@@ -1,0 +1,18 @@
+syntax = "proto3";
+package xsuportal.proto.services.dcim;
+option go_package = "github.com/isucon/isucon10-final/proto/services/dcim";
+
+import "xsuportal/resources/contestant_instance.proto";
+
+service InstanceManagementService {
+  rpc InformInstanceStateUpdate(InformInstanceStateUpdateRequest) returns (InformInstanceStateUpdateResponse);
+}
+
+message InformInstanceStateUpdateRequest {
+  string token = 1;
+  xsuportal.proto.resources.ContestantInstance instance = 2;
+}
+
+message InformInstanceStateUpdateResponse {
+}
+

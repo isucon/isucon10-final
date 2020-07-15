@@ -1,0 +1,19 @@
+syntax = "proto3";
+package xsuportal.proto.services.bench;
+option go_package = "github.com/isucon/isucon10-final/proto/services/bench";
+
+service BenchmarkQueueService {
+  rpc ReceiveBenchmarkJob(ReceiveBenchmarkJobRequest) returns (ReceiveBenchmarkJobResponse);
+}
+
+message ReceiveBenchmarkJobRequest {
+  string instance_name = 1;
+  int64 team_id = 2;
+}
+
+message ReceiveBenchmarkJobResponse {
+  int64 job_id = 1;
+  string handle = 2;
+  string target_ipv4_address = 3;
+  string description_human = 4;
+}

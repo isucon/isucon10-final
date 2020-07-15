@@ -1,0 +1,33 @@
+syntax = "proto3";
+package xsuportal.proto.resources;
+option go_package = "github.com/isucon/isucon10-final/proto/resources";
+
+import "xsuportal/resources/benchmark_result.proto";
+import "xsuportal/resources/contestant_instance.proto";
+import "xsuportal/resources/team.proto";
+
+import "google/protobuf/timestamp.proto";
+
+message BenchmarkJob {
+  int64 id = 1;
+  int64 team_id = 2;
+  int64 target_id = 3;
+  Status status = 4;
+  enum Status {
+    PENDING = 0;
+    RUNNING = 1;
+    ERRORED = 2;
+    CANCELLED = 3;
+    FINISHED = 4;
+  }
+
+  BenchmarkResult result = 5;
+
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+  google.protobuf.Timestamp started_at = 8;
+  google.protobuf.Timestamp finished_at = 9;
+
+  Team team = 16;
+  ContestantInstance target = 17;
+}

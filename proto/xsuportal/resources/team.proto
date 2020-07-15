@@ -1,0 +1,26 @@
+syntax = "proto3";
+package xsuportal.proto.resources;
+option go_package = "github.com/isucon/isucon10-final/proto/resources";
+
+import "xsuportal/resources/contestant.proto";
+
+message Team {
+  int64 id = 1;
+  string name = 2;
+  int64 leader_id = 3;
+  repeated int64 member_ids = 4;
+  bool final_participation = 5;
+  bool hidden = 6;
+  bool withdrawn = 7;
+
+  message TeamDetail {
+    string email_address = 1;
+    int64 benchmark_target_id = 2;
+
+    string invite_token = 16;
+  }
+  TeamDetail detail = 8;
+
+  Contestant leader = 16;
+  repeated Contestant members = 17;
+}

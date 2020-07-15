@@ -1,0 +1,19 @@
+syntax = "proto3";
+package xsuportal.proto.resources;
+option go_package = "github.com/isucon/isucon10-final/proto/resources";
+
+import "xsuportal/resources/team.proto";
+import "google/protobuf/timestamp.proto";
+
+message Clarification {
+  int64 id = 1;
+  int64 team_id = 2;
+  bool answered = 3;
+  bool disclosed = 4;
+  string question = 5;
+  string answer = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp answered_at = 8;
+
+  Team team = 16;
+}

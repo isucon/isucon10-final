@@ -1,0 +1,13 @@
+syntax = "proto3";
+package xsuportal.proto.services.registration;
+option go_package = "github.com/isucon/isucon10-final/proto/services/registration";
+
+message JoinTeamRequest {
+  int64 team_id = 1;
+  string invite_token = 2;
+  string name = 3;
+  bool is_student = 4;
+}
+
+message JoinTeamResponse {
+}
