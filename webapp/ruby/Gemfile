@@ -4,7 +4,7 @@ gem 'puma'
 gem 'sinatra'
 gem 'mysql2'
 gem 'mysql2-cs-bind'
-gem 'google-protobuf'
+gem 'griffin'
 
 group :development do
   gem 'sinatra-contrib'
