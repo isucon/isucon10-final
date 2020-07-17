@@ -1,11 +1,11 @@
-import {isuxportal} from "./pb";
+import {xsuportal} from "./pb";
 import {ApiClient} from "./ApiClient";
 import React from "react";
 
 export interface Props {
   client: ApiClient,
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse,
-  registrationSession: isuxportal.proto.services.registration.GetRegistrationSessionResponse,
+  session: xsuportal.proto.services.common.GetCurrentSessionResponse,
+  registrationSession: xsuportal.proto.services.registration.GetRegistrationSessionResponse,
 }
 
 export interface State {
@@ -30,11 +30,11 @@ export class RegistrationLogin extends React.Component<Props, State> {
   }
 
   githubLoginUrl() {
-    return (document.querySelector('meta[name="isux:github-auth-path"]') as HTMLMetaElement).content;
+    return (document.querySelector('meta[name="xsu:github-auth-path"]') as HTMLMetaElement).content;
   }
 
   discordLoginUrl() {
-    return (document.querySelector('meta[name="isux:discord-auth-path"]') as HTMLMetaElement).content;
+    return (document.querySelector('meta[name="xsu:discord-auth-path"]') as HTMLMetaElement).content;
   }
 
   public renderLogin(title: string, loginUrl: string, username?: string, avatarUrl?: string) {

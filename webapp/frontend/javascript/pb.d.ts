@@ -103,8 +103,8 @@ export namespace google {
     }
 }
 
-/** Namespace isuxportal. */
-export namespace isuxportal {
+/** Namespace xsuportal. */
+export namespace xsuportal {
 
     /** Namespace proto. */
     namespace proto {
@@ -125,7 +125,7 @@ export namespace isuxportal {
             humanDescriptions?: (string[]|null);
 
             /** Error debugInfo */
-            debugInfo?: (isuxportal.proto.Error.IDebugInfo|null);
+            debugInfo?: (xsuportal.proto.Error.IDebugInfo|null);
         }
 
         /** Represents an Error. */
@@ -135,7 +135,7 @@ export namespace isuxportal {
              * Constructs a new Error.
              * @param [properties] Properties to set
              */
-            constructor(properties?: isuxportal.proto.IError);
+            constructor(properties?: xsuportal.proto.IError);
 
             /** Error code. */
             public code: number;
@@ -150,30 +150,30 @@ export namespace isuxportal {
             public humanDescriptions: string[];
 
             /** Error debugInfo. */
-            public debugInfo?: (isuxportal.proto.Error.IDebugInfo|null);
+            public debugInfo?: (xsuportal.proto.Error.IDebugInfo|null);
 
             /**
              * Creates a new Error instance using the specified properties.
              * @param [properties] Properties to set
              * @returns Error instance
              */
-            public static create(properties?: isuxportal.proto.IError): isuxportal.proto.Error;
+            public static create(properties?: xsuportal.proto.IError): isuxportal.proto.Error;
 
             /**
-             * Encodes the specified Error message. Does not implicitly {@link isuxportal.proto.Error.verify|verify} messages.
+             * Encodes the specified Error message. Does not implicitly {@link xsuportal.proto.Error.verify|verify} messages.
              * @param message Error message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: isuxportal.proto.IError, writer?: $protobuf.Writer): $protobuf.Writer;
+            public static encode(message: xsuportal.proto.IError, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified Error message, length delimited. Does not implicitly {@link isuxportal.proto.Error.verify|verify} messages.
+             * Encodes the specified Error message, length delimited. Does not implicitly {@link xsuportal.proto.Error.verify|verify} messages.
              * @param message Error message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: isuxportal.proto.IError, writer?: $protobuf.Writer): $protobuf.Writer;
+            public static encodeDelimited(message: xsuportal.proto.IError, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
              * Decodes an Error message from the specified reader or buffer.
@@ -183,7 +183,7 @@ export namespace isuxportal {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.Error;
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.Error;
 
             /**
              * Decodes an Error message from the specified reader or buffer, length delimited.
@@ -192,7 +192,7 @@ export namespace isuxportal {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.Error;
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.Error;
 
             /**
              * Verifies an Error message.
@@ -206,7 +206,7 @@ export namespace isuxportal {
              * @param object Plain object
              * @returns Error
              */
-            public static fromObject(object: { [k: string]: any }): isuxportal.proto.Error;
+            public static fromObject(object: { [k: string]: any }): xsuportal.proto.Error;
 
             /**
              * Creates a plain object from an Error message. Also converts values to other types if specified.
@@ -214,7 +214,7 @@ export namespace isuxportal {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: isuxportal.proto.Error, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: xsuportal.proto.Error, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this Error to JSON.
@@ -248,7 +248,7 @@ export namespace isuxportal {
                  * Constructs a new DebugInfo.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: isuxportal.proto.Error.IDebugInfo);
+                constructor(properties?: xsuportal.proto.Error.IDebugInfo);
 
                 /** DebugInfo exception. */
                 public exception: string;
@@ -267,23 +267,23 @@ export namespace isuxportal {
                  * @param [properties] Properties to set
                  * @returns DebugInfo instance
                  */
-                public static create(properties?: isuxportal.proto.Error.IDebugInfo): isuxportal.proto.Error.DebugInfo;
+                public static create(properties?: xsuportal.proto.Error.IDebugInfo): isuxportal.proto.Error.DebugInfo;
 
                 /**
-                 * Encodes the specified DebugInfo message. Does not implicitly {@link isuxportal.proto.Error.DebugInfo.verify|verify} messages.
+                 * Encodes the specified DebugInfo message. Does not implicitly {@link xsuportal.proto.Error.DebugInfo.verify|verify} messages.
                  * @param message DebugInfo message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: isuxportal.proto.Error.IDebugInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encode(message: xsuportal.proto.Error.IDebugInfo, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified DebugInfo message, length delimited. Does not implicitly {@link isuxportal.proto.Error.DebugInfo.verify|verify} messages.
+                 * Encodes the specified DebugInfo message, length delimited. Does not implicitly {@link xsuportal.proto.Error.DebugInfo.verify|verify} messages.
                  * @param message DebugInfo message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: isuxportal.proto.Error.IDebugInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encodeDelimited(message: xsuportal.proto.Error.IDebugInfo, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
                  * Decodes a DebugInfo message from the specified reader or buffer.
@@ -293,7 +293,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.Error.DebugInfo;
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.Error.DebugInfo;
 
                 /**
                  * Decodes a DebugInfo message from the specified reader or buffer, length delimited.
@@ -302,7 +302,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.Error.DebugInfo;
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.Error.DebugInfo;
 
                 /**
                  * Verifies a DebugInfo message.
@@ -316,7 +316,7 @@ export namespace isuxportal {
                  * @param object Plain object
                  * @returns DebugInfo
                  */
-                public static fromObject(object: { [k: string]: any }): isuxportal.proto.Error.DebugInfo;
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.Error.DebugInfo;
 
                 /**
                  * Creates a plain object from a DebugInfo message. Also converts values to other types if specified.
@@ -324,7 +324,7 @@ export namespace isuxportal {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: isuxportal.proto.Error.DebugInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: xsuportal.proto.Error.DebugInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this DebugInfo to JSON.
@@ -350,10 +350,10 @@ export namespace isuxportal {
                 targetId?: (number|Long|null);
 
                 /** BenchmarkJob status */
-                status?: (isuxportal.proto.resources.BenchmarkJob.Status|null);
+                status?: (xsuportal.proto.resources.BenchmarkJob.Status|null);
 
                 /** BenchmarkJob result */
-                result?: (isuxportal.proto.resources.IBenchmarkResult|null);
+                result?: (xsuportal.proto.resources.IBenchmarkResult|null);
 
                 /** BenchmarkJob createdAt */
                 createdAt?: (google.protobuf.ITimestamp|null);
@@ -368,10 +368,10 @@ export namespace isuxportal {
                 finishedAt?: (google.protobuf.ITimestamp|null);
 
                 /** BenchmarkJob team */
-                team?: (isuxportal.proto.resources.ITeam|null);
+                team?: (xsuportal.proto.resources.ITeam|null);
 
                 /** BenchmarkJob target */
-                target?: (isuxportal.proto.resources.IContestantInstance|null);
+                target?: (xsuportal.proto.resources.IContestantInstance|null);
             }
 
             /** Represents a BenchmarkJob. */
@@ -381,7 +381,7 @@ export namespace isuxportal {
                  * Constructs a new BenchmarkJob.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: isuxportal.proto.resources.IBenchmarkJob);
+                constructor(properties?: xsuportal.proto.resources.IBenchmarkJob);
 
                 /** BenchmarkJob id. */
                 public id: (number|Long);
@@ -393,10 +393,10 @@ export namespace isuxportal {
                 public targetId: (number|Long);
 
                 /** BenchmarkJob status. */
-                public status: isuxportal.proto.resources.BenchmarkJob.Status;
+                public status: xsuportal.proto.resources.BenchmarkJob.Status;
 
                 /** BenchmarkJob result. */
-                public result?: (isuxportal.proto.resources.IBenchmarkResult|null);
+                public result?: (xsuportal.proto.resources.IBenchmarkResult|null);
 
                 /** BenchmarkJob createdAt. */
                 public createdAt?: (google.protobuf.ITimestamp|null);
@@ -411,33 +411,33 @@ export namespace isuxportal {
                 public finishedAt?: (google.protobuf.ITimestamp|null);
 
                 /** BenchmarkJob team. */
-                public team?: (isuxportal.proto.resources.ITeam|null);
+                public team?: (xsuportal.proto.resources.ITeam|null);
 
                 /** BenchmarkJob target. */
-                public target?: (isuxportal.proto.resources.IContestantInstance|null);
+                public target?: (xsuportal.proto.resources.IContestantInstance|null);
 
                 /**
                  * Creates a new BenchmarkJob instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns BenchmarkJob instance
                  */
-                public static create(properties?: isuxportal.proto.resources.IBenchmarkJob): isuxportal.proto.resources.BenchmarkJob;
+                public static create(properties?: xsuportal.proto.resources.IBenchmarkJob): isuxportal.proto.resources.BenchmarkJob;
 
                 /**
-                 * Encodes the specified BenchmarkJob message. Does not implicitly {@link isuxportal.proto.resources.BenchmarkJob.verify|verify} messages.
+                 * Encodes the specified BenchmarkJob message. Does not implicitly {@link xsuportal.proto.resources.BenchmarkJob.verify|verify} messages.
                  * @param message BenchmarkJob message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: isuxportal.proto.resources.IBenchmarkJob, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encode(message: xsuportal.proto.resources.IBenchmarkJob, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified BenchmarkJob message, length delimited. Does not implicitly {@link isuxportal.proto.resources.BenchmarkJob.verify|verify} messages.
+                 * Encodes the specified BenchmarkJob message, length delimited. Does not implicitly {@link xsuportal.proto.resources.BenchmarkJob.verify|verify} messages.
                  * @param message BenchmarkJob message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: isuxportal.proto.resources.IBenchmarkJob, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encodeDelimited(message: xsuportal.proto.resources.IBenchmarkJob, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
                  * Decodes a BenchmarkJob message from the specified reader or buffer.
@@ -447,7 +447,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.BenchmarkJob;
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.BenchmarkJob;
 
                 /**
                  * Decodes a BenchmarkJob message from the specified reader or buffer, length delimited.
@@ -456,7 +456,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.BenchmarkJob;
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.BenchmarkJob;
 
                 /**
                  * Verifies a BenchmarkJob message.
@@ -470,7 +470,7 @@ export namespace isuxportal {
                  * @param object Plain object
                  * @returns BenchmarkJob
                  */
-                public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.BenchmarkJob;
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.BenchmarkJob;
 
                 /**
                  * Creates a plain object from a BenchmarkJob message. Also converts values to other types if specified.
@@ -478,7 +478,7 @@ export namespace isuxportal {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: isuxportal.proto.resources.BenchmarkJob, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: xsuportal.proto.resources.BenchmarkJob, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this BenchmarkJob to JSON.
@@ -512,7 +512,7 @@ export namespace isuxportal {
                 score?: (number|Long|null);
 
                 /** BenchmarkResult scoreBreakdown */
-                scoreBreakdown?: (isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown|null);
+                scoreBreakdown?: (xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown|null);
 
                 /** BenchmarkResult reason */
                 reason?: (string|null);
@@ -524,7 +524,7 @@ export namespace isuxportal {
                 stderr?: (string|null);
 
                 /** BenchmarkResult survey */
-                survey?: (isuxportal.proto.resources.BenchmarkResult.ISurvey|null);
+                survey?: (xsuportal.proto.resources.BenchmarkResult.ISurvey|null);
             }
 
             /** Represents a BenchmarkResult. */
@@ -534,7 +534,7 @@ export namespace isuxportal {
                  * Constructs a new BenchmarkResult.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: isuxportal.proto.resources.IBenchmarkResult);
+                constructor(properties?: xsuportal.proto.resources.IBenchmarkResult);
 
                 /** BenchmarkResult finished. */
                 public finished: boolean;
@@ -546,7 +546,7 @@ export namespace isuxportal {
                 public score: (number|Long);
 
                 /** BenchmarkResult scoreBreakdown. */
-                public scoreBreakdown?: (isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown|null);
+                public scoreBreakdown?: (xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown|null);
 
                 /** BenchmarkResult reason. */
                 public reason: string;
@@ -558,30 +558,30 @@ export namespace isuxportal {
                 public stderr: string;
 
                 /** BenchmarkResult survey. */
-                public survey?: (isuxportal.proto.resources.BenchmarkResult.ISurvey|null);
+                public survey?: (xsuportal.proto.resources.BenchmarkResult.ISurvey|null);
 
                 /**
                  * Creates a new BenchmarkResult instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns BenchmarkResult instance
                  */
-                public static create(properties?: isuxportal.proto.resources.IBenchmarkResult): isuxportal.proto.resources.BenchmarkResult;
+                public static create(properties?: xsuportal.proto.resources.IBenchmarkResult): isuxportal.proto.resources.BenchmarkResult;
 
                 /**
-                 * Encodes the specified BenchmarkResult message. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.verify|verify} messages.
+                 * Encodes the specified BenchmarkResult message. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.verify|verify} messages.
                  * @param message BenchmarkResult message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: isuxportal.proto.resources.IBenchmarkResult, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encode(message: xsuportal.proto.resources.IBenchmarkResult, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified BenchmarkResult message, length delimited. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.verify|verify} messages.
+                 * Encodes the specified BenchmarkResult message, length delimited. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.verify|verify} messages.
                  * @param message BenchmarkResult message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: isuxportal.proto.resources.IBenchmarkResult, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encodeDelimited(message: xsuportal.proto.resources.IBenchmarkResult, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
                  * Decodes a BenchmarkResult message from the specified reader or buffer.
@@ -591,7 +591,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.BenchmarkResult;
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.BenchmarkResult;
 
                 /**
                  * Decodes a BenchmarkResult message from the specified reader or buffer, length delimited.
@@ -600,7 +600,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.BenchmarkResult;
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.BenchmarkResult;
 
                 /**
                  * Verifies a BenchmarkResult message.
@@ -614,7 +614,7 @@ export namespace isuxportal {
                  * @param object Plain object
                  * @returns BenchmarkResult
                  */
-                public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.BenchmarkResult;
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.BenchmarkResult;
 
                 /**
                  * Creates a plain object from a BenchmarkResult message. Also converts values to other types if specified.
@@ -622,7 +622,7 @@ export namespace isuxportal {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: isuxportal.proto.resources.BenchmarkResult, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: xsuportal.proto.resources.BenchmarkResult, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this BenchmarkResult to JSON.
@@ -650,7 +650,7 @@ export namespace isuxportal {
                      * Constructs a new ScoreBreakdown.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown);
+                    constructor(properties?: xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown);
 
                     /** ScoreBreakdown base. */
                     public base: (number|Long);
@@ -663,23 +663,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns ScoreBreakdown instance
                      */
-                    public static create(properties?: isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown): isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown;
+                    public static create(properties?: xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown): isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown;
 
                     /**
-                     * Encodes the specified ScoreBreakdown message. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown.verify|verify} messages.
+                     * Encodes the specified ScoreBreakdown message. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.verify|verify} messages.
                      * @param message ScoreBreakdown message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified ScoreBreakdown message, length delimited. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown.verify|verify} messages.
+                     * Encodes the specified ScoreBreakdown message, length delimited. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.verify|verify} messages.
                      * @param message ScoreBreakdown message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a ScoreBreakdown message from the specified reader or buffer.
@@ -689,7 +689,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown;
 
                     /**
                      * Decodes a ScoreBreakdown message from the specified reader or buffer, length delimited.
@@ -698,7 +698,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown;
 
                     /**
                      * Verifies a ScoreBreakdown message.
@@ -712,7 +712,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns ScoreBreakdown
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown;
 
                     /**
                      * Creates a plain object from a ScoreBreakdown message. Also converts values to other types if specified.
@@ -720,7 +720,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this ScoreBreakdown to JSON.
@@ -743,7 +743,7 @@ export namespace isuxportal {
                      * Constructs a new Survey.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.resources.BenchmarkResult.ISurvey);
+                    constructor(properties?: xsuportal.proto.resources.BenchmarkResult.ISurvey);
 
                     /** Survey language. */
                     public language: string;
@@ -753,23 +753,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns Survey instance
                      */
-                    public static create(properties?: isuxportal.proto.resources.BenchmarkResult.ISurvey): isuxportal.proto.resources.BenchmarkResult.Survey;
+                    public static create(properties?: xsuportal.proto.resources.BenchmarkResult.ISurvey): isuxportal.proto.resources.BenchmarkResult.Survey;
 
                     /**
-                     * Encodes the specified Survey message. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
+                     * Encodes the specified Survey message. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
                      * @param message Survey message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.resources.BenchmarkResult.ISurvey, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.resources.BenchmarkResult.ISurvey, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified Survey message, length delimited. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
+                     * Encodes the specified Survey message, length delimited. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
                      * @param message Survey message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.resources.BenchmarkResult.ISurvey, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.resources.BenchmarkResult.ISurvey, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a Survey message from the specified reader or buffer.
@@ -779,7 +779,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.BenchmarkResult.Survey;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.BenchmarkResult.Survey;
 
                     /**
                      * Decodes a Survey message from the specified reader or buffer, length delimited.
@@ -788,7 +788,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.BenchmarkResult.Survey;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.BenchmarkResult.Survey;
 
                     /**
                      * Verifies a Survey message.
@@ -802,7 +802,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns Survey
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.BenchmarkResult.Survey;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.BenchmarkResult.Survey;
 
                     /**
                      * Creates a plain object from a Survey message. Also converts values to other types if specified.
@@ -810,7 +810,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.resources.BenchmarkResult.Survey, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.resources.BenchmarkResult.Survey, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this Survey to JSON.
@@ -839,10 +839,10 @@ export namespace isuxportal {
                 privateIpv4Address?: (string|null);
 
                 /** ContestantInstance status */
-                status?: (isuxportal.proto.resources.ContestantInstance.Status|null);
+                status?: (xsuportal.proto.resources.ContestantInstance.Status|null);
 
                 /** ContestantInstance team */
-                team?: (isuxportal.proto.resources.ITeam|null);
+                team?: (xsuportal.proto.resources.ITeam|null);
             }
 
             /** Represents a ContestantInstance. */
@@ -852,7 +852,7 @@ export namespace isuxportal {
                  * Constructs a new ContestantInstance.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: isuxportal.proto.resources.IContestantInstance);
+                constructor(properties?: xsuportal.proto.resources.IContestantInstance);
 
                 /** ContestantInstance cloudId. */
                 public cloudId: string;
@@ -870,33 +870,33 @@ export namespace isuxportal {
                 public privateIpv4Address: string;
 
                 /** ContestantInstance status. */
-                public status: isuxportal.proto.resources.ContestantInstance.Status;
+                public status: xsuportal.proto.resources.ContestantInstance.Status;
 
                 /** ContestantInstance team. */
-                public team?: (isuxportal.proto.resources.ITeam|null);
+                public team?: (xsuportal.proto.resources.ITeam|null);
 
                 /**
                  * Creates a new ContestantInstance instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns ContestantInstance instance
                  */
-                public static create(properties?: isuxportal.proto.resources.IContestantInstance): isuxportal.proto.resources.ContestantInstance;
+                public static create(properties?: xsuportal.proto.resources.IContestantInstance): isuxportal.proto.resources.ContestantInstance;
 
                 /**
-                 * Encodes the specified ContestantInstance message. Does not implicitly {@link isuxportal.proto.resources.ContestantInstance.verify|verify} messages.
+                 * Encodes the specified ContestantInstance message. Does not implicitly {@link xsuportal.proto.resources.ContestantInstance.verify|verify} messages.
                  * @param message ContestantInstance message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: isuxportal.proto.resources.IContestantInstance, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encode(message: xsuportal.proto.resources.IContestantInstance, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified ContestantInstance message, length delimited. Does not implicitly {@link isuxportal.proto.resources.ContestantInstance.verify|verify} messages.
+                 * Encodes the specified ContestantInstance message, length delimited. Does not implicitly {@link xsuportal.proto.resources.ContestantInstance.verify|verify} messages.
                  * @param message ContestantInstance message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: isuxportal.proto.resources.IContestantInstance, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encodeDelimited(message: xsuportal.proto.resources.IContestantInstance, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
                  * Decodes a ContestantInstance message from the specified reader or buffer.
@@ -906,7 +906,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.ContestantInstance;
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.ContestantInstance;
 
                 /**
                  * Decodes a ContestantInstance message from the specified reader or buffer, length delimited.
@@ -915,7 +915,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.ContestantInstance;
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.ContestantInstance;
 
                 /**
                  * Verifies a ContestantInstance message.
@@ -929,7 +929,7 @@ export namespace isuxportal {
                  * @param object Plain object
                  * @returns ContestantInstance
                  */
-                public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.ContestantInstance;
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.ContestantInstance;
 
                 /**
                  * Creates a plain object from a ContestantInstance message. Also converts values to other types if specified.
@@ -937,7 +937,7 @@ export namespace isuxportal {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: isuxportal.proto.resources.ContestantInstance, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: xsuportal.proto.resources.ContestantInstance, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this ContestantInstance to JSON.
@@ -984,13 +984,13 @@ export namespace isuxportal {
                 withdrawn?: (boolean|null);
 
                 /** Team detail */
-                detail?: (isuxportal.proto.resources.Team.ITeamDetail|null);
+                detail?: (xsuportal.proto.resources.Team.ITeamDetail|null);
 
                 /** Team leader */
-                leader?: (isuxportal.proto.resources.IContestant|null);
+                leader?: (xsuportal.proto.resources.IContestant|null);
 
                 /** Team members */
-                members?: (isuxportal.proto.resources.IContestant[]|null);
+                members?: (xsuportal.proto.resources.IContestant[]|null);
             }
 
             /** Represents a Team. */
@@ -1000,7 +1000,7 @@ export namespace isuxportal {
                  * Constructs a new Team.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: isuxportal.proto.resources.ITeam);
+                constructor(properties?: xsuportal.proto.resources.ITeam);
 
                 /** Team id. */
                 public id: (number|Long);
@@ -1024,36 +1024,36 @@ export namespace isuxportal {
                 public withdrawn: boolean;
 
                 /** Team detail. */
-                public detail?: (isuxportal.proto.resources.Team.ITeamDetail|null);
+                public detail?: (xsuportal.proto.resources.Team.ITeamDetail|null);
 
                 /** Team leader. */
-                public leader?: (isuxportal.proto.resources.IContestant|null);
+                public leader?: (xsuportal.proto.resources.IContestant|null);
 
                 /** Team members. */
-                public members: isuxportal.proto.resources.IContestant[];
+                public members: xsuportal.proto.resources.IContestant[];
 
                 /**
                  * Creates a new Team instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns Team instance
                  */
-                public static create(properties?: isuxportal.proto.resources.ITeam): isuxportal.proto.resources.Team;
+                public static create(properties?: xsuportal.proto.resources.ITeam): isuxportal.proto.resources.Team;
 
                 /**
-                 * Encodes the specified Team message. Does not implicitly {@link isuxportal.proto.resources.Team.verify|verify} messages.
+                 * Encodes the specified Team message. Does not implicitly {@link xsuportal.proto.resources.Team.verify|verify} messages.
                  * @param message Team message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: isuxportal.proto.resources.ITeam, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encode(message: xsuportal.proto.resources.ITeam, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified Team message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Team.verify|verify} messages.
+                 * Encodes the specified Team message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Team.verify|verify} messages.
                  * @param message Team message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: isuxportal.proto.resources.ITeam, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encodeDelimited(message: xsuportal.proto.resources.ITeam, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
                  * Decodes a Team message from the specified reader or buffer.
@@ -1063,7 +1063,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.Team;
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Team;
 
                 /**
                  * Decodes a Team message from the specified reader or buffer, length delimited.
@@ -1072,7 +1072,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.Team;
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Team;
 
                 /**
                  * Verifies a Team message.
@@ -1086,7 +1086,7 @@ export namespace isuxportal {
                  * @param object Plain object
                  * @returns Team
                  */
-                public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.Team;
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Team;
 
                 /**
                  * Creates a plain object from a Team message. Also converts values to other types if specified.
@@ -1094,7 +1094,7 @@ export namespace isuxportal {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: isuxportal.proto.resources.Team, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: xsuportal.proto.resources.Team, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this Team to JSON.
@@ -1125,7 +1125,7 @@ export namespace isuxportal {
                      * Constructs a new TeamDetail.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.resources.Team.ITeamDetail);
+                    constructor(properties?: xsuportal.proto.resources.Team.ITeamDetail);
 
                     /** TeamDetail emailAddress. */
                     public emailAddress: string;
@@ -1141,23 +1141,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns TeamDetail instance
                      */
-                    public static create(properties?: isuxportal.proto.resources.Team.ITeamDetail): isuxportal.proto.resources.Team.TeamDetail;
+                    public static create(properties?: xsuportal.proto.resources.Team.ITeamDetail): isuxportal.proto.resources.Team.TeamDetail;
 
                     /**
-                     * Encodes the specified TeamDetail message. Does not implicitly {@link isuxportal.proto.resources.Team.TeamDetail.verify|verify} messages.
+                     * Encodes the specified TeamDetail message. Does not implicitly {@link xsuportal.proto.resources.Team.TeamDetail.verify|verify} messages.
                      * @param message TeamDetail message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.resources.Team.ITeamDetail, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.resources.Team.ITeamDetail, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified TeamDetail message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Team.TeamDetail.verify|verify} messages.
+                     * Encodes the specified TeamDetail message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Team.TeamDetail.verify|verify} messages.
                      * @param message TeamDetail message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.resources.Team.ITeamDetail, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.resources.Team.ITeamDetail, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a TeamDetail message from the specified reader or buffer.
@@ -1167,7 +1167,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.Team.TeamDetail;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Team.TeamDetail;
 
                     /**
                      * Decodes a TeamDetail message from the specified reader or buffer, length delimited.
@@ -1176,7 +1176,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.Team.TeamDetail;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Team.TeamDetail;
 
                     /**
                      * Verifies a TeamDetail message.
@@ -1190,7 +1190,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns TeamDetail
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.Team.TeamDetail;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Team.TeamDetail;
 
                     /**
                      * Creates a plain object from a TeamDetail message. Also converts values to other types if specified.
@@ -1198,7 +1198,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.resources.Team.TeamDetail, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.resources.Team.TeamDetail, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this TeamDetail to JSON.
@@ -1221,7 +1221,7 @@ export namespace isuxportal {
                 name?: (string|null);
 
                 /** Contestant contestantDetail */
-                contestantDetail?: (isuxportal.proto.resources.Contestant.IContestantDetail|null);
+                contestantDetail?: (xsuportal.proto.resources.Contestant.IContestantDetail|null);
             }
 
             /** Represents a Contestant. */
@@ -1231,7 +1231,7 @@ export namespace isuxportal {
                  * Constructs a new Contestant.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: isuxportal.proto.resources.IContestant);
+                constructor(properties?: xsuportal.proto.resources.IContestant);
 
                 /** Contestant id. */
                 public id: (number|Long);
@@ -1243,30 +1243,30 @@ export namespace isuxportal {
                 public name: string;
 
                 /** Contestant contestantDetail. */
-                public contestantDetail?: (isuxportal.proto.resources.Contestant.IContestantDetail|null);
+                public contestantDetail?: (xsuportal.proto.resources.Contestant.IContestantDetail|null);
 
                 /**
                  * Creates a new Contestant instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns Contestant instance
                  */
-                public static create(properties?: isuxportal.proto.resources.IContestant): isuxportal.proto.resources.Contestant;
+                public static create(properties?: xsuportal.proto.resources.IContestant): isuxportal.proto.resources.Contestant;
 
                 /**
-                 * Encodes the specified Contestant message. Does not implicitly {@link isuxportal.proto.resources.Contestant.verify|verify} messages.
+                 * Encodes the specified Contestant message. Does not implicitly {@link xsuportal.proto.resources.Contestant.verify|verify} messages.
                  * @param message Contestant message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: isuxportal.proto.resources.IContestant, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encode(message: xsuportal.proto.resources.IContestant, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified Contestant message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Contestant.verify|verify} messages.
+                 * Encodes the specified Contestant message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Contestant.verify|verify} messages.
                  * @param message Contestant message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: isuxportal.proto.resources.IContestant, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encodeDelimited(message: xsuportal.proto.resources.IContestant, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
                  * Decodes a Contestant message from the specified reader or buffer.
@@ -1276,7 +1276,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.Contestant;
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Contestant;
 
                 /**
                  * Decodes a Contestant message from the specified reader or buffer, length delimited.
@@ -1285,7 +1285,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.Contestant;
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Contestant;
 
                 /**
                  * Verifies a Contestant message.
@@ -1299,7 +1299,7 @@ export namespace isuxportal {
                  * @param object Plain object
                  * @returns Contestant
                  */
-                public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.Contestant;
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Contestant;
 
                 /**
                  * Creates a plain object from a Contestant message. Also converts values to other types if specified.
@@ -1307,7 +1307,7 @@ export namespace isuxportal {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: isuxportal.proto.resources.Contestant, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: xsuportal.proto.resources.Contestant, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this Contestant to JSON.
@@ -1341,7 +1341,7 @@ export namespace isuxportal {
                      * Constructs a new ContestantDetail.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.resources.Contestant.IContestantDetail);
+                    constructor(properties?: xsuportal.proto.resources.Contestant.IContestantDetail);
 
                     /** ContestantDetail githubLogin. */
                     public githubLogin: string;
@@ -1360,23 +1360,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns ContestantDetail instance
                      */
-                    public static create(properties?: isuxportal.proto.resources.Contestant.IContestantDetail): isuxportal.proto.resources.Contestant.ContestantDetail;
+                    public static create(properties?: xsuportal.proto.resources.Contestant.IContestantDetail): isuxportal.proto.resources.Contestant.ContestantDetail;
 
                     /**
-                     * Encodes the specified ContestantDetail message. Does not implicitly {@link isuxportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
+                     * Encodes the specified ContestantDetail message. Does not implicitly {@link xsuportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
                      * @param message ContestantDetail message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.resources.Contestant.IContestantDetail, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.resources.Contestant.IContestantDetail, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified ContestantDetail message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
+                     * Encodes the specified ContestantDetail message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
                      * @param message ContestantDetail message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.resources.Contestant.IContestantDetail, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.resources.Contestant.IContestantDetail, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a ContestantDetail message from the specified reader or buffer.
@@ -1386,7 +1386,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.Contestant.ContestantDetail;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Contestant.ContestantDetail;
 
                     /**
                      * Decodes a ContestantDetail message from the specified reader or buffer, length delimited.
@@ -1395,7 +1395,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.Contestant.ContestantDetail;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Contestant.ContestantDetail;
 
                     /**
                      * Verifies a ContestantDetail message.
@@ -1409,7 +1409,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns ContestantDetail
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.Contestant.ContestantDetail;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Contestant.ContestantDetail;
 
                     /**
                      * Creates a plain object from a ContestantDetail message. Also converts values to other types if specified.
@@ -1417,7 +1417,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.resources.Contestant.ContestantDetail, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.resources.Contestant.ContestantDetail, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this ContestantDetail to JSON.
@@ -1455,7 +1455,7 @@ export namespace isuxportal {
                 answeredAt?: (google.protobuf.ITimestamp|null);
 
                 /** Clarification team */
-                team?: (isuxportal.proto.resources.ITeam|null);
+                team?: (xsuportal.proto.resources.ITeam|null);
             }
 
             /** Represents a Clarification. */
@@ -1465,7 +1465,7 @@ export namespace isuxportal {
                  * Constructs a new Clarification.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: isuxportal.proto.resources.IClarification);
+                constructor(properties?: xsuportal.proto.resources.IClarification);
 
                 /** Clarification id. */
                 public id: (number|Long);
@@ -1492,30 +1492,30 @@ export namespace isuxportal {
                 public answeredAt?: (google.protobuf.ITimestamp|null);
 
                 /** Clarification team. */
-                public team?: (isuxportal.proto.resources.ITeam|null);
+                public team?: (xsuportal.proto.resources.ITeam|null);
 
                 /**
                  * Creates a new Clarification instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns Clarification instance
                  */
-                public static create(properties?: isuxportal.proto.resources.IClarification): isuxportal.proto.resources.Clarification;
+                public static create(properties?: xsuportal.proto.resources.IClarification): isuxportal.proto.resources.Clarification;
 
                 /**
-                 * Encodes the specified Clarification message. Does not implicitly {@link isuxportal.proto.resources.Clarification.verify|verify} messages.
+                 * Encodes the specified Clarification message. Does not implicitly {@link xsuportal.proto.resources.Clarification.verify|verify} messages.
                  * @param message Clarification message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: isuxportal.proto.resources.IClarification, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encode(message: xsuportal.proto.resources.IClarification, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified Clarification message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Clarification.verify|verify} messages.
+                 * Encodes the specified Clarification message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Clarification.verify|verify} messages.
                  * @param message Clarification message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: isuxportal.proto.resources.IClarification, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encodeDelimited(message: xsuportal.proto.resources.IClarification, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
                  * Decodes a Clarification message from the specified reader or buffer.
@@ -1525,7 +1525,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.Clarification;
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Clarification;
 
                 /**
                  * Decodes a Clarification message from the specified reader or buffer, length delimited.
@@ -1534,7 +1534,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.Clarification;
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Clarification;
 
                 /**
                  * Verifies a Clarification message.
@@ -1548,7 +1548,7 @@ export namespace isuxportal {
                  * @param object Plain object
                  * @returns Clarification
                  */
-                public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.Clarification;
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Clarification;
 
                 /**
                  * Creates a plain object from a Clarification message. Also converts values to other types if specified.
@@ -1556,7 +1556,7 @@ export namespace isuxportal {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: isuxportal.proto.resources.Clarification, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: xsuportal.proto.resources.Clarification, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this Clarification to JSON.
@@ -1582,7 +1582,7 @@ export namespace isuxportal {
                  * Constructs a new Staff.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: isuxportal.proto.resources.IStaff);
+                constructor(properties?: xsuportal.proto.resources.IStaff);
 
                 /** Staff id. */
                 public id: (number|Long);
@@ -1595,23 +1595,23 @@ export namespace isuxportal {
                  * @param [properties] Properties to set
                  * @returns Staff instance
                  */
-                public static create(properties?: isuxportal.proto.resources.IStaff): isuxportal.proto.resources.Staff;
+                public static create(properties?: xsuportal.proto.resources.IStaff): isuxportal.proto.resources.Staff;
 
                 /**
-                 * Encodes the specified Staff message. Does not implicitly {@link isuxportal.proto.resources.Staff.verify|verify} messages.
+                 * Encodes the specified Staff message. Does not implicitly {@link xsuportal.proto.resources.Staff.verify|verify} messages.
                  * @param message Staff message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: isuxportal.proto.resources.IStaff, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encode(message: xsuportal.proto.resources.IStaff, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified Staff message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Staff.verify|verify} messages.
+                 * Encodes the specified Staff message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Staff.verify|verify} messages.
                  * @param message Staff message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: isuxportal.proto.resources.IStaff, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encodeDelimited(message: xsuportal.proto.resources.IStaff, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
                  * Decodes a Staff message from the specified reader or buffer.
@@ -1621,7 +1621,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.resources.Staff;
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Staff;
 
                 /**
                  * Decodes a Staff message from the specified reader or buffer, length delimited.
@@ -1630,7 +1630,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.resources.Staff;
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Staff;
 
                 /**
                  * Verifies a Staff message.
@@ -1644,7 +1644,7 @@ export namespace isuxportal {
                  * @param object Plain object
                  * @returns Staff
                  */
-                public static fromObject(object: { [k: string]: any }): isuxportal.proto.resources.Staff;
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Staff;
 
                 /**
                  * Creates a plain object from a Staff message. Also converts values to other types if specified.
@@ -1652,7 +1652,7 @@ export namespace isuxportal {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: isuxportal.proto.resources.Staff, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: xsuportal.proto.resources.Staff, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this Staff to JSON.
@@ -1676,30 +1676,30 @@ export namespace isuxportal {
                  * Constructs a new DashboardRequest.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: isuxportal.proto.common.IDashboardRequest);
+                constructor(properties?: xsuportal.proto.common.IDashboardRequest);
 
                 /**
                  * Creates a new DashboardRequest instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns DashboardRequest instance
                  */
-                public static create(properties?: isuxportal.proto.common.IDashboardRequest): isuxportal.proto.common.DashboardRequest;
+                public static create(properties?: xsuportal.proto.common.IDashboardRequest): isuxportal.proto.common.DashboardRequest;
 
                 /**
-                 * Encodes the specified DashboardRequest message. Does not implicitly {@link isuxportal.proto.common.DashboardRequest.verify|verify} messages.
+                 * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
                  * @param message DashboardRequest message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: isuxportal.proto.common.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encode(message: xsuportal.proto.common.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link isuxportal.proto.common.DashboardRequest.verify|verify} messages.
+                 * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
                  * @param message DashboardRequest message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: isuxportal.proto.common.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encodeDelimited(message: xsuportal.proto.common.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
                  * Decodes a DashboardRequest message from the specified reader or buffer.
@@ -1709,7 +1709,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.common.DashboardRequest;
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.common.DashboardRequest;
 
                 /**
                  * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
@@ -1718,7 +1718,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.common.DashboardRequest;
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.common.DashboardRequest;
 
                 /**
                  * Verifies a DashboardRequest message.
@@ -1732,7 +1732,7 @@ export namespace isuxportal {
                  * @param object Plain object
                  * @returns DashboardRequest
                  */
-                public static fromObject(object: { [k: string]: any }): isuxportal.proto.common.DashboardRequest;
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.common.DashboardRequest;
 
                 /**
                  * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
@@ -1740,7 +1740,7 @@ export namespace isuxportal {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: isuxportal.proto.common.DashboardRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: xsuportal.proto.common.DashboardRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this DashboardRequest to JSON.
@@ -1760,30 +1760,30 @@ export namespace isuxportal {
                  * Constructs a new DashboardResponse.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: isuxportal.proto.common.IDashboardResponse);
+                constructor(properties?: xsuportal.proto.common.IDashboardResponse);
 
                 /**
                  * Creates a new DashboardResponse instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns DashboardResponse instance
                  */
-                public static create(properties?: isuxportal.proto.common.IDashboardResponse): isuxportal.proto.common.DashboardResponse;
+                public static create(properties?: xsuportal.proto.common.IDashboardResponse): isuxportal.proto.common.DashboardResponse;
 
                 /**
-                 * Encodes the specified DashboardResponse message. Does not implicitly {@link isuxportal.proto.common.DashboardResponse.verify|verify} messages.
+                 * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
                  * @param message DashboardResponse message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: isuxportal.proto.common.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encode(message: xsuportal.proto.common.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
-                 * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link isuxportal.proto.common.DashboardResponse.verify|verify} messages.
+                 * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
                  * @param message DashboardResponse message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: isuxportal.proto.common.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                public static encodeDelimited(message: xsuportal.proto.common.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                 /**
                  * Decodes a DashboardResponse message from the specified reader or buffer.
@@ -1793,7 +1793,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.common.DashboardResponse;
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.common.DashboardResponse;
 
                 /**
                  * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
@@ -1802,7 +1802,7 @@ export namespace isuxportal {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.common.DashboardResponse;
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.common.DashboardResponse;
 
                 /**
                  * Verifies a DashboardResponse message.
@@ -1816,7 +1816,7 @@ export namespace isuxportal {
                  * @param object Plain object
                  * @returns DashboardResponse
                  */
-                public static fromObject(object: { [k: string]: any }): isuxportal.proto.common.DashboardResponse;
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.common.DashboardResponse;
 
                 /**
                  * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
@@ -1824,7 +1824,7 @@ export namespace isuxportal {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: isuxportal.proto.common.DashboardResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: xsuportal.proto.common.DashboardResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this DashboardResponse to JSON.
@@ -1851,30 +1851,30 @@ export namespace isuxportal {
                      * Constructs a new GetCurrentSessionRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.common.IGetCurrentSessionRequest);
+                    constructor(properties?: xsuportal.proto.services.common.IGetCurrentSessionRequest);
 
                     /**
                      * Creates a new GetCurrentSessionRequest instance using the specified properties.
                      * @param [properties] Properties to set
                      * @returns GetCurrentSessionRequest instance
                      */
-                    public static create(properties?: isuxportal.proto.services.common.IGetCurrentSessionRequest): isuxportal.proto.services.common.GetCurrentSessionRequest;
+                    public static create(properties?: xsuportal.proto.services.common.IGetCurrentSessionRequest): isuxportal.proto.services.common.GetCurrentSessionRequest;
 
                     /**
-                     * Encodes the specified GetCurrentSessionRequest message. Does not implicitly {@link isuxportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
+                     * Encodes the specified GetCurrentSessionRequest message. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
                      * @param message GetCurrentSessionRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.common.IGetCurrentSessionRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.common.IGetCurrentSessionRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified GetCurrentSessionRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
+                     * Encodes the specified GetCurrentSessionRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
                      * @param message GetCurrentSessionRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.common.IGetCurrentSessionRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.common.IGetCurrentSessionRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a GetCurrentSessionRequest message from the specified reader or buffer.
@@ -1884,7 +1884,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.common.GetCurrentSessionRequest;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.common.GetCurrentSessionRequest;
 
                     /**
                      * Decodes a GetCurrentSessionRequest message from the specified reader or buffer, length delimited.
@@ -1893,7 +1893,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.common.GetCurrentSessionRequest;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.common.GetCurrentSessionRequest;
 
                     /**
                      * Verifies a GetCurrentSessionRequest message.
@@ -1907,7 +1907,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns GetCurrentSessionRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.common.GetCurrentSessionRequest;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.common.GetCurrentSessionRequest;
 
                     /**
                      * Creates a plain object from a GetCurrentSessionRequest message. Also converts values to other types if specified.
@@ -1915,7 +1915,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.common.GetCurrentSessionRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.common.GetCurrentSessionRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this GetCurrentSessionRequest to JSON.
@@ -1928,10 +1928,10 @@ export namespace isuxportal {
                 interface IGetCurrentSessionResponse {
 
                     /** GetCurrentSessionResponse team */
-                    team?: (isuxportal.proto.resources.ITeam|null);
+                    team?: (xsuportal.proto.resources.ITeam|null);
 
                     /** GetCurrentSessionResponse contestant */
-                    contestant?: (isuxportal.proto.resources.IContestant|null);
+                    contestant?: (xsuportal.proto.resources.IContestant|null);
 
                     /** GetCurrentSessionResponse discordServerId */
                     discordServerId?: (string|null);
@@ -1944,13 +1944,13 @@ export namespace isuxportal {
                      * Constructs a new GetCurrentSessionResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.common.IGetCurrentSessionResponse);
+                    constructor(properties?: xsuportal.proto.services.common.IGetCurrentSessionResponse);
 
                     /** GetCurrentSessionResponse team. */
-                    public team?: (isuxportal.proto.resources.ITeam|null);
+                    public team?: (xsuportal.proto.resources.ITeam|null);
 
                     /** GetCurrentSessionResponse contestant. */
-                    public contestant?: (isuxportal.proto.resources.IContestant|null);
+                    public contestant?: (xsuportal.proto.resources.IContestant|null);
 
                     /** GetCurrentSessionResponse discordServerId. */
                     public discordServerId: string;
@@ -1960,23 +1960,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns GetCurrentSessionResponse instance
                      */
-                    public static create(properties?: isuxportal.proto.services.common.IGetCurrentSessionResponse): isuxportal.proto.services.common.GetCurrentSessionResponse;
+                    public static create(properties?: xsuportal.proto.services.common.IGetCurrentSessionResponse): isuxportal.proto.services.common.GetCurrentSessionResponse;
 
                     /**
-                     * Encodes the specified GetCurrentSessionResponse message. Does not implicitly {@link isuxportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
+                     * Encodes the specified GetCurrentSessionResponse message. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
                      * @param message GetCurrentSessionResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.common.IGetCurrentSessionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.common.IGetCurrentSessionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified GetCurrentSessionResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
+                     * Encodes the specified GetCurrentSessionResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
                      * @param message GetCurrentSessionResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.common.IGetCurrentSessionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.common.IGetCurrentSessionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a GetCurrentSessionResponse message from the specified reader or buffer.
@@ -1986,7 +1986,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.common.GetCurrentSessionResponse;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.common.GetCurrentSessionResponse;
 
                     /**
                      * Decodes a GetCurrentSessionResponse message from the specified reader or buffer, length delimited.
@@ -1995,7 +1995,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.common.GetCurrentSessionResponse;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.common.GetCurrentSessionResponse;
 
                     /**
                      * Verifies a GetCurrentSessionResponse message.
@@ -2009,7 +2009,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns GetCurrentSessionResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.common.GetCurrentSessionResponse;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.common.GetCurrentSessionResponse;
 
                     /**
                      * Creates a plain object from a GetCurrentSessionResponse message. Also converts values to other types if specified.
@@ -2017,7 +2017,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.common.GetCurrentSessionResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.common.GetCurrentSessionResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this GetCurrentSessionResponse to JSON.
@@ -2041,30 +2041,30 @@ export namespace isuxportal {
                      * Constructs a new ListTeamsRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.audience.IListTeamsRequest);
+                    constructor(properties?: xsuportal.proto.services.audience.IListTeamsRequest);
 
                     /**
                      * Creates a new ListTeamsRequest instance using the specified properties.
                      * @param [properties] Properties to set
                      * @returns ListTeamsRequest instance
                      */
-                    public static create(properties?: isuxportal.proto.services.audience.IListTeamsRequest): isuxportal.proto.services.audience.ListTeamsRequest;
+                    public static create(properties?: xsuportal.proto.services.audience.IListTeamsRequest): isuxportal.proto.services.audience.ListTeamsRequest;
 
                     /**
-                     * Encodes the specified ListTeamsRequest message. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsRequest.verify|verify} messages.
+                     * Encodes the specified ListTeamsRequest message. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsRequest.verify|verify} messages.
                      * @param message ListTeamsRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.audience.IListTeamsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.audience.IListTeamsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified ListTeamsRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsRequest.verify|verify} messages.
+                     * Encodes the specified ListTeamsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsRequest.verify|verify} messages.
                      * @param message ListTeamsRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.audience.IListTeamsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.audience.IListTeamsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a ListTeamsRequest message from the specified reader or buffer.
@@ -2074,7 +2074,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.audience.ListTeamsRequest;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.audience.ListTeamsRequest;
 
                     /**
                      * Decodes a ListTeamsRequest message from the specified reader or buffer, length delimited.
@@ -2083,7 +2083,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.audience.ListTeamsRequest;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.audience.ListTeamsRequest;
 
                     /**
                      * Verifies a ListTeamsRequest message.
@@ -2097,7 +2097,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns ListTeamsRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.audience.ListTeamsRequest;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.audience.ListTeamsRequest;
 
                     /**
                      * Creates a plain object from a ListTeamsRequest message. Also converts values to other types if specified.
@@ -2105,7 +2105,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.audience.ListTeamsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.audience.ListTeamsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this ListTeamsRequest to JSON.
@@ -2118,7 +2118,7 @@ export namespace isuxportal {
                 interface IListTeamsResponse {
 
                     /** ListTeamsResponse teams */
-                    teams?: (isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem[]|null);
+                    teams?: (xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem[]|null);
                 }
 
                 /** Represents a ListTeamsResponse. */
@@ -2128,33 +2128,33 @@ export namespace isuxportal {
                      * Constructs a new ListTeamsResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.audience.IListTeamsResponse);
+                    constructor(properties?: xsuportal.proto.services.audience.IListTeamsResponse);
 
                     /** ListTeamsResponse teams. */
-                    public teams: isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem[];
+                    public teams: xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem[];
 
                     /**
                      * Creates a new ListTeamsResponse instance using the specified properties.
                      * @param [properties] Properties to set
                      * @returns ListTeamsResponse instance
                      */
-                    public static create(properties?: isuxportal.proto.services.audience.IListTeamsResponse): isuxportal.proto.services.audience.ListTeamsResponse;
+                    public static create(properties?: xsuportal.proto.services.audience.IListTeamsResponse): isuxportal.proto.services.audience.ListTeamsResponse;
 
                     /**
-                     * Encodes the specified ListTeamsResponse message. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsResponse.verify|verify} messages.
+                     * Encodes the specified ListTeamsResponse message. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsResponse.verify|verify} messages.
                      * @param message ListTeamsResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.audience.IListTeamsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.audience.IListTeamsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified ListTeamsResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsResponse.verify|verify} messages.
+                     * Encodes the specified ListTeamsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsResponse.verify|verify} messages.
                      * @param message ListTeamsResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.audience.IListTeamsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.audience.IListTeamsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a ListTeamsResponse message from the specified reader or buffer.
@@ -2164,7 +2164,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.audience.ListTeamsResponse;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.audience.ListTeamsResponse;
 
                     /**
                      * Decodes a ListTeamsResponse message from the specified reader or buffer, length delimited.
@@ -2173,7 +2173,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.audience.ListTeamsResponse;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.audience.ListTeamsResponse;
 
                     /**
                      * Verifies a ListTeamsResponse message.
@@ -2187,7 +2187,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns ListTeamsResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.audience.ListTeamsResponse;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.audience.ListTeamsResponse;
 
                     /**
                      * Creates a plain object from a ListTeamsResponse message. Also converts values to other types if specified.
@@ -2195,7 +2195,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.audience.ListTeamsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.audience.ListTeamsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this ListTeamsResponse to JSON.
@@ -2232,7 +2232,7 @@ export namespace isuxportal {
                          * Constructs a new TeamListItem.
                          * @param [properties] Properties to set
                          */
-                        constructor(properties?: isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem);
+                        constructor(properties?: xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem);
 
                         /** TeamListItem teamId. */
                         public teamId: (number|Long);
@@ -2254,23 +2254,23 @@ export namespace isuxportal {
                          * @param [properties] Properties to set
                          * @returns TeamListItem instance
                          */
-                        public static create(properties?: isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem): isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem;
+                        public static create(properties?: xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem): isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem;
 
                         /**
-                         * Encodes the specified TeamListItem message. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem.verify|verify} messages.
+                         * Encodes the specified TeamListItem message. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem.verify|verify} messages.
                          * @param message TeamListItem message or plain object to encode
                          * @param [writer] Writer to encode to
                          * @returns Writer
                          */
-                        public static encode(message: isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem, writer?: $protobuf.Writer): $protobuf.Writer;
+                        public static encode(message: xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem, writer?: $protobuf.Writer): $protobuf.Writer;
 
                         /**
-                         * Encodes the specified TeamListItem message, length delimited. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem.verify|verify} messages.
+                         * Encodes the specified TeamListItem message, length delimited. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem.verify|verify} messages.
                          * @param message TeamListItem message or plain object to encode
                          * @param [writer] Writer to encode to
                          * @returns Writer
                          */
-                        public static encodeDelimited(message: isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem, writer?: $protobuf.Writer): $protobuf.Writer;
+                        public static encodeDelimited(message: xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem, writer?: $protobuf.Writer): $protobuf.Writer;
 
                         /**
                          * Decodes a TeamListItem message from the specified reader or buffer.
@@ -2280,7 +2280,7 @@ export namespace isuxportal {
                          * @throws {Error} If the payload is not a reader or valid buffer
                          * @throws {$protobuf.util.ProtocolError} If required fields are missing
                          */
-                        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem;
+                        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem;
 
                         /**
                          * Decodes a TeamListItem message from the specified reader or buffer, length delimited.
@@ -2289,7 +2289,7 @@ export namespace isuxportal {
                          * @throws {Error} If the payload is not a reader or valid buffer
                          * @throws {$protobuf.util.ProtocolError} If required fields are missing
                          */
-                        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem;
+                        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem;
 
                         /**
                          * Verifies a TeamListItem message.
@@ -2303,7 +2303,7 @@ export namespace isuxportal {
                          * @param object Plain object
                          * @returns TeamListItem
                          */
-                        public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem;
+                        public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem;
 
                         /**
                          * Creates a plain object from a TeamListItem message. Also converts values to other types if specified.
@@ -2311,7 +2311,7 @@ export namespace isuxportal {
                          * @param [options] Conversion options
                          * @returns Plain object
                          */
-                        public static toObject(message: isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        public static toObject(message: xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                         /**
                          * Converts this TeamListItem to JSON.
@@ -2348,7 +2348,7 @@ export namespace isuxportal {
                      * Constructs a new CreateTeamRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.registration.ICreateTeamRequest);
+                    constructor(properties?: xsuportal.proto.services.registration.ICreateTeamRequest);
 
                     /** CreateTeamRequest teamName. */
                     public teamName: string;
@@ -2367,23 +2367,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns CreateTeamRequest instance
                      */
-                    public static create(properties?: isuxportal.proto.services.registration.ICreateTeamRequest): isuxportal.proto.services.registration.CreateTeamRequest;
+                    public static create(properties?: xsuportal.proto.services.registration.ICreateTeamRequest): isuxportal.proto.services.registration.CreateTeamRequest;
 
                     /**
-                     * Encodes the specified CreateTeamRequest message. Does not implicitly {@link isuxportal.proto.services.registration.CreateTeamRequest.verify|verify} messages.
+                     * Encodes the specified CreateTeamRequest message. Does not implicitly {@link xsuportal.proto.services.registration.CreateTeamRequest.verify|verify} messages.
                      * @param message CreateTeamRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.registration.ICreateTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.registration.ICreateTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified CreateTeamRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.CreateTeamRequest.verify|verify} messages.
+                     * Encodes the specified CreateTeamRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.CreateTeamRequest.verify|verify} messages.
                      * @param message CreateTeamRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.registration.ICreateTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.registration.ICreateTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a CreateTeamRequest message from the specified reader or buffer.
@@ -2393,7 +2393,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.registration.CreateTeamRequest;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.registration.CreateTeamRequest;
 
                     /**
                      * Decodes a CreateTeamRequest message from the specified reader or buffer, length delimited.
@@ -2402,7 +2402,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.registration.CreateTeamRequest;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.registration.CreateTeamRequest;
 
                     /**
                      * Verifies a CreateTeamRequest message.
@@ -2416,7 +2416,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns CreateTeamRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.registration.CreateTeamRequest;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.registration.CreateTeamRequest;
 
                     /**
                      * Creates a plain object from a CreateTeamRequest message. Also converts values to other types if specified.
@@ -2424,7 +2424,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.registration.CreateTeamRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.registration.CreateTeamRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this CreateTeamRequest to JSON.
@@ -2447,7 +2447,7 @@ export namespace isuxportal {
                      * Constructs a new CreateTeamResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.registration.ICreateTeamResponse);
+                    constructor(properties?: xsuportal.proto.services.registration.ICreateTeamResponse);
 
                     /** CreateTeamResponse teamId. */
                     public teamId: (number|Long);
@@ -2457,23 +2457,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns CreateTeamResponse instance
                      */
-                    public static create(properties?: isuxportal.proto.services.registration.ICreateTeamResponse): isuxportal.proto.services.registration.CreateTeamResponse;
+                    public static create(properties?: xsuportal.proto.services.registration.ICreateTeamResponse): isuxportal.proto.services.registration.CreateTeamResponse;
 
                     /**
-                     * Encodes the specified CreateTeamResponse message. Does not implicitly {@link isuxportal.proto.services.registration.CreateTeamResponse.verify|verify} messages.
+                     * Encodes the specified CreateTeamResponse message. Does not implicitly {@link xsuportal.proto.services.registration.CreateTeamResponse.verify|verify} messages.
                      * @param message CreateTeamResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.registration.ICreateTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.registration.ICreateTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified CreateTeamResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.CreateTeamResponse.verify|verify} messages.
+                     * Encodes the specified CreateTeamResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.CreateTeamResponse.verify|verify} messages.
                      * @param message CreateTeamResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.registration.ICreateTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.registration.ICreateTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a CreateTeamResponse message from the specified reader or buffer.
@@ -2483,7 +2483,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.registration.CreateTeamResponse;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.registration.CreateTeamResponse;
 
                     /**
                      * Decodes a CreateTeamResponse message from the specified reader or buffer, length delimited.
@@ -2492,7 +2492,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.registration.CreateTeamResponse;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.registration.CreateTeamResponse;
 
                     /**
                      * Verifies a CreateTeamResponse message.
@@ -2506,7 +2506,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns CreateTeamResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.registration.CreateTeamResponse;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.registration.CreateTeamResponse;
 
                     /**
                      * Creates a plain object from a CreateTeamResponse message. Also converts values to other types if specified.
@@ -2514,7 +2514,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.registration.CreateTeamResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.registration.CreateTeamResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this CreateTeamResponse to JSON.
@@ -2546,7 +2546,7 @@ export namespace isuxportal {
                      * Constructs a new JoinTeamRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.registration.IJoinTeamRequest);
+                    constructor(properties?: xsuportal.proto.services.registration.IJoinTeamRequest);
 
                     /** JoinTeamRequest teamId. */
                     public teamId: (number|Long);
@@ -2565,23 +2565,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns JoinTeamRequest instance
                      */
-                    public static create(properties?: isuxportal.proto.services.registration.IJoinTeamRequest): isuxportal.proto.services.registration.JoinTeamRequest;
+                    public static create(properties?: xsuportal.proto.services.registration.IJoinTeamRequest): isuxportal.proto.services.registration.JoinTeamRequest;
 
                     /**
-                     * Encodes the specified JoinTeamRequest message. Does not implicitly {@link isuxportal.proto.services.registration.JoinTeamRequest.verify|verify} messages.
+                     * Encodes the specified JoinTeamRequest message. Does not implicitly {@link xsuportal.proto.services.registration.JoinTeamRequest.verify|verify} messages.
                      * @param message JoinTeamRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.registration.IJoinTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.registration.IJoinTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified JoinTeamRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.JoinTeamRequest.verify|verify} messages.
+                     * Encodes the specified JoinTeamRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.JoinTeamRequest.verify|verify} messages.
                      * @param message JoinTeamRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.registration.IJoinTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.registration.IJoinTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a JoinTeamRequest message from the specified reader or buffer.
@@ -2591,7 +2591,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.registration.JoinTeamRequest;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.registration.JoinTeamRequest;
 
                     /**
                      * Decodes a JoinTeamRequest message from the specified reader or buffer, length delimited.
@@ -2600,7 +2600,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.registration.JoinTeamRequest;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.registration.JoinTeamRequest;
 
                     /**
                      * Verifies a JoinTeamRequest message.
@@ -2614,7 +2614,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns JoinTeamRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.registration.JoinTeamRequest;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.registration.JoinTeamRequest;
 
                     /**
                      * Creates a plain object from a JoinTeamRequest message. Also converts values to other types if specified.
@@ -2622,7 +2622,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.registration.JoinTeamRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.registration.JoinTeamRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this JoinTeamRequest to JSON.
@@ -2642,30 +2642,30 @@ export namespace isuxportal {
                      * Constructs a new JoinTeamResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.registration.IJoinTeamResponse);
+                    constructor(properties?: xsuportal.proto.services.registration.IJoinTeamResponse);
 
                     /**
                      * Creates a new JoinTeamResponse instance using the specified properties.
                      * @param [properties] Properties to set
                      * @returns JoinTeamResponse instance
                      */
-                    public static create(properties?: isuxportal.proto.services.registration.IJoinTeamResponse): isuxportal.proto.services.registration.JoinTeamResponse;
+                    public static create(properties?: xsuportal.proto.services.registration.IJoinTeamResponse): isuxportal.proto.services.registration.JoinTeamResponse;
 
                     /**
-                     * Encodes the specified JoinTeamResponse message. Does not implicitly {@link isuxportal.proto.services.registration.JoinTeamResponse.verify|verify} messages.
+                     * Encodes the specified JoinTeamResponse message. Does not implicitly {@link xsuportal.proto.services.registration.JoinTeamResponse.verify|verify} messages.
                      * @param message JoinTeamResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.registration.IJoinTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.registration.IJoinTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified JoinTeamResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.JoinTeamResponse.verify|verify} messages.
+                     * Encodes the specified JoinTeamResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.JoinTeamResponse.verify|verify} messages.
                      * @param message JoinTeamResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.registration.IJoinTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.registration.IJoinTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a JoinTeamResponse message from the specified reader or buffer.
@@ -2675,7 +2675,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.registration.JoinTeamResponse;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.registration.JoinTeamResponse;
 
                     /**
                      * Decodes a JoinTeamResponse message from the specified reader or buffer, length delimited.
@@ -2684,7 +2684,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.registration.JoinTeamResponse;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.registration.JoinTeamResponse;
 
                     /**
                      * Verifies a JoinTeamResponse message.
@@ -2698,7 +2698,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns JoinTeamResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.registration.JoinTeamResponse;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.registration.JoinTeamResponse;
 
                     /**
                      * Creates a plain object from a JoinTeamResponse message. Also converts values to other types if specified.
@@ -2706,7 +2706,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.registration.JoinTeamResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.registration.JoinTeamResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this JoinTeamResponse to JSON.
@@ -2732,7 +2732,7 @@ export namespace isuxportal {
                      * Constructs a new GetRegistrationSessionQuery.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.registration.IGetRegistrationSessionQuery);
+                    constructor(properties?: xsuportal.proto.services.registration.IGetRegistrationSessionQuery);
 
                     /** GetRegistrationSessionQuery teamId. */
                     public teamId: (number|Long);
@@ -2745,23 +2745,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns GetRegistrationSessionQuery instance
                      */
-                    public static create(properties?: isuxportal.proto.services.registration.IGetRegistrationSessionQuery): isuxportal.proto.services.registration.GetRegistrationSessionQuery;
+                    public static create(properties?: xsuportal.proto.services.registration.IGetRegistrationSessionQuery): isuxportal.proto.services.registration.GetRegistrationSessionQuery;
 
                     /**
-                     * Encodes the specified GetRegistrationSessionQuery message. Does not implicitly {@link isuxportal.proto.services.registration.GetRegistrationSessionQuery.verify|verify} messages.
+                     * Encodes the specified GetRegistrationSessionQuery message. Does not implicitly {@link xsuportal.proto.services.registration.GetRegistrationSessionQuery.verify|verify} messages.
                      * @param message GetRegistrationSessionQuery message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.registration.IGetRegistrationSessionQuery, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.registration.IGetRegistrationSessionQuery, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified GetRegistrationSessionQuery message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.GetRegistrationSessionQuery.verify|verify} messages.
+                     * Encodes the specified GetRegistrationSessionQuery message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.GetRegistrationSessionQuery.verify|verify} messages.
                      * @param message GetRegistrationSessionQuery message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.registration.IGetRegistrationSessionQuery, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.registration.IGetRegistrationSessionQuery, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a GetRegistrationSessionQuery message from the specified reader or buffer.
@@ -2771,7 +2771,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.registration.GetRegistrationSessionQuery;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.registration.GetRegistrationSessionQuery;
 
                     /**
                      * Decodes a GetRegistrationSessionQuery message from the specified reader or buffer, length delimited.
@@ -2780,7 +2780,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.registration.GetRegistrationSessionQuery;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.registration.GetRegistrationSessionQuery;
 
                     /**
                      * Verifies a GetRegistrationSessionQuery message.
@@ -2794,7 +2794,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns GetRegistrationSessionQuery
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.registration.GetRegistrationSessionQuery;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.registration.GetRegistrationSessionQuery;
 
                     /**
                      * Creates a plain object from a GetRegistrationSessionQuery message. Also converts values to other types if specified.
@@ -2802,7 +2802,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.registration.GetRegistrationSessionQuery, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.registration.GetRegistrationSessionQuery, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this GetRegistrationSessionQuery to JSON.
@@ -2815,10 +2815,10 @@ export namespace isuxportal {
                 interface IGetRegistrationSessionResponse {
 
                     /** GetRegistrationSessionResponse team */
-                    team?: (isuxportal.proto.resources.ITeam|null);
+                    team?: (xsuportal.proto.resources.ITeam|null);
 
                     /** GetRegistrationSessionResponse status */
-                    status?: (isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status|null);
+                    status?: (xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status|null);
 
                     /** GetRegistrationSessionResponse githubLogin */
                     githubLogin?: (string|null);
@@ -2846,13 +2846,13 @@ export namespace isuxportal {
                      * Constructs a new GetRegistrationSessionResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.registration.IGetRegistrationSessionResponse);
+                    constructor(properties?: xsuportal.proto.services.registration.IGetRegistrationSessionResponse);
 
                     /** GetRegistrationSessionResponse team. */
-                    public team?: (isuxportal.proto.resources.ITeam|null);
+                    public team?: (xsuportal.proto.resources.ITeam|null);
 
                     /** GetRegistrationSessionResponse status. */
-                    public status: isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status;
+                    public status: xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status;
 
                     /** GetRegistrationSessionResponse githubLogin. */
                     public githubLogin: string;
@@ -2877,23 +2877,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns GetRegistrationSessionResponse instance
                      */
-                    public static create(properties?: isuxportal.proto.services.registration.IGetRegistrationSessionResponse): isuxportal.proto.services.registration.GetRegistrationSessionResponse;
+                    public static create(properties?: xsuportal.proto.services.registration.IGetRegistrationSessionResponse): isuxportal.proto.services.registration.GetRegistrationSessionResponse;
 
                     /**
-                     * Encodes the specified GetRegistrationSessionResponse message. Does not implicitly {@link isuxportal.proto.services.registration.GetRegistrationSessionResponse.verify|verify} messages.
+                     * Encodes the specified GetRegistrationSessionResponse message. Does not implicitly {@link xsuportal.proto.services.registration.GetRegistrationSessionResponse.verify|verify} messages.
                      * @param message GetRegistrationSessionResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.registration.IGetRegistrationSessionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.registration.IGetRegistrationSessionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified GetRegistrationSessionResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.GetRegistrationSessionResponse.verify|verify} messages.
+                     * Encodes the specified GetRegistrationSessionResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.GetRegistrationSessionResponse.verify|verify} messages.
                      * @param message GetRegistrationSessionResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.registration.IGetRegistrationSessionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.registration.IGetRegistrationSessionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a GetRegistrationSessionResponse message from the specified reader or buffer.
@@ -2903,7 +2903,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.registration.GetRegistrationSessionResponse;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.registration.GetRegistrationSessionResponse;
 
                     /**
                      * Decodes a GetRegistrationSessionResponse message from the specified reader or buffer, length delimited.
@@ -2912,7 +2912,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.registration.GetRegistrationSessionResponse;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.registration.GetRegistrationSessionResponse;
 
                     /**
                      * Verifies a GetRegistrationSessionResponse message.
@@ -2926,7 +2926,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns GetRegistrationSessionResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.registration.GetRegistrationSessionResponse;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.registration.GetRegistrationSessionResponse;
 
                     /**
                      * Creates a plain object from a GetRegistrationSessionResponse message. Also converts values to other types if specified.
@@ -2934,7 +2934,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.registration.GetRegistrationSessionResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.registration.GetRegistrationSessionResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this GetRegistrationSessionResponse to JSON.
@@ -2979,7 +2979,7 @@ export namespace isuxportal {
                      * Constructs a new UpdateRegistrationRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.registration.IUpdateRegistrationRequest);
+                    constructor(properties?: xsuportal.proto.services.registration.IUpdateRegistrationRequest);
 
                     /** UpdateRegistrationRequest teamName. */
                     public teamName: string;
@@ -2998,23 +2998,23 @@ export namespace isuxportal {
                      * @param [properties] Properties to set
                      * @returns UpdateRegistrationRequest instance
                      */
-                    public static create(properties?: isuxportal.proto.services.registration.IUpdateRegistrationRequest): isuxportal.proto.services.registration.UpdateRegistrationRequest;
+                    public static create(properties?: xsuportal.proto.services.registration.IUpdateRegistrationRequest): isuxportal.proto.services.registration.UpdateRegistrationRequest;
 
                     /**
-                     * Encodes the specified UpdateRegistrationRequest message. Does not implicitly {@link isuxportal.proto.services.registration.UpdateRegistrationRequest.verify|verify} messages.
+                     * Encodes the specified UpdateRegistrationRequest message. Does not implicitly {@link xsuportal.proto.services.registration.UpdateRegistrationRequest.verify|verify} messages.
                      * @param message UpdateRegistrationRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.registration.IUpdateRegistrationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.registration.IUpdateRegistrationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified UpdateRegistrationRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.UpdateRegistrationRequest.verify|verify} messages.
+                     * Encodes the specified UpdateRegistrationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.UpdateRegistrationRequest.verify|verify} messages.
                      * @param message UpdateRegistrationRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.registration.IUpdateRegistrationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.registration.IUpdateRegistrationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes an UpdateRegistrationRequest message from the specified reader or buffer.
@@ -3024,7 +3024,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.registration.UpdateRegistrationRequest;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.registration.UpdateRegistrationRequest;
 
                     /**
                      * Decodes an UpdateRegistrationRequest message from the specified reader or buffer, length delimited.
@@ -3033,7 +3033,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.registration.UpdateRegistrationRequest;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.registration.UpdateRegistrationRequest;
 
                     /**
                      * Verifies an UpdateRegistrationRequest message.
@@ -3047,7 +3047,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns UpdateRegistrationRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.registration.UpdateRegistrationRequest;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.registration.UpdateRegistrationRequest;
 
                     /**
                      * Creates a plain object from an UpdateRegistrationRequest message. Also converts values to other types if specified.
@@ -3055,7 +3055,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.registration.UpdateRegistrationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.registration.UpdateRegistrationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this UpdateRegistrationRequest to JSON.
@@ -3075,30 +3075,30 @@ export namespace isuxportal {
                      * Constructs a new UpdateRegistrationResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.registration.IUpdateRegistrationResponse);
+                    constructor(properties?: xsuportal.proto.services.registration.IUpdateRegistrationResponse);
 
                     /**
                      * Creates a new UpdateRegistrationResponse instance using the specified properties.
                      * @param [properties] Properties to set
                      * @returns UpdateRegistrationResponse instance
                      */
-                    public static create(properties?: isuxportal.proto.services.registration.IUpdateRegistrationResponse): isuxportal.proto.services.registration.UpdateRegistrationResponse;
+                    public static create(properties?: xsuportal.proto.services.registration.IUpdateRegistrationResponse): isuxportal.proto.services.registration.UpdateRegistrationResponse;
 
                     /**
-                     * Encodes the specified UpdateRegistrationResponse message. Does not implicitly {@link isuxportal.proto.services.registration.UpdateRegistrationResponse.verify|verify} messages.
+                     * Encodes the specified UpdateRegistrationResponse message. Does not implicitly {@link xsuportal.proto.services.registration.UpdateRegistrationResponse.verify|verify} messages.
                      * @param message UpdateRegistrationResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.registration.IUpdateRegistrationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.registration.IUpdateRegistrationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified UpdateRegistrationResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.UpdateRegistrationResponse.verify|verify} messages.
+                     * Encodes the specified UpdateRegistrationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.UpdateRegistrationResponse.verify|verify} messages.
                      * @param message UpdateRegistrationResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.registration.IUpdateRegistrationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.registration.IUpdateRegistrationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes an UpdateRegistrationResponse message from the specified reader or buffer.
@@ -3108,7 +3108,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.registration.UpdateRegistrationResponse;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.registration.UpdateRegistrationResponse;
 
                     /**
                      * Decodes an UpdateRegistrationResponse message from the specified reader or buffer, length delimited.
@@ -3117,7 +3117,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.registration.UpdateRegistrationResponse;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.registration.UpdateRegistrationResponse;
 
                     /**
                      * Verifies an UpdateRegistrationResponse message.
@@ -3131,7 +3131,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns UpdateRegistrationResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.registration.UpdateRegistrationResponse;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.registration.UpdateRegistrationResponse;
 
                     /**
                      * Creates a plain object from an UpdateRegistrationResponse message. Also converts values to other types if specified.
@@ -3139,7 +3139,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.registration.UpdateRegistrationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.registration.UpdateRegistrationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this UpdateRegistrationResponse to JSON.
@@ -3159,30 +3159,30 @@ export namespace isuxportal {
                      * Constructs a new DeleteRegistrationRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.registration.IDeleteRegistrationRequest);
+                    constructor(properties?: xsuportal.proto.services.registration.IDeleteRegistrationRequest);
 
                     /**
                      * Creates a new DeleteRegistrationRequest instance using the specified properties.
                      * @param [properties] Properties to set
                      * @returns DeleteRegistrationRequest instance
                      */
-                    public static create(properties?: isuxportal.proto.services.registration.IDeleteRegistrationRequest): isuxportal.proto.services.registration.DeleteRegistrationRequest;
+                    public static create(properties?: xsuportal.proto.services.registration.IDeleteRegistrationRequest): isuxportal.proto.services.registration.DeleteRegistrationRequest;
 
                     /**
-                     * Encodes the specified DeleteRegistrationRequest message. Does not implicitly {@link isuxportal.proto.services.registration.DeleteRegistrationRequest.verify|verify} messages.
+                     * Encodes the specified DeleteRegistrationRequest message. Does not implicitly {@link xsuportal.proto.services.registration.DeleteRegistrationRequest.verify|verify} messages.
                      * @param message DeleteRegistrationRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.registration.IDeleteRegistrationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.registration.IDeleteRegistrationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified DeleteRegistrationRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.DeleteRegistrationRequest.verify|verify} messages.
+                     * Encodes the specified DeleteRegistrationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.DeleteRegistrationRequest.verify|verify} messages.
                      * @param message DeleteRegistrationRequest message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.registration.IDeleteRegistrationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.registration.IDeleteRegistrationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a DeleteRegistrationRequest message from the specified reader or buffer.
@@ -3192,7 +3192,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.registration.DeleteRegistrationRequest;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.registration.DeleteRegistrationRequest;
 
                     /**
                      * Decodes a DeleteRegistrationRequest message from the specified reader or buffer, length delimited.
@@ -3201,7 +3201,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.registration.DeleteRegistrationRequest;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.registration.DeleteRegistrationRequest;
 
                     /**
                      * Verifies a DeleteRegistrationRequest message.
@@ -3215,7 +3215,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns DeleteRegistrationRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.registration.DeleteRegistrationRequest;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.registration.DeleteRegistrationRequest;
 
                     /**
                      * Creates a plain object from a DeleteRegistrationRequest message. Also converts values to other types if specified.
@@ -3223,7 +3223,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.registration.DeleteRegistrationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.registration.DeleteRegistrationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this DeleteRegistrationRequest to JSON.
@@ -3243,30 +3243,30 @@ export namespace isuxportal {
                      * Constructs a new DeleteRegistrationResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: isuxportal.proto.services.registration.IDeleteRegistrationResponse);
+                    constructor(properties?: xsuportal.proto.services.registration.IDeleteRegistrationResponse);
 
                     /**
                      * Creates a new DeleteRegistrationResponse instance using the specified properties.
                      * @param [properties] Properties to set
                      * @returns DeleteRegistrationResponse instance
                      */
-                    public static create(properties?: isuxportal.proto.services.registration.IDeleteRegistrationResponse): isuxportal.proto.services.registration.DeleteRegistrationResponse;
+                    public static create(properties?: xsuportal.proto.services.registration.IDeleteRegistrationResponse): isuxportal.proto.services.registration.DeleteRegistrationResponse;
 
                     /**
-                     * Encodes the specified DeleteRegistrationResponse message. Does not implicitly {@link isuxportal.proto.services.registration.DeleteRegistrationResponse.verify|verify} messages.
+                     * Encodes the specified DeleteRegistrationResponse message. Does not implicitly {@link xsuportal.proto.services.registration.DeleteRegistrationResponse.verify|verify} messages.
                      * @param message DeleteRegistrationResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: isuxportal.proto.services.registration.IDeleteRegistrationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.registration.IDeleteRegistrationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified DeleteRegistrationResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.DeleteRegistrationResponse.verify|verify} messages.
+                     * Encodes the specified DeleteRegistrationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.DeleteRegistrationResponse.verify|verify} messages.
                      * @param message DeleteRegistrationResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: isuxportal.proto.services.registration.IDeleteRegistrationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.registration.IDeleteRegistrationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
                      * Decodes a DeleteRegistrationResponse message from the specified reader or buffer.
@@ -3276,7 +3276,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): isuxportal.proto.services.registration.DeleteRegistrationResponse;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.registration.DeleteRegistrationResponse;
 
                     /**
                      * Decodes a DeleteRegistrationResponse message from the specified reader or buffer, length delimited.
@@ -3285,7 +3285,7 @@ export namespace isuxportal {
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): isuxportal.proto.services.registration.DeleteRegistrationResponse;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.registration.DeleteRegistrationResponse;
 
                     /**
                      * Verifies a DeleteRegistrationResponse message.
@@ -3299,7 +3299,7 @@ export namespace isuxportal {
                      * @param object Plain object
                      * @returns DeleteRegistrationResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): isuxportal.proto.services.registration.DeleteRegistrationResponse;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.registration.DeleteRegistrationResponse;
 
                     /**
                      * Creates a plain object from a DeleteRegistrationResponse message. Also converts values to other types if specified.
@@ -3307,7 +3307,7 @@ export namespace isuxportal {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: isuxportal.proto.services.registration.DeleteRegistrationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.registration.DeleteRegistrationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this DeleteRegistrationResponse to JSON.

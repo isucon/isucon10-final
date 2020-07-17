@@ -1,4 +1,4 @@
-import {isuxportal} from "./pb";
+import {xsuportal} from "./pb";
 import {ApiClient} from "./ApiClient";
 import React from "react";
 
@@ -6,8 +6,8 @@ import {ErrorMessage} from "./ErrorMessage";
 
 export interface Props {
   client: ApiClient,
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse,
-  registrationSession: isuxportal.proto.services.registration.GetRegistrationSessionResponse,
+  session: xsuportal.proto.services.common.GetCurrentSessionResponse,
+  registrationSession: xsuportal.proto.services.registration.GetRegistrationSessionResponse,
   updateRegistrationSession: () => void,
   enableEdit: () => void,
 }
@@ -88,7 +88,7 @@ export class RegistrationStatus extends React.Component<Props, State> {
     return this.props.registrationSession.team!.members!.map((member) => this.renderTeamMember(member));
   }
 
-  renderTeamMember(member: isuxportal.proto.resources.IContestant) {
+  renderTeamMember(member: xsuportal.proto.resources.IContestant) {
     return <div className="card mt-2" key={member.id!.toString()}>
       <div className="card-content">
         <div className="media">

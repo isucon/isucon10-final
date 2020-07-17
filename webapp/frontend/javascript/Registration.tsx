@@ -1,4 +1,4 @@
-import {isuxportal} from "./pb";
+import {xsuportal} from "./pb";
 import {ApiError, ApiClient} from "./ApiClient";
 import React from "react";
 
@@ -9,13 +9,13 @@ import {RegistrationForm} from "./RegistrationForm";
 import {RegistrationStatus} from "./RegistrationStatus";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse,
+  session: xsuportal.proto.services.common.GetCurrentSessionResponse,
   client: ApiClient,
 }
 
 export interface State {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse,
-  registrationSession: isuxportal.proto.services.registration.GetRegistrationSessionResponse | null,
+  session: xsuportal.proto.services.common.GetCurrentSessionResponse,
+  registrationSession: xsuportal.proto.services.registration.GetRegistrationSessionResponse | null,
   teamId: number | null,
   inviteToken: string | null,
   edit: boolean,
@@ -85,10 +85,10 @@ export class Registration extends React.Component<Props, State> {
         <RegistrationLogin client={this.props.client} session={this.state.session} registrationSession={this.state.registrationSession} />
       </>;
       switch(this.state.registrationSession.status) {
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.NOT_LOGGED_IN:
+        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.NOT_LOGGED_IN:
           return login;
           break;
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.CLOSED:
+        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.CLOSED:
           return <>
             <div className="message is-danger">
               <div className="message-body">
@@ -98,7 +98,7 @@ export class Registration extends React.Component<Props, State> {
             {login}
           </>;
           break;
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.NOT_JOINABLE:
+        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.NOT_JOINABLE:
           return <>
             <div className="message is-danger">
               <div className="message-body">
@@ -108,14 +108,14 @@ export class Registration extends React.Component<Props, State> {
             {login}
           </>;
           break;
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.CREATABLE:
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINABLE:
+        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.CREATABLE:
+        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINABLE:
           return <>
             {login}
             <RegistrationForm client={this.props.client} session={this.state.session} inviteToken={this.state.inviteToken} registrationSession={this.state.registrationSession} updateRegistrationSession={this.updateRegistrationSession.bind(this)} />
           </>;
           break;
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINED:
+        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINED:
           if (this.state.edit) {
             return <RegistrationForm client={this.props.client} session={this.state.session} inviteToken={null} registrationSession={this.state.registrationSession} updateRegistrationSession={this.updateRegistrationSession.bind(this)} />;
           }

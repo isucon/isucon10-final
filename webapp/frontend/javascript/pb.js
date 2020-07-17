@@ -257,20 +257,20 @@ $root.google = (function() {
     return google;
 })();
 
-$root.isuxportal = (function() {
+$root.xsuportal = (function() {
 
     /**
-     * Namespace isuxportal.
-     * @exports isuxportal
+     * Namespace xsuportal.
+     * @exports xsuportal
      * @namespace
      */
-    var isuxportal = {};
+    var xsuportal = {};
 
-    isuxportal.proto = (function() {
+    xsuportal.proto = (function() {
 
         /**
          * Namespace proto.
-         * @memberof isuxportal
+         * @memberof xsuportal
          * @namespace
          */
         var proto = {};
@@ -279,22 +279,22 @@ $root.isuxportal = (function() {
 
             /**
              * Properties of an Error.
-             * @memberof isuxportal.proto
+             * @memberof xsuportal.proto
              * @interface IError
              * @property {number|null} [code] Error code
              * @property {string|null} [name] Error name
              * @property {string|null} [humanMessage] Error humanMessage
              * @property {Array.<string>|null} [humanDescriptions] Error humanDescriptions
-             * @property {isuxportal.proto.Error.IDebugInfo|null} [debugInfo] Error debugInfo
+             * @property {xsuportal.proto.Error.IDebugInfo|null} [debugInfo] Error debugInfo
              */
 
             /**
              * Constructs a new Error.
-             * @memberof isuxportal.proto
+             * @memberof xsuportal.proto
              * @classdesc Represents an Error.
              * @implements IError
              * @constructor
-             * @param {isuxportal.proto.IError=} [properties] Properties to set
+             * @param {xsuportal.proto.IError=} [properties] Properties to set
              */
             function Error(properties) {
                 this.humanDescriptions = [];
@@ -307,7 +307,7 @@ $root.isuxportal = (function() {
             /**
              * Error code.
              * @member {number} code
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @instance
              */
             Error.prototype.code = 0;
@@ -315,7 +315,7 @@ $root.isuxportal = (function() {
             /**
              * Error name.
              * @member {string} name
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @instance
              */
             Error.prototype.name = "";
@@ -323,7 +323,7 @@ $root.isuxportal = (function() {
             /**
              * Error humanMessage.
              * @member {string} humanMessage
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @instance
              */
             Error.prototype.humanMessage = "";
@@ -331,15 +331,15 @@ $root.isuxportal = (function() {
             /**
              * Error humanDescriptions.
              * @member {Array.<string>} humanDescriptions
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @instance
              */
             Error.prototype.humanDescriptions = $util.emptyArray;
 
             /**
              * Error debugInfo.
-             * @member {isuxportal.proto.Error.IDebugInfo|null|undefined} debugInfo
-             * @memberof isuxportal.proto.Error
+             * @member {xsuportal.proto.Error.IDebugInfo|null|undefined} debugInfo
+             * @memberof xsuportal.proto.Error
              * @instance
              */
             Error.prototype.debugInfo = null;
@@ -347,21 +347,21 @@ $root.isuxportal = (function() {
             /**
              * Creates a new Error instance using the specified properties.
              * @function create
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @static
-             * @param {isuxportal.proto.IError=} [properties] Properties to set
-             * @returns {isuxportal.proto.Error} Error instance
+             * @param {xsuportal.proto.IError=} [properties] Properties to set
+             * @returns {xsuportal.proto.Error} Error instance
              */
             Error.create = function create(properties) {
                 return new Error(properties);
             };
 
             /**
-             * Encodes the specified Error message. Does not implicitly {@link isuxportal.proto.Error.verify|verify} messages.
+             * Encodes the specified Error message. Does not implicitly {@link xsuportal.proto.Error.verify|verify} messages.
              * @function encode
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @static
-             * @param {isuxportal.proto.IError} message Error message or plain object to encode
+             * @param {xsuportal.proto.IError} message Error message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
@@ -378,16 +378,16 @@ $root.isuxportal = (function() {
                     for (var i = 0; i < message.humanDescriptions.length; ++i)
                         writer.uint32(/* id 4, wireType 2 =*/34).string(message.humanDescriptions[i]);
                 if (message.debugInfo != null && Object.hasOwnProperty.call(message, "debugInfo"))
-                    $root.isuxportal.proto.Error.DebugInfo.encode(message.debugInfo, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
+                    $root.xsuportal.proto.Error.DebugInfo.encode(message.debugInfo, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                 return writer;
             };
 
             /**
-             * Encodes the specified Error message, length delimited. Does not implicitly {@link isuxportal.proto.Error.verify|verify} messages.
+             * Encodes the specified Error message, length delimited. Does not implicitly {@link xsuportal.proto.Error.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @static
-             * @param {isuxportal.proto.IError} message Error message or plain object to encode
+             * @param {xsuportal.proto.IError} message Error message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
@@ -398,18 +398,18 @@ $root.isuxportal = (function() {
             /**
              * Decodes an Error message from the specified reader or buffer.
              * @function decode
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {isuxportal.proto.Error} Error
+             * @returns {xsuportal.proto.Error} Error
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             Error.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.Error();
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.Error();
                 while (reader.pos < end) {
                     var tag = reader.uint32();
                     switch (tag >>> 3) {
@@ -428,7 +428,7 @@ $root.isuxportal = (function() {
                         message.humanDescriptions.push(reader.string());
                         break;
                     case 16:
-                        message.debugInfo = $root.isuxportal.proto.Error.DebugInfo.decode(reader, reader.uint32());
+                        message.debugInfo = $root.xsuportal.proto.Error.DebugInfo.decode(reader, reader.uint32());
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -441,10 +441,10 @@ $root.isuxportal = (function() {
             /**
              * Decodes an Error message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {isuxportal.proto.Error} Error
+             * @returns {xsuportal.proto.Error} Error
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
@@ -457,7 +457,7 @@ $root.isuxportal = (function() {
             /**
              * Verifies an Error message.
              * @function verify
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -482,7 +482,7 @@ $root.isuxportal = (function() {
                             return "humanDescriptions: string[] expected";
                 }
                 if (message.debugInfo != null && message.hasOwnProperty("debugInfo")) {
-                    var error = $root.isuxportal.proto.Error.DebugInfo.verify(message.debugInfo);
+                    var error = $root.xsuportal.proto.Error.DebugInfo.verify(message.debugInfo);
                     if (error)
                         return "debugInfo." + error;
                 }
@@ -492,15 +492,15 @@ $root.isuxportal = (function() {
             /**
              * Creates an Error message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {isuxportal.proto.Error} Error
+             * @returns {xsuportal.proto.Error} Error
              */
             Error.fromObject = function fromObject(object) {
-                if (object instanceof $root.isuxportal.proto.Error)
+                if (object instanceof $root.xsuportal.proto.Error)
                     return object;
-                var message = new $root.isuxportal.proto.Error();
+                var message = new $root.xsuportal.proto.Error();
                 if (object.code != null)
                     message.code = object.code | 0;
                 if (object.name != null)
@@ -509,15 +509,15 @@ $root.isuxportal = (function() {
                     message.humanMessage = String(object.humanMessage);
                 if (object.humanDescriptions) {
                     if (!Array.isArray(object.humanDescriptions))
-                        throw TypeError(".isuxportal.proto.Error.humanDescriptions: array expected");
+                        throw TypeError(".xsuportal.proto.Error.humanDescriptions: array expected");
                     message.humanDescriptions = [];
                     for (var i = 0; i < object.humanDescriptions.length; ++i)
                         message.humanDescriptions[i] = String(object.humanDescriptions[i]);
                 }
                 if (object.debugInfo != null) {
                     if (typeof object.debugInfo !== "object")
-                        throw TypeError(".isuxportal.proto.Error.debugInfo: object expected");
-                    message.debugInfo = $root.isuxportal.proto.Error.DebugInfo.fromObject(object.debugInfo);
+                        throw TypeError(".xsuportal.proto.Error.debugInfo: object expected");
+                    message.debugInfo = $root.xsuportal.proto.Error.DebugInfo.fromObject(object.debugInfo);
                 }
                 return message;
             };
@@ -525,9 +525,9 @@ $root.isuxportal = (function() {
             /**
              * Creates a plain object from an Error message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @static
-             * @param {isuxportal.proto.Error} message Error
+             * @param {xsuportal.proto.Error} message Error
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
@@ -555,14 +555,14 @@ $root.isuxportal = (function() {
                         object.humanDescriptions[j] = message.humanDescriptions[j];
                 }
                 if (message.debugInfo != null && message.hasOwnProperty("debugInfo"))
-                    object.debugInfo = $root.isuxportal.proto.Error.DebugInfo.toObject(message.debugInfo, options);
+                    object.debugInfo = $root.xsuportal.proto.Error.DebugInfo.toObject(message.debugInfo, options);
                 return object;
             };
 
             /**
              * Converts this Error to JSON.
              * @function toJSON
-             * @memberof isuxportal.proto.Error
+             * @memberof xsuportal.proto.Error
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
@@ -574,7 +574,7 @@ $root.isuxportal = (function() {
 
                 /**
                  * Properties of a DebugInfo.
-                 * @memberof isuxportal.proto.Error
+                 * @memberof xsuportal.proto.Error
                  * @interface IDebugInfo
                  * @property {string|null} [exception] DebugInfo exception
                  * @property {Array.<string>|null} [trace] DebugInfo trace
@@ -584,11 +584,11 @@ $root.isuxportal = (function() {
 
                 /**
                  * Constructs a new DebugInfo.
-                 * @memberof isuxportal.proto.Error
+                 * @memberof xsuportal.proto.Error
                  * @classdesc Represents a DebugInfo.
                  * @implements IDebugInfo
                  * @constructor
-                 * @param {isuxportal.proto.Error.IDebugInfo=} [properties] Properties to set
+                 * @param {xsuportal.proto.Error.IDebugInfo=} [properties] Properties to set
                  */
                 function DebugInfo(properties) {
                     this.trace = [];
@@ -603,7 +603,7 @@ $root.isuxportal = (function() {
                 /**
                  * DebugInfo exception.
                  * @member {string} exception
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @instance
                  */
                 DebugInfo.prototype.exception = "";
@@ -611,7 +611,7 @@ $root.isuxportal = (function() {
                 /**
                  * DebugInfo trace.
                  * @member {Array.<string>} trace
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @instance
                  */
                 DebugInfo.prototype.trace = $util.emptyArray;
@@ -619,7 +619,7 @@ $root.isuxportal = (function() {
                 /**
                  * DebugInfo applicationTrace.
                  * @member {Array.<string>} applicationTrace
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @instance
                  */
                 DebugInfo.prototype.applicationTrace = $util.emptyArray;
@@ -627,7 +627,7 @@ $root.isuxportal = (function() {
                 /**
                  * DebugInfo frameworkTrace.
                  * @member {Array.<string>} frameworkTrace
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @instance
                  */
                 DebugInfo.prototype.frameworkTrace = $util.emptyArray;
@@ -635,21 +635,21 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a new DebugInfo instance using the specified properties.
                  * @function create
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @static
-                 * @param {isuxportal.proto.Error.IDebugInfo=} [properties] Properties to set
-                 * @returns {isuxportal.proto.Error.DebugInfo} DebugInfo instance
+                 * @param {xsuportal.proto.Error.IDebugInfo=} [properties] Properties to set
+                 * @returns {xsuportal.proto.Error.DebugInfo} DebugInfo instance
                  */
                 DebugInfo.create = function create(properties) {
                     return new DebugInfo(properties);
                 };
 
                 /**
-                 * Encodes the specified DebugInfo message. Does not implicitly {@link isuxportal.proto.Error.DebugInfo.verify|verify} messages.
+                 * Encodes the specified DebugInfo message. Does not implicitly {@link xsuportal.proto.Error.DebugInfo.verify|verify} messages.
                  * @function encode
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @static
-                 * @param {isuxportal.proto.Error.IDebugInfo} message DebugInfo message or plain object to encode
+                 * @param {xsuportal.proto.Error.IDebugInfo} message DebugInfo message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -671,11 +671,11 @@ $root.isuxportal = (function() {
                 };
 
                 /**
-                 * Encodes the specified DebugInfo message, length delimited. Does not implicitly {@link isuxportal.proto.Error.DebugInfo.verify|verify} messages.
+                 * Encodes the specified DebugInfo message, length delimited. Does not implicitly {@link xsuportal.proto.Error.DebugInfo.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @static
-                 * @param {isuxportal.proto.Error.IDebugInfo} message DebugInfo message or plain object to encode
+                 * @param {xsuportal.proto.Error.IDebugInfo} message DebugInfo message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -686,18 +686,18 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a DebugInfo message from the specified reader or buffer.
                  * @function decode
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {isuxportal.proto.Error.DebugInfo} DebugInfo
+                 * @returns {xsuportal.proto.Error.DebugInfo} DebugInfo
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 DebugInfo.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.Error.DebugInfo();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.Error.DebugInfo();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
@@ -730,10 +730,10 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a DebugInfo message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {isuxportal.proto.Error.DebugInfo} DebugInfo
+                 * @returns {xsuportal.proto.Error.DebugInfo} DebugInfo
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
@@ -746,7 +746,7 @@ $root.isuxportal = (function() {
                 /**
                  * Verifies a DebugInfo message.
                  * @function verify
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -784,34 +784,34 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a DebugInfo message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {isuxportal.proto.Error.DebugInfo} DebugInfo
+                 * @returns {xsuportal.proto.Error.DebugInfo} DebugInfo
                  */
                 DebugInfo.fromObject = function fromObject(object) {
-                    if (object instanceof $root.isuxportal.proto.Error.DebugInfo)
+                    if (object instanceof $root.xsuportal.proto.Error.DebugInfo)
                         return object;
-                    var message = new $root.isuxportal.proto.Error.DebugInfo();
+                    var message = new $root.xsuportal.proto.Error.DebugInfo();
                     if (object.exception != null)
                         message.exception = String(object.exception);
                     if (object.trace) {
                         if (!Array.isArray(object.trace))
-                            throw TypeError(".isuxportal.proto.Error.DebugInfo.trace: array expected");
+                            throw TypeError(".xsuportal.proto.Error.DebugInfo.trace: array expected");
                         message.trace = [];
                         for (var i = 0; i < object.trace.length; ++i)
                             message.trace[i] = String(object.trace[i]);
                     }
                     if (object.applicationTrace) {
                         if (!Array.isArray(object.applicationTrace))
-                            throw TypeError(".isuxportal.proto.Error.DebugInfo.applicationTrace: array expected");
+                            throw TypeError(".xsuportal.proto.Error.DebugInfo.applicationTrace: array expected");
                         message.applicationTrace = [];
                         for (var i = 0; i < object.applicationTrace.length; ++i)
                             message.applicationTrace[i] = String(object.applicationTrace[i]);
                     }
                     if (object.frameworkTrace) {
                         if (!Array.isArray(object.frameworkTrace))
-                            throw TypeError(".isuxportal.proto.Error.DebugInfo.frameworkTrace: array expected");
+                            throw TypeError(".xsuportal.proto.Error.DebugInfo.frameworkTrace: array expected");
                         message.frameworkTrace = [];
                         for (var i = 0; i < object.frameworkTrace.length; ++i)
                             message.frameworkTrace[i] = String(object.frameworkTrace[i]);
@@ -822,9 +822,9 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a plain object from a DebugInfo message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @static
-                 * @param {isuxportal.proto.Error.DebugInfo} message DebugInfo
+                 * @param {xsuportal.proto.Error.DebugInfo} message DebugInfo
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
@@ -862,7 +862,7 @@ $root.isuxportal = (function() {
                 /**
                  * Converts this DebugInfo to JSON.
                  * @function toJSON
-                 * @memberof isuxportal.proto.Error.DebugInfo
+                 * @memberof xsuportal.proto.Error.DebugInfo
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
@@ -880,7 +880,7 @@ $root.isuxportal = (function() {
 
             /**
              * Namespace resources.
-             * @memberof isuxportal.proto
+             * @memberof xsuportal.proto
              * @namespace
              */
             var resources = {};
@@ -889,28 +889,28 @@ $root.isuxportal = (function() {
 
                 /**
                  * Properties of a BenchmarkJob.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @interface IBenchmarkJob
                  * @property {number|Long|null} [id] BenchmarkJob id
                  * @property {number|Long|null} [teamId] BenchmarkJob teamId
                  * @property {number|Long|null} [targetId] BenchmarkJob targetId
-                 * @property {isuxportal.proto.resources.BenchmarkJob.Status|null} [status] BenchmarkJob status
-                 * @property {isuxportal.proto.resources.IBenchmarkResult|null} [result] BenchmarkJob result
+                 * @property {xsuportal.proto.resources.BenchmarkJob.Status|null} [status] BenchmarkJob status
+                 * @property {xsuportal.proto.resources.IBenchmarkResult|null} [result] BenchmarkJob result
                  * @property {google.protobuf.ITimestamp|null} [createdAt] BenchmarkJob createdAt
                  * @property {google.protobuf.ITimestamp|null} [updatedAt] BenchmarkJob updatedAt
                  * @property {google.protobuf.ITimestamp|null} [startedAt] BenchmarkJob startedAt
                  * @property {google.protobuf.ITimestamp|null} [finishedAt] BenchmarkJob finishedAt
-                 * @property {isuxportal.proto.resources.ITeam|null} [team] BenchmarkJob team
-                 * @property {isuxportal.proto.resources.IContestantInstance|null} [target] BenchmarkJob target
+                 * @property {xsuportal.proto.resources.ITeam|null} [team] BenchmarkJob team
+                 * @property {xsuportal.proto.resources.IContestantInstance|null} [target] BenchmarkJob target
                  */
 
                 /**
                  * Constructs a new BenchmarkJob.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @classdesc Represents a BenchmarkJob.
                  * @implements IBenchmarkJob
                  * @constructor
-                 * @param {isuxportal.proto.resources.IBenchmarkJob=} [properties] Properties to set
+                 * @param {xsuportal.proto.resources.IBenchmarkJob=} [properties] Properties to set
                  */
                 function BenchmarkJob(properties) {
                     if (properties)
@@ -922,7 +922,7 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkJob id.
                  * @member {number|Long} id
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -930,7 +930,7 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkJob teamId.
                  * @member {number|Long} teamId
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -938,23 +938,23 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkJob targetId.
                  * @member {number|Long} targetId
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.targetId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
                  * BenchmarkJob status.
-                 * @member {isuxportal.proto.resources.BenchmarkJob.Status} status
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @member {xsuportal.proto.resources.BenchmarkJob.Status} status
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.status = 0;
 
                 /**
                  * BenchmarkJob result.
-                 * @member {isuxportal.proto.resources.IBenchmarkResult|null|undefined} result
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @member {xsuportal.proto.resources.IBenchmarkResult|null|undefined} result
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.result = null;
@@ -962,7 +962,7 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkJob createdAt.
                  * @member {google.protobuf.ITimestamp|null|undefined} createdAt
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.createdAt = null;
@@ -970,7 +970,7 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkJob updatedAt.
                  * @member {google.protobuf.ITimestamp|null|undefined} updatedAt
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.updatedAt = null;
@@ -978,7 +978,7 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkJob startedAt.
                  * @member {google.protobuf.ITimestamp|null|undefined} startedAt
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.startedAt = null;
@@ -986,23 +986,23 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkJob finishedAt.
                  * @member {google.protobuf.ITimestamp|null|undefined} finishedAt
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.finishedAt = null;
 
                 /**
                  * BenchmarkJob team.
-                 * @member {isuxportal.proto.resources.ITeam|null|undefined} team
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @member {xsuportal.proto.resources.ITeam|null|undefined} team
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.team = null;
 
                 /**
                  * BenchmarkJob target.
-                 * @member {isuxportal.proto.resources.IContestantInstance|null|undefined} target
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @member {xsuportal.proto.resources.IContestantInstance|null|undefined} target
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
                 BenchmarkJob.prototype.target = null;
@@ -1010,21 +1010,21 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a new BenchmarkJob instance using the specified properties.
                  * @function create
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @static
-                 * @param {isuxportal.proto.resources.IBenchmarkJob=} [properties] Properties to set
-                 * @returns {isuxportal.proto.resources.BenchmarkJob} BenchmarkJob instance
+                 * @param {xsuportal.proto.resources.IBenchmarkJob=} [properties] Properties to set
+                 * @returns {xsuportal.proto.resources.BenchmarkJob} BenchmarkJob instance
                  */
                 BenchmarkJob.create = function create(properties) {
                     return new BenchmarkJob(properties);
                 };
 
                 /**
-                 * Encodes the specified BenchmarkJob message. Does not implicitly {@link isuxportal.proto.resources.BenchmarkJob.verify|verify} messages.
+                 * Encodes the specified BenchmarkJob message. Does not implicitly {@link xsuportal.proto.resources.BenchmarkJob.verify|verify} messages.
                  * @function encode
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @static
-                 * @param {isuxportal.proto.resources.IBenchmarkJob} message BenchmarkJob message or plain object to encode
+                 * @param {xsuportal.proto.resources.IBenchmarkJob} message BenchmarkJob message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -1040,7 +1040,7 @@ $root.isuxportal = (function() {
                     if (message.status != null && Object.hasOwnProperty.call(message, "status"))
                         writer.uint32(/* id 4, wireType 0 =*/32).int32(message.status);
                     if (message.result != null && Object.hasOwnProperty.call(message, "result"))
-                        $root.isuxportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                        $root.xsuportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
                     if (message.createdAt != null && Object.hasOwnProperty.call(message, "createdAt"))
                         $root.google.protobuf.Timestamp.encode(message.createdAt, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
                     if (message.updatedAt != null && Object.hasOwnProperty.call(message, "updatedAt"))
@@ -1050,18 +1050,18 @@ $root.isuxportal = (function() {
                     if (message.finishedAt != null && Object.hasOwnProperty.call(message, "finishedAt"))
                         $root.google.protobuf.Timestamp.encode(message.finishedAt, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
                     if (message.team != null && Object.hasOwnProperty.call(message, "team"))
-                        $root.isuxportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
+                        $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                     if (message.target != null && Object.hasOwnProperty.call(message, "target"))
-                        $root.isuxportal.proto.resources.ContestantInstance.encode(message.target, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
+                        $root.xsuportal.proto.resources.ContestantInstance.encode(message.target, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
                     return writer;
                 };
 
                 /**
-                 * Encodes the specified BenchmarkJob message, length delimited. Does not implicitly {@link isuxportal.proto.resources.BenchmarkJob.verify|verify} messages.
+                 * Encodes the specified BenchmarkJob message, length delimited. Does not implicitly {@link xsuportal.proto.resources.BenchmarkJob.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @static
-                 * @param {isuxportal.proto.resources.IBenchmarkJob} message BenchmarkJob message or plain object to encode
+                 * @param {xsuportal.proto.resources.IBenchmarkJob} message BenchmarkJob message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -1072,18 +1072,18 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a BenchmarkJob message from the specified reader or buffer.
                  * @function decode
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {isuxportal.proto.resources.BenchmarkJob} BenchmarkJob
+                 * @returns {xsuportal.proto.resources.BenchmarkJob} BenchmarkJob
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 BenchmarkJob.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.BenchmarkJob();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.BenchmarkJob();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
@@ -1100,7 +1100,7 @@ $root.isuxportal = (function() {
                             message.status = reader.int32();
                             break;
                         case 5:
-                            message.result = $root.isuxportal.proto.resources.BenchmarkResult.decode(reader, reader.uint32());
+                            message.result = $root.xsuportal.proto.resources.BenchmarkResult.decode(reader, reader.uint32());
                             break;
                         case 6:
                             message.createdAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
@@ -1115,10 +1115,10 @@ $root.isuxportal = (function() {
                             message.finishedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
                         case 16:
-                            message.team = $root.isuxportal.proto.resources.Team.decode(reader, reader.uint32());
+                            message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
                             break;
                         case 17:
-                            message.target = $root.isuxportal.proto.resources.ContestantInstance.decode(reader, reader.uint32());
+                            message.target = $root.xsuportal.proto.resources.ContestantInstance.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -1131,10 +1131,10 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a BenchmarkJob message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {isuxportal.proto.resources.BenchmarkJob} BenchmarkJob
+                 * @returns {xsuportal.proto.resources.BenchmarkJob} BenchmarkJob
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
@@ -1147,7 +1147,7 @@ $root.isuxportal = (function() {
                 /**
                  * Verifies a BenchmarkJob message.
                  * @function verify
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -1176,7 +1176,7 @@ $root.isuxportal = (function() {
                             break;
                         }
                     if (message.result != null && message.hasOwnProperty("result")) {
-                        var error = $root.isuxportal.proto.resources.BenchmarkResult.verify(message.result);
+                        var error = $root.xsuportal.proto.resources.BenchmarkResult.verify(message.result);
                         if (error)
                             return "result." + error;
                     }
@@ -1201,12 +1201,12 @@ $root.isuxportal = (function() {
                             return "finishedAt." + error;
                     }
                     if (message.team != null && message.hasOwnProperty("team")) {
-                        var error = $root.isuxportal.proto.resources.Team.verify(message.team);
+                        var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                         if (error)
                             return "team." + error;
                     }
                     if (message.target != null && message.hasOwnProperty("target")) {
-                        var error = $root.isuxportal.proto.resources.ContestantInstance.verify(message.target);
+                        var error = $root.xsuportal.proto.resources.ContestantInstance.verify(message.target);
                         if (error)
                             return "target." + error;
                     }
@@ -1216,15 +1216,15 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a BenchmarkJob message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {isuxportal.proto.resources.BenchmarkJob} BenchmarkJob
+                 * @returns {xsuportal.proto.resources.BenchmarkJob} BenchmarkJob
                  */
                 BenchmarkJob.fromObject = function fromObject(object) {
-                    if (object instanceof $root.isuxportal.proto.resources.BenchmarkJob)
+                    if (object instanceof $root.xsuportal.proto.resources.BenchmarkJob)
                         return object;
-                    var message = new $root.isuxportal.proto.resources.BenchmarkJob();
+                    var message = new $root.xsuportal.proto.resources.BenchmarkJob();
                     if (object.id != null)
                         if ($util.Long)
                             (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -1276,38 +1276,38 @@ $root.isuxportal = (function() {
                     }
                     if (object.result != null) {
                         if (typeof object.result !== "object")
-                            throw TypeError(".isuxportal.proto.resources.BenchmarkJob.result: object expected");
-                        message.result = $root.isuxportal.proto.resources.BenchmarkResult.fromObject(object.result);
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.result: object expected");
+                        message.result = $root.xsuportal.proto.resources.BenchmarkResult.fromObject(object.result);
                     }
                     if (object.createdAt != null) {
                         if (typeof object.createdAt !== "object")
-                            throw TypeError(".isuxportal.proto.resources.BenchmarkJob.createdAt: object expected");
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.createdAt: object expected");
                         message.createdAt = $root.google.protobuf.Timestamp.fromObject(object.createdAt);
                     }
                     if (object.updatedAt != null) {
                         if (typeof object.updatedAt !== "object")
-                            throw TypeError(".isuxportal.proto.resources.BenchmarkJob.updatedAt: object expected");
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.updatedAt: object expected");
                         message.updatedAt = $root.google.protobuf.Timestamp.fromObject(object.updatedAt);
                     }
                     if (object.startedAt != null) {
                         if (typeof object.startedAt !== "object")
-                            throw TypeError(".isuxportal.proto.resources.BenchmarkJob.startedAt: object expected");
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.startedAt: object expected");
                         message.startedAt = $root.google.protobuf.Timestamp.fromObject(object.startedAt);
                     }
                     if (object.finishedAt != null) {
                         if (typeof object.finishedAt !== "object")
-                            throw TypeError(".isuxportal.proto.resources.BenchmarkJob.finishedAt: object expected");
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.finishedAt: object expected");
                         message.finishedAt = $root.google.protobuf.Timestamp.fromObject(object.finishedAt);
                     }
                     if (object.team != null) {
                         if (typeof object.team !== "object")
-                            throw TypeError(".isuxportal.proto.resources.BenchmarkJob.team: object expected");
-                        message.team = $root.isuxportal.proto.resources.Team.fromObject(object.team);
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.team: object expected");
+                        message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
                     }
                     if (object.target != null) {
                         if (typeof object.target !== "object")
-                            throw TypeError(".isuxportal.proto.resources.BenchmarkJob.target: object expected");
-                        message.target = $root.isuxportal.proto.resources.ContestantInstance.fromObject(object.target);
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.target: object expected");
+                        message.target = $root.xsuportal.proto.resources.ContestantInstance.fromObject(object.target);
                     }
                     return message;
                 };
@@ -1315,9 +1315,9 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a plain object from a BenchmarkJob message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @static
-                 * @param {isuxportal.proto.resources.BenchmarkJob} message BenchmarkJob
+                 * @param {xsuportal.proto.resources.BenchmarkJob} message BenchmarkJob
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
@@ -1366,9 +1366,9 @@ $root.isuxportal = (function() {
                         else
                             object.targetId = options.longs === String ? $util.Long.prototype.toString.call(message.targetId) : options.longs === Number ? new $util.LongBits(message.targetId.low >>> 0, message.targetId.high >>> 0).toNumber() : message.targetId;
                     if (message.status != null && message.hasOwnProperty("status"))
-                        object.status = options.enums === String ? $root.isuxportal.proto.resources.BenchmarkJob.Status[message.status] : message.status;
+                        object.status = options.enums === String ? $root.xsuportal.proto.resources.BenchmarkJob.Status[message.status] : message.status;
                     if (message.result != null && message.hasOwnProperty("result"))
-                        object.result = $root.isuxportal.proto.resources.BenchmarkResult.toObject(message.result, options);
+                        object.result = $root.xsuportal.proto.resources.BenchmarkResult.toObject(message.result, options);
                     if (message.createdAt != null && message.hasOwnProperty("createdAt"))
                         object.createdAt = $root.google.protobuf.Timestamp.toObject(message.createdAt, options);
                     if (message.updatedAt != null && message.hasOwnProperty("updatedAt"))
@@ -1378,16 +1378,16 @@ $root.isuxportal = (function() {
                     if (message.finishedAt != null && message.hasOwnProperty("finishedAt"))
                         object.finishedAt = $root.google.protobuf.Timestamp.toObject(message.finishedAt, options);
                     if (message.team != null && message.hasOwnProperty("team"))
-                        object.team = $root.isuxportal.proto.resources.Team.toObject(message.team, options);
+                        object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                     if (message.target != null && message.hasOwnProperty("target"))
-                        object.target = $root.isuxportal.proto.resources.ContestantInstance.toObject(message.target, options);
+                        object.target = $root.xsuportal.proto.resources.ContestantInstance.toObject(message.target, options);
                     return object;
                 };
 
                 /**
                  * Converts this BenchmarkJob to JSON.
                  * @function toJSON
-                 * @memberof isuxportal.proto.resources.BenchmarkJob
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
@@ -1397,7 +1397,7 @@ $root.isuxportal = (function() {
 
                 /**
                  * Status enum.
-                 * @name isuxportal.proto.resources.BenchmarkJob.Status
+                 * @name xsuportal.proto.resources.BenchmarkJob.Status
                  * @enum {number}
                  * @property {number} PENDING=0 PENDING value
                  * @property {number} RUNNING=1 RUNNING value
@@ -1422,25 +1422,25 @@ $root.isuxportal = (function() {
 
                 /**
                  * Properties of a BenchmarkResult.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @interface IBenchmarkResult
                  * @property {boolean|null} [finished] BenchmarkResult finished
                  * @property {boolean|null} [passed] BenchmarkResult passed
                  * @property {number|Long|null} [score] BenchmarkResult score
-                 * @property {isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown|null} [scoreBreakdown] BenchmarkResult scoreBreakdown
+                 * @property {xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown|null} [scoreBreakdown] BenchmarkResult scoreBreakdown
                  * @property {string|null} [reason] BenchmarkResult reason
                  * @property {string|null} [stdout] BenchmarkResult stdout
                  * @property {string|null} [stderr] BenchmarkResult stderr
-                 * @property {isuxportal.proto.resources.BenchmarkResult.ISurvey|null} [survey] BenchmarkResult survey
+                 * @property {xsuportal.proto.resources.BenchmarkResult.ISurvey|null} [survey] BenchmarkResult survey
                  */
 
                 /**
                  * Constructs a new BenchmarkResult.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @classdesc Represents a BenchmarkResult.
                  * @implements IBenchmarkResult
                  * @constructor
-                 * @param {isuxportal.proto.resources.IBenchmarkResult=} [properties] Properties to set
+                 * @param {xsuportal.proto.resources.IBenchmarkResult=} [properties] Properties to set
                  */
                 function BenchmarkResult(properties) {
                     if (properties)
@@ -1452,7 +1452,7 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkResult finished.
                  * @member {boolean} finished
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @instance
                  */
                 BenchmarkResult.prototype.finished = false;
@@ -1460,7 +1460,7 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkResult passed.
                  * @member {boolean} passed
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @instance
                  */
                 BenchmarkResult.prototype.passed = false;
@@ -1468,15 +1468,15 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkResult score.
                  * @member {number|Long} score
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @instance
                  */
                 BenchmarkResult.prototype.score = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
                  * BenchmarkResult scoreBreakdown.
-                 * @member {isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown|null|undefined} scoreBreakdown
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @member {xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown|null|undefined} scoreBreakdown
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @instance
                  */
                 BenchmarkResult.prototype.scoreBreakdown = null;
@@ -1484,7 +1484,7 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkResult reason.
                  * @member {string} reason
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @instance
                  */
                 BenchmarkResult.prototype.reason = "";
@@ -1492,7 +1492,7 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkResult stdout.
                  * @member {string} stdout
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @instance
                  */
                 BenchmarkResult.prototype.stdout = "";
@@ -1500,15 +1500,15 @@ $root.isuxportal = (function() {
                 /**
                  * BenchmarkResult stderr.
                  * @member {string} stderr
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @instance
                  */
                 BenchmarkResult.prototype.stderr = "";
 
                 /**
                  * BenchmarkResult survey.
-                 * @member {isuxportal.proto.resources.BenchmarkResult.ISurvey|null|undefined} survey
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @member {xsuportal.proto.resources.BenchmarkResult.ISurvey|null|undefined} survey
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @instance
                  */
                 BenchmarkResult.prototype.survey = null;
@@ -1516,21 +1516,21 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a new BenchmarkResult instance using the specified properties.
                  * @function create
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @static
-                 * @param {isuxportal.proto.resources.IBenchmarkResult=} [properties] Properties to set
-                 * @returns {isuxportal.proto.resources.BenchmarkResult} BenchmarkResult instance
+                 * @param {xsuportal.proto.resources.IBenchmarkResult=} [properties] Properties to set
+                 * @returns {xsuportal.proto.resources.BenchmarkResult} BenchmarkResult instance
                  */
                 BenchmarkResult.create = function create(properties) {
                     return new BenchmarkResult(properties);
                 };
 
                 /**
-                 * Encodes the specified BenchmarkResult message. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.verify|verify} messages.
+                 * Encodes the specified BenchmarkResult message. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.verify|verify} messages.
                  * @function encode
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @static
-                 * @param {isuxportal.proto.resources.IBenchmarkResult} message BenchmarkResult message or plain object to encode
+                 * @param {xsuportal.proto.resources.IBenchmarkResult} message BenchmarkResult message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -1544,7 +1544,7 @@ $root.isuxportal = (function() {
                     if (message.score != null && Object.hasOwnProperty.call(message, "score"))
                         writer.uint32(/* id 3, wireType 0 =*/24).int64(message.score);
                     if (message.scoreBreakdown != null && Object.hasOwnProperty.call(message, "scoreBreakdown"))
-                        $root.isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown.encode(message.scoreBreakdown, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                        $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.encode(message.scoreBreakdown, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                     if (message.reason != null && Object.hasOwnProperty.call(message, "reason"))
                         writer.uint32(/* id 5, wireType 2 =*/42).string(message.reason);
                     if (message.stdout != null && Object.hasOwnProperty.call(message, "stdout"))
@@ -1552,16 +1552,16 @@ $root.isuxportal = (function() {
                     if (message.stderr != null && Object.hasOwnProperty.call(message, "stderr"))
                         writer.uint32(/* id 7, wireType 2 =*/58).string(message.stderr);
                     if (message.survey != null && Object.hasOwnProperty.call(message, "survey"))
-                        $root.isuxportal.proto.resources.BenchmarkResult.Survey.encode(message.survey, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                        $root.xsuportal.proto.resources.BenchmarkResult.Survey.encode(message.survey, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
                     return writer;
                 };
 
                 /**
-                 * Encodes the specified BenchmarkResult message, length delimited. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.verify|verify} messages.
+                 * Encodes the specified BenchmarkResult message, length delimited. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @static
-                 * @param {isuxportal.proto.resources.IBenchmarkResult} message BenchmarkResult message or plain object to encode
+                 * @param {xsuportal.proto.resources.IBenchmarkResult} message BenchmarkResult message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -1572,18 +1572,18 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a BenchmarkResult message from the specified reader or buffer.
                  * @function decode
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {isuxportal.proto.resources.BenchmarkResult} BenchmarkResult
+                 * @returns {xsuportal.proto.resources.BenchmarkResult} BenchmarkResult
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 BenchmarkResult.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.BenchmarkResult();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.BenchmarkResult();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
@@ -1597,7 +1597,7 @@ $root.isuxportal = (function() {
                             message.score = reader.int64();
                             break;
                         case 4:
-                            message.scoreBreakdown = $root.isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown.decode(reader, reader.uint32());
+                            message.scoreBreakdown = $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.decode(reader, reader.uint32());
                             break;
                         case 5:
                             message.reason = reader.string();
@@ -1609,7 +1609,7 @@ $root.isuxportal = (function() {
                             message.stderr = reader.string();
                             break;
                         case 8:
-                            message.survey = $root.isuxportal.proto.resources.BenchmarkResult.Survey.decode(reader, reader.uint32());
+                            message.survey = $root.xsuportal.proto.resources.BenchmarkResult.Survey.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -1622,10 +1622,10 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a BenchmarkResult message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {isuxportal.proto.resources.BenchmarkResult} BenchmarkResult
+                 * @returns {xsuportal.proto.resources.BenchmarkResult} BenchmarkResult
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
@@ -1638,7 +1638,7 @@ $root.isuxportal = (function() {
                 /**
                  * Verifies a BenchmarkResult message.
                  * @function verify
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -1656,7 +1656,7 @@ $root.isuxportal = (function() {
                         if (!$util.isInteger(message.score) && !(message.score && $util.isInteger(message.score.low) && $util.isInteger(message.score.high)))
                             return "score: integer|Long expected";
                     if (message.scoreBreakdown != null && message.hasOwnProperty("scoreBreakdown")) {
-                        var error = $root.isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown.verify(message.scoreBreakdown);
+                        var error = $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.verify(message.scoreBreakdown);
                         if (error)
                             return "scoreBreakdown." + error;
                     }
@@ -1670,7 +1670,7 @@ $root.isuxportal = (function() {
                         if (!$util.isString(message.stderr))
                             return "stderr: string expected";
                     if (message.survey != null && message.hasOwnProperty("survey")) {
-                        var error = $root.isuxportal.proto.resources.BenchmarkResult.Survey.verify(message.survey);
+                        var error = $root.xsuportal.proto.resources.BenchmarkResult.Survey.verify(message.survey);
                         if (error)
                             return "survey." + error;
                     }
@@ -1680,15 +1680,15 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a BenchmarkResult message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {isuxportal.proto.resources.BenchmarkResult} BenchmarkResult
+                 * @returns {xsuportal.proto.resources.BenchmarkResult} BenchmarkResult
                  */
                 BenchmarkResult.fromObject = function fromObject(object) {
-                    if (object instanceof $root.isuxportal.proto.resources.BenchmarkResult)
+                    if (object instanceof $root.xsuportal.proto.resources.BenchmarkResult)
                         return object;
-                    var message = new $root.isuxportal.proto.resources.BenchmarkResult();
+                    var message = new $root.xsuportal.proto.resources.BenchmarkResult();
                     if (object.finished != null)
                         message.finished = Boolean(object.finished);
                     if (object.passed != null)
@@ -1704,8 +1704,8 @@ $root.isuxportal = (function() {
                             message.score = new $util.LongBits(object.score.low >>> 0, object.score.high >>> 0).toNumber();
                     if (object.scoreBreakdown != null) {
                         if (typeof object.scoreBreakdown !== "object")
-                            throw TypeError(".isuxportal.proto.resources.BenchmarkResult.scoreBreakdown: object expected");
-                        message.scoreBreakdown = $root.isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown.fromObject(object.scoreBreakdown);
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkResult.scoreBreakdown: object expected");
+                        message.scoreBreakdown = $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.fromObject(object.scoreBreakdown);
                     }
                     if (object.reason != null)
                         message.reason = String(object.reason);
@@ -1715,8 +1715,8 @@ $root.isuxportal = (function() {
                         message.stderr = String(object.stderr);
                     if (object.survey != null) {
                         if (typeof object.survey !== "object")
-                            throw TypeError(".isuxportal.proto.resources.BenchmarkResult.survey: object expected");
-                        message.survey = $root.isuxportal.proto.resources.BenchmarkResult.Survey.fromObject(object.survey);
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkResult.survey: object expected");
+                        message.survey = $root.xsuportal.proto.resources.BenchmarkResult.Survey.fromObject(object.survey);
                     }
                     return message;
                 };
@@ -1724,9 +1724,9 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a plain object from a BenchmarkResult message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @static
-                 * @param {isuxportal.proto.resources.BenchmarkResult} message BenchmarkResult
+                 * @param {xsuportal.proto.resources.BenchmarkResult} message BenchmarkResult
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
@@ -1758,7 +1758,7 @@ $root.isuxportal = (function() {
                         else
                             object.score = options.longs === String ? $util.Long.prototype.toString.call(message.score) : options.longs === Number ? new $util.LongBits(message.score.low >>> 0, message.score.high >>> 0).toNumber() : message.score;
                     if (message.scoreBreakdown != null && message.hasOwnProperty("scoreBreakdown"))
-                        object.scoreBreakdown = $root.isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown.toObject(message.scoreBreakdown, options);
+                        object.scoreBreakdown = $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.toObject(message.scoreBreakdown, options);
                     if (message.reason != null && message.hasOwnProperty("reason"))
                         object.reason = message.reason;
                     if (message.stdout != null && message.hasOwnProperty("stdout"))
@@ -1766,14 +1766,14 @@ $root.isuxportal = (function() {
                     if (message.stderr != null && message.hasOwnProperty("stderr"))
                         object.stderr = message.stderr;
                     if (message.survey != null && message.hasOwnProperty("survey"))
-                        object.survey = $root.isuxportal.proto.resources.BenchmarkResult.Survey.toObject(message.survey, options);
+                        object.survey = $root.xsuportal.proto.resources.BenchmarkResult.Survey.toObject(message.survey, options);
                     return object;
                 };
 
                 /**
                  * Converts this BenchmarkResult to JSON.
                  * @function toJSON
-                 * @memberof isuxportal.proto.resources.BenchmarkResult
+                 * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
@@ -1785,7 +1785,7 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a ScoreBreakdown.
-                     * @memberof isuxportal.proto.resources.BenchmarkResult
+                     * @memberof xsuportal.proto.resources.BenchmarkResult
                      * @interface IScoreBreakdown
                      * @property {number|Long|null} [base] ScoreBreakdown base
                      * @property {number|Long|null} [deduction] ScoreBreakdown deduction
@@ -1793,11 +1793,11 @@ $root.isuxportal = (function() {
 
                     /**
                      * Constructs a new ScoreBreakdown.
-                     * @memberof isuxportal.proto.resources.BenchmarkResult
+                     * @memberof xsuportal.proto.resources.BenchmarkResult
                      * @classdesc Represents a ScoreBreakdown.
                      * @implements IScoreBreakdown
                      * @constructor
-                     * @param {isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown=} [properties] Properties to set
+                     * @param {xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown=} [properties] Properties to set
                      */
                     function ScoreBreakdown(properties) {
                         if (properties)
@@ -1809,7 +1809,7 @@ $root.isuxportal = (function() {
                     /**
                      * ScoreBreakdown base.
                      * @member {number|Long} base
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @instance
                      */
                     ScoreBreakdown.prototype.base = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -1817,7 +1817,7 @@ $root.isuxportal = (function() {
                     /**
                      * ScoreBreakdown deduction.
                      * @member {number|Long} deduction
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @instance
                      */
                     ScoreBreakdown.prototype.deduction = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -1825,21 +1825,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new ScoreBreakdown instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @static
-                     * @param {isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown=} [properties] Properties to set
-                     * @returns {isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown} ScoreBreakdown instance
+                     * @param {xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown=} [properties] Properties to set
+                     * @returns {xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown} ScoreBreakdown instance
                      */
                     ScoreBreakdown.create = function create(properties) {
                         return new ScoreBreakdown(properties);
                     };
 
                     /**
-                     * Encodes the specified ScoreBreakdown message. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown.verify|verify} messages.
+                     * Encodes the specified ScoreBreakdown message. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @static
-                     * @param {isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown} message ScoreBreakdown message or plain object to encode
+                     * @param {xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown} message ScoreBreakdown message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -1854,11 +1854,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified ScoreBreakdown message, length delimited. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown.verify|verify} messages.
+                     * Encodes the specified ScoreBreakdown message, length delimited. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @static
-                     * @param {isuxportal.proto.resources.BenchmarkResult.IScoreBreakdown} message ScoreBreakdown message or plain object to encode
+                     * @param {xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown} message ScoreBreakdown message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -1869,18 +1869,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a ScoreBreakdown message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown} ScoreBreakdown
+                     * @returns {xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown} ScoreBreakdown
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     ScoreBreakdown.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -1901,10 +1901,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a ScoreBreakdown message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown} ScoreBreakdown
+                     * @returns {xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown} ScoreBreakdown
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -1917,7 +1917,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a ScoreBreakdown message.
                      * @function verify
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -1937,15 +1937,15 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a ScoreBreakdown message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown} ScoreBreakdown
+                     * @returns {xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown} ScoreBreakdown
                      */
                     ScoreBreakdown.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown)
+                        if (object instanceof $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown)
                             return object;
-                        var message = new $root.isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown();
+                        var message = new $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown();
                         if (object.base != null)
                             if ($util.Long)
                                 (message.base = $util.Long.fromValue(object.base)).unsigned = false;
@@ -1970,9 +1970,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a ScoreBreakdown message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @static
-                     * @param {isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown} message ScoreBreakdown
+                     * @param {xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown} message ScoreBreakdown
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -2008,7 +2008,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this ScoreBreakdown to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.ScoreBreakdown
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -2023,18 +2023,18 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a Survey.
-                     * @memberof isuxportal.proto.resources.BenchmarkResult
+                     * @memberof xsuportal.proto.resources.BenchmarkResult
                      * @interface ISurvey
                      * @property {string|null} [language] Survey language
                      */
 
                     /**
                      * Constructs a new Survey.
-                     * @memberof isuxportal.proto.resources.BenchmarkResult
+                     * @memberof xsuportal.proto.resources.BenchmarkResult
                      * @classdesc Represents a Survey.
                      * @implements ISurvey
                      * @constructor
-                     * @param {isuxportal.proto.resources.BenchmarkResult.ISurvey=} [properties] Properties to set
+                     * @param {xsuportal.proto.resources.BenchmarkResult.ISurvey=} [properties] Properties to set
                      */
                     function Survey(properties) {
                         if (properties)
@@ -2046,7 +2046,7 @@ $root.isuxportal = (function() {
                     /**
                      * Survey language.
                      * @member {string} language
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.Survey
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
                      * @instance
                      */
                     Survey.prototype.language = "";
@@ -2054,21 +2054,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new Survey instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.Survey
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
                      * @static
-                     * @param {isuxportal.proto.resources.BenchmarkResult.ISurvey=} [properties] Properties to set
-                     * @returns {isuxportal.proto.resources.BenchmarkResult.Survey} Survey instance
+                     * @param {xsuportal.proto.resources.BenchmarkResult.ISurvey=} [properties] Properties to set
+                     * @returns {xsuportal.proto.resources.BenchmarkResult.Survey} Survey instance
                      */
                     Survey.create = function create(properties) {
                         return new Survey(properties);
                     };
 
                     /**
-                     * Encodes the specified Survey message. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
+                     * Encodes the specified Survey message. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.Survey
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
                      * @static
-                     * @param {isuxportal.proto.resources.BenchmarkResult.ISurvey} message Survey message or plain object to encode
+                     * @param {xsuportal.proto.resources.BenchmarkResult.ISurvey} message Survey message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -2081,11 +2081,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified Survey message, length delimited. Does not implicitly {@link isuxportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
+                     * Encodes the specified Survey message, length delimited. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.Survey
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
                      * @static
-                     * @param {isuxportal.proto.resources.BenchmarkResult.ISurvey} message Survey message or plain object to encode
+                     * @param {xsuportal.proto.resources.BenchmarkResult.ISurvey} message Survey message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -2096,18 +2096,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a Survey message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.Survey
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.resources.BenchmarkResult.Survey} Survey
+                     * @returns {xsuportal.proto.resources.BenchmarkResult.Survey} Survey
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     Survey.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.BenchmarkResult.Survey();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.BenchmarkResult.Survey();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -2125,10 +2125,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a Survey message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.Survey
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.resources.BenchmarkResult.Survey} Survey
+                     * @returns {xsuportal.proto.resources.BenchmarkResult.Survey} Survey
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -2141,7 +2141,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a Survey message.
                      * @function verify
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.Survey
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -2158,15 +2158,15 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a Survey message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.Survey
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.resources.BenchmarkResult.Survey} Survey
+                     * @returns {xsuportal.proto.resources.BenchmarkResult.Survey} Survey
                      */
                     Survey.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.resources.BenchmarkResult.Survey)
+                        if (object instanceof $root.xsuportal.proto.resources.BenchmarkResult.Survey)
                             return object;
-                        var message = new $root.isuxportal.proto.resources.BenchmarkResult.Survey();
+                        var message = new $root.xsuportal.proto.resources.BenchmarkResult.Survey();
                         if (object.language != null)
                             message.language = String(object.language);
                         return message;
@@ -2175,9 +2175,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a Survey message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.Survey
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
                      * @static
-                     * @param {isuxportal.proto.resources.BenchmarkResult.Survey} message Survey
+                     * @param {xsuportal.proto.resources.BenchmarkResult.Survey} message Survey
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -2195,7 +2195,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this Survey to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.resources.BenchmarkResult.Survey
+                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -2213,24 +2213,24 @@ $root.isuxportal = (function() {
 
                 /**
                  * Properties of a ContestantInstance.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @interface IContestantInstance
                  * @property {string|null} [cloudId] ContestantInstance cloudId
                  * @property {number|Long|null} [teamId] ContestantInstance teamId
                  * @property {number|Long|null} [number] ContestantInstance number
                  * @property {string|null} [publicIpv4Address] ContestantInstance publicIpv4Address
                  * @property {string|null} [privateIpv4Address] ContestantInstance privateIpv4Address
-                 * @property {isuxportal.proto.resources.ContestantInstance.Status|null} [status] ContestantInstance status
-                 * @property {isuxportal.proto.resources.ITeam|null} [team] ContestantInstance team
+                 * @property {xsuportal.proto.resources.ContestantInstance.Status|null} [status] ContestantInstance status
+                 * @property {xsuportal.proto.resources.ITeam|null} [team] ContestantInstance team
                  */
 
                 /**
                  * Constructs a new ContestantInstance.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @classdesc Represents a ContestantInstance.
                  * @implements IContestantInstance
                  * @constructor
-                 * @param {isuxportal.proto.resources.IContestantInstance=} [properties] Properties to set
+                 * @param {xsuportal.proto.resources.IContestantInstance=} [properties] Properties to set
                  */
                 function ContestantInstance(properties) {
                     if (properties)
@@ -2242,7 +2242,7 @@ $root.isuxportal = (function() {
                 /**
                  * ContestantInstance cloudId.
                  * @member {string} cloudId
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @instance
                  */
                 ContestantInstance.prototype.cloudId = "";
@@ -2250,7 +2250,7 @@ $root.isuxportal = (function() {
                 /**
                  * ContestantInstance teamId.
                  * @member {number|Long} teamId
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @instance
                  */
                 ContestantInstance.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -2258,7 +2258,7 @@ $root.isuxportal = (function() {
                 /**
                  * ContestantInstance number.
                  * @member {number|Long} number
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @instance
                  */
                 ContestantInstance.prototype.number = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -2266,7 +2266,7 @@ $root.isuxportal = (function() {
                 /**
                  * ContestantInstance publicIpv4Address.
                  * @member {string} publicIpv4Address
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @instance
                  */
                 ContestantInstance.prototype.publicIpv4Address = "";
@@ -2274,23 +2274,23 @@ $root.isuxportal = (function() {
                 /**
                  * ContestantInstance privateIpv4Address.
                  * @member {string} privateIpv4Address
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @instance
                  */
                 ContestantInstance.prototype.privateIpv4Address = "";
 
                 /**
                  * ContestantInstance status.
-                 * @member {isuxportal.proto.resources.ContestantInstance.Status} status
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @member {xsuportal.proto.resources.ContestantInstance.Status} status
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @instance
                  */
                 ContestantInstance.prototype.status = 0;
 
                 /**
                  * ContestantInstance team.
-                 * @member {isuxportal.proto.resources.ITeam|null|undefined} team
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @member {xsuportal.proto.resources.ITeam|null|undefined} team
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @instance
                  */
                 ContestantInstance.prototype.team = null;
@@ -2298,21 +2298,21 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a new ContestantInstance instance using the specified properties.
                  * @function create
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @static
-                 * @param {isuxportal.proto.resources.IContestantInstance=} [properties] Properties to set
-                 * @returns {isuxportal.proto.resources.ContestantInstance} ContestantInstance instance
+                 * @param {xsuportal.proto.resources.IContestantInstance=} [properties] Properties to set
+                 * @returns {xsuportal.proto.resources.ContestantInstance} ContestantInstance instance
                  */
                 ContestantInstance.create = function create(properties) {
                     return new ContestantInstance(properties);
                 };
 
                 /**
-                 * Encodes the specified ContestantInstance message. Does not implicitly {@link isuxportal.proto.resources.ContestantInstance.verify|verify} messages.
+                 * Encodes the specified ContestantInstance message. Does not implicitly {@link xsuportal.proto.resources.ContestantInstance.verify|verify} messages.
                  * @function encode
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @static
-                 * @param {isuxportal.proto.resources.IContestantInstance} message ContestantInstance message or plain object to encode
+                 * @param {xsuportal.proto.resources.IContestantInstance} message ContestantInstance message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -2332,16 +2332,16 @@ $root.isuxportal = (function() {
                     if (message.status != null && Object.hasOwnProperty.call(message, "status"))
                         writer.uint32(/* id 6, wireType 0 =*/48).int32(message.status);
                     if (message.team != null && Object.hasOwnProperty.call(message, "team"))
-                        $root.isuxportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
+                        $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                     return writer;
                 };
 
                 /**
-                 * Encodes the specified ContestantInstance message, length delimited. Does not implicitly {@link isuxportal.proto.resources.ContestantInstance.verify|verify} messages.
+                 * Encodes the specified ContestantInstance message, length delimited. Does not implicitly {@link xsuportal.proto.resources.ContestantInstance.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @static
-                 * @param {isuxportal.proto.resources.IContestantInstance} message ContestantInstance message or plain object to encode
+                 * @param {xsuportal.proto.resources.IContestantInstance} message ContestantInstance message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -2352,18 +2352,18 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a ContestantInstance message from the specified reader or buffer.
                  * @function decode
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {isuxportal.proto.resources.ContestantInstance} ContestantInstance
+                 * @returns {xsuportal.proto.resources.ContestantInstance} ContestantInstance
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 ContestantInstance.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.ContestantInstance();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.ContestantInstance();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
@@ -2386,7 +2386,7 @@ $root.isuxportal = (function() {
                             message.status = reader.int32();
                             break;
                         case 16:
-                            message.team = $root.isuxportal.proto.resources.Team.decode(reader, reader.uint32());
+                            message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -2399,10 +2399,10 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a ContestantInstance message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {isuxportal.proto.resources.ContestantInstance} ContestantInstance
+                 * @returns {xsuportal.proto.resources.ContestantInstance} ContestantInstance
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
@@ -2415,7 +2415,7 @@ $root.isuxportal = (function() {
                 /**
                  * Verifies a ContestantInstance message.
                  * @function verify
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -2451,7 +2451,7 @@ $root.isuxportal = (function() {
                             break;
                         }
                     if (message.team != null && message.hasOwnProperty("team")) {
-                        var error = $root.isuxportal.proto.resources.Team.verify(message.team);
+                        var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                         if (error)
                             return "team." + error;
                     }
@@ -2461,15 +2461,15 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a ContestantInstance message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {isuxportal.proto.resources.ContestantInstance} ContestantInstance
+                 * @returns {xsuportal.proto.resources.ContestantInstance} ContestantInstance
                  */
                 ContestantInstance.fromObject = function fromObject(object) {
-                    if (object instanceof $root.isuxportal.proto.resources.ContestantInstance)
+                    if (object instanceof $root.xsuportal.proto.resources.ContestantInstance)
                         return object;
-                    var message = new $root.isuxportal.proto.resources.ContestantInstance();
+                    var message = new $root.xsuportal.proto.resources.ContestantInstance();
                     if (object.cloudId != null)
                         message.cloudId = String(object.cloudId);
                     if (object.teamId != null)
@@ -2522,8 +2522,8 @@ $root.isuxportal = (function() {
                     }
                     if (object.team != null) {
                         if (typeof object.team !== "object")
-                            throw TypeError(".isuxportal.proto.resources.ContestantInstance.team: object expected");
-                        message.team = $root.isuxportal.proto.resources.Team.fromObject(object.team);
+                            throw TypeError(".xsuportal.proto.resources.ContestantInstance.team: object expected");
+                        message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
                     }
                     return message;
                 };
@@ -2531,9 +2531,9 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a plain object from a ContestantInstance message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @static
-                 * @param {isuxportal.proto.resources.ContestantInstance} message ContestantInstance
+                 * @param {xsuportal.proto.resources.ContestantInstance} message ContestantInstance
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
@@ -2575,16 +2575,16 @@ $root.isuxportal = (function() {
                     if (message.privateIpv4Address != null && message.hasOwnProperty("privateIpv4Address"))
                         object.privateIpv4Address = message.privateIpv4Address;
                     if (message.status != null && message.hasOwnProperty("status"))
-                        object.status = options.enums === String ? $root.isuxportal.proto.resources.ContestantInstance.Status[message.status] : message.status;
+                        object.status = options.enums === String ? $root.xsuportal.proto.resources.ContestantInstance.Status[message.status] : message.status;
                     if (message.team != null && message.hasOwnProperty("team"))
-                        object.team = $root.isuxportal.proto.resources.Team.toObject(message.team, options);
+                        object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                     return object;
                 };
 
                 /**
                  * Converts this ContestantInstance to JSON.
                  * @function toJSON
-                 * @memberof isuxportal.proto.resources.ContestantInstance
+                 * @memberof xsuportal.proto.resources.ContestantInstance
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
@@ -2594,7 +2594,7 @@ $root.isuxportal = (function() {
 
                 /**
                  * Status enum.
-                 * @name isuxportal.proto.resources.ContestantInstance.Status
+                 * @name xsuportal.proto.resources.ContestantInstance.Status
                  * @enum {number}
                  * @property {number} UNKNOWN=0 UNKNOWN value
                  * @property {number} PENDING=1 PENDING value
@@ -2621,7 +2621,7 @@ $root.isuxportal = (function() {
 
                 /**
                  * Properties of a Team.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @interface ITeam
                  * @property {number|Long|null} [id] Team id
                  * @property {string|null} [name] Team name
@@ -2630,18 +2630,18 @@ $root.isuxportal = (function() {
                  * @property {boolean|null} [finalParticipation] Team finalParticipation
                  * @property {boolean|null} [hidden] Team hidden
                  * @property {boolean|null} [withdrawn] Team withdrawn
-                 * @property {isuxportal.proto.resources.Team.ITeamDetail|null} [detail] Team detail
-                 * @property {isuxportal.proto.resources.IContestant|null} [leader] Team leader
-                 * @property {Array.<isuxportal.proto.resources.IContestant>|null} [members] Team members
+                 * @property {xsuportal.proto.resources.Team.ITeamDetail|null} [detail] Team detail
+                 * @property {xsuportal.proto.resources.IContestant|null} [leader] Team leader
+                 * @property {Array.<xsuportal.proto.resources.IContestant>|null} [members] Team members
                  */
 
                 /**
                  * Constructs a new Team.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @classdesc Represents a Team.
                  * @implements ITeam
                  * @constructor
-                 * @param {isuxportal.proto.resources.ITeam=} [properties] Properties to set
+                 * @param {xsuportal.proto.resources.ITeam=} [properties] Properties to set
                  */
                 function Team(properties) {
                     this.memberIds = [];
@@ -2655,7 +2655,7 @@ $root.isuxportal = (function() {
                 /**
                  * Team id.
                  * @member {number|Long} id
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -2663,7 +2663,7 @@ $root.isuxportal = (function() {
                 /**
                  * Team name.
                  * @member {string} name
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.name = "";
@@ -2671,7 +2671,7 @@ $root.isuxportal = (function() {
                 /**
                  * Team leaderId.
                  * @member {number|Long} leaderId
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.leaderId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -2679,7 +2679,7 @@ $root.isuxportal = (function() {
                 /**
                  * Team memberIds.
                  * @member {Array.<number|Long>} memberIds
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.memberIds = $util.emptyArray;
@@ -2687,7 +2687,7 @@ $root.isuxportal = (function() {
                 /**
                  * Team finalParticipation.
                  * @member {boolean} finalParticipation
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.finalParticipation = false;
@@ -2695,7 +2695,7 @@ $root.isuxportal = (function() {
                 /**
                  * Team hidden.
                  * @member {boolean} hidden
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.hidden = false;
@@ -2703,31 +2703,31 @@ $root.isuxportal = (function() {
                 /**
                  * Team withdrawn.
                  * @member {boolean} withdrawn
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.withdrawn = false;
 
                 /**
                  * Team detail.
-                 * @member {isuxportal.proto.resources.Team.ITeamDetail|null|undefined} detail
-                 * @memberof isuxportal.proto.resources.Team
+                 * @member {xsuportal.proto.resources.Team.ITeamDetail|null|undefined} detail
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.detail = null;
 
                 /**
                  * Team leader.
-                 * @member {isuxportal.proto.resources.IContestant|null|undefined} leader
-                 * @memberof isuxportal.proto.resources.Team
+                 * @member {xsuportal.proto.resources.IContestant|null|undefined} leader
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.leader = null;
 
                 /**
                  * Team members.
-                 * @member {Array.<isuxportal.proto.resources.IContestant>} members
-                 * @memberof isuxportal.proto.resources.Team
+                 * @member {Array.<xsuportal.proto.resources.IContestant>} members
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.members = $util.emptyArray;
@@ -2735,21 +2735,21 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a new Team instance using the specified properties.
                  * @function create
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @static
-                 * @param {isuxportal.proto.resources.ITeam=} [properties] Properties to set
-                 * @returns {isuxportal.proto.resources.Team} Team instance
+                 * @param {xsuportal.proto.resources.ITeam=} [properties] Properties to set
+                 * @returns {xsuportal.proto.resources.Team} Team instance
                  */
                 Team.create = function create(properties) {
                     return new Team(properties);
                 };
 
                 /**
-                 * Encodes the specified Team message. Does not implicitly {@link isuxportal.proto.resources.Team.verify|verify} messages.
+                 * Encodes the specified Team message. Does not implicitly {@link xsuportal.proto.resources.Team.verify|verify} messages.
                  * @function encode
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @static
-                 * @param {isuxportal.proto.resources.ITeam} message Team message or plain object to encode
+                 * @param {xsuportal.proto.resources.ITeam} message Team message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -2775,21 +2775,21 @@ $root.isuxportal = (function() {
                     if (message.withdrawn != null && Object.hasOwnProperty.call(message, "withdrawn"))
                         writer.uint32(/* id 7, wireType 0 =*/56).bool(message.withdrawn);
                     if (message.detail != null && Object.hasOwnProperty.call(message, "detail"))
-                        $root.isuxportal.proto.resources.Team.TeamDetail.encode(message.detail, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                        $root.xsuportal.proto.resources.Team.TeamDetail.encode(message.detail, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
                     if (message.leader != null && Object.hasOwnProperty.call(message, "leader"))
-                        $root.isuxportal.proto.resources.Contestant.encode(message.leader, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
+                        $root.xsuportal.proto.resources.Contestant.encode(message.leader, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                     if (message.members != null && message.members.length)
                         for (var i = 0; i < message.members.length; ++i)
-                            $root.isuxportal.proto.resources.Contestant.encode(message.members[i], writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
+                            $root.xsuportal.proto.resources.Contestant.encode(message.members[i], writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
                     return writer;
                 };
 
                 /**
-                 * Encodes the specified Team message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Team.verify|verify} messages.
+                 * Encodes the specified Team message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Team.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @static
-                 * @param {isuxportal.proto.resources.ITeam} message Team message or plain object to encode
+                 * @param {xsuportal.proto.resources.ITeam} message Team message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -2800,18 +2800,18 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a Team message from the specified reader or buffer.
                  * @function decode
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {isuxportal.proto.resources.Team} Team
+                 * @returns {xsuportal.proto.resources.Team} Team
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 Team.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.Team();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Team();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
@@ -2844,15 +2844,15 @@ $root.isuxportal = (function() {
                             message.withdrawn = reader.bool();
                             break;
                         case 8:
-                            message.detail = $root.isuxportal.proto.resources.Team.TeamDetail.decode(reader, reader.uint32());
+                            message.detail = $root.xsuportal.proto.resources.Team.TeamDetail.decode(reader, reader.uint32());
                             break;
                         case 16:
-                            message.leader = $root.isuxportal.proto.resources.Contestant.decode(reader, reader.uint32());
+                            message.leader = $root.xsuportal.proto.resources.Contestant.decode(reader, reader.uint32());
                             break;
                         case 17:
                             if (!(message.members && message.members.length))
                                 message.members = [];
-                            message.members.push($root.isuxportal.proto.resources.Contestant.decode(reader, reader.uint32()));
+                            message.members.push($root.xsuportal.proto.resources.Contestant.decode(reader, reader.uint32()));
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -2865,10 +2865,10 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a Team message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {isuxportal.proto.resources.Team} Team
+                 * @returns {xsuportal.proto.resources.Team} Team
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
@@ -2881,7 +2881,7 @@ $root.isuxportal = (function() {
                 /**
                  * Verifies a Team message.
                  * @function verify
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -2915,12 +2915,12 @@ $root.isuxportal = (function() {
                         if (typeof message.withdrawn !== "boolean")
                             return "withdrawn: boolean expected";
                     if (message.detail != null && message.hasOwnProperty("detail")) {
-                        var error = $root.isuxportal.proto.resources.Team.TeamDetail.verify(message.detail);
+                        var error = $root.xsuportal.proto.resources.Team.TeamDetail.verify(message.detail);
                         if (error)
                             return "detail." + error;
                     }
                     if (message.leader != null && message.hasOwnProperty("leader")) {
-                        var error = $root.isuxportal.proto.resources.Contestant.verify(message.leader);
+                        var error = $root.xsuportal.proto.resources.Contestant.verify(message.leader);
                         if (error)
                             return "leader." + error;
                     }
@@ -2928,7 +2928,7 @@ $root.isuxportal = (function() {
                         if (!Array.isArray(message.members))
                             return "members: array expected";
                         for (var i = 0; i < message.members.length; ++i) {
-                            var error = $root.isuxportal.proto.resources.Contestant.verify(message.members[i]);
+                            var error = $root.xsuportal.proto.resources.Contestant.verify(message.members[i]);
                             if (error)
                                 return "members." + error;
                         }
@@ -2939,15 +2939,15 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a Team message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {isuxportal.proto.resources.Team} Team
+                 * @returns {xsuportal.proto.resources.Team} Team
                  */
                 Team.fromObject = function fromObject(object) {
-                    if (object instanceof $root.isuxportal.proto.resources.Team)
+                    if (object instanceof $root.xsuportal.proto.resources.Team)
                         return object;
-                    var message = new $root.isuxportal.proto.resources.Team();
+                    var message = new $root.xsuportal.proto.resources.Team();
                     if (object.id != null)
                         if ($util.Long)
                             (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -2970,7 +2970,7 @@ $root.isuxportal = (function() {
                             message.leaderId = new $util.LongBits(object.leaderId.low >>> 0, object.leaderId.high >>> 0).toNumber();
                     if (object.memberIds) {
                         if (!Array.isArray(object.memberIds))
-                            throw TypeError(".isuxportal.proto.resources.Team.memberIds: array expected");
+                            throw TypeError(".xsuportal.proto.resources.Team.memberIds: array expected");
                         message.memberIds = [];
                         for (var i = 0; i < object.memberIds.length; ++i)
                             if ($util.Long)
@@ -2990,22 +2990,22 @@ $root.isuxportal = (function() {
                         message.withdrawn = Boolean(object.withdrawn);
                     if (object.detail != null) {
                         if (typeof object.detail !== "object")
-                            throw TypeError(".isuxportal.proto.resources.Team.detail: object expected");
-                        message.detail = $root.isuxportal.proto.resources.Team.TeamDetail.fromObject(object.detail);
+                            throw TypeError(".xsuportal.proto.resources.Team.detail: object expected");
+                        message.detail = $root.xsuportal.proto.resources.Team.TeamDetail.fromObject(object.detail);
                     }
                     if (object.leader != null) {
                         if (typeof object.leader !== "object")
-                            throw TypeError(".isuxportal.proto.resources.Team.leader: object expected");
-                        message.leader = $root.isuxportal.proto.resources.Contestant.fromObject(object.leader);
+                            throw TypeError(".xsuportal.proto.resources.Team.leader: object expected");
+                        message.leader = $root.xsuportal.proto.resources.Contestant.fromObject(object.leader);
                     }
                     if (object.members) {
                         if (!Array.isArray(object.members))
-                            throw TypeError(".isuxportal.proto.resources.Team.members: array expected");
+                            throw TypeError(".xsuportal.proto.resources.Team.members: array expected");
                         message.members = [];
                         for (var i = 0; i < object.members.length; ++i) {
                             if (typeof object.members[i] !== "object")
-                                throw TypeError(".isuxportal.proto.resources.Team.members: object expected");
-                            message.members[i] = $root.isuxportal.proto.resources.Contestant.fromObject(object.members[i]);
+                                throw TypeError(".xsuportal.proto.resources.Team.members: object expected");
+                            message.members[i] = $root.xsuportal.proto.resources.Contestant.fromObject(object.members[i]);
                         }
                     }
                     return message;
@@ -3014,9 +3014,9 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a plain object from a Team message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @static
-                 * @param {isuxportal.proto.resources.Team} message Team
+                 * @param {xsuportal.proto.resources.Team} message Team
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
@@ -3073,13 +3073,13 @@ $root.isuxportal = (function() {
                     if (message.withdrawn != null && message.hasOwnProperty("withdrawn"))
                         object.withdrawn = message.withdrawn;
                     if (message.detail != null && message.hasOwnProperty("detail"))
-                        object.detail = $root.isuxportal.proto.resources.Team.TeamDetail.toObject(message.detail, options);
+                        object.detail = $root.xsuportal.proto.resources.Team.TeamDetail.toObject(message.detail, options);
                     if (message.leader != null && message.hasOwnProperty("leader"))
-                        object.leader = $root.isuxportal.proto.resources.Contestant.toObject(message.leader, options);
+                        object.leader = $root.xsuportal.proto.resources.Contestant.toObject(message.leader, options);
                     if (message.members && message.members.length) {
                         object.members = [];
                         for (var j = 0; j < message.members.length; ++j)
-                            object.members[j] = $root.isuxportal.proto.resources.Contestant.toObject(message.members[j], options);
+                            object.members[j] = $root.xsuportal.proto.resources.Contestant.toObject(message.members[j], options);
                     }
                     return object;
                 };
@@ -3087,7 +3087,7 @@ $root.isuxportal = (function() {
                 /**
                  * Converts this Team to JSON.
                  * @function toJSON
-                 * @memberof isuxportal.proto.resources.Team
+                 * @memberof xsuportal.proto.resources.Team
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
@@ -3099,7 +3099,7 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a TeamDetail.
-                     * @memberof isuxportal.proto.resources.Team
+                     * @memberof xsuportal.proto.resources.Team
                      * @interface ITeamDetail
                      * @property {string|null} [emailAddress] TeamDetail emailAddress
                      * @property {number|Long|null} [benchmarkTargetId] TeamDetail benchmarkTargetId
@@ -3108,11 +3108,11 @@ $root.isuxportal = (function() {
 
                     /**
                      * Constructs a new TeamDetail.
-                     * @memberof isuxportal.proto.resources.Team
+                     * @memberof xsuportal.proto.resources.Team
                      * @classdesc Represents a TeamDetail.
                      * @implements ITeamDetail
                      * @constructor
-                     * @param {isuxportal.proto.resources.Team.ITeamDetail=} [properties] Properties to set
+                     * @param {xsuportal.proto.resources.Team.ITeamDetail=} [properties] Properties to set
                      */
                     function TeamDetail(properties) {
                         if (properties)
@@ -3124,7 +3124,7 @@ $root.isuxportal = (function() {
                     /**
                      * TeamDetail emailAddress.
                      * @member {string} emailAddress
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @instance
                      */
                     TeamDetail.prototype.emailAddress = "";
@@ -3132,7 +3132,7 @@ $root.isuxportal = (function() {
                     /**
                      * TeamDetail benchmarkTargetId.
                      * @member {number|Long} benchmarkTargetId
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @instance
                      */
                     TeamDetail.prototype.benchmarkTargetId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -3140,7 +3140,7 @@ $root.isuxportal = (function() {
                     /**
                      * TeamDetail inviteToken.
                      * @member {string} inviteToken
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @instance
                      */
                     TeamDetail.prototype.inviteToken = "";
@@ -3148,21 +3148,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new TeamDetail instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @static
-                     * @param {isuxportal.proto.resources.Team.ITeamDetail=} [properties] Properties to set
-                     * @returns {isuxportal.proto.resources.Team.TeamDetail} TeamDetail instance
+                     * @param {xsuportal.proto.resources.Team.ITeamDetail=} [properties] Properties to set
+                     * @returns {xsuportal.proto.resources.Team.TeamDetail} TeamDetail instance
                      */
                     TeamDetail.create = function create(properties) {
                         return new TeamDetail(properties);
                     };
 
                     /**
-                     * Encodes the specified TeamDetail message. Does not implicitly {@link isuxportal.proto.resources.Team.TeamDetail.verify|verify} messages.
+                     * Encodes the specified TeamDetail message. Does not implicitly {@link xsuportal.proto.resources.Team.TeamDetail.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @static
-                     * @param {isuxportal.proto.resources.Team.ITeamDetail} message TeamDetail message or plain object to encode
+                     * @param {xsuportal.proto.resources.Team.ITeamDetail} message TeamDetail message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -3179,11 +3179,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified TeamDetail message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Team.TeamDetail.verify|verify} messages.
+                     * Encodes the specified TeamDetail message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Team.TeamDetail.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @static
-                     * @param {isuxportal.proto.resources.Team.ITeamDetail} message TeamDetail message or plain object to encode
+                     * @param {xsuportal.proto.resources.Team.ITeamDetail} message TeamDetail message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -3194,18 +3194,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a TeamDetail message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.resources.Team.TeamDetail} TeamDetail
+                     * @returns {xsuportal.proto.resources.Team.TeamDetail} TeamDetail
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     TeamDetail.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.Team.TeamDetail();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Team.TeamDetail();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -3229,10 +3229,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a TeamDetail message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.resources.Team.TeamDetail} TeamDetail
+                     * @returns {xsuportal.proto.resources.Team.TeamDetail} TeamDetail
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -3245,7 +3245,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a TeamDetail message.
                      * @function verify
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -3268,15 +3268,15 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a TeamDetail message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.resources.Team.TeamDetail} TeamDetail
+                     * @returns {xsuportal.proto.resources.Team.TeamDetail} TeamDetail
                      */
                     TeamDetail.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.resources.Team.TeamDetail)
+                        if (object instanceof $root.xsuportal.proto.resources.Team.TeamDetail)
                             return object;
-                        var message = new $root.isuxportal.proto.resources.Team.TeamDetail();
+                        var message = new $root.xsuportal.proto.resources.Team.TeamDetail();
                         if (object.emailAddress != null)
                             message.emailAddress = String(object.emailAddress);
                         if (object.benchmarkTargetId != null)
@@ -3296,9 +3296,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a TeamDetail message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @static
-                     * @param {isuxportal.proto.resources.Team.TeamDetail} message TeamDetail
+                     * @param {xsuportal.proto.resources.Team.TeamDetail} message TeamDetail
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -3330,7 +3330,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this TeamDetail to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.resources.Team.TeamDetail
+                     * @memberof xsuportal.proto.resources.Team.TeamDetail
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -3348,21 +3348,21 @@ $root.isuxportal = (function() {
 
                 /**
                  * Properties of a Contestant.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @interface IContestant
                  * @property {number|Long|null} [id] Contestant id
                  * @property {number|Long|null} [teamId] Contestant teamId
                  * @property {string|null} [name] Contestant name
-                 * @property {isuxportal.proto.resources.Contestant.IContestantDetail|null} [contestantDetail] Contestant contestantDetail
+                 * @property {xsuportal.proto.resources.Contestant.IContestantDetail|null} [contestantDetail] Contestant contestantDetail
                  */
 
                 /**
                  * Constructs a new Contestant.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @classdesc Represents a Contestant.
                  * @implements IContestant
                  * @constructor
-                 * @param {isuxportal.proto.resources.IContestant=} [properties] Properties to set
+                 * @param {xsuportal.proto.resources.IContestant=} [properties] Properties to set
                  */
                 function Contestant(properties) {
                     if (properties)
@@ -3374,7 +3374,7 @@ $root.isuxportal = (function() {
                 /**
                  * Contestant id.
                  * @member {number|Long} id
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @instance
                  */
                 Contestant.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -3382,7 +3382,7 @@ $root.isuxportal = (function() {
                 /**
                  * Contestant teamId.
                  * @member {number|Long} teamId
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @instance
                  */
                 Contestant.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -3390,15 +3390,15 @@ $root.isuxportal = (function() {
                 /**
                  * Contestant name.
                  * @member {string} name
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @instance
                  */
                 Contestant.prototype.name = "";
 
                 /**
                  * Contestant contestantDetail.
-                 * @member {isuxportal.proto.resources.Contestant.IContestantDetail|null|undefined} contestantDetail
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @member {xsuportal.proto.resources.Contestant.IContestantDetail|null|undefined} contestantDetail
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @instance
                  */
                 Contestant.prototype.contestantDetail = null;
@@ -3406,21 +3406,21 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a new Contestant instance using the specified properties.
                  * @function create
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @static
-                 * @param {isuxportal.proto.resources.IContestant=} [properties] Properties to set
-                 * @returns {isuxportal.proto.resources.Contestant} Contestant instance
+                 * @param {xsuportal.proto.resources.IContestant=} [properties] Properties to set
+                 * @returns {xsuportal.proto.resources.Contestant} Contestant instance
                  */
                 Contestant.create = function create(properties) {
                     return new Contestant(properties);
                 };
 
                 /**
-                 * Encodes the specified Contestant message. Does not implicitly {@link isuxportal.proto.resources.Contestant.verify|verify} messages.
+                 * Encodes the specified Contestant message. Does not implicitly {@link xsuportal.proto.resources.Contestant.verify|verify} messages.
                  * @function encode
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @static
-                 * @param {isuxportal.proto.resources.IContestant} message Contestant message or plain object to encode
+                 * @param {xsuportal.proto.resources.IContestant} message Contestant message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -3434,16 +3434,16 @@ $root.isuxportal = (function() {
                     if (message.name != null && Object.hasOwnProperty.call(message, "name"))
                         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
                     if (message.contestantDetail != null && Object.hasOwnProperty.call(message, "contestantDetail"))
-                        $root.isuxportal.proto.resources.Contestant.ContestantDetail.encode(message.contestantDetail, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+                        $root.xsuportal.proto.resources.Contestant.ContestantDetail.encode(message.contestantDetail, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
                     return writer;
                 };
 
                 /**
-                 * Encodes the specified Contestant message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Contestant.verify|verify} messages.
+                 * Encodes the specified Contestant message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Contestant.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @static
-                 * @param {isuxportal.proto.resources.IContestant} message Contestant message or plain object to encode
+                 * @param {xsuportal.proto.resources.IContestant} message Contestant message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -3454,18 +3454,18 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a Contestant message from the specified reader or buffer.
                  * @function decode
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {isuxportal.proto.resources.Contestant} Contestant
+                 * @returns {xsuportal.proto.resources.Contestant} Contestant
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 Contestant.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.Contestant();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Contestant();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
@@ -3479,7 +3479,7 @@ $root.isuxportal = (function() {
                             message.name = reader.string();
                             break;
                         case 7:
-                            message.contestantDetail = $root.isuxportal.proto.resources.Contestant.ContestantDetail.decode(reader, reader.uint32());
+                            message.contestantDetail = $root.xsuportal.proto.resources.Contestant.ContestantDetail.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -3492,10 +3492,10 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a Contestant message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {isuxportal.proto.resources.Contestant} Contestant
+                 * @returns {xsuportal.proto.resources.Contestant} Contestant
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
@@ -3508,7 +3508,7 @@ $root.isuxportal = (function() {
                 /**
                  * Verifies a Contestant message.
                  * @function verify
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -3526,7 +3526,7 @@ $root.isuxportal = (function() {
                         if (!$util.isString(message.name))
                             return "name: string expected";
                     if (message.contestantDetail != null && message.hasOwnProperty("contestantDetail")) {
-                        var error = $root.isuxportal.proto.resources.Contestant.ContestantDetail.verify(message.contestantDetail);
+                        var error = $root.xsuportal.proto.resources.Contestant.ContestantDetail.verify(message.contestantDetail);
                         if (error)
                             return "contestantDetail." + error;
                     }
@@ -3536,15 +3536,15 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a Contestant message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {isuxportal.proto.resources.Contestant} Contestant
+                 * @returns {xsuportal.proto.resources.Contestant} Contestant
                  */
                 Contestant.fromObject = function fromObject(object) {
-                    if (object instanceof $root.isuxportal.proto.resources.Contestant)
+                    if (object instanceof $root.xsuportal.proto.resources.Contestant)
                         return object;
-                    var message = new $root.isuxportal.proto.resources.Contestant();
+                    var message = new $root.xsuportal.proto.resources.Contestant();
                     if (object.id != null)
                         if ($util.Long)
                             (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -3567,8 +3567,8 @@ $root.isuxportal = (function() {
                         message.name = String(object.name);
                     if (object.contestantDetail != null) {
                         if (typeof object.contestantDetail !== "object")
-                            throw TypeError(".isuxportal.proto.resources.Contestant.contestantDetail: object expected");
-                        message.contestantDetail = $root.isuxportal.proto.resources.Contestant.ContestantDetail.fromObject(object.contestantDetail);
+                            throw TypeError(".xsuportal.proto.resources.Contestant.contestantDetail: object expected");
+                        message.contestantDetail = $root.xsuportal.proto.resources.Contestant.ContestantDetail.fromObject(object.contestantDetail);
                     }
                     return message;
                 };
@@ -3576,9 +3576,9 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a plain object from a Contestant message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @static
-                 * @param {isuxportal.proto.resources.Contestant} message Contestant
+                 * @param {xsuportal.proto.resources.Contestant} message Contestant
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
@@ -3613,14 +3613,14 @@ $root.isuxportal = (function() {
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
                     if (message.contestantDetail != null && message.hasOwnProperty("contestantDetail"))
-                        object.contestantDetail = $root.isuxportal.proto.resources.Contestant.ContestantDetail.toObject(message.contestantDetail, options);
+                        object.contestantDetail = $root.xsuportal.proto.resources.Contestant.ContestantDetail.toObject(message.contestantDetail, options);
                     return object;
                 };
 
                 /**
                  * Converts this Contestant to JSON.
                  * @function toJSON
-                 * @memberof isuxportal.proto.resources.Contestant
+                 * @memberof xsuportal.proto.resources.Contestant
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
@@ -3632,7 +3632,7 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a ContestantDetail.
-                     * @memberof isuxportal.proto.resources.Contestant
+                     * @memberof xsuportal.proto.resources.Contestant
                      * @interface IContestantDetail
                      * @property {string|null} [githubLogin] ContestantDetail githubLogin
                      * @property {string|null} [discordTag] ContestantDetail discordTag
@@ -3642,11 +3642,11 @@ $root.isuxportal = (function() {
 
                     /**
                      * Constructs a new ContestantDetail.
-                     * @memberof isuxportal.proto.resources.Contestant
+                     * @memberof xsuportal.proto.resources.Contestant
                      * @classdesc Represents a ContestantDetail.
                      * @implements IContestantDetail
                      * @constructor
-                     * @param {isuxportal.proto.resources.Contestant.IContestantDetail=} [properties] Properties to set
+                     * @param {xsuportal.proto.resources.Contestant.IContestantDetail=} [properties] Properties to set
                      */
                     function ContestantDetail(properties) {
                         if (properties)
@@ -3658,7 +3658,7 @@ $root.isuxportal = (function() {
                     /**
                      * ContestantDetail githubLogin.
                      * @member {string} githubLogin
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @instance
                      */
                     ContestantDetail.prototype.githubLogin = "";
@@ -3666,7 +3666,7 @@ $root.isuxportal = (function() {
                     /**
                      * ContestantDetail discordTag.
                      * @member {string} discordTag
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @instance
                      */
                     ContestantDetail.prototype.discordTag = "";
@@ -3674,7 +3674,7 @@ $root.isuxportal = (function() {
                     /**
                      * ContestantDetail isStudent.
                      * @member {boolean} isStudent
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @instance
                      */
                     ContestantDetail.prototype.isStudent = false;
@@ -3682,7 +3682,7 @@ $root.isuxportal = (function() {
                     /**
                      * ContestantDetail avatarUrl.
                      * @member {string} avatarUrl
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @instance
                      */
                     ContestantDetail.prototype.avatarUrl = "";
@@ -3690,21 +3690,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new ContestantDetail instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @static
-                     * @param {isuxportal.proto.resources.Contestant.IContestantDetail=} [properties] Properties to set
-                     * @returns {isuxportal.proto.resources.Contestant.ContestantDetail} ContestantDetail instance
+                     * @param {xsuportal.proto.resources.Contestant.IContestantDetail=} [properties] Properties to set
+                     * @returns {xsuportal.proto.resources.Contestant.ContestantDetail} ContestantDetail instance
                      */
                     ContestantDetail.create = function create(properties) {
                         return new ContestantDetail(properties);
                     };
 
                     /**
-                     * Encodes the specified ContestantDetail message. Does not implicitly {@link isuxportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
+                     * Encodes the specified ContestantDetail message. Does not implicitly {@link xsuportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @static
-                     * @param {isuxportal.proto.resources.Contestant.IContestantDetail} message ContestantDetail message or plain object to encode
+                     * @param {xsuportal.proto.resources.Contestant.IContestantDetail} message ContestantDetail message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -3723,11 +3723,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified ContestantDetail message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
+                     * Encodes the specified ContestantDetail message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @static
-                     * @param {isuxportal.proto.resources.Contestant.IContestantDetail} message ContestantDetail message or plain object to encode
+                     * @param {xsuportal.proto.resources.Contestant.IContestantDetail} message ContestantDetail message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -3738,18 +3738,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a ContestantDetail message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.resources.Contestant.ContestantDetail} ContestantDetail
+                     * @returns {xsuportal.proto.resources.Contestant.ContestantDetail} ContestantDetail
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     ContestantDetail.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.Contestant.ContestantDetail();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Contestant.ContestantDetail();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -3776,10 +3776,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a ContestantDetail message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.resources.Contestant.ContestantDetail} ContestantDetail
+                     * @returns {xsuportal.proto.resources.Contestant.ContestantDetail} ContestantDetail
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -3792,7 +3792,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a ContestantDetail message.
                      * @function verify
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -3818,15 +3818,15 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a ContestantDetail message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.resources.Contestant.ContestantDetail} ContestantDetail
+                     * @returns {xsuportal.proto.resources.Contestant.ContestantDetail} ContestantDetail
                      */
                     ContestantDetail.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.resources.Contestant.ContestantDetail)
+                        if (object instanceof $root.xsuportal.proto.resources.Contestant.ContestantDetail)
                             return object;
-                        var message = new $root.isuxportal.proto.resources.Contestant.ContestantDetail();
+                        var message = new $root.xsuportal.proto.resources.Contestant.ContestantDetail();
                         if (object.githubLogin != null)
                             message.githubLogin = String(object.githubLogin);
                         if (object.discordTag != null)
@@ -3841,9 +3841,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a ContestantDetail message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @static
-                     * @param {isuxportal.proto.resources.Contestant.ContestantDetail} message ContestantDetail
+                     * @param {xsuportal.proto.resources.Contestant.ContestantDetail} message ContestantDetail
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -3871,7 +3871,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this ContestantDetail to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.resources.Contestant.ContestantDetail
+                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -3889,7 +3889,7 @@ $root.isuxportal = (function() {
 
                 /**
                  * Properties of a Clarification.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @interface IClarification
                  * @property {number|Long|null} [id] Clarification id
                  * @property {number|Long|null} [teamId] Clarification teamId
@@ -3899,16 +3899,16 @@ $root.isuxportal = (function() {
                  * @property {string|null} [answer] Clarification answer
                  * @property {google.protobuf.ITimestamp|null} [createdAt] Clarification createdAt
                  * @property {google.protobuf.ITimestamp|null} [answeredAt] Clarification answeredAt
-                 * @property {isuxportal.proto.resources.ITeam|null} [team] Clarification team
+                 * @property {xsuportal.proto.resources.ITeam|null} [team] Clarification team
                  */
 
                 /**
                  * Constructs a new Clarification.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @classdesc Represents a Clarification.
                  * @implements IClarification
                  * @constructor
-                 * @param {isuxportal.proto.resources.IClarification=} [properties] Properties to set
+                 * @param {xsuportal.proto.resources.IClarification=} [properties] Properties to set
                  */
                 function Clarification(properties) {
                     if (properties)
@@ -3920,7 +3920,7 @@ $root.isuxportal = (function() {
                 /**
                  * Clarification id.
                  * @member {number|Long} id
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @instance
                  */
                 Clarification.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -3928,7 +3928,7 @@ $root.isuxportal = (function() {
                 /**
                  * Clarification teamId.
                  * @member {number|Long} teamId
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @instance
                  */
                 Clarification.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -3936,7 +3936,7 @@ $root.isuxportal = (function() {
                 /**
                  * Clarification answered.
                  * @member {boolean} answered
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @instance
                  */
                 Clarification.prototype.answered = false;
@@ -3944,7 +3944,7 @@ $root.isuxportal = (function() {
                 /**
                  * Clarification disclosed.
                  * @member {boolean} disclosed
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @instance
                  */
                 Clarification.prototype.disclosed = false;
@@ -3952,7 +3952,7 @@ $root.isuxportal = (function() {
                 /**
                  * Clarification question.
                  * @member {string} question
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @instance
                  */
                 Clarification.prototype.question = "";
@@ -3960,7 +3960,7 @@ $root.isuxportal = (function() {
                 /**
                  * Clarification answer.
                  * @member {string} answer
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @instance
                  */
                 Clarification.prototype.answer = "";
@@ -3968,7 +3968,7 @@ $root.isuxportal = (function() {
                 /**
                  * Clarification createdAt.
                  * @member {google.protobuf.ITimestamp|null|undefined} createdAt
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @instance
                  */
                 Clarification.prototype.createdAt = null;
@@ -3976,15 +3976,15 @@ $root.isuxportal = (function() {
                 /**
                  * Clarification answeredAt.
                  * @member {google.protobuf.ITimestamp|null|undefined} answeredAt
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @instance
                  */
                 Clarification.prototype.answeredAt = null;
 
                 /**
                  * Clarification team.
-                 * @member {isuxportal.proto.resources.ITeam|null|undefined} team
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @member {xsuportal.proto.resources.ITeam|null|undefined} team
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @instance
                  */
                 Clarification.prototype.team = null;
@@ -3992,21 +3992,21 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a new Clarification instance using the specified properties.
                  * @function create
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @static
-                 * @param {isuxportal.proto.resources.IClarification=} [properties] Properties to set
-                 * @returns {isuxportal.proto.resources.Clarification} Clarification instance
+                 * @param {xsuportal.proto.resources.IClarification=} [properties] Properties to set
+                 * @returns {xsuportal.proto.resources.Clarification} Clarification instance
                  */
                 Clarification.create = function create(properties) {
                     return new Clarification(properties);
                 };
 
                 /**
-                 * Encodes the specified Clarification message. Does not implicitly {@link isuxportal.proto.resources.Clarification.verify|verify} messages.
+                 * Encodes the specified Clarification message. Does not implicitly {@link xsuportal.proto.resources.Clarification.verify|verify} messages.
                  * @function encode
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @static
-                 * @param {isuxportal.proto.resources.IClarification} message Clarification message or plain object to encode
+                 * @param {xsuportal.proto.resources.IClarification} message Clarification message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -4030,16 +4030,16 @@ $root.isuxportal = (function() {
                     if (message.answeredAt != null && Object.hasOwnProperty.call(message, "answeredAt"))
                         $root.google.protobuf.Timestamp.encode(message.answeredAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
                     if (message.team != null && Object.hasOwnProperty.call(message, "team"))
-                        $root.isuxportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
+                        $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                     return writer;
                 };
 
                 /**
-                 * Encodes the specified Clarification message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Clarification.verify|verify} messages.
+                 * Encodes the specified Clarification message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Clarification.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @static
-                 * @param {isuxportal.proto.resources.IClarification} message Clarification message or plain object to encode
+                 * @param {xsuportal.proto.resources.IClarification} message Clarification message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -4050,18 +4050,18 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a Clarification message from the specified reader or buffer.
                  * @function decode
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {isuxportal.proto.resources.Clarification} Clarification
+                 * @returns {xsuportal.proto.resources.Clarification} Clarification
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 Clarification.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.Clarification();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Clarification();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
@@ -4090,7 +4090,7 @@ $root.isuxportal = (function() {
                             message.answeredAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
                         case 16:
-                            message.team = $root.isuxportal.proto.resources.Team.decode(reader, reader.uint32());
+                            message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -4103,10 +4103,10 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a Clarification message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {isuxportal.proto.resources.Clarification} Clarification
+                 * @returns {xsuportal.proto.resources.Clarification} Clarification
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
@@ -4119,7 +4119,7 @@ $root.isuxportal = (function() {
                 /**
                  * Verifies a Clarification message.
                  * @function verify
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -4156,7 +4156,7 @@ $root.isuxportal = (function() {
                             return "answeredAt." + error;
                     }
                     if (message.team != null && message.hasOwnProperty("team")) {
-                        var error = $root.isuxportal.proto.resources.Team.verify(message.team);
+                        var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                         if (error)
                             return "team." + error;
                     }
@@ -4166,15 +4166,15 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a Clarification message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {isuxportal.proto.resources.Clarification} Clarification
+                 * @returns {xsuportal.proto.resources.Clarification} Clarification
                  */
                 Clarification.fromObject = function fromObject(object) {
-                    if (object instanceof $root.isuxportal.proto.resources.Clarification)
+                    if (object instanceof $root.xsuportal.proto.resources.Clarification)
                         return object;
-                    var message = new $root.isuxportal.proto.resources.Clarification();
+                    var message = new $root.xsuportal.proto.resources.Clarification();
                     if (object.id != null)
                         if ($util.Long)
                             (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -4203,18 +4203,18 @@ $root.isuxportal = (function() {
                         message.answer = String(object.answer);
                     if (object.createdAt != null) {
                         if (typeof object.createdAt !== "object")
-                            throw TypeError(".isuxportal.proto.resources.Clarification.createdAt: object expected");
+                            throw TypeError(".xsuportal.proto.resources.Clarification.createdAt: object expected");
                         message.createdAt = $root.google.protobuf.Timestamp.fromObject(object.createdAt);
                     }
                     if (object.answeredAt != null) {
                         if (typeof object.answeredAt !== "object")
-                            throw TypeError(".isuxportal.proto.resources.Clarification.answeredAt: object expected");
+                            throw TypeError(".xsuportal.proto.resources.Clarification.answeredAt: object expected");
                         message.answeredAt = $root.google.protobuf.Timestamp.fromObject(object.answeredAt);
                     }
                     if (object.team != null) {
                         if (typeof object.team !== "object")
-                            throw TypeError(".isuxportal.proto.resources.Clarification.team: object expected");
-                        message.team = $root.isuxportal.proto.resources.Team.fromObject(object.team);
+                            throw TypeError(".xsuportal.proto.resources.Clarification.team: object expected");
+                        message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
                     }
                     return message;
                 };
@@ -4222,9 +4222,9 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a plain object from a Clarification message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @static
-                 * @param {isuxportal.proto.resources.Clarification} message Clarification
+                 * @param {xsuportal.proto.resources.Clarification} message Clarification
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
@@ -4274,14 +4274,14 @@ $root.isuxportal = (function() {
                     if (message.answeredAt != null && message.hasOwnProperty("answeredAt"))
                         object.answeredAt = $root.google.protobuf.Timestamp.toObject(message.answeredAt, options);
                     if (message.team != null && message.hasOwnProperty("team"))
-                        object.team = $root.isuxportal.proto.resources.Team.toObject(message.team, options);
+                        object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                     return object;
                 };
 
                 /**
                  * Converts this Clarification to JSON.
                  * @function toJSON
-                 * @memberof isuxportal.proto.resources.Clarification
+                 * @memberof xsuportal.proto.resources.Clarification
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
@@ -4296,7 +4296,7 @@ $root.isuxportal = (function() {
 
                 /**
                  * Properties of a Staff.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @interface IStaff
                  * @property {number|Long|null} [id] Staff id
                  * @property {string|null} [githubLogin] Staff githubLogin
@@ -4304,11 +4304,11 @@ $root.isuxportal = (function() {
 
                 /**
                  * Constructs a new Staff.
-                 * @memberof isuxportal.proto.resources
+                 * @memberof xsuportal.proto.resources
                  * @classdesc Represents a Staff.
                  * @implements IStaff
                  * @constructor
-                 * @param {isuxportal.proto.resources.IStaff=} [properties] Properties to set
+                 * @param {xsuportal.proto.resources.IStaff=} [properties] Properties to set
                  */
                 function Staff(properties) {
                     if (properties)
@@ -4320,7 +4320,7 @@ $root.isuxportal = (function() {
                 /**
                  * Staff id.
                  * @member {number|Long} id
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @instance
                  */
                 Staff.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -4328,7 +4328,7 @@ $root.isuxportal = (function() {
                 /**
                  * Staff githubLogin.
                  * @member {string} githubLogin
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @instance
                  */
                 Staff.prototype.githubLogin = "";
@@ -4336,21 +4336,21 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a new Staff instance using the specified properties.
                  * @function create
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @static
-                 * @param {isuxportal.proto.resources.IStaff=} [properties] Properties to set
-                 * @returns {isuxportal.proto.resources.Staff} Staff instance
+                 * @param {xsuportal.proto.resources.IStaff=} [properties] Properties to set
+                 * @returns {xsuportal.proto.resources.Staff} Staff instance
                  */
                 Staff.create = function create(properties) {
                     return new Staff(properties);
                 };
 
                 /**
-                 * Encodes the specified Staff message. Does not implicitly {@link isuxportal.proto.resources.Staff.verify|verify} messages.
+                 * Encodes the specified Staff message. Does not implicitly {@link xsuportal.proto.resources.Staff.verify|verify} messages.
                  * @function encode
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @static
-                 * @param {isuxportal.proto.resources.IStaff} message Staff message or plain object to encode
+                 * @param {xsuportal.proto.resources.IStaff} message Staff message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -4365,11 +4365,11 @@ $root.isuxportal = (function() {
                 };
 
                 /**
-                 * Encodes the specified Staff message, length delimited. Does not implicitly {@link isuxportal.proto.resources.Staff.verify|verify} messages.
+                 * Encodes the specified Staff message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Staff.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @static
-                 * @param {isuxportal.proto.resources.IStaff} message Staff message or plain object to encode
+                 * @param {xsuportal.proto.resources.IStaff} message Staff message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -4380,18 +4380,18 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a Staff message from the specified reader or buffer.
                  * @function decode
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {isuxportal.proto.resources.Staff} Staff
+                 * @returns {xsuportal.proto.resources.Staff} Staff
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 Staff.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.resources.Staff();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Staff();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
@@ -4412,10 +4412,10 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a Staff message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {isuxportal.proto.resources.Staff} Staff
+                 * @returns {xsuportal.proto.resources.Staff} Staff
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
@@ -4428,7 +4428,7 @@ $root.isuxportal = (function() {
                 /**
                  * Verifies a Staff message.
                  * @function verify
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -4448,15 +4448,15 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a Staff message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {isuxportal.proto.resources.Staff} Staff
+                 * @returns {xsuportal.proto.resources.Staff} Staff
                  */
                 Staff.fromObject = function fromObject(object) {
-                    if (object instanceof $root.isuxportal.proto.resources.Staff)
+                    if (object instanceof $root.xsuportal.proto.resources.Staff)
                         return object;
-                    var message = new $root.isuxportal.proto.resources.Staff();
+                    var message = new $root.xsuportal.proto.resources.Staff();
                     if (object.id != null)
                         if ($util.Long)
                             (message.id = $util.Long.fromValue(object.id)).unsigned = false;
@@ -4474,9 +4474,9 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a plain object from a Staff message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @static
-                 * @param {isuxportal.proto.resources.Staff} message Staff
+                 * @param {xsuportal.proto.resources.Staff} message Staff
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
@@ -4505,7 +4505,7 @@ $root.isuxportal = (function() {
                 /**
                  * Converts this Staff to JSON.
                  * @function toJSON
-                 * @memberof isuxportal.proto.resources.Staff
+                 * @memberof xsuportal.proto.resources.Staff
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
@@ -4523,7 +4523,7 @@ $root.isuxportal = (function() {
 
             /**
              * Namespace common.
-             * @memberof isuxportal.proto
+             * @memberof xsuportal.proto
              * @namespace
              */
             var common = {};
@@ -4532,17 +4532,17 @@ $root.isuxportal = (function() {
 
                 /**
                  * Properties of a DashboardRequest.
-                 * @memberof isuxportal.proto.common
+                 * @memberof xsuportal.proto.common
                  * @interface IDashboardRequest
                  */
 
                 /**
                  * Constructs a new DashboardRequest.
-                 * @memberof isuxportal.proto.common
+                 * @memberof xsuportal.proto.common
                  * @classdesc Represents a DashboardRequest.
                  * @implements IDashboardRequest
                  * @constructor
-                 * @param {isuxportal.proto.common.IDashboardRequest=} [properties] Properties to set
+                 * @param {xsuportal.proto.common.IDashboardRequest=} [properties] Properties to set
                  */
                 function DashboardRequest(properties) {
                     if (properties)
@@ -4554,21 +4554,21 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a new DashboardRequest instance using the specified properties.
                  * @function create
-                 * @memberof isuxportal.proto.common.DashboardRequest
+                 * @memberof xsuportal.proto.common.DashboardRequest
                  * @static
-                 * @param {isuxportal.proto.common.IDashboardRequest=} [properties] Properties to set
-                 * @returns {isuxportal.proto.common.DashboardRequest} DashboardRequest instance
+                 * @param {xsuportal.proto.common.IDashboardRequest=} [properties] Properties to set
+                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest instance
                  */
                 DashboardRequest.create = function create(properties) {
                     return new DashboardRequest(properties);
                 };
 
                 /**
-                 * Encodes the specified DashboardRequest message. Does not implicitly {@link isuxportal.proto.common.DashboardRequest.verify|verify} messages.
+                 * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
                  * @function encode
-                 * @memberof isuxportal.proto.common.DashboardRequest
+                 * @memberof xsuportal.proto.common.DashboardRequest
                  * @static
-                 * @param {isuxportal.proto.common.IDashboardRequest} message DashboardRequest message or plain object to encode
+                 * @param {xsuportal.proto.common.IDashboardRequest} message DashboardRequest message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -4579,11 +4579,11 @@ $root.isuxportal = (function() {
                 };
 
                 /**
-                 * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link isuxportal.proto.common.DashboardRequest.verify|verify} messages.
+                 * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof isuxportal.proto.common.DashboardRequest
+                 * @memberof xsuportal.proto.common.DashboardRequest
                  * @static
-                 * @param {isuxportal.proto.common.IDashboardRequest} message DashboardRequest message or plain object to encode
+                 * @param {xsuportal.proto.common.IDashboardRequest} message DashboardRequest message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -4594,18 +4594,18 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a DashboardRequest message from the specified reader or buffer.
                  * @function decode
-                 * @memberof isuxportal.proto.common.DashboardRequest
+                 * @memberof xsuportal.proto.common.DashboardRequest
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {isuxportal.proto.common.DashboardRequest} DashboardRequest
+                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 DashboardRequest.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.common.DashboardRequest();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.common.DashboardRequest();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
@@ -4620,10 +4620,10 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof isuxportal.proto.common.DashboardRequest
+                 * @memberof xsuportal.proto.common.DashboardRequest
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {isuxportal.proto.common.DashboardRequest} DashboardRequest
+                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
@@ -4636,7 +4636,7 @@ $root.isuxportal = (function() {
                 /**
                  * Verifies a DashboardRequest message.
                  * @function verify
-                 * @memberof isuxportal.proto.common.DashboardRequest
+                 * @memberof xsuportal.proto.common.DashboardRequest
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -4650,23 +4650,23 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof isuxportal.proto.common.DashboardRequest
+                 * @memberof xsuportal.proto.common.DashboardRequest
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {isuxportal.proto.common.DashboardRequest} DashboardRequest
+                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
                  */
                 DashboardRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.isuxportal.proto.common.DashboardRequest)
+                    if (object instanceof $root.xsuportal.proto.common.DashboardRequest)
                         return object;
-                    return new $root.isuxportal.proto.common.DashboardRequest();
+                    return new $root.xsuportal.proto.common.DashboardRequest();
                 };
 
                 /**
                  * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof isuxportal.proto.common.DashboardRequest
+                 * @memberof xsuportal.proto.common.DashboardRequest
                  * @static
-                 * @param {isuxportal.proto.common.DashboardRequest} message DashboardRequest
+                 * @param {xsuportal.proto.common.DashboardRequest} message DashboardRequest
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
@@ -4677,7 +4677,7 @@ $root.isuxportal = (function() {
                 /**
                  * Converts this DashboardRequest to JSON.
                  * @function toJSON
-                 * @memberof isuxportal.proto.common.DashboardRequest
+                 * @memberof xsuportal.proto.common.DashboardRequest
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
@@ -4692,17 +4692,17 @@ $root.isuxportal = (function() {
 
                 /**
                  * Properties of a DashboardResponse.
-                 * @memberof isuxportal.proto.common
+                 * @memberof xsuportal.proto.common
                  * @interface IDashboardResponse
                  */
 
                 /**
                  * Constructs a new DashboardResponse.
-                 * @memberof isuxportal.proto.common
+                 * @memberof xsuportal.proto.common
                  * @classdesc Represents a DashboardResponse.
                  * @implements IDashboardResponse
                  * @constructor
-                 * @param {isuxportal.proto.common.IDashboardResponse=} [properties] Properties to set
+                 * @param {xsuportal.proto.common.IDashboardResponse=} [properties] Properties to set
                  */
                 function DashboardResponse(properties) {
                     if (properties)
@@ -4714,21 +4714,21 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a new DashboardResponse instance using the specified properties.
                  * @function create
-                 * @memberof isuxportal.proto.common.DashboardResponse
+                 * @memberof xsuportal.proto.common.DashboardResponse
                  * @static
-                 * @param {isuxportal.proto.common.IDashboardResponse=} [properties] Properties to set
-                 * @returns {isuxportal.proto.common.DashboardResponse} DashboardResponse instance
+                 * @param {xsuportal.proto.common.IDashboardResponse=} [properties] Properties to set
+                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse instance
                  */
                 DashboardResponse.create = function create(properties) {
                     return new DashboardResponse(properties);
                 };
 
                 /**
-                 * Encodes the specified DashboardResponse message. Does not implicitly {@link isuxportal.proto.common.DashboardResponse.verify|verify} messages.
+                 * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
                  * @function encode
-                 * @memberof isuxportal.proto.common.DashboardResponse
+                 * @memberof xsuportal.proto.common.DashboardResponse
                  * @static
-                 * @param {isuxportal.proto.common.IDashboardResponse} message DashboardResponse message or plain object to encode
+                 * @param {xsuportal.proto.common.IDashboardResponse} message DashboardResponse message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -4739,11 +4739,11 @@ $root.isuxportal = (function() {
                 };
 
                 /**
-                 * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link isuxportal.proto.common.DashboardResponse.verify|verify} messages.
+                 * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof isuxportal.proto.common.DashboardResponse
+                 * @memberof xsuportal.proto.common.DashboardResponse
                  * @static
-                 * @param {isuxportal.proto.common.IDashboardResponse} message DashboardResponse message or plain object to encode
+                 * @param {xsuportal.proto.common.IDashboardResponse} message DashboardResponse message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
@@ -4754,18 +4754,18 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a DashboardResponse message from the specified reader or buffer.
                  * @function decode
-                 * @memberof isuxportal.proto.common.DashboardResponse
+                 * @memberof xsuportal.proto.common.DashboardResponse
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {isuxportal.proto.common.DashboardResponse} DashboardResponse
+                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 DashboardResponse.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.common.DashboardResponse();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.common.DashboardResponse();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
@@ -4780,10 +4780,10 @@ $root.isuxportal = (function() {
                 /**
                  * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof isuxportal.proto.common.DashboardResponse
+                 * @memberof xsuportal.proto.common.DashboardResponse
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {isuxportal.proto.common.DashboardResponse} DashboardResponse
+                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
@@ -4796,7 +4796,7 @@ $root.isuxportal = (function() {
                 /**
                  * Verifies a DashboardResponse message.
                  * @function verify
-                 * @memberof isuxportal.proto.common.DashboardResponse
+                 * @memberof xsuportal.proto.common.DashboardResponse
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -4810,23 +4810,23 @@ $root.isuxportal = (function() {
                 /**
                  * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof isuxportal.proto.common.DashboardResponse
+                 * @memberof xsuportal.proto.common.DashboardResponse
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {isuxportal.proto.common.DashboardResponse} DashboardResponse
+                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
                  */
                 DashboardResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.isuxportal.proto.common.DashboardResponse)
+                    if (object instanceof $root.xsuportal.proto.common.DashboardResponse)
                         return object;
-                    return new $root.isuxportal.proto.common.DashboardResponse();
+                    return new $root.xsuportal.proto.common.DashboardResponse();
                 };
 
                 /**
                  * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof isuxportal.proto.common.DashboardResponse
+                 * @memberof xsuportal.proto.common.DashboardResponse
                  * @static
-                 * @param {isuxportal.proto.common.DashboardResponse} message DashboardResponse
+                 * @param {xsuportal.proto.common.DashboardResponse} message DashboardResponse
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
@@ -4837,7 +4837,7 @@ $root.isuxportal = (function() {
                 /**
                  * Converts this DashboardResponse to JSON.
                  * @function toJSON
-                 * @memberof isuxportal.proto.common.DashboardResponse
+                 * @memberof xsuportal.proto.common.DashboardResponse
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
@@ -4855,7 +4855,7 @@ $root.isuxportal = (function() {
 
             /**
              * Namespace services.
-             * @memberof isuxportal.proto
+             * @memberof xsuportal.proto
              * @namespace
              */
             var services = {};
@@ -4864,7 +4864,7 @@ $root.isuxportal = (function() {
 
                 /**
                  * Namespace common.
-                 * @memberof isuxportal.proto.services
+                 * @memberof xsuportal.proto.services
                  * @namespace
                  */
                 var common = {};
@@ -4873,17 +4873,17 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a GetCurrentSessionRequest.
-                     * @memberof isuxportal.proto.services.common
+                     * @memberof xsuportal.proto.services.common
                      * @interface IGetCurrentSessionRequest
                      */
 
                     /**
                      * Constructs a new GetCurrentSessionRequest.
-                     * @memberof isuxportal.proto.services.common
+                     * @memberof xsuportal.proto.services.common
                      * @classdesc Represents a GetCurrentSessionRequest.
                      * @implements IGetCurrentSessionRequest
                      * @constructor
-                     * @param {isuxportal.proto.services.common.IGetCurrentSessionRequest=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest=} [properties] Properties to set
                      */
                     function GetCurrentSessionRequest(properties) {
                         if (properties)
@@ -4895,21 +4895,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new GetCurrentSessionRequest instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
                      * @static
-                     * @param {isuxportal.proto.services.common.IGetCurrentSessionRequest=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest instance
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest instance
                      */
                     GetCurrentSessionRequest.create = function create(properties) {
                         return new GetCurrentSessionRequest(properties);
                     };
 
                     /**
-                     * Encodes the specified GetCurrentSessionRequest message. Does not implicitly {@link isuxportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
+                     * Encodes the specified GetCurrentSessionRequest message. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
                      * @static
-                     * @param {isuxportal.proto.services.common.IGetCurrentSessionRequest} message GetCurrentSessionRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest} message GetCurrentSessionRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -4920,11 +4920,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified GetCurrentSessionRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
+                     * Encodes the specified GetCurrentSessionRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
                      * @static
-                     * @param {isuxportal.proto.services.common.IGetCurrentSessionRequest} message GetCurrentSessionRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest} message GetCurrentSessionRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -4935,18 +4935,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a GetCurrentSessionRequest message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     GetCurrentSessionRequest.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.common.GetCurrentSessionRequest();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.common.GetCurrentSessionRequest();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -4961,10 +4961,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a GetCurrentSessionRequest message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -4977,7 +4977,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a GetCurrentSessionRequest message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -4991,23 +4991,23 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a GetCurrentSessionRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
                      */
                     GetCurrentSessionRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.common.GetCurrentSessionRequest)
+                        if (object instanceof $root.xsuportal.proto.services.common.GetCurrentSessionRequest)
                             return object;
-                        return new $root.isuxportal.proto.services.common.GetCurrentSessionRequest();
+                        return new $root.xsuportal.proto.services.common.GetCurrentSessionRequest();
                     };
 
                     /**
                      * Creates a plain object from a GetCurrentSessionRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
                      * @static
-                     * @param {isuxportal.proto.services.common.GetCurrentSessionRequest} message GetCurrentSessionRequest
+                     * @param {xsuportal.proto.services.common.GetCurrentSessionRequest} message GetCurrentSessionRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -5018,7 +5018,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this GetCurrentSessionRequest to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -5033,20 +5033,20 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a GetCurrentSessionResponse.
-                     * @memberof isuxportal.proto.services.common
+                     * @memberof xsuportal.proto.services.common
                      * @interface IGetCurrentSessionResponse
-                     * @property {isuxportal.proto.resources.ITeam|null} [team] GetCurrentSessionResponse team
-                     * @property {isuxportal.proto.resources.IContestant|null} [contestant] GetCurrentSessionResponse contestant
+                     * @property {xsuportal.proto.resources.ITeam|null} [team] GetCurrentSessionResponse team
+                     * @property {xsuportal.proto.resources.IContestant|null} [contestant] GetCurrentSessionResponse contestant
                      * @property {string|null} [discordServerId] GetCurrentSessionResponse discordServerId
                      */
 
                     /**
                      * Constructs a new GetCurrentSessionResponse.
-                     * @memberof isuxportal.proto.services.common
+                     * @memberof xsuportal.proto.services.common
                      * @classdesc Represents a GetCurrentSessionResponse.
                      * @implements IGetCurrentSessionResponse
                      * @constructor
-                     * @param {isuxportal.proto.services.common.IGetCurrentSessionResponse=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse=} [properties] Properties to set
                      */
                     function GetCurrentSessionResponse(properties) {
                         if (properties)
@@ -5057,16 +5057,16 @@ $root.isuxportal = (function() {
 
                     /**
                      * GetCurrentSessionResponse team.
-                     * @member {isuxportal.proto.resources.ITeam|null|undefined} team
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @member {xsuportal.proto.resources.ITeam|null|undefined} team
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @instance
                      */
                     GetCurrentSessionResponse.prototype.team = null;
 
                     /**
                      * GetCurrentSessionResponse contestant.
-                     * @member {isuxportal.proto.resources.IContestant|null|undefined} contestant
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @member {xsuportal.proto.resources.IContestant|null|undefined} contestant
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @instance
                      */
                     GetCurrentSessionResponse.prototype.contestant = null;
@@ -5074,7 +5074,7 @@ $root.isuxportal = (function() {
                     /**
                      * GetCurrentSessionResponse discordServerId.
                      * @member {string} discordServerId
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @instance
                      */
                     GetCurrentSessionResponse.prototype.discordServerId = "";
@@ -5082,21 +5082,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new GetCurrentSessionResponse instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @static
-                     * @param {isuxportal.proto.services.common.IGetCurrentSessionResponse=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse instance
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse instance
                      */
                     GetCurrentSessionResponse.create = function create(properties) {
                         return new GetCurrentSessionResponse(properties);
                     };
 
                     /**
-                     * Encodes the specified GetCurrentSessionResponse message. Does not implicitly {@link isuxportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
+                     * Encodes the specified GetCurrentSessionResponse message. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @static
-                     * @param {isuxportal.proto.services.common.IGetCurrentSessionResponse} message GetCurrentSessionResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse} message GetCurrentSessionResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -5104,20 +5104,20 @@ $root.isuxportal = (function() {
                         if (!writer)
                             writer = $Writer.create();
                         if (message.team != null && Object.hasOwnProperty.call(message, "team"))
-                            $root.isuxportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                            $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                         if (message.contestant != null && Object.hasOwnProperty.call(message, "contestant"))
-                            $root.isuxportal.proto.resources.Contestant.encode(message.contestant, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                            $root.xsuportal.proto.resources.Contestant.encode(message.contestant, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
                         if (message.discordServerId != null && Object.hasOwnProperty.call(message, "discordServerId"))
                             writer.uint32(/* id 3, wireType 2 =*/26).string(message.discordServerId);
                         return writer;
                     };
 
                     /**
-                     * Encodes the specified GetCurrentSessionResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
+                     * Encodes the specified GetCurrentSessionResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @static
-                     * @param {isuxportal.proto.services.common.IGetCurrentSessionResponse} message GetCurrentSessionResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse} message GetCurrentSessionResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -5128,26 +5128,26 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a GetCurrentSessionResponse message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     GetCurrentSessionResponse.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.common.GetCurrentSessionResponse();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.common.GetCurrentSessionResponse();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
                             case 1:
-                                message.team = $root.isuxportal.proto.resources.Team.decode(reader, reader.uint32());
+                                message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
                                 break;
                             case 2:
-                                message.contestant = $root.isuxportal.proto.resources.Contestant.decode(reader, reader.uint32());
+                                message.contestant = $root.xsuportal.proto.resources.Contestant.decode(reader, reader.uint32());
                                 break;
                             case 3:
                                 message.discordServerId = reader.string();
@@ -5163,10 +5163,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a GetCurrentSessionResponse message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -5179,7 +5179,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a GetCurrentSessionResponse message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -5188,12 +5188,12 @@ $root.isuxportal = (function() {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.team != null && message.hasOwnProperty("team")) {
-                            var error = $root.isuxportal.proto.resources.Team.verify(message.team);
+                            var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                             if (error)
                                 return "team." + error;
                         }
                         if (message.contestant != null && message.hasOwnProperty("contestant")) {
-                            var error = $root.isuxportal.proto.resources.Contestant.verify(message.contestant);
+                            var error = $root.xsuportal.proto.resources.Contestant.verify(message.contestant);
                             if (error)
                                 return "contestant." + error;
                         }
@@ -5206,24 +5206,24 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a GetCurrentSessionResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
                      */
                     GetCurrentSessionResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.common.GetCurrentSessionResponse)
+                        if (object instanceof $root.xsuportal.proto.services.common.GetCurrentSessionResponse)
                             return object;
-                        var message = new $root.isuxportal.proto.services.common.GetCurrentSessionResponse();
+                        var message = new $root.xsuportal.proto.services.common.GetCurrentSessionResponse();
                         if (object.team != null) {
                             if (typeof object.team !== "object")
-                                throw TypeError(".isuxportal.proto.services.common.GetCurrentSessionResponse.team: object expected");
-                            message.team = $root.isuxportal.proto.resources.Team.fromObject(object.team);
+                                throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.team: object expected");
+                            message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
                         }
                         if (object.contestant != null) {
                             if (typeof object.contestant !== "object")
-                                throw TypeError(".isuxportal.proto.services.common.GetCurrentSessionResponse.contestant: object expected");
-                            message.contestant = $root.isuxportal.proto.resources.Contestant.fromObject(object.contestant);
+                                throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.contestant: object expected");
+                            message.contestant = $root.xsuportal.proto.resources.Contestant.fromObject(object.contestant);
                         }
                         if (object.discordServerId != null)
                             message.discordServerId = String(object.discordServerId);
@@ -5233,9 +5233,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a GetCurrentSessionResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @static
-                     * @param {isuxportal.proto.services.common.GetCurrentSessionResponse} message GetCurrentSessionResponse
+                     * @param {xsuportal.proto.services.common.GetCurrentSessionResponse} message GetCurrentSessionResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -5249,9 +5249,9 @@ $root.isuxportal = (function() {
                             object.discordServerId = "";
                         }
                         if (message.team != null && message.hasOwnProperty("team"))
-                            object.team = $root.isuxportal.proto.resources.Team.toObject(message.team, options);
+                            object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                         if (message.contestant != null && message.hasOwnProperty("contestant"))
-                            object.contestant = $root.isuxportal.proto.resources.Contestant.toObject(message.contestant, options);
+                            object.contestant = $root.xsuportal.proto.resources.Contestant.toObject(message.contestant, options);
                         if (message.discordServerId != null && message.hasOwnProperty("discordServerId"))
                             object.discordServerId = message.discordServerId;
                         return object;
@@ -5260,7 +5260,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this GetCurrentSessionResponse to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -5278,7 +5278,7 @@ $root.isuxportal = (function() {
 
                 /**
                  * Namespace audience.
-                 * @memberof isuxportal.proto.services
+                 * @memberof xsuportal.proto.services
                  * @namespace
                  */
                 var audience = {};
@@ -5287,17 +5287,17 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a ListTeamsRequest.
-                     * @memberof isuxportal.proto.services.audience
+                     * @memberof xsuportal.proto.services.audience
                      * @interface IListTeamsRequest
                      */
 
                     /**
                      * Constructs a new ListTeamsRequest.
-                     * @memberof isuxportal.proto.services.audience
+                     * @memberof xsuportal.proto.services.audience
                      * @classdesc Represents a ListTeamsRequest.
                      * @implements IListTeamsRequest
                      * @constructor
-                     * @param {isuxportal.proto.services.audience.IListTeamsRequest=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.audience.IListTeamsRequest=} [properties] Properties to set
                      */
                     function ListTeamsRequest(properties) {
                         if (properties)
@@ -5309,21 +5309,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new ListTeamsRequest instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.audience.ListTeamsRequest
+                     * @memberof xsuportal.proto.services.audience.ListTeamsRequest
                      * @static
-                     * @param {isuxportal.proto.services.audience.IListTeamsRequest=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.audience.ListTeamsRequest} ListTeamsRequest instance
+                     * @param {xsuportal.proto.services.audience.IListTeamsRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.audience.ListTeamsRequest} ListTeamsRequest instance
                      */
                     ListTeamsRequest.create = function create(properties) {
                         return new ListTeamsRequest(properties);
                     };
 
                     /**
-                     * Encodes the specified ListTeamsRequest message. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsRequest.verify|verify} messages.
+                     * Encodes the specified ListTeamsRequest message. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsRequest.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.audience.ListTeamsRequest
+                     * @memberof xsuportal.proto.services.audience.ListTeamsRequest
                      * @static
-                     * @param {isuxportal.proto.services.audience.IListTeamsRequest} message ListTeamsRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.audience.IListTeamsRequest} message ListTeamsRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -5334,11 +5334,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified ListTeamsRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsRequest.verify|verify} messages.
+                     * Encodes the specified ListTeamsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsRequest.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.audience.ListTeamsRequest
+                     * @memberof xsuportal.proto.services.audience.ListTeamsRequest
                      * @static
-                     * @param {isuxportal.proto.services.audience.IListTeamsRequest} message ListTeamsRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.audience.IListTeamsRequest} message ListTeamsRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -5349,18 +5349,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a ListTeamsRequest message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.audience.ListTeamsRequest
+                     * @memberof xsuportal.proto.services.audience.ListTeamsRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.audience.ListTeamsRequest} ListTeamsRequest
+                     * @returns {xsuportal.proto.services.audience.ListTeamsRequest} ListTeamsRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     ListTeamsRequest.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.audience.ListTeamsRequest();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.audience.ListTeamsRequest();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -5375,10 +5375,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a ListTeamsRequest message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.audience.ListTeamsRequest
+                     * @memberof xsuportal.proto.services.audience.ListTeamsRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.audience.ListTeamsRequest} ListTeamsRequest
+                     * @returns {xsuportal.proto.services.audience.ListTeamsRequest} ListTeamsRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -5391,7 +5391,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a ListTeamsRequest message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.audience.ListTeamsRequest
+                     * @memberof xsuportal.proto.services.audience.ListTeamsRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -5405,23 +5405,23 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a ListTeamsRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.audience.ListTeamsRequest
+                     * @memberof xsuportal.proto.services.audience.ListTeamsRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.audience.ListTeamsRequest} ListTeamsRequest
+                     * @returns {xsuportal.proto.services.audience.ListTeamsRequest} ListTeamsRequest
                      */
                     ListTeamsRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.audience.ListTeamsRequest)
+                        if (object instanceof $root.xsuportal.proto.services.audience.ListTeamsRequest)
                             return object;
-                        return new $root.isuxportal.proto.services.audience.ListTeamsRequest();
+                        return new $root.xsuportal.proto.services.audience.ListTeamsRequest();
                     };
 
                     /**
                      * Creates a plain object from a ListTeamsRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.audience.ListTeamsRequest
+                     * @memberof xsuportal.proto.services.audience.ListTeamsRequest
                      * @static
-                     * @param {isuxportal.proto.services.audience.ListTeamsRequest} message ListTeamsRequest
+                     * @param {xsuportal.proto.services.audience.ListTeamsRequest} message ListTeamsRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -5432,7 +5432,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this ListTeamsRequest to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.audience.ListTeamsRequest
+                     * @memberof xsuportal.proto.services.audience.ListTeamsRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -5447,18 +5447,18 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a ListTeamsResponse.
-                     * @memberof isuxportal.proto.services.audience
+                     * @memberof xsuportal.proto.services.audience
                      * @interface IListTeamsResponse
-                     * @property {Array.<isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem>|null} [teams] ListTeamsResponse teams
+                     * @property {Array.<xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem>|null} [teams] ListTeamsResponse teams
                      */
 
                     /**
                      * Constructs a new ListTeamsResponse.
-                     * @memberof isuxportal.proto.services.audience
+                     * @memberof xsuportal.proto.services.audience
                      * @classdesc Represents a ListTeamsResponse.
                      * @implements IListTeamsResponse
                      * @constructor
-                     * @param {isuxportal.proto.services.audience.IListTeamsResponse=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.audience.IListTeamsResponse=} [properties] Properties to set
                      */
                     function ListTeamsResponse(properties) {
                         this.teams = [];
@@ -5470,8 +5470,8 @@ $root.isuxportal = (function() {
 
                     /**
                      * ListTeamsResponse teams.
-                     * @member {Array.<isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem>} teams
-                     * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                     * @member {Array.<xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem>} teams
+                     * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                      * @instance
                      */
                     ListTeamsResponse.prototype.teams = $util.emptyArray;
@@ -5479,21 +5479,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new ListTeamsResponse instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                     * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                      * @static
-                     * @param {isuxportal.proto.services.audience.IListTeamsResponse=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.audience.ListTeamsResponse} ListTeamsResponse instance
+                     * @param {xsuportal.proto.services.audience.IListTeamsResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.audience.ListTeamsResponse} ListTeamsResponse instance
                      */
                     ListTeamsResponse.create = function create(properties) {
                         return new ListTeamsResponse(properties);
                     };
 
                     /**
-                     * Encodes the specified ListTeamsResponse message. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsResponse.verify|verify} messages.
+                     * Encodes the specified ListTeamsResponse message. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsResponse.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                     * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                      * @static
-                     * @param {isuxportal.proto.services.audience.IListTeamsResponse} message ListTeamsResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.audience.IListTeamsResponse} message ListTeamsResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -5502,16 +5502,16 @@ $root.isuxportal = (function() {
                             writer = $Writer.create();
                         if (message.teams != null && message.teams.length)
                             for (var i = 0; i < message.teams.length; ++i)
-                                $root.isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem.encode(message.teams[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                                $root.xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem.encode(message.teams[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                         return writer;
                     };
 
                     /**
-                     * Encodes the specified ListTeamsResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsResponse.verify|verify} messages.
+                     * Encodes the specified ListTeamsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsResponse.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                     * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                      * @static
-                     * @param {isuxportal.proto.services.audience.IListTeamsResponse} message ListTeamsResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.audience.IListTeamsResponse} message ListTeamsResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -5522,25 +5522,25 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a ListTeamsResponse message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                     * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.audience.ListTeamsResponse} ListTeamsResponse
+                     * @returns {xsuportal.proto.services.audience.ListTeamsResponse} ListTeamsResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     ListTeamsResponse.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.audience.ListTeamsResponse();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.audience.ListTeamsResponse();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
                             case 1:
                                 if (!(message.teams && message.teams.length))
                                     message.teams = [];
-                                message.teams.push($root.isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem.decode(reader, reader.uint32()));
+                                message.teams.push($root.xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem.decode(reader, reader.uint32()));
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -5553,10 +5553,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a ListTeamsResponse message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                     * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.audience.ListTeamsResponse} ListTeamsResponse
+                     * @returns {xsuportal.proto.services.audience.ListTeamsResponse} ListTeamsResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -5569,7 +5569,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a ListTeamsResponse message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                     * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -5581,7 +5581,7 @@ $root.isuxportal = (function() {
                             if (!Array.isArray(message.teams))
                                 return "teams: array expected";
                             for (var i = 0; i < message.teams.length; ++i) {
-                                var error = $root.isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem.verify(message.teams[i]);
+                                var error = $root.xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem.verify(message.teams[i]);
                                 if (error)
                                     return "teams." + error;
                             }
@@ -5592,23 +5592,23 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a ListTeamsResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                     * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.audience.ListTeamsResponse} ListTeamsResponse
+                     * @returns {xsuportal.proto.services.audience.ListTeamsResponse} ListTeamsResponse
                      */
                     ListTeamsResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.audience.ListTeamsResponse)
+                        if (object instanceof $root.xsuportal.proto.services.audience.ListTeamsResponse)
                             return object;
-                        var message = new $root.isuxportal.proto.services.audience.ListTeamsResponse();
+                        var message = new $root.xsuportal.proto.services.audience.ListTeamsResponse();
                         if (object.teams) {
                             if (!Array.isArray(object.teams))
-                                throw TypeError(".isuxportal.proto.services.audience.ListTeamsResponse.teams: array expected");
+                                throw TypeError(".xsuportal.proto.services.audience.ListTeamsResponse.teams: array expected");
                             message.teams = [];
                             for (var i = 0; i < object.teams.length; ++i) {
                                 if (typeof object.teams[i] !== "object")
-                                    throw TypeError(".isuxportal.proto.services.audience.ListTeamsResponse.teams: object expected");
-                                message.teams[i] = $root.isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem.fromObject(object.teams[i]);
+                                    throw TypeError(".xsuportal.proto.services.audience.ListTeamsResponse.teams: object expected");
+                                message.teams[i] = $root.xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem.fromObject(object.teams[i]);
                             }
                         }
                         return message;
@@ -5617,9 +5617,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a ListTeamsResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                     * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                      * @static
-                     * @param {isuxportal.proto.services.audience.ListTeamsResponse} message ListTeamsResponse
+                     * @param {xsuportal.proto.services.audience.ListTeamsResponse} message ListTeamsResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -5632,7 +5632,7 @@ $root.isuxportal = (function() {
                         if (message.teams && message.teams.length) {
                             object.teams = [];
                             for (var j = 0; j < message.teams.length; ++j)
-                                object.teams[j] = $root.isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem.toObject(message.teams[j], options);
+                                object.teams[j] = $root.xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem.toObject(message.teams[j], options);
                         }
                         return object;
                     };
@@ -5640,7 +5640,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this ListTeamsResponse to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                     * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -5652,7 +5652,7 @@ $root.isuxportal = (function() {
 
                         /**
                          * Properties of a TeamListItem.
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                          * @interface ITeamListItem
                          * @property {number|Long|null} [teamId] TeamListItem teamId
                          * @property {string|null} [name] TeamListItem name
@@ -5663,11 +5663,11 @@ $root.isuxportal = (function() {
 
                         /**
                          * Constructs a new TeamListItem.
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse
                          * @classdesc Represents a TeamListItem.
                          * @implements ITeamListItem
                          * @constructor
-                         * @param {isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem=} [properties] Properties to set
+                         * @param {xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem=} [properties] Properties to set
                          */
                         function TeamListItem(properties) {
                             this.memberNames = [];
@@ -5680,7 +5680,7 @@ $root.isuxportal = (function() {
                         /**
                          * TeamListItem teamId.
                          * @member {number|Long} teamId
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @instance
                          */
                         TeamListItem.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -5688,7 +5688,7 @@ $root.isuxportal = (function() {
                         /**
                          * TeamListItem name.
                          * @member {string} name
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @instance
                          */
                         TeamListItem.prototype.name = "";
@@ -5696,7 +5696,7 @@ $root.isuxportal = (function() {
                         /**
                          * TeamListItem memberNames.
                          * @member {Array.<string>} memberNames
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @instance
                          */
                         TeamListItem.prototype.memberNames = $util.emptyArray;
@@ -5704,7 +5704,7 @@ $root.isuxportal = (function() {
                         /**
                          * TeamListItem finalParticipation.
                          * @member {boolean} finalParticipation
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @instance
                          */
                         TeamListItem.prototype.finalParticipation = false;
@@ -5712,7 +5712,7 @@ $root.isuxportal = (function() {
                         /**
                          * TeamListItem isStudent.
                          * @member {boolean} isStudent
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @instance
                          */
                         TeamListItem.prototype.isStudent = false;
@@ -5720,21 +5720,21 @@ $root.isuxportal = (function() {
                         /**
                          * Creates a new TeamListItem instance using the specified properties.
                          * @function create
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @static
-                         * @param {isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem=} [properties] Properties to set
-                         * @returns {isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem} TeamListItem instance
+                         * @param {xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem=} [properties] Properties to set
+                         * @returns {xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem} TeamListItem instance
                          */
                         TeamListItem.create = function create(properties) {
                             return new TeamListItem(properties);
                         };
 
                         /**
-                         * Encodes the specified TeamListItem message. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem.verify|verify} messages.
+                         * Encodes the specified TeamListItem message. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem.verify|verify} messages.
                          * @function encode
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @static
-                         * @param {isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem} message TeamListItem message or plain object to encode
+                         * @param {xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem} message TeamListItem message or plain object to encode
                          * @param {$protobuf.Writer} [writer] Writer to encode to
                          * @returns {$protobuf.Writer} Writer
                          */
@@ -5756,11 +5756,11 @@ $root.isuxportal = (function() {
                         };
 
                         /**
-                         * Encodes the specified TeamListItem message, length delimited. Does not implicitly {@link isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem.verify|verify} messages.
+                         * Encodes the specified TeamListItem message, length delimited. Does not implicitly {@link xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem.verify|verify} messages.
                          * @function encodeDelimited
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @static
-                         * @param {isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem} message TeamListItem message or plain object to encode
+                         * @param {xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem} message TeamListItem message or plain object to encode
                          * @param {$protobuf.Writer} [writer] Writer to encode to
                          * @returns {$protobuf.Writer} Writer
                          */
@@ -5771,18 +5771,18 @@ $root.isuxportal = (function() {
                         /**
                          * Decodes a TeamListItem message from the specified reader or buffer.
                          * @function decode
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @static
                          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                          * @param {number} [length] Message length if known beforehand
-                         * @returns {isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem} TeamListItem
+                         * @returns {xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem} TeamListItem
                          * @throws {Error} If the payload is not a reader or valid buffer
                          * @throws {$protobuf.util.ProtocolError} If required fields are missing
                          */
                         TeamListItem.decode = function decode(reader, length) {
                             if (!(reader instanceof $Reader))
                                 reader = $Reader.create(reader);
-                            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem();
+                            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem();
                             while (reader.pos < end) {
                                 var tag = reader.uint32();
                                 switch (tag >>> 3) {
@@ -5814,10 +5814,10 @@ $root.isuxportal = (function() {
                         /**
                          * Decodes a TeamListItem message from the specified reader or buffer, length delimited.
                          * @function decodeDelimited
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @static
                          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                         * @returns {isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem} TeamListItem
+                         * @returns {xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem} TeamListItem
                          * @throws {Error} If the payload is not a reader or valid buffer
                          * @throws {$protobuf.util.ProtocolError} If required fields are missing
                          */
@@ -5830,7 +5830,7 @@ $root.isuxportal = (function() {
                         /**
                          * Verifies a TeamListItem message.
                          * @function verify
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @static
                          * @param {Object.<string,*>} message Plain object to verify
                          * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -5863,15 +5863,15 @@ $root.isuxportal = (function() {
                         /**
                          * Creates a TeamListItem message from a plain object. Also converts values to their respective internal types.
                          * @function fromObject
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @static
                          * @param {Object.<string,*>} object Plain object
-                         * @returns {isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem} TeamListItem
+                         * @returns {xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem} TeamListItem
                          */
                         TeamListItem.fromObject = function fromObject(object) {
-                            if (object instanceof $root.isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem)
+                            if (object instanceof $root.xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem)
                                 return object;
-                            var message = new $root.isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem();
+                            var message = new $root.xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem();
                             if (object.teamId != null)
                                 if ($util.Long)
                                     (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
@@ -5885,7 +5885,7 @@ $root.isuxportal = (function() {
                                 message.name = String(object.name);
                             if (object.memberNames) {
                                 if (!Array.isArray(object.memberNames))
-                                    throw TypeError(".isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem.memberNames: array expected");
+                                    throw TypeError(".xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem.memberNames: array expected");
                                 message.memberNames = [];
                                 for (var i = 0; i < object.memberNames.length; ++i)
                                     message.memberNames[i] = String(object.memberNames[i]);
@@ -5900,9 +5900,9 @@ $root.isuxportal = (function() {
                         /**
                          * Creates a plain object from a TeamListItem message. Also converts values to other types if specified.
                          * @function toObject
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @static
-                         * @param {isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem} message TeamListItem
+                         * @param {xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem} message TeamListItem
                          * @param {$protobuf.IConversionOptions} [options] Conversion options
                          * @returns {Object.<string,*>} Plain object
                          */
@@ -5944,7 +5944,7 @@ $root.isuxportal = (function() {
                         /**
                          * Converts this TeamListItem to JSON.
                          * @function toJSON
-                         * @memberof isuxportal.proto.services.audience.ListTeamsResponse.TeamListItem
+                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
                          * @instance
                          * @returns {Object.<string,*>} JSON object
                          */
@@ -5965,7 +5965,7 @@ $root.isuxportal = (function() {
 
                 /**
                  * Namespace registration.
-                 * @memberof isuxportal.proto.services
+                 * @memberof xsuportal.proto.services
                  * @namespace
                  */
                 var registration = {};
@@ -5974,7 +5974,7 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a CreateTeamRequest.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @interface ICreateTeamRequest
                      * @property {string|null} [teamName] CreateTeamRequest teamName
                      * @property {string|null} [name] CreateTeamRequest name
@@ -5984,11 +5984,11 @@ $root.isuxportal = (function() {
 
                     /**
                      * Constructs a new CreateTeamRequest.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @classdesc Represents a CreateTeamRequest.
                      * @implements ICreateTeamRequest
                      * @constructor
-                     * @param {isuxportal.proto.services.registration.ICreateTeamRequest=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.registration.ICreateTeamRequest=} [properties] Properties to set
                      */
                     function CreateTeamRequest(properties) {
                         if (properties)
@@ -6000,7 +6000,7 @@ $root.isuxportal = (function() {
                     /**
                      * CreateTeamRequest teamName.
                      * @member {string} teamName
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @instance
                      */
                     CreateTeamRequest.prototype.teamName = "";
@@ -6008,7 +6008,7 @@ $root.isuxportal = (function() {
                     /**
                      * CreateTeamRequest name.
                      * @member {string} name
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @instance
                      */
                     CreateTeamRequest.prototype.name = "";
@@ -6016,7 +6016,7 @@ $root.isuxportal = (function() {
                     /**
                      * CreateTeamRequest emailAddress.
                      * @member {string} emailAddress
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @instance
                      */
                     CreateTeamRequest.prototype.emailAddress = "";
@@ -6024,7 +6024,7 @@ $root.isuxportal = (function() {
                     /**
                      * CreateTeamRequest isStudent.
                      * @member {boolean} isStudent
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @instance
                      */
                     CreateTeamRequest.prototype.isStudent = false;
@@ -6032,21 +6032,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new CreateTeamRequest instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.ICreateTeamRequest=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.registration.CreateTeamRequest} CreateTeamRequest instance
+                     * @param {xsuportal.proto.services.registration.ICreateTeamRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.registration.CreateTeamRequest} CreateTeamRequest instance
                      */
                     CreateTeamRequest.create = function create(properties) {
                         return new CreateTeamRequest(properties);
                     };
 
                     /**
-                     * Encodes the specified CreateTeamRequest message. Does not implicitly {@link isuxportal.proto.services.registration.CreateTeamRequest.verify|verify} messages.
+                     * Encodes the specified CreateTeamRequest message. Does not implicitly {@link xsuportal.proto.services.registration.CreateTeamRequest.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.ICreateTeamRequest} message CreateTeamRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.ICreateTeamRequest} message CreateTeamRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -6065,11 +6065,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified CreateTeamRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.CreateTeamRequest.verify|verify} messages.
+                     * Encodes the specified CreateTeamRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.CreateTeamRequest.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.ICreateTeamRequest} message CreateTeamRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.ICreateTeamRequest} message CreateTeamRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -6080,18 +6080,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a CreateTeamRequest message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.registration.CreateTeamRequest} CreateTeamRequest
+                     * @returns {xsuportal.proto.services.registration.CreateTeamRequest} CreateTeamRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     CreateTeamRequest.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.registration.CreateTeamRequest();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.registration.CreateTeamRequest();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -6118,10 +6118,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a CreateTeamRequest message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.registration.CreateTeamRequest} CreateTeamRequest
+                     * @returns {xsuportal.proto.services.registration.CreateTeamRequest} CreateTeamRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -6134,7 +6134,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a CreateTeamRequest message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -6160,15 +6160,15 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a CreateTeamRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.registration.CreateTeamRequest} CreateTeamRequest
+                     * @returns {xsuportal.proto.services.registration.CreateTeamRequest} CreateTeamRequest
                      */
                     CreateTeamRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.registration.CreateTeamRequest)
+                        if (object instanceof $root.xsuportal.proto.services.registration.CreateTeamRequest)
                             return object;
-                        var message = new $root.isuxportal.proto.services.registration.CreateTeamRequest();
+                        var message = new $root.xsuportal.proto.services.registration.CreateTeamRequest();
                         if (object.teamName != null)
                             message.teamName = String(object.teamName);
                         if (object.name != null)
@@ -6183,9 +6183,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a CreateTeamRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.CreateTeamRequest} message CreateTeamRequest
+                     * @param {xsuportal.proto.services.registration.CreateTeamRequest} message CreateTeamRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -6213,7 +6213,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this CreateTeamRequest to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.registration.CreateTeamRequest
+                     * @memberof xsuportal.proto.services.registration.CreateTeamRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -6228,18 +6228,18 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a CreateTeamResponse.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @interface ICreateTeamResponse
                      * @property {number|Long|null} [teamId] CreateTeamResponse teamId
                      */
 
                     /**
                      * Constructs a new CreateTeamResponse.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @classdesc Represents a CreateTeamResponse.
                      * @implements ICreateTeamResponse
                      * @constructor
-                     * @param {isuxportal.proto.services.registration.ICreateTeamResponse=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.registration.ICreateTeamResponse=} [properties] Properties to set
                      */
                     function CreateTeamResponse(properties) {
                         if (properties)
@@ -6251,7 +6251,7 @@ $root.isuxportal = (function() {
                     /**
                      * CreateTeamResponse teamId.
                      * @member {number|Long} teamId
-                     * @memberof isuxportal.proto.services.registration.CreateTeamResponse
+                     * @memberof xsuportal.proto.services.registration.CreateTeamResponse
                      * @instance
                      */
                     CreateTeamResponse.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -6259,21 +6259,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new CreateTeamResponse instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.registration.CreateTeamResponse
+                     * @memberof xsuportal.proto.services.registration.CreateTeamResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.ICreateTeamResponse=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.registration.CreateTeamResponse} CreateTeamResponse instance
+                     * @param {xsuportal.proto.services.registration.ICreateTeamResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.registration.CreateTeamResponse} CreateTeamResponse instance
                      */
                     CreateTeamResponse.create = function create(properties) {
                         return new CreateTeamResponse(properties);
                     };
 
                     /**
-                     * Encodes the specified CreateTeamResponse message. Does not implicitly {@link isuxportal.proto.services.registration.CreateTeamResponse.verify|verify} messages.
+                     * Encodes the specified CreateTeamResponse message. Does not implicitly {@link xsuportal.proto.services.registration.CreateTeamResponse.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.registration.CreateTeamResponse
+                     * @memberof xsuportal.proto.services.registration.CreateTeamResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.ICreateTeamResponse} message CreateTeamResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.ICreateTeamResponse} message CreateTeamResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -6286,11 +6286,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified CreateTeamResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.CreateTeamResponse.verify|verify} messages.
+                     * Encodes the specified CreateTeamResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.CreateTeamResponse.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.registration.CreateTeamResponse
+                     * @memberof xsuportal.proto.services.registration.CreateTeamResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.ICreateTeamResponse} message CreateTeamResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.ICreateTeamResponse} message CreateTeamResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -6301,18 +6301,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a CreateTeamResponse message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.registration.CreateTeamResponse
+                     * @memberof xsuportal.proto.services.registration.CreateTeamResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.registration.CreateTeamResponse} CreateTeamResponse
+                     * @returns {xsuportal.proto.services.registration.CreateTeamResponse} CreateTeamResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     CreateTeamResponse.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.registration.CreateTeamResponse();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.registration.CreateTeamResponse();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -6330,10 +6330,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a CreateTeamResponse message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.registration.CreateTeamResponse
+                     * @memberof xsuportal.proto.services.registration.CreateTeamResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.registration.CreateTeamResponse} CreateTeamResponse
+                     * @returns {xsuportal.proto.services.registration.CreateTeamResponse} CreateTeamResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -6346,7 +6346,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a CreateTeamResponse message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.registration.CreateTeamResponse
+                     * @memberof xsuportal.proto.services.registration.CreateTeamResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -6363,15 +6363,15 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a CreateTeamResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.registration.CreateTeamResponse
+                     * @memberof xsuportal.proto.services.registration.CreateTeamResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.registration.CreateTeamResponse} CreateTeamResponse
+                     * @returns {xsuportal.proto.services.registration.CreateTeamResponse} CreateTeamResponse
                      */
                     CreateTeamResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.registration.CreateTeamResponse)
+                        if (object instanceof $root.xsuportal.proto.services.registration.CreateTeamResponse)
                             return object;
-                        var message = new $root.isuxportal.proto.services.registration.CreateTeamResponse();
+                        var message = new $root.xsuportal.proto.services.registration.CreateTeamResponse();
                         if (object.teamId != null)
                             if ($util.Long)
                                 (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
@@ -6387,9 +6387,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a CreateTeamResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.registration.CreateTeamResponse
+                     * @memberof xsuportal.proto.services.registration.CreateTeamResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.CreateTeamResponse} message CreateTeamResponse
+                     * @param {xsuportal.proto.services.registration.CreateTeamResponse} message CreateTeamResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -6414,7 +6414,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this CreateTeamResponse to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.registration.CreateTeamResponse
+                     * @memberof xsuportal.proto.services.registration.CreateTeamResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -6429,7 +6429,7 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a JoinTeamRequest.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @interface IJoinTeamRequest
                      * @property {number|Long|null} [teamId] JoinTeamRequest teamId
                      * @property {string|null} [inviteToken] JoinTeamRequest inviteToken
@@ -6439,11 +6439,11 @@ $root.isuxportal = (function() {
 
                     /**
                      * Constructs a new JoinTeamRequest.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @classdesc Represents a JoinTeamRequest.
                      * @implements IJoinTeamRequest
                      * @constructor
-                     * @param {isuxportal.proto.services.registration.IJoinTeamRequest=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.registration.IJoinTeamRequest=} [properties] Properties to set
                      */
                     function JoinTeamRequest(properties) {
                         if (properties)
@@ -6455,7 +6455,7 @@ $root.isuxportal = (function() {
                     /**
                      * JoinTeamRequest teamId.
                      * @member {number|Long} teamId
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @instance
                      */
                     JoinTeamRequest.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -6463,7 +6463,7 @@ $root.isuxportal = (function() {
                     /**
                      * JoinTeamRequest inviteToken.
                      * @member {string} inviteToken
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @instance
                      */
                     JoinTeamRequest.prototype.inviteToken = "";
@@ -6471,7 +6471,7 @@ $root.isuxportal = (function() {
                     /**
                      * JoinTeamRequest name.
                      * @member {string} name
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @instance
                      */
                     JoinTeamRequest.prototype.name = "";
@@ -6479,7 +6479,7 @@ $root.isuxportal = (function() {
                     /**
                      * JoinTeamRequest isStudent.
                      * @member {boolean} isStudent
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @instance
                      */
                     JoinTeamRequest.prototype.isStudent = false;
@@ -6487,21 +6487,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new JoinTeamRequest instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.IJoinTeamRequest=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.registration.JoinTeamRequest} JoinTeamRequest instance
+                     * @param {xsuportal.proto.services.registration.IJoinTeamRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.registration.JoinTeamRequest} JoinTeamRequest instance
                      */
                     JoinTeamRequest.create = function create(properties) {
                         return new JoinTeamRequest(properties);
                     };
 
                     /**
-                     * Encodes the specified JoinTeamRequest message. Does not implicitly {@link isuxportal.proto.services.registration.JoinTeamRequest.verify|verify} messages.
+                     * Encodes the specified JoinTeamRequest message. Does not implicitly {@link xsuportal.proto.services.registration.JoinTeamRequest.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.IJoinTeamRequest} message JoinTeamRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IJoinTeamRequest} message JoinTeamRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -6520,11 +6520,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified JoinTeamRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.JoinTeamRequest.verify|verify} messages.
+                     * Encodes the specified JoinTeamRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.JoinTeamRequest.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.IJoinTeamRequest} message JoinTeamRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IJoinTeamRequest} message JoinTeamRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -6535,18 +6535,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a JoinTeamRequest message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.registration.JoinTeamRequest} JoinTeamRequest
+                     * @returns {xsuportal.proto.services.registration.JoinTeamRequest} JoinTeamRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     JoinTeamRequest.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.registration.JoinTeamRequest();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.registration.JoinTeamRequest();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -6573,10 +6573,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a JoinTeamRequest message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.registration.JoinTeamRequest} JoinTeamRequest
+                     * @returns {xsuportal.proto.services.registration.JoinTeamRequest} JoinTeamRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -6589,7 +6589,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a JoinTeamRequest message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -6615,15 +6615,15 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a JoinTeamRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.registration.JoinTeamRequest} JoinTeamRequest
+                     * @returns {xsuportal.proto.services.registration.JoinTeamRequest} JoinTeamRequest
                      */
                     JoinTeamRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.registration.JoinTeamRequest)
+                        if (object instanceof $root.xsuportal.proto.services.registration.JoinTeamRequest)
                             return object;
-                        var message = new $root.isuxportal.proto.services.registration.JoinTeamRequest();
+                        var message = new $root.xsuportal.proto.services.registration.JoinTeamRequest();
                         if (object.teamId != null)
                             if ($util.Long)
                                 (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
@@ -6645,9 +6645,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a JoinTeamRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.JoinTeamRequest} message JoinTeamRequest
+                     * @param {xsuportal.proto.services.registration.JoinTeamRequest} message JoinTeamRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -6682,7 +6682,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this JoinTeamRequest to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.registration.JoinTeamRequest
+                     * @memberof xsuportal.proto.services.registration.JoinTeamRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -6697,17 +6697,17 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a JoinTeamResponse.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @interface IJoinTeamResponse
                      */
 
                     /**
                      * Constructs a new JoinTeamResponse.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @classdesc Represents a JoinTeamResponse.
                      * @implements IJoinTeamResponse
                      * @constructor
-                     * @param {isuxportal.proto.services.registration.IJoinTeamResponse=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.registration.IJoinTeamResponse=} [properties] Properties to set
                      */
                     function JoinTeamResponse(properties) {
                         if (properties)
@@ -6719,21 +6719,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new JoinTeamResponse instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.registration.JoinTeamResponse
+                     * @memberof xsuportal.proto.services.registration.JoinTeamResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IJoinTeamResponse=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.registration.JoinTeamResponse} JoinTeamResponse instance
+                     * @param {xsuportal.proto.services.registration.IJoinTeamResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.registration.JoinTeamResponse} JoinTeamResponse instance
                      */
                     JoinTeamResponse.create = function create(properties) {
                         return new JoinTeamResponse(properties);
                     };
 
                     /**
-                     * Encodes the specified JoinTeamResponse message. Does not implicitly {@link isuxportal.proto.services.registration.JoinTeamResponse.verify|verify} messages.
+                     * Encodes the specified JoinTeamResponse message. Does not implicitly {@link xsuportal.proto.services.registration.JoinTeamResponse.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.registration.JoinTeamResponse
+                     * @memberof xsuportal.proto.services.registration.JoinTeamResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IJoinTeamResponse} message JoinTeamResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IJoinTeamResponse} message JoinTeamResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -6744,11 +6744,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified JoinTeamResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.JoinTeamResponse.verify|verify} messages.
+                     * Encodes the specified JoinTeamResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.JoinTeamResponse.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.registration.JoinTeamResponse
+                     * @memberof xsuportal.proto.services.registration.JoinTeamResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IJoinTeamResponse} message JoinTeamResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IJoinTeamResponse} message JoinTeamResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -6759,18 +6759,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a JoinTeamResponse message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.registration.JoinTeamResponse
+                     * @memberof xsuportal.proto.services.registration.JoinTeamResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.registration.JoinTeamResponse} JoinTeamResponse
+                     * @returns {xsuportal.proto.services.registration.JoinTeamResponse} JoinTeamResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     JoinTeamResponse.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.registration.JoinTeamResponse();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.registration.JoinTeamResponse();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -6785,10 +6785,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a JoinTeamResponse message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.registration.JoinTeamResponse
+                     * @memberof xsuportal.proto.services.registration.JoinTeamResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.registration.JoinTeamResponse} JoinTeamResponse
+                     * @returns {xsuportal.proto.services.registration.JoinTeamResponse} JoinTeamResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -6801,7 +6801,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a JoinTeamResponse message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.registration.JoinTeamResponse
+                     * @memberof xsuportal.proto.services.registration.JoinTeamResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -6815,23 +6815,23 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a JoinTeamResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.registration.JoinTeamResponse
+                     * @memberof xsuportal.proto.services.registration.JoinTeamResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.registration.JoinTeamResponse} JoinTeamResponse
+                     * @returns {xsuportal.proto.services.registration.JoinTeamResponse} JoinTeamResponse
                      */
                     JoinTeamResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.registration.JoinTeamResponse)
+                        if (object instanceof $root.xsuportal.proto.services.registration.JoinTeamResponse)
                             return object;
-                        return new $root.isuxportal.proto.services.registration.JoinTeamResponse();
+                        return new $root.xsuportal.proto.services.registration.JoinTeamResponse();
                     };
 
                     /**
                      * Creates a plain object from a JoinTeamResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.registration.JoinTeamResponse
+                     * @memberof xsuportal.proto.services.registration.JoinTeamResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.JoinTeamResponse} message JoinTeamResponse
+                     * @param {xsuportal.proto.services.registration.JoinTeamResponse} message JoinTeamResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -6842,7 +6842,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this JoinTeamResponse to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.registration.JoinTeamResponse
+                     * @memberof xsuportal.proto.services.registration.JoinTeamResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -6857,7 +6857,7 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a GetRegistrationSessionQuery.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @interface IGetRegistrationSessionQuery
                      * @property {number|Long|null} [teamId] GetRegistrationSessionQuery teamId
                      * @property {string|null} [inviteToken] GetRegistrationSessionQuery inviteToken
@@ -6865,11 +6865,11 @@ $root.isuxportal = (function() {
 
                     /**
                      * Constructs a new GetRegistrationSessionQuery.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @classdesc Represents a GetRegistrationSessionQuery.
                      * @implements IGetRegistrationSessionQuery
                      * @constructor
-                     * @param {isuxportal.proto.services.registration.IGetRegistrationSessionQuery=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.registration.IGetRegistrationSessionQuery=} [properties] Properties to set
                      */
                     function GetRegistrationSessionQuery(properties) {
                         if (properties)
@@ -6881,7 +6881,7 @@ $root.isuxportal = (function() {
                     /**
                      * GetRegistrationSessionQuery teamId.
                      * @member {number|Long} teamId
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @instance
                      */
                     GetRegistrationSessionQuery.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
@@ -6889,7 +6889,7 @@ $root.isuxportal = (function() {
                     /**
                      * GetRegistrationSessionQuery inviteToken.
                      * @member {string} inviteToken
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @instance
                      */
                     GetRegistrationSessionQuery.prototype.inviteToken = "";
@@ -6897,21 +6897,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new GetRegistrationSessionQuery instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @static
-                     * @param {isuxportal.proto.services.registration.IGetRegistrationSessionQuery=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.registration.GetRegistrationSessionQuery} GetRegistrationSessionQuery instance
+                     * @param {xsuportal.proto.services.registration.IGetRegistrationSessionQuery=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.registration.GetRegistrationSessionQuery} GetRegistrationSessionQuery instance
                      */
                     GetRegistrationSessionQuery.create = function create(properties) {
                         return new GetRegistrationSessionQuery(properties);
                     };
 
                     /**
-                     * Encodes the specified GetRegistrationSessionQuery message. Does not implicitly {@link isuxportal.proto.services.registration.GetRegistrationSessionQuery.verify|verify} messages.
+                     * Encodes the specified GetRegistrationSessionQuery message. Does not implicitly {@link xsuportal.proto.services.registration.GetRegistrationSessionQuery.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @static
-                     * @param {isuxportal.proto.services.registration.IGetRegistrationSessionQuery} message GetRegistrationSessionQuery message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IGetRegistrationSessionQuery} message GetRegistrationSessionQuery message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -6926,11 +6926,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified GetRegistrationSessionQuery message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.GetRegistrationSessionQuery.verify|verify} messages.
+                     * Encodes the specified GetRegistrationSessionQuery message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.GetRegistrationSessionQuery.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @static
-                     * @param {isuxportal.proto.services.registration.IGetRegistrationSessionQuery} message GetRegistrationSessionQuery message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IGetRegistrationSessionQuery} message GetRegistrationSessionQuery message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -6941,18 +6941,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a GetRegistrationSessionQuery message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.registration.GetRegistrationSessionQuery} GetRegistrationSessionQuery
+                     * @returns {xsuportal.proto.services.registration.GetRegistrationSessionQuery} GetRegistrationSessionQuery
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     GetRegistrationSessionQuery.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.registration.GetRegistrationSessionQuery();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.registration.GetRegistrationSessionQuery();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -6973,10 +6973,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a GetRegistrationSessionQuery message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.registration.GetRegistrationSessionQuery} GetRegistrationSessionQuery
+                     * @returns {xsuportal.proto.services.registration.GetRegistrationSessionQuery} GetRegistrationSessionQuery
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -6989,7 +6989,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a GetRegistrationSessionQuery message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -7009,15 +7009,15 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a GetRegistrationSessionQuery message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.registration.GetRegistrationSessionQuery} GetRegistrationSessionQuery
+                     * @returns {xsuportal.proto.services.registration.GetRegistrationSessionQuery} GetRegistrationSessionQuery
                      */
                     GetRegistrationSessionQuery.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.registration.GetRegistrationSessionQuery)
+                        if (object instanceof $root.xsuportal.proto.services.registration.GetRegistrationSessionQuery)
                             return object;
-                        var message = new $root.isuxportal.proto.services.registration.GetRegistrationSessionQuery();
+                        var message = new $root.xsuportal.proto.services.registration.GetRegistrationSessionQuery();
                         if (object.teamId != null)
                             if ($util.Long)
                                 (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
@@ -7035,9 +7035,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a GetRegistrationSessionQuery message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @static
-                     * @param {isuxportal.proto.services.registration.GetRegistrationSessionQuery} message GetRegistrationSessionQuery
+                     * @param {xsuportal.proto.services.registration.GetRegistrationSessionQuery} message GetRegistrationSessionQuery
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -7066,7 +7066,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this GetRegistrationSessionQuery to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionQuery
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionQuery
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -7081,10 +7081,10 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a GetRegistrationSessionResponse.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @interface IGetRegistrationSessionResponse
-                     * @property {isuxportal.proto.resources.ITeam|null} [team] GetRegistrationSessionResponse team
-                     * @property {isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status|null} [status] GetRegistrationSessionResponse status
+                     * @property {xsuportal.proto.resources.ITeam|null} [team] GetRegistrationSessionResponse team
+                     * @property {xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status|null} [status] GetRegistrationSessionResponse status
                      * @property {string|null} [githubLogin] GetRegistrationSessionResponse githubLogin
                      * @property {string|null} [githubAvatarUrl] GetRegistrationSessionResponse githubAvatarUrl
                      * @property {string|null} [discordTag] GetRegistrationSessionResponse discordTag
@@ -7095,11 +7095,11 @@ $root.isuxportal = (function() {
 
                     /**
                      * Constructs a new GetRegistrationSessionResponse.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @classdesc Represents a GetRegistrationSessionResponse.
                      * @implements IGetRegistrationSessionResponse
                      * @constructor
-                     * @param {isuxportal.proto.services.registration.IGetRegistrationSessionResponse=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.registration.IGetRegistrationSessionResponse=} [properties] Properties to set
                      */
                     function GetRegistrationSessionResponse(properties) {
                         if (properties)
@@ -7110,16 +7110,16 @@ $root.isuxportal = (function() {
 
                     /**
                      * GetRegistrationSessionResponse team.
-                     * @member {isuxportal.proto.resources.ITeam|null|undefined} team
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @member {xsuportal.proto.resources.ITeam|null|undefined} team
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @instance
                      */
                     GetRegistrationSessionResponse.prototype.team = null;
 
                     /**
                      * GetRegistrationSessionResponse status.
-                     * @member {isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status} status
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @member {xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status} status
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @instance
                      */
                     GetRegistrationSessionResponse.prototype.status = 0;
@@ -7127,7 +7127,7 @@ $root.isuxportal = (function() {
                     /**
                      * GetRegistrationSessionResponse githubLogin.
                      * @member {string} githubLogin
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @instance
                      */
                     GetRegistrationSessionResponse.prototype.githubLogin = "";
@@ -7135,7 +7135,7 @@ $root.isuxportal = (function() {
                     /**
                      * GetRegistrationSessionResponse githubAvatarUrl.
                      * @member {string} githubAvatarUrl
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @instance
                      */
                     GetRegistrationSessionResponse.prototype.githubAvatarUrl = "";
@@ -7143,7 +7143,7 @@ $root.isuxportal = (function() {
                     /**
                      * GetRegistrationSessionResponse discordTag.
                      * @member {string} discordTag
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @instance
                      */
                     GetRegistrationSessionResponse.prototype.discordTag = "";
@@ -7151,7 +7151,7 @@ $root.isuxportal = (function() {
                     /**
                      * GetRegistrationSessionResponse discordAvatarUrl.
                      * @member {string} discordAvatarUrl
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @instance
                      */
                     GetRegistrationSessionResponse.prototype.discordAvatarUrl = "";
@@ -7159,7 +7159,7 @@ $root.isuxportal = (function() {
                     /**
                      * GetRegistrationSessionResponse memberInviteUrl.
                      * @member {string} memberInviteUrl
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @instance
                      */
                     GetRegistrationSessionResponse.prototype.memberInviteUrl = "";
@@ -7167,7 +7167,7 @@ $root.isuxportal = (function() {
                     /**
                      * GetRegistrationSessionResponse discordServerId.
                      * @member {string} discordServerId
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @instance
                      */
                     GetRegistrationSessionResponse.prototype.discordServerId = "";
@@ -7175,21 +7175,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new GetRegistrationSessionResponse instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IGetRegistrationSessionResponse=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.registration.GetRegistrationSessionResponse} GetRegistrationSessionResponse instance
+                     * @param {xsuportal.proto.services.registration.IGetRegistrationSessionResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.registration.GetRegistrationSessionResponse} GetRegistrationSessionResponse instance
                      */
                     GetRegistrationSessionResponse.create = function create(properties) {
                         return new GetRegistrationSessionResponse(properties);
                     };
 
                     /**
-                     * Encodes the specified GetRegistrationSessionResponse message. Does not implicitly {@link isuxportal.proto.services.registration.GetRegistrationSessionResponse.verify|verify} messages.
+                     * Encodes the specified GetRegistrationSessionResponse message. Does not implicitly {@link xsuportal.proto.services.registration.GetRegistrationSessionResponse.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IGetRegistrationSessionResponse} message GetRegistrationSessionResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IGetRegistrationSessionResponse} message GetRegistrationSessionResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -7197,7 +7197,7 @@ $root.isuxportal = (function() {
                         if (!writer)
                             writer = $Writer.create();
                         if (message.team != null && Object.hasOwnProperty.call(message, "team"))
-                            $root.isuxportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                            $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                         if (message.status != null && Object.hasOwnProperty.call(message, "status"))
                             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.status);
                         if (message.githubLogin != null && Object.hasOwnProperty.call(message, "githubLogin"))
@@ -7216,11 +7216,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified GetRegistrationSessionResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.GetRegistrationSessionResponse.verify|verify} messages.
+                     * Encodes the specified GetRegistrationSessionResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.GetRegistrationSessionResponse.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IGetRegistrationSessionResponse} message GetRegistrationSessionResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IGetRegistrationSessionResponse} message GetRegistrationSessionResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -7231,23 +7231,23 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a GetRegistrationSessionResponse message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.registration.GetRegistrationSessionResponse} GetRegistrationSessionResponse
+                     * @returns {xsuportal.proto.services.registration.GetRegistrationSessionResponse} GetRegistrationSessionResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     GetRegistrationSessionResponse.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.registration.GetRegistrationSessionResponse();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.registration.GetRegistrationSessionResponse();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
                             case 1:
-                                message.team = $root.isuxportal.proto.resources.Team.decode(reader, reader.uint32());
+                                message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
                                 break;
                             case 2:
                                 message.status = reader.int32();
@@ -7281,10 +7281,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a GetRegistrationSessionResponse message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.registration.GetRegistrationSessionResponse} GetRegistrationSessionResponse
+                     * @returns {xsuportal.proto.services.registration.GetRegistrationSessionResponse} GetRegistrationSessionResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -7297,7 +7297,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a GetRegistrationSessionResponse message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -7306,7 +7306,7 @@ $root.isuxportal = (function() {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.team != null && message.hasOwnProperty("team")) {
-                            var error = $root.isuxportal.proto.resources.Team.verify(message.team);
+                            var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                             if (error)
                                 return "team." + error;
                         }
@@ -7346,19 +7346,19 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a GetRegistrationSessionResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.registration.GetRegistrationSessionResponse} GetRegistrationSessionResponse
+                     * @returns {xsuportal.proto.services.registration.GetRegistrationSessionResponse} GetRegistrationSessionResponse
                      */
                     GetRegistrationSessionResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.registration.GetRegistrationSessionResponse)
+                        if (object instanceof $root.xsuportal.proto.services.registration.GetRegistrationSessionResponse)
                             return object;
-                        var message = new $root.isuxportal.proto.services.registration.GetRegistrationSessionResponse();
+                        var message = new $root.xsuportal.proto.services.registration.GetRegistrationSessionResponse();
                         if (object.team != null) {
                             if (typeof object.team !== "object")
-                                throw TypeError(".isuxportal.proto.services.registration.GetRegistrationSessionResponse.team: object expected");
-                            message.team = $root.isuxportal.proto.resources.Team.fromObject(object.team);
+                                throw TypeError(".xsuportal.proto.services.registration.GetRegistrationSessionResponse.team: object expected");
+                            message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
                         }
                         switch (object.status) {
                         case "CLOSED":
@@ -7404,9 +7404,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from a GetRegistrationSessionResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.GetRegistrationSessionResponse} message GetRegistrationSessionResponse
+                     * @param {xsuportal.proto.services.registration.GetRegistrationSessionResponse} message GetRegistrationSessionResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -7425,9 +7425,9 @@ $root.isuxportal = (function() {
                             object.discordServerId = "";
                         }
                         if (message.team != null && message.hasOwnProperty("team"))
-                            object.team = $root.isuxportal.proto.resources.Team.toObject(message.team, options);
+                            object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                         if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status[message.status] : message.status;
+                            object.status = options.enums === String ? $root.xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status[message.status] : message.status;
                         if (message.githubLogin != null && message.hasOwnProperty("githubLogin"))
                             object.githubLogin = message.githubLogin;
                         if (message.githubAvatarUrl != null && message.hasOwnProperty("githubAvatarUrl"))
@@ -7446,7 +7446,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this GetRegistrationSessionResponse to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -7456,7 +7456,7 @@ $root.isuxportal = (function() {
 
                     /**
                      * Status enum.
-                     * @name isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status
+                     * @name xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status
                      * @enum {number}
                      * @property {number} CLOSED=0 CLOSED value
                      * @property {number} NOT_JOINABLE=1 NOT_JOINABLE value
@@ -7483,7 +7483,7 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of an UpdateRegistrationRequest.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @interface IUpdateRegistrationRequest
                      * @property {string|null} [teamName] UpdateRegistrationRequest teamName
                      * @property {string|null} [name] UpdateRegistrationRequest name
@@ -7493,11 +7493,11 @@ $root.isuxportal = (function() {
 
                     /**
                      * Constructs a new UpdateRegistrationRequest.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @classdesc Represents an UpdateRegistrationRequest.
                      * @implements IUpdateRegistrationRequest
                      * @constructor
-                     * @param {isuxportal.proto.services.registration.IUpdateRegistrationRequest=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.registration.IUpdateRegistrationRequest=} [properties] Properties to set
                      */
                     function UpdateRegistrationRequest(properties) {
                         if (properties)
@@ -7509,7 +7509,7 @@ $root.isuxportal = (function() {
                     /**
                      * UpdateRegistrationRequest teamName.
                      * @member {string} teamName
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @instance
                      */
                     UpdateRegistrationRequest.prototype.teamName = "";
@@ -7517,7 +7517,7 @@ $root.isuxportal = (function() {
                     /**
                      * UpdateRegistrationRequest name.
                      * @member {string} name
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @instance
                      */
                     UpdateRegistrationRequest.prototype.name = "";
@@ -7525,7 +7525,7 @@ $root.isuxportal = (function() {
                     /**
                      * UpdateRegistrationRequest emailAddress.
                      * @member {string} emailAddress
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @instance
                      */
                     UpdateRegistrationRequest.prototype.emailAddress = "";
@@ -7533,7 +7533,7 @@ $root.isuxportal = (function() {
                     /**
                      * UpdateRegistrationRequest isStudent.
                      * @member {boolean} isStudent
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @instance
                      */
                     UpdateRegistrationRequest.prototype.isStudent = false;
@@ -7541,21 +7541,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new UpdateRegistrationRequest instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.IUpdateRegistrationRequest=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.registration.UpdateRegistrationRequest} UpdateRegistrationRequest instance
+                     * @param {xsuportal.proto.services.registration.IUpdateRegistrationRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.registration.UpdateRegistrationRequest} UpdateRegistrationRequest instance
                      */
                     UpdateRegistrationRequest.create = function create(properties) {
                         return new UpdateRegistrationRequest(properties);
                     };
 
                     /**
-                     * Encodes the specified UpdateRegistrationRequest message. Does not implicitly {@link isuxportal.proto.services.registration.UpdateRegistrationRequest.verify|verify} messages.
+                     * Encodes the specified UpdateRegistrationRequest message. Does not implicitly {@link xsuportal.proto.services.registration.UpdateRegistrationRequest.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.IUpdateRegistrationRequest} message UpdateRegistrationRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IUpdateRegistrationRequest} message UpdateRegistrationRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -7574,11 +7574,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified UpdateRegistrationRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.UpdateRegistrationRequest.verify|verify} messages.
+                     * Encodes the specified UpdateRegistrationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.UpdateRegistrationRequest.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.IUpdateRegistrationRequest} message UpdateRegistrationRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IUpdateRegistrationRequest} message UpdateRegistrationRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -7589,18 +7589,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes an UpdateRegistrationRequest message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.registration.UpdateRegistrationRequest} UpdateRegistrationRequest
+                     * @returns {xsuportal.proto.services.registration.UpdateRegistrationRequest} UpdateRegistrationRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     UpdateRegistrationRequest.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.registration.UpdateRegistrationRequest();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.registration.UpdateRegistrationRequest();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -7627,10 +7627,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes an UpdateRegistrationRequest message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.registration.UpdateRegistrationRequest} UpdateRegistrationRequest
+                     * @returns {xsuportal.proto.services.registration.UpdateRegistrationRequest} UpdateRegistrationRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -7643,7 +7643,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies an UpdateRegistrationRequest message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -7669,15 +7669,15 @@ $root.isuxportal = (function() {
                     /**
                      * Creates an UpdateRegistrationRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.registration.UpdateRegistrationRequest} UpdateRegistrationRequest
+                     * @returns {xsuportal.proto.services.registration.UpdateRegistrationRequest} UpdateRegistrationRequest
                      */
                     UpdateRegistrationRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.registration.UpdateRegistrationRequest)
+                        if (object instanceof $root.xsuportal.proto.services.registration.UpdateRegistrationRequest)
                             return object;
-                        var message = new $root.isuxportal.proto.services.registration.UpdateRegistrationRequest();
+                        var message = new $root.xsuportal.proto.services.registration.UpdateRegistrationRequest();
                         if (object.teamName != null)
                             message.teamName = String(object.teamName);
                         if (object.name != null)
@@ -7692,9 +7692,9 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a plain object from an UpdateRegistrationRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.UpdateRegistrationRequest} message UpdateRegistrationRequest
+                     * @param {xsuportal.proto.services.registration.UpdateRegistrationRequest} message UpdateRegistrationRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -7722,7 +7722,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this UpdateRegistrationRequest to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -7737,17 +7737,17 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of an UpdateRegistrationResponse.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @interface IUpdateRegistrationResponse
                      */
 
                     /**
                      * Constructs a new UpdateRegistrationResponse.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @classdesc Represents an UpdateRegistrationResponse.
                      * @implements IUpdateRegistrationResponse
                      * @constructor
-                     * @param {isuxportal.proto.services.registration.IUpdateRegistrationResponse=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.registration.IUpdateRegistrationResponse=} [properties] Properties to set
                      */
                     function UpdateRegistrationResponse(properties) {
                         if (properties)
@@ -7759,21 +7759,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new UpdateRegistrationResponse instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IUpdateRegistrationResponse=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.registration.UpdateRegistrationResponse} UpdateRegistrationResponse instance
+                     * @param {xsuportal.proto.services.registration.IUpdateRegistrationResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.registration.UpdateRegistrationResponse} UpdateRegistrationResponse instance
                      */
                     UpdateRegistrationResponse.create = function create(properties) {
                         return new UpdateRegistrationResponse(properties);
                     };
 
                     /**
-                     * Encodes the specified UpdateRegistrationResponse message. Does not implicitly {@link isuxportal.proto.services.registration.UpdateRegistrationResponse.verify|verify} messages.
+                     * Encodes the specified UpdateRegistrationResponse message. Does not implicitly {@link xsuportal.proto.services.registration.UpdateRegistrationResponse.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IUpdateRegistrationResponse} message UpdateRegistrationResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IUpdateRegistrationResponse} message UpdateRegistrationResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -7784,11 +7784,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified UpdateRegistrationResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.UpdateRegistrationResponse.verify|verify} messages.
+                     * Encodes the specified UpdateRegistrationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.UpdateRegistrationResponse.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IUpdateRegistrationResponse} message UpdateRegistrationResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IUpdateRegistrationResponse} message UpdateRegistrationResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -7799,18 +7799,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes an UpdateRegistrationResponse message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.registration.UpdateRegistrationResponse} UpdateRegistrationResponse
+                     * @returns {xsuportal.proto.services.registration.UpdateRegistrationResponse} UpdateRegistrationResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     UpdateRegistrationResponse.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.registration.UpdateRegistrationResponse();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.registration.UpdateRegistrationResponse();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -7825,10 +7825,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes an UpdateRegistrationResponse message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.registration.UpdateRegistrationResponse} UpdateRegistrationResponse
+                     * @returns {xsuportal.proto.services.registration.UpdateRegistrationResponse} UpdateRegistrationResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -7841,7 +7841,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies an UpdateRegistrationResponse message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -7855,23 +7855,23 @@ $root.isuxportal = (function() {
                     /**
                      * Creates an UpdateRegistrationResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.registration.UpdateRegistrationResponse} UpdateRegistrationResponse
+                     * @returns {xsuportal.proto.services.registration.UpdateRegistrationResponse} UpdateRegistrationResponse
                      */
                     UpdateRegistrationResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.registration.UpdateRegistrationResponse)
+                        if (object instanceof $root.xsuportal.proto.services.registration.UpdateRegistrationResponse)
                             return object;
-                        return new $root.isuxportal.proto.services.registration.UpdateRegistrationResponse();
+                        return new $root.xsuportal.proto.services.registration.UpdateRegistrationResponse();
                     };
 
                     /**
                      * Creates a plain object from an UpdateRegistrationResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.UpdateRegistrationResponse} message UpdateRegistrationResponse
+                     * @param {xsuportal.proto.services.registration.UpdateRegistrationResponse} message UpdateRegistrationResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -7882,7 +7882,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this UpdateRegistrationResponse to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.registration.UpdateRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.UpdateRegistrationResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -7897,17 +7897,17 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a DeleteRegistrationRequest.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @interface IDeleteRegistrationRequest
                      */
 
                     /**
                      * Constructs a new DeleteRegistrationRequest.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @classdesc Represents a DeleteRegistrationRequest.
                      * @implements IDeleteRegistrationRequest
                      * @constructor
-                     * @param {isuxportal.proto.services.registration.IDeleteRegistrationRequest=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.registration.IDeleteRegistrationRequest=} [properties] Properties to set
                      */
                     function DeleteRegistrationRequest(properties) {
                         if (properties)
@@ -7919,21 +7919,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new DeleteRegistrationRequest instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.IDeleteRegistrationRequest=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.registration.DeleteRegistrationRequest} DeleteRegistrationRequest instance
+                     * @param {xsuportal.proto.services.registration.IDeleteRegistrationRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.registration.DeleteRegistrationRequest} DeleteRegistrationRequest instance
                      */
                     DeleteRegistrationRequest.create = function create(properties) {
                         return new DeleteRegistrationRequest(properties);
                     };
 
                     /**
-                     * Encodes the specified DeleteRegistrationRequest message. Does not implicitly {@link isuxportal.proto.services.registration.DeleteRegistrationRequest.verify|verify} messages.
+                     * Encodes the specified DeleteRegistrationRequest message. Does not implicitly {@link xsuportal.proto.services.registration.DeleteRegistrationRequest.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.IDeleteRegistrationRequest} message DeleteRegistrationRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IDeleteRegistrationRequest} message DeleteRegistrationRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -7944,11 +7944,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified DeleteRegistrationRequest message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.DeleteRegistrationRequest.verify|verify} messages.
+                     * Encodes the specified DeleteRegistrationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.DeleteRegistrationRequest.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.IDeleteRegistrationRequest} message DeleteRegistrationRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IDeleteRegistrationRequest} message DeleteRegistrationRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -7959,18 +7959,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a DeleteRegistrationRequest message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.registration.DeleteRegistrationRequest} DeleteRegistrationRequest
+                     * @returns {xsuportal.proto.services.registration.DeleteRegistrationRequest} DeleteRegistrationRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     DeleteRegistrationRequest.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.registration.DeleteRegistrationRequest();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.registration.DeleteRegistrationRequest();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -7985,10 +7985,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a DeleteRegistrationRequest message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.registration.DeleteRegistrationRequest} DeleteRegistrationRequest
+                     * @returns {xsuportal.proto.services.registration.DeleteRegistrationRequest} DeleteRegistrationRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -8001,7 +8001,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a DeleteRegistrationRequest message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -8015,23 +8015,23 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a DeleteRegistrationRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.registration.DeleteRegistrationRequest} DeleteRegistrationRequest
+                     * @returns {xsuportal.proto.services.registration.DeleteRegistrationRequest} DeleteRegistrationRequest
                      */
                     DeleteRegistrationRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.registration.DeleteRegistrationRequest)
+                        if (object instanceof $root.xsuportal.proto.services.registration.DeleteRegistrationRequest)
                             return object;
-                        return new $root.isuxportal.proto.services.registration.DeleteRegistrationRequest();
+                        return new $root.xsuportal.proto.services.registration.DeleteRegistrationRequest();
                     };
 
                     /**
                      * Creates a plain object from a DeleteRegistrationRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationRequest
                      * @static
-                     * @param {isuxportal.proto.services.registration.DeleteRegistrationRequest} message DeleteRegistrationRequest
+                     * @param {xsuportal.proto.services.registration.DeleteRegistrationRequest} message DeleteRegistrationRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -8042,7 +8042,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this DeleteRegistrationRequest to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationRequest
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -8057,17 +8057,17 @@ $root.isuxportal = (function() {
 
                     /**
                      * Properties of a DeleteRegistrationResponse.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @interface IDeleteRegistrationResponse
                      */
 
                     /**
                      * Constructs a new DeleteRegistrationResponse.
-                     * @memberof isuxportal.proto.services.registration
+                     * @memberof xsuportal.proto.services.registration
                      * @classdesc Represents a DeleteRegistrationResponse.
                      * @implements IDeleteRegistrationResponse
                      * @constructor
-                     * @param {isuxportal.proto.services.registration.IDeleteRegistrationResponse=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.registration.IDeleteRegistrationResponse=} [properties] Properties to set
                      */
                     function DeleteRegistrationResponse(properties) {
                         if (properties)
@@ -8079,21 +8079,21 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a new DeleteRegistrationResponse instance using the specified properties.
                      * @function create
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IDeleteRegistrationResponse=} [properties] Properties to set
-                     * @returns {isuxportal.proto.services.registration.DeleteRegistrationResponse} DeleteRegistrationResponse instance
+                     * @param {xsuportal.proto.services.registration.IDeleteRegistrationResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.registration.DeleteRegistrationResponse} DeleteRegistrationResponse instance
                      */
                     DeleteRegistrationResponse.create = function create(properties) {
                         return new DeleteRegistrationResponse(properties);
                     };
 
                     /**
-                     * Encodes the specified DeleteRegistrationResponse message. Does not implicitly {@link isuxportal.proto.services.registration.DeleteRegistrationResponse.verify|verify} messages.
+                     * Encodes the specified DeleteRegistrationResponse message. Does not implicitly {@link xsuportal.proto.services.registration.DeleteRegistrationResponse.verify|verify} messages.
                      * @function encode
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IDeleteRegistrationResponse} message DeleteRegistrationResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IDeleteRegistrationResponse} message DeleteRegistrationResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -8104,11 +8104,11 @@ $root.isuxportal = (function() {
                     };
 
                     /**
-                     * Encodes the specified DeleteRegistrationResponse message, length delimited. Does not implicitly {@link isuxportal.proto.services.registration.DeleteRegistrationResponse.verify|verify} messages.
+                     * Encodes the specified DeleteRegistrationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.registration.DeleteRegistrationResponse.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.IDeleteRegistrationResponse} message DeleteRegistrationResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.registration.IDeleteRegistrationResponse} message DeleteRegistrationResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
@@ -8119,18 +8119,18 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a DeleteRegistrationResponse message from the specified reader or buffer.
                      * @function decode
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {isuxportal.proto.services.registration.DeleteRegistrationResponse} DeleteRegistrationResponse
+                     * @returns {xsuportal.proto.services.registration.DeleteRegistrationResponse} DeleteRegistrationResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
                     DeleteRegistrationResponse.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.isuxportal.proto.services.registration.DeleteRegistrationResponse();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.registration.DeleteRegistrationResponse();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
@@ -8145,10 +8145,10 @@ $root.isuxportal = (function() {
                     /**
                      * Decodes a DeleteRegistrationResponse message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {isuxportal.proto.services.registration.DeleteRegistrationResponse} DeleteRegistrationResponse
+                     * @returns {xsuportal.proto.services.registration.DeleteRegistrationResponse} DeleteRegistrationResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
@@ -8161,7 +8161,7 @@ $root.isuxportal = (function() {
                     /**
                      * Verifies a DeleteRegistrationResponse message.
                      * @function verify
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -8175,23 +8175,23 @@ $root.isuxportal = (function() {
                     /**
                      * Creates a DeleteRegistrationResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {isuxportal.proto.services.registration.DeleteRegistrationResponse} DeleteRegistrationResponse
+                     * @returns {xsuportal.proto.services.registration.DeleteRegistrationResponse} DeleteRegistrationResponse
                      */
                     DeleteRegistrationResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.isuxportal.proto.services.registration.DeleteRegistrationResponse)
+                        if (object instanceof $root.xsuportal.proto.services.registration.DeleteRegistrationResponse)
                             return object;
-                        return new $root.isuxportal.proto.services.registration.DeleteRegistrationResponse();
+                        return new $root.xsuportal.proto.services.registration.DeleteRegistrationResponse();
                     };
 
                     /**
                      * Creates a plain object from a DeleteRegistrationResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationResponse
                      * @static
-                     * @param {isuxportal.proto.services.registration.DeleteRegistrationResponse} message DeleteRegistrationResponse
+                     * @param {xsuportal.proto.services.registration.DeleteRegistrationResponse} message DeleteRegistrationResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -8202,7 +8202,7 @@ $root.isuxportal = (function() {
                     /**
                      * Converts this DeleteRegistrationResponse to JSON.
                      * @function toJSON
-                     * @memberof isuxportal.proto.services.registration.DeleteRegistrationResponse
+                     * @memberof xsuportal.proto.services.registration.DeleteRegistrationResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -8222,7 +8222,7 @@ $root.isuxportal = (function() {
         return proto;
     })();
 
-    return isuxportal;
+    return xsuportal;
 })();
 
 module.exports = $root;

@@ -3,5 +3,5 @@ import "../sentry.js";
 
 // TODO: import 'raven';
 
-import * as Rails from "@rails/ujs";
-Rails.start();
+// import * as Rails from "@rails/ujs";
+// Rails.start();

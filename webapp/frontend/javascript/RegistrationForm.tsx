@@ -1,4 +1,4 @@
-import {isuxportal} from "./pb";
+import {xsuportal} from "./pb";
 import {ApiClient} from "./ApiClient";
 import React from "react";
 
@@ -6,9 +6,9 @@ import {ErrorMessage} from "./ErrorMessage";
 
 export interface Props {
   client: ApiClient,
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse,
+  session: xsuportal.proto.services.common.GetCurrentSessionResponse,
   inviteToken: string | null,
-  registrationSession: isuxportal.proto.services.registration.GetRegistrationSessionResponse,
+  registrationSession: xsuportal.proto.services.registration.GetRegistrationSessionResponse,
   updateRegistrationSession: () => void,
 }
 
@@ -93,7 +93,7 @@ export class RegistrationForm extends React.Component<Props, State> {
   }
 
   isEditing() {
-    return this.props.registrationSession.status == isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINED;
+    return this.props.registrationSession.status == xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINED;
   }
 
   public render() {
