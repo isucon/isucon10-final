@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "devDependencies": {
+    "css-loader": "^3.6.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^9.0.1",
+    "terser-webpack-plugin": "^3.0.6",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.6",
+    "webpack": "^4.43.0",
+    "webpack-assets-manifest": "^3.1.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "@rails/ujs": "^6.0.3-2",
+    "@sentry/browser": "^5.19.0",
+    "@types/react": "^16.9.41",
+    "@types/react-dom": "^16.9.8",
+    "bulma": "^0.9.0",
+    "protobufjs": "~6.9.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
