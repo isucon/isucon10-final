@@ -1,25 +1,25 @@
-import {xsuportal} from "./pb";
-import {ApiError, ApiClient} from "./ApiClient";
+import { xsuportal } from "./pb";
+import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 
-import {ErrorMessage} from "./ErrorMessage";
+import { ErrorMessage } from "./ErrorMessage";
 
-import {RegistrationLogin} from "./RegistrationLogin";
-import {RegistrationForm} from "./RegistrationForm";
-import {RegistrationStatus} from "./RegistrationStatus";
+import { RegistrationLogin } from "./RegistrationLogin";
+import { RegistrationForm } from "./RegistrationForm";
+import { RegistrationStatus } from "./RegistrationStatus";
 
 export interface Props {
-  session: xsuportal.proto.services.common.GetCurrentSessionResponse,
-  client: ApiClient,
+  session: xsuportal.proto.services.common.GetCurrentSessionResponse;
+  client: ApiClient;
 }
 
 export interface State {
-  session: xsuportal.proto.services.common.GetCurrentSessionResponse,
-  registrationSession: xsuportal.proto.services.registration.GetRegistrationSessionResponse | null,
-  teamId: number | null,
-  inviteToken: string | null,
-  edit: boolean,
-  error: Error | null,
+  session: xsuportal.proto.services.common.GetCurrentSessionResponse;
+  registrationSession: xsuportal.proto.services.registration.GetRegistrationSessionResponse | null;
+  teamId: number | null;
+  inviteToken: string | null;
+  edit: boolean;
+  error: Error | null;
 }
 
 export class Registration extends React.Component<Props, State> {
@@ -29,7 +29,7 @@ export class Registration extends React.Component<Props, State> {
     this.state = {
       session: this.props.session,
       registrationSession: null,
-      teamId: parseInt(params.get("team_id") || '0', 10),
+      teamId: parseInt(params.get("team_id") || "0", 10),
       inviteToken: params.get("invite_token"),
       edit: false,
       error: null,
@@ -42,35 +42,39 @@ export class Registration extends React.Component<Props, State> {
 
   async updateRegistrationSession() {
     try {
-      const registrationSession = await this.props.client.getRegistrationSession({
-        teamId: this.state.teamId,
-        inviteToken: this.state.inviteToken,
-      });
+      const registrationSession = await this.props.client.getRegistrationSession(
+        {
+          teamId: this.state.teamId,
+          inviteToken: this.state.inviteToken,
+        }
+      );
       let session = this.state.session;
       if (this.state.registrationSession) {
         // XXX: Contestant name might be updated inside the registration page, and it is only included in GetCurrentSession response, not available in GetRegistrationSession.
         session = await this.props.client.getCurrentSession();
       }
-      this.setState({session, registrationSession, edit: false});
+      this.setState({ session, registrationSession, edit: false });
     } catch (err) {
-      this.setState({error: err});
+      this.setState({ error: err });
     }
   }
 
   enableEdit() {
-    this.setState({edit: true});
+    this.setState({ edit: true });
   }
 
   public render() {
-    return <>
-      <header>
-        <h1 className="title is-1">参加登録</h1>
-      </header>
-      <main>
-        {this.renderError()}
-        {this.renderPhase()}
-      </main>
-    </>;
+    return (
+      <>
+        <header>
+          <h1 className="title is-1">参加登録</h1>
+        </header>
+        <main>
+          {this.renderError()}
+          {this.renderPhase()}
+        </main>
+      </>
+    );
   }
 
   public renderError() {
@@ -80,46 +84,93 @@ export class Registration extends React.Component<Props, State> {
 
   public renderPhase() {
     if (this.state.registrationSession) {
-      const login = <>
-        {this.renderTeam()}
-        <RegistrationLogin client={this.props.client} session={this.state.session} registrationSession={this.state.registrationSession} />
-      </>;
-      switch(this.state.registrationSession.status) {
-        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.NOT_LOGGED_IN:
+      const login = (
+        <>
+          {this.renderTeam()}
+          <RegistrationLogin
+            client={this.props.client}
+            session={this.state.session}
+            registrationSession={this.state.registrationSession}
+          />
+        </>
+      );
+      switch (this.state.registrationSession.status) {
+        case xsuportal.proto.services.registration
+          .GetRegistrationSessionResponse.Status.NOT_LOGGED_IN:
           return login;
           break;
-        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.CLOSED:
-          return <>
-            <div className="message is-danger">
-              <div className="message-body">
-                参加登録を現在受け付けていません (定員到達、締切後、もしくは受付開始前)
+        case xsuportal.proto.services.registration
+          .GetRegistrationSessionResponse.Status.CLOSED:
+          return (
+            <>
+              <div className="message is-danger">
+                <div className="message-body">
+                  参加登録を現在受け付けていません
+                  (定員到達、締切後、もしくは受付開始前)
+                </div>
               </div>
-            </div>
-            {login}
-          </>;
+              {login}
+            </>
+          );
           break;
-        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.NOT_JOINABLE:
-          return <>
-            <div className="message is-danger">
-              <div className="message-body">
-                招待元のチームメンバー数が上限に達しているため、この招待を利用して参加登録を進めることはできません。
+        case xsuportal.proto.services.registration
+          .GetRegistrationSessionResponse.Status.NOT_JOINABLE:
+          return (
+            <>
+              <div className="message is-danger">
+                <div className="message-body">
+                  招待元のチームメンバー数が上限に達しているため、この招待を利用して参加登録を進めることはできません。
+                </div>
               </div>
-            </div>
-            {login}
-          </>;
+              {login}
+            </>
+          );
           break;
-        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.CREATABLE:
-        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINABLE:
-          return <>
-            {login}
-            <RegistrationForm client={this.props.client} session={this.state.session} inviteToken={this.state.inviteToken} registrationSession={this.state.registrationSession} updateRegistrationSession={this.updateRegistrationSession.bind(this)} />
-          </>;
+        case xsuportal.proto.services.registration
+          .GetRegistrationSessionResponse.Status.CREATABLE:
+        case xsuportal.proto.services.registration
+          .GetRegistrationSessionResponse.Status.JOINABLE:
+          return (
+            <>
+              {login}
+              <RegistrationForm
+                client={this.props.client}
+                session={this.state.session}
+                inviteToken={this.state.inviteToken}
+                registrationSession={this.state.registrationSession}
+                updateRegistrationSession={this.updateRegistrationSession.bind(
+                  this
+                )}
+              />
+            </>
+          );
           break;
-        case xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINED:
+        case xsuportal.proto.services.registration
+          .GetRegistrationSessionResponse.Status.JOINED:
           if (this.state.edit) {
-            return <RegistrationForm client={this.props.client} session={this.state.session} inviteToken={null} registrationSession={this.state.registrationSession} updateRegistrationSession={this.updateRegistrationSession.bind(this)} />;
+            return (
+              <RegistrationForm
+                client={this.props.client}
+                session={this.state.session}
+                inviteToken={null}
+                registrationSession={this.state.registrationSession}
+                updateRegistrationSession={this.updateRegistrationSession.bind(
+                  this
+                )}
+              />
+            );
           }
-          return <RegistrationStatus client={this.props.client} session={this.state.session} registrationSession={this.state.registrationSession}  updateRegistrationSession={this.updateRegistrationSession.bind(this)} enableEdit={this.enableEdit.bind(this)} />;
+          return (
+            <RegistrationStatus
+              client={this.props.client}
+              session={this.state.session}
+              registrationSession={this.state.registrationSession}
+              updateRegistrationSession={this.updateRegistrationSession.bind(
+                this
+              )}
+              enableEdit={this.enableEdit.bind(this)}
+            />
+          );
           break;
       }
     } else {
@@ -130,14 +181,20 @@ export class Registration extends React.Component<Props, State> {
   }
 
   renderTeam() {
-    if (!this.state.registrationSession || !this.state.registrationSession.team) return;
+    if (!this.state.registrationSession || !this.state.registrationSession.team)
+      return;
 
     const team = this.state.registrationSession.team;
-    return <>
-      <section className="mt-3">
-        <h3 className="title is-3">チームから招待されています</h3>
-        <p>{team.leader!.name} のチーム {team.name} からの招待を受諾して参加登録します。</p>
-      </section>
-    </>;
+    return (
+      <>
+        <section className="mt-3">
+          <h3 className="title is-3">チームから招待されています</h3>
+          <p>
+            {team.leader!.name} のチーム {team.name}{" "}
+            からの招待を受諾して参加登録します。
+          </p>
+        </section>
+      </>
+    );
   }
 }

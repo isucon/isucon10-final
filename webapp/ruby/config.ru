@@ -1,5 +1,4 @@
 require 'sinatra'
 require './app.rb'
 
-run XsuPortal::App
-
+run Xsuportal::App
