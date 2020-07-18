@@ -35,15 +35,17 @@ export class RegistrationLogin extends React.Component<Props, State> {
   }
 
   githubLoginUrl() {
-    return (document.querySelector(
-      'meta[name="xsu:github-auth-path"]'
-    ) as HTMLMetaElement).content;
+    // return (document.querySelector(
+    //   'meta[name="xsu:github-auth-path"]'
+    // ) as HTMLMetaElement).content;
+    return "https://github.com/";
   }
 
   discordLoginUrl() {
-    return (document.querySelector(
-      'meta[name="xsu:discord-auth-path"]'
-    ) as HTMLMetaElement).content;
+    // return (document.querySelector(
+    //   'meta[name="xsu:discord-auth-path"]'
+    // ) as HTMLMetaElement).content;
+    return "https://discord.com/";
   }
 
   public renderLogin(

@@ -1,2 +1,2 @@
-import {fetchAndUpdateNavbarSession} from "../NavbarSession";
+import { fetchAndUpdateNavbarSession } from "../NavbarSession";
 fetchAndUpdateNavbarSession();
