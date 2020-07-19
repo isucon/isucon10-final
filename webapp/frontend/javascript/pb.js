@@ -4519,338 +4519,6 @@ $root.xsuportal = (function() {
             return resources;
         })();
 
-        proto.common = (function() {
-
-            /**
-             * Namespace common.
-             * @memberof xsuportal.proto
-             * @namespace
-             */
-            var common = {};
-
-            common.DashboardRequest = (function() {
-
-                /**
-                 * Properties of a DashboardRequest.
-                 * @memberof xsuportal.proto.common
-                 * @interface IDashboardRequest
-                 */
-
-                /**
-                 * Constructs a new DashboardRequest.
-                 * @memberof xsuportal.proto.common
-                 * @classdesc Represents a DashboardRequest.
-                 * @implements IDashboardRequest
-                 * @constructor
-                 * @param {xsuportal.proto.common.IDashboardRequest=} [properties] Properties to set
-                 */
-                function DashboardRequest(properties) {
-                    if (properties)
-                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * Creates a new DashboardRequest instance using the specified properties.
-                 * @function create
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardRequest=} [properties] Properties to set
-                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest instance
-                 */
-                DashboardRequest.create = function create(properties) {
-                    return new DashboardRequest(properties);
-                };
-
-                /**
-                 * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
-                 * @function encode
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardRequest} message DashboardRequest message or plain object to encode
-                 * @param {$protobuf.Writer} [writer] Writer to encode to
-                 * @returns {$protobuf.Writer} Writer
-                 */
-                DashboardRequest.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    return writer;
-                };
-
-                /**
-                 * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
-                 * @function encodeDelimited
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardRequest} message DashboardRequest message or plain object to encode
-                 * @param {$protobuf.Writer} [writer] Writer to encode to
-                 * @returns {$protobuf.Writer} Writer
-                 */
-                DashboardRequest.encodeDelimited = function encodeDelimited(message, writer) {
-                    return this.encode(message, writer).ldelim();
-                };
-
-                /**
-                 * Decodes a DashboardRequest message from the specified reader or buffer.
-                 * @function decode
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @param {number} [length] Message length if known beforehand
-                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                DashboardRequest.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.common.DashboardRequest();
-                    while (reader.pos < end) {
-                        var tag = reader.uint32();
-                        switch (tag >>> 3) {
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
-                        }
-                    }
-                    return message;
-                };
-
-                /**
-                 * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
-                 * @function decodeDelimited
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                DashboardRequest.decodeDelimited = function decodeDelimited(reader) {
-                    if (!(reader instanceof $Reader))
-                        reader = new $Reader(reader);
-                    return this.decode(reader, reader.uint32());
-                };
-
-                /**
-                 * Verifies a DashboardRequest message.
-                 * @function verify
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                DashboardRequest.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    return null;
-                };
-
-                /**
-                 * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
-                 */
-                DashboardRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.xsuportal.proto.common.DashboardRequest)
-                        return object;
-                    return new $root.xsuportal.proto.common.DashboardRequest();
-                };
-
-                /**
-                 * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {xsuportal.proto.common.DashboardRequest} message DashboardRequest
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                DashboardRequest.toObject = function toObject() {
-                    return {};
-                };
-
-                /**
-                 * Converts this DashboardRequest to JSON.
-                 * @function toJSON
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                DashboardRequest.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return DashboardRequest;
-            })();
-
-            common.DashboardResponse = (function() {
-
-                /**
-                 * Properties of a DashboardResponse.
-                 * @memberof xsuportal.proto.common
-                 * @interface IDashboardResponse
-                 */
-
-                /**
-                 * Constructs a new DashboardResponse.
-                 * @memberof xsuportal.proto.common
-                 * @classdesc Represents a DashboardResponse.
-                 * @implements IDashboardResponse
-                 * @constructor
-                 * @param {xsuportal.proto.common.IDashboardResponse=} [properties] Properties to set
-                 */
-                function DashboardResponse(properties) {
-                    if (properties)
-                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * Creates a new DashboardResponse instance using the specified properties.
-                 * @function create
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardResponse=} [properties] Properties to set
-                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse instance
-                 */
-                DashboardResponse.create = function create(properties) {
-                    return new DashboardResponse(properties);
-                };
-
-                /**
-                 * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
-                 * @function encode
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardResponse} message DashboardResponse message or plain object to encode
-                 * @param {$protobuf.Writer} [writer] Writer to encode to
-                 * @returns {$protobuf.Writer} Writer
-                 */
-                DashboardResponse.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    return writer;
-                };
-
-                /**
-                 * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
-                 * @function encodeDelimited
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardResponse} message DashboardResponse message or plain object to encode
-                 * @param {$protobuf.Writer} [writer] Writer to encode to
-                 * @returns {$protobuf.Writer} Writer
-                 */
-                DashboardResponse.encodeDelimited = function encodeDelimited(message, writer) {
-                    return this.encode(message, writer).ldelim();
-                };
-
-                /**
-                 * Decodes a DashboardResponse message from the specified reader or buffer.
-                 * @function decode
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @param {number} [length] Message length if known beforehand
-                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                DashboardResponse.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.common.DashboardResponse();
-                    while (reader.pos < end) {
-                        var tag = reader.uint32();
-                        switch (tag >>> 3) {
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
-                        }
-                    }
-                    return message;
-                };
-
-                /**
-                 * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
-                 * @function decodeDelimited
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                DashboardResponse.decodeDelimited = function decodeDelimited(reader) {
-                    if (!(reader instanceof $Reader))
-                        reader = new $Reader(reader);
-                    return this.decode(reader, reader.uint32());
-                };
-
-                /**
-                 * Verifies a DashboardResponse message.
-                 * @function verify
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                DashboardResponse.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    return null;
-                };
-
-                /**
-                 * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
-                 */
-                DashboardResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.xsuportal.proto.common.DashboardResponse)
-                        return object;
-                    return new $root.xsuportal.proto.common.DashboardResponse();
-                };
-
-                /**
-                 * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {xsuportal.proto.common.DashboardResponse} message DashboardResponse
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                DashboardResponse.toObject = function toObject() {
-                    return {};
-                };
-
-                /**
-                 * Converts this DashboardResponse to JSON.
-                 * @function toJSON
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                DashboardResponse.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return DashboardResponse;
-            })();
-
-            return common;
-        })();
-
         proto.services = (function() {
 
             /**
@@ -4860,32 +4528,34 @@ $root.xsuportal = (function() {
              */
             var services = {};
 
-            services.common = (function() {
+            services.account = (function() {
 
                 /**
-                 * Namespace common.
+                 * Namespace account.
                  * @memberof xsuportal.proto.services
                  * @namespace
                  */
-                var common = {};
+                var account = {};
 
-                common.GetCurrentSessionRequest = (function() {
+                account.SignupRequest = (function() {
 
                     /**
-                     * Properties of a GetCurrentSessionRequest.
-                     * @memberof xsuportal.proto.services.common
-                     * @interface IGetCurrentSessionRequest
+                     * Properties of a SignupRequest.
+                     * @memberof xsuportal.proto.services.account
+                     * @interface ISignupRequest
+                     * @property {string|null} [userId] SignupRequest userId
+                     * @property {string|null} [password] SignupRequest password
                      */
 
                     /**
-                     * Constructs a new GetCurrentSessionRequest.
-                     * @memberof xsuportal.proto.services.common
-                     * @classdesc Represents a GetCurrentSessionRequest.
-                     * @implements IGetCurrentSessionRequest
+                     * Constructs a new SignupRequest.
+                     * @memberof xsuportal.proto.services.account
+                     * @classdesc Represents a SignupRequest.
+                     * @implements ISignupRequest
                      * @constructor
-                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.account.ISignupRequest=} [properties] Properties to set
                      */
-                    function GetCurrentSessionRequest(properties) {
+                    function SignupRequest(properties) {
                         if (properties)
                             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -4893,264 +4563,88 @@ $root.xsuportal = (function() {
                     }
 
                     /**
-                     * Creates a new GetCurrentSessionRequest instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
-                     * @static
-                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest=} [properties] Properties to set
-                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest instance
+                     * SignupRequest userId.
+                     * @member {string} userId
+                     * @memberof xsuportal.proto.services.account.SignupRequest
+                     * @instance
                      */
-                    GetCurrentSessionRequest.create = function create(properties) {
-                        return new GetCurrentSessionRequest(properties);
+                    SignupRequest.prototype.userId = "";
+
+                    /**
+                     * SignupRequest password.
+                     * @member {string} password
+                     * @memberof xsuportal.proto.services.account.SignupRequest
+                     * @instance
+                     */
+                    SignupRequest.prototype.password = "";
+
+                    /**
+                     * Creates a new SignupRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.account.SignupRequest
+                     * @static
+                     * @param {xsuportal.proto.services.account.ISignupRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.account.SignupRequest} SignupRequest instance
+                     */
+                    SignupRequest.create = function create(properties) {
+                        return new SignupRequest(properties);
                     };
 
                     /**
-                     * Encodes the specified GetCurrentSessionRequest message. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
+                     * Encodes the specified SignupRequest message. Does not implicitly {@link xsuportal.proto.services.account.SignupRequest.verify|verify} messages.
                      * @function encode
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.account.SignupRequest
                      * @static
-                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest} message GetCurrentSessionRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.account.ISignupRequest} message SignupRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
-                    GetCurrentSessionRequest.encode = function encode(message, writer) {
+                    SignupRequest.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
+                        if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
+                        if (message.password != null && Object.hasOwnProperty.call(message, "password"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.password);
                         return writer;
                     };
 
                     /**
-                     * Encodes the specified GetCurrentSessionRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
+                     * Encodes the specified SignupRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.SignupRequest.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.account.SignupRequest
                      * @static
-                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest} message GetCurrentSessionRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.account.ISignupRequest} message SignupRequest message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
-                    GetCurrentSessionRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                    SignupRequest.encodeDelimited = function encodeDelimited(message, writer) {
                         return this.encode(message, writer).ldelim();
                     };
 
                     /**
-                     * Decodes a GetCurrentSessionRequest message from the specified reader or buffer.
+                     * Decodes a SignupRequest message from the specified reader or buffer.
                      * @function decode
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @memberof xsuportal.proto.services.account.SignupRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
+                     * @returns {xsuportal.proto.services.account.SignupRequest} SignupRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    GetCurrentSessionRequest.decode = function decode(reader, length) {
+                    SignupRequest.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.common.GetCurrentSessionRequest();
-                        while (reader.pos < end) {
-                            var tag = reader.uint32();
-                            switch (tag >>> 3) {
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
-                            }
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Decodes a GetCurrentSessionRequest message from the specified reader or buffer, length delimited.
-                     * @function decodeDelimited
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    GetCurrentSessionRequest.decodeDelimited = function decodeDelimited(reader) {
-                        if (!(reader instanceof $Reader))
-                            reader = new $Reader(reader);
-                        return this.decode(reader, reader.uint32());
-                    };
-
-                    /**
-                     * Verifies a GetCurrentSessionRequest message.
-                     * @function verify
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    GetCurrentSessionRequest.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a GetCurrentSessionRequest message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
-                     */
-                    GetCurrentSessionRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.services.common.GetCurrentSessionRequest)
-                            return object;
-                        return new $root.xsuportal.proto.services.common.GetCurrentSessionRequest();
-                    };
-
-                    /**
-                     * Creates a plain object from a GetCurrentSessionRequest message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
-                     * @static
-                     * @param {xsuportal.proto.services.common.GetCurrentSessionRequest} message GetCurrentSessionRequest
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    GetCurrentSessionRequest.toObject = function toObject() {
-                        return {};
-                    };
-
-                    /**
-                     * Converts this GetCurrentSessionRequest to JSON.
-                     * @function toJSON
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    GetCurrentSessionRequest.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return GetCurrentSessionRequest;
-                })();
-
-                common.GetCurrentSessionResponse = (function() {
-
-                    /**
-                     * Properties of a GetCurrentSessionResponse.
-                     * @memberof xsuportal.proto.services.common
-                     * @interface IGetCurrentSessionResponse
-                     * @property {xsuportal.proto.resources.ITeam|null} [team] GetCurrentSessionResponse team
-                     * @property {xsuportal.proto.resources.IContestant|null} [contestant] GetCurrentSessionResponse contestant
-                     * @property {string|null} [discordServerId] GetCurrentSessionResponse discordServerId
-                     */
-
-                    /**
-                     * Constructs a new GetCurrentSessionResponse.
-                     * @memberof xsuportal.proto.services.common
-                     * @classdesc Represents a GetCurrentSessionResponse.
-                     * @implements IGetCurrentSessionResponse
-                     * @constructor
-                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse=} [properties] Properties to set
-                     */
-                    function GetCurrentSessionResponse(properties) {
-                        if (properties)
-                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * GetCurrentSessionResponse team.
-                     * @member {xsuportal.proto.resources.ITeam|null|undefined} team
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
-                     * @instance
-                     */
-                    GetCurrentSessionResponse.prototype.team = null;
-
-                    /**
-                     * GetCurrentSessionResponse contestant.
-                     * @member {xsuportal.proto.resources.IContestant|null|undefined} contestant
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
-                     * @instance
-                     */
-                    GetCurrentSessionResponse.prototype.contestant = null;
-
-                    /**
-                     * GetCurrentSessionResponse discordServerId.
-                     * @member {string} discordServerId
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
-                     * @instance
-                     */
-                    GetCurrentSessionResponse.prototype.discordServerId = "";
-
-                    /**
-                     * Creates a new GetCurrentSessionResponse instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
-                     * @static
-                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse=} [properties] Properties to set
-                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse instance
-                     */
-                    GetCurrentSessionResponse.create = function create(properties) {
-                        return new GetCurrentSessionResponse(properties);
-                    };
-
-                    /**
-                     * Encodes the specified GetCurrentSessionResponse message. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
-                     * @function encode
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
-                     * @static
-                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse} message GetCurrentSessionResponse message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    GetCurrentSessionResponse.encode = function encode(message, writer) {
-                        if (!writer)
-                            writer = $Writer.create();
-                        if (message.team != null && Object.hasOwnProperty.call(message, "team"))
-                            $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                        if (message.contestant != null && Object.hasOwnProperty.call(message, "contestant"))
-                            $root.xsuportal.proto.resources.Contestant.encode(message.contestant, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                        if (message.discordServerId != null && Object.hasOwnProperty.call(message, "discordServerId"))
-                            writer.uint32(/* id 3, wireType 2 =*/26).string(message.discordServerId);
-                        return writer;
-                    };
-
-                    /**
-                     * Encodes the specified GetCurrentSessionResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
-                     * @function encodeDelimited
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
-                     * @static
-                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse} message GetCurrentSessionResponse message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    GetCurrentSessionResponse.encodeDelimited = function encodeDelimited(message, writer) {
-                        return this.encode(message, writer).ldelim();
-                    };
-
-                    /**
-                     * Decodes a GetCurrentSessionResponse message from the specified reader or buffer.
-                     * @function decode
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    GetCurrentSessionResponse.decode = function decode(reader, length) {
-                        if (!(reader instanceof $Reader))
-                            reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.common.GetCurrentSessionResponse();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.account.SignupRequest();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
                             case 1:
-                                message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
+                                message.userId = reader.string();
                                 break;
                             case 2:
-                                message.contestant = $root.xsuportal.proto.resources.Contestant.decode(reader, reader.uint32());
-                                break;
-                            case 3:
-                                message.discordServerId = reader.string();
+                                message.password = reader.string();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -5161,117 +4655,259 @@ $root.xsuportal = (function() {
                     };
 
                     /**
-                     * Decodes a GetCurrentSessionResponse message from the specified reader or buffer, length delimited.
+                     * Decodes a SignupRequest message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.account.SignupRequest
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
+                     * @returns {xsuportal.proto.services.account.SignupRequest} SignupRequest
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    GetCurrentSessionResponse.decodeDelimited = function decodeDelimited(reader) {
+                    SignupRequest.decodeDelimited = function decodeDelimited(reader) {
                         if (!(reader instanceof $Reader))
                             reader = new $Reader(reader);
                         return this.decode(reader, reader.uint32());
                     };
 
                     /**
-                     * Verifies a GetCurrentSessionResponse message.
+                     * Verifies a SignupRequest message.
                      * @function verify
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.account.SignupRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    GetCurrentSessionResponse.verify = function verify(message) {
+                    SignupRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.team != null && message.hasOwnProperty("team")) {
-                            var error = $root.xsuportal.proto.resources.Team.verify(message.team);
-                            if (error)
-                                return "team." + error;
-                        }
-                        if (message.contestant != null && message.hasOwnProperty("contestant")) {
-                            var error = $root.xsuportal.proto.resources.Contestant.verify(message.contestant);
-                            if (error)
-                                return "contestant." + error;
-                        }
-                        if (message.discordServerId != null && message.hasOwnProperty("discordServerId"))
-                            if (!$util.isString(message.discordServerId))
-                                return "discordServerId: string expected";
+                        if (message.userId != null && message.hasOwnProperty("userId"))
+                            if (!$util.isString(message.userId))
+                                return "userId: string expected";
+                        if (message.password != null && message.hasOwnProperty("password"))
+                            if (!$util.isString(message.password))
+                                return "password: string expected";
                         return null;
                     };
 
                     /**
-                     * Creates a GetCurrentSessionResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a SignupRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.account.SignupRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
+                     * @returns {xsuportal.proto.services.account.SignupRequest} SignupRequest
                      */
-                    GetCurrentSessionResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.services.common.GetCurrentSessionResponse)
+                    SignupRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.account.SignupRequest)
                             return object;
-                        var message = new $root.xsuportal.proto.services.common.GetCurrentSessionResponse();
-                        if (object.team != null) {
-                            if (typeof object.team !== "object")
-                                throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.team: object expected");
-                            message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
-                        }
-                        if (object.contestant != null) {
-                            if (typeof object.contestant !== "object")
-                                throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.contestant: object expected");
-                            message.contestant = $root.xsuportal.proto.resources.Contestant.fromObject(object.contestant);
-                        }
-                        if (object.discordServerId != null)
-                            message.discordServerId = String(object.discordServerId);
+                        var message = new $root.xsuportal.proto.services.account.SignupRequest();
+                        if (object.userId != null)
+                            message.userId = String(object.userId);
+                        if (object.password != null)
+                            message.password = String(object.password);
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a GetCurrentSessionResponse message. Also converts values to other types if specified.
+                     * Creates a plain object from a SignupRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.account.SignupRequest
                      * @static
-                     * @param {xsuportal.proto.services.common.GetCurrentSessionResponse} message GetCurrentSessionResponse
+                     * @param {xsuportal.proto.services.account.SignupRequest} message SignupRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    GetCurrentSessionResponse.toObject = function toObject(message, options) {
+                    SignupRequest.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         var object = {};
                         if (options.defaults) {
-                            object.team = null;
-                            object.contestant = null;
-                            object.discordServerId = "";
+                            object.userId = "";
+                            object.password = "";
                         }
-                        if (message.team != null && message.hasOwnProperty("team"))
-                            object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
-                        if (message.contestant != null && message.hasOwnProperty("contestant"))
-                            object.contestant = $root.xsuportal.proto.resources.Contestant.toObject(message.contestant, options);
-                        if (message.discordServerId != null && message.hasOwnProperty("discordServerId"))
-                            object.discordServerId = message.discordServerId;
+                        if (message.userId != null && message.hasOwnProperty("userId"))
+                            object.userId = message.userId;
+                        if (message.password != null && message.hasOwnProperty("password"))
+                            object.password = message.password;
                         return object;
                     };
 
                     /**
-                     * Converts this GetCurrentSessionResponse to JSON.
+                     * Converts this SignupRequest to JSON.
                      * @function toJSON
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @memberof xsuportal.proto.services.account.SignupRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    GetCurrentSessionResponse.prototype.toJSON = function toJSON() {
+                    SignupRequest.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return GetCurrentSessionResponse;
+                    return SignupRequest;
                 })();
 
-                return common;
+                account.SignupResponse = (function() {
+
+                    /**
+                     * Properties of a SignupResponse.
+                     * @memberof xsuportal.proto.services.account
+                     * @interface ISignupResponse
+                     */
+
+                    /**
+                     * Constructs a new SignupResponse.
+                     * @memberof xsuportal.proto.services.account
+                     * @classdesc Represents a SignupResponse.
+                     * @implements ISignupResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.account.ISignupResponse=} [properties] Properties to set
+                     */
+                    function SignupResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new SignupResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.account.SignupResponse
+                     * @static
+                     * @param {xsuportal.proto.services.account.ISignupResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.account.SignupResponse} SignupResponse instance
+                     */
+                    SignupResponse.create = function create(properties) {
+                        return new SignupResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified SignupResponse message. Does not implicitly {@link xsuportal.proto.services.account.SignupResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.account.SignupResponse
+                     * @static
+                     * @param {xsuportal.proto.services.account.ISignupResponse} message SignupResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    SignupResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified SignupResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.SignupResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.account.SignupResponse
+                     * @static
+                     * @param {xsuportal.proto.services.account.ISignupResponse} message SignupResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    SignupResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a SignupResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.account.SignupResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.account.SignupResponse} SignupResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    SignupResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.account.SignupResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a SignupResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.account.SignupResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.account.SignupResponse} SignupResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    SignupResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a SignupResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.account.SignupResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    SignupResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a SignupResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.account.SignupResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.account.SignupResponse} SignupResponse
+                     */
+                    SignupResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.account.SignupResponse)
+                            return object;
+                        return new $root.xsuportal.proto.services.account.SignupResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from a SignupResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.account.SignupResponse
+                     * @static
+                     * @param {xsuportal.proto.services.account.SignupResponse} message SignupResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    SignupResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this SignupResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.account.SignupResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    SignupResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return SignupResponse;
+                })();
+
+                return account;
             })();
 
             services.audience = (function() {
@@ -5959,6 +5595,1959 @@ $root.xsuportal = (function() {
                 })();
 
                 return audience;
+            })();
+
+            services.bench = (function() {
+
+                /**
+                 * Namespace bench.
+                 * @memberof xsuportal.proto.services
+                 * @namespace
+                 */
+                var bench = {};
+
+                bench.BenchmarkQueueService = (function() {
+
+                    /**
+                     * Constructs a new BenchmarkQueueService service.
+                     * @memberof xsuportal.proto.services.bench
+                     * @classdesc Represents a BenchmarkQueueService
+                     * @extends $protobuf.rpc.Service
+                     * @constructor
+                     * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                     * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                     * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                     */
+                    function BenchmarkQueueService(rpcImpl, requestDelimited, responseDelimited) {
+                        $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                    }
+
+                    (BenchmarkQueueService.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = BenchmarkQueueService;
+
+                    /**
+                     * Creates new BenchmarkQueueService service using the specified rpc implementation.
+                     * @function create
+                     * @memberof xsuportal.proto.services.bench.BenchmarkQueueService
+                     * @static
+                     * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                     * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                     * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                     * @returns {BenchmarkQueueService} RPC service. Useful where requests and/or responses are streamed.
+                     */
+                    BenchmarkQueueService.create = function create(rpcImpl, requestDelimited, responseDelimited) {
+                        return new this(rpcImpl, requestDelimited, responseDelimited);
+                    };
+
+                    /**
+                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkQueueService#receiveBenchmarkJob}.
+                     * @memberof xsuportal.proto.services.bench.BenchmarkQueueService
+                     * @typedef ReceiveBenchmarkJobCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse} [response] ReceiveBenchmarkJobResponse
+                     */
+
+                    /**
+                     * Calls ReceiveBenchmarkJob.
+                     * @function receiveBenchmarkJob
+                     * @memberof xsuportal.proto.services.bench.BenchmarkQueueService
+                     * @instance
+                     * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest} request ReceiveBenchmarkJobRequest message or plain object
+                     * @param {xsuportal.proto.services.bench.BenchmarkQueueService.ReceiveBenchmarkJobCallback} callback Node-style callback called with the error, if any, and ReceiveBenchmarkJobResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(BenchmarkQueueService.prototype.receiveBenchmarkJob = function receiveBenchmarkJob(request, callback) {
+                        return this.rpcCall(receiveBenchmarkJob, $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest, $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse, request, callback);
+                    }, "name", { value: "ReceiveBenchmarkJob" });
+
+                    /**
+                     * Calls ReceiveBenchmarkJob.
+                     * @function receiveBenchmarkJob
+                     * @memberof xsuportal.proto.services.bench.BenchmarkQueueService
+                     * @instance
+                     * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest} request ReceiveBenchmarkJobRequest message or plain object
+                     * @returns {Promise<xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse>} Promise
+                     * @variation 2
+                     */
+
+                    return BenchmarkQueueService;
+                })();
+
+                bench.ReceiveBenchmarkJobRequest = (function() {
+
+                    /**
+                     * Properties of a ReceiveBenchmarkJobRequest.
+                     * @memberof xsuportal.proto.services.bench
+                     * @interface IReceiveBenchmarkJobRequest
+                     * @property {string|null} [instanceName] ReceiveBenchmarkJobRequest instanceName
+                     * @property {number|Long|null} [teamId] ReceiveBenchmarkJobRequest teamId
+                     */
+
+                    /**
+                     * Constructs a new ReceiveBenchmarkJobRequest.
+                     * @memberof xsuportal.proto.services.bench
+                     * @classdesc Represents a ReceiveBenchmarkJobRequest.
+                     * @implements IReceiveBenchmarkJobRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest=} [properties] Properties to set
+                     */
+                    function ReceiveBenchmarkJobRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ReceiveBenchmarkJobRequest instanceName.
+                     * @member {string} instanceName
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @instance
+                     */
+                    ReceiveBenchmarkJobRequest.prototype.instanceName = "";
+
+                    /**
+                     * ReceiveBenchmarkJobRequest teamId.
+                     * @member {number|Long} teamId
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @instance
+                     */
+                    ReceiveBenchmarkJobRequest.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new ReceiveBenchmarkJobRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest} ReceiveBenchmarkJobRequest instance
+                     */
+                    ReceiveBenchmarkJobRequest.create = function create(properties) {
+                        return new ReceiveBenchmarkJobRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ReceiveBenchmarkJobRequest message. Does not implicitly {@link xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest} message ReceiveBenchmarkJobRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ReceiveBenchmarkJobRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.instanceName != null && Object.hasOwnProperty.call(message, "instanceName"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.instanceName);
+                        if (message.teamId != null && Object.hasOwnProperty.call(message, "teamId"))
+                            writer.uint32(/* id 2, wireType 0 =*/16).int64(message.teamId);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ReceiveBenchmarkJobRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest} message ReceiveBenchmarkJobRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ReceiveBenchmarkJobRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ReceiveBenchmarkJobRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest} ReceiveBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ReceiveBenchmarkJobRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.instanceName = reader.string();
+                                break;
+                            case 2:
+                                message.teamId = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ReceiveBenchmarkJobRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest} ReceiveBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ReceiveBenchmarkJobRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ReceiveBenchmarkJobRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ReceiveBenchmarkJobRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.instanceName != null && message.hasOwnProperty("instanceName"))
+                            if (!$util.isString(message.instanceName))
+                                return "instanceName: string expected";
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (!$util.isInteger(message.teamId) && !(message.teamId && $util.isInteger(message.teamId.low) && $util.isInteger(message.teamId.high)))
+                                return "teamId: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ReceiveBenchmarkJobRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest} ReceiveBenchmarkJobRequest
+                     */
+                    ReceiveBenchmarkJobRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest();
+                        if (object.instanceName != null)
+                            message.instanceName = String(object.instanceName);
+                        if (object.teamId != null)
+                            if ($util.Long)
+                                (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
+                            else if (typeof object.teamId === "string")
+                                message.teamId = parseInt(object.teamId, 10);
+                            else if (typeof object.teamId === "number")
+                                message.teamId = object.teamId;
+                            else if (typeof object.teamId === "object")
+                                message.teamId = new $util.LongBits(object.teamId.low >>> 0, object.teamId.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ReceiveBenchmarkJobRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest} message ReceiveBenchmarkJobRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ReceiveBenchmarkJobRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.instanceName = "";
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.teamId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.teamId = options.longs === String ? "0" : 0;
+                        }
+                        if (message.instanceName != null && message.hasOwnProperty("instanceName"))
+                            object.instanceName = message.instanceName;
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (typeof message.teamId === "number")
+                                object.teamId = options.longs === String ? String(message.teamId) : message.teamId;
+                            else
+                                object.teamId = options.longs === String ? $util.Long.prototype.toString.call(message.teamId) : options.longs === Number ? new $util.LongBits(message.teamId.low >>> 0, message.teamId.high >>> 0).toNumber() : message.teamId;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ReceiveBenchmarkJobRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ReceiveBenchmarkJobRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ReceiveBenchmarkJobRequest;
+                })();
+
+                bench.ReceiveBenchmarkJobResponse = (function() {
+
+                    /**
+                     * Properties of a ReceiveBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.bench
+                     * @interface IReceiveBenchmarkJobResponse
+                     * @property {number|Long|null} [jobId] ReceiveBenchmarkJobResponse jobId
+                     * @property {string|null} [handle] ReceiveBenchmarkJobResponse handle
+                     * @property {string|null} [targetIpv4Address] ReceiveBenchmarkJobResponse targetIpv4Address
+                     * @property {string|null} [descriptionHuman] ReceiveBenchmarkJobResponse descriptionHuman
+                     */
+
+                    /**
+                     * Constructs a new ReceiveBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.bench
+                     * @classdesc Represents a ReceiveBenchmarkJobResponse.
+                     * @implements IReceiveBenchmarkJobResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobResponse=} [properties] Properties to set
+                     */
+                    function ReceiveBenchmarkJobResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ReceiveBenchmarkJobResponse jobId.
+                     * @member {number|Long} jobId
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @instance
+                     */
+                    ReceiveBenchmarkJobResponse.prototype.jobId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * ReceiveBenchmarkJobResponse handle.
+                     * @member {string} handle
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @instance
+                     */
+                    ReceiveBenchmarkJobResponse.prototype.handle = "";
+
+                    /**
+                     * ReceiveBenchmarkJobResponse targetIpv4Address.
+                     * @member {string} targetIpv4Address
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @instance
+                     */
+                    ReceiveBenchmarkJobResponse.prototype.targetIpv4Address = "";
+
+                    /**
+                     * ReceiveBenchmarkJobResponse descriptionHuman.
+                     * @member {string} descriptionHuman
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @instance
+                     */
+                    ReceiveBenchmarkJobResponse.prototype.descriptionHuman = "";
+
+                    /**
+                     * Creates a new ReceiveBenchmarkJobResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse} ReceiveBenchmarkJobResponse instance
+                     */
+                    ReceiveBenchmarkJobResponse.create = function create(properties) {
+                        return new ReceiveBenchmarkJobResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ReceiveBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobResponse} message ReceiveBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ReceiveBenchmarkJobResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.jobId != null && Object.hasOwnProperty.call(message, "jobId"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.jobId);
+                        if (message.handle != null && Object.hasOwnProperty.call(message, "handle"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.handle);
+                        if (message.targetIpv4Address != null && Object.hasOwnProperty.call(message, "targetIpv4Address"))
+                            writer.uint32(/* id 3, wireType 2 =*/26).string(message.targetIpv4Address);
+                        if (message.descriptionHuman != null && Object.hasOwnProperty.call(message, "descriptionHuman"))
+                            writer.uint32(/* id 4, wireType 2 =*/34).string(message.descriptionHuman);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ReceiveBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobResponse} message ReceiveBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ReceiveBenchmarkJobResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ReceiveBenchmarkJobResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse} ReceiveBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ReceiveBenchmarkJobResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.jobId = reader.int64();
+                                break;
+                            case 2:
+                                message.handle = reader.string();
+                                break;
+                            case 3:
+                                message.targetIpv4Address = reader.string();
+                                break;
+                            case 4:
+                                message.descriptionHuman = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ReceiveBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse} ReceiveBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ReceiveBenchmarkJobResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ReceiveBenchmarkJobResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ReceiveBenchmarkJobResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.jobId != null && message.hasOwnProperty("jobId"))
+                            if (!$util.isInteger(message.jobId) && !(message.jobId && $util.isInteger(message.jobId.low) && $util.isInteger(message.jobId.high)))
+                                return "jobId: integer|Long expected";
+                        if (message.handle != null && message.hasOwnProperty("handle"))
+                            if (!$util.isString(message.handle))
+                                return "handle: string expected";
+                        if (message.targetIpv4Address != null && message.hasOwnProperty("targetIpv4Address"))
+                            if (!$util.isString(message.targetIpv4Address))
+                                return "targetIpv4Address: string expected";
+                        if (message.descriptionHuman != null && message.hasOwnProperty("descriptionHuman"))
+                            if (!$util.isString(message.descriptionHuman))
+                                return "descriptionHuman: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ReceiveBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse} ReceiveBenchmarkJobResponse
+                     */
+                    ReceiveBenchmarkJobResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse();
+                        if (object.jobId != null)
+                            if ($util.Long)
+                                (message.jobId = $util.Long.fromValue(object.jobId)).unsigned = false;
+                            else if (typeof object.jobId === "string")
+                                message.jobId = parseInt(object.jobId, 10);
+                            else if (typeof object.jobId === "number")
+                                message.jobId = object.jobId;
+                            else if (typeof object.jobId === "object")
+                                message.jobId = new $util.LongBits(object.jobId.low >>> 0, object.jobId.high >>> 0).toNumber();
+                        if (object.handle != null)
+                            message.handle = String(object.handle);
+                        if (object.targetIpv4Address != null)
+                            message.targetIpv4Address = String(object.targetIpv4Address);
+                        if (object.descriptionHuman != null)
+                            message.descriptionHuman = String(object.descriptionHuman);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ReceiveBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse} message ReceiveBenchmarkJobResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ReceiveBenchmarkJobResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.jobId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.jobId = options.longs === String ? "0" : 0;
+                            object.handle = "";
+                            object.targetIpv4Address = "";
+                            object.descriptionHuman = "";
+                        }
+                        if (message.jobId != null && message.hasOwnProperty("jobId"))
+                            if (typeof message.jobId === "number")
+                                object.jobId = options.longs === String ? String(message.jobId) : message.jobId;
+                            else
+                                object.jobId = options.longs === String ? $util.Long.prototype.toString.call(message.jobId) : options.longs === Number ? new $util.LongBits(message.jobId.low >>> 0, message.jobId.high >>> 0).toNumber() : message.jobId;
+                        if (message.handle != null && message.hasOwnProperty("handle"))
+                            object.handle = message.handle;
+                        if (message.targetIpv4Address != null && message.hasOwnProperty("targetIpv4Address"))
+                            object.targetIpv4Address = message.targetIpv4Address;
+                        if (message.descriptionHuman != null && message.hasOwnProperty("descriptionHuman"))
+                            object.descriptionHuman = message.descriptionHuman;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ReceiveBenchmarkJobResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ReceiveBenchmarkJobResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ReceiveBenchmarkJobResponse;
+                })();
+
+                bench.BenchmarkReportService = (function() {
+
+                    /**
+                     * Constructs a new BenchmarkReportService service.
+                     * @memberof xsuportal.proto.services.bench
+                     * @classdesc Represents a BenchmarkReportService
+                     * @extends $protobuf.rpc.Service
+                     * @constructor
+                     * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                     * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                     * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                     */
+                    function BenchmarkReportService(rpcImpl, requestDelimited, responseDelimited) {
+                        $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                    }
+
+                    (BenchmarkReportService.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = BenchmarkReportService;
+
+                    /**
+                     * Creates new BenchmarkReportService service using the specified rpc implementation.
+                     * @function create
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * @static
+                     * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                     * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                     * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                     * @returns {BenchmarkReportService} RPC service. Useful where requests and/or responses are streamed.
+                     */
+                    BenchmarkReportService.create = function create(rpcImpl, requestDelimited, responseDelimited) {
+                        return new this(rpcImpl, requestDelimited, responseDelimited);
+                    };
+
+                    /**
+                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkReportService#reportBenchmarkResult}.
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * @typedef ReportBenchmarkResultCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {xsuportal.proto.services.bench.ReportBenchmarkResultResponse} [response] ReportBenchmarkResultResponse
+                     */
+
+                    /**
+                     * Calls ReportBenchmarkResult.
+                     * @function reportBenchmarkResult
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * @instance
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest} request ReportBenchmarkResultRequest message or plain object
+                     * @param {xsuportal.proto.services.bench.BenchmarkReportService.ReportBenchmarkResultCallback} callback Node-style callback called with the error, if any, and ReportBenchmarkResultResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(BenchmarkReportService.prototype.reportBenchmarkResult = function reportBenchmarkResult(request, callback) {
+                        return this.rpcCall(reportBenchmarkResult, $root.xsuportal.proto.services.bench.ReportBenchmarkResultRequest, $root.xsuportal.proto.services.bench.ReportBenchmarkResultResponse, request, callback);
+                    }, "name", { value: "ReportBenchmarkResult" });
+
+                    /**
+                     * Calls ReportBenchmarkResult.
+                     * @function reportBenchmarkResult
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * @instance
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest} request ReportBenchmarkResultRequest message or plain object
+                     * @returns {Promise<xsuportal.proto.services.bench.ReportBenchmarkResultResponse>} Promise
+                     * @variation 2
+                     */
+
+                    /**
+                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkReportService#streamBenchmarkResult}.
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * @typedef StreamBenchmarkResultCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {xsuportal.proto.services.bench.ReportBenchmarkResultResponse} [response] ReportBenchmarkResultResponse
+                     */
+
+                    /**
+                     * Calls StreamBenchmarkResult.
+                     * @function streamBenchmarkResult
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * @instance
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest} request ReportBenchmarkResultRequest message or plain object
+                     * @param {xsuportal.proto.services.bench.BenchmarkReportService.StreamBenchmarkResultCallback} callback Node-style callback called with the error, if any, and ReportBenchmarkResultResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(BenchmarkReportService.prototype.streamBenchmarkResult = function streamBenchmarkResult(request, callback) {
+                        return this.rpcCall(streamBenchmarkResult, $root.xsuportal.proto.services.bench.ReportBenchmarkResultRequest, $root.xsuportal.proto.services.bench.ReportBenchmarkResultResponse, request, callback);
+                    }, "name", { value: "StreamBenchmarkResult" });
+
+                    /**
+                     * Calls StreamBenchmarkResult.
+                     * @function streamBenchmarkResult
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * @instance
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest} request ReportBenchmarkResultRequest message or plain object
+                     * @returns {Promise<xsuportal.proto.services.bench.ReportBenchmarkResultResponse>} Promise
+                     * @variation 2
+                     */
+
+                    return BenchmarkReportService;
+                })();
+
+                bench.ReportBenchmarkResultRequest = (function() {
+
+                    /**
+                     * Properties of a ReportBenchmarkResultRequest.
+                     * @memberof xsuportal.proto.services.bench
+                     * @interface IReportBenchmarkResultRequest
+                     * @property {number|Long|null} [jobId] ReportBenchmarkResultRequest jobId
+                     * @property {string|null} [handle] ReportBenchmarkResultRequest handle
+                     * @property {xsuportal.proto.resources.IBenchmarkResult|null} [result] ReportBenchmarkResultRequest result
+                     */
+
+                    /**
+                     * Constructs a new ReportBenchmarkResultRequest.
+                     * @memberof xsuportal.proto.services.bench
+                     * @classdesc Represents a ReportBenchmarkResultRequest.
+                     * @implements IReportBenchmarkResultRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest=} [properties] Properties to set
+                     */
+                    function ReportBenchmarkResultRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ReportBenchmarkResultRequest jobId.
+                     * @member {number|Long} jobId
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @instance
+                     */
+                    ReportBenchmarkResultRequest.prototype.jobId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * ReportBenchmarkResultRequest handle.
+                     * @member {string} handle
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @instance
+                     */
+                    ReportBenchmarkResultRequest.prototype.handle = "";
+
+                    /**
+                     * ReportBenchmarkResultRequest result.
+                     * @member {xsuportal.proto.resources.IBenchmarkResult|null|undefined} result
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @instance
+                     */
+                    ReportBenchmarkResultRequest.prototype.result = null;
+
+                    /**
+                     * Creates a new ReportBenchmarkResultRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.bench.ReportBenchmarkResultRequest} ReportBenchmarkResultRequest instance
+                     */
+                    ReportBenchmarkResultRequest.create = function create(properties) {
+                        return new ReportBenchmarkResultRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ReportBenchmarkResultRequest message. Does not implicitly {@link xsuportal.proto.services.bench.ReportBenchmarkResultRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest} message ReportBenchmarkResultRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ReportBenchmarkResultRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.jobId != null && Object.hasOwnProperty.call(message, "jobId"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.jobId);
+                        if (message.handle != null && Object.hasOwnProperty.call(message, "handle"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.handle);
+                        if (message.result != null && Object.hasOwnProperty.call(message, "result"))
+                            $root.xsuportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ReportBenchmarkResultRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.bench.ReportBenchmarkResultRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest} message ReportBenchmarkResultRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ReportBenchmarkResultRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ReportBenchmarkResultRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.bench.ReportBenchmarkResultRequest} ReportBenchmarkResultRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ReportBenchmarkResultRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.bench.ReportBenchmarkResultRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.jobId = reader.int64();
+                                break;
+                            case 2:
+                                message.handle = reader.string();
+                                break;
+                            case 3:
+                                message.result = $root.xsuportal.proto.resources.BenchmarkResult.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ReportBenchmarkResultRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.bench.ReportBenchmarkResultRequest} ReportBenchmarkResultRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ReportBenchmarkResultRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ReportBenchmarkResultRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ReportBenchmarkResultRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.jobId != null && message.hasOwnProperty("jobId"))
+                            if (!$util.isInteger(message.jobId) && !(message.jobId && $util.isInteger(message.jobId.low) && $util.isInteger(message.jobId.high)))
+                                return "jobId: integer|Long expected";
+                        if (message.handle != null && message.hasOwnProperty("handle"))
+                            if (!$util.isString(message.handle))
+                                return "handle: string expected";
+                        if (message.result != null && message.hasOwnProperty("result")) {
+                            var error = $root.xsuportal.proto.resources.BenchmarkResult.verify(message.result);
+                            if (error)
+                                return "result." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ReportBenchmarkResultRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.bench.ReportBenchmarkResultRequest} ReportBenchmarkResultRequest
+                     */
+                    ReportBenchmarkResultRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.bench.ReportBenchmarkResultRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.bench.ReportBenchmarkResultRequest();
+                        if (object.jobId != null)
+                            if ($util.Long)
+                                (message.jobId = $util.Long.fromValue(object.jobId)).unsigned = false;
+                            else if (typeof object.jobId === "string")
+                                message.jobId = parseInt(object.jobId, 10);
+                            else if (typeof object.jobId === "number")
+                                message.jobId = object.jobId;
+                            else if (typeof object.jobId === "object")
+                                message.jobId = new $util.LongBits(object.jobId.low >>> 0, object.jobId.high >>> 0).toNumber();
+                        if (object.handle != null)
+                            message.handle = String(object.handle);
+                        if (object.result != null) {
+                            if (typeof object.result !== "object")
+                                throw TypeError(".xsuportal.proto.services.bench.ReportBenchmarkResultRequest.result: object expected");
+                            message.result = $root.xsuportal.proto.resources.BenchmarkResult.fromObject(object.result);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ReportBenchmarkResultRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.ReportBenchmarkResultRequest} message ReportBenchmarkResultRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ReportBenchmarkResultRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.jobId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.jobId = options.longs === String ? "0" : 0;
+                            object.handle = "";
+                            object.result = null;
+                        }
+                        if (message.jobId != null && message.hasOwnProperty("jobId"))
+                            if (typeof message.jobId === "number")
+                                object.jobId = options.longs === String ? String(message.jobId) : message.jobId;
+                            else
+                                object.jobId = options.longs === String ? $util.Long.prototype.toString.call(message.jobId) : options.longs === Number ? new $util.LongBits(message.jobId.low >>> 0, message.jobId.high >>> 0).toNumber() : message.jobId;
+                        if (message.handle != null && message.hasOwnProperty("handle"))
+                            object.handle = message.handle;
+                        if (message.result != null && message.hasOwnProperty("result"))
+                            object.result = $root.xsuportal.proto.resources.BenchmarkResult.toObject(message.result, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ReportBenchmarkResultRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ReportBenchmarkResultRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ReportBenchmarkResultRequest;
+                })();
+
+                bench.ReportBenchmarkResultResponse = (function() {
+
+                    /**
+                     * Properties of a ReportBenchmarkResultResponse.
+                     * @memberof xsuportal.proto.services.bench
+                     * @interface IReportBenchmarkResultResponse
+                     */
+
+                    /**
+                     * Constructs a new ReportBenchmarkResultResponse.
+                     * @memberof xsuportal.proto.services.bench
+                     * @classdesc Represents a ReportBenchmarkResultResponse.
+                     * @implements IReportBenchmarkResultResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultResponse=} [properties] Properties to set
+                     */
+                    function ReportBenchmarkResultResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new ReportBenchmarkResultResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.bench.ReportBenchmarkResultResponse} ReportBenchmarkResultResponse instance
+                     */
+                    ReportBenchmarkResultResponse.create = function create(properties) {
+                        return new ReportBenchmarkResultResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ReportBenchmarkResultResponse message. Does not implicitly {@link xsuportal.proto.services.bench.ReportBenchmarkResultResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultResponse} message ReportBenchmarkResultResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ReportBenchmarkResultResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ReportBenchmarkResultResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.bench.ReportBenchmarkResultResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultResponse} message ReportBenchmarkResultResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ReportBenchmarkResultResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ReportBenchmarkResultResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.bench.ReportBenchmarkResultResponse} ReportBenchmarkResultResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ReportBenchmarkResultResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.bench.ReportBenchmarkResultResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ReportBenchmarkResultResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.bench.ReportBenchmarkResultResponse} ReportBenchmarkResultResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ReportBenchmarkResultResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ReportBenchmarkResultResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ReportBenchmarkResultResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ReportBenchmarkResultResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.bench.ReportBenchmarkResultResponse} ReportBenchmarkResultResponse
+                     */
+                    ReportBenchmarkResultResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.bench.ReportBenchmarkResultResponse)
+                            return object;
+                        return new $root.xsuportal.proto.services.bench.ReportBenchmarkResultResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from a ReportBenchmarkResultResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.ReportBenchmarkResultResponse} message ReportBenchmarkResultResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ReportBenchmarkResultResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this ReportBenchmarkResultResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ReportBenchmarkResultResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ReportBenchmarkResultResponse;
+                })();
+
+                return bench;
+            })();
+
+            services.common = (function() {
+
+                /**
+                 * Namespace common.
+                 * @memberof xsuportal.proto.services
+                 * @namespace
+                 */
+                var common = {};
+
+                common.GetCurrentSessionRequest = (function() {
+
+                    /**
+                     * Properties of a GetCurrentSessionRequest.
+                     * @memberof xsuportal.proto.services.common
+                     * @interface IGetCurrentSessionRequest
+                     */
+
+                    /**
+                     * Constructs a new GetCurrentSessionRequest.
+                     * @memberof xsuportal.proto.services.common
+                     * @classdesc Represents a GetCurrentSessionRequest.
+                     * @implements IGetCurrentSessionRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest=} [properties] Properties to set
+                     */
+                    function GetCurrentSessionRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new GetCurrentSessionRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @static
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest instance
+                     */
+                    GetCurrentSessionRequest.create = function create(properties) {
+                        return new GetCurrentSessionRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetCurrentSessionRequest message. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @static
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest} message GetCurrentSessionRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetCurrentSessionRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetCurrentSessionRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @static
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionRequest} message GetCurrentSessionRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetCurrentSessionRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetCurrentSessionRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetCurrentSessionRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.common.GetCurrentSessionRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetCurrentSessionRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetCurrentSessionRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetCurrentSessionRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetCurrentSessionRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetCurrentSessionRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionRequest} GetCurrentSessionRequest
+                     */
+                    GetCurrentSessionRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.common.GetCurrentSessionRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.common.GetCurrentSessionRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a GetCurrentSessionRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @static
+                     * @param {xsuportal.proto.services.common.GetCurrentSessionRequest} message GetCurrentSessionRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetCurrentSessionRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this GetCurrentSessionRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetCurrentSessionRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetCurrentSessionRequest;
+                })();
+
+                common.GetCurrentSessionResponse = (function() {
+
+                    /**
+                     * Properties of a GetCurrentSessionResponse.
+                     * @memberof xsuportal.proto.services.common
+                     * @interface IGetCurrentSessionResponse
+                     * @property {xsuportal.proto.resources.ITeam|null} [team] GetCurrentSessionResponse team
+                     * @property {xsuportal.proto.resources.IContestant|null} [contestant] GetCurrentSessionResponse contestant
+                     * @property {string|null} [discordServerId] GetCurrentSessionResponse discordServerId
+                     */
+
+                    /**
+                     * Constructs a new GetCurrentSessionResponse.
+                     * @memberof xsuportal.proto.services.common
+                     * @classdesc Represents a GetCurrentSessionResponse.
+                     * @implements IGetCurrentSessionResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse=} [properties] Properties to set
+                     */
+                    function GetCurrentSessionResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetCurrentSessionResponse team.
+                     * @member {xsuportal.proto.resources.ITeam|null|undefined} team
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @instance
+                     */
+                    GetCurrentSessionResponse.prototype.team = null;
+
+                    /**
+                     * GetCurrentSessionResponse contestant.
+                     * @member {xsuportal.proto.resources.IContestant|null|undefined} contestant
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @instance
+                     */
+                    GetCurrentSessionResponse.prototype.contestant = null;
+
+                    /**
+                     * GetCurrentSessionResponse discordServerId.
+                     * @member {string} discordServerId
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @instance
+                     */
+                    GetCurrentSessionResponse.prototype.discordServerId = "";
+
+                    /**
+                     * Creates a new GetCurrentSessionResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse instance
+                     */
+                    GetCurrentSessionResponse.create = function create(properties) {
+                        return new GetCurrentSessionResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetCurrentSessionResponse message. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse} message GetCurrentSessionResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetCurrentSessionResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.team != null && Object.hasOwnProperty.call(message, "team"))
+                            $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        if (message.contestant != null && Object.hasOwnProperty.call(message, "contestant"))
+                            $root.xsuportal.proto.resources.Contestant.encode(message.contestant, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                        if (message.discordServerId != null && Object.hasOwnProperty.call(message, "discordServerId"))
+                            writer.uint32(/* id 3, wireType 2 =*/26).string(message.discordServerId);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetCurrentSessionResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.GetCurrentSessionResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.IGetCurrentSessionResponse} message GetCurrentSessionResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetCurrentSessionResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetCurrentSessionResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetCurrentSessionResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.common.GetCurrentSessionResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
+                                break;
+                            case 2:
+                                message.contestant = $root.xsuportal.proto.resources.Contestant.decode(reader, reader.uint32());
+                                break;
+                            case 3:
+                                message.discordServerId = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetCurrentSessionResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetCurrentSessionResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetCurrentSessionResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetCurrentSessionResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.team != null && message.hasOwnProperty("team")) {
+                            var error = $root.xsuportal.proto.resources.Team.verify(message.team);
+                            if (error)
+                                return "team." + error;
+                        }
+                        if (message.contestant != null && message.hasOwnProperty("contestant")) {
+                            var error = $root.xsuportal.proto.resources.Contestant.verify(message.contestant);
+                            if (error)
+                                return "contestant." + error;
+                        }
+                        if (message.discordServerId != null && message.hasOwnProperty("discordServerId"))
+                            if (!$util.isString(message.discordServerId))
+                                return "discordServerId: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetCurrentSessionResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.common.GetCurrentSessionResponse} GetCurrentSessionResponse
+                     */
+                    GetCurrentSessionResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.common.GetCurrentSessionResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.common.GetCurrentSessionResponse();
+                        if (object.team != null) {
+                            if (typeof object.team !== "object")
+                                throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.team: object expected");
+                            message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
+                        }
+                        if (object.contestant != null) {
+                            if (typeof object.contestant !== "object")
+                                throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.contestant: object expected");
+                            message.contestant = $root.xsuportal.proto.resources.Contestant.fromObject(object.contestant);
+                        }
+                        if (object.discordServerId != null)
+                            message.discordServerId = String(object.discordServerId);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetCurrentSessionResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.GetCurrentSessionResponse} message GetCurrentSessionResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetCurrentSessionResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.team = null;
+                            object.contestant = null;
+                            object.discordServerId = "";
+                        }
+                        if (message.team != null && message.hasOwnProperty("team"))
+                            object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
+                        if (message.contestant != null && message.hasOwnProperty("contestant"))
+                            object.contestant = $root.xsuportal.proto.resources.Contestant.toObject(message.contestant, options);
+                        if (message.discordServerId != null && message.hasOwnProperty("discordServerId"))
+                            object.discordServerId = message.discordServerId;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetCurrentSessionResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetCurrentSessionResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetCurrentSessionResponse;
+                })();
+
+                return common;
+            })();
+
+            services.dcim = (function() {
+
+                /**
+                 * Namespace dcim.
+                 * @memberof xsuportal.proto.services
+                 * @namespace
+                 */
+                var dcim = {};
+
+                dcim.InstanceManagementService = (function() {
+
+                    /**
+                     * Constructs a new InstanceManagementService service.
+                     * @memberof xsuportal.proto.services.dcim
+                     * @classdesc Represents an InstanceManagementService
+                     * @extends $protobuf.rpc.Service
+                     * @constructor
+                     * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                     * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                     * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                     */
+                    function InstanceManagementService(rpcImpl, requestDelimited, responseDelimited) {
+                        $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                    }
+
+                    (InstanceManagementService.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = InstanceManagementService;
+
+                    /**
+                     * Creates new InstanceManagementService service using the specified rpc implementation.
+                     * @function create
+                     * @memberof xsuportal.proto.services.dcim.InstanceManagementService
+                     * @static
+                     * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                     * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                     * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                     * @returns {InstanceManagementService} RPC service. Useful where requests and/or responses are streamed.
+                     */
+                    InstanceManagementService.create = function create(rpcImpl, requestDelimited, responseDelimited) {
+                        return new this(rpcImpl, requestDelimited, responseDelimited);
+                    };
+
+                    /**
+                     * Callback as used by {@link xsuportal.proto.services.dcim.InstanceManagementService#informInstanceStateUpdate}.
+                     * @memberof xsuportal.proto.services.dcim.InstanceManagementService
+                     * @typedef InformInstanceStateUpdateCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse} [response] InformInstanceStateUpdateResponse
+                     */
+
+                    /**
+                     * Calls InformInstanceStateUpdate.
+                     * @function informInstanceStateUpdate
+                     * @memberof xsuportal.proto.services.dcim.InstanceManagementService
+                     * @instance
+                     * @param {xsuportal.proto.services.dcim.IInformInstanceStateUpdateRequest} request InformInstanceStateUpdateRequest message or plain object
+                     * @param {xsuportal.proto.services.dcim.InstanceManagementService.InformInstanceStateUpdateCallback} callback Node-style callback called with the error, if any, and InformInstanceStateUpdateResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(InstanceManagementService.prototype.informInstanceStateUpdate = function informInstanceStateUpdate(request, callback) {
+                        return this.rpcCall(informInstanceStateUpdate, $root.xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest, $root.xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse, request, callback);
+                    }, "name", { value: "InformInstanceStateUpdate" });
+
+                    /**
+                     * Calls InformInstanceStateUpdate.
+                     * @function informInstanceStateUpdate
+                     * @memberof xsuportal.proto.services.dcim.InstanceManagementService
+                     * @instance
+                     * @param {xsuportal.proto.services.dcim.IInformInstanceStateUpdateRequest} request InformInstanceStateUpdateRequest message or plain object
+                     * @returns {Promise<xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse>} Promise
+                     * @variation 2
+                     */
+
+                    return InstanceManagementService;
+                })();
+
+                dcim.InformInstanceStateUpdateRequest = (function() {
+
+                    /**
+                     * Properties of an InformInstanceStateUpdateRequest.
+                     * @memberof xsuportal.proto.services.dcim
+                     * @interface IInformInstanceStateUpdateRequest
+                     * @property {string|null} [token] InformInstanceStateUpdateRequest token
+                     * @property {xsuportal.proto.resources.IContestantInstance|null} [instance] InformInstanceStateUpdateRequest instance
+                     */
+
+                    /**
+                     * Constructs a new InformInstanceStateUpdateRequest.
+                     * @memberof xsuportal.proto.services.dcim
+                     * @classdesc Represents an InformInstanceStateUpdateRequest.
+                     * @implements IInformInstanceStateUpdateRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.dcim.IInformInstanceStateUpdateRequest=} [properties] Properties to set
+                     */
+                    function InformInstanceStateUpdateRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * InformInstanceStateUpdateRequest token.
+                     * @member {string} token
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @instance
+                     */
+                    InformInstanceStateUpdateRequest.prototype.token = "";
+
+                    /**
+                     * InformInstanceStateUpdateRequest instance.
+                     * @member {xsuportal.proto.resources.IContestantInstance|null|undefined} instance
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @instance
+                     */
+                    InformInstanceStateUpdateRequest.prototype.instance = null;
+
+                    /**
+                     * Creates a new InformInstanceStateUpdateRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @static
+                     * @param {xsuportal.proto.services.dcim.IInformInstanceStateUpdateRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest} InformInstanceStateUpdateRequest instance
+                     */
+                    InformInstanceStateUpdateRequest.create = function create(properties) {
+                        return new InformInstanceStateUpdateRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified InformInstanceStateUpdateRequest message. Does not implicitly {@link xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @static
+                     * @param {xsuportal.proto.services.dcim.IInformInstanceStateUpdateRequest} message InformInstanceStateUpdateRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    InformInstanceStateUpdateRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.token != null && Object.hasOwnProperty.call(message, "token"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.token);
+                        if (message.instance != null && Object.hasOwnProperty.call(message, "instance"))
+                            $root.xsuportal.proto.resources.ContestantInstance.encode(message.instance, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified InformInstanceStateUpdateRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @static
+                     * @param {xsuportal.proto.services.dcim.IInformInstanceStateUpdateRequest} message InformInstanceStateUpdateRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    InformInstanceStateUpdateRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an InformInstanceStateUpdateRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest} InformInstanceStateUpdateRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    InformInstanceStateUpdateRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.token = reader.string();
+                                break;
+                            case 2:
+                                message.instance = $root.xsuportal.proto.resources.ContestantInstance.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an InformInstanceStateUpdateRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest} InformInstanceStateUpdateRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    InformInstanceStateUpdateRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an InformInstanceStateUpdateRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    InformInstanceStateUpdateRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.token != null && message.hasOwnProperty("token"))
+                            if (!$util.isString(message.token))
+                                return "token: string expected";
+                        if (message.instance != null && message.hasOwnProperty("instance")) {
+                            var error = $root.xsuportal.proto.resources.ContestantInstance.verify(message.instance);
+                            if (error)
+                                return "instance." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an InformInstanceStateUpdateRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest} InformInstanceStateUpdateRequest
+                     */
+                    InformInstanceStateUpdateRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest();
+                        if (object.token != null)
+                            message.token = String(object.token);
+                        if (object.instance != null) {
+                            if (typeof object.instance !== "object")
+                                throw TypeError(".xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest.instance: object expected");
+                            message.instance = $root.xsuportal.proto.resources.ContestantInstance.fromObject(object.instance);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an InformInstanceStateUpdateRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @static
+                     * @param {xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest} message InformInstanceStateUpdateRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    InformInstanceStateUpdateRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.token = "";
+                            object.instance = null;
+                        }
+                        if (message.token != null && message.hasOwnProperty("token"))
+                            object.token = message.token;
+                        if (message.instance != null && message.hasOwnProperty("instance"))
+                            object.instance = $root.xsuportal.proto.resources.ContestantInstance.toObject(message.instance, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this InformInstanceStateUpdateRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    InformInstanceStateUpdateRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return InformInstanceStateUpdateRequest;
+                })();
+
+                dcim.InformInstanceStateUpdateResponse = (function() {
+
+                    /**
+                     * Properties of an InformInstanceStateUpdateResponse.
+                     * @memberof xsuportal.proto.services.dcim
+                     * @interface IInformInstanceStateUpdateResponse
+                     */
+
+                    /**
+                     * Constructs a new InformInstanceStateUpdateResponse.
+                     * @memberof xsuportal.proto.services.dcim
+                     * @classdesc Represents an InformInstanceStateUpdateResponse.
+                     * @implements IInformInstanceStateUpdateResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.dcim.IInformInstanceStateUpdateResponse=} [properties] Properties to set
+                     */
+                    function InformInstanceStateUpdateResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new InformInstanceStateUpdateResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse
+                     * @static
+                     * @param {xsuportal.proto.services.dcim.IInformInstanceStateUpdateResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse} InformInstanceStateUpdateResponse instance
+                     */
+                    InformInstanceStateUpdateResponse.create = function create(properties) {
+                        return new InformInstanceStateUpdateResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified InformInstanceStateUpdateResponse message. Does not implicitly {@link xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse
+                     * @static
+                     * @param {xsuportal.proto.services.dcim.IInformInstanceStateUpdateResponse} message InformInstanceStateUpdateResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    InformInstanceStateUpdateResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified InformInstanceStateUpdateResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse
+                     * @static
+                     * @param {xsuportal.proto.services.dcim.IInformInstanceStateUpdateResponse} message InformInstanceStateUpdateResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    InformInstanceStateUpdateResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an InformInstanceStateUpdateResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse} InformInstanceStateUpdateResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    InformInstanceStateUpdateResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an InformInstanceStateUpdateResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse} InformInstanceStateUpdateResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    InformInstanceStateUpdateResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an InformInstanceStateUpdateResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    InformInstanceStateUpdateResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an InformInstanceStateUpdateResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse} InformInstanceStateUpdateResponse
+                     */
+                    InformInstanceStateUpdateResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse)
+                            return object;
+                        return new $root.xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from an InformInstanceStateUpdateResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse
+                     * @static
+                     * @param {xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse} message InformInstanceStateUpdateResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    InformInstanceStateUpdateResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this InformInstanceStateUpdateResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.dcim.InformInstanceStateUpdateResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    InformInstanceStateUpdateResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return InformInstanceStateUpdateResponse;
+                })();
+
+                return dcim;
             })();
 
             services.registration = (function() {
@@ -8217,6 +9806,338 @@ $root.xsuportal = (function() {
             })();
 
             return services;
+        })();
+
+        proto.common = (function() {
+
+            /**
+             * Namespace common.
+             * @memberof xsuportal.proto
+             * @namespace
+             */
+            var common = {};
+
+            common.DashboardRequest = (function() {
+
+                /**
+                 * Properties of a DashboardRequest.
+                 * @memberof xsuportal.proto.common
+                 * @interface IDashboardRequest
+                 */
+
+                /**
+                 * Constructs a new DashboardRequest.
+                 * @memberof xsuportal.proto.common
+                 * @classdesc Represents a DashboardRequest.
+                 * @implements IDashboardRequest
+                 * @constructor
+                 * @param {xsuportal.proto.common.IDashboardRequest=} [properties] Properties to set
+                 */
+                function DashboardRequest(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Creates a new DashboardRequest instance using the specified properties.
+                 * @function create
+                 * @memberof xsuportal.proto.common.DashboardRequest
+                 * @static
+                 * @param {xsuportal.proto.common.IDashboardRequest=} [properties] Properties to set
+                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest instance
+                 */
+                DashboardRequest.create = function create(properties) {
+                    return new DashboardRequest(properties);
+                };
+
+                /**
+                 * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
+                 * @function encode
+                 * @memberof xsuportal.proto.common.DashboardRequest
+                 * @static
+                 * @param {xsuportal.proto.common.IDashboardRequest} message DashboardRequest message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                DashboardRequest.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof xsuportal.proto.common.DashboardRequest
+                 * @static
+                 * @param {xsuportal.proto.common.IDashboardRequest} message DashboardRequest message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                DashboardRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a DashboardRequest message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof xsuportal.proto.common.DashboardRequest
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                DashboardRequest.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.common.DashboardRequest();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof xsuportal.proto.common.DashboardRequest
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                DashboardRequest.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a DashboardRequest message.
+                 * @function verify
+                 * @memberof xsuportal.proto.common.DashboardRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DashboardRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof xsuportal.proto.common.DashboardRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
+                 */
+                DashboardRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.xsuportal.proto.common.DashboardRequest)
+                        return object;
+                    return new $root.xsuportal.proto.common.DashboardRequest();
+                };
+
+                /**
+                 * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof xsuportal.proto.common.DashboardRequest
+                 * @static
+                 * @param {xsuportal.proto.common.DashboardRequest} message DashboardRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DashboardRequest.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DashboardRequest to JSON.
+                 * @function toJSON
+                 * @memberof xsuportal.proto.common.DashboardRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DashboardRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DashboardRequest;
+            })();
+
+            common.DashboardResponse = (function() {
+
+                /**
+                 * Properties of a DashboardResponse.
+                 * @memberof xsuportal.proto.common
+                 * @interface IDashboardResponse
+                 */
+
+                /**
+                 * Constructs a new DashboardResponse.
+                 * @memberof xsuportal.proto.common
+                 * @classdesc Represents a DashboardResponse.
+                 * @implements IDashboardResponse
+                 * @constructor
+                 * @param {xsuportal.proto.common.IDashboardResponse=} [properties] Properties to set
+                 */
+                function DashboardResponse(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Creates a new DashboardResponse instance using the specified properties.
+                 * @function create
+                 * @memberof xsuportal.proto.common.DashboardResponse
+                 * @static
+                 * @param {xsuportal.proto.common.IDashboardResponse=} [properties] Properties to set
+                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse instance
+                 */
+                DashboardResponse.create = function create(properties) {
+                    return new DashboardResponse(properties);
+                };
+
+                /**
+                 * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
+                 * @function encode
+                 * @memberof xsuportal.proto.common.DashboardResponse
+                 * @static
+                 * @param {xsuportal.proto.common.IDashboardResponse} message DashboardResponse message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                DashboardResponse.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof xsuportal.proto.common.DashboardResponse
+                 * @static
+                 * @param {xsuportal.proto.common.IDashboardResponse} message DashboardResponse message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                DashboardResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a DashboardResponse message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof xsuportal.proto.common.DashboardResponse
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                DashboardResponse.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.common.DashboardResponse();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof xsuportal.proto.common.DashboardResponse
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                DashboardResponse.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a DashboardResponse message.
+                 * @function verify
+                 * @memberof xsuportal.proto.common.DashboardResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DashboardResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof xsuportal.proto.common.DashboardResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
+                 */
+                DashboardResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.xsuportal.proto.common.DashboardResponse)
+                        return object;
+                    return new $root.xsuportal.proto.common.DashboardResponse();
+                };
+
+                /**
+                 * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof xsuportal.proto.common.DashboardResponse
+                 * @static
+                 * @param {xsuportal.proto.common.DashboardResponse} message DashboardResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DashboardResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DashboardResponse to JSON.
+                 * @function toJSON
+                 * @memberof xsuportal.proto.common.DashboardResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DashboardResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DashboardResponse;
+            })();
+
+            return common;
         })();
 
         return proto;

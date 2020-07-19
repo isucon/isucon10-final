@@ -23,6 +23,10 @@ module Xsuportal
       erb :registration
     end
 
+    get '/signup' do
+      erb :signup
+    end
+
     get '/api/session' do
       t = Proto::Services::Common::GetCurrentSessionResponse
       t.encode(t.new)
