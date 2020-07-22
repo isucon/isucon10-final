@@ -1671,8 +1671,8 @@ export namespace xsuportal {
                 /** Properties of a SignupRequest. */
                 interface ISignupRequest {
 
-                    /** SignupRequest userId */
-                    userId?: (string|null);
+                    /** SignupRequest contestantId */
+                    contestantId?: (string|null);
 
                     /** SignupRequest password */
                     password?: (string|null);
@@ -1687,8 +1687,8 @@ export namespace xsuportal {
                      */
                     constructor(properties?: xsuportal.proto.services.account.ISignupRequest);
 
-                    /** SignupRequest userId. */
-                    public userId: string;
+                    /** SignupRequest contestantId. */
+                    public contestantId: string;
 
                     /** SignupRequest password. */
                     public password: string;

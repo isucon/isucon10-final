@@ -4543,7 +4543,7 @@ $root.xsuportal = (function() {
                      * Properties of a SignupRequest.
                      * @memberof xsuportal.proto.services.account
                      * @interface ISignupRequest
-                     * @property {string|null} [userId] SignupRequest userId
+                     * @property {string|null} [contestantId] SignupRequest contestantId
                      * @property {string|null} [password] SignupRequest password
                      */
 
@@ -4563,12 +4563,12 @@ $root.xsuportal = (function() {
                     }
 
                     /**
-                     * SignupRequest userId.
-                     * @member {string} userId
+                     * SignupRequest contestantId.
+                     * @member {string} contestantId
                      * @memberof xsuportal.proto.services.account.SignupRequest
                      * @instance
                      */
-                    SignupRequest.prototype.userId = "";
+                    SignupRequest.prototype.contestantId = "";
 
                     /**
                      * SignupRequest password.
@@ -4602,8 +4602,8 @@ $root.xsuportal = (function() {
                     SignupRequest.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
+                        if (message.contestantId != null && Object.hasOwnProperty.call(message, "contestantId"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.contestantId);
                         if (message.password != null && Object.hasOwnProperty.call(message, "password"))
                             writer.uint32(/* id 2, wireType 2 =*/18).string(message.password);
                         return writer;
@@ -4641,7 +4641,7 @@ $root.xsuportal = (function() {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
                             case 1:
-                                message.userId = reader.string();
+                                message.contestantId = reader.string();
                                 break;
                             case 2:
                                 message.password = reader.string();
@@ -4681,9 +4681,9 @@ $root.xsuportal = (function() {
                     SignupRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.userId != null && message.hasOwnProperty("userId"))
-                            if (!$util.isString(message.userId))
-                                return "userId: string expected";
+                        if (message.contestantId != null && message.hasOwnProperty("contestantId"))
+                            if (!$util.isString(message.contestantId))
+                                return "contestantId: string expected";
                         if (message.password != null && message.hasOwnProperty("password"))
                             if (!$util.isString(message.password))
                                 return "password: string expected";
@@ -4702,8 +4702,8 @@ $root.xsuportal = (function() {
                         if (object instanceof $root.xsuportal.proto.services.account.SignupRequest)
                             return object;
                         var message = new $root.xsuportal.proto.services.account.SignupRequest();
-                        if (object.userId != null)
-                            message.userId = String(object.userId);
+                        if (object.contestantId != null)
+                            message.contestantId = String(object.contestantId);
                         if (object.password != null)
                             message.password = String(object.password);
                         return message;
@@ -4723,11 +4723,11 @@ $root.xsuportal = (function() {
                             options = {};
                         var object = {};
                         if (options.defaults) {
-                            object.userId = "";
+                            object.contestantId = "";
                             object.password = "";
                         }
-                        if (message.userId != null && message.hasOwnProperty("userId"))
-                            object.userId = message.userId;
+                        if (message.contestantId != null && message.hasOwnProperty("contestantId"))
+                            object.contestantId = message.contestantId;
                         if (message.password != null && message.hasOwnProperty("password"))
                             object.password = message.password;
                         return object;

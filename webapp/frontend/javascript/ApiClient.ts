@@ -150,6 +150,23 @@ export class ApiClient {
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
+  public async signup(
+    payload: xsuportal.proto.services.account.ISignupRequest
+  ) {
+    const responseClass = xsuportal.proto.services.account.SignupResponse;
+    const payloadClass = xsuportal.proto.services.account.SignupRequest;
+    const payloadMessage = payload
+      ? payloadClass.encode(payloadClass.fromObject(payload)).finish()
+      : null;
+    const resp = await this.request(
+      `${this.baseUrl}/api/signup`,
+      "POST",
+      null,
+      payloadMessage
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
   public async request(
     path: string,
     method: string,

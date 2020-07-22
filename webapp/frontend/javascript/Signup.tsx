@@ -12,6 +12,9 @@ export interface Props {
 export interface State {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   error: Error | null;
+  contestantId: string;
+  password: string;
+  requesting: boolean;
 }
 
 export class Signup extends React.Component<Props, State> {
@@ -20,6 +23,9 @@ export class Signup extends React.Component<Props, State> {
     this.state = {
       session: this.props.session,
       error: null,
+      contestantId: "",
+      password: "",
+      requesting: false,
     };
   }
 
@@ -52,16 +58,17 @@ export class Signup extends React.Component<Props, State> {
     return (
       <>
         <div className="field">
-          <label className="label" htmlFor="fieldUserId">
-            ユーザID
+          <label className="label" htmlFor="fieldContestantId">
+            ログインID
           </label>
           <div className="control">
             <input
               className="input"
               type="text"
               required
-              id="fieldUserId"
-              name="userId"
+              id="fieldContestantId"
+              name="contestantId"
+              onChange={this.onChange.bind(this)}
             />
           </div>
         </div>
@@ -74,8 +81,9 @@ export class Signup extends React.Component<Props, State> {
               className="input"
               type="password"
               required
-              id="fieldUserId"
-              name="userId"
+              id="fieldContestantId"
+              name="contestantId"
+              onChange={this.onChange.bind(this)}
             />
           </div>
         </div>
@@ -88,5 +96,31 @@ export class Signup extends React.Component<Props, State> {
     );
   }
 
-  public onSubmit(event: React.FormEvent<HTMLFormElement>) {}
+  public onChange(event: React.FormEvent<HTMLInputElement>) {
+    const target = event.target as HTMLInputElement;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value as unknown,
+    } as Pick<State, keyof State>);
+  }
+
+  public async onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (this.state.requesting) return;
+    try {
+      this.setState({ requesting: true });
+      await this.signup();
+    } catch (err) {
+      this.setState({ requesting: false });
+    }
+  }
+
+  signup() {
+    return this.props.client.signup({
+      contestantId: this.state.contestantId,
+      password: this.state.password,
+    });
+  }
 }

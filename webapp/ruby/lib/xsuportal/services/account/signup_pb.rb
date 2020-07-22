@@ -6,7 +6,7 @@ require 'google/protobuf'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/services/account/signup.proto", :syntax => :proto3) do
     add_message "xsuportal.proto.services.account.SignupRequest" do
-      optional :user_id, :string, 1
+      optional :contestant_id, :string, 1
       optional :password, :string, 2
     end
     add_message "xsuportal.proto.services.account.SignupResponse" do
