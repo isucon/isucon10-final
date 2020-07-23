@@ -1,0 +1,17 @@
+syntax = "proto3";
+package xsuportal.proto.services.account;
+option go_package = "github.com/isucon/isucon10-final/proto/services/account";
+
+message LoginRequest {
+  string contestant_id = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  enum Status {
+    SUCCEEDED = 0;
+    FAILED = 1;
+  }
+  Status status = 1;
+  string error = 2;
+}

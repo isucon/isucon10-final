@@ -167,6 +167,21 @@ export class ApiClient {
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
+  public async login(payload: xsuportal.proto.services.account.ILoginRequest) {
+    const responseClass = xsuportal.proto.services.account.LoginResponse;
+    const payloadClass = xsuportal.proto.services.account.LoginRequest;
+    const payloadMessage = payload
+      ? payloadClass.encode(payloadClass.fromObject(payload)).finish()
+      : null;
+    const resp = await this.request(
+      `${this.baseUrl}/api/login`,
+      "POST",
+      null,
+      payloadMessage
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
   public async request(
     path: string,
     method: string,
