@@ -1,6 +1,7 @@
 import { xsuportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
+import { Redirect } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
 
@@ -15,6 +16,7 @@ export interface State {
   contestantId: string;
   password: string;
   requesting: boolean;
+  loginSucceeded: boolean;
 }
 
 export class Login extends React.Component<Props, State> {
@@ -26,23 +28,32 @@ export class Login extends React.Component<Props, State> {
       contestantId: "",
       password: "",
       requesting: false,
+      loginSucceeded: false,
     };
   }
 
   public componentDidMount() {}
 
   public render() {
-    return (
-      <>
-        <header>
-          <h1 className="title is-1">ログイン</h1>
-        </header>
-        <main>
-          {this.renderError()}
-          {this.renderForm()}
-        </main>
-      </>
-    );
+    if (this.state.loginSucceeded) {
+      return (
+        <>
+          <Redirect to="/"></Redirect>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <header>
+            <h1 className="title is-1">ログイン</h1>
+          </header>
+          <main>
+            {this.renderError()}
+            {this.renderForm()}
+          </main>
+        </>
+      );
+    }
   }
 
   public renderError() {
@@ -127,8 +138,7 @@ export class Login extends React.Component<Props, State> {
         xsuportal.proto.services.account.LoginResponse.Status.SUCCEEDED
       ) {
         console.log("login!");
-        // this.props.history.pushState(null, null, "/");
-        this.setState({ error: null });
+        this.setState({ loginSucceeded: true, error: null });
       } else {
         throw new Error(loginResponse.error);
       }
