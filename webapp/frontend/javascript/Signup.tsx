@@ -15,6 +15,7 @@ export interface State {
   contestantId: string;
   password: string;
   requesting: boolean;
+  signupSucceeded: boolean;
 }
 
 export class Signup extends React.Component<Props, State> {
@@ -26,6 +27,7 @@ export class Signup extends React.Component<Props, State> {
       contestantId: "",
       password: "",
       requesting: false,
+      signupSucceeded: false,
     };
   }
 
@@ -37,16 +39,28 @@ export class Signup extends React.Component<Props, State> {
         <header>
           <h1 className="title is-1">アカウント作成</h1>
         </header>
-        <main>{this.renderForm()}</main>
+        <main>
+          {this.renderError()}
+          {this.renderForm()}
+          {this.renderFinishMessage()}
+        </main>
       </>
     );
+  }
+
+  public renderError() {
+    if (!this.state.error) return;
+    return <ErrorMessage error={this.state.error} />;
   }
 
   public renderForm() {
     return (
       <>
-        <section className="mt-2">
-          <form onSubmit={this.onSubmit.bind(this)}>
+        <section
+          className="columns mt-2"
+          style={{ display: this.state.signupSucceeded ? "none" : "" }}
+        >
+          <form className="column is-half" onSubmit={this.onSubmit.bind(this)}>
             {this.renderFormFields()}
           </form>
         </section>
@@ -68,6 +82,7 @@ export class Signup extends React.Component<Props, State> {
               required
               id="fieldContestantId"
               name="contestantId"
+              autoComplete="username"
               onChange={this.onChange.bind(this)}
             />
           </div>
@@ -81,8 +96,9 @@ export class Signup extends React.Component<Props, State> {
               className="input"
               type="password"
               required
-              id="fieldContestantId"
-              name="contestantId"
+              id="fieldPassword"
+              name="password"
+              autoComplete="current-password"
               onChange={this.onChange.bind(this)}
             />
           </div>
@@ -92,6 +108,19 @@ export class Signup extends React.Component<Props, State> {
             <button className="button is-primary">送信</button>
           </div>
         </div>
+      </>
+    );
+  }
+
+  public renderFinishMessage() {
+    return (
+      <>
+        <section
+          className="message is-success mt-2"
+          style={{ display: this.state.signupSucceeded ? "" : "none" }}
+        >
+          <p className="message-body">アカウント作成が完了しました。</p>
+        </section>
       </>
     );
   }
@@ -111,8 +140,19 @@ export class Signup extends React.Component<Props, State> {
     if (this.state.requesting) return;
     try {
       this.setState({ requesting: true });
-      await this.signup();
+      const signupResponse = await this.signup();
+      if (
+        signupResponse.status ==
+        xsuportal.proto.services.account.SignupResponse.Status.SUCCEEDED
+      ) {
+        this.setState({ signupSucceeded: true, error: null });
+        await this.login();
+      } else {
+        throw new Error(signupResponse.error);
+      }
     } catch (err) {
+      this.setState({ error: err });
+    } finally {
       this.setState({ requesting: false });
     }
   }
@@ -122,5 +162,9 @@ export class Signup extends React.Component<Props, State> {
       contestantId: this.state.contestantId,
       password: this.state.password,
     });
+  }
+
+  login() {
+    console.debug("login");
   }
 }

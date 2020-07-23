@@ -10,6 +10,7 @@ end
 
 module Xsuportal
   class App < Sinatra::Base
+    MYSQL_ER_DUP_ENTRY = 1062
 
     configure :development do
       require 'sinatra/reloader'
@@ -75,6 +76,7 @@ module Xsuportal
 
     post '/api/signup' do
       req = decode_request Proto::Services::Account::SignupRequest
+      result = { status: :SUCCEEDED }
 
       begin
         db.xquery(
@@ -83,10 +85,17 @@ module Xsuportal
           Digest::SHA256.hexdigest(req.password)
         )
       rescue Mysql2::Error => e
-        raise e
+        if e.errno == MYSQL_ER_DUP_ENTRY
+          result = { status: :FAILED, error: 'IDが既に登録されています'}
+        else
+          raise e
+        end
       end
       
-      encode_response Proto::Services::Account::SignupResponse
+      encode_response(
+        Proto::Services::Account::SignupResponse,
+        result
+      )
     end
   end
 end

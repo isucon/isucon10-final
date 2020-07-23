@@ -1766,6 +1766,12 @@ export namespace xsuportal {
 
                 /** Properties of a SignupResponse. */
                 interface ISignupResponse {
+
+                    /** SignupResponse status */
+                    status?: (xsuportal.proto.services.account.SignupResponse.Status|null);
+
+                    /** SignupResponse error */
+                    error?: (string|null);
                 }
 
                 /** Represents a SignupResponse. */
@@ -1776,6 +1782,12 @@ export namespace xsuportal {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: xsuportal.proto.services.account.ISignupResponse);
+
+                    /** SignupResponse status. */
+                    public status: xsuportal.proto.services.account.SignupResponse.Status;
+
+                    /** SignupResponse error. */
+                    public error: string;
 
                     /**
                      * Creates a new SignupResponse instance using the specified properties.
@@ -1846,6 +1858,15 @@ export namespace xsuportal {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                namespace SignupResponse {
+
+                    /** Status enum. */
+                    enum Status {
+                        SUCCEEDED = 0,
+                        FAILED = 1
+                    }
                 }
             }
 

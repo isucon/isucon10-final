@@ -7,4 +7,11 @@ message SignupRequest {
   string password = 2;
 }
 
-message SignupResponse {}
+message SignupResponse {
+  enum Status {
+    SUCCEEDED = 0;
+    FAILED = 1;
+  }
+  Status status = 1;
+  string error = 2;
+}
