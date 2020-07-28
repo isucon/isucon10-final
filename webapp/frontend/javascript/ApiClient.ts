@@ -182,6 +182,23 @@ export class ApiClient {
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
+  public async logout(
+    payload: xsuportal.proto.services.account.ILogoutRequest
+  ) {
+    const responseClass = xsuportal.proto.services.account.LogoutResponse;
+    const payloadClass = xsuportal.proto.services.account.LogoutRequest;
+    const payloadMessage = payload
+      ? payloadClass.encode(payloadClass.fromObject(payload)).finish()
+      : null;
+    const resp = await this.request(
+      `${this.baseUrl}/api/logout`,
+      "POST",
+      null,
+      payloadMessage
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
   public async request(
     path: string,
     method: string,

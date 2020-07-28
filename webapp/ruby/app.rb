@@ -18,7 +18,7 @@ module Xsuportal
       register Sinatra::Reloader
       also_reload './utils.rb'
 
-      %w[/ /registration /signup /login].each do |path|
+      %w[/ /registration /signup /login /logout].each do |path|
         get path do
           File.read(File.join('public', 'index.html'))
         end
@@ -190,6 +190,23 @@ module Xsuportal
       
       encode_response(
         Proto::Services::Account::LoginResponse,
+        result
+      )
+    end
+
+    post '/api/logout' do
+      req = decode_request Proto::Services::Account::LogoutRequest
+      result = nil
+
+      if session[:contestant_id]
+        session.delete(:contestant_id)
+        result = { status: :SUCCEEDED }
+      else
+        result = { status: :FAILED, error: 'ログインしていません' }
+      end
+      
+      encode_response(
+        Proto::Services::Account::LogoutResponse,
         result
       )
     end

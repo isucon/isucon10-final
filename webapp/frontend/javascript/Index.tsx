@@ -7,6 +7,7 @@ import { ErrorMessage } from "./ErrorMessage";
 import { TeamList } from "./TeamList";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
+import { Logout } from "./Logout";
 import { Registration } from "./Registration";
 
 export interface Props {
@@ -17,6 +18,7 @@ export interface Props {
 export interface State {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   error: Error | null;
+  loggedin: boolean;
 }
 
 export class Index extends React.Component<Props, State> {
@@ -25,6 +27,7 @@ export class Index extends React.Component<Props, State> {
     this.state = {
       session: this.props.session,
       error: null,
+      loggedin: false,
     };
   }
 
@@ -59,31 +62,7 @@ export class Index extends React.Component<Props, State> {
                 </div>
                 <div className="navbar-end">
                   <div className="navbar-item">
-                    <div className="buttons">
-                      <div className="xsu-visibility-user">
-                        <Link className="button is-light" to="#">
-                          登録確認
-                        </Link>
-                        <Link
-                          className="button is-light"
-                          data-method="delete"
-                          to="#"
-                        >
-                          ログアウト
-                        </Link>
-                      </div>
-                      <div className="xsu-visibility-guest">
-                        <Link className="button is-light" to="/registration">
-                          参加登録
-                        </Link>
-                        <Link className="button is-light" to="/login">
-                          ログイン
-                        </Link>
-                        <Link className="button is-light" to="/signup">
-                          アカウント作成
-                        </Link>
-                      </div>
-                    </div>
+                    <div className="buttons">{this.renderNavbarButtons()}</div>
                   </div>
                 </div>
               </div>
@@ -102,6 +81,14 @@ export class Index extends React.Component<Props, State> {
                 <Login
                   session={this.props.session}
                   client={this.props.client}
+                  root={this}
+                />
+              </Route>
+              <Route path="/logout">
+                <Logout
+                  session={this.props.session}
+                  client={this.props.client}
+                  root={this}
                 />
               </Route>
               <Route path="/signup">
@@ -121,5 +108,38 @@ export class Index extends React.Component<Props, State> {
         </Router>
       </>
     );
+  }
+
+  public renderNavbarButtons() {
+    if (this.state.loggedin) {
+      return (
+        <>
+          <div>
+            <Link className="button is-light" to="#">
+              登録確認
+            </Link>
+            <Link className="button is-light" to="/logout">
+              ログアウト
+            </Link>
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <div>
+            <Link className="button is-light" to="/registration">
+              参加登録
+            </Link>
+            <Link className="button is-light" to="/login">
+              ログイン
+            </Link>
+            <Link className="button is-light" to="/signup">
+              アカウント作成
+            </Link>
+          </div>
+        </>
+      );
+    }
   }
 }

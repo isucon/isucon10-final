@@ -4,10 +4,12 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
+import { Index } from "./Index";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
+  root: Index;
 }
 
 export interface State {
@@ -137,7 +139,7 @@ export class Login extends React.Component<Props, State> {
         loginResponse.status ==
         xsuportal.proto.services.account.LoginResponse.Status.SUCCEEDED
       ) {
-        console.log("login!");
+        this.props.root.setState({ loggedin: true });
         this.setState({ loginSucceeded: true, error: null });
       } else {
         throw new Error(loginResponse.error);

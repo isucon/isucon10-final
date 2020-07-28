@@ -1869,6 +1869,195 @@ export namespace xsuportal {
                     }
                 }
 
+                /** Properties of a LogoutRequest. */
+                interface ILogoutRequest {
+                }
+
+                /** Represents a LogoutRequest. */
+                class LogoutRequest implements ILogoutRequest {
+
+                    /**
+                     * Constructs a new LogoutRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.account.ILogoutRequest);
+
+                    /**
+                     * Creates a new LogoutRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns LogoutRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.account.ILogoutRequest): xsuportal.proto.services.account.LogoutRequest;
+
+                    /**
+                     * Encodes the specified LogoutRequest message. Does not implicitly {@link xsuportal.proto.services.account.LogoutRequest.verify|verify} messages.
+                     * @param message LogoutRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.account.ILogoutRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified LogoutRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LogoutRequest.verify|verify} messages.
+                     * @param message LogoutRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.account.ILogoutRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a LogoutRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns LogoutRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.account.LogoutRequest;
+
+                    /**
+                     * Decodes a LogoutRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns LogoutRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.account.LogoutRequest;
+
+                    /**
+                     * Verifies a LogoutRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LogoutRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LogoutRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.account.LogoutRequest;
+
+                    /**
+                     * Creates a plain object from a LogoutRequest message. Also converts values to other types if specified.
+                     * @param message LogoutRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.account.LogoutRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LogoutRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a LogoutResponse. */
+                interface ILogoutResponse {
+
+                    /** LogoutResponse status */
+                    status?: (xsuportal.proto.services.account.LogoutResponse.Status|null);
+
+                    /** LogoutResponse error */
+                    error?: (string|null);
+                }
+
+                /** Represents a LogoutResponse. */
+                class LogoutResponse implements ILogoutResponse {
+
+                    /**
+                     * Constructs a new LogoutResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.account.ILogoutResponse);
+
+                    /** LogoutResponse status. */
+                    public status: xsuportal.proto.services.account.LogoutResponse.Status;
+
+                    /** LogoutResponse error. */
+                    public error: string;
+
+                    /**
+                     * Creates a new LogoutResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns LogoutResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.account.ILogoutResponse): xsuportal.proto.services.account.LogoutResponse;
+
+                    /**
+                     * Encodes the specified LogoutResponse message. Does not implicitly {@link xsuportal.proto.services.account.LogoutResponse.verify|verify} messages.
+                     * @param message LogoutResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.account.ILogoutResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified LogoutResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LogoutResponse.verify|verify} messages.
+                     * @param message LogoutResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.account.ILogoutResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a LogoutResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns LogoutResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.account.LogoutResponse;
+
+                    /**
+                     * Decodes a LogoutResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns LogoutResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.account.LogoutResponse;
+
+                    /**
+                     * Verifies a LogoutResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LogoutResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LogoutResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.account.LogoutResponse;
+
+                    /**
+                     * Creates a plain object from a LogoutResponse message. Also converts values to other types if specified.
+                     * @param message LogoutResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.account.LogoutResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LogoutResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace LogoutResponse {
+
+                    /** Status enum. */
+                    enum Status {
+                        SUCCEEDED = 0,
+                        FAILED = 1
+                    }
+                }
+
                 /** Properties of a SignupRequest. */
                 interface ISignupRequest {
 

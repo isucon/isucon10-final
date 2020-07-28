@@ -4970,6 +4970,403 @@ $root.xsuportal = (function() {
                     return LoginResponse;
                 })();
 
+                account.LogoutRequest = (function() {
+
+                    /**
+                     * Properties of a LogoutRequest.
+                     * @memberof xsuportal.proto.services.account
+                     * @interface ILogoutRequest
+                     */
+
+                    /**
+                     * Constructs a new LogoutRequest.
+                     * @memberof xsuportal.proto.services.account
+                     * @classdesc Represents a LogoutRequest.
+                     * @implements ILogoutRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.account.ILogoutRequest=} [properties] Properties to set
+                     */
+                    function LogoutRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new LogoutRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.account.LogoutRequest
+                     * @static
+                     * @param {xsuportal.proto.services.account.ILogoutRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.account.LogoutRequest} LogoutRequest instance
+                     */
+                    LogoutRequest.create = function create(properties) {
+                        return new LogoutRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified LogoutRequest message. Does not implicitly {@link xsuportal.proto.services.account.LogoutRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.account.LogoutRequest
+                     * @static
+                     * @param {xsuportal.proto.services.account.ILogoutRequest} message LogoutRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LogoutRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified LogoutRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LogoutRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.account.LogoutRequest
+                     * @static
+                     * @param {xsuportal.proto.services.account.ILogoutRequest} message LogoutRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LogoutRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a LogoutRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.account.LogoutRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.account.LogoutRequest} LogoutRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LogoutRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.account.LogoutRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a LogoutRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.account.LogoutRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.account.LogoutRequest} LogoutRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LogoutRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a LogoutRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.account.LogoutRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    LogoutRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a LogoutRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.account.LogoutRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.account.LogoutRequest} LogoutRequest
+                     */
+                    LogoutRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.account.LogoutRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.account.LogoutRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a LogoutRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.account.LogoutRequest
+                     * @static
+                     * @param {xsuportal.proto.services.account.LogoutRequest} message LogoutRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    LogoutRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this LogoutRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.account.LogoutRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    LogoutRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return LogoutRequest;
+                })();
+
+                account.LogoutResponse = (function() {
+
+                    /**
+                     * Properties of a LogoutResponse.
+                     * @memberof xsuportal.proto.services.account
+                     * @interface ILogoutResponse
+                     * @property {xsuportal.proto.services.account.LogoutResponse.Status|null} [status] LogoutResponse status
+                     * @property {string|null} [error] LogoutResponse error
+                     */
+
+                    /**
+                     * Constructs a new LogoutResponse.
+                     * @memberof xsuportal.proto.services.account
+                     * @classdesc Represents a LogoutResponse.
+                     * @implements ILogoutResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.account.ILogoutResponse=} [properties] Properties to set
+                     */
+                    function LogoutResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * LogoutResponse status.
+                     * @member {xsuportal.proto.services.account.LogoutResponse.Status} status
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @instance
+                     */
+                    LogoutResponse.prototype.status = 0;
+
+                    /**
+                     * LogoutResponse error.
+                     * @member {string} error
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @instance
+                     */
+                    LogoutResponse.prototype.error = "";
+
+                    /**
+                     * Creates a new LogoutResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @static
+                     * @param {xsuportal.proto.services.account.ILogoutResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.account.LogoutResponse} LogoutResponse instance
+                     */
+                    LogoutResponse.create = function create(properties) {
+                        return new LogoutResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified LogoutResponse message. Does not implicitly {@link xsuportal.proto.services.account.LogoutResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @static
+                     * @param {xsuportal.proto.services.account.ILogoutResponse} message LogoutResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LogoutResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.status != null && Object.hasOwnProperty.call(message, "status"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.status);
+                        if (message.error != null && Object.hasOwnProperty.call(message, "error"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.error);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified LogoutResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LogoutResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @static
+                     * @param {xsuportal.proto.services.account.ILogoutResponse} message LogoutResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LogoutResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a LogoutResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.account.LogoutResponse} LogoutResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LogoutResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.account.LogoutResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.status = reader.int32();
+                                break;
+                            case 2:
+                                message.error = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a LogoutResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.account.LogoutResponse} LogoutResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LogoutResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a LogoutResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    LogoutResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                                break;
+                            }
+                        if (message.error != null && message.hasOwnProperty("error"))
+                            if (!$util.isString(message.error))
+                                return "error: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a LogoutResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.account.LogoutResponse} LogoutResponse
+                     */
+                    LogoutResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.account.LogoutResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.account.LogoutResponse();
+                        switch (object.status) {
+                        case "SUCCEEDED":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "FAILED":
+                        case 1:
+                            message.status = 1;
+                            break;
+                        }
+                        if (object.error != null)
+                            message.error = String(object.error);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a LogoutResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @static
+                     * @param {xsuportal.proto.services.account.LogoutResponse} message LogoutResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    LogoutResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.status = options.enums === String ? "SUCCEEDED" : 0;
+                            object.error = "";
+                        }
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.xsuportal.proto.services.account.LogoutResponse.Status[message.status] : message.status;
+                        if (message.error != null && message.hasOwnProperty("error"))
+                            object.error = message.error;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this LogoutResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.account.LogoutResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    LogoutResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    /**
+                     * Status enum.
+                     * @name xsuportal.proto.services.account.LogoutResponse.Status
+                     * @enum {number}
+                     * @property {number} SUCCEEDED=0 SUCCEEDED value
+                     * @property {number} FAILED=1 FAILED value
+                     */
+                    LogoutResponse.Status = (function() {
+                        var valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "SUCCEEDED"] = 0;
+                        values[valuesById[1] = "FAILED"] = 1;
+                        return values;
+                    })();
+
+                    return LogoutResponse;
+                })();
+
                 account.SignupRequest = (function() {
 
                     /**
