@@ -6,7 +6,7 @@ require 'google/protobuf'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/resources/contestant.proto", :syntax => :proto3) do
     add_message "xsuportal.proto.resources.Contestant" do
-      optional :id, :int64, 1
+      optional :id, :string, 1
       optional :team_id, :int64, 2
       optional :name, :string, 3
       optional :contestant_detail, :message, 7, "xsuportal.proto.resources.Contestant.ContestantDetail"

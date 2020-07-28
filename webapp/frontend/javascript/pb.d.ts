@@ -1212,7 +1212,7 @@ export namespace xsuportal {
             interface IContestant {
 
                 /** Contestant id */
-                id?: (number|Long|null);
+                id?: (string|null);
 
                 /** Contestant teamId */
                 teamId?: (number|Long|null);
@@ -1234,7 +1234,7 @@ export namespace xsuportal {
                 constructor(properties?: xsuportal.proto.resources.IContestant);
 
                 /** Contestant id. */
-                public id: (number|Long);
+                public id: string;
 
                 /** Contestant teamId. */
                 public teamId: (number|Long);

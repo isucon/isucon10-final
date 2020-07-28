@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS `contestants` (
   `name` VARCHAR(255),
   `avatar_url` VARChAR(255),
   `student` TINYINT(1) DEFAULT FALSE,
-  `withdrawn` TINYINT(1) DEFAULT FALSE,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NOT NULL
 );
@@ -18,6 +17,8 @@ CREATE TABLE IF NOT EXISTS `teams` (
   `final_participation` TINYINT(1) DEFAULT FALSE NOT NULL,
   `email_address` VARCHAR(255) NOT NULL,
   `invite_token` VARCHAR(255) NOT NULL,
+  `withdrawn` TINYINT(1) DEFAULT FALSE,
+  `disqualified` TINYINT(1) DEFAULT FALSE,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NOT NULL,
   FOREIGN KEY (`leader_id`) REFERENCES `contestants`(`id`) ON DELETE SET NULL

@@ -3,7 +3,7 @@ package xsuportal.proto.resources;
 option go_package = "github.com/isucon/isucon10-final/proto/resources";
 
 message Contestant {
-  int64 id = 1;
+  string id = 1;
   int64 team_id = 2;
   string name = 3;
   message ContestantDetail {
