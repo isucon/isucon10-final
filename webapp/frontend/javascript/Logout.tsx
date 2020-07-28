@@ -40,14 +40,16 @@ export class Logout extends React.Component<Props, State> {
         xsuportal.proto.services.account.LogoutResponse.Status.SUCCEEDED
       ) {
         this.props.root.setState({ loggedin: false });
-        this.setState({ logoutSucceeded: true, error: null });
+        this.setState({
+          logoutSucceeded: true,
+          error: null,
+          requesting: false,
+        });
       } else {
         throw new Error(logoutResponse.error);
       }
     } catch (err) {
-      this.setState({ error: err });
-    } finally {
-      this.setState({ requesting: false });
+      this.setState({ error: err, requesting: false });
     }
   }
 

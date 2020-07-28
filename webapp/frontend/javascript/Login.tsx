@@ -140,14 +140,12 @@ export class Login extends React.Component<Props, State> {
         xsuportal.proto.services.account.LoginResponse.Status.SUCCEEDED
       ) {
         this.props.root.setState({ loggedin: true });
-        this.setState({ loginSucceeded: true, error: null });
+        this.setState({ loginSucceeded: true, error: null, requesting: false });
       } else {
         throw new Error(loginResponse.error);
       }
     } catch (err) {
-      this.setState({ error: err });
-    } finally {
-      this.setState({ requesting: false });
+      this.setState({ error: err, requesting: false });
     }
   }
 

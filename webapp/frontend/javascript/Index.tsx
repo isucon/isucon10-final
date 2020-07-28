@@ -31,7 +31,12 @@ export class Index extends React.Component<Props, State> {
     };
   }
 
-  public componentDidMount() {}
+  public async componentDidMount() {
+    const session = await this.props.client.getCurrentSession();
+    if (session.contestant) {
+      this.setState({ loggedin: true });
+    }
+  }
 
   public render() {
     return (
