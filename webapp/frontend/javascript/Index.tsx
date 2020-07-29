@@ -19,6 +19,7 @@ export interface State {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   error: Error | null;
   loggedin: boolean;
+  registered: boolean;
 }
 
 export class Index extends React.Component<Props, State> {
@@ -28,6 +29,7 @@ export class Index extends React.Component<Props, State> {
       session: this.props.session,
       error: null,
       loggedin: false,
+      registered: false,
     };
   }
 
@@ -67,7 +69,10 @@ export class Index extends React.Component<Props, State> {
                 </div>
                 <div className="navbar-end">
                   <div className="navbar-item">
-                    <div className="buttons">{this.renderNavbarButtons()}</div>
+                    <div className="buttons">
+                      {this.renderNavbarRegistrationButtons()}
+                      {this.renderNavbarLoginButtons()}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -115,34 +120,44 @@ export class Index extends React.Component<Props, State> {
     );
   }
 
-  public renderNavbarButtons() {
+  public renderNavbarRegistrationButtons() {
+    if (this.state.loggedin) {
+      if (this.state.registered) {
+        return (
+          <Link className="button is-light" to="#">
+            登録確認
+          </Link>
+        );
+      } else {
+        return (
+          <Link className="button is-light" to="/registration">
+            参加登録
+          </Link>
+        );
+      }
+    } else {
+      return <></>;
+    }
+  }
+
+  public renderNavbarLoginButtons() {
     if (this.state.loggedin) {
       return (
         <>
-          <div>
-            <Link className="button is-light" to="#">
-              登録確認
-            </Link>
-            <Link className="button is-light" to="/logout">
-              ログアウト
-            </Link>
-          </div>
+          <Link className="button is-light" to="/logout">
+            ログアウト
+          </Link>
         </>
       );
     } else {
       return (
         <>
-          <div>
-            <Link className="button is-light" to="/registration">
-              参加登録
-            </Link>
-            <Link className="button is-light" to="/login">
-              ログイン
-            </Link>
-            <Link className="button is-light" to="/signup">
-              アカウント作成
-            </Link>
-          </div>
+          <Link className="button is-light" to="/login">
+            ログイン
+          </Link>
+          <Link className="button is-light" to="/signup">
+            アカウント作成
+          </Link>
         </>
       );
     }
