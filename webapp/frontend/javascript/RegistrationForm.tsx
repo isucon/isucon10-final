@@ -3,10 +3,12 @@ import { ApiClient } from "./ApiClient";
 import React from "react";
 
 import { ErrorMessage } from "./ErrorMessage";
+import { Index } from "./Index";
 
 export interface Props {
   client: ApiClient;
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
+  root: Index;
   inviteToken: string | null;
   registrationSession: xsuportal.proto.services.registration.GetRegistrationSessionResponse;
   updateRegistrationSession: () => void;
@@ -50,6 +52,7 @@ export class RegistrationForm extends React.Component<Props, State> {
         }
       }
       this.setState({ requestError: null, requesting: false });
+      this.props.root.setState({ registered: true });
       this.props.updateRegistrationSession();
     } catch (err) {
       this.setState({ requestError: err, requesting: false });

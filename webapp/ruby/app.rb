@@ -238,10 +238,11 @@ module Xsuportal
           req.contestant_id,
           Digest::SHA256.hexdigest(req.password)
         )
+        session[:contestant_id] = req.contestant_id
         result = { status: :SUCCEEDED }
       rescue Mysql2::Error => e
         if e.errno == MYSQL_ER_DUP_ENTRY
-          result = { status: :FAILED, error: 'IDが既に登録されています'}
+          result = { status: :FAILED, error: 'IDが既に登録されています' }
         else
           raise e
         end

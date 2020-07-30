@@ -3044,9 +3044,6 @@ export namespace xsuportal {
 
                     /** GetCurrentSessionResponse contestant */
                     contestant?: (xsuportal.proto.resources.IContestant|null);
-
-                    /** GetCurrentSessionResponse discordServerId */
-                    discordServerId?: (string|null);
                 }
 
                 /** Represents a GetCurrentSessionResponse. */
@@ -3063,9 +3060,6 @@ export namespace xsuportal {
 
                     /** GetCurrentSessionResponse contestant. */
                     public contestant?: (xsuportal.proto.resources.IContestant|null);
-
-                    /** GetCurrentSessionResponse discordServerId. */
-                    public discordServerId: string;
 
                     /**
                      * Creates a new GetCurrentSessionResponse instance using the specified properties.

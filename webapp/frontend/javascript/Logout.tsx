@@ -39,7 +39,7 @@ export class Logout extends React.Component<Props, State> {
         logoutResponse.status ==
         xsuportal.proto.services.account.LogoutResponse.Status.SUCCEEDED
       ) {
-        this.props.root.setState({ loggedin: false });
+        this.props.root.setState({ loggedin: false, registered: false });
         this.setState({
           logoutSucceeded: true,
           error: null,

@@ -7492,7 +7492,6 @@ $root.xsuportal = (function() {
                      * @interface IGetCurrentSessionResponse
                      * @property {xsuportal.proto.resources.ITeam|null} [team] GetCurrentSessionResponse team
                      * @property {xsuportal.proto.resources.IContestant|null} [contestant] GetCurrentSessionResponse contestant
-                     * @property {string|null} [discordServerId] GetCurrentSessionResponse discordServerId
                      */
 
                     /**
@@ -7527,14 +7526,6 @@ $root.xsuportal = (function() {
                     GetCurrentSessionResponse.prototype.contestant = null;
 
                     /**
-                     * GetCurrentSessionResponse discordServerId.
-                     * @member {string} discordServerId
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
-                     * @instance
-                     */
-                    GetCurrentSessionResponse.prototype.discordServerId = "";
-
-                    /**
                      * Creates a new GetCurrentSessionResponse instance using the specified properties.
                      * @function create
                      * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
@@ -7562,8 +7553,6 @@ $root.xsuportal = (function() {
                             $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                         if (message.contestant != null && Object.hasOwnProperty.call(message, "contestant"))
                             $root.xsuportal.proto.resources.Contestant.encode(message.contestant, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                        if (message.discordServerId != null && Object.hasOwnProperty.call(message, "discordServerId"))
-                            writer.uint32(/* id 3, wireType 2 =*/26).string(message.discordServerId);
                         return writer;
                     };
 
@@ -7603,9 +7592,6 @@ $root.xsuportal = (function() {
                                 break;
                             case 2:
                                 message.contestant = $root.xsuportal.proto.resources.Contestant.decode(reader, reader.uint32());
-                                break;
-                            case 3:
-                                message.discordServerId = reader.string();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -7652,9 +7638,6 @@ $root.xsuportal = (function() {
                             if (error)
                                 return "contestant." + error;
                         }
-                        if (message.discordServerId != null && message.hasOwnProperty("discordServerId"))
-                            if (!$util.isString(message.discordServerId))
-                                return "discordServerId: string expected";
                         return null;
                     };
 
@@ -7680,8 +7663,6 @@ $root.xsuportal = (function() {
                                 throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.contestant: object expected");
                             message.contestant = $root.xsuportal.proto.resources.Contestant.fromObject(object.contestant);
                         }
-                        if (object.discordServerId != null)
-                            message.discordServerId = String(object.discordServerId);
                         return message;
                     };
 
@@ -7701,14 +7682,11 @@ $root.xsuportal = (function() {
                         if (options.defaults) {
                             object.team = null;
                             object.contestant = null;
-                            object.discordServerId = "";
                         }
                         if (message.team != null && message.hasOwnProperty("team"))
                             object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                         if (message.contestant != null && message.hasOwnProperty("contestant"))
                             object.contestant = $root.xsuportal.proto.resources.Contestant.toObject(message.contestant, options);
-                        if (message.discordServerId != null && message.hasOwnProperty("discordServerId"))
-                            object.discordServerId = message.discordServerId;
                         return object;
                     };
 

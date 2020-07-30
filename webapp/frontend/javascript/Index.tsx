@@ -35,14 +35,17 @@ export class Index extends React.Component<Props, State> {
 
   public async componentDidMount() {
     const session = await this.props.client.getCurrentSession();
-    if (session.contestant) {
-      this.setState({ loggedin: true });
-    }
+    this.setState({
+      loggedin: !!session.contestant,
+      registered: !!session.team,
+    });
   }
 
   public render() {
     return (
       <>
+        <p>loggedin={this.state.loggedin.toString()}</p>
+        <p>registered={this.state.registered.toString()}</p>
         <Router>
           <nav
             className="navbar is-dark"
@@ -85,6 +88,7 @@ export class Index extends React.Component<Props, State> {
                 <Registration
                   session={this.props.session}
                   client={this.props.client}
+                  root={this}
                 />
               </Route>
               <Route path="/login">
@@ -105,6 +109,7 @@ export class Index extends React.Component<Props, State> {
                 <Signup
                   session={this.props.session}
                   client={this.props.client}
+                  root={this}
                 />
               </Route>
               <Route path="/">

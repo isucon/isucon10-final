@@ -1,12 +1,15 @@
 import { xsuportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
+import { Redirect } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
+import { Index } from "./Index";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
+  root: Index;
 }
 
 export interface State {
@@ -42,7 +45,7 @@ export class Signup extends React.Component<Props, State> {
         <main>
           {this.renderError()}
           {this.renderForm()}
-          {this.renderFinishMessage()}
+          {this.renderRedirect()}
         </main>
       </>
     );
@@ -112,17 +115,10 @@ export class Signup extends React.Component<Props, State> {
     );
   }
 
-  public renderFinishMessage() {
-    return (
-      <>
-        <section
-          className="message is-success mt-2"
-          style={{ display: this.state.signupSucceeded ? "" : "none" }}
-        >
-          <p className="message-body">アカウント作成が完了しました。</p>
-        </section>
-      </>
-    );
+  public renderRedirect() {
+    if (this.state.signupSucceeded) {
+      return <Redirect to="/registration"></Redirect>;
+    }
   }
 
   public onChange(event: React.FormEvent<HTMLInputElement>) {
@@ -145,15 +141,17 @@ export class Signup extends React.Component<Props, State> {
         signupResponse.status ==
         xsuportal.proto.services.account.SignupResponse.Status.SUCCEEDED
       ) {
-        this.setState({ signupSucceeded: true, error: null });
-        await this.login();
+        this.setState({
+          signupSucceeded: true,
+          error: null,
+          requesting: false,
+        });
+        this.props.root.setState({ loggedin: true });
       } else {
         throw new Error(signupResponse.error);
       }
     } catch (err) {
       this.setState({ error: err });
-    } finally {
-      this.setState({ requesting: false });
     }
   }
 
@@ -162,9 +160,5 @@ export class Signup extends React.Component<Props, State> {
       contestantId: this.state.contestantId,
       password: this.state.password,
     });
-  }
-
-  login() {
-    console.debug("login");
   }
 }

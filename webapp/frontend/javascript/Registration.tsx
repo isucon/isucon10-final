@@ -1,15 +1,18 @@
 import { xsuportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
+import { Redirect } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
 
 import { RegistrationForm } from "./RegistrationForm";
 import { RegistrationStatus } from "./RegistrationStatus";
+import { Index } from "./Index";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
+  root: Index;
 }
 
 export interface State {
@@ -53,6 +56,10 @@ export class Registration extends React.Component<Props, State> {
         session = await this.props.client.getCurrentSession();
       }
       this.setState({ session, registrationSession, edit: false });
+      this.props.root.setState({
+        loggedin: !!session.contestant,
+        registered: !!session.team,
+      });
     } catch (err) {
       this.setState({ error: err });
     }
@@ -126,6 +133,7 @@ export class Registration extends React.Component<Props, State> {
               <RegistrationForm
                 client={this.props.client}
                 session={this.state.session}
+                root={this.props.root}
                 inviteToken={this.state.inviteToken}
                 registrationSession={this.state.registrationSession}
                 updateRegistrationSession={this.updateRegistrationSession.bind(
@@ -142,6 +150,7 @@ export class Registration extends React.Component<Props, State> {
               <RegistrationForm
                 client={this.props.client}
                 session={this.state.session}
+                root={this.props.root}
                 inviteToken={null}
                 registrationSession={this.state.registrationSession}
                 updateRegistrationSession={this.updateRegistrationSession.bind(

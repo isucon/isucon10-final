@@ -38,11 +38,11 @@ export class Login extends React.Component<Props, State> {
 
   public render() {
     if (this.state.loginSucceeded) {
-      return (
-        <>
-          <Redirect to="/"></Redirect>
-        </>
-      );
+      if (this.props.root.state.registered) {
+        return <Redirect to="/"></Redirect>;
+      } else {
+        return <Redirect to="/registration"></Redirect>;
+      }
     } else {
       return (
         <>

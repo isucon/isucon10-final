@@ -11,6 +11,5 @@ message GetCurrentSessionRequest {
 message GetCurrentSessionResponse {
   xsuportal.proto.resources.Team team = 1;
   xsuportal.proto.resources.Contestant contestant = 2;
-  string discord_server_id = 3;
 }
 

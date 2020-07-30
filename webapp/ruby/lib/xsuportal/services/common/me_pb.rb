@@ -12,7 +12,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "xsuportal.proto.services.common.GetCurrentSessionResponse" do
       optional :team, :message, 1, "xsuportal.proto.resources.Team"
       optional :contestant, :message, 2, "xsuportal.proto.resources.Contestant"
-      optional :discord_server_id, :string, 3
     end
   end
 end
