@@ -7,7 +7,7 @@ import "xsuportal/resources/contestant.proto";
 message Team {
   int64 id = 1;
   string name = 2;
-  int64 leader_id = 3;
+  string leader_id = 3;
   repeated int64 member_ids = 4;
   bool final_participation = 5;
   bool hidden = 6;

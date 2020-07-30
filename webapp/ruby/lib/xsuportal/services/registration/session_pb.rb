@@ -13,12 +13,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "xsuportal.proto.services.registration.GetRegistrationSessionResponse" do
       optional :team, :message, 1, "xsuportal.proto.resources.Team"
       optional :status, :enum, 2, "xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status"
-      optional :github_login, :string, 3
-      optional :github_avatar_url, :string, 4
-      optional :discord_tag, :string, 5
-      optional :discord_avatar_url, :string, 6
-      optional :member_invite_url, :string, 7
-      optional :discord_server_id, :string, 8
+      optional :member_invite_url, :string, 3
     end
     add_enum "xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status" do
       value :CLOSED, 0

@@ -83,16 +83,6 @@ export class RegistrationStatus extends React.Component<Props, State> {
               <h5 className="title is-5 mt-3">メンバーリスト</h5>
               {this.renderTeamMembers()}
             </section>
-
-            <section className="column">
-              <h4 className="title is-4">Discord</h4>
-              <iframe
-                src={`https://discordapp.com/widget?id=${this.props.registrationSession.discordServerId}`}
-                width="350"
-                height="500"
-                frameBorder={0}
-              ></iframe>
-            </section>
           </div>
         </div>
 
@@ -148,7 +138,7 @@ export class RegistrationStatus extends React.Component<Props, State> {
           <div className="media">
             <div className="media-left">
               <figure className="image is-48x48">
-                <img src={member.contestantDetail!.avatarUrl || ""} />
+                <img src="" />
               </figure>
             </div>
             <div className="media-content">
@@ -157,11 +147,9 @@ export class RegistrationStatus extends React.Component<Props, State> {
                 {this.props.registrationSession.team!.leaderId == member.id ? (
                   <span className="tag is-danger">代表者</span>
                 ) : null}
-                {member.contestantDetail!.isStudent ? (
+                {member.isStudent ? (
                   <span className="tag is-info">学生</span>
                 ) : null}
-                GitHub @{member.contestantDetail!.githubLogin}, Discord{" "}
-                {member.contestantDetail!.discordTag}
               </p>
             </div>
           </div>

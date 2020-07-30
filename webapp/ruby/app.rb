@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'google/protobuf'
 require 'digest/sha2'
+require 'securerandom'
 require 'mysql2'
 require 'mysql2-cs-bind'
 $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
@@ -45,6 +46,27 @@ module Xsuportal
         )
       end
 
+      def db_ensure_transaction_close
+        if Thread.current[:db_transaction] == :open
+          db_transaction_rollback
+        end
+      end
+
+      def db_transaction_begin
+        db.query('BEGIN')
+        Thread.current[:db_transaction] = :open
+      end
+
+      def db_transaction_commit
+        db.query('COMMIT')
+        Thread.current[:db_transaction] = nil
+      end
+
+      def db_transaction_rollback
+        db.query('ROLLBACK')
+        Thread.current[:db_transaction] = nil
+      end
+
       def decode_request(request_class)
         request_class.decode(request.body.read)
       end
@@ -84,24 +106,31 @@ module Xsuportal
           id: contestant[:id],
           team_id: contestant[:team_id],
           name: contestant[:name],
-          contestant_detail: !detail ? nil : Proto::Resources::Contestant::ContestantDetail.new(
-            avatar_url: contestant[:avatar_url],
-            is_student: contestant[:student],
-          ),
+          is_student: contestant[:student],
         )
       end
 
       def team_pb(team, detail: false, enable_members: true, member_detail: false)
-        leader = db.xquery(
-          'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1',
-          team[:leader_id],
-        ).first
-        members = db.xquery(
-          'SELECT * FROM `contestants` WHERE `team_id` = ? AND `id` != ? LIMIT 1',
-          team[:id],
-          team[:leader_id],
-        )
-        leader_pb = enable_members ? contestant_pb(leader, detail: member_detail) : nil
+        leader = nil
+        members = nil
+        if team[:leader_id]
+          leader = db.xquery(
+            'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1',
+            team[:leader_id],
+          ).first
+          members = db.xquery(
+            'SELECT * FROM `contestants` WHERE `team_id` = ? AND `id` != ? LIMIT 1',
+            team[:id],
+            team[:leader_id],
+          )
+        else
+          members = db.xquery(
+            'SELECT * FROM `contestants` WHERE `team_id` = ? LIMIT 1',
+            team[:id],
+          )
+        end
+
+        leader_pb = enable_members && leader ? contestant_pb(leader, detail: member_detail) : nil
         members_pb = enable_members && members ?
           members.map { |_| contestant_pb(_, detail: member_detail) } : nil
 
@@ -125,9 +154,8 @@ module Xsuportal
     end
 
     get '/api/session' do
-      detail = false # TODO:
       encode_response Proto::Services::Common::GetCurrentSessionResponse, {
-        contestant: current_contestant ? contestant_pb(current_contestant) : nil,
+        contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
         team: current_team ? team_pb(current_team) : nil,
       }
     end
@@ -144,7 +172,60 @@ module Xsuportal
       )
     end
 
-    get '/api/registration/team' do
+    post '/api/registration/team' do
+      req = decode_request Proto::Services::Registration::CreateTeamRequest
+      result = {}
+
+      begin
+        invite_token = SecureRandom.urlsafe_base64(64)
+        db_transaction_begin
+
+        unless current_contestant
+          raise 'ログインが必要です'
+        end
+
+        db.xquery(
+          'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`, `updated_at`) VALUES (?, ?, ?, NOW(), NOW())',
+          req.team_name,
+          req.email_address,
+          invite_token,
+        )
+        team_id = db.xquery('SELECT LAST_INSERT_ID() AS `id`').first&.fetch(:id)
+        if !team_id
+          raise 'チームを登録できませんでした'
+        end
+
+        db.xquery(
+          'UPDATE `contestants` SET `name` = ?, `student` = ?, `team_id` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          req.name,
+          req.is_student,
+          team_id,
+          current_contestant[:id],
+        )
+
+        db.xquery(
+          'UPDATE `teams` SET `leader_id` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          current_contestant[:id],
+          team_id,
+        )
+
+        db_transaction_commit
+
+        result = { team_id: team_id }
+      rescue Mysql2::Error => e
+        db_transaction_rollback
+        raise e # TODO: pb でエラー返すべき?
+      rescue => e
+        db_transaction_rollback
+        raise e # TODO: pb でエラー返すべき?
+      ensure
+        db_ensure_transaction_close
+      end
+
+      encode_response(
+        Proto::Services::Registration::CreateTeamResponse,
+        result,
+      )
     end
 
     post '/api/signup' do

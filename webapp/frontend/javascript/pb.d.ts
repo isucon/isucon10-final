@@ -969,7 +969,7 @@ export namespace xsuportal {
                 name?: (string|null);
 
                 /** Team leaderId */
-                leaderId?: (number|Long|null);
+                leaderId?: (string|null);
 
                 /** Team memberIds */
                 memberIds?: ((number|Long)[]|null);
@@ -1009,7 +1009,7 @@ export namespace xsuportal {
                 public name: string;
 
                 /** Team leaderId. */
-                public leaderId: (number|Long);
+                public leaderId: string;
 
                 /** Team memberIds. */
                 public memberIds: (number|Long)[];
@@ -1220,8 +1220,8 @@ export namespace xsuportal {
                 /** Contestant name */
                 name?: (string|null);
 
-                /** Contestant contestantDetail */
-                contestantDetail?: (xsuportal.proto.resources.Contestant.IContestantDetail|null);
+                /** Contestant isStudent */
+                isStudent?: (boolean|null);
             }
 
             /** Represents a Contestant. */
@@ -1242,8 +1242,8 @@ export namespace xsuportal {
                 /** Contestant name. */
                 public name: string;
 
-                /** Contestant contestantDetail. */
-                public contestantDetail?: (xsuportal.proto.resources.Contestant.IContestantDetail|null);
+                /** Contestant isStudent. */
+                public isStudent: boolean;
 
                 /**
                  * Creates a new Contestant instance using the specified properties.
@@ -1314,117 +1314,6 @@ export namespace xsuportal {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
-            }
-
-            namespace Contestant {
-
-                /** Properties of a ContestantDetail. */
-                interface IContestantDetail {
-
-                    /** ContestantDetail githubLogin */
-                    githubLogin?: (string|null);
-
-                    /** ContestantDetail discordTag */
-                    discordTag?: (string|null);
-
-                    /** ContestantDetail isStudent */
-                    isStudent?: (boolean|null);
-
-                    /** ContestantDetail avatarUrl */
-                    avatarUrl?: (string|null);
-                }
-
-                /** Represents a ContestantDetail. */
-                class ContestantDetail implements IContestantDetail {
-
-                    /**
-                     * Constructs a new ContestantDetail.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: xsuportal.proto.resources.Contestant.IContestantDetail);
-
-                    /** ContestantDetail githubLogin. */
-                    public githubLogin: string;
-
-                    /** ContestantDetail discordTag. */
-                    public discordTag: string;
-
-                    /** ContestantDetail isStudent. */
-                    public isStudent: boolean;
-
-                    /** ContestantDetail avatarUrl. */
-                    public avatarUrl: string;
-
-                    /**
-                     * Creates a new ContestantDetail instance using the specified properties.
-                     * @param [properties] Properties to set
-                     * @returns ContestantDetail instance
-                     */
-                    public static create(properties?: xsuportal.proto.resources.Contestant.IContestantDetail): xsuportal.proto.resources.Contestant.ContestantDetail;
-
-                    /**
-                     * Encodes the specified ContestantDetail message. Does not implicitly {@link xsuportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
-                     * @param message ContestantDetail message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encode(message: xsuportal.proto.resources.Contestant.IContestantDetail, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Encodes the specified ContestantDetail message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
-                     * @param message ContestantDetail message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encodeDelimited(message: xsuportal.proto.resources.Contestant.IContestantDetail, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Decodes a ContestantDetail message from the specified reader or buffer.
-                     * @param reader Reader or buffer to decode from
-                     * @param [length] Message length if known beforehand
-                     * @returns ContestantDetail
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Contestant.ContestantDetail;
-
-                    /**
-                     * Decodes a ContestantDetail message from the specified reader or buffer, length delimited.
-                     * @param reader Reader or buffer to decode from
-                     * @returns ContestantDetail
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Contestant.ContestantDetail;
-
-                    /**
-                     * Verifies a ContestantDetail message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a ContestantDetail message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns ContestantDetail
-                     */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Contestant.ContestantDetail;
-
-                    /**
-                     * Creates a plain object from a ContestantDetail message. Also converts values to other types if specified.
-                     * @param message ContestantDetail
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: xsuportal.proto.resources.Contestant.ContestantDetail, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this ContestantDetail to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
             }
 
             /** Properties of a Clarification. */
@@ -3977,23 +3866,8 @@ export namespace xsuportal {
                     /** GetRegistrationSessionResponse status */
                     status?: (xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status|null);
 
-                    /** GetRegistrationSessionResponse githubLogin */
-                    githubLogin?: (string|null);
-
-                    /** GetRegistrationSessionResponse githubAvatarUrl */
-                    githubAvatarUrl?: (string|null);
-
-                    /** GetRegistrationSessionResponse discordTag */
-                    discordTag?: (string|null);
-
-                    /** GetRegistrationSessionResponse discordAvatarUrl */
-                    discordAvatarUrl?: (string|null);
-
                     /** GetRegistrationSessionResponse memberInviteUrl */
                     memberInviteUrl?: (string|null);
-
-                    /** GetRegistrationSessionResponse discordServerId */
-                    discordServerId?: (string|null);
                 }
 
                 /** Represents a GetRegistrationSessionResponse. */
@@ -4011,23 +3885,8 @@ export namespace xsuportal {
                     /** GetRegistrationSessionResponse status. */
                     public status: xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status;
 
-                    /** GetRegistrationSessionResponse githubLogin. */
-                    public githubLogin: string;
-
-                    /** GetRegistrationSessionResponse githubAvatarUrl. */
-                    public githubAvatarUrl: string;
-
-                    /** GetRegistrationSessionResponse discordTag. */
-                    public discordTag: string;
-
-                    /** GetRegistrationSessionResponse discordAvatarUrl. */
-                    public discordAvatarUrl: string;
-
                     /** GetRegistrationSessionResponse memberInviteUrl. */
                     public memberInviteUrl: string;
-
-                    /** GetRegistrationSessionResponse discordServerId. */
-                    public discordServerId: string;
 
                     /**
                      * Creates a new GetRegistrationSessionResponse instance using the specified properties.

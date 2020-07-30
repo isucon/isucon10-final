@@ -4,7 +4,6 @@ import React from "react";
 
 import { ErrorMessage } from "./ErrorMessage";
 
-import { RegistrationLogin } from "./RegistrationLogin";
 import { RegistrationForm } from "./RegistrationForm";
 import { RegistrationStatus } from "./RegistrationStatus";
 
@@ -84,16 +83,7 @@ export class Registration extends React.Component<Props, State> {
 
   public renderPhase() {
     if (this.state.registrationSession) {
-      const login = (
-        <>
-          {this.renderTeam()}
-          <RegistrationLogin
-            client={this.props.client}
-            session={this.state.session}
-            registrationSession={this.state.registrationSession}
-          />
-        </>
-      );
+      const login = this.renderTeam();
       switch (this.state.registrationSession.status) {
         case xsuportal.proto.services.registration
           .GetRegistrationSessionResponse.Status.NOT_LOGGED_IN:

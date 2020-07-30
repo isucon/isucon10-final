@@ -2625,7 +2625,7 @@ $root.xsuportal = (function() {
                  * @interface ITeam
                  * @property {number|Long|null} [id] Team id
                  * @property {string|null} [name] Team name
-                 * @property {number|Long|null} [leaderId] Team leaderId
+                 * @property {string|null} [leaderId] Team leaderId
                  * @property {Array.<number|Long>|null} [memberIds] Team memberIds
                  * @property {boolean|null} [finalParticipation] Team finalParticipation
                  * @property {boolean|null} [hidden] Team hidden
@@ -2670,11 +2670,11 @@ $root.xsuportal = (function() {
 
                 /**
                  * Team leaderId.
-                 * @member {number|Long} leaderId
+                 * @member {string} leaderId
                  * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
-                Team.prototype.leaderId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                Team.prototype.leaderId = "";
 
                 /**
                  * Team memberIds.
@@ -2761,7 +2761,7 @@ $root.xsuportal = (function() {
                     if (message.name != null && Object.hasOwnProperty.call(message, "name"))
                         writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
                     if (message.leaderId != null && Object.hasOwnProperty.call(message, "leaderId"))
-                        writer.uint32(/* id 3, wireType 0 =*/24).int64(message.leaderId);
+                        writer.uint32(/* id 3, wireType 2 =*/26).string(message.leaderId);
                     if (message.memberIds != null && message.memberIds.length) {
                         writer.uint32(/* id 4, wireType 2 =*/34).fork();
                         for (var i = 0; i < message.memberIds.length; ++i)
@@ -2822,7 +2822,7 @@ $root.xsuportal = (function() {
                             message.name = reader.string();
                             break;
                         case 3:
-                            message.leaderId = reader.int64();
+                            message.leaderId = reader.string();
                             break;
                         case 4:
                             if (!(message.memberIds && message.memberIds.length))
@@ -2896,8 +2896,8 @@ $root.xsuportal = (function() {
                         if (!$util.isString(message.name))
                             return "name: string expected";
                     if (message.leaderId != null && message.hasOwnProperty("leaderId"))
-                        if (!$util.isInteger(message.leaderId) && !(message.leaderId && $util.isInteger(message.leaderId.low) && $util.isInteger(message.leaderId.high)))
-                            return "leaderId: integer|Long expected";
+                        if (!$util.isString(message.leaderId))
+                            return "leaderId: string expected";
                     if (message.memberIds != null && message.hasOwnProperty("memberIds")) {
                         if (!Array.isArray(message.memberIds))
                             return "memberIds: array expected";
@@ -2960,14 +2960,7 @@ $root.xsuportal = (function() {
                     if (object.name != null)
                         message.name = String(object.name);
                     if (object.leaderId != null)
-                        if ($util.Long)
-                            (message.leaderId = $util.Long.fromValue(object.leaderId)).unsigned = false;
-                        else if (typeof object.leaderId === "string")
-                            message.leaderId = parseInt(object.leaderId, 10);
-                        else if (typeof object.leaderId === "number")
-                            message.leaderId = object.leaderId;
-                        else if (typeof object.leaderId === "object")
-                            message.leaderId = new $util.LongBits(object.leaderId.low >>> 0, object.leaderId.high >>> 0).toNumber();
+                        message.leaderId = String(object.leaderId);
                     if (object.memberIds) {
                         if (!Array.isArray(object.memberIds))
                             throw TypeError(".xsuportal.proto.resources.Team.memberIds: array expected");
@@ -3035,11 +3028,7 @@ $root.xsuportal = (function() {
                         } else
                             object.id = options.longs === String ? "0" : 0;
                         object.name = "";
-                        if ($util.Long) {
-                            var long = new $util.Long(0, 0, false);
-                            object.leaderId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.leaderId = options.longs === String ? "0" : 0;
+                        object.leaderId = "";
                         object.finalParticipation = false;
                         object.hidden = false;
                         object.withdrawn = false;
@@ -3054,10 +3043,7 @@ $root.xsuportal = (function() {
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
                     if (message.leaderId != null && message.hasOwnProperty("leaderId"))
-                        if (typeof message.leaderId === "number")
-                            object.leaderId = options.longs === String ? String(message.leaderId) : message.leaderId;
-                        else
-                            object.leaderId = options.longs === String ? $util.Long.prototype.toString.call(message.leaderId) : options.longs === Number ? new $util.LongBits(message.leaderId.low >>> 0, message.leaderId.high >>> 0).toNumber() : message.leaderId;
+                        object.leaderId = message.leaderId;
                     if (message.memberIds && message.memberIds.length) {
                         object.memberIds = [];
                         for (var j = 0; j < message.memberIds.length; ++j)
@@ -3353,7 +3339,7 @@ $root.xsuportal = (function() {
                  * @property {string|null} [id] Contestant id
                  * @property {number|Long|null} [teamId] Contestant teamId
                  * @property {string|null} [name] Contestant name
-                 * @property {xsuportal.proto.resources.Contestant.IContestantDetail|null} [contestantDetail] Contestant contestantDetail
+                 * @property {boolean|null} [isStudent] Contestant isStudent
                  */
 
                 /**
@@ -3396,12 +3382,12 @@ $root.xsuportal = (function() {
                 Contestant.prototype.name = "";
 
                 /**
-                 * Contestant contestantDetail.
-                 * @member {xsuportal.proto.resources.Contestant.IContestantDetail|null|undefined} contestantDetail
+                 * Contestant isStudent.
+                 * @member {boolean} isStudent
                  * @memberof xsuportal.proto.resources.Contestant
                  * @instance
                  */
-                Contestant.prototype.contestantDetail = null;
+                Contestant.prototype.isStudent = false;
 
                 /**
                  * Creates a new Contestant instance using the specified properties.
@@ -3433,8 +3419,8 @@ $root.xsuportal = (function() {
                         writer.uint32(/* id 2, wireType 0 =*/16).int64(message.teamId);
                     if (message.name != null && Object.hasOwnProperty.call(message, "name"))
                         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
-                    if (message.contestantDetail != null && Object.hasOwnProperty.call(message, "contestantDetail"))
-                        $root.xsuportal.proto.resources.Contestant.ContestantDetail.encode(message.contestantDetail, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+                    if (message.isStudent != null && Object.hasOwnProperty.call(message, "isStudent"))
+                        writer.uint32(/* id 4, wireType 0 =*/32).bool(message.isStudent);
                     return writer;
                 };
 
@@ -3478,8 +3464,8 @@ $root.xsuportal = (function() {
                         case 3:
                             message.name = reader.string();
                             break;
-                        case 7:
-                            message.contestantDetail = $root.xsuportal.proto.resources.Contestant.ContestantDetail.decode(reader, reader.uint32());
+                        case 4:
+                            message.isStudent = reader.bool();
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -3525,11 +3511,9 @@ $root.xsuportal = (function() {
                     if (message.name != null && message.hasOwnProperty("name"))
                         if (!$util.isString(message.name))
                             return "name: string expected";
-                    if (message.contestantDetail != null && message.hasOwnProperty("contestantDetail")) {
-                        var error = $root.xsuportal.proto.resources.Contestant.ContestantDetail.verify(message.contestantDetail);
-                        if (error)
-                            return "contestantDetail." + error;
-                    }
+                    if (message.isStudent != null && message.hasOwnProperty("isStudent"))
+                        if (typeof message.isStudent !== "boolean")
+                            return "isStudent: boolean expected";
                     return null;
                 };
 
@@ -3558,11 +3542,8 @@ $root.xsuportal = (function() {
                             message.teamId = new $util.LongBits(object.teamId.low >>> 0, object.teamId.high >>> 0).toNumber();
                     if (object.name != null)
                         message.name = String(object.name);
-                    if (object.contestantDetail != null) {
-                        if (typeof object.contestantDetail !== "object")
-                            throw TypeError(".xsuportal.proto.resources.Contestant.contestantDetail: object expected");
-                        message.contestantDetail = $root.xsuportal.proto.resources.Contestant.ContestantDetail.fromObject(object.contestantDetail);
-                    }
+                    if (object.isStudent != null)
+                        message.isStudent = Boolean(object.isStudent);
                     return message;
                 };
 
@@ -3587,7 +3568,7 @@ $root.xsuportal = (function() {
                         } else
                             object.teamId = options.longs === String ? "0" : 0;
                         object.name = "";
-                        object.contestantDetail = null;
+                        object.isStudent = false;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
                         object.id = message.id;
@@ -3598,8 +3579,8 @@ $root.xsuportal = (function() {
                             object.teamId = options.longs === String ? $util.Long.prototype.toString.call(message.teamId) : options.longs === Number ? new $util.LongBits(message.teamId.low >>> 0, message.teamId.high >>> 0).toNumber() : message.teamId;
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
-                    if (message.contestantDetail != null && message.hasOwnProperty("contestantDetail"))
-                        object.contestantDetail = $root.xsuportal.proto.resources.Contestant.ContestantDetail.toObject(message.contestantDetail, options);
+                    if (message.isStudent != null && message.hasOwnProperty("isStudent"))
+                        object.isStudent = message.isStudent;
                     return object;
                 };
 
@@ -3613,260 +3594,6 @@ $root.xsuportal = (function() {
                 Contestant.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
-
-                Contestant.ContestantDetail = (function() {
-
-                    /**
-                     * Properties of a ContestantDetail.
-                     * @memberof xsuportal.proto.resources.Contestant
-                     * @interface IContestantDetail
-                     * @property {string|null} [githubLogin] ContestantDetail githubLogin
-                     * @property {string|null} [discordTag] ContestantDetail discordTag
-                     * @property {boolean|null} [isStudent] ContestantDetail isStudent
-                     * @property {string|null} [avatarUrl] ContestantDetail avatarUrl
-                     */
-
-                    /**
-                     * Constructs a new ContestantDetail.
-                     * @memberof xsuportal.proto.resources.Contestant
-                     * @classdesc Represents a ContestantDetail.
-                     * @implements IContestantDetail
-                     * @constructor
-                     * @param {xsuportal.proto.resources.Contestant.IContestantDetail=} [properties] Properties to set
-                     */
-                    function ContestantDetail(properties) {
-                        if (properties)
-                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * ContestantDetail githubLogin.
-                     * @member {string} githubLogin
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @instance
-                     */
-                    ContestantDetail.prototype.githubLogin = "";
-
-                    /**
-                     * ContestantDetail discordTag.
-                     * @member {string} discordTag
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @instance
-                     */
-                    ContestantDetail.prototype.discordTag = "";
-
-                    /**
-                     * ContestantDetail isStudent.
-                     * @member {boolean} isStudent
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @instance
-                     */
-                    ContestantDetail.prototype.isStudent = false;
-
-                    /**
-                     * ContestantDetail avatarUrl.
-                     * @member {string} avatarUrl
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @instance
-                     */
-                    ContestantDetail.prototype.avatarUrl = "";
-
-                    /**
-                     * Creates a new ContestantDetail instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @static
-                     * @param {xsuportal.proto.resources.Contestant.IContestantDetail=} [properties] Properties to set
-                     * @returns {xsuportal.proto.resources.Contestant.ContestantDetail} ContestantDetail instance
-                     */
-                    ContestantDetail.create = function create(properties) {
-                        return new ContestantDetail(properties);
-                    };
-
-                    /**
-                     * Encodes the specified ContestantDetail message. Does not implicitly {@link xsuportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
-                     * @function encode
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @static
-                     * @param {xsuportal.proto.resources.Contestant.IContestantDetail} message ContestantDetail message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    ContestantDetail.encode = function encode(message, writer) {
-                        if (!writer)
-                            writer = $Writer.create();
-                        if (message.githubLogin != null && Object.hasOwnProperty.call(message, "githubLogin"))
-                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.githubLogin);
-                        if (message.discordTag != null && Object.hasOwnProperty.call(message, "discordTag"))
-                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.discordTag);
-                        if (message.isStudent != null && Object.hasOwnProperty.call(message, "isStudent"))
-                            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.isStudent);
-                        if (message.avatarUrl != null && Object.hasOwnProperty.call(message, "avatarUrl"))
-                            writer.uint32(/* id 4, wireType 2 =*/34).string(message.avatarUrl);
-                        return writer;
-                    };
-
-                    /**
-                     * Encodes the specified ContestantDetail message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Contestant.ContestantDetail.verify|verify} messages.
-                     * @function encodeDelimited
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @static
-                     * @param {xsuportal.proto.resources.Contestant.IContestantDetail} message ContestantDetail message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    ContestantDetail.encodeDelimited = function encodeDelimited(message, writer) {
-                        return this.encode(message, writer).ldelim();
-                    };
-
-                    /**
-                     * Decodes a ContestantDetail message from the specified reader or buffer.
-                     * @function decode
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.resources.Contestant.ContestantDetail} ContestantDetail
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    ContestantDetail.decode = function decode(reader, length) {
-                        if (!(reader instanceof $Reader))
-                            reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Contestant.ContestantDetail();
-                        while (reader.pos < end) {
-                            var tag = reader.uint32();
-                            switch (tag >>> 3) {
-                            case 1:
-                                message.githubLogin = reader.string();
-                                break;
-                            case 2:
-                                message.discordTag = reader.string();
-                                break;
-                            case 3:
-                                message.isStudent = reader.bool();
-                                break;
-                            case 4:
-                                message.avatarUrl = reader.string();
-                                break;
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
-                            }
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Decodes a ContestantDetail message from the specified reader or buffer, length delimited.
-                     * @function decodeDelimited
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.resources.Contestant.ContestantDetail} ContestantDetail
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    ContestantDetail.decodeDelimited = function decodeDelimited(reader) {
-                        if (!(reader instanceof $Reader))
-                            reader = new $Reader(reader);
-                        return this.decode(reader, reader.uint32());
-                    };
-
-                    /**
-                     * Verifies a ContestantDetail message.
-                     * @function verify
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    ContestantDetail.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.githubLogin != null && message.hasOwnProperty("githubLogin"))
-                            if (!$util.isString(message.githubLogin))
-                                return "githubLogin: string expected";
-                        if (message.discordTag != null && message.hasOwnProperty("discordTag"))
-                            if (!$util.isString(message.discordTag))
-                                return "discordTag: string expected";
-                        if (message.isStudent != null && message.hasOwnProperty("isStudent"))
-                            if (typeof message.isStudent !== "boolean")
-                                return "isStudent: boolean expected";
-                        if (message.avatarUrl != null && message.hasOwnProperty("avatarUrl"))
-                            if (!$util.isString(message.avatarUrl))
-                                return "avatarUrl: string expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a ContestantDetail message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.resources.Contestant.ContestantDetail} ContestantDetail
-                     */
-                    ContestantDetail.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.resources.Contestant.ContestantDetail)
-                            return object;
-                        var message = new $root.xsuportal.proto.resources.Contestant.ContestantDetail();
-                        if (object.githubLogin != null)
-                            message.githubLogin = String(object.githubLogin);
-                        if (object.discordTag != null)
-                            message.discordTag = String(object.discordTag);
-                        if (object.isStudent != null)
-                            message.isStudent = Boolean(object.isStudent);
-                        if (object.avatarUrl != null)
-                            message.avatarUrl = String(object.avatarUrl);
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a ContestantDetail message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @static
-                     * @param {xsuportal.proto.resources.Contestant.ContestantDetail} message ContestantDetail
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    ContestantDetail.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        var object = {};
-                        if (options.defaults) {
-                            object.githubLogin = "";
-                            object.discordTag = "";
-                            object.isStudent = false;
-                            object.avatarUrl = "";
-                        }
-                        if (message.githubLogin != null && message.hasOwnProperty("githubLogin"))
-                            object.githubLogin = message.githubLogin;
-                        if (message.discordTag != null && message.hasOwnProperty("discordTag"))
-                            object.discordTag = message.discordTag;
-                        if (message.isStudent != null && message.hasOwnProperty("isStudent"))
-                            object.isStudent = message.isStudent;
-                        if (message.avatarUrl != null && message.hasOwnProperty("avatarUrl"))
-                            object.avatarUrl = message.avatarUrl;
-                        return object;
-                    };
-
-                    /**
-                     * Converts this ContestantDetail to JSON.
-                     * @function toJSON
-                     * @memberof xsuportal.proto.resources.Contestant.ContestantDetail
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    ContestantDetail.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return ContestantDetail;
-                })();
 
                 return Contestant;
             })();
@@ -9581,12 +9308,7 @@ $root.xsuportal = (function() {
                      * @interface IGetRegistrationSessionResponse
                      * @property {xsuportal.proto.resources.ITeam|null} [team] GetRegistrationSessionResponse team
                      * @property {xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status|null} [status] GetRegistrationSessionResponse status
-                     * @property {string|null} [githubLogin] GetRegistrationSessionResponse githubLogin
-                     * @property {string|null} [githubAvatarUrl] GetRegistrationSessionResponse githubAvatarUrl
-                     * @property {string|null} [discordTag] GetRegistrationSessionResponse discordTag
-                     * @property {string|null} [discordAvatarUrl] GetRegistrationSessionResponse discordAvatarUrl
                      * @property {string|null} [memberInviteUrl] GetRegistrationSessionResponse memberInviteUrl
-                     * @property {string|null} [discordServerId] GetRegistrationSessionResponse discordServerId
                      */
 
                     /**
@@ -9621,52 +9343,12 @@ $root.xsuportal = (function() {
                     GetRegistrationSessionResponse.prototype.status = 0;
 
                     /**
-                     * GetRegistrationSessionResponse githubLogin.
-                     * @member {string} githubLogin
-                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
-                     * @instance
-                     */
-                    GetRegistrationSessionResponse.prototype.githubLogin = "";
-
-                    /**
-                     * GetRegistrationSessionResponse githubAvatarUrl.
-                     * @member {string} githubAvatarUrl
-                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
-                     * @instance
-                     */
-                    GetRegistrationSessionResponse.prototype.githubAvatarUrl = "";
-
-                    /**
-                     * GetRegistrationSessionResponse discordTag.
-                     * @member {string} discordTag
-                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
-                     * @instance
-                     */
-                    GetRegistrationSessionResponse.prototype.discordTag = "";
-
-                    /**
-                     * GetRegistrationSessionResponse discordAvatarUrl.
-                     * @member {string} discordAvatarUrl
-                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
-                     * @instance
-                     */
-                    GetRegistrationSessionResponse.prototype.discordAvatarUrl = "";
-
-                    /**
                      * GetRegistrationSessionResponse memberInviteUrl.
                      * @member {string} memberInviteUrl
                      * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
                      * @instance
                      */
                     GetRegistrationSessionResponse.prototype.memberInviteUrl = "";
-
-                    /**
-                     * GetRegistrationSessionResponse discordServerId.
-                     * @member {string} discordServerId
-                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
-                     * @instance
-                     */
-                    GetRegistrationSessionResponse.prototype.discordServerId = "";
 
                     /**
                      * Creates a new GetRegistrationSessionResponse instance using the specified properties.
@@ -9696,18 +9378,8 @@ $root.xsuportal = (function() {
                             $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                         if (message.status != null && Object.hasOwnProperty.call(message, "status"))
                             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.status);
-                        if (message.githubLogin != null && Object.hasOwnProperty.call(message, "githubLogin"))
-                            writer.uint32(/* id 3, wireType 2 =*/26).string(message.githubLogin);
-                        if (message.githubAvatarUrl != null && Object.hasOwnProperty.call(message, "githubAvatarUrl"))
-                            writer.uint32(/* id 4, wireType 2 =*/34).string(message.githubAvatarUrl);
-                        if (message.discordTag != null && Object.hasOwnProperty.call(message, "discordTag"))
-                            writer.uint32(/* id 5, wireType 2 =*/42).string(message.discordTag);
-                        if (message.discordAvatarUrl != null && Object.hasOwnProperty.call(message, "discordAvatarUrl"))
-                            writer.uint32(/* id 6, wireType 2 =*/50).string(message.discordAvatarUrl);
                         if (message.memberInviteUrl != null && Object.hasOwnProperty.call(message, "memberInviteUrl"))
-                            writer.uint32(/* id 7, wireType 2 =*/58).string(message.memberInviteUrl);
-                        if (message.discordServerId != null && Object.hasOwnProperty.call(message, "discordServerId"))
-                            writer.uint32(/* id 8, wireType 2 =*/66).string(message.discordServerId);
+                            writer.uint32(/* id 3, wireType 2 =*/26).string(message.memberInviteUrl);
                         return writer;
                     };
 
@@ -9749,22 +9421,7 @@ $root.xsuportal = (function() {
                                 message.status = reader.int32();
                                 break;
                             case 3:
-                                message.githubLogin = reader.string();
-                                break;
-                            case 4:
-                                message.githubAvatarUrl = reader.string();
-                                break;
-                            case 5:
-                                message.discordTag = reader.string();
-                                break;
-                            case 6:
-                                message.discordAvatarUrl = reader.string();
-                                break;
-                            case 7:
                                 message.memberInviteUrl = reader.string();
-                                break;
-                            case 8:
-                                message.discordServerId = reader.string();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -9818,24 +9475,9 @@ $root.xsuportal = (function() {
                             case 5:
                                 break;
                             }
-                        if (message.githubLogin != null && message.hasOwnProperty("githubLogin"))
-                            if (!$util.isString(message.githubLogin))
-                                return "githubLogin: string expected";
-                        if (message.githubAvatarUrl != null && message.hasOwnProperty("githubAvatarUrl"))
-                            if (!$util.isString(message.githubAvatarUrl))
-                                return "githubAvatarUrl: string expected";
-                        if (message.discordTag != null && message.hasOwnProperty("discordTag"))
-                            if (!$util.isString(message.discordTag))
-                                return "discordTag: string expected";
-                        if (message.discordAvatarUrl != null && message.hasOwnProperty("discordAvatarUrl"))
-                            if (!$util.isString(message.discordAvatarUrl))
-                                return "discordAvatarUrl: string expected";
                         if (message.memberInviteUrl != null && message.hasOwnProperty("memberInviteUrl"))
                             if (!$util.isString(message.memberInviteUrl))
                                 return "memberInviteUrl: string expected";
-                        if (message.discordServerId != null && message.hasOwnProperty("discordServerId"))
-                            if (!$util.isString(message.discordServerId))
-                                return "discordServerId: string expected";
                         return null;
                     };
 
@@ -9882,18 +9524,8 @@ $root.xsuportal = (function() {
                             message.status = 5;
                             break;
                         }
-                        if (object.githubLogin != null)
-                            message.githubLogin = String(object.githubLogin);
-                        if (object.githubAvatarUrl != null)
-                            message.githubAvatarUrl = String(object.githubAvatarUrl);
-                        if (object.discordTag != null)
-                            message.discordTag = String(object.discordTag);
-                        if (object.discordAvatarUrl != null)
-                            message.discordAvatarUrl = String(object.discordAvatarUrl);
                         if (object.memberInviteUrl != null)
                             message.memberInviteUrl = String(object.memberInviteUrl);
-                        if (object.discordServerId != null)
-                            message.discordServerId = String(object.discordServerId);
                         return message;
                     };
 
@@ -9913,29 +9545,14 @@ $root.xsuportal = (function() {
                         if (options.defaults) {
                             object.team = null;
                             object.status = options.enums === String ? "CLOSED" : 0;
-                            object.githubLogin = "";
-                            object.githubAvatarUrl = "";
-                            object.discordTag = "";
-                            object.discordAvatarUrl = "";
                             object.memberInviteUrl = "";
-                            object.discordServerId = "";
                         }
                         if (message.team != null && message.hasOwnProperty("team"))
                             object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                         if (message.status != null && message.hasOwnProperty("status"))
                             object.status = options.enums === String ? $root.xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status[message.status] : message.status;
-                        if (message.githubLogin != null && message.hasOwnProperty("githubLogin"))
-                            object.githubLogin = message.githubLogin;
-                        if (message.githubAvatarUrl != null && message.hasOwnProperty("githubAvatarUrl"))
-                            object.githubAvatarUrl = message.githubAvatarUrl;
-                        if (message.discordTag != null && message.hasOwnProperty("discordTag"))
-                            object.discordTag = message.discordTag;
-                        if (message.discordAvatarUrl != null && message.hasOwnProperty("discordAvatarUrl"))
-                            object.discordAvatarUrl = message.discordAvatarUrl;
                         if (message.memberInviteUrl != null && message.hasOwnProperty("memberInviteUrl"))
                             object.memberInviteUrl = message.memberInviteUrl;
-                        if (message.discordServerId != null && message.hasOwnProperty("discordServerId"))
-                            object.discordServerId = message.discordServerId;
                         return object;
                     };
 

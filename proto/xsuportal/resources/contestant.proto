@@ -6,11 +6,5 @@ message Contestant {
   string id = 1;
   int64 team_id = 2;
   string name = 3;
-  message ContestantDetail {
-    string github_login = 1;
-    string discord_tag = 2;
-    bool is_student = 3;
-    string avatar_url = 4;
-  }
-  ContestantDetail contestant_detail = 7;
+  bool is_student = 4;
 }
