@@ -118,16 +118,6 @@ export class RegistrationForm extends React.Component<Props, State> {
               への同意が必要です。
             </li>
             <li>
-              ご登録いただいたチーム名, 代表者名, メンバー名は ISUCON
-              公式サイトおよびポータルなど上で広く公開されます。GitHub
-              アカウントの情報はチームメンバー内で共有されます。
-            </li>
-            <li>
-              競技進行のため、全参加者はサポート/アナウンス用の Discord サーバー
-              (サポートチャット) への参加が必要です。そのため、Discord
-              アカウントの情報は全参加者にも共有されます。
-            </li>
-            <li>
               参加登録が完了すると、他のチームへの参加はできなくなります。
             </li>
             <li>
@@ -135,27 +125,16 @@ export class RegistrationForm extends React.Component<Props, State> {
               を確認することができます。招待 URL
               を共有し、チームメンバー全員の登録をしてください。
             </li>
-            <li>
-              参加登録メールなどは送信されません。個別の連絡や、Discord
-              が利用できない場合を想定してメールアドレスの記入をお願いしていますが、競技のアナウンスや連絡は、本ポータルサイトあるいは
-              Discord 上で行われます。
-            </li>
-            <li>
-              チーム名・代表者名に公序良俗に反する名前は使わないでください。
-            </li>
-            <li>
-              チーム名・代表者名に機種依存文字・絵文字・HTMLタグなどが入っていた場合、サイトへの表示時に表現を変えさせていただく場合があります。
-            </li>
           </ul>
         </section>
         <section className="mt-2">
           <h3 className="title is-3">
             {this.isEditing() ? "編集" : "詳細の入力"}
           </h3>
+          {this.renderError()}
           <form onSubmit={this.onSubmit.bind(this)}>
             {this.renderTeamFormFields()}
             {this.renderContestantFormFields()}
-
             <div className="field">
               <div className="control">
                 <button
@@ -171,8 +150,6 @@ export class RegistrationForm extends React.Component<Props, State> {
                 </a>
               </p>
             </div>
-
-            {this.renderError()}
           </form>
         </section>
       </>

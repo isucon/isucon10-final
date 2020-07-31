@@ -181,7 +181,7 @@ module Xsuportal
         db_transaction_begin
 
         unless current_contestant
-          raise 'ログインが必要です'
+          halt 401, 'ログインが必要です'
         end
 
         db.xquery(

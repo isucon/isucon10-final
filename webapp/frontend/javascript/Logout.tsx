@@ -33,6 +33,7 @@ export class Logout extends React.Component<Props, State> {
   public async componentDidMount() {
     if (this.state.requesting) return;
     try {
+      await this.logout();
       this.setState({ requesting: true });
       this.props.root.setState({ loggedin: false, registered: false });
       this.setState({

@@ -56,10 +56,6 @@ export class Registration extends React.Component<Props, State> {
         session = await this.props.client.getCurrentSession();
       }
       this.setState({ session, registrationSession, edit: false });
-      this.props.root.setState({
-        loggedin: !!session.contestant,
-        registered: !!session.team,
-      });
     } catch (err) {
       this.setState({ error: err });
     }

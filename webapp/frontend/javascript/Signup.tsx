@@ -135,6 +135,7 @@ export class Signup extends React.Component<Props, State> {
     event.preventDefault();
     if (this.state.requesting) return;
     try {
+      await this.signup();
       this.setState({ requesting: true });
       this.setState({
         signupSucceeded: true,
