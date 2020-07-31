@@ -10,12 +10,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :password, :string, 2
     end
     add_message "xsuportal.proto.services.account.LoginResponse" do
-      optional :status, :enum, 1, "xsuportal.proto.services.account.LoginResponse.Status"
-      optional :error, :string, 2
-    end
-    add_enum "xsuportal.proto.services.account.LoginResponse.Status" do
-      value :SUCCEEDED, 0
-      value :FAILED, 1
     end
   end
 end
@@ -26,7 +20,6 @@ module Xsuportal
       module Account
         LoginRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.account.LoginRequest").msgclass
         LoginResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.account.LoginResponse").msgclass
-        LoginResponse::Status = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.account.LoginResponse.Status").enummodule
       end
     end
   end

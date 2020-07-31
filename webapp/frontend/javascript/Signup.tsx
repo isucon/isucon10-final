@@ -136,20 +136,12 @@ export class Signup extends React.Component<Props, State> {
     if (this.state.requesting) return;
     try {
       this.setState({ requesting: true });
-      const signupResponse = await this.signup();
-      if (
-        signupResponse.status ==
-        xsuportal.proto.services.account.SignupResponse.Status.SUCCEEDED
-      ) {
-        this.setState({
-          signupSucceeded: true,
-          error: null,
-          requesting: false,
-        });
-        this.props.root.setState({ loggedin: true });
-      } else {
-        throw new Error(signupResponse.error);
-      }
+      this.setState({
+        signupSucceeded: true,
+        error: null,
+        requesting: false,
+      });
+      this.props.root.setState({ loggedin: true });
     } catch (err) {
       this.setState({ error: err });
     }

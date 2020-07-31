@@ -4466,8 +4466,6 @@ $root.xsuportal = (function() {
                      * Properties of a LoginResponse.
                      * @memberof xsuportal.proto.services.account
                      * @interface ILoginResponse
-                     * @property {xsuportal.proto.services.account.LoginResponse.Status|null} [status] LoginResponse status
-                     * @property {string|null} [error] LoginResponse error
                      */
 
                     /**
@@ -4484,22 +4482,6 @@ $root.xsuportal = (function() {
                                 if (properties[keys[i]] != null)
                                     this[keys[i]] = properties[keys[i]];
                     }
-
-                    /**
-                     * LoginResponse status.
-                     * @member {xsuportal.proto.services.account.LoginResponse.Status} status
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @instance
-                     */
-                    LoginResponse.prototype.status = 0;
-
-                    /**
-                     * LoginResponse error.
-                     * @member {string} error
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @instance
-                     */
-                    LoginResponse.prototype.error = "";
 
                     /**
                      * Creates a new LoginResponse instance using the specified properties.
@@ -4525,10 +4507,6 @@ $root.xsuportal = (function() {
                     LoginResponse.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.status != null && Object.hasOwnProperty.call(message, "status"))
-                            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.status);
-                        if (message.error != null && Object.hasOwnProperty.call(message, "error"))
-                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.error);
                         return writer;
                     };
 
@@ -4563,12 +4541,6 @@ $root.xsuportal = (function() {
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
-                            case 1:
-                                message.status = reader.int32();
-                                break;
-                            case 2:
-                                message.error = reader.string();
-                                break;
                             default:
                                 reader.skipType(tag & 7);
                                 break;
@@ -4604,17 +4576,6 @@ $root.xsuportal = (function() {
                     LoginResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.status != null && message.hasOwnProperty("status"))
-                            switch (message.status) {
-                            default:
-                                return "status: enum value expected";
-                            case 0:
-                            case 1:
-                                break;
-                            }
-                        if (message.error != null && message.hasOwnProperty("error"))
-                            if (!$util.isString(message.error))
-                                return "error: string expected";
                         return null;
                     };
 
@@ -4629,20 +4590,7 @@ $root.xsuportal = (function() {
                     LoginResponse.fromObject = function fromObject(object) {
                         if (object instanceof $root.xsuportal.proto.services.account.LoginResponse)
                             return object;
-                        var message = new $root.xsuportal.proto.services.account.LoginResponse();
-                        switch (object.status) {
-                        case "SUCCEEDED":
-                        case 0:
-                            message.status = 0;
-                            break;
-                        case "FAILED":
-                        case 1:
-                            message.status = 1;
-                            break;
-                        }
-                        if (object.error != null)
-                            message.error = String(object.error);
-                        return message;
+                        return new $root.xsuportal.proto.services.account.LoginResponse();
                     };
 
                     /**
@@ -4654,19 +4602,8 @@ $root.xsuportal = (function() {
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    LoginResponse.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        var object = {};
-                        if (options.defaults) {
-                            object.status = options.enums === String ? "SUCCEEDED" : 0;
-                            object.error = "";
-                        }
-                        if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.xsuportal.proto.services.account.LoginResponse.Status[message.status] : message.status;
-                        if (message.error != null && message.hasOwnProperty("error"))
-                            object.error = message.error;
-                        return object;
+                    LoginResponse.toObject = function toObject() {
+                        return {};
                     };
 
                     /**
@@ -4679,20 +4616,6 @@ $root.xsuportal = (function() {
                     LoginResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
-
-                    /**
-                     * Status enum.
-                     * @name xsuportal.proto.services.account.LoginResponse.Status
-                     * @enum {number}
-                     * @property {number} SUCCEEDED=0 SUCCEEDED value
-                     * @property {number} FAILED=1 FAILED value
-                     */
-                    LoginResponse.Status = (function() {
-                        var valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "SUCCEEDED"] = 0;
-                        values[valuesById[1] = "FAILED"] = 1;
-                        return values;
-                    })();
 
                     return LoginResponse;
                 })();
@@ -4863,8 +4786,6 @@ $root.xsuportal = (function() {
                      * Properties of a LogoutResponse.
                      * @memberof xsuportal.proto.services.account
                      * @interface ILogoutResponse
-                     * @property {xsuportal.proto.services.account.LogoutResponse.Status|null} [status] LogoutResponse status
-                     * @property {string|null} [error] LogoutResponse error
                      */
 
                     /**
@@ -4881,22 +4802,6 @@ $root.xsuportal = (function() {
                                 if (properties[keys[i]] != null)
                                     this[keys[i]] = properties[keys[i]];
                     }
-
-                    /**
-                     * LogoutResponse status.
-                     * @member {xsuportal.proto.services.account.LogoutResponse.Status} status
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @instance
-                     */
-                    LogoutResponse.prototype.status = 0;
-
-                    /**
-                     * LogoutResponse error.
-                     * @member {string} error
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @instance
-                     */
-                    LogoutResponse.prototype.error = "";
 
                     /**
                      * Creates a new LogoutResponse instance using the specified properties.
@@ -4922,10 +4827,6 @@ $root.xsuportal = (function() {
                     LogoutResponse.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.status != null && Object.hasOwnProperty.call(message, "status"))
-                            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.status);
-                        if (message.error != null && Object.hasOwnProperty.call(message, "error"))
-                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.error);
                         return writer;
                     };
 
@@ -4960,12 +4861,6 @@ $root.xsuportal = (function() {
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
-                            case 1:
-                                message.status = reader.int32();
-                                break;
-                            case 2:
-                                message.error = reader.string();
-                                break;
                             default:
                                 reader.skipType(tag & 7);
                                 break;
@@ -5001,17 +4896,6 @@ $root.xsuportal = (function() {
                     LogoutResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.status != null && message.hasOwnProperty("status"))
-                            switch (message.status) {
-                            default:
-                                return "status: enum value expected";
-                            case 0:
-                            case 1:
-                                break;
-                            }
-                        if (message.error != null && message.hasOwnProperty("error"))
-                            if (!$util.isString(message.error))
-                                return "error: string expected";
                         return null;
                     };
 
@@ -5026,20 +4910,7 @@ $root.xsuportal = (function() {
                     LogoutResponse.fromObject = function fromObject(object) {
                         if (object instanceof $root.xsuportal.proto.services.account.LogoutResponse)
                             return object;
-                        var message = new $root.xsuportal.proto.services.account.LogoutResponse();
-                        switch (object.status) {
-                        case "SUCCEEDED":
-                        case 0:
-                            message.status = 0;
-                            break;
-                        case "FAILED":
-                        case 1:
-                            message.status = 1;
-                            break;
-                        }
-                        if (object.error != null)
-                            message.error = String(object.error);
-                        return message;
+                        return new $root.xsuportal.proto.services.account.LogoutResponse();
                     };
 
                     /**
@@ -5051,19 +4922,8 @@ $root.xsuportal = (function() {
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    LogoutResponse.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        var object = {};
-                        if (options.defaults) {
-                            object.status = options.enums === String ? "SUCCEEDED" : 0;
-                            object.error = "";
-                        }
-                        if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.xsuportal.proto.services.account.LogoutResponse.Status[message.status] : message.status;
-                        if (message.error != null && message.hasOwnProperty("error"))
-                            object.error = message.error;
-                        return object;
+                    LogoutResponse.toObject = function toObject() {
+                        return {};
                     };
 
                     /**
@@ -5076,20 +4936,6 @@ $root.xsuportal = (function() {
                     LogoutResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
-
-                    /**
-                     * Status enum.
-                     * @name xsuportal.proto.services.account.LogoutResponse.Status
-                     * @enum {number}
-                     * @property {number} SUCCEEDED=0 SUCCEEDED value
-                     * @property {number} FAILED=1 FAILED value
-                     */
-                    LogoutResponse.Status = (function() {
-                        var valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "SUCCEEDED"] = 0;
-                        values[valuesById[1] = "FAILED"] = 1;
-                        return values;
-                    })();
 
                     return LogoutResponse;
                 })();
@@ -5310,8 +5156,6 @@ $root.xsuportal = (function() {
                      * Properties of a SignupResponse.
                      * @memberof xsuportal.proto.services.account
                      * @interface ISignupResponse
-                     * @property {xsuportal.proto.services.account.SignupResponse.Status|null} [status] SignupResponse status
-                     * @property {string|null} [error] SignupResponse error
                      */
 
                     /**
@@ -5328,22 +5172,6 @@ $root.xsuportal = (function() {
                                 if (properties[keys[i]] != null)
                                     this[keys[i]] = properties[keys[i]];
                     }
-
-                    /**
-                     * SignupResponse status.
-                     * @member {xsuportal.proto.services.account.SignupResponse.Status} status
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @instance
-                     */
-                    SignupResponse.prototype.status = 0;
-
-                    /**
-                     * SignupResponse error.
-                     * @member {string} error
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @instance
-                     */
-                    SignupResponse.prototype.error = "";
 
                     /**
                      * Creates a new SignupResponse instance using the specified properties.
@@ -5369,10 +5197,6 @@ $root.xsuportal = (function() {
                     SignupResponse.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.status != null && Object.hasOwnProperty.call(message, "status"))
-                            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.status);
-                        if (message.error != null && Object.hasOwnProperty.call(message, "error"))
-                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.error);
                         return writer;
                     };
 
@@ -5407,12 +5231,6 @@ $root.xsuportal = (function() {
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
-                            case 1:
-                                message.status = reader.int32();
-                                break;
-                            case 2:
-                                message.error = reader.string();
-                                break;
                             default:
                                 reader.skipType(tag & 7);
                                 break;
@@ -5448,17 +5266,6 @@ $root.xsuportal = (function() {
                     SignupResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.status != null && message.hasOwnProperty("status"))
-                            switch (message.status) {
-                            default:
-                                return "status: enum value expected";
-                            case 0:
-                            case 1:
-                                break;
-                            }
-                        if (message.error != null && message.hasOwnProperty("error"))
-                            if (!$util.isString(message.error))
-                                return "error: string expected";
                         return null;
                     };
 
@@ -5473,20 +5280,7 @@ $root.xsuportal = (function() {
                     SignupResponse.fromObject = function fromObject(object) {
                         if (object instanceof $root.xsuportal.proto.services.account.SignupResponse)
                             return object;
-                        var message = new $root.xsuportal.proto.services.account.SignupResponse();
-                        switch (object.status) {
-                        case "SUCCEEDED":
-                        case 0:
-                            message.status = 0;
-                            break;
-                        case "FAILED":
-                        case 1:
-                            message.status = 1;
-                            break;
-                        }
-                        if (object.error != null)
-                            message.error = String(object.error);
-                        return message;
+                        return new $root.xsuportal.proto.services.account.SignupResponse();
                     };
 
                     /**
@@ -5498,19 +5292,8 @@ $root.xsuportal = (function() {
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    SignupResponse.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        var object = {};
-                        if (options.defaults) {
-                            object.status = options.enums === String ? "SUCCEEDED" : 0;
-                            object.error = "";
-                        }
-                        if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.xsuportal.proto.services.account.SignupResponse.Status[message.status] : message.status;
-                        if (message.error != null && message.hasOwnProperty("error"))
-                            object.error = message.error;
-                        return object;
+                    SignupResponse.toObject = function toObject() {
+                        return {};
                     };
 
                     /**
@@ -5523,20 +5306,6 @@ $root.xsuportal = (function() {
                     SignupResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
-
-                    /**
-                     * Status enum.
-                     * @name xsuportal.proto.services.account.SignupResponse.Status
-                     * @enum {number}
-                     * @property {number} SUCCEEDED=0 SUCCEEDED value
-                     * @property {number} FAILED=1 FAILED value
-                     */
-                    SignupResponse.Status = (function() {
-                        var valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "SUCCEEDED"] = 0;
-                        values[valuesById[1] = "FAILED"] = 1;
-                        return values;
-                    })();
 
                     return SignupResponse;
                 })();

@@ -34,20 +34,12 @@ export class Logout extends React.Component<Props, State> {
     if (this.state.requesting) return;
     try {
       this.setState({ requesting: true });
-      const logoutResponse = await this.logout();
-      if (
-        logoutResponse.status ==
-        xsuportal.proto.services.account.LogoutResponse.Status.SUCCEEDED
-      ) {
-        this.props.root.setState({ loggedin: false, registered: false });
-        this.setState({
-          logoutSucceeded: true,
-          error: null,
-          requesting: false,
-        });
-      } else {
-        throw new Error(logoutResponse.error);
-      }
+      this.props.root.setState({ loggedin: false, registered: false });
+      this.setState({
+        logoutSucceeded: true,
+        error: null,
+        requesting: false,
+      });
     } catch (err) {
       this.setState({ error: err, requesting: false });
     }

@@ -192,7 +192,7 @@ module Xsuportal
         )
         team_id = db.xquery('SELECT LAST_INSERT_ID() AS `id`').first&.fetch(:id)
         if !team_id
-          raise 'チームを登録できませんでした'
+          halt 500, 'チームを登録できませんでした'
         end
 
         db.xquery(
@@ -214,10 +214,12 @@ module Xsuportal
         result = { team_id: team_id }
       rescue Mysql2::Error => e
         db_transaction_rollback
-        raise e # TODO: pb でエラー返すべき?
+        if e.errno == MYSQL_ER_DUP_ENTRY
+          halt 400, '既にチーム登録済みです'
+        end
       rescue => e
         db_transaction_rollback
-        raise e # TODO: pb でエラー返すべき?
+        halt 500, e.full_message
       ensure
         db_ensure_transaction_close
       end
@@ -239,24 +241,19 @@ module Xsuportal
           Digest::SHA256.hexdigest(req.password)
         )
         session[:contestant_id] = req.contestant_id
-        result = { status: :SUCCEEDED }
       rescue Mysql2::Error => e
         if e.errno == MYSQL_ER_DUP_ENTRY
-          result = { status: :FAILED, error: 'IDが既に登録されています' }
+          halt 400, 'IDが既に登録されています'
         else
-          raise e
+          halt 500, e.full_message
         end
       end
       
-      encode_response(
-        Proto::Services::Account::SignupResponse,
-        result
-      )
+      encode_response Proto::Services::Account::SignupResponse
     end
 
     post '/api/login' do
       req = decode_request Proto::Services::Account::LoginRequest
-      result = nil
 
       contestant = db.xquery(
         'SELECT `password` FROM `contestants` WHERE `id` = ? LIMIT 1',
@@ -265,32 +262,23 @@ module Xsuportal
 
       if contestant && Rack::Utils.secure_compare(contestant[:password], Digest::SHA256.hexdigest(req.password))
         session[:contestant_id] = req.contestant_id
-        result = { status: :SUCCEEDED }
       else
-        result = { status: :FAILED, error: 'ログインIDまたはパスワードが正しくありません' }
+        halt 400, 'ログインIDまたはパスワードが正しくありません'
       end
       
-      encode_response(
-        Proto::Services::Account::LoginResponse,
-        result
-      )
+      encode_response Proto::Services::Account::LoginResponse
     end
 
     post '/api/logout' do
       req = decode_request Proto::Services::Account::LogoutRequest
-      result = nil
 
       if session[:contestant_id]
         session.delete(:contestant_id)
-        result = { status: :SUCCEEDED }
       else
-        result = { status: :FAILED, error: 'ログインしていません' }
+        halt 401, 'ログインしていません'
       end
       
-      encode_response(
-        Proto::Services::Account::LogoutResponse,
-        result
-      )
+      encode_response Proto::Services::Account::LogoutResponse
     end
   end
 end

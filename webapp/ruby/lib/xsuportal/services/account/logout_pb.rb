@@ -8,12 +8,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "xsuportal.proto.services.account.LogoutRequest" do
     end
     add_message "xsuportal.proto.services.account.LogoutResponse" do
-      optional :status, :enum, 1, "xsuportal.proto.services.account.LogoutResponse.Status"
-      optional :error, :string, 2
-    end
-    add_enum "xsuportal.proto.services.account.LogoutResponse.Status" do
-      value :SUCCEEDED, 0
-      value :FAILED, 1
     end
   end
 end
@@ -24,7 +18,6 @@ module Xsuportal
       module Account
         LogoutRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.account.LogoutRequest").msgclass
         LogoutResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.account.LogoutResponse").msgclass
-        LogoutResponse::Status = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.account.LogoutResponse.Status").enummodule
       end
     end
   end

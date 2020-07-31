@@ -7,11 +7,4 @@ message LoginRequest {
   string password = 2;
 }
 
-message LoginResponse {
-  enum Status {
-    SUCCEEDED = 0;
-    FAILED = 1;
-  }
-  Status status = 1;
-  string error = 2;
-}
+message LoginResponse {}

@@ -4,11 +4,4 @@ option go_package = "github.com/isucon/isucon10-final/proto/services/account";
 
 message LogoutRequest {}
 
-message LogoutResponse {
-  enum Status {
-    SUCCEEDED = 0;
-    FAILED = 1;
-  }
-  Status status = 1;
-  string error = 2;
-}
+message LogoutResponse {}

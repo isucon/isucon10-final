@@ -1655,12 +1655,6 @@ export namespace xsuportal {
 
                 /** Properties of a LoginResponse. */
                 interface ILoginResponse {
-
-                    /** LoginResponse status */
-                    status?: (xsuportal.proto.services.account.LoginResponse.Status|null);
-
-                    /** LoginResponse error */
-                    error?: (string|null);
                 }
 
                 /** Represents a LoginResponse. */
@@ -1671,12 +1665,6 @@ export namespace xsuportal {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: xsuportal.proto.services.account.ILoginResponse);
-
-                    /** LoginResponse status. */
-                    public status: xsuportal.proto.services.account.LoginResponse.Status;
-
-                    /** LoginResponse error. */
-                    public error: string;
 
                     /**
                      * Creates a new LoginResponse instance using the specified properties.
@@ -1747,15 +1735,6 @@ export namespace xsuportal {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
-                }
-
-                namespace LoginResponse {
-
-                    /** Status enum. */
-                    enum Status {
-                        SUCCEEDED = 0,
-                        FAILED = 1
-                    }
                 }
 
                 /** Properties of a LogoutRequest. */
@@ -1844,12 +1823,6 @@ export namespace xsuportal {
 
                 /** Properties of a LogoutResponse. */
                 interface ILogoutResponse {
-
-                    /** LogoutResponse status */
-                    status?: (xsuportal.proto.services.account.LogoutResponse.Status|null);
-
-                    /** LogoutResponse error */
-                    error?: (string|null);
                 }
 
                 /** Represents a LogoutResponse. */
@@ -1860,12 +1833,6 @@ export namespace xsuportal {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: xsuportal.proto.services.account.ILogoutResponse);
-
-                    /** LogoutResponse status. */
-                    public status: xsuportal.proto.services.account.LogoutResponse.Status;
-
-                    /** LogoutResponse error. */
-                    public error: string;
 
                     /**
                      * Creates a new LogoutResponse instance using the specified properties.
@@ -1936,15 +1903,6 @@ export namespace xsuportal {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
-                }
-
-                namespace LogoutResponse {
-
-                    /** Status enum. */
-                    enum Status {
-                        SUCCEEDED = 0,
-                        FAILED = 1
-                    }
                 }
 
                 /** Properties of a SignupRequest. */
@@ -2045,12 +2003,6 @@ export namespace xsuportal {
 
                 /** Properties of a SignupResponse. */
                 interface ISignupResponse {
-
-                    /** SignupResponse status */
-                    status?: (xsuportal.proto.services.account.SignupResponse.Status|null);
-
-                    /** SignupResponse error */
-                    error?: (string|null);
                 }
 
                 /** Represents a SignupResponse. */
@@ -2061,12 +2013,6 @@ export namespace xsuportal {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: xsuportal.proto.services.account.ISignupResponse);
-
-                    /** SignupResponse status. */
-                    public status: xsuportal.proto.services.account.SignupResponse.Status;
-
-                    /** SignupResponse error. */
-                    public error: string;
 
                     /**
                      * Creates a new SignupResponse instance using the specified properties.
@@ -2137,15 +2083,6 @@ export namespace xsuportal {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
-                }
-
-                namespace SignupResponse {
-
-                    /** Status enum. */
-                    enum Status {
-                        SUCCEEDED = 0,
-                        FAILED = 1
-                    }
                 }
             }
 
