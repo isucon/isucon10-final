@@ -18,8 +18,8 @@ export interface Props {
 export interface State {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   error: Error | null;
-  loggedin: boolean;
-  registered: boolean;
+  loggedin: boolean | null;
+  registered: boolean | null;
 }
 
 export class Index extends React.Component<Props, State> {
@@ -28,8 +28,8 @@ export class Index extends React.Component<Props, State> {
     this.state = {
       session: this.props.session,
       error: null,
-      loggedin: false,
-      registered: false,
+      loggedin: null,
+      registered: null,
     };
   }
 
@@ -44,8 +44,8 @@ export class Index extends React.Component<Props, State> {
   public render() {
     return (
       <>
-        <p>loggedin={this.state.loggedin.toString()}</p>
-        <p>registered={this.state.registered.toString()}</p>
+        <p>loggedin={this.state.loggedin?.toString()}</p>
+        <p>registered={this.state.registered?.toString()}</p>
         <Router>
           <nav
             className="navbar is-dark"
@@ -136,7 +136,7 @@ export class Index extends React.Component<Props, State> {
       } else {
         return (
           <Link className="button is-light" to="/registration">
-            参加登録
+            チーム作成
           </Link>
         );
       }

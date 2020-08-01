@@ -1,13 +1,13 @@
 import { xsuportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
-import { Redirect } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
 
 import { RegistrationForm } from "./RegistrationForm";
 import { RegistrationStatus } from "./RegistrationStatus";
 import { Index } from "./Index";
+import { LoginRequired } from "./LoginRequired";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
@@ -66,8 +66,10 @@ export class Registration extends React.Component<Props, State> {
   }
 
   public render() {
+    console.log("render");
     return (
       <>
+        <LoginRequired root={this.props.root}></LoginRequired>
         <header>
           <h1 className="title is-1">参加登録</h1>
         </header>

@@ -45,7 +45,7 @@ export class Signup extends React.Component<Props, State> {
         <main>
           {this.renderError()}
           {this.renderForm()}
-          {this.renderRedirect()}
+          {this.renderFinishMessage()}
         </main>
       </>
     );
@@ -72,52 +72,77 @@ export class Signup extends React.Component<Props, State> {
   }
 
   public renderFormFields() {
-    return (
-      <>
-        <div className="field">
-          <label className="label" htmlFor="fieldContestantId">
-            ログインID
-          </label>
-          <div className="control">
-            <input
-              className="input"
-              type="text"
-              required
-              id="fieldContestantId"
-              name="contestantId"
-              autoComplete="username"
-              onChange={this.onChange.bind(this)}
-            />
+    if (this.state.signupSucceeded) {
+      return (
+        <>
+          <p>
+            参加登録するには、チームを新しく作成するか、招待URLから既存チームに参加してください。
+          </p>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <div className="field">
+            <label className="label" htmlFor="fieldContestantId">
+              ログインID
+            </label>
+            <div className="control">
+              <input
+                className="input"
+                type="text"
+                required
+                id="fieldContestantId"
+                name="contestantId"
+                autoComplete="username"
+                onChange={this.onChange.bind(this)}
+              />
+            </div>
           </div>
-        </div>
-        <div className="field">
-          <label className="label" htmlFor="fieldPassword">
-            パスワード
-          </label>
-          <div className="control">
-            <input
-              className="input"
-              type="password"
-              required
-              id="fieldPassword"
-              name="password"
-              autoComplete="current-password"
-              onChange={this.onChange.bind(this)}
-            />
+          <div className="field">
+            <label className="label" htmlFor="fieldPassword">
+              パスワード
+            </label>
+            <div className="control">
+              <input
+                className="input"
+                type="password"
+                required
+                id="fieldPassword"
+                name="password"
+                autoComplete="current-password"
+                onChange={this.onChange.bind(this)}
+              />
+            </div>
           </div>
-        </div>
-        <div className="field">
-          <div className="control">
-            <button className="button is-primary">送信</button>
+          <div className="field">
+            <div className="control">
+              <button className="button is-primary">送信</button>
+            </div>
           </div>
-        </div>
-      </>
-    );
+        </>
+      );
+    }
   }
 
-  public renderRedirect() {
+  public renderFinishMessage() {
     if (this.state.signupSucceeded) {
-      return <Redirect to="/registration"></Redirect>;
+      return (
+        <>
+          <article className="message is-success">
+            <div className="message-header">
+              <p>アカウントを作成しました</p>
+            </div>
+            <div className="message-body">
+              <p>
+                参加登録するには、
+                <a href="/registration">チームを新しく作成する</a>
+                か、招待 URL から既存チームに参加してください。
+              </p>
+            </div>
+          </article>
+        </>
+      );
     }
   }
 

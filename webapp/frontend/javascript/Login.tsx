@@ -2,6 +2,7 @@ import { xsuportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 import { Redirect } from "react-router-dom";
+import querystring from "querystring";
 
 import { ErrorMessage } from "./ErrorMessage";
 import { Index } from "./Index";
@@ -38,10 +39,31 @@ export class Login extends React.Component<Props, State> {
 
   public render() {
     if (this.state.loginSucceeded) {
-      if (this.props.root.state.registered) {
-        return <Redirect to="/"></Redirect>;
+      const params = querystring.parse(window.location.search.slice(1));
+      if (params.redirect) {
+        console.log("redirect: ", params.redirect.toString());
+        return <Redirect to={params.redirect.toString()}></Redirect>;
       } else {
-        return <Redirect to="/registration"></Redirect>;
+        if (this.props.root.state.registered) {
+          return <Redirect to="/"></Redirect>;
+        } else {
+          return (
+            <>
+              <article className="message is-success">
+                <div className="message-header">
+                  <p>参加登録してください</p>
+                </div>
+                <div className="message-body">
+                  <p>
+                    参加登録するには、
+                    <a href="/registration">チームを新しく作成する</a>
+                    か、招待URLから既存チームに参加してください。
+                  </p>
+                </div>
+              </article>
+            </>
+          );
+        }
       }
     } else {
       return (
