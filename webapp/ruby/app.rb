@@ -135,9 +135,8 @@ module Xsuportal
             team[:leader_id],
           ).first
           members = db.xquery(
-            'SELECT * FROM `contestants` WHERE `team_id` = ? AND `id` != ? LIMIT 1',
+            'SELECT * FROM `contestants` WHERE `team_id` = ? LIMIT 1',
             team[:id],
-            team[:leader_id],
           )
         else
           members = db.xquery(
@@ -196,7 +195,7 @@ module Xsuportal
         team = current_team
       when params[:team_id] && params[:invite_token]
         team = db.xquery(
-          'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? LIMIT 1',
+          'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE LIMIT 1',
           params[:team_id],
           params[:invite_token],
         ).first
@@ -300,7 +299,7 @@ module Xsuportal
         end
 
         team = db.xquery(
-          'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? LIMIT 1 FOR UPDATE',
+          'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE LIMIT 1 FOR UPDATE',
           req.team_id,
           req.invite_token,
         ).first
