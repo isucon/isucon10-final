@@ -2626,7 +2626,7 @@ $root.xsuportal = (function() {
                  * @property {number|Long|null} [id] Team id
                  * @property {string|null} [name] Team name
                  * @property {string|null} [leaderId] Team leaderId
-                 * @property {Array.<number|Long>|null} [memberIds] Team memberIds
+                 * @property {Array.<string>|null} [memberIds] Team memberIds
                  * @property {boolean|null} [finalParticipation] Team finalParticipation
                  * @property {boolean|null} [hidden] Team hidden
                  * @property {boolean|null} [withdrawn] Team withdrawn
@@ -2678,7 +2678,7 @@ $root.xsuportal = (function() {
 
                 /**
                  * Team memberIds.
-                 * @member {Array.<number|Long>} memberIds
+                 * @member {Array.<string>} memberIds
                  * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
@@ -2762,12 +2762,9 @@ $root.xsuportal = (function() {
                         writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
                     if (message.leaderId != null && Object.hasOwnProperty.call(message, "leaderId"))
                         writer.uint32(/* id 3, wireType 2 =*/26).string(message.leaderId);
-                    if (message.memberIds != null && message.memberIds.length) {
-                        writer.uint32(/* id 4, wireType 2 =*/34).fork();
+                    if (message.memberIds != null && message.memberIds.length)
                         for (var i = 0; i < message.memberIds.length; ++i)
-                            writer.int64(message.memberIds[i]);
-                        writer.ldelim();
-                    }
+                            writer.uint32(/* id 4, wireType 2 =*/34).string(message.memberIds[i]);
                     if (message.finalParticipation != null && Object.hasOwnProperty.call(message, "finalParticipation"))
                         writer.uint32(/* id 5, wireType 0 =*/40).bool(message.finalParticipation);
                     if (message.hidden != null && Object.hasOwnProperty.call(message, "hidden"))
@@ -2827,12 +2824,7 @@ $root.xsuportal = (function() {
                         case 4:
                             if (!(message.memberIds && message.memberIds.length))
                                 message.memberIds = [];
-                            if ((tag & 7) === 2) {
-                                var end2 = reader.uint32() + reader.pos;
-                                while (reader.pos < end2)
-                                    message.memberIds.push(reader.int64());
-                            } else
-                                message.memberIds.push(reader.int64());
+                            message.memberIds.push(reader.string());
                             break;
                         case 5:
                             message.finalParticipation = reader.bool();
@@ -2902,8 +2894,8 @@ $root.xsuportal = (function() {
                         if (!Array.isArray(message.memberIds))
                             return "memberIds: array expected";
                         for (var i = 0; i < message.memberIds.length; ++i)
-                            if (!$util.isInteger(message.memberIds[i]) && !(message.memberIds[i] && $util.isInteger(message.memberIds[i].low) && $util.isInteger(message.memberIds[i].high)))
-                                return "memberIds: integer|Long[] expected";
+                            if (!$util.isString(message.memberIds[i]))
+                                return "memberIds: string[] expected";
                     }
                     if (message.finalParticipation != null && message.hasOwnProperty("finalParticipation"))
                         if (typeof message.finalParticipation !== "boolean")
@@ -2966,14 +2958,7 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.Team.memberIds: array expected");
                         message.memberIds = [];
                         for (var i = 0; i < object.memberIds.length; ++i)
-                            if ($util.Long)
-                                (message.memberIds[i] = $util.Long.fromValue(object.memberIds[i])).unsigned = false;
-                            else if (typeof object.memberIds[i] === "string")
-                                message.memberIds[i] = parseInt(object.memberIds[i], 10);
-                            else if (typeof object.memberIds[i] === "number")
-                                message.memberIds[i] = object.memberIds[i];
-                            else if (typeof object.memberIds[i] === "object")
-                                message.memberIds[i] = new $util.LongBits(object.memberIds[i].low >>> 0, object.memberIds[i].high >>> 0).toNumber();
+                            message.memberIds[i] = String(object.memberIds[i]);
                     }
                     if (object.finalParticipation != null)
                         message.finalParticipation = Boolean(object.finalParticipation);
@@ -3047,10 +3032,7 @@ $root.xsuportal = (function() {
                     if (message.memberIds && message.memberIds.length) {
                         object.memberIds = [];
                         for (var j = 0; j < message.memberIds.length; ++j)
-                            if (typeof message.memberIds[j] === "number")
-                                object.memberIds[j] = options.longs === String ? String(message.memberIds[j]) : message.memberIds[j];
-                            else
-                                object.memberIds[j] = options.longs === String ? $util.Long.prototype.toString.call(message.memberIds[j]) : options.longs === Number ? new $util.LongBits(message.memberIds[j].low >>> 0, message.memberIds[j].high >>> 0).toNumber() : message.memberIds[j];
+                            object.memberIds[j] = message.memberIds[j];
                     }
                     if (message.finalParticipation != null && message.hasOwnProperty("finalParticipation"))
                         object.finalParticipation = message.finalParticipation;

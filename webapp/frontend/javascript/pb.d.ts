@@ -972,7 +972,7 @@ export namespace xsuportal {
                 leaderId?: (string|null);
 
                 /** Team memberIds */
-                memberIds?: ((number|Long)[]|null);
+                memberIds?: (string[]|null);
 
                 /** Team finalParticipation */
                 finalParticipation?: (boolean|null);
@@ -1012,7 +1012,7 @@ export namespace xsuportal {
                 public leaderId: string;
 
                 /** Team memberIds. */
-                public memberIds: (number|Long)[];
+                public memberIds: string[];
 
                 /** Team finalParticipation. */
                 public finalParticipation: boolean;

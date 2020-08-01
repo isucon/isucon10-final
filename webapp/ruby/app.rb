@@ -67,6 +67,22 @@ module Xsuportal
         Thread.current[:db_transaction] = nil
       end
 
+      def db_transaction
+        begin
+          db_transaction_begin
+          yield
+          db_transaction_commit
+        rescue => e
+          db_transaction_rollback
+          halt_pb 500, {
+            name: e.class.to_s,
+            human_message: e.to_s,
+          }
+        ensure
+          db_ensure_transaction_close
+        end
+      end
+
       def decode_request(request_class)
         request_class.decode(request.body.read)
       end
@@ -75,11 +91,11 @@ module Xsuportal
         response_class.encode(response_class.new(payload))
       end
 
-      def current_contestant
+      def current_contestant(lock: false)
         @current_contestant ||= begin
           if session[:contestant_id]
             db.xquery(
-              'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1',
+              "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1#{lock ? ' FOR UPDATE' : ''}",
               session[:contestant_id],
             ).first
           else
@@ -88,11 +104,11 @@ module Xsuportal
         end
       end
 
-      def current_team
+      def current_team(lock: false)
         @current_team ||= begin
           if current_contestant
             db.xquery(
-              'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+              "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1#{lock ? ' FOR UPDATE' : ''}",
               current_contestant[:team_id],
             ).first
           else
@@ -142,14 +158,23 @@ module Xsuportal
           final_participation: team[:final_participation],
           hidden: team[:is_hidden],
           withdrawn: team[:withdrawn],
-          detail: !detail ? nil : Proto::Resources::Team::TeamDetail.new(
+          detail: detail ? Proto::Resources::Team::TeamDetail.new(
             email_address: team[:email_address],
             benchmark_target_id: 0, # TODO:
             invite_token: team[:invite_token],
-          ),
+          ) : nil,
           leader: leader_pb,
           members: members_pb,
         )
+      end
+
+      def halt_pb(code, name:nil, human_message:nil, human_descriptions:[])
+        halt code, encode_response(Proto::Error, {
+          code: code,
+          name: name,
+          human_message: human_message,
+          human_descriptions: human_descriptions,
+        })
       end
     end
 
@@ -165,9 +190,53 @@ module Xsuportal
     end
 
     get '/api/registration/session' do
+      team = nil
+      case
+      when current_team
+        team = current_team
+      when params[:team_id] && params[:invite_token]
+        team = db.xquery(
+          'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? LIMIT 1',
+          params[:team_id],
+          params[:invite_token],
+        ).first
+        unless team
+          halt_pb 404, {
+            human_descriptions: ['招待URLが無効です'],
+          }
+        end
+      end
+
+      members = []
+      if team
+        members = db.xquery(
+          'SELECT * FROM `contestants` WHERE `team_id` = ? LIMIT 1',
+          team[:id],
+        )
+      end
+
+      status = case
+      when current_contestant&.fetch(:team_id)
+        Proto::Services::Registration::GetRegistrationSessionResponse::Status::JOINED
+      when team && members.count >= 3
+        Proto::Services::Registration::GetRegistrationSessionResponse::Status::NOT_JOINABLE
+      # when !team && (!Contest.registration_open? || Contest.max_teams_reached?)
+      #   Proto::Services::Registration::GetRegistrationSessionResponse::Status::CLOSED
+      when !current_contestant
+        Proto::Services::Registration::GetRegistrationSessionResponse::Status::NOT_LOGGED_IN
+      when team
+        Proto::Services::Registration::GetRegistrationSessionResponse::Status::JOINABLE
+      when !team
+        Proto::Services::Registration::GetRegistrationSessionResponse::Status::CREATABLE
+      else
+        raise "undeterminable status"
+      end
+  
       encode_response(
         Proto::Services::Registration::GetRegistrationSessionResponse, {
-          status: :CREATABLE,
+          team: team ? team_pb(team, detail: current_contestant&.fetch(:id) == current_team&.fetch(:leader_id), member_detail: true, enable_members: true) : nil,
+          status: status,
+          member_invite_url: team ? "/registration?team_id=#{team[:id]}&invite_token=#{team[:invite_token]}" : nil,
         }
       )
     end
@@ -176,11 +245,11 @@ module Xsuportal
       req = decode_request Proto::Services::Registration::CreateTeamRequest
       result = {}
 
-      begin
+      db_transaction do
         invite_token = SecureRandom.urlsafe_base64(64)
-        db_transaction_begin
 
-        unless current_contestant
+        unless current_contestant(lock: true)
+          db_transaction_rollback
           halt 401, 'ログインが必要です'
         end
 
@@ -192,6 +261,7 @@ module Xsuportal
         )
         team_id = db.xquery('SELECT LAST_INSERT_ID() AS `id`').first&.fetch(:id)
         if !team_id
+          db_transaction_rollback
           halt 500, 'チームを登録できませんでした'
         end
 
@@ -209,25 +279,117 @@ module Xsuportal
           team_id,
         )
 
-        db_transaction_commit
-
         result = { team_id: team_id }
-      rescue Mysql2::Error => e
-        db_transaction_rollback
-        if e.errno == MYSQL_ER_DUP_ENTRY
-          halt 400, '既にチーム登録済みです'
-        end
-      rescue => e
-        db_transaction_rollback
-        halt 500, e.full_message
-      ensure
-        db_ensure_transaction_close
       end
 
       encode_response(
         Proto::Services::Registration::CreateTeamResponse,
         result,
       )
+    end
+
+    post '/api/registration/contestant' do
+      req = decode_request Proto::Services::Registration::JoinTeamRequest
+
+      db_transaction do
+        unless current_contestant
+          db_transaction_rollback
+          halt_pb 401, {
+            human_message: 'ログインが必要です'
+          }
+        end
+
+        team = db.xquery(
+          'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? LIMIT 1 FOR UPDATE',
+          req.team_id,
+          req.invite_token,
+        ).first
+
+        unless team
+          db_transaction_rollback
+          halt_pb 400, {
+            human_message: '招待URLが不正です'
+          }
+        end
+
+        db.xquery(
+          'UPDATE `contestants` SET `team_id` = ?, `name` = ?, `student` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          req.team_id,
+          req.name,
+          req.is_student,
+          current_contestant[:id],
+        )
+      end
+
+      encode_response Proto::Services::Registration::JoinTeamResponse
+    end
+
+    put '/api/registration' do
+      req = decode_request Proto::Services::Registration::UpdateRegistrationRequest
+
+      db_transaction do
+
+        unless current_contestant(lock: true)
+          db_transaction_rollback
+          halt_pb 401, {
+            human_message: 'ログインが必要です'
+          }
+        end
+        unless current_team(lock: true)
+          db_transaction_rollback
+          halt_pb 400, {
+            human_message: '参加登録されていません'
+          }
+        end
+
+        if current_team[:leader_id] == current_contestant[:id]
+          db.xquery(
+            'UPDATE `teams` SET `name` = ?, `email_address` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+            req.team_name,
+            req.email_address,
+            current_team[:id],
+          )
+        end
+
+        db.xquery(
+          'UPDATE `contestants` SET `name` = ?, `student` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          req.name,
+          req.is_student,
+          current_contestant[:id],
+        )
+      end
+
+      encode_response Proto::Services::Registration::UpdateRegistrationResponse
+    end
+
+    delete '/api/registration' do
+      db_transaction do
+        unless current_contestant(lock: true)
+          db_transaction_rollback
+          halt_pb 401, {
+            human_message: 'ログインが必要です'
+          }
+        end
+        unless current_team(lock: true)
+          db_transaction_rollback
+          halt_pb 400, {
+            human_message: 'チームに所属していません'
+          }
+        end
+
+        if current_team[:leader_id] == current_contestant[:id]
+          db.xquery(
+            'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+            current_team[:id],
+          )
+        end
+
+        db.xquery(
+          'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          current_contestant[:id],
+        )
+      end
+      encode_response Proto::Services::Registration::DeleteRegistrationResponse
     end
 
     post '/api/signup' do
