@@ -90,7 +90,16 @@ export class Registration extends React.Component<Props, State> {
       switch (this.state.registrationSession.status) {
         case xsuportal.proto.services.registration
           .GetRegistrationSessionResponse.Status.NOT_LOGGED_IN:
-          return login;
+          return (
+            <>
+              <div className="message is-danger">
+                <div className="message-body">
+                  参加登録をするにはログインしてください
+                </div>
+              </div>
+              {login}
+            </>
+          );
           break;
         case xsuportal.proto.services.registration
           .GetRegistrationSessionResponse.Status.CLOSED:
