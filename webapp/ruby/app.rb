@@ -177,6 +177,17 @@ module Xsuportal
       end
     end
 
+    post '/initialize' do
+      db.query('TRUNCATE `teams`')
+      db.query('TRUNCATE `contestants`')
+
+      encode_response Proto::Services::Common::InitializeResponse, {
+        # TODO: 負荷レベルの指定
+        # 実装言語
+        language: 'ruby',
+      }
+    end
+
     get '/api/session' do
       encode_response Proto::Services::Common::GetCurrentSessionResponse, {
         contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
@@ -185,7 +196,7 @@ module Xsuportal
     end
 
     get '/api/audience/teams' do
-      teams = db.xquery('SELECT * FROM `teams` WHERE `withdrawn` = FALSE AND `disqualified` = FALSE ORDER BY `updated_at` DESC')
+      teams = db.query('SELECT * FROM `teams` WHERE `withdrawn` = FALSE AND `disqualified` = FALSE ORDER BY `updated_at` DESC')
       items = teams.map do |team|
         members = db.xquery(
           'SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`',

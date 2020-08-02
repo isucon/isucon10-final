@@ -7075,6 +7075,353 @@ $root.xsuportal = (function() {
                  */
                 var common = {};
 
+                common.InitializeRequest = (function() {
+
+                    /**
+                     * Properties of an InitializeRequest.
+                     * @memberof xsuportal.proto.services.common
+                     * @interface IInitializeRequest
+                     */
+
+                    /**
+                     * Constructs a new InitializeRequest.
+                     * @memberof xsuportal.proto.services.common
+                     * @classdesc Represents an InitializeRequest.
+                     * @implements IInitializeRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.common.IInitializeRequest=} [properties] Properties to set
+                     */
+                    function InitializeRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new InitializeRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.common.InitializeRequest
+                     * @static
+                     * @param {xsuportal.proto.services.common.IInitializeRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.common.InitializeRequest} InitializeRequest instance
+                     */
+                    InitializeRequest.create = function create(properties) {
+                        return new InitializeRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified InitializeRequest message. Does not implicitly {@link xsuportal.proto.services.common.InitializeRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.common.InitializeRequest
+                     * @static
+                     * @param {xsuportal.proto.services.common.IInitializeRequest} message InitializeRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    InitializeRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified InitializeRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.InitializeRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.common.InitializeRequest
+                     * @static
+                     * @param {xsuportal.proto.services.common.IInitializeRequest} message InitializeRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    InitializeRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an InitializeRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.common.InitializeRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.common.InitializeRequest} InitializeRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    InitializeRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.common.InitializeRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an InitializeRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.common.InitializeRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.common.InitializeRequest} InitializeRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    InitializeRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an InitializeRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.common.InitializeRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    InitializeRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an InitializeRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.common.InitializeRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.common.InitializeRequest} InitializeRequest
+                     */
+                    InitializeRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.common.InitializeRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.common.InitializeRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from an InitializeRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.common.InitializeRequest
+                     * @static
+                     * @param {xsuportal.proto.services.common.InitializeRequest} message InitializeRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    InitializeRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this InitializeRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.common.InitializeRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    InitializeRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return InitializeRequest;
+                })();
+
+                common.InitializeResponse = (function() {
+
+                    /**
+                     * Properties of an InitializeResponse.
+                     * @memberof xsuportal.proto.services.common
+                     * @interface IInitializeResponse
+                     * @property {string|null} [language] InitializeResponse language
+                     */
+
+                    /**
+                     * Constructs a new InitializeResponse.
+                     * @memberof xsuportal.proto.services.common
+                     * @classdesc Represents an InitializeResponse.
+                     * @implements IInitializeResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.common.IInitializeResponse=} [properties] Properties to set
+                     */
+                    function InitializeResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * InitializeResponse language.
+                     * @member {string} language
+                     * @memberof xsuportal.proto.services.common.InitializeResponse
+                     * @instance
+                     */
+                    InitializeResponse.prototype.language = "";
+
+                    /**
+                     * Creates a new InitializeResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.common.InitializeResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.IInitializeResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.common.InitializeResponse} InitializeResponse instance
+                     */
+                    InitializeResponse.create = function create(properties) {
+                        return new InitializeResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified InitializeResponse message. Does not implicitly {@link xsuportal.proto.services.common.InitializeResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.common.InitializeResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.IInitializeResponse} message InitializeResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    InitializeResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.language != null && Object.hasOwnProperty.call(message, "language"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.language);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified InitializeResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.InitializeResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.common.InitializeResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.IInitializeResponse} message InitializeResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    InitializeResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an InitializeResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.common.InitializeResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.common.InitializeResponse} InitializeResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    InitializeResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.common.InitializeResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.language = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an InitializeResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.common.InitializeResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.common.InitializeResponse} InitializeResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    InitializeResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an InitializeResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.common.InitializeResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    InitializeResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.language != null && message.hasOwnProperty("language"))
+                            if (!$util.isString(message.language))
+                                return "language: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an InitializeResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.common.InitializeResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.common.InitializeResponse} InitializeResponse
+                     */
+                    InitializeResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.common.InitializeResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.common.InitializeResponse();
+                        if (object.language != null)
+                            message.language = String(object.language);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an InitializeResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.common.InitializeResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.InitializeResponse} message InitializeResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    InitializeResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.language = "";
+                        if (message.language != null && message.hasOwnProperty("language"))
+                            object.language = message.language;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this InitializeResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.common.InitializeResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    InitializeResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return InitializeResponse;
+                })();
+
                 common.GetCurrentSessionRequest = (function() {
 
                     /**

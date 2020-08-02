@@ -1,0 +1,7 @@
+syntax = "proto3";
+package xsuportal.proto.services.common;
+option go_package = "github.com/isucon/isucon10-final/proto/services/common";
+
+message InitializeRequest {}
+
+message InitializeResponse { string language = 1; }
