@@ -1,0 +1,8 @@
+$: << File.expand_path('lib', __dir__)
+require 'rake/testtask'
+require 'net/http'
+
+Rake::TestTask.new do |t|
+  t.test_files = FileList['test/*_test.rb']
+  t.warning = true
+end

@@ -167,10 +167,12 @@ module Xsuportal
 
       def encode_response_pb(payload={})
         cls = PB_TABLE.fetch(request.env.fetch('sinatra.route'))[1]
+        content_type "application/vnd.google.protobuf; proto=#{cls.descriptor.name}"
         cls.encode(cls.new(payload))
       end
 
       def halt_pb(code, name:nil, human_message:nil, human_descriptions:[])
+        content_type 'application/vnd.google.protobuf; proto=isuxportal.proto.Error'
         halt code, Proto::Error.encode(Proto::Error.new(
           code: code,
           name: name,
