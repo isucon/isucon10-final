@@ -1,5 +1,5 @@
 syntax = "proto3";
-package xsuportal.proto.services.common;
+package xsuportal.proto.services.admin;
 option go_package = "github.com/isucon/isucon10-final/proto/services/common";
 
 message InitializeRequest {}

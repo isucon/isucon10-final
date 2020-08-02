@@ -189,7 +189,7 @@ module Xsuportal
     end
 
     get '/api/session' do
-      encode_response Proto::Services::Common::GetCurrentSessionResponse, {
+      encode_response Proto::Services::Admin::GetCurrentSessionResponse, {
         contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
         team: current_team ? team_pb(current_team) : nil,
       }

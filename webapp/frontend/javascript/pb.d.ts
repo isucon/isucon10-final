@@ -2086,6 +2086,184 @@ export namespace xsuportal {
                 }
             }
 
+            /** Namespace admin. */
+            namespace admin {
+
+                /** Properties of an InitializeRequest. */
+                interface IInitializeRequest {
+                }
+
+                /** Represents an InitializeRequest. */
+                class InitializeRequest implements IInitializeRequest {
+
+                    /**
+                     * Constructs a new InitializeRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IInitializeRequest);
+
+                    /**
+                     * Creates a new InitializeRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns InitializeRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IInitializeRequest): xsuportal.proto.services.admin.InitializeRequest;
+
+                    /**
+                     * Encodes the specified InitializeRequest message. Does not implicitly {@link xsuportal.proto.services.admin.InitializeRequest.verify|verify} messages.
+                     * @param message InitializeRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IInitializeRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified InitializeRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.InitializeRequest.verify|verify} messages.
+                     * @param message InitializeRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IInitializeRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an InitializeRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns InitializeRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.InitializeRequest;
+
+                    /**
+                     * Decodes an InitializeRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns InitializeRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.InitializeRequest;
+
+                    /**
+                     * Verifies an InitializeRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an InitializeRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns InitializeRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.InitializeRequest;
+
+                    /**
+                     * Creates a plain object from an InitializeRequest message. Also converts values to other types if specified.
+                     * @param message InitializeRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.InitializeRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this InitializeRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an InitializeResponse. */
+                interface IInitializeResponse {
+
+                    /** InitializeResponse language */
+                    language?: (string|null);
+                }
+
+                /** Represents an InitializeResponse. */
+                class InitializeResponse implements IInitializeResponse {
+
+                    /**
+                     * Constructs a new InitializeResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IInitializeResponse);
+
+                    /** InitializeResponse language. */
+                    public language: string;
+
+                    /**
+                     * Creates a new InitializeResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns InitializeResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IInitializeResponse): xsuportal.proto.services.admin.InitializeResponse;
+
+                    /**
+                     * Encodes the specified InitializeResponse message. Does not implicitly {@link xsuportal.proto.services.admin.InitializeResponse.verify|verify} messages.
+                     * @param message InitializeResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IInitializeResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified InitializeResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.InitializeResponse.verify|verify} messages.
+                     * @param message InitializeResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IInitializeResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an InitializeResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns InitializeResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.InitializeResponse;
+
+                    /**
+                     * Decodes an InitializeResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns InitializeResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.InitializeResponse;
+
+                    /**
+                     * Verifies an InitializeResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an InitializeResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns InitializeResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.InitializeResponse;
+
+                    /**
+                     * Creates a plain object from an InitializeResponse message. Also converts values to other types if specified.
+                     * @param message InitializeResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.InitializeResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this InitializeResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+
             /** Namespace audience. */
             namespace audience {
 
@@ -2888,180 +3066,6 @@ export namespace xsuportal {
 
             /** Namespace common. */
             namespace common {
-
-                /** Properties of an InitializeRequest. */
-                interface IInitializeRequest {
-                }
-
-                /** Represents an InitializeRequest. */
-                class InitializeRequest implements IInitializeRequest {
-
-                    /**
-                     * Constructs a new InitializeRequest.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: xsuportal.proto.services.common.IInitializeRequest);
-
-                    /**
-                     * Creates a new InitializeRequest instance using the specified properties.
-                     * @param [properties] Properties to set
-                     * @returns InitializeRequest instance
-                     */
-                    public static create(properties?: xsuportal.proto.services.common.IInitializeRequest): xsuportal.proto.services.common.InitializeRequest;
-
-                    /**
-                     * Encodes the specified InitializeRequest message. Does not implicitly {@link xsuportal.proto.services.common.InitializeRequest.verify|verify} messages.
-                     * @param message InitializeRequest message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encode(message: xsuportal.proto.services.common.IInitializeRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Encodes the specified InitializeRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.InitializeRequest.verify|verify} messages.
-                     * @param message InitializeRequest message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encodeDelimited(message: xsuportal.proto.services.common.IInitializeRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Decodes an InitializeRequest message from the specified reader or buffer.
-                     * @param reader Reader or buffer to decode from
-                     * @param [length] Message length if known beforehand
-                     * @returns InitializeRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.common.InitializeRequest;
-
-                    /**
-                     * Decodes an InitializeRequest message from the specified reader or buffer, length delimited.
-                     * @param reader Reader or buffer to decode from
-                     * @returns InitializeRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.common.InitializeRequest;
-
-                    /**
-                     * Verifies an InitializeRequest message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates an InitializeRequest message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns InitializeRequest
-                     */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.common.InitializeRequest;
-
-                    /**
-                     * Creates a plain object from an InitializeRequest message. Also converts values to other types if specified.
-                     * @param message InitializeRequest
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: xsuportal.proto.services.common.InitializeRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this InitializeRequest to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of an InitializeResponse. */
-                interface IInitializeResponse {
-
-                    /** InitializeResponse language */
-                    language?: (string|null);
-                }
-
-                /** Represents an InitializeResponse. */
-                class InitializeResponse implements IInitializeResponse {
-
-                    /**
-                     * Constructs a new InitializeResponse.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: xsuportal.proto.services.common.IInitializeResponse);
-
-                    /** InitializeResponse language. */
-                    public language: string;
-
-                    /**
-                     * Creates a new InitializeResponse instance using the specified properties.
-                     * @param [properties] Properties to set
-                     * @returns InitializeResponse instance
-                     */
-                    public static create(properties?: xsuportal.proto.services.common.IInitializeResponse): xsuportal.proto.services.common.InitializeResponse;
-
-                    /**
-                     * Encodes the specified InitializeResponse message. Does not implicitly {@link xsuportal.proto.services.common.InitializeResponse.verify|verify} messages.
-                     * @param message InitializeResponse message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encode(message: xsuportal.proto.services.common.IInitializeResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Encodes the specified InitializeResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.InitializeResponse.verify|verify} messages.
-                     * @param message InitializeResponse message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encodeDelimited(message: xsuportal.proto.services.common.IInitializeResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Decodes an InitializeResponse message from the specified reader or buffer.
-                     * @param reader Reader or buffer to decode from
-                     * @param [length] Message length if known beforehand
-                     * @returns InitializeResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.common.InitializeResponse;
-
-                    /**
-                     * Decodes an InitializeResponse message from the specified reader or buffer, length delimited.
-                     * @param reader Reader or buffer to decode from
-                     * @returns InitializeResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.common.InitializeResponse;
-
-                    /**
-                     * Verifies an InitializeResponse message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates an InitializeResponse message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns InitializeResponse
-                     */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.common.InitializeResponse;
-
-                    /**
-                     * Creates a plain object from an InitializeResponse message. Also converts values to other types if specified.
-                     * @param message InitializeResponse
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: xsuportal.proto.services.common.InitializeResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this InitializeResponse to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
 
                 /** Properties of a GetCurrentSessionRequest. */
                 interface IGetCurrentSessionRequest {
