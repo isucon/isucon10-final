@@ -185,7 +185,23 @@ module Xsuportal
     end
 
     get '/api/audience/teams' do
-      encode_response Proto::Resources::Team
+      teams = db.xquery('SELECT * FROM `teams` WHERE `withdrawn` = FALSE AND `disqualified` = FALSE ORDER BY `updated_at` DESC')
+      items = teams.map do |team|
+        members = db.xquery(
+          'SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`',
+          team[:id],
+        )
+        Proto::Services::Audience::ListTeamsResponse::TeamListItem.new(
+          team_id: team[:id],
+          name: team[:name],
+          member_names: members.map { |_| _[:name] },
+          final_participation: team[:final_participation],
+          is_student: team[:student],
+        )
+      end
+      encode_response Proto::Services::Audience::ListTeamsResponse, {
+        teams: items,
+      }
     end
 
     get '/api/registration/session' do
