@@ -5,11 +5,7 @@ option go_package = "github.com/isucon/isucon10-final/proto/services/common";
 import "xsuportal/resources/team.proto";
 import "xsuportal/resources/contestant.proto";
 
-message GetCurrentSessionRequest {
-}
-
 message GetCurrentSessionResponse {
   xsuportal.proto.resources.Team team = 1;
   xsuportal.proto.resources.Contestant contestant = 2;
 }
-

@@ -5,8 +5,6 @@ require 'google/protobuf'
 
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/services/audience/team_list.proto", :syntax => :proto3) do
-    add_message "xsuportal.proto.services.audience.ListTeamsRequest" do
-    end
     add_message "xsuportal.proto.services.audience.ListTeamsResponse" do
       repeated :teams, :message, 1, "xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem"
     end
@@ -24,7 +22,6 @@ module Xsuportal
   module Proto
     module Services
       module Audience
-        ListTeamsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.audience.ListTeamsRequest").msgclass
         ListTeamsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.audience.ListTeamsResponse").msgclass
         ListTeamsResponse::TeamListItem = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem").msgclass
       end

@@ -4,13 +4,14 @@ require 'digest/sha2'
 require 'securerandom'
 require 'mysql2'
 require 'mysql2-cs-bind'
+
 $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
-Dir.chdir('lib') do
-  Dir.glob('**/*_pb.rb').each {|f| require f }
-end
+require 'routes'
 
 module Xsuportal
   class App < Sinatra::Base
+    include Xsuportal::Routes
+
     MYSQL_ER_DUP_ENTRY = 1062
 
     configure :development do
@@ -81,14 +82,6 @@ module Xsuportal
         ensure
           db_ensure_transaction_close
         end
-      end
-
-      def decode_request(request_class)
-        request_class.decode(request.body.read)
-      end
-
-      def encode_response(response_class, payload={})
-        response_class.encode(response_class.new(payload))
       end
 
       def current_contestant(lock: false)
@@ -168,12 +161,12 @@ module Xsuportal
       end
 
       def halt_pb(code, name:nil, human_message:nil, human_descriptions:[])
-        halt code, encode_response(Proto::Error, {
+        halt code, Proto::Error.encode(Proto::Error.new(
           code: code,
           name: name,
           human_message: human_message,
           human_descriptions: human_descriptions,
-        })
+        ))
       end
     end
 
@@ -181,18 +174,18 @@ module Xsuportal
       db.query('TRUNCATE `teams`')
       db.query('TRUNCATE `contestants`')
 
-      encode_response Proto::Services::Common::InitializeResponse, {
+      encode_response_pb(
         # TODO: 負荷レベルの指定
         # 実装言語
         language: 'ruby',
-      }
+      )
     end
 
     get '/api/session' do
-      encode_response Proto::Services::Admin::GetCurrentSessionResponse, {
+      encode_response_pb(
         contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
         team: current_team ? team_pb(current_team) : nil,
-      }
+      )
     end
 
     get '/api/audience/teams' do
@@ -210,9 +203,9 @@ module Xsuportal
           is_student: team[:student],
         )
       end
-      encode_response Proto::Services::Audience::ListTeamsResponse, {
+      encode_response_pb(
         teams: items,
-      }
+      )
     end
 
     get '/api/registration/session' do
@@ -258,17 +251,15 @@ module Xsuportal
         raise "undeterminable status"
       end
   
-      encode_response(
-        Proto::Services::Registration::GetRegistrationSessionResponse, {
-          team: team ? team_pb(team, detail: current_contestant&.fetch(:id) == current_team&.fetch(:leader_id), member_detail: true, enable_members: true) : nil,
-          status: status,
-          member_invite_url: team ? "/registration?team_id=#{team[:id]}&invite_token=#{team[:invite_token]}" : nil,
-        }
+      encode_response_pb(
+        team: team ? team_pb(team, detail: current_contestant&.fetch(:id) == current_team&.fetch(:leader_id), member_detail: true, enable_members: true) : nil,
+        status: status,
+        member_invite_url: team ? "/registration?team_id=#{team[:id]}&invite_token=#{team[:invite_token]}" : nil,
       )
     end
 
     post '/api/registration/team' do
-      req = decode_request Proto::Services::Registration::CreateTeamRequest
+      req = decode_request_pb
       result = {}
 
       db_transaction do
@@ -308,14 +299,11 @@ module Xsuportal
         result = { team_id: team_id }
       end
 
-      encode_response(
-        Proto::Services::Registration::CreateTeamResponse,
-        result,
-      )
+      encode_response_pb(result)
     end
 
     post '/api/registration/contestant' do
-      req = decode_request Proto::Services::Registration::JoinTeamRequest
+      req = decode_request_pb
 
       db_transaction do
         unless current_contestant
@@ -347,11 +335,11 @@ module Xsuportal
         )
       end
 
-      encode_response Proto::Services::Registration::JoinTeamResponse
+      encode_response_pb
     end
 
     put '/api/registration' do
-      req = decode_request Proto::Services::Registration::UpdateRegistrationRequest
+      req = decode_request_pb
 
       db_transaction do
 
@@ -385,7 +373,7 @@ module Xsuportal
         )
       end
 
-      encode_response Proto::Services::Registration::UpdateRegistrationResponse
+      encode_response_pb
     end
 
     delete '/api/registration' do
@@ -415,11 +403,11 @@ module Xsuportal
           current_contestant[:id],
         )
       end
-      encode_response Proto::Services::Registration::DeleteRegistrationResponse
+      encode_response_pb
     end
 
     post '/api/signup' do
-      req = decode_request Proto::Services::Account::SignupRequest
+      req = decode_request_pb
       result = nil
 
       begin
@@ -437,11 +425,11 @@ module Xsuportal
         end
       end
       
-      encode_response Proto::Services::Account::SignupResponse
+      encode_response_pb
     end
 
     post '/api/login' do
-      req = decode_request Proto::Services::Account::LoginRequest
+      req = decode_request_pb
 
       contestant = db.xquery(
         'SELECT `password` FROM `contestants` WHERE `id` = ? LIMIT 1',
@@ -454,11 +442,11 @@ module Xsuportal
         halt 400, 'ログインIDまたはパスワードが正しくありません'
       end
       
-      encode_response Proto::Services::Account::LoginResponse
+      encode_response_pb
     end
 
     post '/api/logout' do
-      req = decode_request Proto::Services::Account::LogoutRequest
+      req = decode_request_pb
 
       if session[:contestant_id]
         session.delete(:contestant_id)
@@ -466,7 +454,7 @@ module Xsuportal
         halt 401, 'ログインしていません'
       end
       
-      encode_response Proto::Services::Account::LogoutResponse
+      encode_response_pb
     end
   end
 end
