@@ -50,24 +50,5 @@ module Xsuportal
         Proto::Services::Account::LogoutResponse,
       ],
     }.freeze
-
-    def decode_request_pb
-      request_class_pb.decode(request.body.read)
-    end
-
-    def encode_response_pb(payload={})
-      cls = response_class_pb
-      cls.encode(cls.new(payload))
-    end
-
-    private
-
-    def request_class_pb
-      PB_TABLE.fetch(request.env.fetch('sinatra.route'))[0]
-    end
-
-    def response_class_pb
-      PB_TABLE.fetch(request.env.fetch('sinatra.route'))[1]
-    end
   end
 end

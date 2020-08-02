@@ -160,6 +160,16 @@ module Xsuportal
         )
       end
 
+      def decode_request_pb
+        cls = PB_TABLE.fetch(request.env.fetch('sinatra.route'))[0]
+        cls.decode(request.body.read)
+      end
+
+      def encode_response_pb(payload={})
+        cls = PB_TABLE.fetch(request.env.fetch('sinatra.route'))[1]
+        cls.encode(cls.new(payload))
+      end
+
       def halt_pb(code, name:nil, human_message:nil, human_descriptions:[])
         halt code, Proto::Error.encode(Proto::Error.new(
           code: code,
