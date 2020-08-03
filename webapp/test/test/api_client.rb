@@ -14,7 +14,7 @@ class ApiClient
   end
 
   def request(method, path, payload={})
-    path_wo_qs, qs = path.split('?')
+    path_wo_qs = path.split('?')[0]
     route = "#{method.upcase} #{path_wo_qs}"
     request_class_pb, response_class_pb = PB_TABLE[route]
     req = nil

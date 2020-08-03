@@ -129,7 +129,7 @@ export class Index extends React.Component<Props, State> {
     if (this.state.loggedin) {
       if (this.state.registered) {
         return (
-          <Link className="button is-light" to="#">
+          <Link className="button is-light" to="/registration">
             登録確認
           </Link>
         );
