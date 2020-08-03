@@ -5142,1078 +5142,6 @@ $root.xsuportal = (function() {
              */
             var services = {};
 
-            services.account = (function() {
-
-                /**
-                 * Namespace account.
-                 * @memberof xsuportal.proto.services
-                 * @namespace
-                 */
-                var account = {};
-
-                account.LoginRequest = (function() {
-
-                    /**
-                     * Properties of a LoginRequest.
-                     * @memberof xsuportal.proto.services.account
-                     * @interface ILoginRequest
-                     * @property {string|null} [contestantId] LoginRequest contestantId
-                     * @property {string|null} [password] LoginRequest password
-                     */
-
-                    /**
-                     * Constructs a new LoginRequest.
-                     * @memberof xsuportal.proto.services.account
-                     * @classdesc Represents a LoginRequest.
-                     * @implements ILoginRequest
-                     * @constructor
-                     * @param {xsuportal.proto.services.account.ILoginRequest=} [properties] Properties to set
-                     */
-                    function LoginRequest(properties) {
-                        if (properties)
-                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * LoginRequest contestantId.
-                     * @member {string} contestantId
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @instance
-                     */
-                    LoginRequest.prototype.contestantId = "";
-
-                    /**
-                     * LoginRequest password.
-                     * @member {string} password
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @instance
-                     */
-                    LoginRequest.prototype.password = "";
-
-                    /**
-                     * Creates a new LoginRequest instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILoginRequest=} [properties] Properties to set
-                     * @returns {xsuportal.proto.services.account.LoginRequest} LoginRequest instance
-                     */
-                    LoginRequest.create = function create(properties) {
-                        return new LoginRequest(properties);
-                    };
-
-                    /**
-                     * Encodes the specified LoginRequest message. Does not implicitly {@link xsuportal.proto.services.account.LoginRequest.verify|verify} messages.
-                     * @function encode
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILoginRequest} message LoginRequest message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    LoginRequest.encode = function encode(message, writer) {
-                        if (!writer)
-                            writer = $Writer.create();
-                        if (message.contestantId != null && Object.hasOwnProperty.call(message, "contestantId"))
-                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.contestantId);
-                        if (message.password != null && Object.hasOwnProperty.call(message, "password"))
-                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.password);
-                        return writer;
-                    };
-
-                    /**
-                     * Encodes the specified LoginRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LoginRequest.verify|verify} messages.
-                     * @function encodeDelimited
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILoginRequest} message LoginRequest message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    LoginRequest.encodeDelimited = function encodeDelimited(message, writer) {
-                        return this.encode(message, writer).ldelim();
-                    };
-
-                    /**
-                     * Decodes a LoginRequest message from the specified reader or buffer.
-                     * @function decode
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.services.account.LoginRequest} LoginRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    LoginRequest.decode = function decode(reader, length) {
-                        if (!(reader instanceof $Reader))
-                            reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.account.LoginRequest();
-                        while (reader.pos < end) {
-                            var tag = reader.uint32();
-                            switch (tag >>> 3) {
-                            case 1:
-                                message.contestantId = reader.string();
-                                break;
-                            case 2:
-                                message.password = reader.string();
-                                break;
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
-                            }
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Decodes a LoginRequest message from the specified reader or buffer, length delimited.
-                     * @function decodeDelimited
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.services.account.LoginRequest} LoginRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    LoginRequest.decodeDelimited = function decodeDelimited(reader) {
-                        if (!(reader instanceof $Reader))
-                            reader = new $Reader(reader);
-                        return this.decode(reader, reader.uint32());
-                    };
-
-                    /**
-                     * Verifies a LoginRequest message.
-                     * @function verify
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    LoginRequest.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.contestantId != null && message.hasOwnProperty("contestantId"))
-                            if (!$util.isString(message.contestantId))
-                                return "contestantId: string expected";
-                        if (message.password != null && message.hasOwnProperty("password"))
-                            if (!$util.isString(message.password))
-                                return "password: string expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a LoginRequest message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.services.account.LoginRequest} LoginRequest
-                     */
-                    LoginRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.services.account.LoginRequest)
-                            return object;
-                        var message = new $root.xsuportal.proto.services.account.LoginRequest();
-                        if (object.contestantId != null)
-                            message.contestantId = String(object.contestantId);
-                        if (object.password != null)
-                            message.password = String(object.password);
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a LoginRequest message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.LoginRequest} message LoginRequest
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    LoginRequest.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        var object = {};
-                        if (options.defaults) {
-                            object.contestantId = "";
-                            object.password = "";
-                        }
-                        if (message.contestantId != null && message.hasOwnProperty("contestantId"))
-                            object.contestantId = message.contestantId;
-                        if (message.password != null && message.hasOwnProperty("password"))
-                            object.password = message.password;
-                        return object;
-                    };
-
-                    /**
-                     * Converts this LoginRequest to JSON.
-                     * @function toJSON
-                     * @memberof xsuportal.proto.services.account.LoginRequest
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    LoginRequest.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return LoginRequest;
-                })();
-
-                account.LoginResponse = (function() {
-
-                    /**
-                     * Properties of a LoginResponse.
-                     * @memberof xsuportal.proto.services.account
-                     * @interface ILoginResponse
-                     */
-
-                    /**
-                     * Constructs a new LoginResponse.
-                     * @memberof xsuportal.proto.services.account
-                     * @classdesc Represents a LoginResponse.
-                     * @implements ILoginResponse
-                     * @constructor
-                     * @param {xsuportal.proto.services.account.ILoginResponse=} [properties] Properties to set
-                     */
-                    function LoginResponse(properties) {
-                        if (properties)
-                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * Creates a new LoginResponse instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILoginResponse=} [properties] Properties to set
-                     * @returns {xsuportal.proto.services.account.LoginResponse} LoginResponse instance
-                     */
-                    LoginResponse.create = function create(properties) {
-                        return new LoginResponse(properties);
-                    };
-
-                    /**
-                     * Encodes the specified LoginResponse message. Does not implicitly {@link xsuportal.proto.services.account.LoginResponse.verify|verify} messages.
-                     * @function encode
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILoginResponse} message LoginResponse message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    LoginResponse.encode = function encode(message, writer) {
-                        if (!writer)
-                            writer = $Writer.create();
-                        return writer;
-                    };
-
-                    /**
-                     * Encodes the specified LoginResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LoginResponse.verify|verify} messages.
-                     * @function encodeDelimited
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILoginResponse} message LoginResponse message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    LoginResponse.encodeDelimited = function encodeDelimited(message, writer) {
-                        return this.encode(message, writer).ldelim();
-                    };
-
-                    /**
-                     * Decodes a LoginResponse message from the specified reader or buffer.
-                     * @function decode
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.services.account.LoginResponse} LoginResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    LoginResponse.decode = function decode(reader, length) {
-                        if (!(reader instanceof $Reader))
-                            reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.account.LoginResponse();
-                        while (reader.pos < end) {
-                            var tag = reader.uint32();
-                            switch (tag >>> 3) {
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
-                            }
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Decodes a LoginResponse message from the specified reader or buffer, length delimited.
-                     * @function decodeDelimited
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.services.account.LoginResponse} LoginResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    LoginResponse.decodeDelimited = function decodeDelimited(reader) {
-                        if (!(reader instanceof $Reader))
-                            reader = new $Reader(reader);
-                        return this.decode(reader, reader.uint32());
-                    };
-
-                    /**
-                     * Verifies a LoginResponse message.
-                     * @function verify
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    LoginResponse.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a LoginResponse message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.services.account.LoginResponse} LoginResponse
-                     */
-                    LoginResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.services.account.LoginResponse)
-                            return object;
-                        return new $root.xsuportal.proto.services.account.LoginResponse();
-                    };
-
-                    /**
-                     * Creates a plain object from a LoginResponse message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.LoginResponse} message LoginResponse
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    LoginResponse.toObject = function toObject() {
-                        return {};
-                    };
-
-                    /**
-                     * Converts this LoginResponse to JSON.
-                     * @function toJSON
-                     * @memberof xsuportal.proto.services.account.LoginResponse
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    LoginResponse.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return LoginResponse;
-                })();
-
-                account.LogoutRequest = (function() {
-
-                    /**
-                     * Properties of a LogoutRequest.
-                     * @memberof xsuportal.proto.services.account
-                     * @interface ILogoutRequest
-                     */
-
-                    /**
-                     * Constructs a new LogoutRequest.
-                     * @memberof xsuportal.proto.services.account
-                     * @classdesc Represents a LogoutRequest.
-                     * @implements ILogoutRequest
-                     * @constructor
-                     * @param {xsuportal.proto.services.account.ILogoutRequest=} [properties] Properties to set
-                     */
-                    function LogoutRequest(properties) {
-                        if (properties)
-                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * Creates a new LogoutRequest instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.services.account.LogoutRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILogoutRequest=} [properties] Properties to set
-                     * @returns {xsuportal.proto.services.account.LogoutRequest} LogoutRequest instance
-                     */
-                    LogoutRequest.create = function create(properties) {
-                        return new LogoutRequest(properties);
-                    };
-
-                    /**
-                     * Encodes the specified LogoutRequest message. Does not implicitly {@link xsuportal.proto.services.account.LogoutRequest.verify|verify} messages.
-                     * @function encode
-                     * @memberof xsuportal.proto.services.account.LogoutRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILogoutRequest} message LogoutRequest message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    LogoutRequest.encode = function encode(message, writer) {
-                        if (!writer)
-                            writer = $Writer.create();
-                        return writer;
-                    };
-
-                    /**
-                     * Encodes the specified LogoutRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LogoutRequest.verify|verify} messages.
-                     * @function encodeDelimited
-                     * @memberof xsuportal.proto.services.account.LogoutRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILogoutRequest} message LogoutRequest message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    LogoutRequest.encodeDelimited = function encodeDelimited(message, writer) {
-                        return this.encode(message, writer).ldelim();
-                    };
-
-                    /**
-                     * Decodes a LogoutRequest message from the specified reader or buffer.
-                     * @function decode
-                     * @memberof xsuportal.proto.services.account.LogoutRequest
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.services.account.LogoutRequest} LogoutRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    LogoutRequest.decode = function decode(reader, length) {
-                        if (!(reader instanceof $Reader))
-                            reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.account.LogoutRequest();
-                        while (reader.pos < end) {
-                            var tag = reader.uint32();
-                            switch (tag >>> 3) {
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
-                            }
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Decodes a LogoutRequest message from the specified reader or buffer, length delimited.
-                     * @function decodeDelimited
-                     * @memberof xsuportal.proto.services.account.LogoutRequest
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.services.account.LogoutRequest} LogoutRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    LogoutRequest.decodeDelimited = function decodeDelimited(reader) {
-                        if (!(reader instanceof $Reader))
-                            reader = new $Reader(reader);
-                        return this.decode(reader, reader.uint32());
-                    };
-
-                    /**
-                     * Verifies a LogoutRequest message.
-                     * @function verify
-                     * @memberof xsuportal.proto.services.account.LogoutRequest
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    LogoutRequest.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a LogoutRequest message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof xsuportal.proto.services.account.LogoutRequest
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.services.account.LogoutRequest} LogoutRequest
-                     */
-                    LogoutRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.services.account.LogoutRequest)
-                            return object;
-                        return new $root.xsuportal.proto.services.account.LogoutRequest();
-                    };
-
-                    /**
-                     * Creates a plain object from a LogoutRequest message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof xsuportal.proto.services.account.LogoutRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.LogoutRequest} message LogoutRequest
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    LogoutRequest.toObject = function toObject() {
-                        return {};
-                    };
-
-                    /**
-                     * Converts this LogoutRequest to JSON.
-                     * @function toJSON
-                     * @memberof xsuportal.proto.services.account.LogoutRequest
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    LogoutRequest.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return LogoutRequest;
-                })();
-
-                account.LogoutResponse = (function() {
-
-                    /**
-                     * Properties of a LogoutResponse.
-                     * @memberof xsuportal.proto.services.account
-                     * @interface ILogoutResponse
-                     */
-
-                    /**
-                     * Constructs a new LogoutResponse.
-                     * @memberof xsuportal.proto.services.account
-                     * @classdesc Represents a LogoutResponse.
-                     * @implements ILogoutResponse
-                     * @constructor
-                     * @param {xsuportal.proto.services.account.ILogoutResponse=} [properties] Properties to set
-                     */
-                    function LogoutResponse(properties) {
-                        if (properties)
-                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * Creates a new LogoutResponse instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILogoutResponse=} [properties] Properties to set
-                     * @returns {xsuportal.proto.services.account.LogoutResponse} LogoutResponse instance
-                     */
-                    LogoutResponse.create = function create(properties) {
-                        return new LogoutResponse(properties);
-                    };
-
-                    /**
-                     * Encodes the specified LogoutResponse message. Does not implicitly {@link xsuportal.proto.services.account.LogoutResponse.verify|verify} messages.
-                     * @function encode
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILogoutResponse} message LogoutResponse message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    LogoutResponse.encode = function encode(message, writer) {
-                        if (!writer)
-                            writer = $Writer.create();
-                        return writer;
-                    };
-
-                    /**
-                     * Encodes the specified LogoutResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LogoutResponse.verify|verify} messages.
-                     * @function encodeDelimited
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.ILogoutResponse} message LogoutResponse message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    LogoutResponse.encodeDelimited = function encodeDelimited(message, writer) {
-                        return this.encode(message, writer).ldelim();
-                    };
-
-                    /**
-                     * Decodes a LogoutResponse message from the specified reader or buffer.
-                     * @function decode
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.services.account.LogoutResponse} LogoutResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    LogoutResponse.decode = function decode(reader, length) {
-                        if (!(reader instanceof $Reader))
-                            reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.account.LogoutResponse();
-                        while (reader.pos < end) {
-                            var tag = reader.uint32();
-                            switch (tag >>> 3) {
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
-                            }
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Decodes a LogoutResponse message from the specified reader or buffer, length delimited.
-                     * @function decodeDelimited
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.services.account.LogoutResponse} LogoutResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    LogoutResponse.decodeDelimited = function decodeDelimited(reader) {
-                        if (!(reader instanceof $Reader))
-                            reader = new $Reader(reader);
-                        return this.decode(reader, reader.uint32());
-                    };
-
-                    /**
-                     * Verifies a LogoutResponse message.
-                     * @function verify
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    LogoutResponse.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a LogoutResponse message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.services.account.LogoutResponse} LogoutResponse
-                     */
-                    LogoutResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.services.account.LogoutResponse)
-                            return object;
-                        return new $root.xsuportal.proto.services.account.LogoutResponse();
-                    };
-
-                    /**
-                     * Creates a plain object from a LogoutResponse message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.LogoutResponse} message LogoutResponse
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    LogoutResponse.toObject = function toObject() {
-                        return {};
-                    };
-
-                    /**
-                     * Converts this LogoutResponse to JSON.
-                     * @function toJSON
-                     * @memberof xsuportal.proto.services.account.LogoutResponse
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    LogoutResponse.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return LogoutResponse;
-                })();
-
-                account.SignupRequest = (function() {
-
-                    /**
-                     * Properties of a SignupRequest.
-                     * @memberof xsuportal.proto.services.account
-                     * @interface ISignupRequest
-                     * @property {string|null} [contestantId] SignupRequest contestantId
-                     * @property {string|null} [password] SignupRequest password
-                     */
-
-                    /**
-                     * Constructs a new SignupRequest.
-                     * @memberof xsuportal.proto.services.account
-                     * @classdesc Represents a SignupRequest.
-                     * @implements ISignupRequest
-                     * @constructor
-                     * @param {xsuportal.proto.services.account.ISignupRequest=} [properties] Properties to set
-                     */
-                    function SignupRequest(properties) {
-                        if (properties)
-                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * SignupRequest contestantId.
-                     * @member {string} contestantId
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @instance
-                     */
-                    SignupRequest.prototype.contestantId = "";
-
-                    /**
-                     * SignupRequest password.
-                     * @member {string} password
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @instance
-                     */
-                    SignupRequest.prototype.password = "";
-
-                    /**
-                     * Creates a new SignupRequest instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.ISignupRequest=} [properties] Properties to set
-                     * @returns {xsuportal.proto.services.account.SignupRequest} SignupRequest instance
-                     */
-                    SignupRequest.create = function create(properties) {
-                        return new SignupRequest(properties);
-                    };
-
-                    /**
-                     * Encodes the specified SignupRequest message. Does not implicitly {@link xsuportal.proto.services.account.SignupRequest.verify|verify} messages.
-                     * @function encode
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.ISignupRequest} message SignupRequest message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    SignupRequest.encode = function encode(message, writer) {
-                        if (!writer)
-                            writer = $Writer.create();
-                        if (message.contestantId != null && Object.hasOwnProperty.call(message, "contestantId"))
-                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.contestantId);
-                        if (message.password != null && Object.hasOwnProperty.call(message, "password"))
-                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.password);
-                        return writer;
-                    };
-
-                    /**
-                     * Encodes the specified SignupRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.SignupRequest.verify|verify} messages.
-                     * @function encodeDelimited
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.ISignupRequest} message SignupRequest message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    SignupRequest.encodeDelimited = function encodeDelimited(message, writer) {
-                        return this.encode(message, writer).ldelim();
-                    };
-
-                    /**
-                     * Decodes a SignupRequest message from the specified reader or buffer.
-                     * @function decode
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.services.account.SignupRequest} SignupRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    SignupRequest.decode = function decode(reader, length) {
-                        if (!(reader instanceof $Reader))
-                            reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.account.SignupRequest();
-                        while (reader.pos < end) {
-                            var tag = reader.uint32();
-                            switch (tag >>> 3) {
-                            case 1:
-                                message.contestantId = reader.string();
-                                break;
-                            case 2:
-                                message.password = reader.string();
-                                break;
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
-                            }
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Decodes a SignupRequest message from the specified reader or buffer, length delimited.
-                     * @function decodeDelimited
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.services.account.SignupRequest} SignupRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    SignupRequest.decodeDelimited = function decodeDelimited(reader) {
-                        if (!(reader instanceof $Reader))
-                            reader = new $Reader(reader);
-                        return this.decode(reader, reader.uint32());
-                    };
-
-                    /**
-                     * Verifies a SignupRequest message.
-                     * @function verify
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    SignupRequest.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.contestantId != null && message.hasOwnProperty("contestantId"))
-                            if (!$util.isString(message.contestantId))
-                                return "contestantId: string expected";
-                        if (message.password != null && message.hasOwnProperty("password"))
-                            if (!$util.isString(message.password))
-                                return "password: string expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a SignupRequest message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.services.account.SignupRequest} SignupRequest
-                     */
-                    SignupRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.services.account.SignupRequest)
-                            return object;
-                        var message = new $root.xsuportal.proto.services.account.SignupRequest();
-                        if (object.contestantId != null)
-                            message.contestantId = String(object.contestantId);
-                        if (object.password != null)
-                            message.password = String(object.password);
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a SignupRequest message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @static
-                     * @param {xsuportal.proto.services.account.SignupRequest} message SignupRequest
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    SignupRequest.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        var object = {};
-                        if (options.defaults) {
-                            object.contestantId = "";
-                            object.password = "";
-                        }
-                        if (message.contestantId != null && message.hasOwnProperty("contestantId"))
-                            object.contestantId = message.contestantId;
-                        if (message.password != null && message.hasOwnProperty("password"))
-                            object.password = message.password;
-                        return object;
-                    };
-
-                    /**
-                     * Converts this SignupRequest to JSON.
-                     * @function toJSON
-                     * @memberof xsuportal.proto.services.account.SignupRequest
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    SignupRequest.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return SignupRequest;
-                })();
-
-                account.SignupResponse = (function() {
-
-                    /**
-                     * Properties of a SignupResponse.
-                     * @memberof xsuportal.proto.services.account
-                     * @interface ISignupResponse
-                     */
-
-                    /**
-                     * Constructs a new SignupResponse.
-                     * @memberof xsuportal.proto.services.account
-                     * @classdesc Represents a SignupResponse.
-                     * @implements ISignupResponse
-                     * @constructor
-                     * @param {xsuportal.proto.services.account.ISignupResponse=} [properties] Properties to set
-                     */
-                    function SignupResponse(properties) {
-                        if (properties)
-                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * Creates a new SignupResponse instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.ISignupResponse=} [properties] Properties to set
-                     * @returns {xsuportal.proto.services.account.SignupResponse} SignupResponse instance
-                     */
-                    SignupResponse.create = function create(properties) {
-                        return new SignupResponse(properties);
-                    };
-
-                    /**
-                     * Encodes the specified SignupResponse message. Does not implicitly {@link xsuportal.proto.services.account.SignupResponse.verify|verify} messages.
-                     * @function encode
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.ISignupResponse} message SignupResponse message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    SignupResponse.encode = function encode(message, writer) {
-                        if (!writer)
-                            writer = $Writer.create();
-                        return writer;
-                    };
-
-                    /**
-                     * Encodes the specified SignupResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.SignupResponse.verify|verify} messages.
-                     * @function encodeDelimited
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.ISignupResponse} message SignupResponse message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    SignupResponse.encodeDelimited = function encodeDelimited(message, writer) {
-                        return this.encode(message, writer).ldelim();
-                    };
-
-                    /**
-                     * Decodes a SignupResponse message from the specified reader or buffer.
-                     * @function decode
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.services.account.SignupResponse} SignupResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    SignupResponse.decode = function decode(reader, length) {
-                        if (!(reader instanceof $Reader))
-                            reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.account.SignupResponse();
-                        while (reader.pos < end) {
-                            var tag = reader.uint32();
-                            switch (tag >>> 3) {
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
-                            }
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Decodes a SignupResponse message from the specified reader or buffer, length delimited.
-                     * @function decodeDelimited
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.services.account.SignupResponse} SignupResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    SignupResponse.decodeDelimited = function decodeDelimited(reader) {
-                        if (!(reader instanceof $Reader))
-                            reader = new $Reader(reader);
-                        return this.decode(reader, reader.uint32());
-                    };
-
-                    /**
-                     * Verifies a SignupResponse message.
-                     * @function verify
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    SignupResponse.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a SignupResponse message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.services.account.SignupResponse} SignupResponse
-                     */
-                    SignupResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.services.account.SignupResponse)
-                            return object;
-                        return new $root.xsuportal.proto.services.account.SignupResponse();
-                    };
-
-                    /**
-                     * Creates a plain object from a SignupResponse message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @static
-                     * @param {xsuportal.proto.services.account.SignupResponse} message SignupResponse
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    SignupResponse.toObject = function toObject() {
-                        return {};
-                    };
-
-                    /**
-                     * Converts this SignupResponse to JSON.
-                     * @function toJSON
-                     * @memberof xsuportal.proto.services.account.SignupResponse
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    SignupResponse.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return SignupResponse;
-                })();
-
-                return account;
-            })();
-
             services.admin = (function() {
 
                 /**
@@ -17317,6 +16245,696 @@ $root.xsuportal = (function() {
                     return ListContestantInstancesResponse;
                 })();
 
+                contestant.LoginRequest = (function() {
+
+                    /**
+                     * Properties of a LoginRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface ILoginRequest
+                     * @property {string|null} [contestantId] LoginRequest contestantId
+                     * @property {string|null} [password] LoginRequest password
+                     */
+
+                    /**
+                     * Constructs a new LoginRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a LoginRequest.
+                     * @implements ILoginRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.ILoginRequest=} [properties] Properties to set
+                     */
+                    function LoginRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * LoginRequest contestantId.
+                     * @member {string} contestantId
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @instance
+                     */
+                    LoginRequest.prototype.contestantId = "";
+
+                    /**
+                     * LoginRequest password.
+                     * @member {string} password
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @instance
+                     */
+                    LoginRequest.prototype.password = "";
+
+                    /**
+                     * Creates a new LoginRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILoginRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.LoginRequest} LoginRequest instance
+                     */
+                    LoginRequest.create = function create(properties) {
+                        return new LoginRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified LoginRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.LoginRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILoginRequest} message LoginRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LoginRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.contestantId != null && Object.hasOwnProperty.call(message, "contestantId"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.contestantId);
+                        if (message.password != null && Object.hasOwnProperty.call(message, "password"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.password);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified LoginRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.LoginRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILoginRequest} message LoginRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LoginRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a LoginRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.LoginRequest} LoginRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LoginRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.LoginRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.contestantId = reader.string();
+                                break;
+                            case 2:
+                                message.password = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a LoginRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.LoginRequest} LoginRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LoginRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a LoginRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    LoginRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.contestantId != null && message.hasOwnProperty("contestantId"))
+                            if (!$util.isString(message.contestantId))
+                                return "contestantId: string expected";
+                        if (message.password != null && message.hasOwnProperty("password"))
+                            if (!$util.isString(message.password))
+                                return "password: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a LoginRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.LoginRequest} LoginRequest
+                     */
+                    LoginRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.LoginRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.LoginRequest();
+                        if (object.contestantId != null)
+                            message.contestantId = String(object.contestantId);
+                        if (object.password != null)
+                            message.password = String(object.password);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a LoginRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.LoginRequest} message LoginRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    LoginRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.contestantId = "";
+                            object.password = "";
+                        }
+                        if (message.contestantId != null && message.hasOwnProperty("contestantId"))
+                            object.contestantId = message.contestantId;
+                        if (message.password != null && message.hasOwnProperty("password"))
+                            object.password = message.password;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this LoginRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.LoginRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    LoginRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return LoginRequest;
+                })();
+
+                contestant.LoginResponse = (function() {
+
+                    /**
+                     * Properties of a LoginResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface ILoginResponse
+                     */
+
+                    /**
+                     * Constructs a new LoginResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a LoginResponse.
+                     * @implements ILoginResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.ILoginResponse=} [properties] Properties to set
+                     */
+                    function LoginResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new LoginResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.LoginResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILoginResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.LoginResponse} LoginResponse instance
+                     */
+                    LoginResponse.create = function create(properties) {
+                        return new LoginResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified LoginResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.LoginResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.LoginResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILoginResponse} message LoginResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LoginResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified LoginResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.LoginResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.LoginResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILoginResponse} message LoginResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LoginResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a LoginResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.LoginResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.LoginResponse} LoginResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LoginResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.LoginResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a LoginResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.LoginResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.LoginResponse} LoginResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LoginResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a LoginResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.LoginResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    LoginResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a LoginResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.LoginResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.LoginResponse} LoginResponse
+                     */
+                    LoginResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.LoginResponse)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.LoginResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from a LoginResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.LoginResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.LoginResponse} message LoginResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    LoginResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this LoginResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.LoginResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    LoginResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return LoginResponse;
+                })();
+
+                contestant.LogoutRequest = (function() {
+
+                    /**
+                     * Properties of a LogoutRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface ILogoutRequest
+                     */
+
+                    /**
+                     * Constructs a new LogoutRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a LogoutRequest.
+                     * @implements ILogoutRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.ILogoutRequest=} [properties] Properties to set
+                     */
+                    function LogoutRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new LogoutRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.LogoutRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILogoutRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.LogoutRequest} LogoutRequest instance
+                     */
+                    LogoutRequest.create = function create(properties) {
+                        return new LogoutRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified LogoutRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.LogoutRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.LogoutRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILogoutRequest} message LogoutRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LogoutRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified LogoutRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.LogoutRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.LogoutRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILogoutRequest} message LogoutRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LogoutRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a LogoutRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.LogoutRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.LogoutRequest} LogoutRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LogoutRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.LogoutRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a LogoutRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.LogoutRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.LogoutRequest} LogoutRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LogoutRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a LogoutRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.LogoutRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    LogoutRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a LogoutRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.LogoutRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.LogoutRequest} LogoutRequest
+                     */
+                    LogoutRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.LogoutRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.LogoutRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a LogoutRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.LogoutRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.LogoutRequest} message LogoutRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    LogoutRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this LogoutRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.LogoutRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    LogoutRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return LogoutRequest;
+                })();
+
+                contestant.LogoutResponse = (function() {
+
+                    /**
+                     * Properties of a LogoutResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface ILogoutResponse
+                     */
+
+                    /**
+                     * Constructs a new LogoutResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a LogoutResponse.
+                     * @implements ILogoutResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.ILogoutResponse=} [properties] Properties to set
+                     */
+                    function LogoutResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new LogoutResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.LogoutResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILogoutResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.LogoutResponse} LogoutResponse instance
+                     */
+                    LogoutResponse.create = function create(properties) {
+                        return new LogoutResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified LogoutResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.LogoutResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.LogoutResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILogoutResponse} message LogoutResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LogoutResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified LogoutResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.LogoutResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.LogoutResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ILogoutResponse} message LogoutResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LogoutResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a LogoutResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.LogoutResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.LogoutResponse} LogoutResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LogoutResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.LogoutResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a LogoutResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.LogoutResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.LogoutResponse} LogoutResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LogoutResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a LogoutResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.LogoutResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    LogoutResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a LogoutResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.LogoutResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.LogoutResponse} LogoutResponse
+                     */
+                    LogoutResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.LogoutResponse)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.LogoutResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from a LogoutResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.LogoutResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.LogoutResponse} message LogoutResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    LogoutResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this LogoutResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.LogoutResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    LogoutResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return LogoutResponse;
+                })();
+
                 contestant.GetNotificationsRequest = (function() {
 
                     /**
@@ -17676,6 +17294,376 @@ $root.xsuportal = (function() {
                     };
 
                     return GetNotificationsResponse;
+                })();
+
+                contestant.SignupRequest = (function() {
+
+                    /**
+                     * Properties of a SignupRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface ISignupRequest
+                     * @property {string|null} [contestantId] SignupRequest contestantId
+                     * @property {string|null} [password] SignupRequest password
+                     */
+
+                    /**
+                     * Constructs a new SignupRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a SignupRequest.
+                     * @implements ISignupRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.ISignupRequest=} [properties] Properties to set
+                     */
+                    function SignupRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * SignupRequest contestantId.
+                     * @member {string} contestantId
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @instance
+                     */
+                    SignupRequest.prototype.contestantId = "";
+
+                    /**
+                     * SignupRequest password.
+                     * @member {string} password
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @instance
+                     */
+                    SignupRequest.prototype.password = "";
+
+                    /**
+                     * Creates a new SignupRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISignupRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.SignupRequest} SignupRequest instance
+                     */
+                    SignupRequest.create = function create(properties) {
+                        return new SignupRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified SignupRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.SignupRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISignupRequest} message SignupRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    SignupRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.contestantId != null && Object.hasOwnProperty.call(message, "contestantId"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.contestantId);
+                        if (message.password != null && Object.hasOwnProperty.call(message, "password"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.password);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified SignupRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.SignupRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISignupRequest} message SignupRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    SignupRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a SignupRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.SignupRequest} SignupRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    SignupRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.SignupRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.contestantId = reader.string();
+                                break;
+                            case 2:
+                                message.password = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a SignupRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.SignupRequest} SignupRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    SignupRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a SignupRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    SignupRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.contestantId != null && message.hasOwnProperty("contestantId"))
+                            if (!$util.isString(message.contestantId))
+                                return "contestantId: string expected";
+                        if (message.password != null && message.hasOwnProperty("password"))
+                            if (!$util.isString(message.password))
+                                return "password: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a SignupRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.SignupRequest} SignupRequest
+                     */
+                    SignupRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.SignupRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.SignupRequest();
+                        if (object.contestantId != null)
+                            message.contestantId = String(object.contestantId);
+                        if (object.password != null)
+                            message.password = String(object.password);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a SignupRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.SignupRequest} message SignupRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    SignupRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.contestantId = "";
+                            object.password = "";
+                        }
+                        if (message.contestantId != null && message.hasOwnProperty("contestantId"))
+                            object.contestantId = message.contestantId;
+                        if (message.password != null && message.hasOwnProperty("password"))
+                            object.password = message.password;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this SignupRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.SignupRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    SignupRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return SignupRequest;
+                })();
+
+                contestant.SignupResponse = (function() {
+
+                    /**
+                     * Properties of a SignupResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface ISignupResponse
+                     */
+
+                    /**
+                     * Constructs a new SignupResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a SignupResponse.
+                     * @implements ISignupResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.ISignupResponse=} [properties] Properties to set
+                     */
+                    function SignupResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new SignupResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.SignupResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISignupResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.SignupResponse} SignupResponse instance
+                     */
+                    SignupResponse.create = function create(properties) {
+                        return new SignupResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified SignupResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.SignupResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.SignupResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISignupResponse} message SignupResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    SignupResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified SignupResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.SignupResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.SignupResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISignupResponse} message SignupResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    SignupResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a SignupResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.SignupResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.SignupResponse} SignupResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    SignupResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.SignupResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a SignupResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.SignupResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.SignupResponse} SignupResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    SignupResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a SignupResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.SignupResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    SignupResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a SignupResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.SignupResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.SignupResponse} SignupResponse
+                     */
+                    SignupResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.SignupResponse)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.SignupResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from a SignupResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.SignupResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.SignupResponse} message SignupResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    SignupResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this SignupResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.SignupResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    SignupResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return SignupResponse;
                 })();
 
                 return contestant;

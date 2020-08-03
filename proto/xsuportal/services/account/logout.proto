@@ -1,7 +1,0 @@
-syntax = "proto3";
-package xsuportal.proto.services.account;
-option go_package = "github.com/isucon/isucon10-final/proto/services/account";
-
-message LogoutRequest {}
-
-message LogoutResponse {}

@@ -1,0 +1,7 @@
+syntax = "proto3";
+package xsuportal.proto.services.contestant;
+option go_package = "github.com/isucon/isucon10-final/proto/services/contestant";
+
+message LogoutRequest {}
+
+message LogoutResponse {}

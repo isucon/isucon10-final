@@ -151,10 +151,10 @@ export class ApiClient {
   }
 
   public async signup(
-    payload: xsuportal.proto.services.account.ISignupRequest
+    payload: xsuportal.proto.services.contestant.ISignupRequest
   ) {
-    const responseClass = xsuportal.proto.services.account.SignupResponse;
-    const payloadClass = xsuportal.proto.services.account.SignupRequest;
+    const responseClass = xsuportal.proto.services.contestant.SignupResponse;
+    const payloadClass = xsuportal.proto.services.contestant.SignupRequest;
     const payloadMessage = payload
       ? payloadClass.encode(payloadClass.fromObject(payload)).finish()
       : null;
@@ -167,9 +167,9 @@ export class ApiClient {
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async login(payload: xsuportal.proto.services.account.ILoginRequest) {
-    const responseClass = xsuportal.proto.services.account.LoginResponse;
-    const payloadClass = xsuportal.proto.services.account.LoginRequest;
+  public async login(payload: xsuportal.proto.services.contestant.ILoginRequest) {
+    const responseClass = xsuportal.proto.services.contestant.LoginResponse;
+    const payloadClass = xsuportal.proto.services.contestant.LoginRequest;
     const payloadMessage = payload
       ? payloadClass.encode(payloadClass.fromObject(payload)).finish()
       : null;
@@ -183,10 +183,10 @@ export class ApiClient {
   }
 
   public async logout(
-    payload: xsuportal.proto.services.account.ILogoutRequest
+    payload: xsuportal.proto.services.contestant.ILogoutRequest
   ) {
-    const responseClass = xsuportal.proto.services.account.LogoutResponse;
-    const payloadClass = xsuportal.proto.services.account.LogoutRequest;
+    const responseClass = xsuportal.proto.services.contestant.LogoutResponse;
+    const payloadClass = xsuportal.proto.services.contestant.LogoutRequest;
     const payloadMessage = payload
       ? payloadClass.encode(payloadClass.fromObject(payload)).finish()
       : null;

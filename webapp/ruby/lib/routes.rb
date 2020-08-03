@@ -38,16 +38,16 @@ module Xsuportal
         Proto::Services::Registration::DeleteRegistrationResponse,
       ],
       'POST /api/signup' => [
-        Proto::Services::Account::SignupRequest,
-        Proto::Services::Account::SignupResponse,
+        Proto::Services::Contestant::SignupRequest,
+        Proto::Services::Contestant::SignupResponse,
       ],
       'POST /api/login' => [
-        Proto::Services::Account::LoginRequest,
-        Proto::Services::Account::LoginResponse,
+        Proto::Services::Contestant::LoginRequest,
+        Proto::Services::Contestant::LoginResponse,
       ],
       'POST /api/logout' => [
-        Proto::Services::Account::LogoutRequest,
-        Proto::Services::Account::LogoutResponse,
+        Proto::Services::Contestant::LogoutRequest,
+        Proto::Services::Contestant::LogoutResponse,
       ],
     }.freeze
   end

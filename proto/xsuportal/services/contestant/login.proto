@@ -1,0 +1,10 @@
+syntax = "proto3";
+package xsuportal.proto.services.contestant;
+option go_package = "github.com/isucon/isucon10-final/proto/services/contestant";
+
+message LoginRequest {
+  string contestant_id = 1;
+  string password = 2;
+}
+
+message LoginResponse {}

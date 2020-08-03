@@ -1890,538 +1890,6 @@ export namespace xsuportal {
         /** Namespace services. */
         namespace services {
 
-            /** Namespace account. */
-            namespace account {
-
-                /** Properties of a LoginRequest. */
-                interface ILoginRequest {
-
-                    /** LoginRequest contestantId */
-                    contestantId?: (string|null);
-
-                    /** LoginRequest password */
-                    password?: (string|null);
-                }
-
-                /** Represents a LoginRequest. */
-                class LoginRequest implements ILoginRequest {
-
-                    /**
-                     * Constructs a new LoginRequest.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: xsuportal.proto.services.account.ILoginRequest);
-
-                    /** LoginRequest contestantId. */
-                    public contestantId: string;
-
-                    /** LoginRequest password. */
-                    public password: string;
-
-                    /**
-                     * Creates a new LoginRequest instance using the specified properties.
-                     * @param [properties] Properties to set
-                     * @returns LoginRequest instance
-                     */
-                    public static create(properties?: xsuportal.proto.services.account.ILoginRequest): xsuportal.proto.services.account.LoginRequest;
-
-                    /**
-                     * Encodes the specified LoginRequest message. Does not implicitly {@link xsuportal.proto.services.account.LoginRequest.verify|verify} messages.
-                     * @param message LoginRequest message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encode(message: xsuportal.proto.services.account.ILoginRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Encodes the specified LoginRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LoginRequest.verify|verify} messages.
-                     * @param message LoginRequest message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encodeDelimited(message: xsuportal.proto.services.account.ILoginRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Decodes a LoginRequest message from the specified reader or buffer.
-                     * @param reader Reader or buffer to decode from
-                     * @param [length] Message length if known beforehand
-                     * @returns LoginRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.account.LoginRequest;
-
-                    /**
-                     * Decodes a LoginRequest message from the specified reader or buffer, length delimited.
-                     * @param reader Reader or buffer to decode from
-                     * @returns LoginRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.account.LoginRequest;
-
-                    /**
-                     * Verifies a LoginRequest message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a LoginRequest message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns LoginRequest
-                     */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.account.LoginRequest;
-
-                    /**
-                     * Creates a plain object from a LoginRequest message. Also converts values to other types if specified.
-                     * @param message LoginRequest
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: xsuportal.proto.services.account.LoginRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this LoginRequest to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a LoginResponse. */
-                interface ILoginResponse {
-                }
-
-                /** Represents a LoginResponse. */
-                class LoginResponse implements ILoginResponse {
-
-                    /**
-                     * Constructs a new LoginResponse.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: xsuportal.proto.services.account.ILoginResponse);
-
-                    /**
-                     * Creates a new LoginResponse instance using the specified properties.
-                     * @param [properties] Properties to set
-                     * @returns LoginResponse instance
-                     */
-                    public static create(properties?: xsuportal.proto.services.account.ILoginResponse): xsuportal.proto.services.account.LoginResponse;
-
-                    /**
-                     * Encodes the specified LoginResponse message. Does not implicitly {@link xsuportal.proto.services.account.LoginResponse.verify|verify} messages.
-                     * @param message LoginResponse message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encode(message: xsuportal.proto.services.account.ILoginResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Encodes the specified LoginResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LoginResponse.verify|verify} messages.
-                     * @param message LoginResponse message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encodeDelimited(message: xsuportal.proto.services.account.ILoginResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Decodes a LoginResponse message from the specified reader or buffer.
-                     * @param reader Reader or buffer to decode from
-                     * @param [length] Message length if known beforehand
-                     * @returns LoginResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.account.LoginResponse;
-
-                    /**
-                     * Decodes a LoginResponse message from the specified reader or buffer, length delimited.
-                     * @param reader Reader or buffer to decode from
-                     * @returns LoginResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.account.LoginResponse;
-
-                    /**
-                     * Verifies a LoginResponse message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a LoginResponse message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns LoginResponse
-                     */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.account.LoginResponse;
-
-                    /**
-                     * Creates a plain object from a LoginResponse message. Also converts values to other types if specified.
-                     * @param message LoginResponse
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: xsuportal.proto.services.account.LoginResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this LoginResponse to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a LogoutRequest. */
-                interface ILogoutRequest {
-                }
-
-                /** Represents a LogoutRequest. */
-                class LogoutRequest implements ILogoutRequest {
-
-                    /**
-                     * Constructs a new LogoutRequest.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: xsuportal.proto.services.account.ILogoutRequest);
-
-                    /**
-                     * Creates a new LogoutRequest instance using the specified properties.
-                     * @param [properties] Properties to set
-                     * @returns LogoutRequest instance
-                     */
-                    public static create(properties?: xsuportal.proto.services.account.ILogoutRequest): xsuportal.proto.services.account.LogoutRequest;
-
-                    /**
-                     * Encodes the specified LogoutRequest message. Does not implicitly {@link xsuportal.proto.services.account.LogoutRequest.verify|verify} messages.
-                     * @param message LogoutRequest message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encode(message: xsuportal.proto.services.account.ILogoutRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Encodes the specified LogoutRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LogoutRequest.verify|verify} messages.
-                     * @param message LogoutRequest message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encodeDelimited(message: xsuportal.proto.services.account.ILogoutRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Decodes a LogoutRequest message from the specified reader or buffer.
-                     * @param reader Reader or buffer to decode from
-                     * @param [length] Message length if known beforehand
-                     * @returns LogoutRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.account.LogoutRequest;
-
-                    /**
-                     * Decodes a LogoutRequest message from the specified reader or buffer, length delimited.
-                     * @param reader Reader or buffer to decode from
-                     * @returns LogoutRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.account.LogoutRequest;
-
-                    /**
-                     * Verifies a LogoutRequest message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a LogoutRequest message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns LogoutRequest
-                     */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.account.LogoutRequest;
-
-                    /**
-                     * Creates a plain object from a LogoutRequest message. Also converts values to other types if specified.
-                     * @param message LogoutRequest
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: xsuportal.proto.services.account.LogoutRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this LogoutRequest to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a LogoutResponse. */
-                interface ILogoutResponse {
-                }
-
-                /** Represents a LogoutResponse. */
-                class LogoutResponse implements ILogoutResponse {
-
-                    /**
-                     * Constructs a new LogoutResponse.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: xsuportal.proto.services.account.ILogoutResponse);
-
-                    /**
-                     * Creates a new LogoutResponse instance using the specified properties.
-                     * @param [properties] Properties to set
-                     * @returns LogoutResponse instance
-                     */
-                    public static create(properties?: xsuportal.proto.services.account.ILogoutResponse): xsuportal.proto.services.account.LogoutResponse;
-
-                    /**
-                     * Encodes the specified LogoutResponse message. Does not implicitly {@link xsuportal.proto.services.account.LogoutResponse.verify|verify} messages.
-                     * @param message LogoutResponse message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encode(message: xsuportal.proto.services.account.ILogoutResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Encodes the specified LogoutResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.LogoutResponse.verify|verify} messages.
-                     * @param message LogoutResponse message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encodeDelimited(message: xsuportal.proto.services.account.ILogoutResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Decodes a LogoutResponse message from the specified reader or buffer.
-                     * @param reader Reader or buffer to decode from
-                     * @param [length] Message length if known beforehand
-                     * @returns LogoutResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.account.LogoutResponse;
-
-                    /**
-                     * Decodes a LogoutResponse message from the specified reader or buffer, length delimited.
-                     * @param reader Reader or buffer to decode from
-                     * @returns LogoutResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.account.LogoutResponse;
-
-                    /**
-                     * Verifies a LogoutResponse message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a LogoutResponse message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns LogoutResponse
-                     */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.account.LogoutResponse;
-
-                    /**
-                     * Creates a plain object from a LogoutResponse message. Also converts values to other types if specified.
-                     * @param message LogoutResponse
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: xsuportal.proto.services.account.LogoutResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this LogoutResponse to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a SignupRequest. */
-                interface ISignupRequest {
-
-                    /** SignupRequest contestantId */
-                    contestantId?: (string|null);
-
-                    /** SignupRequest password */
-                    password?: (string|null);
-                }
-
-                /** Represents a SignupRequest. */
-                class SignupRequest implements ISignupRequest {
-
-                    /**
-                     * Constructs a new SignupRequest.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: xsuportal.proto.services.account.ISignupRequest);
-
-                    /** SignupRequest contestantId. */
-                    public contestantId: string;
-
-                    /** SignupRequest password. */
-                    public password: string;
-
-                    /**
-                     * Creates a new SignupRequest instance using the specified properties.
-                     * @param [properties] Properties to set
-                     * @returns SignupRequest instance
-                     */
-                    public static create(properties?: xsuportal.proto.services.account.ISignupRequest): xsuportal.proto.services.account.SignupRequest;
-
-                    /**
-                     * Encodes the specified SignupRequest message. Does not implicitly {@link xsuportal.proto.services.account.SignupRequest.verify|verify} messages.
-                     * @param message SignupRequest message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encode(message: xsuportal.proto.services.account.ISignupRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Encodes the specified SignupRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.SignupRequest.verify|verify} messages.
-                     * @param message SignupRequest message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encodeDelimited(message: xsuportal.proto.services.account.ISignupRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Decodes a SignupRequest message from the specified reader or buffer.
-                     * @param reader Reader or buffer to decode from
-                     * @param [length] Message length if known beforehand
-                     * @returns SignupRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.account.SignupRequest;
-
-                    /**
-                     * Decodes a SignupRequest message from the specified reader or buffer, length delimited.
-                     * @param reader Reader or buffer to decode from
-                     * @returns SignupRequest
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.account.SignupRequest;
-
-                    /**
-                     * Verifies a SignupRequest message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a SignupRequest message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns SignupRequest
-                     */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.account.SignupRequest;
-
-                    /**
-                     * Creates a plain object from a SignupRequest message. Also converts values to other types if specified.
-                     * @param message SignupRequest
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: xsuportal.proto.services.account.SignupRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this SignupRequest to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a SignupResponse. */
-                interface ISignupResponse {
-                }
-
-                /** Represents a SignupResponse. */
-                class SignupResponse implements ISignupResponse {
-
-                    /**
-                     * Constructs a new SignupResponse.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: xsuportal.proto.services.account.ISignupResponse);
-
-                    /**
-                     * Creates a new SignupResponse instance using the specified properties.
-                     * @param [properties] Properties to set
-                     * @returns SignupResponse instance
-                     */
-                    public static create(properties?: xsuportal.proto.services.account.ISignupResponse): xsuportal.proto.services.account.SignupResponse;
-
-                    /**
-                     * Encodes the specified SignupResponse message. Does not implicitly {@link xsuportal.proto.services.account.SignupResponse.verify|verify} messages.
-                     * @param message SignupResponse message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encode(message: xsuportal.proto.services.account.ISignupResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Encodes the specified SignupResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.account.SignupResponse.verify|verify} messages.
-                     * @param message SignupResponse message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encodeDelimited(message: xsuportal.proto.services.account.ISignupResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Decodes a SignupResponse message from the specified reader or buffer.
-                     * @param reader Reader or buffer to decode from
-                     * @param [length] Message length if known beforehand
-                     * @returns SignupResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.account.SignupResponse;
-
-                    /**
-                     * Decodes a SignupResponse message from the specified reader or buffer, length delimited.
-                     * @param reader Reader or buffer to decode from
-                     * @returns SignupResponse
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.account.SignupResponse;
-
-                    /**
-                     * Verifies a SignupResponse message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a SignupResponse message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns SignupResponse
-                     */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.account.SignupResponse;
-
-                    /**
-                     * Creates a plain object from a SignupResponse message. Also converts values to other types if specified.
-                     * @param message SignupResponse
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: xsuportal.proto.services.account.SignupResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this SignupResponse to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-            }
-
             /** Namespace admin. */
             namespace admin {
 
@@ -7439,6 +6907,354 @@ export namespace xsuportal {
                     public toJSON(): { [k: string]: any };
                 }
 
+                /** Properties of a LoginRequest. */
+                interface ILoginRequest {
+
+                    /** LoginRequest contestantId */
+                    contestantId?: (string|null);
+
+                    /** LoginRequest password */
+                    password?: (string|null);
+                }
+
+                /** Represents a LoginRequest. */
+                class LoginRequest implements ILoginRequest {
+
+                    /**
+                     * Constructs a new LoginRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.ILoginRequest);
+
+                    /** LoginRequest contestantId. */
+                    public contestantId: string;
+
+                    /** LoginRequest password. */
+                    public password: string;
+
+                    /**
+                     * Creates a new LoginRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns LoginRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.ILoginRequest): xsuportal.proto.services.contestant.LoginRequest;
+
+                    /**
+                     * Encodes the specified LoginRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.LoginRequest.verify|verify} messages.
+                     * @param message LoginRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.ILoginRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified LoginRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.LoginRequest.verify|verify} messages.
+                     * @param message LoginRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.ILoginRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a LoginRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns LoginRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.LoginRequest;
+
+                    /**
+                     * Decodes a LoginRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns LoginRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.LoginRequest;
+
+                    /**
+                     * Verifies a LoginRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LoginRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LoginRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.LoginRequest;
+
+                    /**
+                     * Creates a plain object from a LoginRequest message. Also converts values to other types if specified.
+                     * @param message LoginRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.LoginRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LoginRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a LoginResponse. */
+                interface ILoginResponse {
+                }
+
+                /** Represents a LoginResponse. */
+                class LoginResponse implements ILoginResponse {
+
+                    /**
+                     * Constructs a new LoginResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.ILoginResponse);
+
+                    /**
+                     * Creates a new LoginResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns LoginResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.ILoginResponse): xsuportal.proto.services.contestant.LoginResponse;
+
+                    /**
+                     * Encodes the specified LoginResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.LoginResponse.verify|verify} messages.
+                     * @param message LoginResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.ILoginResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified LoginResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.LoginResponse.verify|verify} messages.
+                     * @param message LoginResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.ILoginResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a LoginResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns LoginResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.LoginResponse;
+
+                    /**
+                     * Decodes a LoginResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns LoginResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.LoginResponse;
+
+                    /**
+                     * Verifies a LoginResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LoginResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LoginResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.LoginResponse;
+
+                    /**
+                     * Creates a plain object from a LoginResponse message. Also converts values to other types if specified.
+                     * @param message LoginResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.LoginResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LoginResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a LogoutRequest. */
+                interface ILogoutRequest {
+                }
+
+                /** Represents a LogoutRequest. */
+                class LogoutRequest implements ILogoutRequest {
+
+                    /**
+                     * Constructs a new LogoutRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.ILogoutRequest);
+
+                    /**
+                     * Creates a new LogoutRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns LogoutRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.ILogoutRequest): xsuportal.proto.services.contestant.LogoutRequest;
+
+                    /**
+                     * Encodes the specified LogoutRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.LogoutRequest.verify|verify} messages.
+                     * @param message LogoutRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.ILogoutRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified LogoutRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.LogoutRequest.verify|verify} messages.
+                     * @param message LogoutRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.ILogoutRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a LogoutRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns LogoutRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.LogoutRequest;
+
+                    /**
+                     * Decodes a LogoutRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns LogoutRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.LogoutRequest;
+
+                    /**
+                     * Verifies a LogoutRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LogoutRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LogoutRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.LogoutRequest;
+
+                    /**
+                     * Creates a plain object from a LogoutRequest message. Also converts values to other types if specified.
+                     * @param message LogoutRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.LogoutRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LogoutRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a LogoutResponse. */
+                interface ILogoutResponse {
+                }
+
+                /** Represents a LogoutResponse. */
+                class LogoutResponse implements ILogoutResponse {
+
+                    /**
+                     * Constructs a new LogoutResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.ILogoutResponse);
+
+                    /**
+                     * Creates a new LogoutResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns LogoutResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.ILogoutResponse): xsuportal.proto.services.contestant.LogoutResponse;
+
+                    /**
+                     * Encodes the specified LogoutResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.LogoutResponse.verify|verify} messages.
+                     * @param message LogoutResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.ILogoutResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified LogoutResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.LogoutResponse.verify|verify} messages.
+                     * @param message LogoutResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.ILogoutResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a LogoutResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns LogoutResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.LogoutResponse;
+
+                    /**
+                     * Decodes a LogoutResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns LogoutResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.LogoutResponse;
+
+                    /**
+                     * Verifies a LogoutResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LogoutResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LogoutResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.LogoutResponse;
+
+                    /**
+                     * Creates a plain object from a LogoutResponse message. Also converts values to other types if specified.
+                     * @param message LogoutResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.LogoutResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LogoutResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
                 /** Properties of a GetNotificationsRequest. */
                 interface IGetNotificationsRequest {
                 }
@@ -7608,6 +7424,186 @@ export namespace xsuportal {
 
                     /**
                      * Converts this GetNotificationsResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a SignupRequest. */
+                interface ISignupRequest {
+
+                    /** SignupRequest contestantId */
+                    contestantId?: (string|null);
+
+                    /** SignupRequest password */
+                    password?: (string|null);
+                }
+
+                /** Represents a SignupRequest. */
+                class SignupRequest implements ISignupRequest {
+
+                    /**
+                     * Constructs a new SignupRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.ISignupRequest);
+
+                    /** SignupRequest contestantId. */
+                    public contestantId: string;
+
+                    /** SignupRequest password. */
+                    public password: string;
+
+                    /**
+                     * Creates a new SignupRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns SignupRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.ISignupRequest): xsuportal.proto.services.contestant.SignupRequest;
+
+                    /**
+                     * Encodes the specified SignupRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.SignupRequest.verify|verify} messages.
+                     * @param message SignupRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.ISignupRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified SignupRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.SignupRequest.verify|verify} messages.
+                     * @param message SignupRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.ISignupRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a SignupRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns SignupRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.SignupRequest;
+
+                    /**
+                     * Decodes a SignupRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns SignupRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.SignupRequest;
+
+                    /**
+                     * Verifies a SignupRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a SignupRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns SignupRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.SignupRequest;
+
+                    /**
+                     * Creates a plain object from a SignupRequest message. Also converts values to other types if specified.
+                     * @param message SignupRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.SignupRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this SignupRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a SignupResponse. */
+                interface ISignupResponse {
+                }
+
+                /** Represents a SignupResponse. */
+                class SignupResponse implements ISignupResponse {
+
+                    /**
+                     * Constructs a new SignupResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.ISignupResponse);
+
+                    /**
+                     * Creates a new SignupResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns SignupResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.ISignupResponse): xsuportal.proto.services.contestant.SignupResponse;
+
+                    /**
+                     * Encodes the specified SignupResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.SignupResponse.verify|verify} messages.
+                     * @param message SignupResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.ISignupResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified SignupResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.SignupResponse.verify|verify} messages.
+                     * @param message SignupResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.ISignupResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a SignupResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns SignupResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.SignupResponse;
+
+                    /**
+                     * Decodes a SignupResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns SignupResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.SignupResponse;
+
+                    /**
+                     * Verifies a SignupResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a SignupResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns SignupResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.SignupResponse;
+
+                    /**
+                     * Creates a plain object from a SignupResponse message. Also converts values to other types if specified.
+                     * @param message SignupResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.SignupResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this SignupResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
