@@ -405,12 +405,12 @@ module Xsuportal
             'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW() WHERE `team_id` = ?',
             current_team[:id],
           )
+        else
+          db.xquery(
+            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+            current_contestant[:id],
+          )
         end
-
-        db.xquery(
-          'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
-          current_contestant[:id],
-        )
       end
       encode_response_pb
     end
