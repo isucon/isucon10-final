@@ -14,7 +14,8 @@ class ApiClient
   end
 
   def request(method, path, payload={})
-    route = "#{method.upcase} #{path}"
+    path_wo_qs, qs = path.split('?')
+    route = "#{method.upcase} #{path_wo_qs}"
     request_class_pb, response_class_pb = PB_TABLE[route]
     req = nil
     case method
@@ -62,11 +63,13 @@ class ApiClient
         contestant_id: contestant_id,
         password: password,
       }
+      raise "signup failed: #{contestant_id}" unless [200, 201].include?(@status)
     else
       request :post, '/api/login', {
         contestant_id: contestant_id,
         password: password,
       }
+      raise "login failed: #{contestant_id}" unless @status == 200
     end
     if block_given?
       yield

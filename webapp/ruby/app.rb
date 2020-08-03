@@ -128,17 +128,11 @@ module Xsuportal
             'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1',
             team[:leader_id],
           ).first
-          members = db.xquery(
-            'SELECT * FROM `contestants` WHERE `team_id` = ? LIMIT 1',
-            team[:id],
-          )
-        else
-          members = db.xquery(
-            'SELECT * FROM `contestants` WHERE `team_id` = ? LIMIT 1',
-            team[:id],
-          )
         end
-
+        members = db.xquery(
+          'SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`',
+          team[:id],
+        )
         leader_pb = enable_members && leader ? contestant_pb(leader, detail: member_detail) : nil
         members_pb = enable_members && members ?
           members.map { |_| contestant_pb(_, detail: member_detail) } : nil
@@ -242,7 +236,7 @@ module Xsuportal
       members = []
       if team
         members = db.xquery(
-          'SELECT * FROM `contestants` WHERE `team_id` = ? LIMIT 1',
+          'SELECT * FROM `contestants` WHERE `team_id` = ?',
           team[:id],
         )
       end

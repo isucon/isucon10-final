@@ -6,11 +6,11 @@ class FixtureBase
   end
 
   def create_leader(contestant_id:, password: nil, name: nil, team_name:, email_address:, is_student: false)
-    @credentials[contestant_id] = password || "#{contestant_id}-password"
+    @credentials[contestant_id] = password || 'password'
     name ||= contestant_id
     @client.request :post, '/api/signup', {
       contestant_id: contestant_id,
-      password: password,
+      password: @credentials[contestant_id],
     }
     res = @client.request :post, '/api/registration/team', {
       name: name || contestant_id,
