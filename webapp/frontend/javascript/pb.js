@@ -895,13 +895,15 @@ $root.xsuportal = (function() {
                  * @property {number|Long|null} [teamId] BenchmarkJob teamId
                  * @property {number|Long|null} [targetId] BenchmarkJob targetId
                  * @property {xsuportal.proto.resources.BenchmarkJob.Status|null} [status] BenchmarkJob status
-                 * @property {xsuportal.proto.resources.IBenchmarkResult|null} [result] BenchmarkJob result
                  * @property {google.protobuf.ITimestamp|null} [createdAt] BenchmarkJob createdAt
                  * @property {google.protobuf.ITimestamp|null} [updatedAt] BenchmarkJob updatedAt
                  * @property {google.protobuf.ITimestamp|null} [startedAt] BenchmarkJob startedAt
                  * @property {google.protobuf.ITimestamp|null} [finishedAt] BenchmarkJob finishedAt
+                 * @property {number|Long|null} [score] BenchmarkJob score
+                 * @property {string|null} [instanceName] BenchmarkJob instanceName
                  * @property {xsuportal.proto.resources.ITeam|null} [team] BenchmarkJob team
                  * @property {xsuportal.proto.resources.IContestantInstance|null} [target] BenchmarkJob target
+                 * @property {xsuportal.proto.resources.IBenchmarkResult|null} [result] BenchmarkJob result
                  */
 
                 /**
@@ -952,14 +954,6 @@ $root.xsuportal = (function() {
                 BenchmarkJob.prototype.status = 0;
 
                 /**
-                 * BenchmarkJob result.
-                 * @member {xsuportal.proto.resources.IBenchmarkResult|null|undefined} result
-                 * @memberof xsuportal.proto.resources.BenchmarkJob
-                 * @instance
-                 */
-                BenchmarkJob.prototype.result = null;
-
-                /**
                  * BenchmarkJob createdAt.
                  * @member {google.protobuf.ITimestamp|null|undefined} createdAt
                  * @memberof xsuportal.proto.resources.BenchmarkJob
@@ -992,6 +986,22 @@ $root.xsuportal = (function() {
                 BenchmarkJob.prototype.finishedAt = null;
 
                 /**
+                 * BenchmarkJob score.
+                 * @member {number|Long} score
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
+                 * @instance
+                 */
+                BenchmarkJob.prototype.score = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * BenchmarkJob instanceName.
+                 * @member {string} instanceName
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
+                 * @instance
+                 */
+                BenchmarkJob.prototype.instanceName = "";
+
+                /**
                  * BenchmarkJob team.
                  * @member {xsuportal.proto.resources.ITeam|null|undefined} team
                  * @memberof xsuportal.proto.resources.BenchmarkJob
@@ -1006,6 +1016,14 @@ $root.xsuportal = (function() {
                  * @instance
                  */
                 BenchmarkJob.prototype.target = null;
+
+                /**
+                 * BenchmarkJob result.
+                 * @member {xsuportal.proto.resources.IBenchmarkResult|null|undefined} result
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
+                 * @instance
+                 */
+                BenchmarkJob.prototype.result = null;
 
                 /**
                  * Creates a new BenchmarkJob instance using the specified properties.
@@ -1039,20 +1057,24 @@ $root.xsuportal = (function() {
                         writer.uint32(/* id 3, wireType 0 =*/24).int64(message.targetId);
                     if (message.status != null && Object.hasOwnProperty.call(message, "status"))
                         writer.uint32(/* id 4, wireType 0 =*/32).int32(message.status);
-                    if (message.result != null && Object.hasOwnProperty.call(message, "result"))
-                        $root.xsuportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
                     if (message.createdAt != null && Object.hasOwnProperty.call(message, "createdAt"))
-                        $root.google.protobuf.Timestamp.encode(message.createdAt, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+                        $root.google.protobuf.Timestamp.encode(message.createdAt, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
                     if (message.updatedAt != null && Object.hasOwnProperty.call(message, "updatedAt"))
-                        $root.google.protobuf.Timestamp.encode(message.updatedAt, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+                        $root.google.protobuf.Timestamp.encode(message.updatedAt, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
                     if (message.startedAt != null && Object.hasOwnProperty.call(message, "startedAt"))
-                        $root.google.protobuf.Timestamp.encode(message.startedAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                        $root.google.protobuf.Timestamp.encode(message.startedAt, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
                     if (message.finishedAt != null && Object.hasOwnProperty.call(message, "finishedAt"))
-                        $root.google.protobuf.Timestamp.encode(message.finishedAt, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
+                        $root.google.protobuf.Timestamp.encode(message.finishedAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                    if (message.score != null && Object.hasOwnProperty.call(message, "score"))
+                        writer.uint32(/* id 9, wireType 0 =*/72).int64(message.score);
+                    if (message.instanceName != null && Object.hasOwnProperty.call(message, "instanceName"))
+                        writer.uint32(/* id 10, wireType 2 =*/82).string(message.instanceName);
                     if (message.team != null && Object.hasOwnProperty.call(message, "team"))
                         $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                     if (message.target != null && Object.hasOwnProperty.call(message, "target"))
                         $root.xsuportal.proto.resources.ContestantInstance.encode(message.target, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
+                    if (message.result != null && Object.hasOwnProperty.call(message, "result"))
+                        $root.xsuportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 18, wireType 2 =*/146).fork()).ldelim();
                     return writer;
                 };
 
@@ -1100,25 +1122,31 @@ $root.xsuportal = (function() {
                             message.status = reader.int32();
                             break;
                         case 5:
-                            message.result = $root.xsuportal.proto.resources.BenchmarkResult.decode(reader, reader.uint32());
-                            break;
-                        case 6:
                             message.createdAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
-                        case 7:
+                        case 6:
                             message.updatedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
-                        case 8:
+                        case 7:
                             message.startedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
-                        case 9:
+                        case 8:
                             message.finishedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            break;
+                        case 9:
+                            message.score = reader.int64();
+                            break;
+                        case 10:
+                            message.instanceName = reader.string();
                             break;
                         case 16:
                             message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
                             break;
                         case 17:
                             message.target = $root.xsuportal.proto.resources.ContestantInstance.decode(reader, reader.uint32());
+                            break;
+                        case 18:
+                            message.result = $root.xsuportal.proto.resources.BenchmarkResult.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -1175,11 +1203,6 @@ $root.xsuportal = (function() {
                         case 4:
                             break;
                         }
-                    if (message.result != null && message.hasOwnProperty("result")) {
-                        var error = $root.xsuportal.proto.resources.BenchmarkResult.verify(message.result);
-                        if (error)
-                            return "result." + error;
-                    }
                     if (message.createdAt != null && message.hasOwnProperty("createdAt")) {
                         var error = $root.google.protobuf.Timestamp.verify(message.createdAt);
                         if (error)
@@ -1200,6 +1223,12 @@ $root.xsuportal = (function() {
                         if (error)
                             return "finishedAt." + error;
                     }
+                    if (message.score != null && message.hasOwnProperty("score"))
+                        if (!$util.isInteger(message.score) && !(message.score && $util.isInteger(message.score.low) && $util.isInteger(message.score.high)))
+                            return "score: integer|Long expected";
+                    if (message.instanceName != null && message.hasOwnProperty("instanceName"))
+                        if (!$util.isString(message.instanceName))
+                            return "instanceName: string expected";
                     if (message.team != null && message.hasOwnProperty("team")) {
                         var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                         if (error)
@@ -1209,6 +1238,11 @@ $root.xsuportal = (function() {
                         var error = $root.xsuportal.proto.resources.ContestantInstance.verify(message.target);
                         if (error)
                             return "target." + error;
+                    }
+                    if (message.result != null && message.hasOwnProperty("result")) {
+                        var error = $root.xsuportal.proto.resources.BenchmarkResult.verify(message.result);
+                        if (error)
+                            return "result." + error;
                     }
                     return null;
                 };
@@ -1274,11 +1308,6 @@ $root.xsuportal = (function() {
                         message.status = 4;
                         break;
                     }
-                    if (object.result != null) {
-                        if (typeof object.result !== "object")
-                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.result: object expected");
-                        message.result = $root.xsuportal.proto.resources.BenchmarkResult.fromObject(object.result);
-                    }
                     if (object.createdAt != null) {
                         if (typeof object.createdAt !== "object")
                             throw TypeError(".xsuportal.proto.resources.BenchmarkJob.createdAt: object expected");
@@ -1299,6 +1328,17 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.BenchmarkJob.finishedAt: object expected");
                         message.finishedAt = $root.google.protobuf.Timestamp.fromObject(object.finishedAt);
                     }
+                    if (object.score != null)
+                        if ($util.Long)
+                            (message.score = $util.Long.fromValue(object.score)).unsigned = false;
+                        else if (typeof object.score === "string")
+                            message.score = parseInt(object.score, 10);
+                        else if (typeof object.score === "number")
+                            message.score = object.score;
+                        else if (typeof object.score === "object")
+                            message.score = new $util.LongBits(object.score.low >>> 0, object.score.high >>> 0).toNumber();
+                    if (object.instanceName != null)
+                        message.instanceName = String(object.instanceName);
                     if (object.team != null) {
                         if (typeof object.team !== "object")
                             throw TypeError(".xsuportal.proto.resources.BenchmarkJob.team: object expected");
@@ -1308,6 +1348,11 @@ $root.xsuportal = (function() {
                         if (typeof object.target !== "object")
                             throw TypeError(".xsuportal.proto.resources.BenchmarkJob.target: object expected");
                         message.target = $root.xsuportal.proto.resources.ContestantInstance.fromObject(object.target);
+                    }
+                    if (object.result != null) {
+                        if (typeof object.result !== "object")
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.result: object expected");
+                        message.result = $root.xsuportal.proto.resources.BenchmarkResult.fromObject(object.result);
                     }
                     return message;
                 };
@@ -1342,13 +1387,19 @@ $root.xsuportal = (function() {
                         } else
                             object.targetId = options.longs === String ? "0" : 0;
                         object.status = options.enums === String ? "PENDING" : 0;
-                        object.result = null;
                         object.createdAt = null;
                         object.updatedAt = null;
                         object.startedAt = null;
                         object.finishedAt = null;
+                        if ($util.Long) {
+                            var long = new $util.Long(0, 0, false);
+                            object.score = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.score = options.longs === String ? "0" : 0;
+                        object.instanceName = "";
                         object.team = null;
                         object.target = null;
+                        object.result = null;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
                         if (typeof message.id === "number")
@@ -1367,8 +1418,6 @@ $root.xsuportal = (function() {
                             object.targetId = options.longs === String ? $util.Long.prototype.toString.call(message.targetId) : options.longs === Number ? new $util.LongBits(message.targetId.low >>> 0, message.targetId.high >>> 0).toNumber() : message.targetId;
                     if (message.status != null && message.hasOwnProperty("status"))
                         object.status = options.enums === String ? $root.xsuportal.proto.resources.BenchmarkJob.Status[message.status] : message.status;
-                    if (message.result != null && message.hasOwnProperty("result"))
-                        object.result = $root.xsuportal.proto.resources.BenchmarkResult.toObject(message.result, options);
                     if (message.createdAt != null && message.hasOwnProperty("createdAt"))
                         object.createdAt = $root.google.protobuf.Timestamp.toObject(message.createdAt, options);
                     if (message.updatedAt != null && message.hasOwnProperty("updatedAt"))
@@ -1377,10 +1426,19 @@ $root.xsuportal = (function() {
                         object.startedAt = $root.google.protobuf.Timestamp.toObject(message.startedAt, options);
                     if (message.finishedAt != null && message.hasOwnProperty("finishedAt"))
                         object.finishedAt = $root.google.protobuf.Timestamp.toObject(message.finishedAt, options);
+                    if (message.score != null && message.hasOwnProperty("score"))
+                        if (typeof message.score === "number")
+                            object.score = options.longs === String ? String(message.score) : message.score;
+                        else
+                            object.score = options.longs === String ? $util.Long.prototype.toString.call(message.score) : options.longs === Number ? new $util.LongBits(message.score.low >>> 0, message.score.high >>> 0).toNumber() : message.score;
+                    if (message.instanceName != null && message.hasOwnProperty("instanceName"))
+                        object.instanceName = message.instanceName;
                     if (message.team != null && message.hasOwnProperty("team"))
                         object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                     if (message.target != null && message.hasOwnProperty("target"))
                         object.target = $root.xsuportal.proto.resources.ContestantInstance.toObject(message.target, options);
+                    if (message.result != null && message.hasOwnProperty("result"))
+                        object.result = $root.xsuportal.proto.resources.BenchmarkResult.toObject(message.result, options);
                     return object;
                 };
 
@@ -2630,6 +2688,7 @@ $root.xsuportal = (function() {
                  * @property {boolean|null} [finalParticipation] Team finalParticipation
                  * @property {boolean|null} [hidden] Team hidden
                  * @property {boolean|null} [withdrawn] Team withdrawn
+                 * @property {boolean|null} [disqualified] Team disqualified
                  * @property {xsuportal.proto.resources.Team.ITeamDetail|null} [detail] Team detail
                  * @property {xsuportal.proto.resources.IContestant|null} [leader] Team leader
                  * @property {Array.<xsuportal.proto.resources.IContestant>|null} [members] Team members
@@ -2709,6 +2768,14 @@ $root.xsuportal = (function() {
                 Team.prototype.withdrawn = false;
 
                 /**
+                 * Team disqualified.
+                 * @member {boolean} disqualified
+                 * @memberof xsuportal.proto.resources.Team
+                 * @instance
+                 */
+                Team.prototype.disqualified = false;
+
+                /**
                  * Team detail.
                  * @member {xsuportal.proto.resources.Team.ITeamDetail|null|undefined} detail
                  * @memberof xsuportal.proto.resources.Team
@@ -2773,6 +2840,8 @@ $root.xsuportal = (function() {
                         writer.uint32(/* id 7, wireType 0 =*/56).bool(message.withdrawn);
                     if (message.detail != null && Object.hasOwnProperty.call(message, "detail"))
                         $root.xsuportal.proto.resources.Team.TeamDetail.encode(message.detail, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                    if (message.disqualified != null && Object.hasOwnProperty.call(message, "disqualified"))
+                        writer.uint32(/* id 9, wireType 0 =*/72).bool(message.disqualified);
                     if (message.leader != null && Object.hasOwnProperty.call(message, "leader"))
                         $root.xsuportal.proto.resources.Contestant.encode(message.leader, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                     if (message.members != null && message.members.length)
@@ -2834,6 +2903,9 @@ $root.xsuportal = (function() {
                             break;
                         case 7:
                             message.withdrawn = reader.bool();
+                            break;
+                        case 9:
+                            message.disqualified = reader.bool();
                             break;
                         case 8:
                             message.detail = $root.xsuportal.proto.resources.Team.TeamDetail.decode(reader, reader.uint32());
@@ -2906,6 +2978,9 @@ $root.xsuportal = (function() {
                     if (message.withdrawn != null && message.hasOwnProperty("withdrawn"))
                         if (typeof message.withdrawn !== "boolean")
                             return "withdrawn: boolean expected";
+                    if (message.disqualified != null && message.hasOwnProperty("disqualified"))
+                        if (typeof message.disqualified !== "boolean")
+                            return "disqualified: boolean expected";
                     if (message.detail != null && message.hasOwnProperty("detail")) {
                         var error = $root.xsuportal.proto.resources.Team.TeamDetail.verify(message.detail);
                         if (error)
@@ -2966,6 +3041,8 @@ $root.xsuportal = (function() {
                         message.hidden = Boolean(object.hidden);
                     if (object.withdrawn != null)
                         message.withdrawn = Boolean(object.withdrawn);
+                    if (object.disqualified != null)
+                        message.disqualified = Boolean(object.disqualified);
                     if (object.detail != null) {
                         if (typeof object.detail !== "object")
                             throw TypeError(".xsuportal.proto.resources.Team.detail: object expected");
@@ -3018,6 +3095,7 @@ $root.xsuportal = (function() {
                         object.hidden = false;
                         object.withdrawn = false;
                         object.detail = null;
+                        object.disqualified = false;
                         object.leader = null;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -3042,6 +3120,8 @@ $root.xsuportal = (function() {
                         object.withdrawn = message.withdrawn;
                     if (message.detail != null && message.hasOwnProperty("detail"))
                         object.detail = $root.xsuportal.proto.resources.Team.TeamDetail.toObject(message.detail, options);
+                    if (message.disqualified != null && message.hasOwnProperty("disqualified"))
+                        object.disqualified = message.disqualified;
                     if (message.leader != null && message.hasOwnProperty("leader"))
                         object.leader = $root.xsuportal.proto.resources.Contestant.toObject(message.leader, options);
                     if (message.members && message.members.length) {
@@ -3070,7 +3150,6 @@ $root.xsuportal = (function() {
                      * @memberof xsuportal.proto.resources.Team
                      * @interface ITeamDetail
                      * @property {string|null} [emailAddress] TeamDetail emailAddress
-                     * @property {number|Long|null} [benchmarkTargetId] TeamDetail benchmarkTargetId
                      * @property {string|null} [inviteToken] TeamDetail inviteToken
                      */
 
@@ -3096,14 +3175,6 @@ $root.xsuportal = (function() {
                      * @instance
                      */
                     TeamDetail.prototype.emailAddress = "";
-
-                    /**
-                     * TeamDetail benchmarkTargetId.
-                     * @member {number|Long} benchmarkTargetId
-                     * @memberof xsuportal.proto.resources.Team.TeamDetail
-                     * @instance
-                     */
-                    TeamDetail.prototype.benchmarkTargetId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * TeamDetail inviteToken.
@@ -3139,8 +3210,6 @@ $root.xsuportal = (function() {
                             writer = $Writer.create();
                         if (message.emailAddress != null && Object.hasOwnProperty.call(message, "emailAddress"))
                             writer.uint32(/* id 1, wireType 2 =*/10).string(message.emailAddress);
-                        if (message.benchmarkTargetId != null && Object.hasOwnProperty.call(message, "benchmarkTargetId"))
-                            writer.uint32(/* id 2, wireType 0 =*/16).int64(message.benchmarkTargetId);
                         if (message.inviteToken != null && Object.hasOwnProperty.call(message, "inviteToken"))
                             writer.uint32(/* id 16, wireType 2 =*/130).string(message.inviteToken);
                         return writer;
@@ -3179,9 +3248,6 @@ $root.xsuportal = (function() {
                             switch (tag >>> 3) {
                             case 1:
                                 message.emailAddress = reader.string();
-                                break;
-                            case 2:
-                                message.benchmarkTargetId = reader.int64();
                                 break;
                             case 16:
                                 message.inviteToken = reader.string();
@@ -3224,9 +3290,6 @@ $root.xsuportal = (function() {
                         if (message.emailAddress != null && message.hasOwnProperty("emailAddress"))
                             if (!$util.isString(message.emailAddress))
                                 return "emailAddress: string expected";
-                        if (message.benchmarkTargetId != null && message.hasOwnProperty("benchmarkTargetId"))
-                            if (!$util.isInteger(message.benchmarkTargetId) && !(message.benchmarkTargetId && $util.isInteger(message.benchmarkTargetId.low) && $util.isInteger(message.benchmarkTargetId.high)))
-                                return "benchmarkTargetId: integer|Long expected";
                         if (message.inviteToken != null && message.hasOwnProperty("inviteToken"))
                             if (!$util.isString(message.inviteToken))
                                 return "inviteToken: string expected";
@@ -3247,15 +3310,6 @@ $root.xsuportal = (function() {
                         var message = new $root.xsuportal.proto.resources.Team.TeamDetail();
                         if (object.emailAddress != null)
                             message.emailAddress = String(object.emailAddress);
-                        if (object.benchmarkTargetId != null)
-                            if ($util.Long)
-                                (message.benchmarkTargetId = $util.Long.fromValue(object.benchmarkTargetId)).unsigned = false;
-                            else if (typeof object.benchmarkTargetId === "string")
-                                message.benchmarkTargetId = parseInt(object.benchmarkTargetId, 10);
-                            else if (typeof object.benchmarkTargetId === "number")
-                                message.benchmarkTargetId = object.benchmarkTargetId;
-                            else if (typeof object.benchmarkTargetId === "object")
-                                message.benchmarkTargetId = new $util.LongBits(object.benchmarkTargetId.low >>> 0, object.benchmarkTargetId.high >>> 0).toNumber();
                         if (object.inviteToken != null)
                             message.inviteToken = String(object.inviteToken);
                         return message;
@@ -3276,20 +3330,10 @@ $root.xsuportal = (function() {
                         var object = {};
                         if (options.defaults) {
                             object.emailAddress = "";
-                            if ($util.Long) {
-                                var long = new $util.Long(0, 0, false);
-                                object.benchmarkTargetId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                            } else
-                                object.benchmarkTargetId = options.longs === String ? "0" : 0;
                             object.inviteToken = "";
                         }
                         if (message.emailAddress != null && message.hasOwnProperty("emailAddress"))
                             object.emailAddress = message.emailAddress;
-                        if (message.benchmarkTargetId != null && message.hasOwnProperty("benchmarkTargetId"))
-                            if (typeof message.benchmarkTargetId === "number")
-                                object.benchmarkTargetId = options.longs === String ? String(message.benchmarkTargetId) : message.benchmarkTargetId;
-                            else
-                                object.benchmarkTargetId = options.longs === String ? $util.Long.prototype.toString.call(message.benchmarkTargetId) : options.longs === Number ? new $util.LongBits(message.benchmarkTargetId.low >>> 0, message.benchmarkTargetId.high >>> 0).toNumber() : message.benchmarkTargetId;
                         if (message.inviteToken != null && message.hasOwnProperty("inviteToken"))
                             object.inviteToken = message.inviteToken;
                         return object;
@@ -3594,6 +3638,7 @@ $root.xsuportal = (function() {
                  * @property {string|null} [answer] Clarification answer
                  * @property {google.protobuf.ITimestamp|null} [createdAt] Clarification createdAt
                  * @property {google.protobuf.ITimestamp|null} [answeredAt] Clarification answeredAt
+                 * @property {string|null} [originalQuestion] Clarification originalQuestion
                  * @property {xsuportal.proto.resources.ITeam|null} [team] Clarification team
                  */
 
@@ -3677,6 +3722,14 @@ $root.xsuportal = (function() {
                 Clarification.prototype.answeredAt = null;
 
                 /**
+                 * Clarification originalQuestion.
+                 * @member {string} originalQuestion
+                 * @memberof xsuportal.proto.resources.Clarification
+                 * @instance
+                 */
+                Clarification.prototype.originalQuestion = "";
+
+                /**
                  * Clarification team.
                  * @member {xsuportal.proto.resources.ITeam|null|undefined} team
                  * @memberof xsuportal.proto.resources.Clarification
@@ -3724,6 +3777,8 @@ $root.xsuportal = (function() {
                         $root.google.protobuf.Timestamp.encode(message.createdAt, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
                     if (message.answeredAt != null && Object.hasOwnProperty.call(message, "answeredAt"))
                         $root.google.protobuf.Timestamp.encode(message.answeredAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                    if (message.originalQuestion != null && Object.hasOwnProperty.call(message, "originalQuestion"))
+                        writer.uint32(/* id 9, wireType 2 =*/74).string(message.originalQuestion);
                     if (message.team != null && Object.hasOwnProperty.call(message, "team"))
                         $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                     return writer;
@@ -3783,6 +3838,9 @@ $root.xsuportal = (function() {
                             break;
                         case 8:
                             message.answeredAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            break;
+                        case 9:
+                            message.originalQuestion = reader.string();
                             break;
                         case 16:
                             message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
@@ -3850,6 +3908,9 @@ $root.xsuportal = (function() {
                         if (error)
                             return "answeredAt." + error;
                     }
+                    if (message.originalQuestion != null && message.hasOwnProperty("originalQuestion"))
+                        if (!$util.isString(message.originalQuestion))
+                            return "originalQuestion: string expected";
                     if (message.team != null && message.hasOwnProperty("team")) {
                         var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                         if (error)
@@ -3906,6 +3967,8 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.Clarification.answeredAt: object expected");
                         message.answeredAt = $root.google.protobuf.Timestamp.fromObject(object.answeredAt);
                     }
+                    if (object.originalQuestion != null)
+                        message.originalQuestion = String(object.originalQuestion);
                     if (object.team != null) {
                         if (typeof object.team !== "object")
                             throw TypeError(".xsuportal.proto.resources.Clarification.team: object expected");
@@ -3944,6 +4007,7 @@ $root.xsuportal = (function() {
                         object.answer = "";
                         object.createdAt = null;
                         object.answeredAt = null;
+                        object.originalQuestion = "";
                         object.team = null;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -3968,6 +4032,8 @@ $root.xsuportal = (function() {
                         object.createdAt = $root.google.protobuf.Timestamp.toObject(message.createdAt, options);
                     if (message.answeredAt != null && message.hasOwnProperty("answeredAt"))
                         object.answeredAt = $root.google.protobuf.Timestamp.toObject(message.answeredAt, options);
+                    if (message.originalQuestion != null && message.hasOwnProperty("originalQuestion"))
+                        object.originalQuestion = message.originalQuestion;
                     if (message.team != null && message.hasOwnProperty("team"))
                         object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                     return object;
@@ -3985,6 +4051,859 @@ $root.xsuportal = (function() {
                 };
 
                 return Clarification;
+            })();
+
+            resources.Leaderboard = (function() {
+
+                /**
+                 * Properties of a Leaderboard.
+                 * @memberof xsuportal.proto.resources
+                 * @interface ILeaderboard
+                 * @property {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>|null} [teams] Leaderboard teams
+                 * @property {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>|null} [generalTeams] Leaderboard generalTeams
+                 * @property {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>|null} [studentTeams] Leaderboard studentTeams
+                 * @property {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>|null} [progresses] Leaderboard progresses
+                 * @property {boolean|null} [frozen] Leaderboard frozen
+                 */
+
+                /**
+                 * Constructs a new Leaderboard.
+                 * @memberof xsuportal.proto.resources
+                 * @classdesc Represents a Leaderboard.
+                 * @implements ILeaderboard
+                 * @constructor
+                 * @param {xsuportal.proto.resources.ILeaderboard=} [properties] Properties to set
+                 */
+                function Leaderboard(properties) {
+                    this.teams = [];
+                    this.generalTeams = [];
+                    this.studentTeams = [];
+                    this.progresses = [];
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Leaderboard teams.
+                 * @member {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>} teams
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @instance
+                 */
+                Leaderboard.prototype.teams = $util.emptyArray;
+
+                /**
+                 * Leaderboard generalTeams.
+                 * @member {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>} generalTeams
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @instance
+                 */
+                Leaderboard.prototype.generalTeams = $util.emptyArray;
+
+                /**
+                 * Leaderboard studentTeams.
+                 * @member {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>} studentTeams
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @instance
+                 */
+                Leaderboard.prototype.studentTeams = $util.emptyArray;
+
+                /**
+                 * Leaderboard progresses.
+                 * @member {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>} progresses
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @instance
+                 */
+                Leaderboard.prototype.progresses = $util.emptyArray;
+
+                /**
+                 * Leaderboard frozen.
+                 * @member {boolean} frozen
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @instance
+                 */
+                Leaderboard.prototype.frozen = false;
+
+                /**
+                 * Creates a new Leaderboard instance using the specified properties.
+                 * @function create
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @static
+                 * @param {xsuportal.proto.resources.ILeaderboard=} [properties] Properties to set
+                 * @returns {xsuportal.proto.resources.Leaderboard} Leaderboard instance
+                 */
+                Leaderboard.create = function create(properties) {
+                    return new Leaderboard(properties);
+                };
+
+                /**
+                 * Encodes the specified Leaderboard message. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.verify|verify} messages.
+                 * @function encode
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @static
+                 * @param {xsuportal.proto.resources.ILeaderboard} message Leaderboard message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Leaderboard.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.teams != null && message.teams.length)
+                        for (var i = 0; i < message.teams.length; ++i)
+                            $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.encode(message.teams[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                    if (message.generalTeams != null && message.generalTeams.length)
+                        for (var i = 0; i < message.generalTeams.length; ++i)
+                            $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.encode(message.generalTeams[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                    if (message.studentTeams != null && message.studentTeams.length)
+                        for (var i = 0; i < message.studentTeams.length; ++i)
+                            $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.encode(message.studentTeams[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                    if (message.progresses != null && message.progresses.length)
+                        for (var i = 0; i < message.progresses.length; ++i)
+                            $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.encode(message.progresses[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                    if (message.frozen != null && Object.hasOwnProperty.call(message, "frozen"))
+                        writer.uint32(/* id 5, wireType 0 =*/40).bool(message.frozen);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified Leaderboard message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @static
+                 * @param {xsuportal.proto.resources.ILeaderboard} message Leaderboard message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Leaderboard.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a Leaderboard message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {xsuportal.proto.resources.Leaderboard} Leaderboard
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Leaderboard.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Leaderboard();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            if (!(message.teams && message.teams.length))
+                                message.teams = [];
+                            message.teams.push($root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.decode(reader, reader.uint32()));
+                            break;
+                        case 2:
+                            if (!(message.generalTeams && message.generalTeams.length))
+                                message.generalTeams = [];
+                            message.generalTeams.push($root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.decode(reader, reader.uint32()));
+                            break;
+                        case 3:
+                            if (!(message.studentTeams && message.studentTeams.length))
+                                message.studentTeams = [];
+                            message.studentTeams.push($root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.decode(reader, reader.uint32()));
+                            break;
+                        case 4:
+                            if (!(message.progresses && message.progresses.length))
+                                message.progresses = [];
+                            message.progresses.push($root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.decode(reader, reader.uint32()));
+                            break;
+                        case 5:
+                            message.frozen = reader.bool();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a Leaderboard message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {xsuportal.proto.resources.Leaderboard} Leaderboard
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Leaderboard.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a Leaderboard message.
+                 * @function verify
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Leaderboard.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.teams != null && message.hasOwnProperty("teams")) {
+                        if (!Array.isArray(message.teams))
+                            return "teams: array expected";
+                        for (var i = 0; i < message.teams.length; ++i) {
+                            var error = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.verify(message.teams[i]);
+                            if (error)
+                                return "teams." + error;
+                        }
+                    }
+                    if (message.generalTeams != null && message.hasOwnProperty("generalTeams")) {
+                        if (!Array.isArray(message.generalTeams))
+                            return "generalTeams: array expected";
+                        for (var i = 0; i < message.generalTeams.length; ++i) {
+                            var error = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.verify(message.generalTeams[i]);
+                            if (error)
+                                return "generalTeams." + error;
+                        }
+                    }
+                    if (message.studentTeams != null && message.hasOwnProperty("studentTeams")) {
+                        if (!Array.isArray(message.studentTeams))
+                            return "studentTeams: array expected";
+                        for (var i = 0; i < message.studentTeams.length; ++i) {
+                            var error = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.verify(message.studentTeams[i]);
+                            if (error)
+                                return "studentTeams." + error;
+                        }
+                    }
+                    if (message.progresses != null && message.hasOwnProperty("progresses")) {
+                        if (!Array.isArray(message.progresses))
+                            return "progresses: array expected";
+                        for (var i = 0; i < message.progresses.length; ++i) {
+                            var error = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.verify(message.progresses[i]);
+                            if (error)
+                                return "progresses." + error;
+                        }
+                    }
+                    if (message.frozen != null && message.hasOwnProperty("frozen"))
+                        if (typeof message.frozen !== "boolean")
+                            return "frozen: boolean expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Leaderboard message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {xsuportal.proto.resources.Leaderboard} Leaderboard
+                 */
+                Leaderboard.fromObject = function fromObject(object) {
+                    if (object instanceof $root.xsuportal.proto.resources.Leaderboard)
+                        return object;
+                    var message = new $root.xsuportal.proto.resources.Leaderboard();
+                    if (object.teams) {
+                        if (!Array.isArray(object.teams))
+                            throw TypeError(".xsuportal.proto.resources.Leaderboard.teams: array expected");
+                        message.teams = [];
+                        for (var i = 0; i < object.teams.length; ++i) {
+                            if (typeof object.teams[i] !== "object")
+                                throw TypeError(".xsuportal.proto.resources.Leaderboard.teams: object expected");
+                            message.teams[i] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.fromObject(object.teams[i]);
+                        }
+                    }
+                    if (object.generalTeams) {
+                        if (!Array.isArray(object.generalTeams))
+                            throw TypeError(".xsuportal.proto.resources.Leaderboard.generalTeams: array expected");
+                        message.generalTeams = [];
+                        for (var i = 0; i < object.generalTeams.length; ++i) {
+                            if (typeof object.generalTeams[i] !== "object")
+                                throw TypeError(".xsuportal.proto.resources.Leaderboard.generalTeams: object expected");
+                            message.generalTeams[i] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.fromObject(object.generalTeams[i]);
+                        }
+                    }
+                    if (object.studentTeams) {
+                        if (!Array.isArray(object.studentTeams))
+                            throw TypeError(".xsuportal.proto.resources.Leaderboard.studentTeams: array expected");
+                        message.studentTeams = [];
+                        for (var i = 0; i < object.studentTeams.length; ++i) {
+                            if (typeof object.studentTeams[i] !== "object")
+                                throw TypeError(".xsuportal.proto.resources.Leaderboard.studentTeams: object expected");
+                            message.studentTeams[i] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.fromObject(object.studentTeams[i]);
+                        }
+                    }
+                    if (object.progresses) {
+                        if (!Array.isArray(object.progresses))
+                            throw TypeError(".xsuportal.proto.resources.Leaderboard.progresses: array expected");
+                        message.progresses = [];
+                        for (var i = 0; i < object.progresses.length; ++i) {
+                            if (typeof object.progresses[i] !== "object")
+                                throw TypeError(".xsuportal.proto.resources.Leaderboard.progresses: object expected");
+                            message.progresses[i] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.fromObject(object.progresses[i]);
+                        }
+                    }
+                    if (object.frozen != null)
+                        message.frozen = Boolean(object.frozen);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Leaderboard message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @static
+                 * @param {xsuportal.proto.resources.Leaderboard} message Leaderboard
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Leaderboard.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.arrays || options.defaults) {
+                        object.teams = [];
+                        object.generalTeams = [];
+                        object.studentTeams = [];
+                        object.progresses = [];
+                    }
+                    if (options.defaults)
+                        object.frozen = false;
+                    if (message.teams && message.teams.length) {
+                        object.teams = [];
+                        for (var j = 0; j < message.teams.length; ++j)
+                            object.teams[j] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.toObject(message.teams[j], options);
+                    }
+                    if (message.generalTeams && message.generalTeams.length) {
+                        object.generalTeams = [];
+                        for (var j = 0; j < message.generalTeams.length; ++j)
+                            object.generalTeams[j] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.toObject(message.generalTeams[j], options);
+                    }
+                    if (message.studentTeams && message.studentTeams.length) {
+                        object.studentTeams = [];
+                        for (var j = 0; j < message.studentTeams.length; ++j)
+                            object.studentTeams[j] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.toObject(message.studentTeams[j], options);
+                    }
+                    if (message.progresses && message.progresses.length) {
+                        object.progresses = [];
+                        for (var j = 0; j < message.progresses.length; ++j)
+                            object.progresses[j] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.toObject(message.progresses[j], options);
+                    }
+                    if (message.frozen != null && message.hasOwnProperty("frozen"))
+                        object.frozen = message.frozen;
+                    return object;
+                };
+
+                /**
+                 * Converts this Leaderboard to JSON.
+                 * @function toJSON
+                 * @memberof xsuportal.proto.resources.Leaderboard
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Leaderboard.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                Leaderboard.LeaderboardItem = (function() {
+
+                    /**
+                     * Properties of a LeaderboardItem.
+                     * @memberof xsuportal.proto.resources.Leaderboard
+                     * @interface ILeaderboardItem
+                     * @property {Array.<xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore>|null} [scores] LeaderboardItem scores
+                     * @property {xsuportal.proto.resources.ITeam|null} [team] LeaderboardItem team
+                     */
+
+                    /**
+                     * Constructs a new LeaderboardItem.
+                     * @memberof xsuportal.proto.resources.Leaderboard
+                     * @classdesc Represents a LeaderboardItem.
+                     * @implements ILeaderboardItem
+                     * @constructor
+                     * @param {xsuportal.proto.resources.Leaderboard.ILeaderboardItem=} [properties] Properties to set
+                     */
+                    function LeaderboardItem(properties) {
+                        this.scores = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * LeaderboardItem scores.
+                     * @member {Array.<xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore>} scores
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @instance
+                     */
+                    LeaderboardItem.prototype.scores = $util.emptyArray;
+
+                    /**
+                     * LeaderboardItem team.
+                     * @member {xsuportal.proto.resources.ITeam|null|undefined} team
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @instance
+                     */
+                    LeaderboardItem.prototype.team = null;
+
+                    /**
+                     * Creates a new LeaderboardItem instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @static
+                     * @param {xsuportal.proto.resources.Leaderboard.ILeaderboardItem=} [properties] Properties to set
+                     * @returns {xsuportal.proto.resources.Leaderboard.LeaderboardItem} LeaderboardItem instance
+                     */
+                    LeaderboardItem.create = function create(properties) {
+                        return new LeaderboardItem(properties);
+                    };
+
+                    /**
+                     * Encodes the specified LeaderboardItem message. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.LeaderboardItem.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @static
+                     * @param {xsuportal.proto.resources.Leaderboard.ILeaderboardItem} message LeaderboardItem message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LeaderboardItem.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.scores != null && message.scores.length)
+                            for (var i = 0; i < message.scores.length; ++i)
+                                $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.encode(message.scores[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        if (message.team != null && Object.hasOwnProperty.call(message, "team"))
+                            $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified LeaderboardItem message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.LeaderboardItem.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @static
+                     * @param {xsuportal.proto.resources.Leaderboard.ILeaderboardItem} message LeaderboardItem message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    LeaderboardItem.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a LeaderboardItem message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.resources.Leaderboard.LeaderboardItem} LeaderboardItem
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LeaderboardItem.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                if (!(message.scores && message.scores.length))
+                                    message.scores = [];
+                                message.scores.push($root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.decode(reader, reader.uint32()));
+                                break;
+                            case 16:
+                                message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a LeaderboardItem message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.resources.Leaderboard.LeaderboardItem} LeaderboardItem
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    LeaderboardItem.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a LeaderboardItem message.
+                     * @function verify
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    LeaderboardItem.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.scores != null && message.hasOwnProperty("scores")) {
+                            if (!Array.isArray(message.scores))
+                                return "scores: array expected";
+                            for (var i = 0; i < message.scores.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.verify(message.scores[i]);
+                                if (error)
+                                    return "scores." + error;
+                            }
+                        }
+                        if (message.team != null && message.hasOwnProperty("team")) {
+                            var error = $root.xsuportal.proto.resources.Team.verify(message.team);
+                            if (error)
+                                return "team." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a LeaderboardItem message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.resources.Leaderboard.LeaderboardItem} LeaderboardItem
+                     */
+                    LeaderboardItem.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem)
+                            return object;
+                        var message = new $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem();
+                        if (object.scores) {
+                            if (!Array.isArray(object.scores))
+                                throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.scores: array expected");
+                            message.scores = [];
+                            for (var i = 0; i < object.scores.length; ++i) {
+                                if (typeof object.scores[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.scores: object expected");
+                                message.scores[i] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.fromObject(object.scores[i]);
+                            }
+                        }
+                        if (object.team != null) {
+                            if (typeof object.team !== "object")
+                                throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.team: object expected");
+                            message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a LeaderboardItem message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @static
+                     * @param {xsuportal.proto.resources.Leaderboard.LeaderboardItem} message LeaderboardItem
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    LeaderboardItem.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.scores = [];
+                        if (options.defaults)
+                            object.team = null;
+                        if (message.scores && message.scores.length) {
+                            object.scores = [];
+                            for (var j = 0; j < message.scores.length; ++j)
+                                object.scores[j] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.toObject(message.scores[j], options);
+                        }
+                        if (message.team != null && message.hasOwnProperty("team"))
+                            object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this LeaderboardItem to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    LeaderboardItem.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    LeaderboardItem.LeaderboardScore = (function() {
+
+                        /**
+                         * Properties of a LeaderboardScore.
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                         * @interface ILeaderboardScore
+                         * @property {number|Long|null} [score] LeaderboardScore score
+                         * @property {google.protobuf.ITimestamp|null} [startedAt] LeaderboardScore startedAt
+                         * @property {google.protobuf.ITimestamp|null} [updatedAt] LeaderboardScore updatedAt
+                         */
+
+                        /**
+                         * Constructs a new LeaderboardScore.
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                         * @classdesc Represents a LeaderboardScore.
+                         * @implements ILeaderboardScore
+                         * @constructor
+                         * @param {xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore=} [properties] Properties to set
+                         */
+                        function LeaderboardScore(properties) {
+                            if (properties)
+                                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * LeaderboardScore score.
+                         * @member {number|Long} score
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @instance
+                         */
+                        LeaderboardScore.prototype.score = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
+                         * LeaderboardScore startedAt.
+                         * @member {google.protobuf.ITimestamp|null|undefined} startedAt
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @instance
+                         */
+                        LeaderboardScore.prototype.startedAt = null;
+
+                        /**
+                         * LeaderboardScore updatedAt.
+                         * @member {google.protobuf.ITimestamp|null|undefined} updatedAt
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @instance
+                         */
+                        LeaderboardScore.prototype.updatedAt = null;
+
+                        /**
+                         * Creates a new LeaderboardScore instance using the specified properties.
+                         * @function create
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @static
+                         * @param {xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore=} [properties] Properties to set
+                         * @returns {xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore} LeaderboardScore instance
+                         */
+                        LeaderboardScore.create = function create(properties) {
+                            return new LeaderboardScore(properties);
+                        };
+
+                        /**
+                         * Encodes the specified LeaderboardScore message. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.verify|verify} messages.
+                         * @function encode
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @static
+                         * @param {xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore} message LeaderboardScore message or plain object to encode
+                         * @param {$protobuf.Writer} [writer] Writer to encode to
+                         * @returns {$protobuf.Writer} Writer
+                         */
+                        LeaderboardScore.encode = function encode(message, writer) {
+                            if (!writer)
+                                writer = $Writer.create();
+                            if (message.score != null && Object.hasOwnProperty.call(message, "score"))
+                                writer.uint32(/* id 1, wireType 0 =*/8).int64(message.score);
+                            if (message.startedAt != null && Object.hasOwnProperty.call(message, "startedAt"))
+                                $root.google.protobuf.Timestamp.encode(message.startedAt, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                            if (message.updatedAt != null && Object.hasOwnProperty.call(message, "updatedAt"))
+                                $root.google.protobuf.Timestamp.encode(message.updatedAt, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                            return writer;
+                        };
+
+                        /**
+                         * Encodes the specified LeaderboardScore message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.verify|verify} messages.
+                         * @function encodeDelimited
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @static
+                         * @param {xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore} message LeaderboardScore message or plain object to encode
+                         * @param {$protobuf.Writer} [writer] Writer to encode to
+                         * @returns {$protobuf.Writer} Writer
+                         */
+                        LeaderboardScore.encodeDelimited = function encodeDelimited(message, writer) {
+                            return this.encode(message, writer).ldelim();
+                        };
+
+                        /**
+                         * Decodes a LeaderboardScore message from the specified reader or buffer.
+                         * @function decode
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @static
+                         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                         * @param {number} [length] Message length if known beforehand
+                         * @returns {xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore} LeaderboardScore
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        LeaderboardScore.decode = function decode(reader, length) {
+                            if (!(reader instanceof $Reader))
+                                reader = $Reader.create(reader);
+                            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore();
+                            while (reader.pos < end) {
+                                var tag = reader.uint32();
+                                switch (tag >>> 3) {
+                                case 1:
+                                    message.score = reader.int64();
+                                    break;
+                                case 2:
+                                    message.startedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                                    break;
+                                case 3:
+                                    message.updatedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                                    break;
+                                default:
+                                    reader.skipType(tag & 7);
+                                    break;
+                                }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Decodes a LeaderboardScore message from the specified reader or buffer, length delimited.
+                         * @function decodeDelimited
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @static
+                         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                         * @returns {xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore} LeaderboardScore
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        LeaderboardScore.decodeDelimited = function decodeDelimited(reader) {
+                            if (!(reader instanceof $Reader))
+                                reader = new $Reader(reader);
+                            return this.decode(reader, reader.uint32());
+                        };
+
+                        /**
+                         * Verifies a LeaderboardScore message.
+                         * @function verify
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        LeaderboardScore.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.score != null && message.hasOwnProperty("score"))
+                                if (!$util.isInteger(message.score) && !(message.score && $util.isInteger(message.score.low) && $util.isInteger(message.score.high)))
+                                    return "score: integer|Long expected";
+                            if (message.startedAt != null && message.hasOwnProperty("startedAt")) {
+                                var error = $root.google.protobuf.Timestamp.verify(message.startedAt);
+                                if (error)
+                                    return "startedAt." + error;
+                            }
+                            if (message.updatedAt != null && message.hasOwnProperty("updatedAt")) {
+                                var error = $root.google.protobuf.Timestamp.verify(message.updatedAt);
+                                if (error)
+                                    return "updatedAt." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a LeaderboardScore message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore} LeaderboardScore
+                         */
+                        LeaderboardScore.fromObject = function fromObject(object) {
+                            if (object instanceof $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore)
+                                return object;
+                            var message = new $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore();
+                            if (object.score != null)
+                                if ($util.Long)
+                                    (message.score = $util.Long.fromValue(object.score)).unsigned = false;
+                                else if (typeof object.score === "string")
+                                    message.score = parseInt(object.score, 10);
+                                else if (typeof object.score === "number")
+                                    message.score = object.score;
+                                else if (typeof object.score === "object")
+                                    message.score = new $util.LongBits(object.score.low >>> 0, object.score.high >>> 0).toNumber();
+                            if (object.startedAt != null) {
+                                if (typeof object.startedAt !== "object")
+                                    throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.startedAt: object expected");
+                                message.startedAt = $root.google.protobuf.Timestamp.fromObject(object.startedAt);
+                            }
+                            if (object.updatedAt != null) {
+                                if (typeof object.updatedAt !== "object")
+                                    throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.updatedAt: object expected");
+                                message.updatedAt = $root.google.protobuf.Timestamp.fromObject(object.updatedAt);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a LeaderboardScore message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @static
+                         * @param {xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore} message LeaderboardScore
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        LeaderboardScore.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            var object = {};
+                            if (options.defaults) {
+                                if ($util.Long) {
+                                    var long = new $util.Long(0, 0, false);
+                                    object.score = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.score = options.longs === String ? "0" : 0;
+                                object.startedAt = null;
+                                object.updatedAt = null;
+                            }
+                            if (message.score != null && message.hasOwnProperty("score"))
+                                if (typeof message.score === "number")
+                                    object.score = options.longs === String ? String(message.score) : message.score;
+                                else
+                                    object.score = options.longs === String ? $util.Long.prototype.toString.call(message.score) : options.longs === Number ? new $util.LongBits(message.score.low >>> 0, message.score.high >>> 0).toNumber() : message.score;
+                            if (message.startedAt != null && message.hasOwnProperty("startedAt"))
+                                object.startedAt = $root.google.protobuf.Timestamp.toObject(message.startedAt, options);
+                            if (message.updatedAt != null && message.hasOwnProperty("updatedAt"))
+                                object.updatedAt = $root.google.protobuf.Timestamp.toObject(message.updatedAt, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this LeaderboardScore to JSON.
+                         * @function toJSON
+                         * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        LeaderboardScore.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return LeaderboardScore;
+                    })();
+
+                    return LeaderboardItem;
+                })();
+
+                return Leaderboard;
             })();
 
             resources.Staff = (function() {
@@ -5304,6 +6223,4115 @@ $root.xsuportal = (function() {
                  */
                 var admin = {};
 
+                admin.ListBenchmarkJobsRequest = (function() {
+
+                    /**
+                     * Properties of a ListBenchmarkJobsRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IListBenchmarkJobsRequest
+                     * @property {number|Long|null} [teamId] ListBenchmarkJobsRequest teamId
+                     * @property {boolean|null} [incompleteOnly] ListBenchmarkJobsRequest incompleteOnly
+                     */
+
+                    /**
+                     * Constructs a new ListBenchmarkJobsRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a ListBenchmarkJobsRequest.
+                     * @implements IListBenchmarkJobsRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IListBenchmarkJobsRequest=} [properties] Properties to set
+                     */
+                    function ListBenchmarkJobsRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListBenchmarkJobsRequest teamId.
+                     * @member {number|Long} teamId
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @instance
+                     */
+                    ListBenchmarkJobsRequest.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * ListBenchmarkJobsRequest incompleteOnly.
+                     * @member {boolean} incompleteOnly
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @instance
+                     */
+                    ListBenchmarkJobsRequest.prototype.incompleteOnly = false;
+
+                    /**
+                     * Creates a new ListBenchmarkJobsRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListBenchmarkJobsRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.ListBenchmarkJobsRequest} ListBenchmarkJobsRequest instance
+                     */
+                    ListBenchmarkJobsRequest.create = function create(properties) {
+                        return new ListBenchmarkJobsRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsRequest message. Does not implicitly {@link xsuportal.proto.services.admin.ListBenchmarkJobsRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListBenchmarkJobsRequest} message ListBenchmarkJobsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListBenchmarkJobsRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.teamId != null && Object.hasOwnProperty.call(message, "teamId"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.teamId);
+                        if (message.incompleteOnly != null && Object.hasOwnProperty.call(message, "incompleteOnly"))
+                            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.incompleteOnly);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListBenchmarkJobsRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListBenchmarkJobsRequest} message ListBenchmarkJobsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListBenchmarkJobsRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListBenchmarkJobsRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.ListBenchmarkJobsRequest} ListBenchmarkJobsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListBenchmarkJobsRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.ListBenchmarkJobsRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.teamId = reader.int64();
+                                break;
+                            case 2:
+                                message.incompleteOnly = reader.bool();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListBenchmarkJobsRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.ListBenchmarkJobsRequest} ListBenchmarkJobsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListBenchmarkJobsRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListBenchmarkJobsRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListBenchmarkJobsRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (!$util.isInteger(message.teamId) && !(message.teamId && $util.isInteger(message.teamId.low) && $util.isInteger(message.teamId.high)))
+                                return "teamId: integer|Long expected";
+                        if (message.incompleteOnly != null && message.hasOwnProperty("incompleteOnly"))
+                            if (typeof message.incompleteOnly !== "boolean")
+                                return "incompleteOnly: boolean expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListBenchmarkJobsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.ListBenchmarkJobsRequest} ListBenchmarkJobsRequest
+                     */
+                    ListBenchmarkJobsRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.ListBenchmarkJobsRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.ListBenchmarkJobsRequest();
+                        if (object.teamId != null)
+                            if ($util.Long)
+                                (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
+                            else if (typeof object.teamId === "string")
+                                message.teamId = parseInt(object.teamId, 10);
+                            else if (typeof object.teamId === "number")
+                                message.teamId = object.teamId;
+                            else if (typeof object.teamId === "object")
+                                message.teamId = new $util.LongBits(object.teamId.low >>> 0, object.teamId.high >>> 0).toNumber();
+                        if (object.incompleteOnly != null)
+                            message.incompleteOnly = Boolean(object.incompleteOnly);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListBenchmarkJobsRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ListBenchmarkJobsRequest} message ListBenchmarkJobsRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListBenchmarkJobsRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.teamId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.teamId = options.longs === String ? "0" : 0;
+                            object.incompleteOnly = false;
+                        }
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (typeof message.teamId === "number")
+                                object.teamId = options.longs === String ? String(message.teamId) : message.teamId;
+                            else
+                                object.teamId = options.longs === String ? $util.Long.prototype.toString.call(message.teamId) : options.longs === Number ? new $util.LongBits(message.teamId.low >>> 0, message.teamId.high >>> 0).toNumber() : message.teamId;
+                        if (message.incompleteOnly != null && message.hasOwnProperty("incompleteOnly"))
+                            object.incompleteOnly = message.incompleteOnly;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListBenchmarkJobsRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListBenchmarkJobsRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListBenchmarkJobsRequest;
+                })();
+
+                admin.ListBenchmarkJobsResponse = (function() {
+
+                    /**
+                     * Properties of a ListBenchmarkJobsResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IListBenchmarkJobsResponse
+                     * @property {Array.<xsuportal.proto.resources.IBenchmarkJob>|null} [jobs] ListBenchmarkJobsResponse jobs
+                     */
+
+                    /**
+                     * Constructs a new ListBenchmarkJobsResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a ListBenchmarkJobsResponse.
+                     * @implements IListBenchmarkJobsResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IListBenchmarkJobsResponse=} [properties] Properties to set
+                     */
+                    function ListBenchmarkJobsResponse(properties) {
+                        this.jobs = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListBenchmarkJobsResponse jobs.
+                     * @member {Array.<xsuportal.proto.resources.IBenchmarkJob>} jobs
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsResponse
+                     * @instance
+                     */
+                    ListBenchmarkJobsResponse.prototype.jobs = $util.emptyArray;
+
+                    /**
+                     * Creates a new ListBenchmarkJobsResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListBenchmarkJobsResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.ListBenchmarkJobsResponse} ListBenchmarkJobsResponse instance
+                     */
+                    ListBenchmarkJobsResponse.create = function create(properties) {
+                        return new ListBenchmarkJobsResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsResponse message. Does not implicitly {@link xsuportal.proto.services.admin.ListBenchmarkJobsResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListBenchmarkJobsResponse} message ListBenchmarkJobsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListBenchmarkJobsResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.jobs != null && message.jobs.length)
+                            for (var i = 0; i < message.jobs.length; ++i)
+                                $root.xsuportal.proto.resources.BenchmarkJob.encode(message.jobs[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListBenchmarkJobsResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListBenchmarkJobsResponse} message ListBenchmarkJobsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListBenchmarkJobsResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListBenchmarkJobsResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.ListBenchmarkJobsResponse} ListBenchmarkJobsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListBenchmarkJobsResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.ListBenchmarkJobsResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                if (!(message.jobs && message.jobs.length))
+                                    message.jobs = [];
+                                message.jobs.push($root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32()));
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListBenchmarkJobsResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.ListBenchmarkJobsResponse} ListBenchmarkJobsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListBenchmarkJobsResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListBenchmarkJobsResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListBenchmarkJobsResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.jobs != null && message.hasOwnProperty("jobs")) {
+                            if (!Array.isArray(message.jobs))
+                                return "jobs: array expected";
+                            for (var i = 0; i < message.jobs.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.BenchmarkJob.verify(message.jobs[i]);
+                                if (error)
+                                    return "jobs." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListBenchmarkJobsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.ListBenchmarkJobsResponse} ListBenchmarkJobsResponse
+                     */
+                    ListBenchmarkJobsResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.ListBenchmarkJobsResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.ListBenchmarkJobsResponse();
+                        if (object.jobs) {
+                            if (!Array.isArray(object.jobs))
+                                throw TypeError(".xsuportal.proto.services.admin.ListBenchmarkJobsResponse.jobs: array expected");
+                            message.jobs = [];
+                            for (var i = 0; i < object.jobs.length; ++i) {
+                                if (typeof object.jobs[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.admin.ListBenchmarkJobsResponse.jobs: object expected");
+                                message.jobs[i] = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.jobs[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListBenchmarkJobsResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ListBenchmarkJobsResponse} message ListBenchmarkJobsResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListBenchmarkJobsResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.jobs = [];
+                        if (message.jobs && message.jobs.length) {
+                            object.jobs = [];
+                            for (var j = 0; j < message.jobs.length; ++j)
+                                object.jobs[j] = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.jobs[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListBenchmarkJobsResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.ListBenchmarkJobsResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListBenchmarkJobsResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListBenchmarkJobsResponse;
+                })();
+
+                admin.EnqueueBenchmarkJobRequest = (function() {
+
+                    /**
+                     * Properties of an EnqueueBenchmarkJobRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IEnqueueBenchmarkJobRequest
+                     * @property {number|Long|null} [teamId] EnqueueBenchmarkJobRequest teamId
+                     * @property {number|Long|null} [targetId] EnqueueBenchmarkJobRequest targetId
+                     */
+
+                    /**
+                     * Constructs a new EnqueueBenchmarkJobRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents an EnqueueBenchmarkJobRequest.
+                     * @implements IEnqueueBenchmarkJobRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IEnqueueBenchmarkJobRequest=} [properties] Properties to set
+                     */
+                    function EnqueueBenchmarkJobRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * EnqueueBenchmarkJobRequest teamId.
+                     * @member {number|Long} teamId
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @instance
+                     */
+                    EnqueueBenchmarkJobRequest.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * EnqueueBenchmarkJobRequest targetId.
+                     * @member {number|Long} targetId
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @instance
+                     */
+                    EnqueueBenchmarkJobRequest.prototype.targetId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new EnqueueBenchmarkJobRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IEnqueueBenchmarkJobRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest} EnqueueBenchmarkJobRequest instance
+                     */
+                    EnqueueBenchmarkJobRequest.create = function create(properties) {
+                        return new EnqueueBenchmarkJobRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobRequest message. Does not implicitly {@link xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IEnqueueBenchmarkJobRequest} message EnqueueBenchmarkJobRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    EnqueueBenchmarkJobRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.teamId != null && Object.hasOwnProperty.call(message, "teamId"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.teamId);
+                        if (message.targetId != null && Object.hasOwnProperty.call(message, "targetId"))
+                            writer.uint32(/* id 2, wireType 0 =*/16).int64(message.targetId);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IEnqueueBenchmarkJobRequest} message EnqueueBenchmarkJobRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    EnqueueBenchmarkJobRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest} EnqueueBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    EnqueueBenchmarkJobRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.teamId = reader.int64();
+                                break;
+                            case 2:
+                                message.targetId = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest} EnqueueBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    EnqueueBenchmarkJobRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an EnqueueBenchmarkJobRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    EnqueueBenchmarkJobRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (!$util.isInteger(message.teamId) && !(message.teamId && $util.isInteger(message.teamId.low) && $util.isInteger(message.teamId.high)))
+                                return "teamId: integer|Long expected";
+                        if (message.targetId != null && message.hasOwnProperty("targetId"))
+                            if (!$util.isInteger(message.targetId) && !(message.targetId && $util.isInteger(message.targetId.low) && $util.isInteger(message.targetId.high)))
+                                return "targetId: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an EnqueueBenchmarkJobRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest} EnqueueBenchmarkJobRequest
+                     */
+                    EnqueueBenchmarkJobRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest();
+                        if (object.teamId != null)
+                            if ($util.Long)
+                                (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
+                            else if (typeof object.teamId === "string")
+                                message.teamId = parseInt(object.teamId, 10);
+                            else if (typeof object.teamId === "number")
+                                message.teamId = object.teamId;
+                            else if (typeof object.teamId === "object")
+                                message.teamId = new $util.LongBits(object.teamId.low >>> 0, object.teamId.high >>> 0).toNumber();
+                        if (object.targetId != null)
+                            if ($util.Long)
+                                (message.targetId = $util.Long.fromValue(object.targetId)).unsigned = false;
+                            else if (typeof object.targetId === "string")
+                                message.targetId = parseInt(object.targetId, 10);
+                            else if (typeof object.targetId === "number")
+                                message.targetId = object.targetId;
+                            else if (typeof object.targetId === "object")
+                                message.targetId = new $util.LongBits(object.targetId.low >>> 0, object.targetId.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an EnqueueBenchmarkJobRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest} message EnqueueBenchmarkJobRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    EnqueueBenchmarkJobRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.teamId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.teamId = options.longs === String ? "0" : 0;
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.targetId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.targetId = options.longs === String ? "0" : 0;
+                        }
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (typeof message.teamId === "number")
+                                object.teamId = options.longs === String ? String(message.teamId) : message.teamId;
+                            else
+                                object.teamId = options.longs === String ? $util.Long.prototype.toString.call(message.teamId) : options.longs === Number ? new $util.LongBits(message.teamId.low >>> 0, message.teamId.high >>> 0).toNumber() : message.teamId;
+                        if (message.targetId != null && message.hasOwnProperty("targetId"))
+                            if (typeof message.targetId === "number")
+                                object.targetId = options.longs === String ? String(message.targetId) : message.targetId;
+                            else
+                                object.targetId = options.longs === String ? $util.Long.prototype.toString.call(message.targetId) : options.longs === Number ? new $util.LongBits(message.targetId.low >>> 0, message.targetId.high >>> 0).toNumber() : message.targetId;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this EnqueueBenchmarkJobRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    EnqueueBenchmarkJobRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return EnqueueBenchmarkJobRequest;
+                })();
+
+                admin.EnqueueBenchmarkJobResponse = (function() {
+
+                    /**
+                     * Properties of an EnqueueBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IEnqueueBenchmarkJobResponse
+                     * @property {xsuportal.proto.resources.IBenchmarkJob|null} [job] EnqueueBenchmarkJobResponse job
+                     */
+
+                    /**
+                     * Constructs a new EnqueueBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents an EnqueueBenchmarkJobResponse.
+                     * @implements IEnqueueBenchmarkJobResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IEnqueueBenchmarkJobResponse=} [properties] Properties to set
+                     */
+                    function EnqueueBenchmarkJobResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * EnqueueBenchmarkJobResponse job.
+                     * @member {xsuportal.proto.resources.IBenchmarkJob|null|undefined} job
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse
+                     * @instance
+                     */
+                    EnqueueBenchmarkJobResponse.prototype.job = null;
+
+                    /**
+                     * Creates a new EnqueueBenchmarkJobResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IEnqueueBenchmarkJobResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse} EnqueueBenchmarkJobResponse instance
+                     */
+                    EnqueueBenchmarkJobResponse.create = function create(properties) {
+                        return new EnqueueBenchmarkJobResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IEnqueueBenchmarkJobResponse} message EnqueueBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    EnqueueBenchmarkJobResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.job != null && Object.hasOwnProperty.call(message, "job"))
+                            $root.xsuportal.proto.resources.BenchmarkJob.encode(message.job, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IEnqueueBenchmarkJobResponse} message EnqueueBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    EnqueueBenchmarkJobResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse} EnqueueBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    EnqueueBenchmarkJobResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.job = $root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse} EnqueueBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    EnqueueBenchmarkJobResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an EnqueueBenchmarkJobResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    EnqueueBenchmarkJobResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.job != null && message.hasOwnProperty("job")) {
+                            var error = $root.xsuportal.proto.resources.BenchmarkJob.verify(message.job);
+                            if (error)
+                                return "job." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an EnqueueBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse} EnqueueBenchmarkJobResponse
+                     */
+                    EnqueueBenchmarkJobResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse();
+                        if (object.job != null) {
+                            if (typeof object.job !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse.job: object expected");
+                            message.job = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.job);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an EnqueueBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse} message EnqueueBenchmarkJobResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    EnqueueBenchmarkJobResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.job = null;
+                        if (message.job != null && message.hasOwnProperty("job"))
+                            object.job = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.job, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this EnqueueBenchmarkJobResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    EnqueueBenchmarkJobResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return EnqueueBenchmarkJobResponse;
+                })();
+
+                admin.CancelBenchmarkJobRequest = (function() {
+
+                    /**
+                     * Properties of a CancelBenchmarkJobRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface ICancelBenchmarkJobRequest
+                     * @property {number|Long|null} [id] CancelBenchmarkJobRequest id
+                     */
+
+                    /**
+                     * Constructs a new CancelBenchmarkJobRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a CancelBenchmarkJobRequest.
+                     * @implements ICancelBenchmarkJobRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.ICancelBenchmarkJobRequest=} [properties] Properties to set
+                     */
+                    function CancelBenchmarkJobRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * CancelBenchmarkJobRequest id.
+                     * @member {number|Long} id
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobRequest
+                     * @instance
+                     */
+                    CancelBenchmarkJobRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new CancelBenchmarkJobRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICancelBenchmarkJobRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.CancelBenchmarkJobRequest} CancelBenchmarkJobRequest instance
+                     */
+                    CancelBenchmarkJobRequest.create = function create(properties) {
+                        return new CancelBenchmarkJobRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified CancelBenchmarkJobRequest message. Does not implicitly {@link xsuportal.proto.services.admin.CancelBenchmarkJobRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICancelBenchmarkJobRequest} message CancelBenchmarkJobRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    CancelBenchmarkJobRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified CancelBenchmarkJobRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.CancelBenchmarkJobRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICancelBenchmarkJobRequest} message CancelBenchmarkJobRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    CancelBenchmarkJobRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a CancelBenchmarkJobRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.CancelBenchmarkJobRequest} CancelBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    CancelBenchmarkJobRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.CancelBenchmarkJobRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.id = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a CancelBenchmarkJobRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.CancelBenchmarkJobRequest} CancelBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    CancelBenchmarkJobRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a CancelBenchmarkJobRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    CancelBenchmarkJobRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CancelBenchmarkJobRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.CancelBenchmarkJobRequest} CancelBenchmarkJobRequest
+                     */
+                    CancelBenchmarkJobRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.CancelBenchmarkJobRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.CancelBenchmarkJobRequest();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a CancelBenchmarkJobRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.CancelBenchmarkJobRequest} message CancelBenchmarkJobRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CancelBenchmarkJobRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this CancelBenchmarkJobRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CancelBenchmarkJobRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CancelBenchmarkJobRequest;
+                })();
+
+                admin.CancelBenchmarkJobResponse = (function() {
+
+                    /**
+                     * Properties of a CancelBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface ICancelBenchmarkJobResponse
+                     * @property {xsuportal.proto.resources.IBenchmarkJob|null} [job] CancelBenchmarkJobResponse job
+                     */
+
+                    /**
+                     * Constructs a new CancelBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a CancelBenchmarkJobResponse.
+                     * @implements ICancelBenchmarkJobResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.ICancelBenchmarkJobResponse=} [properties] Properties to set
+                     */
+                    function CancelBenchmarkJobResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * CancelBenchmarkJobResponse job.
+                     * @member {xsuportal.proto.resources.IBenchmarkJob|null|undefined} job
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobResponse
+                     * @instance
+                     */
+                    CancelBenchmarkJobResponse.prototype.job = null;
+
+                    /**
+                     * Creates a new CancelBenchmarkJobResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICancelBenchmarkJobResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.CancelBenchmarkJobResponse} CancelBenchmarkJobResponse instance
+                     */
+                    CancelBenchmarkJobResponse.create = function create(properties) {
+                        return new CancelBenchmarkJobResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified CancelBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.admin.CancelBenchmarkJobResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICancelBenchmarkJobResponse} message CancelBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    CancelBenchmarkJobResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.job != null && Object.hasOwnProperty.call(message, "job"))
+                            $root.xsuportal.proto.resources.BenchmarkJob.encode(message.job, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified CancelBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.CancelBenchmarkJobResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICancelBenchmarkJobResponse} message CancelBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    CancelBenchmarkJobResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a CancelBenchmarkJobResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.CancelBenchmarkJobResponse} CancelBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    CancelBenchmarkJobResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.CancelBenchmarkJobResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.job = $root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a CancelBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.CancelBenchmarkJobResponse} CancelBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    CancelBenchmarkJobResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a CancelBenchmarkJobResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    CancelBenchmarkJobResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.job != null && message.hasOwnProperty("job")) {
+                            var error = $root.xsuportal.proto.resources.BenchmarkJob.verify(message.job);
+                            if (error)
+                                return "job." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CancelBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.CancelBenchmarkJobResponse} CancelBenchmarkJobResponse
+                     */
+                    CancelBenchmarkJobResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.CancelBenchmarkJobResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.CancelBenchmarkJobResponse();
+                        if (object.job != null) {
+                            if (typeof object.job !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.CancelBenchmarkJobResponse.job: object expected");
+                            message.job = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.job);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a CancelBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.CancelBenchmarkJobResponse} message CancelBenchmarkJobResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CancelBenchmarkJobResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.job = null;
+                        if (message.job != null && message.hasOwnProperty("job"))
+                            object.job = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.job, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this CancelBenchmarkJobResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.CancelBenchmarkJobResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CancelBenchmarkJobResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CancelBenchmarkJobResponse;
+                })();
+
+                admin.GetBenchmarkJobQuery = (function() {
+
+                    /**
+                     * Properties of a GetBenchmarkJobQuery.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IGetBenchmarkJobQuery
+                     * @property {number|Long|null} [id] GetBenchmarkJobQuery id
+                     */
+
+                    /**
+                     * Constructs a new GetBenchmarkJobQuery.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a GetBenchmarkJobQuery.
+                     * @implements IGetBenchmarkJobQuery
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IGetBenchmarkJobQuery=} [properties] Properties to set
+                     */
+                    function GetBenchmarkJobQuery(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetBenchmarkJobQuery id.
+                     * @member {number|Long} id
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobQuery
+                     * @instance
+                     */
+                    GetBenchmarkJobQuery.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new GetBenchmarkJobQuery instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobQuery
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetBenchmarkJobQuery=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.GetBenchmarkJobQuery} GetBenchmarkJobQuery instance
+                     */
+                    GetBenchmarkJobQuery.create = function create(properties) {
+                        return new GetBenchmarkJobQuery(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobQuery message. Does not implicitly {@link xsuportal.proto.services.admin.GetBenchmarkJobQuery.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobQuery
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetBenchmarkJobQuery} message GetBenchmarkJobQuery message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetBenchmarkJobQuery.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobQuery message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetBenchmarkJobQuery.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobQuery
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetBenchmarkJobQuery} message GetBenchmarkJobQuery message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetBenchmarkJobQuery.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetBenchmarkJobQuery message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobQuery
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.GetBenchmarkJobQuery} GetBenchmarkJobQuery
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetBenchmarkJobQuery.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.GetBenchmarkJobQuery();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.id = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetBenchmarkJobQuery message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobQuery
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.GetBenchmarkJobQuery} GetBenchmarkJobQuery
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetBenchmarkJobQuery.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetBenchmarkJobQuery message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobQuery
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetBenchmarkJobQuery.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetBenchmarkJobQuery message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobQuery
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.GetBenchmarkJobQuery} GetBenchmarkJobQuery
+                     */
+                    GetBenchmarkJobQuery.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.GetBenchmarkJobQuery)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.GetBenchmarkJobQuery();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetBenchmarkJobQuery message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobQuery
+                     * @static
+                     * @param {xsuportal.proto.services.admin.GetBenchmarkJobQuery} message GetBenchmarkJobQuery
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetBenchmarkJobQuery.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetBenchmarkJobQuery to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobQuery
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetBenchmarkJobQuery.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetBenchmarkJobQuery;
+                })();
+
+                admin.GetBenchmarkJobResponse = (function() {
+
+                    /**
+                     * Properties of a GetBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IGetBenchmarkJobResponse
+                     * @property {xsuportal.proto.resources.IBenchmarkJob|null} [job] GetBenchmarkJobResponse job
+                     */
+
+                    /**
+                     * Constructs a new GetBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a GetBenchmarkJobResponse.
+                     * @implements IGetBenchmarkJobResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IGetBenchmarkJobResponse=} [properties] Properties to set
+                     */
+                    function GetBenchmarkJobResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetBenchmarkJobResponse job.
+                     * @member {xsuportal.proto.resources.IBenchmarkJob|null|undefined} job
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobResponse
+                     * @instance
+                     */
+                    GetBenchmarkJobResponse.prototype.job = null;
+
+                    /**
+                     * Creates a new GetBenchmarkJobResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetBenchmarkJobResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.GetBenchmarkJobResponse} GetBenchmarkJobResponse instance
+                     */
+                    GetBenchmarkJobResponse.create = function create(properties) {
+                        return new GetBenchmarkJobResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.admin.GetBenchmarkJobResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetBenchmarkJobResponse} message GetBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetBenchmarkJobResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.job != null && Object.hasOwnProperty.call(message, "job"))
+                            $root.xsuportal.proto.resources.BenchmarkJob.encode(message.job, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetBenchmarkJobResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetBenchmarkJobResponse} message GetBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetBenchmarkJobResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetBenchmarkJobResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.GetBenchmarkJobResponse} GetBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetBenchmarkJobResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.GetBenchmarkJobResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.job = $root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.GetBenchmarkJobResponse} GetBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetBenchmarkJobResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetBenchmarkJobResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetBenchmarkJobResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.job != null && message.hasOwnProperty("job")) {
+                            var error = $root.xsuportal.proto.resources.BenchmarkJob.verify(message.job);
+                            if (error)
+                                return "job." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.GetBenchmarkJobResponse} GetBenchmarkJobResponse
+                     */
+                    GetBenchmarkJobResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.GetBenchmarkJobResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.GetBenchmarkJobResponse();
+                        if (object.job != null) {
+                            if (typeof object.job !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.GetBenchmarkJobResponse.job: object expected");
+                            message.job = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.job);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.GetBenchmarkJobResponse} message GetBenchmarkJobResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetBenchmarkJobResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.job = null;
+                        if (message.job != null && message.hasOwnProperty("job"))
+                            object.job = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.job, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetBenchmarkJobResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.GetBenchmarkJobResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetBenchmarkJobResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetBenchmarkJobResponse;
+                })();
+
+                admin.ListClarificationsRequest = (function() {
+
+                    /**
+                     * Properties of a ListClarificationsRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IListClarificationsRequest
+                     * @property {number|Long|null} [teamId] ListClarificationsRequest teamId
+                     */
+
+                    /**
+                     * Constructs a new ListClarificationsRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a ListClarificationsRequest.
+                     * @implements IListClarificationsRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IListClarificationsRequest=} [properties] Properties to set
+                     */
+                    function ListClarificationsRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListClarificationsRequest teamId.
+                     * @member {number|Long} teamId
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsRequest
+                     * @instance
+                     */
+                    ListClarificationsRequest.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new ListClarificationsRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListClarificationsRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.ListClarificationsRequest} ListClarificationsRequest instance
+                     */
+                    ListClarificationsRequest.create = function create(properties) {
+                        return new ListClarificationsRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListClarificationsRequest message. Does not implicitly {@link xsuportal.proto.services.admin.ListClarificationsRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListClarificationsRequest} message ListClarificationsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListClarificationsRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.teamId != null && Object.hasOwnProperty.call(message, "teamId"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.teamId);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListClarificationsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListClarificationsRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListClarificationsRequest} message ListClarificationsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListClarificationsRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListClarificationsRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.ListClarificationsRequest} ListClarificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListClarificationsRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.ListClarificationsRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.teamId = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListClarificationsRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.ListClarificationsRequest} ListClarificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListClarificationsRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListClarificationsRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListClarificationsRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (!$util.isInteger(message.teamId) && !(message.teamId && $util.isInteger(message.teamId.low) && $util.isInteger(message.teamId.high)))
+                                return "teamId: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListClarificationsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.ListClarificationsRequest} ListClarificationsRequest
+                     */
+                    ListClarificationsRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.ListClarificationsRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.ListClarificationsRequest();
+                        if (object.teamId != null)
+                            if ($util.Long)
+                                (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
+                            else if (typeof object.teamId === "string")
+                                message.teamId = parseInt(object.teamId, 10);
+                            else if (typeof object.teamId === "number")
+                                message.teamId = object.teamId;
+                            else if (typeof object.teamId === "object")
+                                message.teamId = new $util.LongBits(object.teamId.low >>> 0, object.teamId.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListClarificationsRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ListClarificationsRequest} message ListClarificationsRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListClarificationsRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.teamId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.teamId = options.longs === String ? "0" : 0;
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (typeof message.teamId === "number")
+                                object.teamId = options.longs === String ? String(message.teamId) : message.teamId;
+                            else
+                                object.teamId = options.longs === String ? $util.Long.prototype.toString.call(message.teamId) : options.longs === Number ? new $util.LongBits(message.teamId.low >>> 0, message.teamId.high >>> 0).toNumber() : message.teamId;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListClarificationsRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListClarificationsRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListClarificationsRequest;
+                })();
+
+                admin.ListClarificationsResponse = (function() {
+
+                    /**
+                     * Properties of a ListClarificationsResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IListClarificationsResponse
+                     * @property {Array.<xsuportal.proto.resources.IClarification>|null} [clarifications] ListClarificationsResponse clarifications
+                     */
+
+                    /**
+                     * Constructs a new ListClarificationsResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a ListClarificationsResponse.
+                     * @implements IListClarificationsResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IListClarificationsResponse=} [properties] Properties to set
+                     */
+                    function ListClarificationsResponse(properties) {
+                        this.clarifications = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListClarificationsResponse clarifications.
+                     * @member {Array.<xsuportal.proto.resources.IClarification>} clarifications
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsResponse
+                     * @instance
+                     */
+                    ListClarificationsResponse.prototype.clarifications = $util.emptyArray;
+
+                    /**
+                     * Creates a new ListClarificationsResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListClarificationsResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.ListClarificationsResponse} ListClarificationsResponse instance
+                     */
+                    ListClarificationsResponse.create = function create(properties) {
+                        return new ListClarificationsResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListClarificationsResponse message. Does not implicitly {@link xsuportal.proto.services.admin.ListClarificationsResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListClarificationsResponse} message ListClarificationsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListClarificationsResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.clarifications != null && message.clarifications.length)
+                            for (var i = 0; i < message.clarifications.length; ++i)
+                                $root.xsuportal.proto.resources.Clarification.encode(message.clarifications[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListClarificationsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListClarificationsResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListClarificationsResponse} message ListClarificationsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListClarificationsResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListClarificationsResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.ListClarificationsResponse} ListClarificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListClarificationsResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.ListClarificationsResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                if (!(message.clarifications && message.clarifications.length))
+                                    message.clarifications = [];
+                                message.clarifications.push($root.xsuportal.proto.resources.Clarification.decode(reader, reader.uint32()));
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListClarificationsResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.ListClarificationsResponse} ListClarificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListClarificationsResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListClarificationsResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListClarificationsResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.clarifications != null && message.hasOwnProperty("clarifications")) {
+                            if (!Array.isArray(message.clarifications))
+                                return "clarifications: array expected";
+                            for (var i = 0; i < message.clarifications.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.Clarification.verify(message.clarifications[i]);
+                                if (error)
+                                    return "clarifications." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListClarificationsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.ListClarificationsResponse} ListClarificationsResponse
+                     */
+                    ListClarificationsResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.ListClarificationsResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.ListClarificationsResponse();
+                        if (object.clarifications) {
+                            if (!Array.isArray(object.clarifications))
+                                throw TypeError(".xsuportal.proto.services.admin.ListClarificationsResponse.clarifications: array expected");
+                            message.clarifications = [];
+                            for (var i = 0; i < object.clarifications.length; ++i) {
+                                if (typeof object.clarifications[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.admin.ListClarificationsResponse.clarifications: object expected");
+                                message.clarifications[i] = $root.xsuportal.proto.resources.Clarification.fromObject(object.clarifications[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListClarificationsResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ListClarificationsResponse} message ListClarificationsResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListClarificationsResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.clarifications = [];
+                        if (message.clarifications && message.clarifications.length) {
+                            object.clarifications = [];
+                            for (var j = 0; j < message.clarifications.length; ++j)
+                                object.clarifications[j] = $root.xsuportal.proto.resources.Clarification.toObject(message.clarifications[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListClarificationsResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.ListClarificationsResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListClarificationsResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListClarificationsResponse;
+                })();
+
+                admin.GetClarificationRequest = (function() {
+
+                    /**
+                     * Properties of a GetClarificationRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IGetClarificationRequest
+                     * @property {number|Long|null} [id] GetClarificationRequest id
+                     */
+
+                    /**
+                     * Constructs a new GetClarificationRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a GetClarificationRequest.
+                     * @implements IGetClarificationRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IGetClarificationRequest=} [properties] Properties to set
+                     */
+                    function GetClarificationRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetClarificationRequest id.
+                     * @member {number|Long} id
+                     * @memberof xsuportal.proto.services.admin.GetClarificationRequest
+                     * @instance
+                     */
+                    GetClarificationRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new GetClarificationRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.GetClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetClarificationRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.GetClarificationRequest} GetClarificationRequest instance
+                     */
+                    GetClarificationRequest.create = function create(properties) {
+                        return new GetClarificationRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetClarificationRequest message. Does not implicitly {@link xsuportal.proto.services.admin.GetClarificationRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.GetClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetClarificationRequest} message GetClarificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetClarificationRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetClarificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetClarificationRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetClarificationRequest} message GetClarificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetClarificationRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetClarificationRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.GetClarificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.GetClarificationRequest} GetClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetClarificationRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.GetClarificationRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.id = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetClarificationRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetClarificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.GetClarificationRequest} GetClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetClarificationRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetClarificationRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.GetClarificationRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetClarificationRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetClarificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.GetClarificationRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.GetClarificationRequest} GetClarificationRequest
+                     */
+                    GetClarificationRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.GetClarificationRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.GetClarificationRequest();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetClarificationRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.GetClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.GetClarificationRequest} message GetClarificationRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetClarificationRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetClarificationRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.GetClarificationRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetClarificationRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetClarificationRequest;
+                })();
+
+                admin.GetClarificationResponse = (function() {
+
+                    /**
+                     * Properties of a GetClarificationResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IGetClarificationResponse
+                     * @property {xsuportal.proto.resources.IClarification|null} [clarification] GetClarificationResponse clarification
+                     */
+
+                    /**
+                     * Constructs a new GetClarificationResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a GetClarificationResponse.
+                     * @implements IGetClarificationResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IGetClarificationResponse=} [properties] Properties to set
+                     */
+                    function GetClarificationResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetClarificationResponse clarification.
+                     * @member {xsuportal.proto.resources.IClarification|null|undefined} clarification
+                     * @memberof xsuportal.proto.services.admin.GetClarificationResponse
+                     * @instance
+                     */
+                    GetClarificationResponse.prototype.clarification = null;
+
+                    /**
+                     * Creates a new GetClarificationResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.GetClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetClarificationResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.GetClarificationResponse} GetClarificationResponse instance
+                     */
+                    GetClarificationResponse.create = function create(properties) {
+                        return new GetClarificationResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetClarificationResponse message. Does not implicitly {@link xsuportal.proto.services.admin.GetClarificationResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.GetClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetClarificationResponse} message GetClarificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetClarificationResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.clarification != null && Object.hasOwnProperty.call(message, "clarification"))
+                            $root.xsuportal.proto.resources.Clarification.encode(message.clarification, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetClarificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetClarificationResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetClarificationResponse} message GetClarificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetClarificationResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetClarificationResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.GetClarificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.GetClarificationResponse} GetClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetClarificationResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.GetClarificationResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.clarification = $root.xsuportal.proto.resources.Clarification.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetClarificationResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetClarificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.GetClarificationResponse} GetClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetClarificationResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetClarificationResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.GetClarificationResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetClarificationResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.clarification != null && message.hasOwnProperty("clarification")) {
+                            var error = $root.xsuportal.proto.resources.Clarification.verify(message.clarification);
+                            if (error)
+                                return "clarification." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetClarificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.GetClarificationResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.GetClarificationResponse} GetClarificationResponse
+                     */
+                    GetClarificationResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.GetClarificationResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.GetClarificationResponse();
+                        if (object.clarification != null) {
+                            if (typeof object.clarification !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.GetClarificationResponse.clarification: object expected");
+                            message.clarification = $root.xsuportal.proto.resources.Clarification.fromObject(object.clarification);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetClarificationResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.GetClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.GetClarificationResponse} message GetClarificationResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetClarificationResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.clarification = null;
+                        if (message.clarification != null && message.hasOwnProperty("clarification"))
+                            object.clarification = $root.xsuportal.proto.resources.Clarification.toObject(message.clarification, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetClarificationResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.GetClarificationResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetClarificationResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetClarificationResponse;
+                })();
+
+                admin.RespondClarificationRequest = (function() {
+
+                    /**
+                     * Properties of a RespondClarificationRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IRespondClarificationRequest
+                     * @property {number|Long|null} [id] RespondClarificationRequest id
+                     * @property {boolean|null} [disclose] RespondClarificationRequest disclose
+                     * @property {string|null} [answer] RespondClarificationRequest answer
+                     * @property {string|null} [question] RespondClarificationRequest question
+                     */
+
+                    /**
+                     * Constructs a new RespondClarificationRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a RespondClarificationRequest.
+                     * @implements IRespondClarificationRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IRespondClarificationRequest=} [properties] Properties to set
+                     */
+                    function RespondClarificationRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RespondClarificationRequest id.
+                     * @member {number|Long} id
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @instance
+                     */
+                    RespondClarificationRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * RespondClarificationRequest disclose.
+                     * @member {boolean} disclose
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @instance
+                     */
+                    RespondClarificationRequest.prototype.disclose = false;
+
+                    /**
+                     * RespondClarificationRequest answer.
+                     * @member {string} answer
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @instance
+                     */
+                    RespondClarificationRequest.prototype.answer = "";
+
+                    /**
+                     * RespondClarificationRequest question.
+                     * @member {string} question
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @instance
+                     */
+                    RespondClarificationRequest.prototype.question = "";
+
+                    /**
+                     * Creates a new RespondClarificationRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IRespondClarificationRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.RespondClarificationRequest} RespondClarificationRequest instance
+                     */
+                    RespondClarificationRequest.create = function create(properties) {
+                        return new RespondClarificationRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified RespondClarificationRequest message. Does not implicitly {@link xsuportal.proto.services.admin.RespondClarificationRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IRespondClarificationRequest} message RespondClarificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    RespondClarificationRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+                        if (message.disclose != null && Object.hasOwnProperty.call(message, "disclose"))
+                            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.disclose);
+                        if (message.answer != null && Object.hasOwnProperty.call(message, "answer"))
+                            writer.uint32(/* id 3, wireType 2 =*/26).string(message.answer);
+                        if (message.question != null && Object.hasOwnProperty.call(message, "question"))
+                            writer.uint32(/* id 4, wireType 2 =*/34).string(message.question);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified RespondClarificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.RespondClarificationRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IRespondClarificationRequest} message RespondClarificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    RespondClarificationRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a RespondClarificationRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.RespondClarificationRequest} RespondClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    RespondClarificationRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.RespondClarificationRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.id = reader.int64();
+                                break;
+                            case 2:
+                                message.disclose = reader.bool();
+                                break;
+                            case 3:
+                                message.answer = reader.string();
+                                break;
+                            case 4:
+                                message.question = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a RespondClarificationRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.RespondClarificationRequest} RespondClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    RespondClarificationRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a RespondClarificationRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RespondClarificationRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        if (message.disclose != null && message.hasOwnProperty("disclose"))
+                            if (typeof message.disclose !== "boolean")
+                                return "disclose: boolean expected";
+                        if (message.answer != null && message.hasOwnProperty("answer"))
+                            if (!$util.isString(message.answer))
+                                return "answer: string expected";
+                        if (message.question != null && message.hasOwnProperty("question"))
+                            if (!$util.isString(message.question))
+                                return "question: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RespondClarificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.RespondClarificationRequest} RespondClarificationRequest
+                     */
+                    RespondClarificationRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.RespondClarificationRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.RespondClarificationRequest();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        if (object.disclose != null)
+                            message.disclose = Boolean(object.disclose);
+                        if (object.answer != null)
+                            message.answer = String(object.answer);
+                        if (object.question != null)
+                            message.question = String(object.question);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RespondClarificationRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.RespondClarificationRequest} message RespondClarificationRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RespondClarificationRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                            object.disclose = false;
+                            object.answer = "";
+                            object.question = "";
+                        }
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                        if (message.disclose != null && message.hasOwnProperty("disclose"))
+                            object.disclose = message.disclose;
+                        if (message.answer != null && message.hasOwnProperty("answer"))
+                            object.answer = message.answer;
+                        if (message.question != null && message.hasOwnProperty("question"))
+                            object.question = message.question;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RespondClarificationRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RespondClarificationRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RespondClarificationRequest;
+                })();
+
+                admin.RespondClarificationResponse = (function() {
+
+                    /**
+                     * Properties of a RespondClarificationResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IRespondClarificationResponse
+                     * @property {xsuportal.proto.resources.IClarification|null} [clarification] RespondClarificationResponse clarification
+                     */
+
+                    /**
+                     * Constructs a new RespondClarificationResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a RespondClarificationResponse.
+                     * @implements IRespondClarificationResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IRespondClarificationResponse=} [properties] Properties to set
+                     */
+                    function RespondClarificationResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RespondClarificationResponse clarification.
+                     * @member {xsuportal.proto.resources.IClarification|null|undefined} clarification
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationResponse
+                     * @instance
+                     */
+                    RespondClarificationResponse.prototype.clarification = null;
+
+                    /**
+                     * Creates a new RespondClarificationResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IRespondClarificationResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.RespondClarificationResponse} RespondClarificationResponse instance
+                     */
+                    RespondClarificationResponse.create = function create(properties) {
+                        return new RespondClarificationResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified RespondClarificationResponse message. Does not implicitly {@link xsuportal.proto.services.admin.RespondClarificationResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IRespondClarificationResponse} message RespondClarificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    RespondClarificationResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.clarification != null && Object.hasOwnProperty.call(message, "clarification"))
+                            $root.xsuportal.proto.resources.Clarification.encode(message.clarification, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified RespondClarificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.RespondClarificationResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IRespondClarificationResponse} message RespondClarificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    RespondClarificationResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a RespondClarificationResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.RespondClarificationResponse} RespondClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    RespondClarificationResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.RespondClarificationResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.clarification = $root.xsuportal.proto.resources.Clarification.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a RespondClarificationResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.RespondClarificationResponse} RespondClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    RespondClarificationResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a RespondClarificationResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RespondClarificationResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.clarification != null && message.hasOwnProperty("clarification")) {
+                            var error = $root.xsuportal.proto.resources.Clarification.verify(message.clarification);
+                            if (error)
+                                return "clarification." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RespondClarificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.RespondClarificationResponse} RespondClarificationResponse
+                     */
+                    RespondClarificationResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.RespondClarificationResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.RespondClarificationResponse();
+                        if (object.clarification != null) {
+                            if (typeof object.clarification !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.RespondClarificationResponse.clarification: object expected");
+                            message.clarification = $root.xsuportal.proto.resources.Clarification.fromObject(object.clarification);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RespondClarificationResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.RespondClarificationResponse} message RespondClarificationResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RespondClarificationResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.clarification = null;
+                        if (message.clarification != null && message.hasOwnProperty("clarification"))
+                            object.clarification = $root.xsuportal.proto.resources.Clarification.toObject(message.clarification, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RespondClarificationResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.RespondClarificationResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RespondClarificationResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RespondClarificationResponse;
+                })();
+
+                admin.CreateClarificationRequest = (function() {
+
+                    /**
+                     * Properties of a CreateClarificationRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface ICreateClarificationRequest
+                     * @property {number|Long|null} [id] CreateClarificationRequest id
+                     * @property {string|null} [answer] CreateClarificationRequest answer
+                     * @property {string|null} [question] CreateClarificationRequest question
+                     */
+
+                    /**
+                     * Constructs a new CreateClarificationRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a CreateClarificationRequest.
+                     * @implements ICreateClarificationRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.ICreateClarificationRequest=} [properties] Properties to set
+                     */
+                    function CreateClarificationRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * CreateClarificationRequest id.
+                     * @member {number|Long} id
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @instance
+                     */
+                    CreateClarificationRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * CreateClarificationRequest answer.
+                     * @member {string} answer
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @instance
+                     */
+                    CreateClarificationRequest.prototype.answer = "";
+
+                    /**
+                     * CreateClarificationRequest question.
+                     * @member {string} question
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @instance
+                     */
+                    CreateClarificationRequest.prototype.question = "";
+
+                    /**
+                     * Creates a new CreateClarificationRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICreateClarificationRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.CreateClarificationRequest} CreateClarificationRequest instance
+                     */
+                    CreateClarificationRequest.create = function create(properties) {
+                        return new CreateClarificationRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified CreateClarificationRequest message. Does not implicitly {@link xsuportal.proto.services.admin.CreateClarificationRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICreateClarificationRequest} message CreateClarificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    CreateClarificationRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+                        if (message.answer != null && Object.hasOwnProperty.call(message, "answer"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.answer);
+                        if (message.question != null && Object.hasOwnProperty.call(message, "question"))
+                            writer.uint32(/* id 3, wireType 2 =*/26).string(message.question);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified CreateClarificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.CreateClarificationRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICreateClarificationRequest} message CreateClarificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    CreateClarificationRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a CreateClarificationRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.CreateClarificationRequest} CreateClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    CreateClarificationRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.CreateClarificationRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.id = reader.int64();
+                                break;
+                            case 2:
+                                message.answer = reader.string();
+                                break;
+                            case 3:
+                                message.question = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a CreateClarificationRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.CreateClarificationRequest} CreateClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    CreateClarificationRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a CreateClarificationRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    CreateClarificationRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        if (message.answer != null && message.hasOwnProperty("answer"))
+                            if (!$util.isString(message.answer))
+                                return "answer: string expected";
+                        if (message.question != null && message.hasOwnProperty("question"))
+                            if (!$util.isString(message.question))
+                                return "question: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CreateClarificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.CreateClarificationRequest} CreateClarificationRequest
+                     */
+                    CreateClarificationRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.CreateClarificationRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.CreateClarificationRequest();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        if (object.answer != null)
+                            message.answer = String(object.answer);
+                        if (object.question != null)
+                            message.question = String(object.question);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a CreateClarificationRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.CreateClarificationRequest} message CreateClarificationRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CreateClarificationRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                            object.answer = "";
+                            object.question = "";
+                        }
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                        if (message.answer != null && message.hasOwnProperty("answer"))
+                            object.answer = message.answer;
+                        if (message.question != null && message.hasOwnProperty("question"))
+                            object.question = message.question;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this CreateClarificationRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CreateClarificationRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CreateClarificationRequest;
+                })();
+
+                admin.CreateClarificationResponse = (function() {
+
+                    /**
+                     * Properties of a CreateClarificationResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface ICreateClarificationResponse
+                     * @property {xsuportal.proto.resources.IClarification|null} [clarification] CreateClarificationResponse clarification
+                     */
+
+                    /**
+                     * Constructs a new CreateClarificationResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a CreateClarificationResponse.
+                     * @implements ICreateClarificationResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.ICreateClarificationResponse=} [properties] Properties to set
+                     */
+                    function CreateClarificationResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * CreateClarificationResponse clarification.
+                     * @member {xsuportal.proto.resources.IClarification|null|undefined} clarification
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationResponse
+                     * @instance
+                     */
+                    CreateClarificationResponse.prototype.clarification = null;
+
+                    /**
+                     * Creates a new CreateClarificationResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICreateClarificationResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.CreateClarificationResponse} CreateClarificationResponse instance
+                     */
+                    CreateClarificationResponse.create = function create(properties) {
+                        return new CreateClarificationResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified CreateClarificationResponse message. Does not implicitly {@link xsuportal.proto.services.admin.CreateClarificationResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICreateClarificationResponse} message CreateClarificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    CreateClarificationResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.clarification != null && Object.hasOwnProperty.call(message, "clarification"))
+                            $root.xsuportal.proto.resources.Clarification.encode(message.clarification, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified CreateClarificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.CreateClarificationResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ICreateClarificationResponse} message CreateClarificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    CreateClarificationResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a CreateClarificationResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.CreateClarificationResponse} CreateClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    CreateClarificationResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.CreateClarificationResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.clarification = $root.xsuportal.proto.resources.Clarification.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a CreateClarificationResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.CreateClarificationResponse} CreateClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    CreateClarificationResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a CreateClarificationResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    CreateClarificationResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.clarification != null && message.hasOwnProperty("clarification")) {
+                            var error = $root.xsuportal.proto.resources.Clarification.verify(message.clarification);
+                            if (error)
+                                return "clarification." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CreateClarificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.CreateClarificationResponse} CreateClarificationResponse
+                     */
+                    CreateClarificationResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.CreateClarificationResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.CreateClarificationResponse();
+                        if (object.clarification != null) {
+                            if (typeof object.clarification !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.CreateClarificationResponse.clarification: object expected");
+                            message.clarification = $root.xsuportal.proto.resources.Clarification.fromObject(object.clarification);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a CreateClarificationResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.CreateClarificationResponse} message CreateClarificationResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CreateClarificationResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.clarification = null;
+                        if (message.clarification != null && message.hasOwnProperty("clarification"))
+                            object.clarification = $root.xsuportal.proto.resources.Clarification.toObject(message.clarification, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this CreateClarificationResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CreateClarificationResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CreateClarificationResponse;
+                })();
+
+                admin.ListContestantInstancesRequest = (function() {
+
+                    /**
+                     * Properties of a ListContestantInstancesRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IListContestantInstancesRequest
+                     * @property {number|Long|null} [teamId] ListContestantInstancesRequest teamId
+                     */
+
+                    /**
+                     * Constructs a new ListContestantInstancesRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a ListContestantInstancesRequest.
+                     * @implements IListContestantInstancesRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IListContestantInstancesRequest=} [properties] Properties to set
+                     */
+                    function ListContestantInstancesRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListContestantInstancesRequest teamId.
+                     * @member {number|Long} teamId
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesRequest
+                     * @instance
+                     */
+                    ListContestantInstancesRequest.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new ListContestantInstancesRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListContestantInstancesRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.ListContestantInstancesRequest} ListContestantInstancesRequest instance
+                     */
+                    ListContestantInstancesRequest.create = function create(properties) {
+                        return new ListContestantInstancesRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListContestantInstancesRequest message. Does not implicitly {@link xsuportal.proto.services.admin.ListContestantInstancesRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListContestantInstancesRequest} message ListContestantInstancesRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListContestantInstancesRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.teamId != null && Object.hasOwnProperty.call(message, "teamId"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.teamId);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListContestantInstancesRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListContestantInstancesRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListContestantInstancesRequest} message ListContestantInstancesRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListContestantInstancesRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListContestantInstancesRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.ListContestantInstancesRequest} ListContestantInstancesRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListContestantInstancesRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.ListContestantInstancesRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.teamId = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListContestantInstancesRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.ListContestantInstancesRequest} ListContestantInstancesRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListContestantInstancesRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListContestantInstancesRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListContestantInstancesRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (!$util.isInteger(message.teamId) && !(message.teamId && $util.isInteger(message.teamId.low) && $util.isInteger(message.teamId.high)))
+                                return "teamId: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListContestantInstancesRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.ListContestantInstancesRequest} ListContestantInstancesRequest
+                     */
+                    ListContestantInstancesRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.ListContestantInstancesRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.ListContestantInstancesRequest();
+                        if (object.teamId != null)
+                            if ($util.Long)
+                                (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
+                            else if (typeof object.teamId === "string")
+                                message.teamId = parseInt(object.teamId, 10);
+                            else if (typeof object.teamId === "number")
+                                message.teamId = object.teamId;
+                            else if (typeof object.teamId === "object")
+                                message.teamId = new $util.LongBits(object.teamId.low >>> 0, object.teamId.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListContestantInstancesRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ListContestantInstancesRequest} message ListContestantInstancesRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListContestantInstancesRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.teamId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.teamId = options.longs === String ? "0" : 0;
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (typeof message.teamId === "number")
+                                object.teamId = options.longs === String ? String(message.teamId) : message.teamId;
+                            else
+                                object.teamId = options.longs === String ? $util.Long.prototype.toString.call(message.teamId) : options.longs === Number ? new $util.LongBits(message.teamId.low >>> 0, message.teamId.high >>> 0).toNumber() : message.teamId;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListContestantInstancesRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListContestantInstancesRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListContestantInstancesRequest;
+                })();
+
+                admin.ListContestantInstancesResponse = (function() {
+
+                    /**
+                     * Properties of a ListContestantInstancesResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IListContestantInstancesResponse
+                     * @property {Array.<xsuportal.proto.resources.IContestantInstance>|null} [contestantInstances] ListContestantInstancesResponse contestantInstances
+                     */
+
+                    /**
+                     * Constructs a new ListContestantInstancesResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a ListContestantInstancesResponse.
+                     * @implements IListContestantInstancesResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IListContestantInstancesResponse=} [properties] Properties to set
+                     */
+                    function ListContestantInstancesResponse(properties) {
+                        this.contestantInstances = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListContestantInstancesResponse contestantInstances.
+                     * @member {Array.<xsuportal.proto.resources.IContestantInstance>} contestantInstances
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesResponse
+                     * @instance
+                     */
+                    ListContestantInstancesResponse.prototype.contestantInstances = $util.emptyArray;
+
+                    /**
+                     * Creates a new ListContestantInstancesResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListContestantInstancesResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.ListContestantInstancesResponse} ListContestantInstancesResponse instance
+                     */
+                    ListContestantInstancesResponse.create = function create(properties) {
+                        return new ListContestantInstancesResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListContestantInstancesResponse message. Does not implicitly {@link xsuportal.proto.services.admin.ListContestantInstancesResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListContestantInstancesResponse} message ListContestantInstancesResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListContestantInstancesResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.contestantInstances != null && message.contestantInstances.length)
+                            for (var i = 0; i < message.contestantInstances.length; ++i)
+                                $root.xsuportal.proto.resources.ContestantInstance.encode(message.contestantInstances[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListContestantInstancesResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListContestantInstancesResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListContestantInstancesResponse} message ListContestantInstancesResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListContestantInstancesResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListContestantInstancesResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.ListContestantInstancesResponse} ListContestantInstancesResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListContestantInstancesResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.ListContestantInstancesResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                if (!(message.contestantInstances && message.contestantInstances.length))
+                                    message.contestantInstances = [];
+                                message.contestantInstances.push($root.xsuportal.proto.resources.ContestantInstance.decode(reader, reader.uint32()));
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListContestantInstancesResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.ListContestantInstancesResponse} ListContestantInstancesResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListContestantInstancesResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListContestantInstancesResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListContestantInstancesResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.contestantInstances != null && message.hasOwnProperty("contestantInstances")) {
+                            if (!Array.isArray(message.contestantInstances))
+                                return "contestantInstances: array expected";
+                            for (var i = 0; i < message.contestantInstances.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.ContestantInstance.verify(message.contestantInstances[i]);
+                                if (error)
+                                    return "contestantInstances." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListContestantInstancesResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.ListContestantInstancesResponse} ListContestantInstancesResponse
+                     */
+                    ListContestantInstancesResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.ListContestantInstancesResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.ListContestantInstancesResponse();
+                        if (object.contestantInstances) {
+                            if (!Array.isArray(object.contestantInstances))
+                                throw TypeError(".xsuportal.proto.services.admin.ListContestantInstancesResponse.contestantInstances: array expected");
+                            message.contestantInstances = [];
+                            for (var i = 0; i < object.contestantInstances.length; ++i) {
+                                if (typeof object.contestantInstances[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.admin.ListContestantInstancesResponse.contestantInstances: object expected");
+                                message.contestantInstances[i] = $root.xsuportal.proto.resources.ContestantInstance.fromObject(object.contestantInstances[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListContestantInstancesResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ListContestantInstancesResponse} message ListContestantInstancesResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListContestantInstancesResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.contestantInstances = [];
+                        if (message.contestantInstances && message.contestantInstances.length) {
+                            object.contestantInstances = [];
+                            for (var j = 0; j < message.contestantInstances.length; ++j)
+                                object.contestantInstances[j] = $root.xsuportal.proto.resources.ContestantInstance.toObject(message.contestantInstances[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListContestantInstancesResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.ListContestantInstancesResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListContestantInstancesResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListContestantInstancesResponse;
+                })();
+
+                admin.DashboardRequest = (function() {
+
+                    /**
+                     * Properties of a DashboardRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IDashboardRequest
+                     */
+
+                    /**
+                     * Constructs a new DashboardRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a DashboardRequest.
+                     * @implements IDashboardRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IDashboardRequest=} [properties] Properties to set
+                     */
+                    function DashboardRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new DashboardRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IDashboardRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.DashboardRequest} DashboardRequest instance
+                     */
+                    DashboardRequest.create = function create(properties) {
+                        return new DashboardRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.services.admin.DashboardRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IDashboardRequest} message DashboardRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.DashboardRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IDashboardRequest} message DashboardRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.DashboardRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.DashboardRequest} DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.DashboardRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.DashboardRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.DashboardRequest} DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a DashboardRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.DashboardRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    DashboardRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.DashboardRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.DashboardRequest} DashboardRequest
+                     */
+                    DashboardRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.DashboardRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.admin.DashboardRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.DashboardRequest} message DashboardRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    DashboardRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this DashboardRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.DashboardRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    DashboardRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return DashboardRequest;
+                })();
+
+                admin.DashboardResponse = (function() {
+
+                    /**
+                     * Properties of a DashboardResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IDashboardResponse
+                     * @property {xsuportal.proto.resources.ILeaderboard|null} [leaderboard] DashboardResponse leaderboard
+                     */
+
+                    /**
+                     * Constructs a new DashboardResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a DashboardResponse.
+                     * @implements IDashboardResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IDashboardResponse=} [properties] Properties to set
+                     */
+                    function DashboardResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * DashboardResponse leaderboard.
+                     * @member {xsuportal.proto.resources.ILeaderboard|null|undefined} leaderboard
+                     * @memberof xsuportal.proto.services.admin.DashboardResponse
+                     * @instance
+                     */
+                    DashboardResponse.prototype.leaderboard = null;
+
+                    /**
+                     * Creates a new DashboardResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IDashboardResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.DashboardResponse} DashboardResponse instance
+                     */
+                    DashboardResponse.create = function create(properties) {
+                        return new DashboardResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.services.admin.DashboardResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IDashboardResponse} message DashboardResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.leaderboard != null && Object.hasOwnProperty.call(message, "leaderboard"))
+                            $root.xsuportal.proto.resources.Leaderboard.encode(message.leaderboard, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.DashboardResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IDashboardResponse} message DashboardResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.DashboardResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.DashboardResponse} DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.DashboardResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.leaderboard = $root.xsuportal.proto.resources.Leaderboard.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.DashboardResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.DashboardResponse} DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a DashboardResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.DashboardResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    DashboardResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.leaderboard != null && message.hasOwnProperty("leaderboard")) {
+                            var error = $root.xsuportal.proto.resources.Leaderboard.verify(message.leaderboard);
+                            if (error)
+                                return "leaderboard." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.DashboardResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.DashboardResponse} DashboardResponse
+                     */
+                    DashboardResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.DashboardResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.DashboardResponse();
+                        if (object.leaderboard != null) {
+                            if (typeof object.leaderboard !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.DashboardResponse.leaderboard: object expected");
+                            message.leaderboard = $root.xsuportal.proto.resources.Leaderboard.fromObject(object.leaderboard);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.DashboardResponse} message DashboardResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    DashboardResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.leaderboard = null;
+                        if (message.leaderboard != null && message.hasOwnProperty("leaderboard"))
+                            object.leaderboard = $root.xsuportal.proto.resources.Leaderboard.toObject(message.leaderboard, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this DashboardResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.DashboardResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    DashboardResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return DashboardResponse;
+                })();
+
                 admin.InitializeRequest = (function() {
 
                     /**
@@ -5651,6 +10679,1514 @@ $root.xsuportal = (function() {
                     return InitializeResponse;
                 })();
 
+                admin.ListTeamsRequest = (function() {
+
+                    /**
+                     * Properties of a ListTeamsRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IListTeamsRequest
+                     */
+
+                    /**
+                     * Constructs a new ListTeamsRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a ListTeamsRequest.
+                     * @implements IListTeamsRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IListTeamsRequest=} [properties] Properties to set
+                     */
+                    function ListTeamsRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new ListTeamsRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.ListTeamsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListTeamsRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.ListTeamsRequest} ListTeamsRequest instance
+                     */
+                    ListTeamsRequest.create = function create(properties) {
+                        return new ListTeamsRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListTeamsRequest message. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.ListTeamsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListTeamsRequest} message ListTeamsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListTeamsRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListTeamsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListTeamsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListTeamsRequest} message ListTeamsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListTeamsRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListTeamsRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.ListTeamsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.ListTeamsRequest} ListTeamsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListTeamsRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.ListTeamsRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListTeamsRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListTeamsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.ListTeamsRequest} ListTeamsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListTeamsRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListTeamsRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.ListTeamsRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListTeamsRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListTeamsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.ListTeamsRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.ListTeamsRequest} ListTeamsRequest
+                     */
+                    ListTeamsRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.ListTeamsRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.admin.ListTeamsRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a ListTeamsRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.ListTeamsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ListTeamsRequest} message ListTeamsRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListTeamsRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this ListTeamsRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.ListTeamsRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListTeamsRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListTeamsRequest;
+                })();
+
+                admin.ListTeamsResponse = (function() {
+
+                    /**
+                     * Properties of a ListTeamsResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IListTeamsResponse
+                     * @property {Array.<xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem>|null} [teams] ListTeamsResponse teams
+                     */
+
+                    /**
+                     * Constructs a new ListTeamsResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a ListTeamsResponse.
+                     * @implements IListTeamsResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IListTeamsResponse=} [properties] Properties to set
+                     */
+                    function ListTeamsResponse(properties) {
+                        this.teams = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListTeamsResponse teams.
+                     * @member {Array.<xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem>} teams
+                     * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                     * @instance
+                     */
+                    ListTeamsResponse.prototype.teams = $util.emptyArray;
+
+                    /**
+                     * Creates a new ListTeamsResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListTeamsResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.ListTeamsResponse} ListTeamsResponse instance
+                     */
+                    ListTeamsResponse.create = function create(properties) {
+                        return new ListTeamsResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListTeamsResponse message. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListTeamsResponse} message ListTeamsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListTeamsResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.teams != null && message.teams.length)
+                            for (var i = 0; i < message.teams.length; ++i)
+                                $root.xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem.encode(message.teams[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListTeamsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IListTeamsResponse} message ListTeamsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListTeamsResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListTeamsResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.ListTeamsResponse} ListTeamsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListTeamsResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.ListTeamsResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                if (!(message.teams && message.teams.length))
+                                    message.teams = [];
+                                message.teams.push($root.xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem.decode(reader, reader.uint32()));
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListTeamsResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.ListTeamsResponse} ListTeamsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListTeamsResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListTeamsResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListTeamsResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.teams != null && message.hasOwnProperty("teams")) {
+                            if (!Array.isArray(message.teams))
+                                return "teams: array expected";
+                            for (var i = 0; i < message.teams.length; ++i) {
+                                var error = $root.xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem.verify(message.teams[i]);
+                                if (error)
+                                    return "teams." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListTeamsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.ListTeamsResponse} ListTeamsResponse
+                     */
+                    ListTeamsResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.ListTeamsResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.ListTeamsResponse();
+                        if (object.teams) {
+                            if (!Array.isArray(object.teams))
+                                throw TypeError(".xsuportal.proto.services.admin.ListTeamsResponse.teams: array expected");
+                            message.teams = [];
+                            for (var i = 0; i < object.teams.length; ++i) {
+                                if (typeof object.teams[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.admin.ListTeamsResponse.teams: object expected");
+                                message.teams[i] = $root.xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem.fromObject(object.teams[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListTeamsResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.ListTeamsResponse} message ListTeamsResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListTeamsResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.teams = [];
+                        if (message.teams && message.teams.length) {
+                            object.teams = [];
+                            for (var j = 0; j < message.teams.length; ++j)
+                                object.teams[j] = $root.xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem.toObject(message.teams[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListTeamsResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListTeamsResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    ListTeamsResponse.TeamListItem = (function() {
+
+                        /**
+                         * Properties of a TeamListItem.
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                         * @interface ITeamListItem
+                         * @property {number|Long|null} [teamId] TeamListItem teamId
+                         * @property {string|null} [name] TeamListItem name
+                         * @property {Array.<string>|null} [memberNames] TeamListItem memberNames
+                         * @property {boolean|null} [finalParticipation] TeamListItem finalParticipation
+                         * @property {boolean|null} [isStudent] TeamListItem isStudent
+                         * @property {boolean|null} [withdrawn] TeamListItem withdrawn
+                         * @property {boolean|null} [disqualified] TeamListItem disqualified
+                         */
+
+                        /**
+                         * Constructs a new TeamListItem.
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse
+                         * @classdesc Represents a TeamListItem.
+                         * @implements ITeamListItem
+                         * @constructor
+                         * @param {xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem=} [properties] Properties to set
+                         */
+                        function TeamListItem(properties) {
+                            this.memberNames = [];
+                            if (properties)
+                                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * TeamListItem teamId.
+                         * @member {number|Long} teamId
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @instance
+                         */
+                        TeamListItem.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
+                         * TeamListItem name.
+                         * @member {string} name
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @instance
+                         */
+                        TeamListItem.prototype.name = "";
+
+                        /**
+                         * TeamListItem memberNames.
+                         * @member {Array.<string>} memberNames
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @instance
+                         */
+                        TeamListItem.prototype.memberNames = $util.emptyArray;
+
+                        /**
+                         * TeamListItem finalParticipation.
+                         * @member {boolean} finalParticipation
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @instance
+                         */
+                        TeamListItem.prototype.finalParticipation = false;
+
+                        /**
+                         * TeamListItem isStudent.
+                         * @member {boolean} isStudent
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @instance
+                         */
+                        TeamListItem.prototype.isStudent = false;
+
+                        /**
+                         * TeamListItem withdrawn.
+                         * @member {boolean} withdrawn
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @instance
+                         */
+                        TeamListItem.prototype.withdrawn = false;
+
+                        /**
+                         * TeamListItem disqualified.
+                         * @member {boolean} disqualified
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @instance
+                         */
+                        TeamListItem.prototype.disqualified = false;
+
+                        /**
+                         * Creates a new TeamListItem instance using the specified properties.
+                         * @function create
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @static
+                         * @param {xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem=} [properties] Properties to set
+                         * @returns {xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem} TeamListItem instance
+                         */
+                        TeamListItem.create = function create(properties) {
+                            return new TeamListItem(properties);
+                        };
+
+                        /**
+                         * Encodes the specified TeamListItem message. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem.verify|verify} messages.
+                         * @function encode
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @static
+                         * @param {xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem} message TeamListItem message or plain object to encode
+                         * @param {$protobuf.Writer} [writer] Writer to encode to
+                         * @returns {$protobuf.Writer} Writer
+                         */
+                        TeamListItem.encode = function encode(message, writer) {
+                            if (!writer)
+                                writer = $Writer.create();
+                            if (message.teamId != null && Object.hasOwnProperty.call(message, "teamId"))
+                                writer.uint32(/* id 1, wireType 0 =*/8).int64(message.teamId);
+                            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
+                                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+                            if (message.memberNames != null && message.memberNames.length)
+                                for (var i = 0; i < message.memberNames.length; ++i)
+                                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.memberNames[i]);
+                            if (message.finalParticipation != null && Object.hasOwnProperty.call(message, "finalParticipation"))
+                                writer.uint32(/* id 4, wireType 0 =*/32).bool(message.finalParticipation);
+                            if (message.isStudent != null && Object.hasOwnProperty.call(message, "isStudent"))
+                                writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isStudent);
+                            if (message.withdrawn != null && Object.hasOwnProperty.call(message, "withdrawn"))
+                                writer.uint32(/* id 6, wireType 0 =*/48).bool(message.withdrawn);
+                            if (message.disqualified != null && Object.hasOwnProperty.call(message, "disqualified"))
+                                writer.uint32(/* id 7, wireType 0 =*/56).bool(message.disqualified);
+                            return writer;
+                        };
+
+                        /**
+                         * Encodes the specified TeamListItem message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem.verify|verify} messages.
+                         * @function encodeDelimited
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @static
+                         * @param {xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem} message TeamListItem message or plain object to encode
+                         * @param {$protobuf.Writer} [writer] Writer to encode to
+                         * @returns {$protobuf.Writer} Writer
+                         */
+                        TeamListItem.encodeDelimited = function encodeDelimited(message, writer) {
+                            return this.encode(message, writer).ldelim();
+                        };
+
+                        /**
+                         * Decodes a TeamListItem message from the specified reader or buffer.
+                         * @function decode
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @static
+                         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                         * @param {number} [length] Message length if known beforehand
+                         * @returns {xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem} TeamListItem
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        TeamListItem.decode = function decode(reader, length) {
+                            if (!(reader instanceof $Reader))
+                                reader = $Reader.create(reader);
+                            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem();
+                            while (reader.pos < end) {
+                                var tag = reader.uint32();
+                                switch (tag >>> 3) {
+                                case 1:
+                                    message.teamId = reader.int64();
+                                    break;
+                                case 2:
+                                    message.name = reader.string();
+                                    break;
+                                case 3:
+                                    if (!(message.memberNames && message.memberNames.length))
+                                        message.memberNames = [];
+                                    message.memberNames.push(reader.string());
+                                    break;
+                                case 4:
+                                    message.finalParticipation = reader.bool();
+                                    break;
+                                case 5:
+                                    message.isStudent = reader.bool();
+                                    break;
+                                case 6:
+                                    message.withdrawn = reader.bool();
+                                    break;
+                                case 7:
+                                    message.disqualified = reader.bool();
+                                    break;
+                                default:
+                                    reader.skipType(tag & 7);
+                                    break;
+                                }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Decodes a TeamListItem message from the specified reader or buffer, length delimited.
+                         * @function decodeDelimited
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @static
+                         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                         * @returns {xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem} TeamListItem
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        TeamListItem.decodeDelimited = function decodeDelimited(reader) {
+                            if (!(reader instanceof $Reader))
+                                reader = new $Reader(reader);
+                            return this.decode(reader, reader.uint32());
+                        };
+
+                        /**
+                         * Verifies a TeamListItem message.
+                         * @function verify
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        TeamListItem.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.teamId != null && message.hasOwnProperty("teamId"))
+                                if (!$util.isInteger(message.teamId) && !(message.teamId && $util.isInteger(message.teamId.low) && $util.isInteger(message.teamId.high)))
+                                    return "teamId: integer|Long expected";
+                            if (message.name != null && message.hasOwnProperty("name"))
+                                if (!$util.isString(message.name))
+                                    return "name: string expected";
+                            if (message.memberNames != null && message.hasOwnProperty("memberNames")) {
+                                if (!Array.isArray(message.memberNames))
+                                    return "memberNames: array expected";
+                                for (var i = 0; i < message.memberNames.length; ++i)
+                                    if (!$util.isString(message.memberNames[i]))
+                                        return "memberNames: string[] expected";
+                            }
+                            if (message.finalParticipation != null && message.hasOwnProperty("finalParticipation"))
+                                if (typeof message.finalParticipation !== "boolean")
+                                    return "finalParticipation: boolean expected";
+                            if (message.isStudent != null && message.hasOwnProperty("isStudent"))
+                                if (typeof message.isStudent !== "boolean")
+                                    return "isStudent: boolean expected";
+                            if (message.withdrawn != null && message.hasOwnProperty("withdrawn"))
+                                if (typeof message.withdrawn !== "boolean")
+                                    return "withdrawn: boolean expected";
+                            if (message.disqualified != null && message.hasOwnProperty("disqualified"))
+                                if (typeof message.disqualified !== "boolean")
+                                    return "disqualified: boolean expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a TeamListItem message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem} TeamListItem
+                         */
+                        TeamListItem.fromObject = function fromObject(object) {
+                            if (object instanceof $root.xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem)
+                                return object;
+                            var message = new $root.xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem();
+                            if (object.teamId != null)
+                                if ($util.Long)
+                                    (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
+                                else if (typeof object.teamId === "string")
+                                    message.teamId = parseInt(object.teamId, 10);
+                                else if (typeof object.teamId === "number")
+                                    message.teamId = object.teamId;
+                                else if (typeof object.teamId === "object")
+                                    message.teamId = new $util.LongBits(object.teamId.low >>> 0, object.teamId.high >>> 0).toNumber();
+                            if (object.name != null)
+                                message.name = String(object.name);
+                            if (object.memberNames) {
+                                if (!Array.isArray(object.memberNames))
+                                    throw TypeError(".xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem.memberNames: array expected");
+                                message.memberNames = [];
+                                for (var i = 0; i < object.memberNames.length; ++i)
+                                    message.memberNames[i] = String(object.memberNames[i]);
+                            }
+                            if (object.finalParticipation != null)
+                                message.finalParticipation = Boolean(object.finalParticipation);
+                            if (object.isStudent != null)
+                                message.isStudent = Boolean(object.isStudent);
+                            if (object.withdrawn != null)
+                                message.withdrawn = Boolean(object.withdrawn);
+                            if (object.disqualified != null)
+                                message.disqualified = Boolean(object.disqualified);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a TeamListItem message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @static
+                         * @param {xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem} message TeamListItem
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        TeamListItem.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            var object = {};
+                            if (options.arrays || options.defaults)
+                                object.memberNames = [];
+                            if (options.defaults) {
+                                if ($util.Long) {
+                                    var long = new $util.Long(0, 0, false);
+                                    object.teamId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.teamId = options.longs === String ? "0" : 0;
+                                object.name = "";
+                                object.finalParticipation = false;
+                                object.isStudent = false;
+                                object.withdrawn = false;
+                                object.disqualified = false;
+                            }
+                            if (message.teamId != null && message.hasOwnProperty("teamId"))
+                                if (typeof message.teamId === "number")
+                                    object.teamId = options.longs === String ? String(message.teamId) : message.teamId;
+                                else
+                                    object.teamId = options.longs === String ? $util.Long.prototype.toString.call(message.teamId) : options.longs === Number ? new $util.LongBits(message.teamId.low >>> 0, message.teamId.high >>> 0).toNumber() : message.teamId;
+                            if (message.name != null && message.hasOwnProperty("name"))
+                                object.name = message.name;
+                            if (message.memberNames && message.memberNames.length) {
+                                object.memberNames = [];
+                                for (var j = 0; j < message.memberNames.length; ++j)
+                                    object.memberNames[j] = message.memberNames[j];
+                            }
+                            if (message.finalParticipation != null && message.hasOwnProperty("finalParticipation"))
+                                object.finalParticipation = message.finalParticipation;
+                            if (message.isStudent != null && message.hasOwnProperty("isStudent"))
+                                object.isStudent = message.isStudent;
+                            if (message.withdrawn != null && message.hasOwnProperty("withdrawn"))
+                                object.withdrawn = message.withdrawn;
+                            if (message.disqualified != null && message.hasOwnProperty("disqualified"))
+                                object.disqualified = message.disqualified;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this TeamListItem to JSON.
+                         * @function toJSON
+                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        TeamListItem.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return TeamListItem;
+                    })();
+
+                    return ListTeamsResponse;
+                })();
+
+                admin.GetTeamRequest = (function() {
+
+                    /**
+                     * Properties of a GetTeamRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IGetTeamRequest
+                     * @property {number|Long|null} [id] GetTeamRequest id
+                     */
+
+                    /**
+                     * Constructs a new GetTeamRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a GetTeamRequest.
+                     * @implements IGetTeamRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IGetTeamRequest=} [properties] Properties to set
+                     */
+                    function GetTeamRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetTeamRequest id.
+                     * @member {number|Long} id
+                     * @memberof xsuportal.proto.services.admin.GetTeamRequest
+                     * @instance
+                     */
+                    GetTeamRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new GetTeamRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.GetTeamRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetTeamRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.GetTeamRequest} GetTeamRequest instance
+                     */
+                    GetTeamRequest.create = function create(properties) {
+                        return new GetTeamRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetTeamRequest message. Does not implicitly {@link xsuportal.proto.services.admin.GetTeamRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.GetTeamRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetTeamRequest} message GetTeamRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetTeamRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetTeamRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetTeamRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetTeamRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetTeamRequest} message GetTeamRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetTeamRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetTeamRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.GetTeamRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.GetTeamRequest} GetTeamRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetTeamRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.GetTeamRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.id = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetTeamRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetTeamRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.GetTeamRequest} GetTeamRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetTeamRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetTeamRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.GetTeamRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetTeamRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetTeamRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.GetTeamRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.GetTeamRequest} GetTeamRequest
+                     */
+                    GetTeamRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.GetTeamRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.GetTeamRequest();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetTeamRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.GetTeamRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.GetTeamRequest} message GetTeamRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetTeamRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetTeamRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.GetTeamRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetTeamRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetTeamRequest;
+                })();
+
+                admin.GetTeamResponse = (function() {
+
+                    /**
+                     * Properties of a GetTeamResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IGetTeamResponse
+                     * @property {xsuportal.proto.resources.ITeam|null} [team] GetTeamResponse team
+                     */
+
+                    /**
+                     * Constructs a new GetTeamResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents a GetTeamResponse.
+                     * @implements IGetTeamResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IGetTeamResponse=} [properties] Properties to set
+                     */
+                    function GetTeamResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetTeamResponse team.
+                     * @member {xsuportal.proto.resources.ITeam|null|undefined} team
+                     * @memberof xsuportal.proto.services.admin.GetTeamResponse
+                     * @instance
+                     */
+                    GetTeamResponse.prototype.team = null;
+
+                    /**
+                     * Creates a new GetTeamResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.GetTeamResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetTeamResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.GetTeamResponse} GetTeamResponse instance
+                     */
+                    GetTeamResponse.create = function create(properties) {
+                        return new GetTeamResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetTeamResponse message. Does not implicitly {@link xsuportal.proto.services.admin.GetTeamResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.GetTeamResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetTeamResponse} message GetTeamResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetTeamResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.team != null && Object.hasOwnProperty.call(message, "team"))
+                            $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetTeamResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetTeamResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetTeamResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IGetTeamResponse} message GetTeamResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetTeamResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetTeamResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.GetTeamResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.GetTeamResponse} GetTeamResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetTeamResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.GetTeamResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetTeamResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.GetTeamResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.GetTeamResponse} GetTeamResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetTeamResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetTeamResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.GetTeamResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetTeamResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.team != null && message.hasOwnProperty("team")) {
+                            var error = $root.xsuportal.proto.resources.Team.verify(message.team);
+                            if (error)
+                                return "team." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetTeamResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.GetTeamResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.GetTeamResponse} GetTeamResponse
+                     */
+                    GetTeamResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.GetTeamResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.GetTeamResponse();
+                        if (object.team != null) {
+                            if (typeof object.team !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.GetTeamResponse.team: object expected");
+                            message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetTeamResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.GetTeamResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.GetTeamResponse} message GetTeamResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetTeamResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.team = null;
+                        if (message.team != null && message.hasOwnProperty("team"))
+                            object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetTeamResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.GetTeamResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetTeamResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetTeamResponse;
+                })();
+
+                admin.UpdateTeamRequest = (function() {
+
+                    /**
+                     * Properties of an UpdateTeamRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IUpdateTeamRequest
+                     * @property {xsuportal.proto.resources.ITeam|null} [team] UpdateTeamRequest team
+                     * @property {Array.<xsuportal.proto.resources.IContestant>|null} [contestants] UpdateTeamRequest contestants
+                     */
+
+                    /**
+                     * Constructs a new UpdateTeamRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents an UpdateTeamRequest.
+                     * @implements IUpdateTeamRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IUpdateTeamRequest=} [properties] Properties to set
+                     */
+                    function UpdateTeamRequest(properties) {
+                        this.contestants = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * UpdateTeamRequest team.
+                     * @member {xsuportal.proto.resources.ITeam|null|undefined} team
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @instance
+                     */
+                    UpdateTeamRequest.prototype.team = null;
+
+                    /**
+                     * UpdateTeamRequest contestants.
+                     * @member {Array.<xsuportal.proto.resources.IContestant>} contestants
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @instance
+                     */
+                    UpdateTeamRequest.prototype.contestants = $util.emptyArray;
+
+                    /**
+                     * Creates a new UpdateTeamRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateTeamRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.UpdateTeamRequest} UpdateTeamRequest instance
+                     */
+                    UpdateTeamRequest.create = function create(properties) {
+                        return new UpdateTeamRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified UpdateTeamRequest message. Does not implicitly {@link xsuportal.proto.services.admin.UpdateTeamRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateTeamRequest} message UpdateTeamRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UpdateTeamRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.team != null && Object.hasOwnProperty.call(message, "team"))
+                            $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        if (message.contestants != null && message.contestants.length)
+                            for (var i = 0; i < message.contestants.length; ++i)
+                                $root.xsuportal.proto.resources.Contestant.encode(message.contestants[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified UpdateTeamRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.UpdateTeamRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateTeamRequest} message UpdateTeamRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UpdateTeamRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an UpdateTeamRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.UpdateTeamRequest} UpdateTeamRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UpdateTeamRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.UpdateTeamRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
+                                break;
+                            case 2:
+                                if (!(message.contestants && message.contestants.length))
+                                    message.contestants = [];
+                                message.contestants.push($root.xsuportal.proto.resources.Contestant.decode(reader, reader.uint32()));
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an UpdateTeamRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.UpdateTeamRequest} UpdateTeamRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UpdateTeamRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an UpdateTeamRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UpdateTeamRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.team != null && message.hasOwnProperty("team")) {
+                            var error = $root.xsuportal.proto.resources.Team.verify(message.team);
+                            if (error)
+                                return "team." + error;
+                        }
+                        if (message.contestants != null && message.hasOwnProperty("contestants")) {
+                            if (!Array.isArray(message.contestants))
+                                return "contestants: array expected";
+                            for (var i = 0; i < message.contestants.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.Contestant.verify(message.contestants[i]);
+                                if (error)
+                                    return "contestants." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UpdateTeamRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.UpdateTeamRequest} UpdateTeamRequest
+                     */
+                    UpdateTeamRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.UpdateTeamRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.UpdateTeamRequest();
+                        if (object.team != null) {
+                            if (typeof object.team !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.UpdateTeamRequest.team: object expected");
+                            message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
+                        }
+                        if (object.contestants) {
+                            if (!Array.isArray(object.contestants))
+                                throw TypeError(".xsuportal.proto.services.admin.UpdateTeamRequest.contestants: array expected");
+                            message.contestants = [];
+                            for (var i = 0; i < object.contestants.length; ++i) {
+                                if (typeof object.contestants[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.admin.UpdateTeamRequest.contestants: object expected");
+                                message.contestants[i] = $root.xsuportal.proto.resources.Contestant.fromObject(object.contestants[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an UpdateTeamRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.UpdateTeamRequest} message UpdateTeamRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UpdateTeamRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.contestants = [];
+                        if (options.defaults)
+                            object.team = null;
+                        if (message.team != null && message.hasOwnProperty("team"))
+                            object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
+                        if (message.contestants && message.contestants.length) {
+                            object.contestants = [];
+                            for (var j = 0; j < message.contestants.length; ++j)
+                                object.contestants[j] = $root.xsuportal.proto.resources.Contestant.toObject(message.contestants[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this UpdateTeamRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UpdateTeamRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UpdateTeamRequest;
+                })();
+
+                admin.UpdateTeamResponse = (function() {
+
+                    /**
+                     * Properties of an UpdateTeamResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IUpdateTeamResponse
+                     */
+
+                    /**
+                     * Constructs a new UpdateTeamResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents an UpdateTeamResponse.
+                     * @implements IUpdateTeamResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IUpdateTeamResponse=} [properties] Properties to set
+                     */
+                    function UpdateTeamResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new UpdateTeamResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateTeamResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.UpdateTeamResponse} UpdateTeamResponse instance
+                     */
+                    UpdateTeamResponse.create = function create(properties) {
+                        return new UpdateTeamResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified UpdateTeamResponse message. Does not implicitly {@link xsuportal.proto.services.admin.UpdateTeamResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateTeamResponse} message UpdateTeamResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UpdateTeamResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified UpdateTeamResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.UpdateTeamResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateTeamResponse} message UpdateTeamResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UpdateTeamResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an UpdateTeamResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.UpdateTeamResponse} UpdateTeamResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UpdateTeamResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.UpdateTeamResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an UpdateTeamResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.UpdateTeamResponse} UpdateTeamResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UpdateTeamResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an UpdateTeamResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UpdateTeamResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UpdateTeamResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.UpdateTeamResponse} UpdateTeamResponse
+                     */
+                    UpdateTeamResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.UpdateTeamResponse)
+                            return object;
+                        return new $root.xsuportal.proto.services.admin.UpdateTeamResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from an UpdateTeamResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.UpdateTeamResponse} message UpdateTeamResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UpdateTeamResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this UpdateTeamResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.UpdateTeamResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UpdateTeamResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UpdateTeamResponse;
+                })();
+
                 return admin;
             })();
 
@@ -5662,6 +12198,358 @@ $root.xsuportal = (function() {
                  * @namespace
                  */
                 var audience = {};
+
+                audience.DashboardRequest = (function() {
+
+                    /**
+                     * Properties of a DashboardRequest.
+                     * @memberof xsuportal.proto.services.audience
+                     * @interface IDashboardRequest
+                     */
+
+                    /**
+                     * Constructs a new DashboardRequest.
+                     * @memberof xsuportal.proto.services.audience
+                     * @classdesc Represents a DashboardRequest.
+                     * @implements IDashboardRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.audience.IDashboardRequest=} [properties] Properties to set
+                     */
+                    function DashboardRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new DashboardRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.audience.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.audience.IDashboardRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.audience.DashboardRequest} DashboardRequest instance
+                     */
+                    DashboardRequest.create = function create(properties) {
+                        return new DashboardRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.services.audience.DashboardRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.audience.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.audience.IDashboardRequest} message DashboardRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.audience.DashboardRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.audience.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.audience.IDashboardRequest} message DashboardRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.audience.DashboardRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.audience.DashboardRequest} DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.audience.DashboardRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.audience.DashboardRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.audience.DashboardRequest} DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a DashboardRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.audience.DashboardRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    DashboardRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.audience.DashboardRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.audience.DashboardRequest} DashboardRequest
+                     */
+                    DashboardRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.audience.DashboardRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.audience.DashboardRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.audience.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.audience.DashboardRequest} message DashboardRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    DashboardRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this DashboardRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.audience.DashboardRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    DashboardRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return DashboardRequest;
+                })();
+
+                audience.DashboardResponse = (function() {
+
+                    /**
+                     * Properties of a DashboardResponse.
+                     * @memberof xsuportal.proto.services.audience
+                     * @interface IDashboardResponse
+                     * @property {xsuportal.proto.resources.ILeaderboard|null} [leaderboard] DashboardResponse leaderboard
+                     */
+
+                    /**
+                     * Constructs a new DashboardResponse.
+                     * @memberof xsuportal.proto.services.audience
+                     * @classdesc Represents a DashboardResponse.
+                     * @implements IDashboardResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.audience.IDashboardResponse=} [properties] Properties to set
+                     */
+                    function DashboardResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * DashboardResponse leaderboard.
+                     * @member {xsuportal.proto.resources.ILeaderboard|null|undefined} leaderboard
+                     * @memberof xsuportal.proto.services.audience.DashboardResponse
+                     * @instance
+                     */
+                    DashboardResponse.prototype.leaderboard = null;
+
+                    /**
+                     * Creates a new DashboardResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.audience.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.audience.IDashboardResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.audience.DashboardResponse} DashboardResponse instance
+                     */
+                    DashboardResponse.create = function create(properties) {
+                        return new DashboardResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.services.audience.DashboardResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.audience.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.audience.IDashboardResponse} message DashboardResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.leaderboard != null && Object.hasOwnProperty.call(message, "leaderboard"))
+                            $root.xsuportal.proto.resources.Leaderboard.encode(message.leaderboard, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.audience.DashboardResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.audience.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.audience.IDashboardResponse} message DashboardResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.audience.DashboardResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.audience.DashboardResponse} DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.audience.DashboardResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.leaderboard = $root.xsuportal.proto.resources.Leaderboard.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.audience.DashboardResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.audience.DashboardResponse} DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a DashboardResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.audience.DashboardResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    DashboardResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.leaderboard != null && message.hasOwnProperty("leaderboard")) {
+                            var error = $root.xsuportal.proto.resources.Leaderboard.verify(message.leaderboard);
+                            if (error)
+                                return "leaderboard." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.audience.DashboardResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.audience.DashboardResponse} DashboardResponse
+                     */
+                    DashboardResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.audience.DashboardResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.audience.DashboardResponse();
+                        if (object.leaderboard != null) {
+                            if (typeof object.leaderboard !== "object")
+                                throw TypeError(".xsuportal.proto.services.audience.DashboardResponse.leaderboard: object expected");
+                            message.leaderboard = $root.xsuportal.proto.resources.Leaderboard.fromObject(object.leaderboard);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.audience.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.audience.DashboardResponse} message DashboardResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    DashboardResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.leaderboard = null;
+                        if (message.leaderboard != null && message.hasOwnProperty("leaderboard"))
+                            object.leaderboard = $root.xsuportal.proto.resources.Leaderboard.toObject(message.leaderboard, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this DashboardResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.audience.DashboardResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    DashboardResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return DashboardResponse;
+                })();
 
                 audience.ListTeamsResponse = (function() {
 
@@ -6264,6 +13152,7 @@ $root.xsuportal = (function() {
                      * Properties of a ReceiveBenchmarkJobRequest.
                      * @memberof xsuportal.proto.services.bench
                      * @interface IReceiveBenchmarkJobRequest
+                     * @property {string|null} [token] ReceiveBenchmarkJobRequest token
                      * @property {string|null} [instanceName] ReceiveBenchmarkJobRequest instanceName
                      * @property {number|Long|null} [teamId] ReceiveBenchmarkJobRequest teamId
                      */
@@ -6282,6 +13171,14 @@ $root.xsuportal = (function() {
                                 if (properties[keys[i]] != null)
                                     this[keys[i]] = properties[keys[i]];
                     }
+
+                    /**
+                     * ReceiveBenchmarkJobRequest token.
+                     * @member {string} token
+                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
+                     * @instance
+                     */
+                    ReceiveBenchmarkJobRequest.prototype.token = "";
 
                     /**
                      * ReceiveBenchmarkJobRequest instanceName.
@@ -6323,10 +13220,12 @@ $root.xsuportal = (function() {
                     ReceiveBenchmarkJobRequest.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
+                        if (message.token != null && Object.hasOwnProperty.call(message, "token"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.token);
                         if (message.instanceName != null && Object.hasOwnProperty.call(message, "instanceName"))
-                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.instanceName);
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.instanceName);
                         if (message.teamId != null && Object.hasOwnProperty.call(message, "teamId"))
-                            writer.uint32(/* id 2, wireType 0 =*/16).int64(message.teamId);
+                            writer.uint32(/* id 3, wireType 0 =*/24).int64(message.teamId);
                         return writer;
                     };
 
@@ -6362,9 +13261,12 @@ $root.xsuportal = (function() {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
                             case 1:
-                                message.instanceName = reader.string();
+                                message.token = reader.string();
                                 break;
                             case 2:
+                                message.instanceName = reader.string();
+                                break;
+                            case 3:
                                 message.teamId = reader.int64();
                                 break;
                             default:
@@ -6402,6 +13304,9 @@ $root.xsuportal = (function() {
                     ReceiveBenchmarkJobRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
+                        if (message.token != null && message.hasOwnProperty("token"))
+                            if (!$util.isString(message.token))
+                                return "token: string expected";
                         if (message.instanceName != null && message.hasOwnProperty("instanceName"))
                             if (!$util.isString(message.instanceName))
                                 return "instanceName: string expected";
@@ -6423,6 +13328,8 @@ $root.xsuportal = (function() {
                         if (object instanceof $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest)
                             return object;
                         var message = new $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest();
+                        if (object.token != null)
+                            message.token = String(object.token);
                         if (object.instanceName != null)
                             message.instanceName = String(object.instanceName);
                         if (object.teamId != null)
@@ -6451,6 +13358,7 @@ $root.xsuportal = (function() {
                             options = {};
                         var object = {};
                         if (options.defaults) {
+                            object.token = "";
                             object.instanceName = "";
                             if ($util.Long) {
                                 var long = new $util.Long(0, 0, false);
@@ -6458,6 +13366,8 @@ $root.xsuportal = (function() {
                             } else
                                 object.teamId = options.longs === String ? "0" : 0;
                         }
+                        if (message.token != null && message.hasOwnProperty("token"))
+                            object.token = message.token;
                         if (message.instanceName != null && message.hasOwnProperty("instanceName"))
                             object.instanceName = message.instanceName;
                         if (message.teamId != null && message.hasOwnProperty("teamId"))
@@ -6488,10 +13398,7 @@ $root.xsuportal = (function() {
                      * Properties of a ReceiveBenchmarkJobResponse.
                      * @memberof xsuportal.proto.services.bench
                      * @interface IReceiveBenchmarkJobResponse
-                     * @property {number|Long|null} [jobId] ReceiveBenchmarkJobResponse jobId
-                     * @property {string|null} [handle] ReceiveBenchmarkJobResponse handle
-                     * @property {string|null} [targetIpv4Address] ReceiveBenchmarkJobResponse targetIpv4Address
-                     * @property {string|null} [descriptionHuman] ReceiveBenchmarkJobResponse descriptionHuman
+                     * @property {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle|null} [jobHandle] ReceiveBenchmarkJobResponse jobHandle
                      */
 
                     /**
@@ -6510,36 +13417,12 @@ $root.xsuportal = (function() {
                     }
 
                     /**
-                     * ReceiveBenchmarkJobResponse jobId.
-                     * @member {number|Long} jobId
+                     * ReceiveBenchmarkJobResponse jobHandle.
+                     * @member {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle|null|undefined} jobHandle
                      * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
                      * @instance
                      */
-                    ReceiveBenchmarkJobResponse.prototype.jobId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                    /**
-                     * ReceiveBenchmarkJobResponse handle.
-                     * @member {string} handle
-                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
-                     * @instance
-                     */
-                    ReceiveBenchmarkJobResponse.prototype.handle = "";
-
-                    /**
-                     * ReceiveBenchmarkJobResponse targetIpv4Address.
-                     * @member {string} targetIpv4Address
-                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
-                     * @instance
-                     */
-                    ReceiveBenchmarkJobResponse.prototype.targetIpv4Address = "";
-
-                    /**
-                     * ReceiveBenchmarkJobResponse descriptionHuman.
-                     * @member {string} descriptionHuman
-                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
-                     * @instance
-                     */
-                    ReceiveBenchmarkJobResponse.prototype.descriptionHuman = "";
+                    ReceiveBenchmarkJobResponse.prototype.jobHandle = null;
 
                     /**
                      * Creates a new ReceiveBenchmarkJobResponse instance using the specified properties.
@@ -6565,14 +13448,8 @@ $root.xsuportal = (function() {
                     ReceiveBenchmarkJobResponse.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.jobId != null && Object.hasOwnProperty.call(message, "jobId"))
-                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.jobId);
-                        if (message.handle != null && Object.hasOwnProperty.call(message, "handle"))
-                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.handle);
-                        if (message.targetIpv4Address != null && Object.hasOwnProperty.call(message, "targetIpv4Address"))
-                            writer.uint32(/* id 3, wireType 2 =*/26).string(message.targetIpv4Address);
-                        if (message.descriptionHuman != null && Object.hasOwnProperty.call(message, "descriptionHuman"))
-                            writer.uint32(/* id 4, wireType 2 =*/34).string(message.descriptionHuman);
+                        if (message.jobHandle != null && Object.hasOwnProperty.call(message, "jobHandle"))
+                            $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle.encode(message.jobHandle, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                         return writer;
                     };
 
@@ -6608,16 +13485,7 @@ $root.xsuportal = (function() {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
                             case 1:
-                                message.jobId = reader.int64();
-                                break;
-                            case 2:
-                                message.handle = reader.string();
-                                break;
-                            case 3:
-                                message.targetIpv4Address = reader.string();
-                                break;
-                            case 4:
-                                message.descriptionHuman = reader.string();
+                                message.jobHandle = $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle.decode(reader, reader.uint32());
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -6654,18 +13522,11 @@ $root.xsuportal = (function() {
                     ReceiveBenchmarkJobResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.jobId != null && message.hasOwnProperty("jobId"))
-                            if (!$util.isInteger(message.jobId) && !(message.jobId && $util.isInteger(message.jobId.low) && $util.isInteger(message.jobId.high)))
-                                return "jobId: integer|Long expected";
-                        if (message.handle != null && message.hasOwnProperty("handle"))
-                            if (!$util.isString(message.handle))
-                                return "handle: string expected";
-                        if (message.targetIpv4Address != null && message.hasOwnProperty("targetIpv4Address"))
-                            if (!$util.isString(message.targetIpv4Address))
-                                return "targetIpv4Address: string expected";
-                        if (message.descriptionHuman != null && message.hasOwnProperty("descriptionHuman"))
-                            if (!$util.isString(message.descriptionHuman))
-                                return "descriptionHuman: string expected";
+                        if (message.jobHandle != null && message.hasOwnProperty("jobHandle")) {
+                            var error = $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle.verify(message.jobHandle);
+                            if (error)
+                                return "jobHandle." + error;
+                        }
                         return null;
                     };
 
@@ -6681,21 +13542,11 @@ $root.xsuportal = (function() {
                         if (object instanceof $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse)
                             return object;
                         var message = new $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse();
-                        if (object.jobId != null)
-                            if ($util.Long)
-                                (message.jobId = $util.Long.fromValue(object.jobId)).unsigned = false;
-                            else if (typeof object.jobId === "string")
-                                message.jobId = parseInt(object.jobId, 10);
-                            else if (typeof object.jobId === "number")
-                                message.jobId = object.jobId;
-                            else if (typeof object.jobId === "object")
-                                message.jobId = new $util.LongBits(object.jobId.low >>> 0, object.jobId.high >>> 0).toNumber();
-                        if (object.handle != null)
-                            message.handle = String(object.handle);
-                        if (object.targetIpv4Address != null)
-                            message.targetIpv4Address = String(object.targetIpv4Address);
-                        if (object.descriptionHuman != null)
-                            message.descriptionHuman = String(object.descriptionHuman);
+                        if (object.jobHandle != null) {
+                            if (typeof object.jobHandle !== "object")
+                                throw TypeError(".xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.jobHandle: object expected");
+                            message.jobHandle = $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle.fromObject(object.jobHandle);
+                        }
                         return message;
                     };
 
@@ -6712,27 +13563,10 @@ $root.xsuportal = (function() {
                         if (!options)
                             options = {};
                         var object = {};
-                        if (options.defaults) {
-                            if ($util.Long) {
-                                var long = new $util.Long(0, 0, false);
-                                object.jobId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                            } else
-                                object.jobId = options.longs === String ? "0" : 0;
-                            object.handle = "";
-                            object.targetIpv4Address = "";
-                            object.descriptionHuman = "";
-                        }
-                        if (message.jobId != null && message.hasOwnProperty("jobId"))
-                            if (typeof message.jobId === "number")
-                                object.jobId = options.longs === String ? String(message.jobId) : message.jobId;
-                            else
-                                object.jobId = options.longs === String ? $util.Long.prototype.toString.call(message.jobId) : options.longs === Number ? new $util.LongBits(message.jobId.low >>> 0, message.jobId.high >>> 0).toNumber() : message.jobId;
-                        if (message.handle != null && message.hasOwnProperty("handle"))
-                            object.handle = message.handle;
-                        if (message.targetIpv4Address != null && message.hasOwnProperty("targetIpv4Address"))
-                            object.targetIpv4Address = message.targetIpv4Address;
-                        if (message.descriptionHuman != null && message.hasOwnProperty("descriptionHuman"))
-                            object.descriptionHuman = message.descriptionHuman;
+                        if (options.defaults)
+                            object.jobHandle = null;
+                        if (message.jobHandle != null && message.hasOwnProperty("jobHandle"))
+                            object.jobHandle = $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle.toObject(message.jobHandle, options);
                         return object;
                     };
 
@@ -6746,6 +13580,274 @@ $root.xsuportal = (function() {
                     ReceiveBenchmarkJobResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
+
+                    ReceiveBenchmarkJobResponse.JobHandle = (function() {
+
+                        /**
+                         * Properties of a JobHandle.
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                         * @interface IJobHandle
+                         * @property {number|Long|null} [jobId] JobHandle jobId
+                         * @property {string|null} [handle] JobHandle handle
+                         * @property {string|null} [targetIpv4Address] JobHandle targetIpv4Address
+                         * @property {string|null} [descriptionHuman] JobHandle descriptionHuman
+                         */
+
+                        /**
+                         * Constructs a new JobHandle.
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
+                         * @classdesc Represents a JobHandle.
+                         * @implements IJobHandle
+                         * @constructor
+                         * @param {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle=} [properties] Properties to set
+                         */
+                        function JobHandle(properties) {
+                            if (properties)
+                                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * JobHandle jobId.
+                         * @member {number|Long} jobId
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @instance
+                         */
+                        JobHandle.prototype.jobId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
+                         * JobHandle handle.
+                         * @member {string} handle
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @instance
+                         */
+                        JobHandle.prototype.handle = "";
+
+                        /**
+                         * JobHandle targetIpv4Address.
+                         * @member {string} targetIpv4Address
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @instance
+                         */
+                        JobHandle.prototype.targetIpv4Address = "";
+
+                        /**
+                         * JobHandle descriptionHuman.
+                         * @member {string} descriptionHuman
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @instance
+                         */
+                        JobHandle.prototype.descriptionHuman = "";
+
+                        /**
+                         * Creates a new JobHandle instance using the specified properties.
+                         * @function create
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @static
+                         * @param {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle=} [properties] Properties to set
+                         * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle} JobHandle instance
+                         */
+                        JobHandle.create = function create(properties) {
+                            return new JobHandle(properties);
+                        };
+
+                        /**
+                         * Encodes the specified JobHandle message. Does not implicitly {@link xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle.verify|verify} messages.
+                         * @function encode
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @static
+                         * @param {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle} message JobHandle message or plain object to encode
+                         * @param {$protobuf.Writer} [writer] Writer to encode to
+                         * @returns {$protobuf.Writer} Writer
+                         */
+                        JobHandle.encode = function encode(message, writer) {
+                            if (!writer)
+                                writer = $Writer.create();
+                            if (message.jobId != null && Object.hasOwnProperty.call(message, "jobId"))
+                                writer.uint32(/* id 1, wireType 0 =*/8).int64(message.jobId);
+                            if (message.handle != null && Object.hasOwnProperty.call(message, "handle"))
+                                writer.uint32(/* id 2, wireType 2 =*/18).string(message.handle);
+                            if (message.targetIpv4Address != null && Object.hasOwnProperty.call(message, "targetIpv4Address"))
+                                writer.uint32(/* id 3, wireType 2 =*/26).string(message.targetIpv4Address);
+                            if (message.descriptionHuman != null && Object.hasOwnProperty.call(message, "descriptionHuman"))
+                                writer.uint32(/* id 4, wireType 2 =*/34).string(message.descriptionHuman);
+                            return writer;
+                        };
+
+                        /**
+                         * Encodes the specified JobHandle message, length delimited. Does not implicitly {@link xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle.verify|verify} messages.
+                         * @function encodeDelimited
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @static
+                         * @param {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle} message JobHandle message or plain object to encode
+                         * @param {$protobuf.Writer} [writer] Writer to encode to
+                         * @returns {$protobuf.Writer} Writer
+                         */
+                        JobHandle.encodeDelimited = function encodeDelimited(message, writer) {
+                            return this.encode(message, writer).ldelim();
+                        };
+
+                        /**
+                         * Decodes a JobHandle message from the specified reader or buffer.
+                         * @function decode
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @static
+                         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                         * @param {number} [length] Message length if known beforehand
+                         * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle} JobHandle
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        JobHandle.decode = function decode(reader, length) {
+                            if (!(reader instanceof $Reader))
+                                reader = $Reader.create(reader);
+                            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle();
+                            while (reader.pos < end) {
+                                var tag = reader.uint32();
+                                switch (tag >>> 3) {
+                                case 1:
+                                    message.jobId = reader.int64();
+                                    break;
+                                case 2:
+                                    message.handle = reader.string();
+                                    break;
+                                case 3:
+                                    message.targetIpv4Address = reader.string();
+                                    break;
+                                case 4:
+                                    message.descriptionHuman = reader.string();
+                                    break;
+                                default:
+                                    reader.skipType(tag & 7);
+                                    break;
+                                }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Decodes a JobHandle message from the specified reader or buffer, length delimited.
+                         * @function decodeDelimited
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @static
+                         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                         * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle} JobHandle
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        JobHandle.decodeDelimited = function decodeDelimited(reader) {
+                            if (!(reader instanceof $Reader))
+                                reader = new $Reader(reader);
+                            return this.decode(reader, reader.uint32());
+                        };
+
+                        /**
+                         * Verifies a JobHandle message.
+                         * @function verify
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        JobHandle.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.jobId != null && message.hasOwnProperty("jobId"))
+                                if (!$util.isInteger(message.jobId) && !(message.jobId && $util.isInteger(message.jobId.low) && $util.isInteger(message.jobId.high)))
+                                    return "jobId: integer|Long expected";
+                            if (message.handle != null && message.hasOwnProperty("handle"))
+                                if (!$util.isString(message.handle))
+                                    return "handle: string expected";
+                            if (message.targetIpv4Address != null && message.hasOwnProperty("targetIpv4Address"))
+                                if (!$util.isString(message.targetIpv4Address))
+                                    return "targetIpv4Address: string expected";
+                            if (message.descriptionHuman != null && message.hasOwnProperty("descriptionHuman"))
+                                if (!$util.isString(message.descriptionHuman))
+                                    return "descriptionHuman: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a JobHandle message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle} JobHandle
+                         */
+                        JobHandle.fromObject = function fromObject(object) {
+                            if (object instanceof $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle)
+                                return object;
+                            var message = new $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle();
+                            if (object.jobId != null)
+                                if ($util.Long)
+                                    (message.jobId = $util.Long.fromValue(object.jobId)).unsigned = false;
+                                else if (typeof object.jobId === "string")
+                                    message.jobId = parseInt(object.jobId, 10);
+                                else if (typeof object.jobId === "number")
+                                    message.jobId = object.jobId;
+                                else if (typeof object.jobId === "object")
+                                    message.jobId = new $util.LongBits(object.jobId.low >>> 0, object.jobId.high >>> 0).toNumber();
+                            if (object.handle != null)
+                                message.handle = String(object.handle);
+                            if (object.targetIpv4Address != null)
+                                message.targetIpv4Address = String(object.targetIpv4Address);
+                            if (object.descriptionHuman != null)
+                                message.descriptionHuman = String(object.descriptionHuman);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a JobHandle message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @static
+                         * @param {xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle} message JobHandle
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        JobHandle.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            var object = {};
+                            if (options.defaults) {
+                                if ($util.Long) {
+                                    var long = new $util.Long(0, 0, false);
+                                    object.jobId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.jobId = options.longs === String ? "0" : 0;
+                                object.handle = "";
+                                object.targetIpv4Address = "";
+                                object.descriptionHuman = "";
+                            }
+                            if (message.jobId != null && message.hasOwnProperty("jobId"))
+                                if (typeof message.jobId === "number")
+                                    object.jobId = options.longs === String ? String(message.jobId) : message.jobId;
+                                else
+                                    object.jobId = options.longs === String ? $util.Long.prototype.toString.call(message.jobId) : options.longs === Number ? new $util.LongBits(message.jobId.low >>> 0, message.jobId.high >>> 0).toNumber() : message.jobId;
+                            if (message.handle != null && message.hasOwnProperty("handle"))
+                                object.handle = message.handle;
+                            if (message.targetIpv4Address != null && message.hasOwnProperty("targetIpv4Address"))
+                                object.targetIpv4Address = message.targetIpv4Address;
+                            if (message.descriptionHuman != null && message.hasOwnProperty("descriptionHuman"))
+                                object.descriptionHuman = message.descriptionHuman;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this JobHandle to JSON.
+                         * @function toJSON
+                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        JobHandle.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return JobHandle;
+                    })();
 
                     return ReceiveBenchmarkJobResponse;
                 })();
@@ -7495,6 +14597,3088 @@ $root.xsuportal = (function() {
                 })();
 
                 return common;
+            })();
+
+            services.contestant = (function() {
+
+                /**
+                 * Namespace contestant.
+                 * @memberof xsuportal.proto.services
+                 * @namespace
+                 */
+                var contestant = {};
+
+                contestant.ListBenchmarkJobsRequest = (function() {
+
+                    /**
+                     * Properties of a ListBenchmarkJobsRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IListBenchmarkJobsRequest
+                     */
+
+                    /**
+                     * Constructs a new ListBenchmarkJobsRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a ListBenchmarkJobsRequest.
+                     * @implements IListBenchmarkJobsRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IListBenchmarkJobsRequest=} [properties] Properties to set
+                     */
+                    function ListBenchmarkJobsRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new ListBenchmarkJobsRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListBenchmarkJobsRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.ListBenchmarkJobsRequest} ListBenchmarkJobsRequest instance
+                     */
+                    ListBenchmarkJobsRequest.create = function create(properties) {
+                        return new ListBenchmarkJobsRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.ListBenchmarkJobsRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListBenchmarkJobsRequest} message ListBenchmarkJobsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListBenchmarkJobsRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListBenchmarkJobsRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListBenchmarkJobsRequest} message ListBenchmarkJobsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListBenchmarkJobsRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListBenchmarkJobsRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.ListBenchmarkJobsRequest} ListBenchmarkJobsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListBenchmarkJobsRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.ListBenchmarkJobsRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListBenchmarkJobsRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.ListBenchmarkJobsRequest} ListBenchmarkJobsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListBenchmarkJobsRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListBenchmarkJobsRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListBenchmarkJobsRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListBenchmarkJobsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.ListBenchmarkJobsRequest} ListBenchmarkJobsRequest
+                     */
+                    ListBenchmarkJobsRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.ListBenchmarkJobsRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.ListBenchmarkJobsRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a ListBenchmarkJobsRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ListBenchmarkJobsRequest} message ListBenchmarkJobsRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListBenchmarkJobsRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this ListBenchmarkJobsRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListBenchmarkJobsRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListBenchmarkJobsRequest;
+                })();
+
+                contestant.ListBenchmarkJobsResponse = (function() {
+
+                    /**
+                     * Properties of a ListBenchmarkJobsResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IListBenchmarkJobsResponse
+                     * @property {Array.<xsuportal.proto.resources.IBenchmarkJob>|null} [jobs] ListBenchmarkJobsResponse jobs
+                     */
+
+                    /**
+                     * Constructs a new ListBenchmarkJobsResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a ListBenchmarkJobsResponse.
+                     * @implements IListBenchmarkJobsResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IListBenchmarkJobsResponse=} [properties] Properties to set
+                     */
+                    function ListBenchmarkJobsResponse(properties) {
+                        this.jobs = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListBenchmarkJobsResponse jobs.
+                     * @member {Array.<xsuportal.proto.resources.IBenchmarkJob>} jobs
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsResponse
+                     * @instance
+                     */
+                    ListBenchmarkJobsResponse.prototype.jobs = $util.emptyArray;
+
+                    /**
+                     * Creates a new ListBenchmarkJobsResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListBenchmarkJobsResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.ListBenchmarkJobsResponse} ListBenchmarkJobsResponse instance
+                     */
+                    ListBenchmarkJobsResponse.create = function create(properties) {
+                        return new ListBenchmarkJobsResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.ListBenchmarkJobsResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListBenchmarkJobsResponse} message ListBenchmarkJobsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListBenchmarkJobsResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.jobs != null && message.jobs.length)
+                            for (var i = 0; i < message.jobs.length; ++i)
+                                $root.xsuportal.proto.resources.BenchmarkJob.encode(message.jobs[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListBenchmarkJobsResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListBenchmarkJobsResponse} message ListBenchmarkJobsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListBenchmarkJobsResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListBenchmarkJobsResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.ListBenchmarkJobsResponse} ListBenchmarkJobsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListBenchmarkJobsResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.ListBenchmarkJobsResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                if (!(message.jobs && message.jobs.length))
+                                    message.jobs = [];
+                                message.jobs.push($root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32()));
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListBenchmarkJobsResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.ListBenchmarkJobsResponse} ListBenchmarkJobsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListBenchmarkJobsResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListBenchmarkJobsResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListBenchmarkJobsResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.jobs != null && message.hasOwnProperty("jobs")) {
+                            if (!Array.isArray(message.jobs))
+                                return "jobs: array expected";
+                            for (var i = 0; i < message.jobs.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.BenchmarkJob.verify(message.jobs[i]);
+                                if (error)
+                                    return "jobs." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListBenchmarkJobsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.ListBenchmarkJobsResponse} ListBenchmarkJobsResponse
+                     */
+                    ListBenchmarkJobsResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.ListBenchmarkJobsResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.ListBenchmarkJobsResponse();
+                        if (object.jobs) {
+                            if (!Array.isArray(object.jobs))
+                                throw TypeError(".xsuportal.proto.services.contestant.ListBenchmarkJobsResponse.jobs: array expected");
+                            message.jobs = [];
+                            for (var i = 0; i < object.jobs.length; ++i) {
+                                if (typeof object.jobs[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.contestant.ListBenchmarkJobsResponse.jobs: object expected");
+                                message.jobs[i] = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.jobs[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListBenchmarkJobsResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ListBenchmarkJobsResponse} message ListBenchmarkJobsResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListBenchmarkJobsResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.jobs = [];
+                        if (message.jobs && message.jobs.length) {
+                            object.jobs = [];
+                            for (var j = 0; j < message.jobs.length; ++j)
+                                object.jobs[j] = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.jobs[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListBenchmarkJobsResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.ListBenchmarkJobsResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListBenchmarkJobsResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListBenchmarkJobsResponse;
+                })();
+
+                contestant.EnqueueBenchmarkJobRequest = (function() {
+
+                    /**
+                     * Properties of an EnqueueBenchmarkJobRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IEnqueueBenchmarkJobRequest
+                     * @property {number|Long|null} [targetId] EnqueueBenchmarkJobRequest targetId
+                     */
+
+                    /**
+                     * Constructs a new EnqueueBenchmarkJobRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents an EnqueueBenchmarkJobRequest.
+                     * @implements IEnqueueBenchmarkJobRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IEnqueueBenchmarkJobRequest=} [properties] Properties to set
+                     */
+                    function EnqueueBenchmarkJobRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * EnqueueBenchmarkJobRequest targetId.
+                     * @member {number|Long} targetId
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
+                     * @instance
+                     */
+                    EnqueueBenchmarkJobRequest.prototype.targetId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new EnqueueBenchmarkJobRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IEnqueueBenchmarkJobRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest} EnqueueBenchmarkJobRequest instance
+                     */
+                    EnqueueBenchmarkJobRequest.create = function create(properties) {
+                        return new EnqueueBenchmarkJobRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IEnqueueBenchmarkJobRequest} message EnqueueBenchmarkJobRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    EnqueueBenchmarkJobRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.targetId != null && Object.hasOwnProperty.call(message, "targetId"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.targetId);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IEnqueueBenchmarkJobRequest} message EnqueueBenchmarkJobRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    EnqueueBenchmarkJobRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest} EnqueueBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    EnqueueBenchmarkJobRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.targetId = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest} EnqueueBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    EnqueueBenchmarkJobRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an EnqueueBenchmarkJobRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    EnqueueBenchmarkJobRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.targetId != null && message.hasOwnProperty("targetId"))
+                            if (!$util.isInteger(message.targetId) && !(message.targetId && $util.isInteger(message.targetId.low) && $util.isInteger(message.targetId.high)))
+                                return "targetId: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an EnqueueBenchmarkJobRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest} EnqueueBenchmarkJobRequest
+                     */
+                    EnqueueBenchmarkJobRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest();
+                        if (object.targetId != null)
+                            if ($util.Long)
+                                (message.targetId = $util.Long.fromValue(object.targetId)).unsigned = false;
+                            else if (typeof object.targetId === "string")
+                                message.targetId = parseInt(object.targetId, 10);
+                            else if (typeof object.targetId === "number")
+                                message.targetId = object.targetId;
+                            else if (typeof object.targetId === "object")
+                                message.targetId = new $util.LongBits(object.targetId.low >>> 0, object.targetId.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an EnqueueBenchmarkJobRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest} message EnqueueBenchmarkJobRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    EnqueueBenchmarkJobRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.targetId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.targetId = options.longs === String ? "0" : 0;
+                        if (message.targetId != null && message.hasOwnProperty("targetId"))
+                            if (typeof message.targetId === "number")
+                                object.targetId = options.longs === String ? String(message.targetId) : message.targetId;
+                            else
+                                object.targetId = options.longs === String ? $util.Long.prototype.toString.call(message.targetId) : options.longs === Number ? new $util.LongBits(message.targetId.low >>> 0, message.targetId.high >>> 0).toNumber() : message.targetId;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this EnqueueBenchmarkJobRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    EnqueueBenchmarkJobRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return EnqueueBenchmarkJobRequest;
+                })();
+
+                contestant.EnqueueBenchmarkJobResponse = (function() {
+
+                    /**
+                     * Properties of an EnqueueBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IEnqueueBenchmarkJobResponse
+                     * @property {xsuportal.proto.resources.IBenchmarkJob|null} [job] EnqueueBenchmarkJobResponse job
+                     */
+
+                    /**
+                     * Constructs a new EnqueueBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents an EnqueueBenchmarkJobResponse.
+                     * @implements IEnqueueBenchmarkJobResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IEnqueueBenchmarkJobResponse=} [properties] Properties to set
+                     */
+                    function EnqueueBenchmarkJobResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * EnqueueBenchmarkJobResponse job.
+                     * @member {xsuportal.proto.resources.IBenchmarkJob|null|undefined} job
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse
+                     * @instance
+                     */
+                    EnqueueBenchmarkJobResponse.prototype.job = null;
+
+                    /**
+                     * Creates a new EnqueueBenchmarkJobResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IEnqueueBenchmarkJobResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse} EnqueueBenchmarkJobResponse instance
+                     */
+                    EnqueueBenchmarkJobResponse.create = function create(properties) {
+                        return new EnqueueBenchmarkJobResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IEnqueueBenchmarkJobResponse} message EnqueueBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    EnqueueBenchmarkJobResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.job != null && Object.hasOwnProperty.call(message, "job"))
+                            $root.xsuportal.proto.resources.BenchmarkJob.encode(message.job, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IEnqueueBenchmarkJobResponse} message EnqueueBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    EnqueueBenchmarkJobResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse} EnqueueBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    EnqueueBenchmarkJobResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.job = $root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse} EnqueueBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    EnqueueBenchmarkJobResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an EnqueueBenchmarkJobResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    EnqueueBenchmarkJobResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.job != null && message.hasOwnProperty("job")) {
+                            var error = $root.xsuportal.proto.resources.BenchmarkJob.verify(message.job);
+                            if (error)
+                                return "job." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an EnqueueBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse} EnqueueBenchmarkJobResponse
+                     */
+                    EnqueueBenchmarkJobResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse();
+                        if (object.job != null) {
+                            if (typeof object.job !== "object")
+                                throw TypeError(".xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse.job: object expected");
+                            message.job = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.job);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an EnqueueBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse} message EnqueueBenchmarkJobResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    EnqueueBenchmarkJobResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.job = null;
+                        if (message.job != null && message.hasOwnProperty("job"))
+                            object.job = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.job, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this EnqueueBenchmarkJobResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    EnqueueBenchmarkJobResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return EnqueueBenchmarkJobResponse;
+                })();
+
+                contestant.GetBenchmarkJobQuery = (function() {
+
+                    /**
+                     * Properties of a GetBenchmarkJobQuery.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IGetBenchmarkJobQuery
+                     * @property {number|Long|null} [id] GetBenchmarkJobQuery id
+                     */
+
+                    /**
+                     * Constructs a new GetBenchmarkJobQuery.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a GetBenchmarkJobQuery.
+                     * @implements IGetBenchmarkJobQuery
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IGetBenchmarkJobQuery=} [properties] Properties to set
+                     */
+                    function GetBenchmarkJobQuery(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetBenchmarkJobQuery id.
+                     * @member {number|Long} id
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobQuery
+                     * @instance
+                     */
+                    GetBenchmarkJobQuery.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new GetBenchmarkJobQuery instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobQuery
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetBenchmarkJobQuery=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.GetBenchmarkJobQuery} GetBenchmarkJobQuery instance
+                     */
+                    GetBenchmarkJobQuery.create = function create(properties) {
+                        return new GetBenchmarkJobQuery(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobQuery message. Does not implicitly {@link xsuportal.proto.services.contestant.GetBenchmarkJobQuery.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobQuery
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetBenchmarkJobQuery} message GetBenchmarkJobQuery message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetBenchmarkJobQuery.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobQuery message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetBenchmarkJobQuery.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobQuery
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetBenchmarkJobQuery} message GetBenchmarkJobQuery message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetBenchmarkJobQuery.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetBenchmarkJobQuery message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobQuery
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.GetBenchmarkJobQuery} GetBenchmarkJobQuery
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetBenchmarkJobQuery.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.GetBenchmarkJobQuery();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.id = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetBenchmarkJobQuery message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobQuery
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.GetBenchmarkJobQuery} GetBenchmarkJobQuery
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetBenchmarkJobQuery.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetBenchmarkJobQuery message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobQuery
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetBenchmarkJobQuery.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetBenchmarkJobQuery message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobQuery
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.GetBenchmarkJobQuery} GetBenchmarkJobQuery
+                     */
+                    GetBenchmarkJobQuery.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.GetBenchmarkJobQuery)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.GetBenchmarkJobQuery();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetBenchmarkJobQuery message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobQuery
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.GetBenchmarkJobQuery} message GetBenchmarkJobQuery
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetBenchmarkJobQuery.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetBenchmarkJobQuery to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobQuery
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetBenchmarkJobQuery.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetBenchmarkJobQuery;
+                })();
+
+                contestant.GetBenchmarkJobResponse = (function() {
+
+                    /**
+                     * Properties of a GetBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IGetBenchmarkJobResponse
+                     * @property {xsuportal.proto.resources.IBenchmarkJob|null} [job] GetBenchmarkJobResponse job
+                     */
+
+                    /**
+                     * Constructs a new GetBenchmarkJobResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a GetBenchmarkJobResponse.
+                     * @implements IGetBenchmarkJobResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IGetBenchmarkJobResponse=} [properties] Properties to set
+                     */
+                    function GetBenchmarkJobResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetBenchmarkJobResponse job.
+                     * @member {xsuportal.proto.resources.IBenchmarkJob|null|undefined} job
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @instance
+                     */
+                    GetBenchmarkJobResponse.prototype.job = null;
+
+                    /**
+                     * Creates a new GetBenchmarkJobResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetBenchmarkJobResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.GetBenchmarkJobResponse} GetBenchmarkJobResponse instance
+                     */
+                    GetBenchmarkJobResponse.create = function create(properties) {
+                        return new GetBenchmarkJobResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.GetBenchmarkJobResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetBenchmarkJobResponse} message GetBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetBenchmarkJobResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.job != null && Object.hasOwnProperty.call(message, "job"))
+                            $root.xsuportal.proto.resources.BenchmarkJob.encode(message.job, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetBenchmarkJobResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetBenchmarkJobResponse} message GetBenchmarkJobResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetBenchmarkJobResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetBenchmarkJobResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.GetBenchmarkJobResponse} GetBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetBenchmarkJobResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.GetBenchmarkJobResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.job = $root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.GetBenchmarkJobResponse} GetBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetBenchmarkJobResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetBenchmarkJobResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetBenchmarkJobResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.job != null && message.hasOwnProperty("job")) {
+                            var error = $root.xsuportal.proto.resources.BenchmarkJob.verify(message.job);
+                            if (error)
+                                return "job." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.GetBenchmarkJobResponse} GetBenchmarkJobResponse
+                     */
+                    GetBenchmarkJobResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.GetBenchmarkJobResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.GetBenchmarkJobResponse();
+                        if (object.job != null) {
+                            if (typeof object.job !== "object")
+                                throw TypeError(".xsuportal.proto.services.contestant.GetBenchmarkJobResponse.job: object expected");
+                            message.job = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.job);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.GetBenchmarkJobResponse} message GetBenchmarkJobResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetBenchmarkJobResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.job = null;
+                        if (message.job != null && message.hasOwnProperty("job"))
+                            object.job = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.job, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetBenchmarkJobResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetBenchmarkJobResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetBenchmarkJobResponse;
+                })();
+
+                contestant.ListClarificationsRequest = (function() {
+
+                    /**
+                     * Properties of a ListClarificationsRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IListClarificationsRequest
+                     */
+
+                    /**
+                     * Constructs a new ListClarificationsRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a ListClarificationsRequest.
+                     * @implements IListClarificationsRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IListClarificationsRequest=} [properties] Properties to set
+                     */
+                    function ListClarificationsRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new ListClarificationsRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListClarificationsRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.ListClarificationsRequest} ListClarificationsRequest instance
+                     */
+                    ListClarificationsRequest.create = function create(properties) {
+                        return new ListClarificationsRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListClarificationsRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.ListClarificationsRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListClarificationsRequest} message ListClarificationsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListClarificationsRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListClarificationsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListClarificationsRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListClarificationsRequest} message ListClarificationsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListClarificationsRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListClarificationsRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.ListClarificationsRequest} ListClarificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListClarificationsRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.ListClarificationsRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListClarificationsRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.ListClarificationsRequest} ListClarificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListClarificationsRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListClarificationsRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListClarificationsRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListClarificationsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.ListClarificationsRequest} ListClarificationsRequest
+                     */
+                    ListClarificationsRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.ListClarificationsRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.ListClarificationsRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a ListClarificationsRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ListClarificationsRequest} message ListClarificationsRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListClarificationsRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this ListClarificationsRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListClarificationsRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListClarificationsRequest;
+                })();
+
+                contestant.ListClarificationsResponse = (function() {
+
+                    /**
+                     * Properties of a ListClarificationsResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IListClarificationsResponse
+                     * @property {Array.<xsuportal.proto.resources.IClarification>|null} [clarifications] ListClarificationsResponse clarifications
+                     */
+
+                    /**
+                     * Constructs a new ListClarificationsResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a ListClarificationsResponse.
+                     * @implements IListClarificationsResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IListClarificationsResponse=} [properties] Properties to set
+                     */
+                    function ListClarificationsResponse(properties) {
+                        this.clarifications = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListClarificationsResponse clarifications.
+                     * @member {Array.<xsuportal.proto.resources.IClarification>} clarifications
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsResponse
+                     * @instance
+                     */
+                    ListClarificationsResponse.prototype.clarifications = $util.emptyArray;
+
+                    /**
+                     * Creates a new ListClarificationsResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListClarificationsResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.ListClarificationsResponse} ListClarificationsResponse instance
+                     */
+                    ListClarificationsResponse.create = function create(properties) {
+                        return new ListClarificationsResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListClarificationsResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.ListClarificationsResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListClarificationsResponse} message ListClarificationsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListClarificationsResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.clarifications != null && message.clarifications.length)
+                            for (var i = 0; i < message.clarifications.length; ++i)
+                                $root.xsuportal.proto.resources.Clarification.encode(message.clarifications[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListClarificationsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListClarificationsResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListClarificationsResponse} message ListClarificationsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListClarificationsResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListClarificationsResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.ListClarificationsResponse} ListClarificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListClarificationsResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.ListClarificationsResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                if (!(message.clarifications && message.clarifications.length))
+                                    message.clarifications = [];
+                                message.clarifications.push($root.xsuportal.proto.resources.Clarification.decode(reader, reader.uint32()));
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListClarificationsResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.ListClarificationsResponse} ListClarificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListClarificationsResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListClarificationsResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListClarificationsResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.clarifications != null && message.hasOwnProperty("clarifications")) {
+                            if (!Array.isArray(message.clarifications))
+                                return "clarifications: array expected";
+                            for (var i = 0; i < message.clarifications.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.Clarification.verify(message.clarifications[i]);
+                                if (error)
+                                    return "clarifications." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListClarificationsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.ListClarificationsResponse} ListClarificationsResponse
+                     */
+                    ListClarificationsResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.ListClarificationsResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.ListClarificationsResponse();
+                        if (object.clarifications) {
+                            if (!Array.isArray(object.clarifications))
+                                throw TypeError(".xsuportal.proto.services.contestant.ListClarificationsResponse.clarifications: array expected");
+                            message.clarifications = [];
+                            for (var i = 0; i < object.clarifications.length; ++i) {
+                                if (typeof object.clarifications[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.contestant.ListClarificationsResponse.clarifications: object expected");
+                                message.clarifications[i] = $root.xsuportal.proto.resources.Clarification.fromObject(object.clarifications[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListClarificationsResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ListClarificationsResponse} message ListClarificationsResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListClarificationsResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.clarifications = [];
+                        if (message.clarifications && message.clarifications.length) {
+                            object.clarifications = [];
+                            for (var j = 0; j < message.clarifications.length; ++j)
+                                object.clarifications[j] = $root.xsuportal.proto.resources.Clarification.toObject(message.clarifications[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListClarificationsResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.ListClarificationsResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListClarificationsResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListClarificationsResponse;
+                })();
+
+                contestant.RequestClarificationRequest = (function() {
+
+                    /**
+                     * Properties of a RequestClarificationRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IRequestClarificationRequest
+                     * @property {string|null} [question] RequestClarificationRequest question
+                     */
+
+                    /**
+                     * Constructs a new RequestClarificationRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a RequestClarificationRequest.
+                     * @implements IRequestClarificationRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IRequestClarificationRequest=} [properties] Properties to set
+                     */
+                    function RequestClarificationRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RequestClarificationRequest question.
+                     * @member {string} question
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationRequest
+                     * @instance
+                     */
+                    RequestClarificationRequest.prototype.question = "";
+
+                    /**
+                     * Creates a new RequestClarificationRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IRequestClarificationRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.RequestClarificationRequest} RequestClarificationRequest instance
+                     */
+                    RequestClarificationRequest.create = function create(properties) {
+                        return new RequestClarificationRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified RequestClarificationRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.RequestClarificationRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IRequestClarificationRequest} message RequestClarificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    RequestClarificationRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.question != null && Object.hasOwnProperty.call(message, "question"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.question);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified RequestClarificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.RequestClarificationRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IRequestClarificationRequest} message RequestClarificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    RequestClarificationRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a RequestClarificationRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.RequestClarificationRequest} RequestClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    RequestClarificationRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.RequestClarificationRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.question = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a RequestClarificationRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.RequestClarificationRequest} RequestClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    RequestClarificationRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a RequestClarificationRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RequestClarificationRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.question != null && message.hasOwnProperty("question"))
+                            if (!$util.isString(message.question))
+                                return "question: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RequestClarificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.RequestClarificationRequest} RequestClarificationRequest
+                     */
+                    RequestClarificationRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.RequestClarificationRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.RequestClarificationRequest();
+                        if (object.question != null)
+                            message.question = String(object.question);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RequestClarificationRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.RequestClarificationRequest} message RequestClarificationRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RequestClarificationRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.question = "";
+                        if (message.question != null && message.hasOwnProperty("question"))
+                            object.question = message.question;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RequestClarificationRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RequestClarificationRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RequestClarificationRequest;
+                })();
+
+                contestant.RequestClarificationResponse = (function() {
+
+                    /**
+                     * Properties of a RequestClarificationResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IRequestClarificationResponse
+                     * @property {xsuportal.proto.resources.IClarification|null} [clarification] RequestClarificationResponse clarification
+                     */
+
+                    /**
+                     * Constructs a new RequestClarificationResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a RequestClarificationResponse.
+                     * @implements IRequestClarificationResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IRequestClarificationResponse=} [properties] Properties to set
+                     */
+                    function RequestClarificationResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RequestClarificationResponse clarification.
+                     * @member {xsuportal.proto.resources.IClarification|null|undefined} clarification
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationResponse
+                     * @instance
+                     */
+                    RequestClarificationResponse.prototype.clarification = null;
+
+                    /**
+                     * Creates a new RequestClarificationResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IRequestClarificationResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.RequestClarificationResponse} RequestClarificationResponse instance
+                     */
+                    RequestClarificationResponse.create = function create(properties) {
+                        return new RequestClarificationResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified RequestClarificationResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.RequestClarificationResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IRequestClarificationResponse} message RequestClarificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    RequestClarificationResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.clarification != null && Object.hasOwnProperty.call(message, "clarification"))
+                            $root.xsuportal.proto.resources.Clarification.encode(message.clarification, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified RequestClarificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.RequestClarificationResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IRequestClarificationResponse} message RequestClarificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    RequestClarificationResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a RequestClarificationResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.RequestClarificationResponse} RequestClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    RequestClarificationResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.RequestClarificationResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.clarification = $root.xsuportal.proto.resources.Clarification.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a RequestClarificationResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.RequestClarificationResponse} RequestClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    RequestClarificationResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a RequestClarificationResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RequestClarificationResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.clarification != null && message.hasOwnProperty("clarification")) {
+                            var error = $root.xsuportal.proto.resources.Clarification.verify(message.clarification);
+                            if (error)
+                                return "clarification." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RequestClarificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.RequestClarificationResponse} RequestClarificationResponse
+                     */
+                    RequestClarificationResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.RequestClarificationResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.RequestClarificationResponse();
+                        if (object.clarification != null) {
+                            if (typeof object.clarification !== "object")
+                                throw TypeError(".xsuportal.proto.services.contestant.RequestClarificationResponse.clarification: object expected");
+                            message.clarification = $root.xsuportal.proto.resources.Clarification.fromObject(object.clarification);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RequestClarificationResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.RequestClarificationResponse} message RequestClarificationResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RequestClarificationResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.clarification = null;
+                        if (message.clarification != null && message.hasOwnProperty("clarification"))
+                            object.clarification = $root.xsuportal.proto.resources.Clarification.toObject(message.clarification, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RequestClarificationResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.RequestClarificationResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RequestClarificationResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RequestClarificationResponse;
+                })();
+
+                contestant.DashboardRequest = (function() {
+
+                    /**
+                     * Properties of a DashboardRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IDashboardRequest
+                     */
+
+                    /**
+                     * Constructs a new DashboardRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a DashboardRequest.
+                     * @implements IDashboardRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IDashboardRequest=} [properties] Properties to set
+                     */
+                    function DashboardRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new DashboardRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IDashboardRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.DashboardRequest} DashboardRequest instance
+                     */
+                    DashboardRequest.create = function create(properties) {
+                        return new DashboardRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.DashboardRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IDashboardRequest} message DashboardRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.DashboardRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IDashboardRequest} message DashboardRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.DashboardRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.DashboardRequest} DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.DashboardRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.DashboardRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.DashboardRequest} DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a DashboardRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.DashboardRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    DashboardRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.DashboardRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.DashboardRequest} DashboardRequest
+                     */
+                    DashboardRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.DashboardRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.DashboardRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.DashboardRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.DashboardRequest} message DashboardRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    DashboardRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this DashboardRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.DashboardRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    DashboardRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return DashboardRequest;
+                })();
+
+                contestant.DashboardResponse = (function() {
+
+                    /**
+                     * Properties of a DashboardResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IDashboardResponse
+                     * @property {xsuportal.proto.resources.ILeaderboard|null} [leaderboard] DashboardResponse leaderboard
+                     * @property {Array.<xsuportal.proto.resources.IContestantInstance>|null} [instances] DashboardResponse instances
+                     * @property {Array.<xsuportal.proto.resources.IBenchmarkJob>|null} [jobs] DashboardResponse jobs
+                     */
+
+                    /**
+                     * Constructs a new DashboardResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a DashboardResponse.
+                     * @implements IDashboardResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IDashboardResponse=} [properties] Properties to set
+                     */
+                    function DashboardResponse(properties) {
+                        this.instances = [];
+                        this.jobs = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * DashboardResponse leaderboard.
+                     * @member {xsuportal.proto.resources.ILeaderboard|null|undefined} leaderboard
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @instance
+                     */
+                    DashboardResponse.prototype.leaderboard = null;
+
+                    /**
+                     * DashboardResponse instances.
+                     * @member {Array.<xsuportal.proto.resources.IContestantInstance>} instances
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @instance
+                     */
+                    DashboardResponse.prototype.instances = $util.emptyArray;
+
+                    /**
+                     * DashboardResponse jobs.
+                     * @member {Array.<xsuportal.proto.resources.IBenchmarkJob>} jobs
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @instance
+                     */
+                    DashboardResponse.prototype.jobs = $util.emptyArray;
+
+                    /**
+                     * Creates a new DashboardResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IDashboardResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.DashboardResponse} DashboardResponse instance
+                     */
+                    DashboardResponse.create = function create(properties) {
+                        return new DashboardResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.DashboardResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IDashboardResponse} message DashboardResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.leaderboard != null && Object.hasOwnProperty.call(message, "leaderboard"))
+                            $root.xsuportal.proto.resources.Leaderboard.encode(message.leaderboard, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        if (message.instances != null && message.instances.length)
+                            for (var i = 0; i < message.instances.length; ++i)
+                                $root.xsuportal.proto.resources.ContestantInstance.encode(message.instances[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                        if (message.jobs != null && message.jobs.length)
+                            for (var i = 0; i < message.jobs.length; ++i)
+                                $root.xsuportal.proto.resources.BenchmarkJob.encode(message.jobs[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.DashboardResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IDashboardResponse} message DashboardResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    DashboardResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.DashboardResponse} DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.DashboardResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.leaderboard = $root.xsuportal.proto.resources.Leaderboard.decode(reader, reader.uint32());
+                                break;
+                            case 2:
+                                if (!(message.instances && message.instances.length))
+                                    message.instances = [];
+                                message.instances.push($root.xsuportal.proto.resources.ContestantInstance.decode(reader, reader.uint32()));
+                                break;
+                            case 3:
+                                if (!(message.jobs && message.jobs.length))
+                                    message.jobs = [];
+                                message.jobs.push($root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32()));
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.DashboardResponse} DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    DashboardResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a DashboardResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    DashboardResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.leaderboard != null && message.hasOwnProperty("leaderboard")) {
+                            var error = $root.xsuportal.proto.resources.Leaderboard.verify(message.leaderboard);
+                            if (error)
+                                return "leaderboard." + error;
+                        }
+                        if (message.instances != null && message.hasOwnProperty("instances")) {
+                            if (!Array.isArray(message.instances))
+                                return "instances: array expected";
+                            for (var i = 0; i < message.instances.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.ContestantInstance.verify(message.instances[i]);
+                                if (error)
+                                    return "instances." + error;
+                            }
+                        }
+                        if (message.jobs != null && message.hasOwnProperty("jobs")) {
+                            if (!Array.isArray(message.jobs))
+                                return "jobs: array expected";
+                            for (var i = 0; i < message.jobs.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.BenchmarkJob.verify(message.jobs[i]);
+                                if (error)
+                                    return "jobs." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.DashboardResponse} DashboardResponse
+                     */
+                    DashboardResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.DashboardResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.DashboardResponse();
+                        if (object.leaderboard != null) {
+                            if (typeof object.leaderboard !== "object")
+                                throw TypeError(".xsuportal.proto.services.contestant.DashboardResponse.leaderboard: object expected");
+                            message.leaderboard = $root.xsuportal.proto.resources.Leaderboard.fromObject(object.leaderboard);
+                        }
+                        if (object.instances) {
+                            if (!Array.isArray(object.instances))
+                                throw TypeError(".xsuportal.proto.services.contestant.DashboardResponse.instances: array expected");
+                            message.instances = [];
+                            for (var i = 0; i < object.instances.length; ++i) {
+                                if (typeof object.instances[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.contestant.DashboardResponse.instances: object expected");
+                                message.instances[i] = $root.xsuportal.proto.resources.ContestantInstance.fromObject(object.instances[i]);
+                            }
+                        }
+                        if (object.jobs) {
+                            if (!Array.isArray(object.jobs))
+                                throw TypeError(".xsuportal.proto.services.contestant.DashboardResponse.jobs: array expected");
+                            message.jobs = [];
+                            for (var i = 0; i < object.jobs.length; ++i) {
+                                if (typeof object.jobs[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.contestant.DashboardResponse.jobs: object expected");
+                                message.jobs[i] = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.jobs[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.DashboardResponse} message DashboardResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    DashboardResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults) {
+                            object.instances = [];
+                            object.jobs = [];
+                        }
+                        if (options.defaults)
+                            object.leaderboard = null;
+                        if (message.leaderboard != null && message.hasOwnProperty("leaderboard"))
+                            object.leaderboard = $root.xsuportal.proto.resources.Leaderboard.toObject(message.leaderboard, options);
+                        if (message.instances && message.instances.length) {
+                            object.instances = [];
+                            for (var j = 0; j < message.instances.length; ++j)
+                                object.instances[j] = $root.xsuportal.proto.resources.ContestantInstance.toObject(message.instances[j], options);
+                        }
+                        if (message.jobs && message.jobs.length) {
+                            object.jobs = [];
+                            for (var j = 0; j < message.jobs.length; ++j)
+                                object.jobs[j] = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.jobs[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this DashboardResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    DashboardResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return DashboardResponse;
+                })();
+
+                contestant.ListContestantInstancesRequest = (function() {
+
+                    /**
+                     * Properties of a ListContestantInstancesRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IListContestantInstancesRequest
+                     */
+
+                    /**
+                     * Constructs a new ListContestantInstancesRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a ListContestantInstancesRequest.
+                     * @implements IListContestantInstancesRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IListContestantInstancesRequest=} [properties] Properties to set
+                     */
+                    function ListContestantInstancesRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new ListContestantInstancesRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListContestantInstancesRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.ListContestantInstancesRequest} ListContestantInstancesRequest instance
+                     */
+                    ListContestantInstancesRequest.create = function create(properties) {
+                        return new ListContestantInstancesRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListContestantInstancesRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.ListContestantInstancesRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListContestantInstancesRequest} message ListContestantInstancesRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListContestantInstancesRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListContestantInstancesRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListContestantInstancesRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListContestantInstancesRequest} message ListContestantInstancesRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListContestantInstancesRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListContestantInstancesRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.ListContestantInstancesRequest} ListContestantInstancesRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListContestantInstancesRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.ListContestantInstancesRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListContestantInstancesRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.ListContestantInstancesRequest} ListContestantInstancesRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListContestantInstancesRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListContestantInstancesRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListContestantInstancesRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListContestantInstancesRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.ListContestantInstancesRequest} ListContestantInstancesRequest
+                     */
+                    ListContestantInstancesRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.ListContestantInstancesRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.ListContestantInstancesRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a ListContestantInstancesRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ListContestantInstancesRequest} message ListContestantInstancesRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListContestantInstancesRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this ListContestantInstancesRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListContestantInstancesRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListContestantInstancesRequest;
+                })();
+
+                contestant.ListContestantInstancesResponse = (function() {
+
+                    /**
+                     * Properties of a ListContestantInstancesResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IListContestantInstancesResponse
+                     * @property {Array.<xsuportal.proto.resources.IContestantInstance>|null} [contestantInstances] ListContestantInstancesResponse contestantInstances
+                     */
+
+                    /**
+                     * Constructs a new ListContestantInstancesResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a ListContestantInstancesResponse.
+                     * @implements IListContestantInstancesResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IListContestantInstancesResponse=} [properties] Properties to set
+                     */
+                    function ListContestantInstancesResponse(properties) {
+                        this.contestantInstances = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListContestantInstancesResponse contestantInstances.
+                     * @member {Array.<xsuportal.proto.resources.IContestantInstance>} contestantInstances
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesResponse
+                     * @instance
+                     */
+                    ListContestantInstancesResponse.prototype.contestantInstances = $util.emptyArray;
+
+                    /**
+                     * Creates a new ListContestantInstancesResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListContestantInstancesResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.ListContestantInstancesResponse} ListContestantInstancesResponse instance
+                     */
+                    ListContestantInstancesResponse.create = function create(properties) {
+                        return new ListContestantInstancesResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ListContestantInstancesResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.ListContestantInstancesResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListContestantInstancesResponse} message ListContestantInstancesResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListContestantInstancesResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.contestantInstances != null && message.contestantInstances.length)
+                            for (var i = 0; i < message.contestantInstances.length; ++i)
+                                $root.xsuportal.proto.resources.ContestantInstance.encode(message.contestantInstances[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ListContestantInstancesResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListContestantInstancesResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListContestantInstancesResponse} message ListContestantInstancesResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ListContestantInstancesResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ListContestantInstancesResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.ListContestantInstancesResponse} ListContestantInstancesResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListContestantInstancesResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.ListContestantInstancesResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                if (!(message.contestantInstances && message.contestantInstances.length))
+                                    message.contestantInstances = [];
+                                message.contestantInstances.push($root.xsuportal.proto.resources.ContestantInstance.decode(reader, reader.uint32()));
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ListContestantInstancesResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.ListContestantInstancesResponse} ListContestantInstancesResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ListContestantInstancesResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ListContestantInstancesResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListContestantInstancesResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.contestantInstances != null && message.hasOwnProperty("contestantInstances")) {
+                            if (!Array.isArray(message.contestantInstances))
+                                return "contestantInstances: array expected";
+                            for (var i = 0; i < message.contestantInstances.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.ContestantInstance.verify(message.contestantInstances[i]);
+                                if (error)
+                                    return "contestantInstances." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListContestantInstancesResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.ListContestantInstancesResponse} ListContestantInstancesResponse
+                     */
+                    ListContestantInstancesResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.ListContestantInstancesResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.ListContestantInstancesResponse();
+                        if (object.contestantInstances) {
+                            if (!Array.isArray(object.contestantInstances))
+                                throw TypeError(".xsuportal.proto.services.contestant.ListContestantInstancesResponse.contestantInstances: array expected");
+                            message.contestantInstances = [];
+                            for (var i = 0; i < object.contestantInstances.length; ++i) {
+                                if (typeof object.contestantInstances[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.contestant.ListContestantInstancesResponse.contestantInstances: object expected");
+                                message.contestantInstances[i] = $root.xsuportal.proto.resources.ContestantInstance.fromObject(object.contestantInstances[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListContestantInstancesResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ListContestantInstancesResponse} message ListContestantInstancesResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListContestantInstancesResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.contestantInstances = [];
+                        if (message.contestantInstances && message.contestantInstances.length) {
+                            object.contestantInstances = [];
+                            for (var j = 0; j < message.contestantInstances.length; ++j)
+                                object.contestantInstances[j] = $root.xsuportal.proto.resources.ContestantInstance.toObject(message.contestantInstances[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListContestantInstancesResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.ListContestantInstancesResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListContestantInstancesResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListContestantInstancesResponse;
+                })();
+
+                contestant.GetNotificationsRequest = (function() {
+
+                    /**
+                     * Properties of a GetNotificationsRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IGetNotificationsRequest
+                     */
+
+                    /**
+                     * Constructs a new GetNotificationsRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a GetNotificationsRequest.
+                     * @implements IGetNotificationsRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IGetNotificationsRequest=} [properties] Properties to set
+                     */
+                    function GetNotificationsRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new GetNotificationsRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetNotificationsRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.GetNotificationsRequest} GetNotificationsRequest instance
+                     */
+                    GetNotificationsRequest.create = function create(properties) {
+                        return new GetNotificationsRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetNotificationsRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetNotificationsRequest} message GetNotificationsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetNotificationsRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetNotificationsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetNotificationsRequest} message GetNotificationsRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetNotificationsRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetNotificationsRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.GetNotificationsRequest} GetNotificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetNotificationsRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.GetNotificationsRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetNotificationsRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.GetNotificationsRequest} GetNotificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetNotificationsRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetNotificationsRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetNotificationsRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetNotificationsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.GetNotificationsRequest} GetNotificationsRequest
+                     */
+                    GetNotificationsRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.GetNotificationsRequest)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.GetNotificationsRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a GetNotificationsRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.GetNotificationsRequest} message GetNotificationsRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetNotificationsRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this GetNotificationsRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetNotificationsRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetNotificationsRequest;
+                })();
+
+                contestant.GetNotificationsResponse = (function() {
+
+                    /**
+                     * Properties of a GetNotificationsResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IGetNotificationsResponse
+                     * @property {number|Long|null} [lastAnsweredClarificationId] GetNotificationsResponse lastAnsweredClarificationId
+                     */
+
+                    /**
+                     * Constructs a new GetNotificationsResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a GetNotificationsResponse.
+                     * @implements IGetNotificationsResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IGetNotificationsResponse=} [properties] Properties to set
+                     */
+                    function GetNotificationsResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetNotificationsResponse lastAnsweredClarificationId.
+                     * @member {number|Long} lastAnsweredClarificationId
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @instance
+                     */
+                    GetNotificationsResponse.prototype.lastAnsweredClarificationId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new GetNotificationsResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetNotificationsResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.GetNotificationsResponse} GetNotificationsResponse instance
+                     */
+                    GetNotificationsResponse.create = function create(properties) {
+                        return new GetNotificationsResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetNotificationsResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetNotificationsResponse} message GetNotificationsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetNotificationsResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.lastAnsweredClarificationId != null && Object.hasOwnProperty.call(message, "lastAnsweredClarificationId"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.lastAnsweredClarificationId);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetNotificationsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IGetNotificationsResponse} message GetNotificationsResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetNotificationsResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetNotificationsResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.GetNotificationsResponse} GetNotificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetNotificationsResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.GetNotificationsResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.lastAnsweredClarificationId = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetNotificationsResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.GetNotificationsResponse} GetNotificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetNotificationsResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetNotificationsResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetNotificationsResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.lastAnsweredClarificationId != null && message.hasOwnProperty("lastAnsweredClarificationId"))
+                            if (!$util.isInteger(message.lastAnsweredClarificationId) && !(message.lastAnsweredClarificationId && $util.isInteger(message.lastAnsweredClarificationId.low) && $util.isInteger(message.lastAnsweredClarificationId.high)))
+                                return "lastAnsweredClarificationId: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetNotificationsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.GetNotificationsResponse} GetNotificationsResponse
+                     */
+                    GetNotificationsResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.GetNotificationsResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.GetNotificationsResponse();
+                        if (object.lastAnsweredClarificationId != null)
+                            if ($util.Long)
+                                (message.lastAnsweredClarificationId = $util.Long.fromValue(object.lastAnsweredClarificationId)).unsigned = false;
+                            else if (typeof object.lastAnsweredClarificationId === "string")
+                                message.lastAnsweredClarificationId = parseInt(object.lastAnsweredClarificationId, 10);
+                            else if (typeof object.lastAnsweredClarificationId === "number")
+                                message.lastAnsweredClarificationId = object.lastAnsweredClarificationId;
+                            else if (typeof object.lastAnsweredClarificationId === "object")
+                                message.lastAnsweredClarificationId = new $util.LongBits(object.lastAnsweredClarificationId.low >>> 0, object.lastAnsweredClarificationId.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetNotificationsResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.GetNotificationsResponse} message GetNotificationsResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetNotificationsResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.lastAnsweredClarificationId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.lastAnsweredClarificationId = options.longs === String ? "0" : 0;
+                        if (message.lastAnsweredClarificationId != null && message.hasOwnProperty("lastAnsweredClarificationId"))
+                            if (typeof message.lastAnsweredClarificationId === "number")
+                                object.lastAnsweredClarificationId = options.longs === String ? String(message.lastAnsweredClarificationId) : message.lastAnsweredClarificationId;
+                            else
+                                object.lastAnsweredClarificationId = options.longs === String ? $util.Long.prototype.toString.call(message.lastAnsweredClarificationId) : options.longs === Number ? new $util.LongBits(message.lastAnsweredClarificationId.low >>> 0, message.lastAnsweredClarificationId.high >>> 0).toNumber() : message.lastAnsweredClarificationId;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetNotificationsResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetNotificationsResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetNotificationsResponse;
+                })();
+
+                return contestant;
             })();
 
             services.dcim = (function() {
@@ -10098,338 +20282,6 @@ $root.xsuportal = (function() {
             })();
 
             return services;
-        })();
-
-        proto.common = (function() {
-
-            /**
-             * Namespace common.
-             * @memberof xsuportal.proto
-             * @namespace
-             */
-            var common = {};
-
-            common.DashboardRequest = (function() {
-
-                /**
-                 * Properties of a DashboardRequest.
-                 * @memberof xsuportal.proto.common
-                 * @interface IDashboardRequest
-                 */
-
-                /**
-                 * Constructs a new DashboardRequest.
-                 * @memberof xsuportal.proto.common
-                 * @classdesc Represents a DashboardRequest.
-                 * @implements IDashboardRequest
-                 * @constructor
-                 * @param {xsuportal.proto.common.IDashboardRequest=} [properties] Properties to set
-                 */
-                function DashboardRequest(properties) {
-                    if (properties)
-                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * Creates a new DashboardRequest instance using the specified properties.
-                 * @function create
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardRequest=} [properties] Properties to set
-                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest instance
-                 */
-                DashboardRequest.create = function create(properties) {
-                    return new DashboardRequest(properties);
-                };
-
-                /**
-                 * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
-                 * @function encode
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardRequest} message DashboardRequest message or plain object to encode
-                 * @param {$protobuf.Writer} [writer] Writer to encode to
-                 * @returns {$protobuf.Writer} Writer
-                 */
-                DashboardRequest.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    return writer;
-                };
-
-                /**
-                 * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
-                 * @function encodeDelimited
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardRequest} message DashboardRequest message or plain object to encode
-                 * @param {$protobuf.Writer} [writer] Writer to encode to
-                 * @returns {$protobuf.Writer} Writer
-                 */
-                DashboardRequest.encodeDelimited = function encodeDelimited(message, writer) {
-                    return this.encode(message, writer).ldelim();
-                };
-
-                /**
-                 * Decodes a DashboardRequest message from the specified reader or buffer.
-                 * @function decode
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @param {number} [length] Message length if known beforehand
-                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                DashboardRequest.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.common.DashboardRequest();
-                    while (reader.pos < end) {
-                        var tag = reader.uint32();
-                        switch (tag >>> 3) {
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
-                        }
-                    }
-                    return message;
-                };
-
-                /**
-                 * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
-                 * @function decodeDelimited
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                DashboardRequest.decodeDelimited = function decodeDelimited(reader) {
-                    if (!(reader instanceof $Reader))
-                        reader = new $Reader(reader);
-                    return this.decode(reader, reader.uint32());
-                };
-
-                /**
-                 * Verifies a DashboardRequest message.
-                 * @function verify
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                DashboardRequest.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    return null;
-                };
-
-                /**
-                 * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {xsuportal.proto.common.DashboardRequest} DashboardRequest
-                 */
-                DashboardRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.xsuportal.proto.common.DashboardRequest)
-                        return object;
-                    return new $root.xsuportal.proto.common.DashboardRequest();
-                };
-
-                /**
-                 * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @static
-                 * @param {xsuportal.proto.common.DashboardRequest} message DashboardRequest
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                DashboardRequest.toObject = function toObject() {
-                    return {};
-                };
-
-                /**
-                 * Converts this DashboardRequest to JSON.
-                 * @function toJSON
-                 * @memberof xsuportal.proto.common.DashboardRequest
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                DashboardRequest.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return DashboardRequest;
-            })();
-
-            common.DashboardResponse = (function() {
-
-                /**
-                 * Properties of a DashboardResponse.
-                 * @memberof xsuportal.proto.common
-                 * @interface IDashboardResponse
-                 */
-
-                /**
-                 * Constructs a new DashboardResponse.
-                 * @memberof xsuportal.proto.common
-                 * @classdesc Represents a DashboardResponse.
-                 * @implements IDashboardResponse
-                 * @constructor
-                 * @param {xsuportal.proto.common.IDashboardResponse=} [properties] Properties to set
-                 */
-                function DashboardResponse(properties) {
-                    if (properties)
-                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * Creates a new DashboardResponse instance using the specified properties.
-                 * @function create
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardResponse=} [properties] Properties to set
-                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse instance
-                 */
-                DashboardResponse.create = function create(properties) {
-                    return new DashboardResponse(properties);
-                };
-
-                /**
-                 * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
-                 * @function encode
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardResponse} message DashboardResponse message or plain object to encode
-                 * @param {$protobuf.Writer} [writer] Writer to encode to
-                 * @returns {$protobuf.Writer} Writer
-                 */
-                DashboardResponse.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    return writer;
-                };
-
-                /**
-                 * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
-                 * @function encodeDelimited
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {xsuportal.proto.common.IDashboardResponse} message DashboardResponse message or plain object to encode
-                 * @param {$protobuf.Writer} [writer] Writer to encode to
-                 * @returns {$protobuf.Writer} Writer
-                 */
-                DashboardResponse.encodeDelimited = function encodeDelimited(message, writer) {
-                    return this.encode(message, writer).ldelim();
-                };
-
-                /**
-                 * Decodes a DashboardResponse message from the specified reader or buffer.
-                 * @function decode
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @param {number} [length] Message length if known beforehand
-                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                DashboardResponse.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.common.DashboardResponse();
-                    while (reader.pos < end) {
-                        var tag = reader.uint32();
-                        switch (tag >>> 3) {
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
-                        }
-                    }
-                    return message;
-                };
-
-                /**
-                 * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
-                 * @function decodeDelimited
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                DashboardResponse.decodeDelimited = function decodeDelimited(reader) {
-                    if (!(reader instanceof $Reader))
-                        reader = new $Reader(reader);
-                    return this.decode(reader, reader.uint32());
-                };
-
-                /**
-                 * Verifies a DashboardResponse message.
-                 * @function verify
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                DashboardResponse.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    return null;
-                };
-
-                /**
-                 * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {xsuportal.proto.common.DashboardResponse} DashboardResponse
-                 */
-                DashboardResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.xsuportal.proto.common.DashboardResponse)
-                        return object;
-                    return new $root.xsuportal.proto.common.DashboardResponse();
-                };
-
-                /**
-                 * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @static
-                 * @param {xsuportal.proto.common.DashboardResponse} message DashboardResponse
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                DashboardResponse.toObject = function toObject() {
-                    return {};
-                };
-
-                /**
-                 * Converts this DashboardResponse to JSON.
-                 * @function toJSON
-                 * @memberof xsuportal.proto.common.DashboardResponse
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                DashboardResponse.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return DashboardResponse;
-            })();
-
-            return common;
         })();
 
         return proto;

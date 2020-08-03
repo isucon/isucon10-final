@@ -16,6 +16,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :answer, :string, 6
       optional :created_at, :message, 7, "google.protobuf.Timestamp"
       optional :answered_at, :message, 8, "google.protobuf.Timestamp"
+      optional :original_question, :string, 9
       optional :team, :message, 16, "xsuportal.proto.resources.Team"
     end
   end

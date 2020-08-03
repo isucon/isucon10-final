@@ -1,0 +1,38 @@
+syntax = "proto3";
+package xsuportal.proto.services.admin;
+option go_package = "github.com/isucon/isucon10-final/proto/services/admin";
+
+import "xsuportal/resources/team.proto";
+import "xsuportal/resources/contestant.proto";
+
+message ListTeamsRequest {
+}
+
+message ListTeamsResponse {
+  repeated TeamListItem teams = 1;
+  message TeamListItem {
+    int64 team_id = 1;
+    string name = 2;
+    repeated string member_names = 3;
+    bool final_participation = 4;
+    bool is_student = 5;
+    bool withdrawn = 6;
+    bool disqualified = 7;
+  }
+}
+
+message GetTeamRequest {
+  int64 id = 1;
+}
+
+message GetTeamResponse {
+  xsuportal.proto.resources.Team team = 1;
+}
+
+message UpdateTeamRequest {
+  xsuportal.proto.resources.Team team = 1;
+  repeated xsuportal.proto.resources.Contestant contestants = 2;
+}
+
+message UpdateTeamResponse {
+}

@@ -21,13 +21,17 @@ message BenchmarkJob {
     FINISHED = 4;
   }
 
-  BenchmarkResult result = 5;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  google.protobuf.Timestamp started_at = 7;
+  google.protobuf.Timestamp finished_at = 8;
 
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp updated_at = 7;
-  google.protobuf.Timestamp started_at = 8;
-  google.protobuf.Timestamp finished_at = 9;
+  int64 score = 9;
+  // instance_name is not available for contestant
+  string instance_name = 10;
 
   Team team = 16;
+  // target & result are only available at GetBenchmarkJobResponse
   ContestantInstance target = 17;
+  BenchmarkResult result = 18;
 }

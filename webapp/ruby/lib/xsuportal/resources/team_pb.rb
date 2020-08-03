@@ -14,13 +14,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :final_participation, :bool, 5
       optional :hidden, :bool, 6
       optional :withdrawn, :bool, 7
+      optional :disqualified, :bool, 9
       optional :detail, :message, 8, "xsuportal.proto.resources.Team.TeamDetail"
       optional :leader, :message, 16, "xsuportal.proto.resources.Contestant"
       repeated :members, :message, 17, "xsuportal.proto.resources.Contestant"
     end
     add_message "xsuportal.proto.resources.Team.TeamDetail" do
       optional :email_address, :string, 1
-      optional :benchmark_target_id, :int64, 2
       optional :invite_token, :string, 16
     end
   end

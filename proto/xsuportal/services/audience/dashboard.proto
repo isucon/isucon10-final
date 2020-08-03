@@ -1,0 +1,14 @@
+syntax = "proto3";
+package xsuportal.proto.services.audience;
+option go_package = "github.com/isucon/isucon10-final/proto/services/audience";
+
+import "xsuportal/resources/leaderboard.proto";
+
+message DashboardRequest {
+}
+
+message DashboardResponse {
+  xsuportal.proto.resources.Leaderboard leaderboard = 1;
+}
+
+

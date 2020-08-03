@@ -1,0 +1,44 @@
+syntax = "proto3";
+package xsuportal.proto.services.admin;
+option go_package = "github.com/isucon/isucon10-final/proto/services/admin";
+
+import "xsuportal/resources/clarification.proto";
+
+message ListClarificationsRequest {
+  // optional to filter
+  int64 team_id = 1;
+}
+
+message ListClarificationsResponse {
+  repeated xsuportal.proto.resources.Clarification clarifications = 1;
+}
+
+message GetClarificationRequest {
+  int64 id = 1;
+}
+
+message GetClarificationResponse {
+  xsuportal.proto.resources.Clarification clarification = 1;
+}
+
+message RespondClarificationRequest {
+  int64 id = 1;
+  bool disclose = 2;
+  string answer = 3;
+  // optional to override original question
+  string question = 4;
+}
+
+message RespondClarificationResponse {
+  xsuportal.proto.resources.Clarification clarification = 1;
+}
+
+message CreateClarificationRequest {
+  int64 id = 1;
+  string answer = 2;
+  string question = 3;
+}
+
+message CreateClarificationResponse {
+  xsuportal.proto.resources.Clarification clarification = 1;
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+package xsuportal.proto.services.contestant;
+option go_package = "github.com/isucon/isucon10-final/proto/services/contestant";
+
+import "xsuportal/resources/clarification.proto";
+
+message ListClarificationsRequest {
+}
+
+message ListClarificationsResponse {
+  repeated xsuportal.proto.resources.Clarification clarifications = 1;
+}
+
+message RequestClarificationRequest {
+  string question = 1;
+}
+
+message RequestClarificationResponse {
+  xsuportal.proto.resources.Clarification clarification = 1;
+}

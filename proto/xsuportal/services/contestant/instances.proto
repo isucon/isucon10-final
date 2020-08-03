@@ -1,0 +1,13 @@
+syntax = "proto3";
+package xsuportal.proto.services.contestant;
+option go_package = "github.com/isucon/isucon10-final/proto/services/contestant";
+
+import "xsuportal/resources/contestant_instance.proto";
+
+message ListContestantInstancesRequest {
+}
+
+message ListContestantInstancesResponse {
+  repeated xsuportal.proto.resources.ContestantInstance contestant_instances = 1;
+}
+

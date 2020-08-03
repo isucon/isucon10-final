@@ -352,9 +352,6 @@ export namespace xsuportal {
                 /** BenchmarkJob status */
                 status?: (xsuportal.proto.resources.BenchmarkJob.Status|null);
 
-                /** BenchmarkJob result */
-                result?: (xsuportal.proto.resources.IBenchmarkResult|null);
-
                 /** BenchmarkJob createdAt */
                 createdAt?: (google.protobuf.ITimestamp|null);
 
@@ -367,11 +364,20 @@ export namespace xsuportal {
                 /** BenchmarkJob finishedAt */
                 finishedAt?: (google.protobuf.ITimestamp|null);
 
+                /** BenchmarkJob score */
+                score?: (number|Long|null);
+
+                /** BenchmarkJob instanceName */
+                instanceName?: (string|null);
+
                 /** BenchmarkJob team */
                 team?: (xsuportal.proto.resources.ITeam|null);
 
                 /** BenchmarkJob target */
                 target?: (xsuportal.proto.resources.IContestantInstance|null);
+
+                /** BenchmarkJob result */
+                result?: (xsuportal.proto.resources.IBenchmarkResult|null);
             }
 
             /** Represents a BenchmarkJob. */
@@ -395,9 +401,6 @@ export namespace xsuportal {
                 /** BenchmarkJob status. */
                 public status: xsuportal.proto.resources.BenchmarkJob.Status;
 
-                /** BenchmarkJob result. */
-                public result?: (xsuportal.proto.resources.IBenchmarkResult|null);
-
                 /** BenchmarkJob createdAt. */
                 public createdAt?: (google.protobuf.ITimestamp|null);
 
@@ -410,11 +413,20 @@ export namespace xsuportal {
                 /** BenchmarkJob finishedAt. */
                 public finishedAt?: (google.protobuf.ITimestamp|null);
 
+                /** BenchmarkJob score. */
+                public score: (number|Long);
+
+                /** BenchmarkJob instanceName. */
+                public instanceName: string;
+
                 /** BenchmarkJob team. */
                 public team?: (xsuportal.proto.resources.ITeam|null);
 
                 /** BenchmarkJob target. */
                 public target?: (xsuportal.proto.resources.IContestantInstance|null);
+
+                /** BenchmarkJob result. */
+                public result?: (xsuportal.proto.resources.IBenchmarkResult|null);
 
                 /**
                  * Creates a new BenchmarkJob instance using the specified properties.
@@ -983,6 +995,9 @@ export namespace xsuportal {
                 /** Team withdrawn */
                 withdrawn?: (boolean|null);
 
+                /** Team disqualified */
+                disqualified?: (boolean|null);
+
                 /** Team detail */
                 detail?: (xsuportal.proto.resources.Team.ITeamDetail|null);
 
@@ -1022,6 +1037,9 @@ export namespace xsuportal {
 
                 /** Team withdrawn. */
                 public withdrawn: boolean;
+
+                /** Team disqualified. */
+                public disqualified: boolean;
 
                 /** Team detail. */
                 public detail?: (xsuportal.proto.resources.Team.ITeamDetail|null);
@@ -1111,9 +1129,6 @@ export namespace xsuportal {
                     /** TeamDetail emailAddress */
                     emailAddress?: (string|null);
 
-                    /** TeamDetail benchmarkTargetId */
-                    benchmarkTargetId?: (number|Long|null);
-
                     /** TeamDetail inviteToken */
                     inviteToken?: (string|null);
                 }
@@ -1129,9 +1144,6 @@ export namespace xsuportal {
 
                     /** TeamDetail emailAddress. */
                     public emailAddress: string;
-
-                    /** TeamDetail benchmarkTargetId. */
-                    public benchmarkTargetId: (number|Long);
 
                     /** TeamDetail inviteToken. */
                     public inviteToken: string;
@@ -1343,6 +1355,9 @@ export namespace xsuportal {
                 /** Clarification answeredAt */
                 answeredAt?: (google.protobuf.ITimestamp|null);
 
+                /** Clarification originalQuestion */
+                originalQuestion?: (string|null);
+
                 /** Clarification team */
                 team?: (xsuportal.proto.resources.ITeam|null);
             }
@@ -1379,6 +1394,9 @@ export namespace xsuportal {
 
                 /** Clarification answeredAt. */
                 public answeredAt?: (google.protobuf.ITimestamp|null);
+
+                /** Clarification originalQuestion. */
+                public originalQuestion: string;
 
                 /** Clarification team. */
                 public team?: (xsuportal.proto.resources.ITeam|null);
@@ -1452,6 +1470,324 @@ export namespace xsuportal {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Leaderboard. */
+            interface ILeaderboard {
+
+                /** Leaderboard teams */
+                teams?: (xsuportal.proto.resources.Leaderboard.ILeaderboardItem[]|null);
+
+                /** Leaderboard generalTeams */
+                generalTeams?: (xsuportal.proto.resources.Leaderboard.ILeaderboardItem[]|null);
+
+                /** Leaderboard studentTeams */
+                studentTeams?: (xsuportal.proto.resources.Leaderboard.ILeaderboardItem[]|null);
+
+                /** Leaderboard progresses */
+                progresses?: (xsuportal.proto.resources.Leaderboard.ILeaderboardItem[]|null);
+
+                /** Leaderboard frozen */
+                frozen?: (boolean|null);
+            }
+
+            /** Represents a Leaderboard. */
+            class Leaderboard implements ILeaderboard {
+
+                /**
+                 * Constructs a new Leaderboard.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: xsuportal.proto.resources.ILeaderboard);
+
+                /** Leaderboard teams. */
+                public teams: xsuportal.proto.resources.Leaderboard.ILeaderboardItem[];
+
+                /** Leaderboard generalTeams. */
+                public generalTeams: xsuportal.proto.resources.Leaderboard.ILeaderboardItem[];
+
+                /** Leaderboard studentTeams. */
+                public studentTeams: xsuportal.proto.resources.Leaderboard.ILeaderboardItem[];
+
+                /** Leaderboard progresses. */
+                public progresses: xsuportal.proto.resources.Leaderboard.ILeaderboardItem[];
+
+                /** Leaderboard frozen. */
+                public frozen: boolean;
+
+                /**
+                 * Creates a new Leaderboard instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns Leaderboard instance
+                 */
+                public static create(properties?: xsuportal.proto.resources.ILeaderboard): xsuportal.proto.resources.Leaderboard;
+
+                /**
+                 * Encodes the specified Leaderboard message. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.verify|verify} messages.
+                 * @param message Leaderboard message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: xsuportal.proto.resources.ILeaderboard, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified Leaderboard message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.verify|verify} messages.
+                 * @param message Leaderboard message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: xsuportal.proto.resources.ILeaderboard, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a Leaderboard message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns Leaderboard
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Leaderboard;
+
+                /**
+                 * Decodes a Leaderboard message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns Leaderboard
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Leaderboard;
+
+                /**
+                 * Verifies a Leaderboard message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Leaderboard message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Leaderboard
+                 */
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Leaderboard;
+
+                /**
+                 * Creates a plain object from a Leaderboard message. Also converts values to other types if specified.
+                 * @param message Leaderboard
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: xsuportal.proto.resources.Leaderboard, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Leaderboard to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace Leaderboard {
+
+                /** Properties of a LeaderboardItem. */
+                interface ILeaderboardItem {
+
+                    /** LeaderboardItem scores */
+                    scores?: (xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore[]|null);
+
+                    /** LeaderboardItem team */
+                    team?: (xsuportal.proto.resources.ITeam|null);
+                }
+
+                /** Represents a LeaderboardItem. */
+                class LeaderboardItem implements ILeaderboardItem {
+
+                    /**
+                     * Constructs a new LeaderboardItem.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.resources.Leaderboard.ILeaderboardItem);
+
+                    /** LeaderboardItem scores. */
+                    public scores: xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore[];
+
+                    /** LeaderboardItem team. */
+                    public team?: (xsuportal.proto.resources.ITeam|null);
+
+                    /**
+                     * Creates a new LeaderboardItem instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns LeaderboardItem instance
+                     */
+                    public static create(properties?: xsuportal.proto.resources.Leaderboard.ILeaderboardItem): xsuportal.proto.resources.Leaderboard.LeaderboardItem;
+
+                    /**
+                     * Encodes the specified LeaderboardItem message. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.LeaderboardItem.verify|verify} messages.
+                     * @param message LeaderboardItem message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.resources.Leaderboard.ILeaderboardItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified LeaderboardItem message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.LeaderboardItem.verify|verify} messages.
+                     * @param message LeaderboardItem message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.resources.Leaderboard.ILeaderboardItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a LeaderboardItem message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns LeaderboardItem
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Leaderboard.LeaderboardItem;
+
+                    /**
+                     * Decodes a LeaderboardItem message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns LeaderboardItem
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Leaderboard.LeaderboardItem;
+
+                    /**
+                     * Verifies a LeaderboardItem message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LeaderboardItem message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LeaderboardItem
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Leaderboard.LeaderboardItem;
+
+                    /**
+                     * Creates a plain object from a LeaderboardItem message. Also converts values to other types if specified.
+                     * @param message LeaderboardItem
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.resources.Leaderboard.LeaderboardItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LeaderboardItem to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace LeaderboardItem {
+
+                    /** Properties of a LeaderboardScore. */
+                    interface ILeaderboardScore {
+
+                        /** LeaderboardScore score */
+                        score?: (number|Long|null);
+
+                        /** LeaderboardScore startedAt */
+                        startedAt?: (google.protobuf.ITimestamp|null);
+
+                        /** LeaderboardScore updatedAt */
+                        updatedAt?: (google.protobuf.ITimestamp|null);
+                    }
+
+                    /** Represents a LeaderboardScore. */
+                    class LeaderboardScore implements ILeaderboardScore {
+
+                        /**
+                         * Constructs a new LeaderboardScore.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore);
+
+                        /** LeaderboardScore score. */
+                        public score: (number|Long);
+
+                        /** LeaderboardScore startedAt. */
+                        public startedAt?: (google.protobuf.ITimestamp|null);
+
+                        /** LeaderboardScore updatedAt. */
+                        public updatedAt?: (google.protobuf.ITimestamp|null);
+
+                        /**
+                         * Creates a new LeaderboardScore instance using the specified properties.
+                         * @param [properties] Properties to set
+                         * @returns LeaderboardScore instance
+                         */
+                        public static create(properties?: xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore): xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore;
+
+                        /**
+                         * Encodes the specified LeaderboardScore message. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.verify|verify} messages.
+                         * @param message LeaderboardScore message or plain object to encode
+                         * @param [writer] Writer to encode to
+                         * @returns Writer
+                         */
+                        public static encode(message: xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                        /**
+                         * Encodes the specified LeaderboardScore message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.verify|verify} messages.
+                         * @param message LeaderboardScore message or plain object to encode
+                         * @param [writer] Writer to encode to
+                         * @returns Writer
+                         */
+                        public static encodeDelimited(message: xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                        /**
+                         * Decodes a LeaderboardScore message from the specified reader or buffer.
+                         * @param reader Reader or buffer to decode from
+                         * @param [length] Message length if known beforehand
+                         * @returns LeaderboardScore
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore;
+
+                        /**
+                         * Decodes a LeaderboardScore message from the specified reader or buffer, length delimited.
+                         * @param reader Reader or buffer to decode from
+                         * @returns LeaderboardScore
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore;
+
+                        /**
+                         * Verifies a LeaderboardScore message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a LeaderboardScore message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns LeaderboardScore
+                         */
+                        public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore;
+
+                        /**
+                         * Creates a plain object from a LeaderboardScore message. Also converts values to other types if specified.
+                         * @param message LeaderboardScore
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this LeaderboardScore to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
             }
 
             /** Properties of a Staff. */
@@ -2089,6 +2425,1842 @@ export namespace xsuportal {
             /** Namespace admin. */
             namespace admin {
 
+                /** Properties of a ListBenchmarkJobsRequest. */
+                interface IListBenchmarkJobsRequest {
+
+                    /** ListBenchmarkJobsRequest teamId */
+                    teamId?: (number|Long|null);
+
+                    /** ListBenchmarkJobsRequest incompleteOnly */
+                    incompleteOnly?: (boolean|null);
+                }
+
+                /** Represents a ListBenchmarkJobsRequest. */
+                class ListBenchmarkJobsRequest implements IListBenchmarkJobsRequest {
+
+                    /**
+                     * Constructs a new ListBenchmarkJobsRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IListBenchmarkJobsRequest);
+
+                    /** ListBenchmarkJobsRequest teamId. */
+                    public teamId: (number|Long);
+
+                    /** ListBenchmarkJobsRequest incompleteOnly. */
+                    public incompleteOnly: boolean;
+
+                    /**
+                     * Creates a new ListBenchmarkJobsRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListBenchmarkJobsRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IListBenchmarkJobsRequest): xsuportal.proto.services.admin.ListBenchmarkJobsRequest;
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsRequest message. Does not implicitly {@link xsuportal.proto.services.admin.ListBenchmarkJobsRequest.verify|verify} messages.
+                     * @param message ListBenchmarkJobsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IListBenchmarkJobsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListBenchmarkJobsRequest.verify|verify} messages.
+                     * @param message ListBenchmarkJobsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IListBenchmarkJobsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListBenchmarkJobsRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListBenchmarkJobsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.ListBenchmarkJobsRequest;
+
+                    /**
+                     * Decodes a ListBenchmarkJobsRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListBenchmarkJobsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.ListBenchmarkJobsRequest;
+
+                    /**
+                     * Verifies a ListBenchmarkJobsRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListBenchmarkJobsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListBenchmarkJobsRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.ListBenchmarkJobsRequest;
+
+                    /**
+                     * Creates a plain object from a ListBenchmarkJobsRequest message. Also converts values to other types if specified.
+                     * @param message ListBenchmarkJobsRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.ListBenchmarkJobsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListBenchmarkJobsRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListBenchmarkJobsResponse. */
+                interface IListBenchmarkJobsResponse {
+
+                    /** ListBenchmarkJobsResponse jobs */
+                    jobs?: (xsuportal.proto.resources.IBenchmarkJob[]|null);
+                }
+
+                /** Represents a ListBenchmarkJobsResponse. */
+                class ListBenchmarkJobsResponse implements IListBenchmarkJobsResponse {
+
+                    /**
+                     * Constructs a new ListBenchmarkJobsResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IListBenchmarkJobsResponse);
+
+                    /** ListBenchmarkJobsResponse jobs. */
+                    public jobs: xsuportal.proto.resources.IBenchmarkJob[];
+
+                    /**
+                     * Creates a new ListBenchmarkJobsResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListBenchmarkJobsResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IListBenchmarkJobsResponse): xsuportal.proto.services.admin.ListBenchmarkJobsResponse;
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsResponse message. Does not implicitly {@link xsuportal.proto.services.admin.ListBenchmarkJobsResponse.verify|verify} messages.
+                     * @param message ListBenchmarkJobsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IListBenchmarkJobsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListBenchmarkJobsResponse.verify|verify} messages.
+                     * @param message ListBenchmarkJobsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IListBenchmarkJobsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListBenchmarkJobsResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListBenchmarkJobsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.ListBenchmarkJobsResponse;
+
+                    /**
+                     * Decodes a ListBenchmarkJobsResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListBenchmarkJobsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.ListBenchmarkJobsResponse;
+
+                    /**
+                     * Verifies a ListBenchmarkJobsResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListBenchmarkJobsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListBenchmarkJobsResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.ListBenchmarkJobsResponse;
+
+                    /**
+                     * Creates a plain object from a ListBenchmarkJobsResponse message. Also converts values to other types if specified.
+                     * @param message ListBenchmarkJobsResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.ListBenchmarkJobsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListBenchmarkJobsResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an EnqueueBenchmarkJobRequest. */
+                interface IEnqueueBenchmarkJobRequest {
+
+                    /** EnqueueBenchmarkJobRequest teamId */
+                    teamId?: (number|Long|null);
+
+                    /** EnqueueBenchmarkJobRequest targetId */
+                    targetId?: (number|Long|null);
+                }
+
+                /** Represents an EnqueueBenchmarkJobRequest. */
+                class EnqueueBenchmarkJobRequest implements IEnqueueBenchmarkJobRequest {
+
+                    /**
+                     * Constructs a new EnqueueBenchmarkJobRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IEnqueueBenchmarkJobRequest);
+
+                    /** EnqueueBenchmarkJobRequest teamId. */
+                    public teamId: (number|Long);
+
+                    /** EnqueueBenchmarkJobRequest targetId. */
+                    public targetId: (number|Long);
+
+                    /**
+                     * Creates a new EnqueueBenchmarkJobRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns EnqueueBenchmarkJobRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IEnqueueBenchmarkJobRequest): xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest;
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobRequest message. Does not implicitly {@link xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest.verify|verify} messages.
+                     * @param message EnqueueBenchmarkJobRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IEnqueueBenchmarkJobRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest.verify|verify} messages.
+                     * @param message EnqueueBenchmarkJobRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IEnqueueBenchmarkJobRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns EnqueueBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest;
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns EnqueueBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest;
+
+                    /**
+                     * Verifies an EnqueueBenchmarkJobRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an EnqueueBenchmarkJobRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns EnqueueBenchmarkJobRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest;
+
+                    /**
+                     * Creates a plain object from an EnqueueBenchmarkJobRequest message. Also converts values to other types if specified.
+                     * @param message EnqueueBenchmarkJobRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.EnqueueBenchmarkJobRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this EnqueueBenchmarkJobRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an EnqueueBenchmarkJobResponse. */
+                interface IEnqueueBenchmarkJobResponse {
+
+                    /** EnqueueBenchmarkJobResponse job */
+                    job?: (xsuportal.proto.resources.IBenchmarkJob|null);
+                }
+
+                /** Represents an EnqueueBenchmarkJobResponse. */
+                class EnqueueBenchmarkJobResponse implements IEnqueueBenchmarkJobResponse {
+
+                    /**
+                     * Constructs a new EnqueueBenchmarkJobResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IEnqueueBenchmarkJobResponse);
+
+                    /** EnqueueBenchmarkJobResponse job. */
+                    public job?: (xsuportal.proto.resources.IBenchmarkJob|null);
+
+                    /**
+                     * Creates a new EnqueueBenchmarkJobResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns EnqueueBenchmarkJobResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IEnqueueBenchmarkJobResponse): xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse;
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse.verify|verify} messages.
+                     * @param message EnqueueBenchmarkJobResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IEnqueueBenchmarkJobResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse.verify|verify} messages.
+                     * @param message EnqueueBenchmarkJobResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IEnqueueBenchmarkJobResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns EnqueueBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse;
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns EnqueueBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse;
+
+                    /**
+                     * Verifies an EnqueueBenchmarkJobResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an EnqueueBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns EnqueueBenchmarkJobResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse;
+
+                    /**
+                     * Creates a plain object from an EnqueueBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @param message EnqueueBenchmarkJobResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.EnqueueBenchmarkJobResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this EnqueueBenchmarkJobResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a CancelBenchmarkJobRequest. */
+                interface ICancelBenchmarkJobRequest {
+
+                    /** CancelBenchmarkJobRequest id */
+                    id?: (number|Long|null);
+                }
+
+                /** Represents a CancelBenchmarkJobRequest. */
+                class CancelBenchmarkJobRequest implements ICancelBenchmarkJobRequest {
+
+                    /**
+                     * Constructs a new CancelBenchmarkJobRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.ICancelBenchmarkJobRequest);
+
+                    /** CancelBenchmarkJobRequest id. */
+                    public id: (number|Long);
+
+                    /**
+                     * Creates a new CancelBenchmarkJobRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns CancelBenchmarkJobRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.ICancelBenchmarkJobRequest): xsuportal.proto.services.admin.CancelBenchmarkJobRequest;
+
+                    /**
+                     * Encodes the specified CancelBenchmarkJobRequest message. Does not implicitly {@link xsuportal.proto.services.admin.CancelBenchmarkJobRequest.verify|verify} messages.
+                     * @param message CancelBenchmarkJobRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.ICancelBenchmarkJobRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified CancelBenchmarkJobRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.CancelBenchmarkJobRequest.verify|verify} messages.
+                     * @param message CancelBenchmarkJobRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.ICancelBenchmarkJobRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a CancelBenchmarkJobRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns CancelBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.CancelBenchmarkJobRequest;
+
+                    /**
+                     * Decodes a CancelBenchmarkJobRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns CancelBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.CancelBenchmarkJobRequest;
+
+                    /**
+                     * Verifies a CancelBenchmarkJobRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a CancelBenchmarkJobRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns CancelBenchmarkJobRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.CancelBenchmarkJobRequest;
+
+                    /**
+                     * Creates a plain object from a CancelBenchmarkJobRequest message. Also converts values to other types if specified.
+                     * @param message CancelBenchmarkJobRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.CancelBenchmarkJobRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this CancelBenchmarkJobRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a CancelBenchmarkJobResponse. */
+                interface ICancelBenchmarkJobResponse {
+
+                    /** CancelBenchmarkJobResponse job */
+                    job?: (xsuportal.proto.resources.IBenchmarkJob|null);
+                }
+
+                /** Represents a CancelBenchmarkJobResponse. */
+                class CancelBenchmarkJobResponse implements ICancelBenchmarkJobResponse {
+
+                    /**
+                     * Constructs a new CancelBenchmarkJobResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.ICancelBenchmarkJobResponse);
+
+                    /** CancelBenchmarkJobResponse job. */
+                    public job?: (xsuportal.proto.resources.IBenchmarkJob|null);
+
+                    /**
+                     * Creates a new CancelBenchmarkJobResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns CancelBenchmarkJobResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.ICancelBenchmarkJobResponse): xsuportal.proto.services.admin.CancelBenchmarkJobResponse;
+
+                    /**
+                     * Encodes the specified CancelBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.admin.CancelBenchmarkJobResponse.verify|verify} messages.
+                     * @param message CancelBenchmarkJobResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.ICancelBenchmarkJobResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified CancelBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.CancelBenchmarkJobResponse.verify|verify} messages.
+                     * @param message CancelBenchmarkJobResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.ICancelBenchmarkJobResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a CancelBenchmarkJobResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns CancelBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.CancelBenchmarkJobResponse;
+
+                    /**
+                     * Decodes a CancelBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns CancelBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.CancelBenchmarkJobResponse;
+
+                    /**
+                     * Verifies a CancelBenchmarkJobResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a CancelBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns CancelBenchmarkJobResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.CancelBenchmarkJobResponse;
+
+                    /**
+                     * Creates a plain object from a CancelBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @param message CancelBenchmarkJobResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.CancelBenchmarkJobResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this CancelBenchmarkJobResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetBenchmarkJobQuery. */
+                interface IGetBenchmarkJobQuery {
+
+                    /** GetBenchmarkJobQuery id */
+                    id?: (number|Long|null);
+                }
+
+                /** Represents a GetBenchmarkJobQuery. */
+                class GetBenchmarkJobQuery implements IGetBenchmarkJobQuery {
+
+                    /**
+                     * Constructs a new GetBenchmarkJobQuery.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IGetBenchmarkJobQuery);
+
+                    /** GetBenchmarkJobQuery id. */
+                    public id: (number|Long);
+
+                    /**
+                     * Creates a new GetBenchmarkJobQuery instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetBenchmarkJobQuery instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IGetBenchmarkJobQuery): xsuportal.proto.services.admin.GetBenchmarkJobQuery;
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobQuery message. Does not implicitly {@link xsuportal.proto.services.admin.GetBenchmarkJobQuery.verify|verify} messages.
+                     * @param message GetBenchmarkJobQuery message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IGetBenchmarkJobQuery, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobQuery message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetBenchmarkJobQuery.verify|verify} messages.
+                     * @param message GetBenchmarkJobQuery message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IGetBenchmarkJobQuery, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetBenchmarkJobQuery message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetBenchmarkJobQuery
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.GetBenchmarkJobQuery;
+
+                    /**
+                     * Decodes a GetBenchmarkJobQuery message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetBenchmarkJobQuery
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.GetBenchmarkJobQuery;
+
+                    /**
+                     * Verifies a GetBenchmarkJobQuery message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetBenchmarkJobQuery message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetBenchmarkJobQuery
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.GetBenchmarkJobQuery;
+
+                    /**
+                     * Creates a plain object from a GetBenchmarkJobQuery message. Also converts values to other types if specified.
+                     * @param message GetBenchmarkJobQuery
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.GetBenchmarkJobQuery, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetBenchmarkJobQuery to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetBenchmarkJobResponse. */
+                interface IGetBenchmarkJobResponse {
+
+                    /** GetBenchmarkJobResponse job */
+                    job?: (xsuportal.proto.resources.IBenchmarkJob|null);
+                }
+
+                /** Represents a GetBenchmarkJobResponse. */
+                class GetBenchmarkJobResponse implements IGetBenchmarkJobResponse {
+
+                    /**
+                     * Constructs a new GetBenchmarkJobResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IGetBenchmarkJobResponse);
+
+                    /** GetBenchmarkJobResponse job. */
+                    public job?: (xsuportal.proto.resources.IBenchmarkJob|null);
+
+                    /**
+                     * Creates a new GetBenchmarkJobResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetBenchmarkJobResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IGetBenchmarkJobResponse): xsuportal.proto.services.admin.GetBenchmarkJobResponse;
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.admin.GetBenchmarkJobResponse.verify|verify} messages.
+                     * @param message GetBenchmarkJobResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IGetBenchmarkJobResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetBenchmarkJobResponse.verify|verify} messages.
+                     * @param message GetBenchmarkJobResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IGetBenchmarkJobResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetBenchmarkJobResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.GetBenchmarkJobResponse;
+
+                    /**
+                     * Decodes a GetBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.GetBenchmarkJobResponse;
+
+                    /**
+                     * Verifies a GetBenchmarkJobResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetBenchmarkJobResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.GetBenchmarkJobResponse;
+
+                    /**
+                     * Creates a plain object from a GetBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @param message GetBenchmarkJobResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.GetBenchmarkJobResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetBenchmarkJobResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListClarificationsRequest. */
+                interface IListClarificationsRequest {
+
+                    /** ListClarificationsRequest teamId */
+                    teamId?: (number|Long|null);
+                }
+
+                /** Represents a ListClarificationsRequest. */
+                class ListClarificationsRequest implements IListClarificationsRequest {
+
+                    /**
+                     * Constructs a new ListClarificationsRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IListClarificationsRequest);
+
+                    /** ListClarificationsRequest teamId. */
+                    public teamId: (number|Long);
+
+                    /**
+                     * Creates a new ListClarificationsRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListClarificationsRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IListClarificationsRequest): xsuportal.proto.services.admin.ListClarificationsRequest;
+
+                    /**
+                     * Encodes the specified ListClarificationsRequest message. Does not implicitly {@link xsuportal.proto.services.admin.ListClarificationsRequest.verify|verify} messages.
+                     * @param message ListClarificationsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IListClarificationsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListClarificationsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListClarificationsRequest.verify|verify} messages.
+                     * @param message ListClarificationsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IListClarificationsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListClarificationsRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListClarificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.ListClarificationsRequest;
+
+                    /**
+                     * Decodes a ListClarificationsRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListClarificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.ListClarificationsRequest;
+
+                    /**
+                     * Verifies a ListClarificationsRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListClarificationsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListClarificationsRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.ListClarificationsRequest;
+
+                    /**
+                     * Creates a plain object from a ListClarificationsRequest message. Also converts values to other types if specified.
+                     * @param message ListClarificationsRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.ListClarificationsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListClarificationsRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListClarificationsResponse. */
+                interface IListClarificationsResponse {
+
+                    /** ListClarificationsResponse clarifications */
+                    clarifications?: (xsuportal.proto.resources.IClarification[]|null);
+                }
+
+                /** Represents a ListClarificationsResponse. */
+                class ListClarificationsResponse implements IListClarificationsResponse {
+
+                    /**
+                     * Constructs a new ListClarificationsResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IListClarificationsResponse);
+
+                    /** ListClarificationsResponse clarifications. */
+                    public clarifications: xsuportal.proto.resources.IClarification[];
+
+                    /**
+                     * Creates a new ListClarificationsResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListClarificationsResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IListClarificationsResponse): xsuportal.proto.services.admin.ListClarificationsResponse;
+
+                    /**
+                     * Encodes the specified ListClarificationsResponse message. Does not implicitly {@link xsuportal.proto.services.admin.ListClarificationsResponse.verify|verify} messages.
+                     * @param message ListClarificationsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IListClarificationsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListClarificationsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListClarificationsResponse.verify|verify} messages.
+                     * @param message ListClarificationsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IListClarificationsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListClarificationsResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListClarificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.ListClarificationsResponse;
+
+                    /**
+                     * Decodes a ListClarificationsResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListClarificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.ListClarificationsResponse;
+
+                    /**
+                     * Verifies a ListClarificationsResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListClarificationsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListClarificationsResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.ListClarificationsResponse;
+
+                    /**
+                     * Creates a plain object from a ListClarificationsResponse message. Also converts values to other types if specified.
+                     * @param message ListClarificationsResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.ListClarificationsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListClarificationsResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetClarificationRequest. */
+                interface IGetClarificationRequest {
+
+                    /** GetClarificationRequest id */
+                    id?: (number|Long|null);
+                }
+
+                /** Represents a GetClarificationRequest. */
+                class GetClarificationRequest implements IGetClarificationRequest {
+
+                    /**
+                     * Constructs a new GetClarificationRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IGetClarificationRequest);
+
+                    /** GetClarificationRequest id. */
+                    public id: (number|Long);
+
+                    /**
+                     * Creates a new GetClarificationRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetClarificationRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IGetClarificationRequest): xsuportal.proto.services.admin.GetClarificationRequest;
+
+                    /**
+                     * Encodes the specified GetClarificationRequest message. Does not implicitly {@link xsuportal.proto.services.admin.GetClarificationRequest.verify|verify} messages.
+                     * @param message GetClarificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IGetClarificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetClarificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetClarificationRequest.verify|verify} messages.
+                     * @param message GetClarificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IGetClarificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetClarificationRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.GetClarificationRequest;
+
+                    /**
+                     * Decodes a GetClarificationRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.GetClarificationRequest;
+
+                    /**
+                     * Verifies a GetClarificationRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetClarificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetClarificationRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.GetClarificationRequest;
+
+                    /**
+                     * Creates a plain object from a GetClarificationRequest message. Also converts values to other types if specified.
+                     * @param message GetClarificationRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.GetClarificationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetClarificationRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetClarificationResponse. */
+                interface IGetClarificationResponse {
+
+                    /** GetClarificationResponse clarification */
+                    clarification?: (xsuportal.proto.resources.IClarification|null);
+                }
+
+                /** Represents a GetClarificationResponse. */
+                class GetClarificationResponse implements IGetClarificationResponse {
+
+                    /**
+                     * Constructs a new GetClarificationResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IGetClarificationResponse);
+
+                    /** GetClarificationResponse clarification. */
+                    public clarification?: (xsuportal.proto.resources.IClarification|null);
+
+                    /**
+                     * Creates a new GetClarificationResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetClarificationResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IGetClarificationResponse): xsuportal.proto.services.admin.GetClarificationResponse;
+
+                    /**
+                     * Encodes the specified GetClarificationResponse message. Does not implicitly {@link xsuportal.proto.services.admin.GetClarificationResponse.verify|verify} messages.
+                     * @param message GetClarificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IGetClarificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetClarificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetClarificationResponse.verify|verify} messages.
+                     * @param message GetClarificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IGetClarificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetClarificationResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.GetClarificationResponse;
+
+                    /**
+                     * Decodes a GetClarificationResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.GetClarificationResponse;
+
+                    /**
+                     * Verifies a GetClarificationResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetClarificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetClarificationResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.GetClarificationResponse;
+
+                    /**
+                     * Creates a plain object from a GetClarificationResponse message. Also converts values to other types if specified.
+                     * @param message GetClarificationResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.GetClarificationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetClarificationResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a RespondClarificationRequest. */
+                interface IRespondClarificationRequest {
+
+                    /** RespondClarificationRequest id */
+                    id?: (number|Long|null);
+
+                    /** RespondClarificationRequest disclose */
+                    disclose?: (boolean|null);
+
+                    /** RespondClarificationRequest answer */
+                    answer?: (string|null);
+
+                    /** RespondClarificationRequest question */
+                    question?: (string|null);
+                }
+
+                /** Represents a RespondClarificationRequest. */
+                class RespondClarificationRequest implements IRespondClarificationRequest {
+
+                    /**
+                     * Constructs a new RespondClarificationRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IRespondClarificationRequest);
+
+                    /** RespondClarificationRequest id. */
+                    public id: (number|Long);
+
+                    /** RespondClarificationRequest disclose. */
+                    public disclose: boolean;
+
+                    /** RespondClarificationRequest answer. */
+                    public answer: string;
+
+                    /** RespondClarificationRequest question. */
+                    public question: string;
+
+                    /**
+                     * Creates a new RespondClarificationRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns RespondClarificationRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IRespondClarificationRequest): xsuportal.proto.services.admin.RespondClarificationRequest;
+
+                    /**
+                     * Encodes the specified RespondClarificationRequest message. Does not implicitly {@link xsuportal.proto.services.admin.RespondClarificationRequest.verify|verify} messages.
+                     * @param message RespondClarificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IRespondClarificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified RespondClarificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.RespondClarificationRequest.verify|verify} messages.
+                     * @param message RespondClarificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IRespondClarificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a RespondClarificationRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns RespondClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.RespondClarificationRequest;
+
+                    /**
+                     * Decodes a RespondClarificationRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns RespondClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.RespondClarificationRequest;
+
+                    /**
+                     * Verifies a RespondClarificationRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RespondClarificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RespondClarificationRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.RespondClarificationRequest;
+
+                    /**
+                     * Creates a plain object from a RespondClarificationRequest message. Also converts values to other types if specified.
+                     * @param message RespondClarificationRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.RespondClarificationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RespondClarificationRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a RespondClarificationResponse. */
+                interface IRespondClarificationResponse {
+
+                    /** RespondClarificationResponse clarification */
+                    clarification?: (xsuportal.proto.resources.IClarification|null);
+                }
+
+                /** Represents a RespondClarificationResponse. */
+                class RespondClarificationResponse implements IRespondClarificationResponse {
+
+                    /**
+                     * Constructs a new RespondClarificationResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IRespondClarificationResponse);
+
+                    /** RespondClarificationResponse clarification. */
+                    public clarification?: (xsuportal.proto.resources.IClarification|null);
+
+                    /**
+                     * Creates a new RespondClarificationResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns RespondClarificationResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IRespondClarificationResponse): xsuportal.proto.services.admin.RespondClarificationResponse;
+
+                    /**
+                     * Encodes the specified RespondClarificationResponse message. Does not implicitly {@link xsuportal.proto.services.admin.RespondClarificationResponse.verify|verify} messages.
+                     * @param message RespondClarificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IRespondClarificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified RespondClarificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.RespondClarificationResponse.verify|verify} messages.
+                     * @param message RespondClarificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IRespondClarificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a RespondClarificationResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns RespondClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.RespondClarificationResponse;
+
+                    /**
+                     * Decodes a RespondClarificationResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns RespondClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.RespondClarificationResponse;
+
+                    /**
+                     * Verifies a RespondClarificationResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RespondClarificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RespondClarificationResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.RespondClarificationResponse;
+
+                    /**
+                     * Creates a plain object from a RespondClarificationResponse message. Also converts values to other types if specified.
+                     * @param message RespondClarificationResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.RespondClarificationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RespondClarificationResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a CreateClarificationRequest. */
+                interface ICreateClarificationRequest {
+
+                    /** CreateClarificationRequest id */
+                    id?: (number|Long|null);
+
+                    /** CreateClarificationRequest answer */
+                    answer?: (string|null);
+
+                    /** CreateClarificationRequest question */
+                    question?: (string|null);
+                }
+
+                /** Represents a CreateClarificationRequest. */
+                class CreateClarificationRequest implements ICreateClarificationRequest {
+
+                    /**
+                     * Constructs a new CreateClarificationRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.ICreateClarificationRequest);
+
+                    /** CreateClarificationRequest id. */
+                    public id: (number|Long);
+
+                    /** CreateClarificationRequest answer. */
+                    public answer: string;
+
+                    /** CreateClarificationRequest question. */
+                    public question: string;
+
+                    /**
+                     * Creates a new CreateClarificationRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns CreateClarificationRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.ICreateClarificationRequest): xsuportal.proto.services.admin.CreateClarificationRequest;
+
+                    /**
+                     * Encodes the specified CreateClarificationRequest message. Does not implicitly {@link xsuportal.proto.services.admin.CreateClarificationRequest.verify|verify} messages.
+                     * @param message CreateClarificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.ICreateClarificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified CreateClarificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.CreateClarificationRequest.verify|verify} messages.
+                     * @param message CreateClarificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.ICreateClarificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a CreateClarificationRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns CreateClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.CreateClarificationRequest;
+
+                    /**
+                     * Decodes a CreateClarificationRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns CreateClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.CreateClarificationRequest;
+
+                    /**
+                     * Verifies a CreateClarificationRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a CreateClarificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns CreateClarificationRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.CreateClarificationRequest;
+
+                    /**
+                     * Creates a plain object from a CreateClarificationRequest message. Also converts values to other types if specified.
+                     * @param message CreateClarificationRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.CreateClarificationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this CreateClarificationRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a CreateClarificationResponse. */
+                interface ICreateClarificationResponse {
+
+                    /** CreateClarificationResponse clarification */
+                    clarification?: (xsuportal.proto.resources.IClarification|null);
+                }
+
+                /** Represents a CreateClarificationResponse. */
+                class CreateClarificationResponse implements ICreateClarificationResponse {
+
+                    /**
+                     * Constructs a new CreateClarificationResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.ICreateClarificationResponse);
+
+                    /** CreateClarificationResponse clarification. */
+                    public clarification?: (xsuportal.proto.resources.IClarification|null);
+
+                    /**
+                     * Creates a new CreateClarificationResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns CreateClarificationResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.ICreateClarificationResponse): xsuportal.proto.services.admin.CreateClarificationResponse;
+
+                    /**
+                     * Encodes the specified CreateClarificationResponse message. Does not implicitly {@link xsuportal.proto.services.admin.CreateClarificationResponse.verify|verify} messages.
+                     * @param message CreateClarificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.ICreateClarificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified CreateClarificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.CreateClarificationResponse.verify|verify} messages.
+                     * @param message CreateClarificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.ICreateClarificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a CreateClarificationResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns CreateClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.CreateClarificationResponse;
+
+                    /**
+                     * Decodes a CreateClarificationResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns CreateClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.CreateClarificationResponse;
+
+                    /**
+                     * Verifies a CreateClarificationResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a CreateClarificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns CreateClarificationResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.CreateClarificationResponse;
+
+                    /**
+                     * Creates a plain object from a CreateClarificationResponse message. Also converts values to other types if specified.
+                     * @param message CreateClarificationResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.CreateClarificationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this CreateClarificationResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListContestantInstancesRequest. */
+                interface IListContestantInstancesRequest {
+
+                    /** ListContestantInstancesRequest teamId */
+                    teamId?: (number|Long|null);
+                }
+
+                /** Represents a ListContestantInstancesRequest. */
+                class ListContestantInstancesRequest implements IListContestantInstancesRequest {
+
+                    /**
+                     * Constructs a new ListContestantInstancesRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IListContestantInstancesRequest);
+
+                    /** ListContestantInstancesRequest teamId. */
+                    public teamId: (number|Long);
+
+                    /**
+                     * Creates a new ListContestantInstancesRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListContestantInstancesRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IListContestantInstancesRequest): xsuportal.proto.services.admin.ListContestantInstancesRequest;
+
+                    /**
+                     * Encodes the specified ListContestantInstancesRequest message. Does not implicitly {@link xsuportal.proto.services.admin.ListContestantInstancesRequest.verify|verify} messages.
+                     * @param message ListContestantInstancesRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IListContestantInstancesRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListContestantInstancesRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListContestantInstancesRequest.verify|verify} messages.
+                     * @param message ListContestantInstancesRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IListContestantInstancesRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListContestantInstancesRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListContestantInstancesRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.ListContestantInstancesRequest;
+
+                    /**
+                     * Decodes a ListContestantInstancesRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListContestantInstancesRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.ListContestantInstancesRequest;
+
+                    /**
+                     * Verifies a ListContestantInstancesRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListContestantInstancesRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListContestantInstancesRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.ListContestantInstancesRequest;
+
+                    /**
+                     * Creates a plain object from a ListContestantInstancesRequest message. Also converts values to other types if specified.
+                     * @param message ListContestantInstancesRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.ListContestantInstancesRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListContestantInstancesRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListContestantInstancesResponse. */
+                interface IListContestantInstancesResponse {
+
+                    /** ListContestantInstancesResponse contestantInstances */
+                    contestantInstances?: (xsuportal.proto.resources.IContestantInstance[]|null);
+                }
+
+                /** Represents a ListContestantInstancesResponse. */
+                class ListContestantInstancesResponse implements IListContestantInstancesResponse {
+
+                    /**
+                     * Constructs a new ListContestantInstancesResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IListContestantInstancesResponse);
+
+                    /** ListContestantInstancesResponse contestantInstances. */
+                    public contestantInstances: xsuportal.proto.resources.IContestantInstance[];
+
+                    /**
+                     * Creates a new ListContestantInstancesResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListContestantInstancesResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IListContestantInstancesResponse): xsuportal.proto.services.admin.ListContestantInstancesResponse;
+
+                    /**
+                     * Encodes the specified ListContestantInstancesResponse message. Does not implicitly {@link xsuportal.proto.services.admin.ListContestantInstancesResponse.verify|verify} messages.
+                     * @param message ListContestantInstancesResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IListContestantInstancesResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListContestantInstancesResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListContestantInstancesResponse.verify|verify} messages.
+                     * @param message ListContestantInstancesResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IListContestantInstancesResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListContestantInstancesResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListContestantInstancesResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.ListContestantInstancesResponse;
+
+                    /**
+                     * Decodes a ListContestantInstancesResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListContestantInstancesResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.ListContestantInstancesResponse;
+
+                    /**
+                     * Verifies a ListContestantInstancesResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListContestantInstancesResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListContestantInstancesResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.ListContestantInstancesResponse;
+
+                    /**
+                     * Creates a plain object from a ListContestantInstancesResponse message. Also converts values to other types if specified.
+                     * @param message ListContestantInstancesResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.ListContestantInstancesResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListContestantInstancesResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a DashboardRequest. */
+                interface IDashboardRequest {
+                }
+
+                /** Represents a DashboardRequest. */
+                class DashboardRequest implements IDashboardRequest {
+
+                    /**
+                     * Constructs a new DashboardRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IDashboardRequest);
+
+                    /**
+                     * Creates a new DashboardRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns DashboardRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IDashboardRequest): xsuportal.proto.services.admin.DashboardRequest;
+
+                    /**
+                     * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.services.admin.DashboardRequest.verify|verify} messages.
+                     * @param message DashboardRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.DashboardRequest.verify|verify} messages.
+                     * @param message DashboardRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.DashboardRequest;
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.DashboardRequest;
+
+                    /**
+                     * Verifies a DashboardRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns DashboardRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.DashboardRequest;
+
+                    /**
+                     * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
+                     * @param message DashboardRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.DashboardRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this DashboardRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a DashboardResponse. */
+                interface IDashboardResponse {
+
+                    /** DashboardResponse leaderboard */
+                    leaderboard?: (xsuportal.proto.resources.ILeaderboard|null);
+                }
+
+                /** Represents a DashboardResponse. */
+                class DashboardResponse implements IDashboardResponse {
+
+                    /**
+                     * Constructs a new DashboardResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IDashboardResponse);
+
+                    /** DashboardResponse leaderboard. */
+                    public leaderboard?: (xsuportal.proto.resources.ILeaderboard|null);
+
+                    /**
+                     * Creates a new DashboardResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns DashboardResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IDashboardResponse): xsuportal.proto.services.admin.DashboardResponse;
+
+                    /**
+                     * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.services.admin.DashboardResponse.verify|verify} messages.
+                     * @param message DashboardResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.DashboardResponse.verify|verify} messages.
+                     * @param message DashboardResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.DashboardResponse;
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.DashboardResponse;
+
+                    /**
+                     * Verifies a DashboardResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns DashboardResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.DashboardResponse;
+
+                    /**
+                     * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
+                     * @param message DashboardResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.DashboardResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this DashboardResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
                 /** Properties of an InitializeRequest. */
                 interface IInitializeRequest {
                 }
@@ -2262,10 +4434,847 @@ export namespace xsuportal {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+
+                /** Properties of a ListTeamsRequest. */
+                interface IListTeamsRequest {
+                }
+
+                /** Represents a ListTeamsRequest. */
+                class ListTeamsRequest implements IListTeamsRequest {
+
+                    /**
+                     * Constructs a new ListTeamsRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IListTeamsRequest);
+
+                    /**
+                     * Creates a new ListTeamsRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListTeamsRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IListTeamsRequest): xsuportal.proto.services.admin.ListTeamsRequest;
+
+                    /**
+                     * Encodes the specified ListTeamsRequest message. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsRequest.verify|verify} messages.
+                     * @param message ListTeamsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IListTeamsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListTeamsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsRequest.verify|verify} messages.
+                     * @param message ListTeamsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IListTeamsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListTeamsRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListTeamsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.ListTeamsRequest;
+
+                    /**
+                     * Decodes a ListTeamsRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListTeamsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.ListTeamsRequest;
+
+                    /**
+                     * Verifies a ListTeamsRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListTeamsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListTeamsRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.ListTeamsRequest;
+
+                    /**
+                     * Creates a plain object from a ListTeamsRequest message. Also converts values to other types if specified.
+                     * @param message ListTeamsRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.ListTeamsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListTeamsRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListTeamsResponse. */
+                interface IListTeamsResponse {
+
+                    /** ListTeamsResponse teams */
+                    teams?: (xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem[]|null);
+                }
+
+                /** Represents a ListTeamsResponse. */
+                class ListTeamsResponse implements IListTeamsResponse {
+
+                    /**
+                     * Constructs a new ListTeamsResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IListTeamsResponse);
+
+                    /** ListTeamsResponse teams. */
+                    public teams: xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem[];
+
+                    /**
+                     * Creates a new ListTeamsResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListTeamsResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IListTeamsResponse): xsuportal.proto.services.admin.ListTeamsResponse;
+
+                    /**
+                     * Encodes the specified ListTeamsResponse message. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsResponse.verify|verify} messages.
+                     * @param message ListTeamsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IListTeamsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListTeamsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsResponse.verify|verify} messages.
+                     * @param message ListTeamsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IListTeamsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListTeamsResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListTeamsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.ListTeamsResponse;
+
+                    /**
+                     * Decodes a ListTeamsResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListTeamsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.ListTeamsResponse;
+
+                    /**
+                     * Verifies a ListTeamsResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListTeamsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListTeamsResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.ListTeamsResponse;
+
+                    /**
+                     * Creates a plain object from a ListTeamsResponse message. Also converts values to other types if specified.
+                     * @param message ListTeamsResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.ListTeamsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListTeamsResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace ListTeamsResponse {
+
+                    /** Properties of a TeamListItem. */
+                    interface ITeamListItem {
+
+                        /** TeamListItem teamId */
+                        teamId?: (number|Long|null);
+
+                        /** TeamListItem name */
+                        name?: (string|null);
+
+                        /** TeamListItem memberNames */
+                        memberNames?: (string[]|null);
+
+                        /** TeamListItem finalParticipation */
+                        finalParticipation?: (boolean|null);
+
+                        /** TeamListItem isStudent */
+                        isStudent?: (boolean|null);
+
+                        /** TeamListItem withdrawn */
+                        withdrawn?: (boolean|null);
+
+                        /** TeamListItem disqualified */
+                        disqualified?: (boolean|null);
+                    }
+
+                    /** Represents a TeamListItem. */
+                    class TeamListItem implements ITeamListItem {
+
+                        /**
+                         * Constructs a new TeamListItem.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem);
+
+                        /** TeamListItem teamId. */
+                        public teamId: (number|Long);
+
+                        /** TeamListItem name. */
+                        public name: string;
+
+                        /** TeamListItem memberNames. */
+                        public memberNames: string[];
+
+                        /** TeamListItem finalParticipation. */
+                        public finalParticipation: boolean;
+
+                        /** TeamListItem isStudent. */
+                        public isStudent: boolean;
+
+                        /** TeamListItem withdrawn. */
+                        public withdrawn: boolean;
+
+                        /** TeamListItem disqualified. */
+                        public disqualified: boolean;
+
+                        /**
+                         * Creates a new TeamListItem instance using the specified properties.
+                         * @param [properties] Properties to set
+                         * @returns TeamListItem instance
+                         */
+                        public static create(properties?: xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem): xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem;
+
+                        /**
+                         * Encodes the specified TeamListItem message. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem.verify|verify} messages.
+                         * @param message TeamListItem message or plain object to encode
+                         * @param [writer] Writer to encode to
+                         * @returns Writer
+                         */
+                        public static encode(message: xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                        /**
+                         * Encodes the specified TeamListItem message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem.verify|verify} messages.
+                         * @param message TeamListItem message or plain object to encode
+                         * @param [writer] Writer to encode to
+                         * @returns Writer
+                         */
+                        public static encodeDelimited(message: xsuportal.proto.services.admin.ListTeamsResponse.ITeamListItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                        /**
+                         * Decodes a TeamListItem message from the specified reader or buffer.
+                         * @param reader Reader or buffer to decode from
+                         * @param [length] Message length if known beforehand
+                         * @returns TeamListItem
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem;
+
+                        /**
+                         * Decodes a TeamListItem message from the specified reader or buffer, length delimited.
+                         * @param reader Reader or buffer to decode from
+                         * @returns TeamListItem
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem;
+
+                        /**
+                         * Verifies a TeamListItem message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a TeamListItem message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns TeamListItem
+                         */
+                        public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem;
+
+                        /**
+                         * Creates a plain object from a TeamListItem message. Also converts values to other types if specified.
+                         * @param message TeamListItem
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this TeamListItem to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+
+                /** Properties of a GetTeamRequest. */
+                interface IGetTeamRequest {
+
+                    /** GetTeamRequest id */
+                    id?: (number|Long|null);
+                }
+
+                /** Represents a GetTeamRequest. */
+                class GetTeamRequest implements IGetTeamRequest {
+
+                    /**
+                     * Constructs a new GetTeamRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IGetTeamRequest);
+
+                    /** GetTeamRequest id. */
+                    public id: (number|Long);
+
+                    /**
+                     * Creates a new GetTeamRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetTeamRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IGetTeamRequest): xsuportal.proto.services.admin.GetTeamRequest;
+
+                    /**
+                     * Encodes the specified GetTeamRequest message. Does not implicitly {@link xsuportal.proto.services.admin.GetTeamRequest.verify|verify} messages.
+                     * @param message GetTeamRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IGetTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetTeamRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetTeamRequest.verify|verify} messages.
+                     * @param message GetTeamRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IGetTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetTeamRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetTeamRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.GetTeamRequest;
+
+                    /**
+                     * Decodes a GetTeamRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetTeamRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.GetTeamRequest;
+
+                    /**
+                     * Verifies a GetTeamRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetTeamRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetTeamRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.GetTeamRequest;
+
+                    /**
+                     * Creates a plain object from a GetTeamRequest message. Also converts values to other types if specified.
+                     * @param message GetTeamRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.GetTeamRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetTeamRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetTeamResponse. */
+                interface IGetTeamResponse {
+
+                    /** GetTeamResponse team */
+                    team?: (xsuportal.proto.resources.ITeam|null);
+                }
+
+                /** Represents a GetTeamResponse. */
+                class GetTeamResponse implements IGetTeamResponse {
+
+                    /**
+                     * Constructs a new GetTeamResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IGetTeamResponse);
+
+                    /** GetTeamResponse team. */
+                    public team?: (xsuportal.proto.resources.ITeam|null);
+
+                    /**
+                     * Creates a new GetTeamResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetTeamResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IGetTeamResponse): xsuportal.proto.services.admin.GetTeamResponse;
+
+                    /**
+                     * Encodes the specified GetTeamResponse message. Does not implicitly {@link xsuportal.proto.services.admin.GetTeamResponse.verify|verify} messages.
+                     * @param message GetTeamResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IGetTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetTeamResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.GetTeamResponse.verify|verify} messages.
+                     * @param message GetTeamResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IGetTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetTeamResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetTeamResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.GetTeamResponse;
+
+                    /**
+                     * Decodes a GetTeamResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetTeamResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.GetTeamResponse;
+
+                    /**
+                     * Verifies a GetTeamResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetTeamResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetTeamResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.GetTeamResponse;
+
+                    /**
+                     * Creates a plain object from a GetTeamResponse message. Also converts values to other types if specified.
+                     * @param message GetTeamResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.GetTeamResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetTeamResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an UpdateTeamRequest. */
+                interface IUpdateTeamRequest {
+
+                    /** UpdateTeamRequest team */
+                    team?: (xsuportal.proto.resources.ITeam|null);
+
+                    /** UpdateTeamRequest contestants */
+                    contestants?: (xsuportal.proto.resources.IContestant[]|null);
+                }
+
+                /** Represents an UpdateTeamRequest. */
+                class UpdateTeamRequest implements IUpdateTeamRequest {
+
+                    /**
+                     * Constructs a new UpdateTeamRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IUpdateTeamRequest);
+
+                    /** UpdateTeamRequest team. */
+                    public team?: (xsuportal.proto.resources.ITeam|null);
+
+                    /** UpdateTeamRequest contestants. */
+                    public contestants: xsuportal.proto.resources.IContestant[];
+
+                    /**
+                     * Creates a new UpdateTeamRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns UpdateTeamRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IUpdateTeamRequest): xsuportal.proto.services.admin.UpdateTeamRequest;
+
+                    /**
+                     * Encodes the specified UpdateTeamRequest message. Does not implicitly {@link xsuportal.proto.services.admin.UpdateTeamRequest.verify|verify} messages.
+                     * @param message UpdateTeamRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IUpdateTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified UpdateTeamRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.UpdateTeamRequest.verify|verify} messages.
+                     * @param message UpdateTeamRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IUpdateTeamRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an UpdateTeamRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns UpdateTeamRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.UpdateTeamRequest;
+
+                    /**
+                     * Decodes an UpdateTeamRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns UpdateTeamRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.UpdateTeamRequest;
+
+                    /**
+                     * Verifies an UpdateTeamRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an UpdateTeamRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns UpdateTeamRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.UpdateTeamRequest;
+
+                    /**
+                     * Creates a plain object from an UpdateTeamRequest message. Also converts values to other types if specified.
+                     * @param message UpdateTeamRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.UpdateTeamRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this UpdateTeamRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an UpdateTeamResponse. */
+                interface IUpdateTeamResponse {
+                }
+
+                /** Represents an UpdateTeamResponse. */
+                class UpdateTeamResponse implements IUpdateTeamResponse {
+
+                    /**
+                     * Constructs a new UpdateTeamResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IUpdateTeamResponse);
+
+                    /**
+                     * Creates a new UpdateTeamResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns UpdateTeamResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IUpdateTeamResponse): xsuportal.proto.services.admin.UpdateTeamResponse;
+
+                    /**
+                     * Encodes the specified UpdateTeamResponse message. Does not implicitly {@link xsuportal.proto.services.admin.UpdateTeamResponse.verify|verify} messages.
+                     * @param message UpdateTeamResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IUpdateTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified UpdateTeamResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.UpdateTeamResponse.verify|verify} messages.
+                     * @param message UpdateTeamResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IUpdateTeamResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an UpdateTeamResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns UpdateTeamResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.UpdateTeamResponse;
+
+                    /**
+                     * Decodes an UpdateTeamResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns UpdateTeamResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.UpdateTeamResponse;
+
+                    /**
+                     * Verifies an UpdateTeamResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an UpdateTeamResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns UpdateTeamResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.UpdateTeamResponse;
+
+                    /**
+                     * Creates a plain object from an UpdateTeamResponse message. Also converts values to other types if specified.
+                     * @param message UpdateTeamResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.UpdateTeamResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this UpdateTeamResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
 
             /** Namespace audience. */
             namespace audience {
+
+                /** Properties of a DashboardRequest. */
+                interface IDashboardRequest {
+                }
+
+                /** Represents a DashboardRequest. */
+                class DashboardRequest implements IDashboardRequest {
+
+                    /**
+                     * Constructs a new DashboardRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.audience.IDashboardRequest);
+
+                    /**
+                     * Creates a new DashboardRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns DashboardRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.audience.IDashboardRequest): xsuportal.proto.services.audience.DashboardRequest;
+
+                    /**
+                     * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.services.audience.DashboardRequest.verify|verify} messages.
+                     * @param message DashboardRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.audience.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.audience.DashboardRequest.verify|verify} messages.
+                     * @param message DashboardRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.audience.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.audience.DashboardRequest;
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.audience.DashboardRequest;
+
+                    /**
+                     * Verifies a DashboardRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns DashboardRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.audience.DashboardRequest;
+
+                    /**
+                     * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
+                     * @param message DashboardRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.audience.DashboardRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this DashboardRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a DashboardResponse. */
+                interface IDashboardResponse {
+
+                    /** DashboardResponse leaderboard */
+                    leaderboard?: (xsuportal.proto.resources.ILeaderboard|null);
+                }
+
+                /** Represents a DashboardResponse. */
+                class DashboardResponse implements IDashboardResponse {
+
+                    /**
+                     * Constructs a new DashboardResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.audience.IDashboardResponse);
+
+                    /** DashboardResponse leaderboard. */
+                    public leaderboard?: (xsuportal.proto.resources.ILeaderboard|null);
+
+                    /**
+                     * Creates a new DashboardResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns DashboardResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.audience.IDashboardResponse): xsuportal.proto.services.audience.DashboardResponse;
+
+                    /**
+                     * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.services.audience.DashboardResponse.verify|verify} messages.
+                     * @param message DashboardResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.audience.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.audience.DashboardResponse.verify|verify} messages.
+                     * @param message DashboardResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.audience.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.audience.DashboardResponse;
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.audience.DashboardResponse;
+
+                    /**
+                     * Verifies a DashboardResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns DashboardResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.audience.DashboardResponse;
+
+                    /**
+                     * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
+                     * @param message DashboardResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.audience.DashboardResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this DashboardResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
 
                 /** Properties of a ListTeamsResponse. */
                 interface IListTeamsResponse {
@@ -2526,6 +5535,9 @@ export namespace xsuportal {
                 /** Properties of a ReceiveBenchmarkJobRequest. */
                 interface IReceiveBenchmarkJobRequest {
 
+                    /** ReceiveBenchmarkJobRequest token */
+                    token?: (string|null);
+
                     /** ReceiveBenchmarkJobRequest instanceName */
                     instanceName?: (string|null);
 
@@ -2541,6 +5553,9 @@ export namespace xsuportal {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest);
+
+                    /** ReceiveBenchmarkJobRequest token. */
+                    public token: string;
 
                     /** ReceiveBenchmarkJobRequest instanceName. */
                     public instanceName: string;
@@ -2622,17 +5637,8 @@ export namespace xsuportal {
                 /** Properties of a ReceiveBenchmarkJobResponse. */
                 interface IReceiveBenchmarkJobResponse {
 
-                    /** ReceiveBenchmarkJobResponse jobId */
-                    jobId?: (number|Long|null);
-
-                    /** ReceiveBenchmarkJobResponse handle */
-                    handle?: (string|null);
-
-                    /** ReceiveBenchmarkJobResponse targetIpv4Address */
-                    targetIpv4Address?: (string|null);
-
-                    /** ReceiveBenchmarkJobResponse descriptionHuman */
-                    descriptionHuman?: (string|null);
+                    /** ReceiveBenchmarkJobResponse jobHandle */
+                    jobHandle?: (xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle|null);
                 }
 
                 /** Represents a ReceiveBenchmarkJobResponse. */
@@ -2644,17 +5650,8 @@ export namespace xsuportal {
                      */
                     constructor(properties?: xsuportal.proto.services.bench.IReceiveBenchmarkJobResponse);
 
-                    /** ReceiveBenchmarkJobResponse jobId. */
-                    public jobId: (number|Long);
-
-                    /** ReceiveBenchmarkJobResponse handle. */
-                    public handle: string;
-
-                    /** ReceiveBenchmarkJobResponse targetIpv4Address. */
-                    public targetIpv4Address: string;
-
-                    /** ReceiveBenchmarkJobResponse descriptionHuman. */
-                    public descriptionHuman: string;
+                    /** ReceiveBenchmarkJobResponse jobHandle. */
+                    public jobHandle?: (xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle|null);
 
                     /**
                      * Creates a new ReceiveBenchmarkJobResponse instance using the specified properties.
@@ -2725,6 +5722,117 @@ export namespace xsuportal {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                namespace ReceiveBenchmarkJobResponse {
+
+                    /** Properties of a JobHandle. */
+                    interface IJobHandle {
+
+                        /** JobHandle jobId */
+                        jobId?: (number|Long|null);
+
+                        /** JobHandle handle */
+                        handle?: (string|null);
+
+                        /** JobHandle targetIpv4Address */
+                        targetIpv4Address?: (string|null);
+
+                        /** JobHandle descriptionHuman */
+                        descriptionHuman?: (string|null);
+                    }
+
+                    /** Represents a JobHandle. */
+                    class JobHandle implements IJobHandle {
+
+                        /**
+                         * Constructs a new JobHandle.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle);
+
+                        /** JobHandle jobId. */
+                        public jobId: (number|Long);
+
+                        /** JobHandle handle. */
+                        public handle: string;
+
+                        /** JobHandle targetIpv4Address. */
+                        public targetIpv4Address: string;
+
+                        /** JobHandle descriptionHuman. */
+                        public descriptionHuman: string;
+
+                        /**
+                         * Creates a new JobHandle instance using the specified properties.
+                         * @param [properties] Properties to set
+                         * @returns JobHandle instance
+                         */
+                        public static create(properties?: xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle): xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle;
+
+                        /**
+                         * Encodes the specified JobHandle message. Does not implicitly {@link xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle.verify|verify} messages.
+                         * @param message JobHandle message or plain object to encode
+                         * @param [writer] Writer to encode to
+                         * @returns Writer
+                         */
+                        public static encode(message: xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                        /**
+                         * Encodes the specified JobHandle message, length delimited. Does not implicitly {@link xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle.verify|verify} messages.
+                         * @param message JobHandle message or plain object to encode
+                         * @param [writer] Writer to encode to
+                         * @returns Writer
+                         */
+                        public static encodeDelimited(message: xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.IJobHandle, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                        /**
+                         * Decodes a JobHandle message from the specified reader or buffer.
+                         * @param reader Reader or buffer to decode from
+                         * @param [length] Message length if known beforehand
+                         * @returns JobHandle
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle;
+
+                        /**
+                         * Decodes a JobHandle message from the specified reader or buffer, length delimited.
+                         * @param reader Reader or buffer to decode from
+                         * @returns JobHandle
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle;
+
+                        /**
+                         * Verifies a JobHandle message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a JobHandle message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns JobHandle
+                         */
+                        public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle;
+
+                        /**
+                         * Creates a plain object from a JobHandle message. Also converts values to other types if specified.
+                         * @param message JobHandle
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this JobHandle to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
                 }
 
                 /** Represents a BenchmarkReportService */
@@ -3074,6 +6182,1432 @@ export namespace xsuportal {
 
                     /**
                      * Converts this GetCurrentSessionResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+
+            /** Namespace contestant. */
+            namespace contestant {
+
+                /** Properties of a ListBenchmarkJobsRequest. */
+                interface IListBenchmarkJobsRequest {
+                }
+
+                /** Represents a ListBenchmarkJobsRequest. */
+                class ListBenchmarkJobsRequest implements IListBenchmarkJobsRequest {
+
+                    /**
+                     * Constructs a new ListBenchmarkJobsRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IListBenchmarkJobsRequest);
+
+                    /**
+                     * Creates a new ListBenchmarkJobsRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListBenchmarkJobsRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IListBenchmarkJobsRequest): xsuportal.proto.services.contestant.ListBenchmarkJobsRequest;
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.ListBenchmarkJobsRequest.verify|verify} messages.
+                     * @param message ListBenchmarkJobsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IListBenchmarkJobsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListBenchmarkJobsRequest.verify|verify} messages.
+                     * @param message ListBenchmarkJobsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IListBenchmarkJobsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListBenchmarkJobsRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListBenchmarkJobsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.ListBenchmarkJobsRequest;
+
+                    /**
+                     * Decodes a ListBenchmarkJobsRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListBenchmarkJobsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.ListBenchmarkJobsRequest;
+
+                    /**
+                     * Verifies a ListBenchmarkJobsRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListBenchmarkJobsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListBenchmarkJobsRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.ListBenchmarkJobsRequest;
+
+                    /**
+                     * Creates a plain object from a ListBenchmarkJobsRequest message. Also converts values to other types if specified.
+                     * @param message ListBenchmarkJobsRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.ListBenchmarkJobsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListBenchmarkJobsRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListBenchmarkJobsResponse. */
+                interface IListBenchmarkJobsResponse {
+
+                    /** ListBenchmarkJobsResponse jobs */
+                    jobs?: (xsuportal.proto.resources.IBenchmarkJob[]|null);
+                }
+
+                /** Represents a ListBenchmarkJobsResponse. */
+                class ListBenchmarkJobsResponse implements IListBenchmarkJobsResponse {
+
+                    /**
+                     * Constructs a new ListBenchmarkJobsResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IListBenchmarkJobsResponse);
+
+                    /** ListBenchmarkJobsResponse jobs. */
+                    public jobs: xsuportal.proto.resources.IBenchmarkJob[];
+
+                    /**
+                     * Creates a new ListBenchmarkJobsResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListBenchmarkJobsResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IListBenchmarkJobsResponse): xsuportal.proto.services.contestant.ListBenchmarkJobsResponse;
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.ListBenchmarkJobsResponse.verify|verify} messages.
+                     * @param message ListBenchmarkJobsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IListBenchmarkJobsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListBenchmarkJobsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListBenchmarkJobsResponse.verify|verify} messages.
+                     * @param message ListBenchmarkJobsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IListBenchmarkJobsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListBenchmarkJobsResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListBenchmarkJobsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.ListBenchmarkJobsResponse;
+
+                    /**
+                     * Decodes a ListBenchmarkJobsResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListBenchmarkJobsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.ListBenchmarkJobsResponse;
+
+                    /**
+                     * Verifies a ListBenchmarkJobsResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListBenchmarkJobsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListBenchmarkJobsResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.ListBenchmarkJobsResponse;
+
+                    /**
+                     * Creates a plain object from a ListBenchmarkJobsResponse message. Also converts values to other types if specified.
+                     * @param message ListBenchmarkJobsResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.ListBenchmarkJobsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListBenchmarkJobsResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an EnqueueBenchmarkJobRequest. */
+                interface IEnqueueBenchmarkJobRequest {
+
+                    /** EnqueueBenchmarkJobRequest targetId */
+                    targetId?: (number|Long|null);
+                }
+
+                /** Represents an EnqueueBenchmarkJobRequest. */
+                class EnqueueBenchmarkJobRequest implements IEnqueueBenchmarkJobRequest {
+
+                    /**
+                     * Constructs a new EnqueueBenchmarkJobRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IEnqueueBenchmarkJobRequest);
+
+                    /** EnqueueBenchmarkJobRequest targetId. */
+                    public targetId: (number|Long);
+
+                    /**
+                     * Creates a new EnqueueBenchmarkJobRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns EnqueueBenchmarkJobRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IEnqueueBenchmarkJobRequest): xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest;
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest.verify|verify} messages.
+                     * @param message EnqueueBenchmarkJobRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IEnqueueBenchmarkJobRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest.verify|verify} messages.
+                     * @param message EnqueueBenchmarkJobRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IEnqueueBenchmarkJobRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns EnqueueBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest;
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns EnqueueBenchmarkJobRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest;
+
+                    /**
+                     * Verifies an EnqueueBenchmarkJobRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an EnqueueBenchmarkJobRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns EnqueueBenchmarkJobRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest;
+
+                    /**
+                     * Creates a plain object from an EnqueueBenchmarkJobRequest message. Also converts values to other types if specified.
+                     * @param message EnqueueBenchmarkJobRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this EnqueueBenchmarkJobRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an EnqueueBenchmarkJobResponse. */
+                interface IEnqueueBenchmarkJobResponse {
+
+                    /** EnqueueBenchmarkJobResponse job */
+                    job?: (xsuportal.proto.resources.IBenchmarkJob|null);
+                }
+
+                /** Represents an EnqueueBenchmarkJobResponse. */
+                class EnqueueBenchmarkJobResponse implements IEnqueueBenchmarkJobResponse {
+
+                    /**
+                     * Constructs a new EnqueueBenchmarkJobResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IEnqueueBenchmarkJobResponse);
+
+                    /** EnqueueBenchmarkJobResponse job. */
+                    public job?: (xsuportal.proto.resources.IBenchmarkJob|null);
+
+                    /**
+                     * Creates a new EnqueueBenchmarkJobResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns EnqueueBenchmarkJobResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IEnqueueBenchmarkJobResponse): xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse;
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse.verify|verify} messages.
+                     * @param message EnqueueBenchmarkJobResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IEnqueueBenchmarkJobResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified EnqueueBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse.verify|verify} messages.
+                     * @param message EnqueueBenchmarkJobResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IEnqueueBenchmarkJobResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns EnqueueBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse;
+
+                    /**
+                     * Decodes an EnqueueBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns EnqueueBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse;
+
+                    /**
+                     * Verifies an EnqueueBenchmarkJobResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an EnqueueBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns EnqueueBenchmarkJobResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse;
+
+                    /**
+                     * Creates a plain object from an EnqueueBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @param message EnqueueBenchmarkJobResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this EnqueueBenchmarkJobResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetBenchmarkJobQuery. */
+                interface IGetBenchmarkJobQuery {
+
+                    /** GetBenchmarkJobQuery id */
+                    id?: (number|Long|null);
+                }
+
+                /** Represents a GetBenchmarkJobQuery. */
+                class GetBenchmarkJobQuery implements IGetBenchmarkJobQuery {
+
+                    /**
+                     * Constructs a new GetBenchmarkJobQuery.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IGetBenchmarkJobQuery);
+
+                    /** GetBenchmarkJobQuery id. */
+                    public id: (number|Long);
+
+                    /**
+                     * Creates a new GetBenchmarkJobQuery instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetBenchmarkJobQuery instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IGetBenchmarkJobQuery): xsuportal.proto.services.contestant.GetBenchmarkJobQuery;
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobQuery message. Does not implicitly {@link xsuportal.proto.services.contestant.GetBenchmarkJobQuery.verify|verify} messages.
+                     * @param message GetBenchmarkJobQuery message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IGetBenchmarkJobQuery, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobQuery message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetBenchmarkJobQuery.verify|verify} messages.
+                     * @param message GetBenchmarkJobQuery message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IGetBenchmarkJobQuery, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetBenchmarkJobQuery message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetBenchmarkJobQuery
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.GetBenchmarkJobQuery;
+
+                    /**
+                     * Decodes a GetBenchmarkJobQuery message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetBenchmarkJobQuery
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.GetBenchmarkJobQuery;
+
+                    /**
+                     * Verifies a GetBenchmarkJobQuery message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetBenchmarkJobQuery message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetBenchmarkJobQuery
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.GetBenchmarkJobQuery;
+
+                    /**
+                     * Creates a plain object from a GetBenchmarkJobQuery message. Also converts values to other types if specified.
+                     * @param message GetBenchmarkJobQuery
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.GetBenchmarkJobQuery, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetBenchmarkJobQuery to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetBenchmarkJobResponse. */
+                interface IGetBenchmarkJobResponse {
+
+                    /** GetBenchmarkJobResponse job */
+                    job?: (xsuportal.proto.resources.IBenchmarkJob|null);
+                }
+
+                /** Represents a GetBenchmarkJobResponse. */
+                class GetBenchmarkJobResponse implements IGetBenchmarkJobResponse {
+
+                    /**
+                     * Constructs a new GetBenchmarkJobResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IGetBenchmarkJobResponse);
+
+                    /** GetBenchmarkJobResponse job. */
+                    public job?: (xsuportal.proto.resources.IBenchmarkJob|null);
+
+                    /**
+                     * Creates a new GetBenchmarkJobResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetBenchmarkJobResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IGetBenchmarkJobResponse): xsuportal.proto.services.contestant.GetBenchmarkJobResponse;
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.GetBenchmarkJobResponse.verify|verify} messages.
+                     * @param message GetBenchmarkJobResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IGetBenchmarkJobResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetBenchmarkJobResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetBenchmarkJobResponse.verify|verify} messages.
+                     * @param message GetBenchmarkJobResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IGetBenchmarkJobResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetBenchmarkJobResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.GetBenchmarkJobResponse;
+
+                    /**
+                     * Decodes a GetBenchmarkJobResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetBenchmarkJobResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.GetBenchmarkJobResponse;
+
+                    /**
+                     * Verifies a GetBenchmarkJobResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetBenchmarkJobResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetBenchmarkJobResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.GetBenchmarkJobResponse;
+
+                    /**
+                     * Creates a plain object from a GetBenchmarkJobResponse message. Also converts values to other types if specified.
+                     * @param message GetBenchmarkJobResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.GetBenchmarkJobResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetBenchmarkJobResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListClarificationsRequest. */
+                interface IListClarificationsRequest {
+                }
+
+                /** Represents a ListClarificationsRequest. */
+                class ListClarificationsRequest implements IListClarificationsRequest {
+
+                    /**
+                     * Constructs a new ListClarificationsRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IListClarificationsRequest);
+
+                    /**
+                     * Creates a new ListClarificationsRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListClarificationsRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IListClarificationsRequest): xsuportal.proto.services.contestant.ListClarificationsRequest;
+
+                    /**
+                     * Encodes the specified ListClarificationsRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.ListClarificationsRequest.verify|verify} messages.
+                     * @param message ListClarificationsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IListClarificationsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListClarificationsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListClarificationsRequest.verify|verify} messages.
+                     * @param message ListClarificationsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IListClarificationsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListClarificationsRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListClarificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.ListClarificationsRequest;
+
+                    /**
+                     * Decodes a ListClarificationsRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListClarificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.ListClarificationsRequest;
+
+                    /**
+                     * Verifies a ListClarificationsRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListClarificationsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListClarificationsRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.ListClarificationsRequest;
+
+                    /**
+                     * Creates a plain object from a ListClarificationsRequest message. Also converts values to other types if specified.
+                     * @param message ListClarificationsRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.ListClarificationsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListClarificationsRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListClarificationsResponse. */
+                interface IListClarificationsResponse {
+
+                    /** ListClarificationsResponse clarifications */
+                    clarifications?: (xsuportal.proto.resources.IClarification[]|null);
+                }
+
+                /** Represents a ListClarificationsResponse. */
+                class ListClarificationsResponse implements IListClarificationsResponse {
+
+                    /**
+                     * Constructs a new ListClarificationsResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IListClarificationsResponse);
+
+                    /** ListClarificationsResponse clarifications. */
+                    public clarifications: xsuportal.proto.resources.IClarification[];
+
+                    /**
+                     * Creates a new ListClarificationsResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListClarificationsResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IListClarificationsResponse): xsuportal.proto.services.contestant.ListClarificationsResponse;
+
+                    /**
+                     * Encodes the specified ListClarificationsResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.ListClarificationsResponse.verify|verify} messages.
+                     * @param message ListClarificationsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IListClarificationsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListClarificationsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListClarificationsResponse.verify|verify} messages.
+                     * @param message ListClarificationsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IListClarificationsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListClarificationsResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListClarificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.ListClarificationsResponse;
+
+                    /**
+                     * Decodes a ListClarificationsResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListClarificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.ListClarificationsResponse;
+
+                    /**
+                     * Verifies a ListClarificationsResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListClarificationsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListClarificationsResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.ListClarificationsResponse;
+
+                    /**
+                     * Creates a plain object from a ListClarificationsResponse message. Also converts values to other types if specified.
+                     * @param message ListClarificationsResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.ListClarificationsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListClarificationsResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a RequestClarificationRequest. */
+                interface IRequestClarificationRequest {
+
+                    /** RequestClarificationRequest question */
+                    question?: (string|null);
+                }
+
+                /** Represents a RequestClarificationRequest. */
+                class RequestClarificationRequest implements IRequestClarificationRequest {
+
+                    /**
+                     * Constructs a new RequestClarificationRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IRequestClarificationRequest);
+
+                    /** RequestClarificationRequest question. */
+                    public question: string;
+
+                    /**
+                     * Creates a new RequestClarificationRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns RequestClarificationRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IRequestClarificationRequest): xsuportal.proto.services.contestant.RequestClarificationRequest;
+
+                    /**
+                     * Encodes the specified RequestClarificationRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.RequestClarificationRequest.verify|verify} messages.
+                     * @param message RequestClarificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IRequestClarificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified RequestClarificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.RequestClarificationRequest.verify|verify} messages.
+                     * @param message RequestClarificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IRequestClarificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a RequestClarificationRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns RequestClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.RequestClarificationRequest;
+
+                    /**
+                     * Decodes a RequestClarificationRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns RequestClarificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.RequestClarificationRequest;
+
+                    /**
+                     * Verifies a RequestClarificationRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RequestClarificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RequestClarificationRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.RequestClarificationRequest;
+
+                    /**
+                     * Creates a plain object from a RequestClarificationRequest message. Also converts values to other types if specified.
+                     * @param message RequestClarificationRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.RequestClarificationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RequestClarificationRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a RequestClarificationResponse. */
+                interface IRequestClarificationResponse {
+
+                    /** RequestClarificationResponse clarification */
+                    clarification?: (xsuportal.proto.resources.IClarification|null);
+                }
+
+                /** Represents a RequestClarificationResponse. */
+                class RequestClarificationResponse implements IRequestClarificationResponse {
+
+                    /**
+                     * Constructs a new RequestClarificationResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IRequestClarificationResponse);
+
+                    /** RequestClarificationResponse clarification. */
+                    public clarification?: (xsuportal.proto.resources.IClarification|null);
+
+                    /**
+                     * Creates a new RequestClarificationResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns RequestClarificationResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IRequestClarificationResponse): xsuportal.proto.services.contestant.RequestClarificationResponse;
+
+                    /**
+                     * Encodes the specified RequestClarificationResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.RequestClarificationResponse.verify|verify} messages.
+                     * @param message RequestClarificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IRequestClarificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified RequestClarificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.RequestClarificationResponse.verify|verify} messages.
+                     * @param message RequestClarificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IRequestClarificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a RequestClarificationResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns RequestClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.RequestClarificationResponse;
+
+                    /**
+                     * Decodes a RequestClarificationResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns RequestClarificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.RequestClarificationResponse;
+
+                    /**
+                     * Verifies a RequestClarificationResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RequestClarificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RequestClarificationResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.RequestClarificationResponse;
+
+                    /**
+                     * Creates a plain object from a RequestClarificationResponse message. Also converts values to other types if specified.
+                     * @param message RequestClarificationResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.RequestClarificationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RequestClarificationResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a DashboardRequest. */
+                interface IDashboardRequest {
+                }
+
+                /** Represents a DashboardRequest. */
+                class DashboardRequest implements IDashboardRequest {
+
+                    /**
+                     * Constructs a new DashboardRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IDashboardRequest);
+
+                    /**
+                     * Creates a new DashboardRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns DashboardRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IDashboardRequest): xsuportal.proto.services.contestant.DashboardRequest;
+
+                    /**
+                     * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.DashboardRequest.verify|verify} messages.
+                     * @param message DashboardRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.DashboardRequest.verify|verify} messages.
+                     * @param message DashboardRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.DashboardRequest;
+
+                    /**
+                     * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns DashboardRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.DashboardRequest;
+
+                    /**
+                     * Verifies a DashboardRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns DashboardRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.DashboardRequest;
+
+                    /**
+                     * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
+                     * @param message DashboardRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.DashboardRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this DashboardRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a DashboardResponse. */
+                interface IDashboardResponse {
+
+                    /** DashboardResponse leaderboard */
+                    leaderboard?: (xsuportal.proto.resources.ILeaderboard|null);
+
+                    /** DashboardResponse instances */
+                    instances?: (xsuportal.proto.resources.IContestantInstance[]|null);
+
+                    /** DashboardResponse jobs */
+                    jobs?: (xsuportal.proto.resources.IBenchmarkJob[]|null);
+                }
+
+                /** Represents a DashboardResponse. */
+                class DashboardResponse implements IDashboardResponse {
+
+                    /**
+                     * Constructs a new DashboardResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IDashboardResponse);
+
+                    /** DashboardResponse leaderboard. */
+                    public leaderboard?: (xsuportal.proto.resources.ILeaderboard|null);
+
+                    /** DashboardResponse instances. */
+                    public instances: xsuportal.proto.resources.IContestantInstance[];
+
+                    /** DashboardResponse jobs. */
+                    public jobs: xsuportal.proto.resources.IBenchmarkJob[];
+
+                    /**
+                     * Creates a new DashboardResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns DashboardResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IDashboardResponse): xsuportal.proto.services.contestant.DashboardResponse;
+
+                    /**
+                     * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.DashboardResponse.verify|verify} messages.
+                     * @param message DashboardResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.DashboardResponse.verify|verify} messages.
+                     * @param message DashboardResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.DashboardResponse;
+
+                    /**
+                     * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns DashboardResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.DashboardResponse;
+
+                    /**
+                     * Verifies a DashboardResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns DashboardResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.DashboardResponse;
+
+                    /**
+                     * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
+                     * @param message DashboardResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.DashboardResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this DashboardResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListContestantInstancesRequest. */
+                interface IListContestantInstancesRequest {
+                }
+
+                /** Represents a ListContestantInstancesRequest. */
+                class ListContestantInstancesRequest implements IListContestantInstancesRequest {
+
+                    /**
+                     * Constructs a new ListContestantInstancesRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IListContestantInstancesRequest);
+
+                    /**
+                     * Creates a new ListContestantInstancesRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListContestantInstancesRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IListContestantInstancesRequest): xsuportal.proto.services.contestant.ListContestantInstancesRequest;
+
+                    /**
+                     * Encodes the specified ListContestantInstancesRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.ListContestantInstancesRequest.verify|verify} messages.
+                     * @param message ListContestantInstancesRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IListContestantInstancesRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListContestantInstancesRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListContestantInstancesRequest.verify|verify} messages.
+                     * @param message ListContestantInstancesRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IListContestantInstancesRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListContestantInstancesRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListContestantInstancesRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.ListContestantInstancesRequest;
+
+                    /**
+                     * Decodes a ListContestantInstancesRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListContestantInstancesRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.ListContestantInstancesRequest;
+
+                    /**
+                     * Verifies a ListContestantInstancesRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListContestantInstancesRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListContestantInstancesRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.ListContestantInstancesRequest;
+
+                    /**
+                     * Creates a plain object from a ListContestantInstancesRequest message. Also converts values to other types if specified.
+                     * @param message ListContestantInstancesRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.ListContestantInstancesRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListContestantInstancesRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ListContestantInstancesResponse. */
+                interface IListContestantInstancesResponse {
+
+                    /** ListContestantInstancesResponse contestantInstances */
+                    contestantInstances?: (xsuportal.proto.resources.IContestantInstance[]|null);
+                }
+
+                /** Represents a ListContestantInstancesResponse. */
+                class ListContestantInstancesResponse implements IListContestantInstancesResponse {
+
+                    /**
+                     * Constructs a new ListContestantInstancesResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IListContestantInstancesResponse);
+
+                    /** ListContestantInstancesResponse contestantInstances. */
+                    public contestantInstances: xsuportal.proto.resources.IContestantInstance[];
+
+                    /**
+                     * Creates a new ListContestantInstancesResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ListContestantInstancesResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IListContestantInstancesResponse): xsuportal.proto.services.contestant.ListContestantInstancesResponse;
+
+                    /**
+                     * Encodes the specified ListContestantInstancesResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.ListContestantInstancesResponse.verify|verify} messages.
+                     * @param message ListContestantInstancesResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IListContestantInstancesResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ListContestantInstancesResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListContestantInstancesResponse.verify|verify} messages.
+                     * @param message ListContestantInstancesResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IListContestantInstancesResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ListContestantInstancesResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ListContestantInstancesResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.ListContestantInstancesResponse;
+
+                    /**
+                     * Decodes a ListContestantInstancesResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ListContestantInstancesResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.ListContestantInstancesResponse;
+
+                    /**
+                     * Verifies a ListContestantInstancesResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListContestantInstancesResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListContestantInstancesResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.ListContestantInstancesResponse;
+
+                    /**
+                     * Creates a plain object from a ListContestantInstancesResponse message. Also converts values to other types if specified.
+                     * @param message ListContestantInstancesResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.ListContestantInstancesResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListContestantInstancesResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetNotificationsRequest. */
+                interface IGetNotificationsRequest {
+                }
+
+                /** Represents a GetNotificationsRequest. */
+                class GetNotificationsRequest implements IGetNotificationsRequest {
+
+                    /**
+                     * Constructs a new GetNotificationsRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IGetNotificationsRequest);
+
+                    /**
+                     * Creates a new GetNotificationsRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetNotificationsRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IGetNotificationsRequest): xsuportal.proto.services.contestant.GetNotificationsRequest;
+
+                    /**
+                     * Encodes the specified GetNotificationsRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsRequest.verify|verify} messages.
+                     * @param message GetNotificationsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IGetNotificationsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetNotificationsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsRequest.verify|verify} messages.
+                     * @param message GetNotificationsRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IGetNotificationsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetNotificationsRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetNotificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.GetNotificationsRequest;
+
+                    /**
+                     * Decodes a GetNotificationsRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetNotificationsRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.GetNotificationsRequest;
+
+                    /**
+                     * Verifies a GetNotificationsRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetNotificationsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetNotificationsRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.GetNotificationsRequest;
+
+                    /**
+                     * Creates a plain object from a GetNotificationsRequest message. Also converts values to other types if specified.
+                     * @param message GetNotificationsRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.GetNotificationsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetNotificationsRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetNotificationsResponse. */
+                interface IGetNotificationsResponse {
+
+                    /** GetNotificationsResponse lastAnsweredClarificationId */
+                    lastAnsweredClarificationId?: (number|Long|null);
+                }
+
+                /** Represents a GetNotificationsResponse. */
+                class GetNotificationsResponse implements IGetNotificationsResponse {
+
+                    /**
+                     * Constructs a new GetNotificationsResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IGetNotificationsResponse);
+
+                    /** GetNotificationsResponse lastAnsweredClarificationId. */
+                    public lastAnsweredClarificationId: (number|Long);
+
+                    /**
+                     * Creates a new GetNotificationsResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetNotificationsResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IGetNotificationsResponse): xsuportal.proto.services.contestant.GetNotificationsResponse;
+
+                    /**
+                     * Encodes the specified GetNotificationsResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsResponse.verify|verify} messages.
+                     * @param message GetNotificationsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IGetNotificationsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetNotificationsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsResponse.verify|verify} messages.
+                     * @param message GetNotificationsResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IGetNotificationsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetNotificationsResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetNotificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.GetNotificationsResponse;
+
+                    /**
+                     * Decodes a GetNotificationsResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetNotificationsResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.GetNotificationsResponse;
+
+                    /**
+                     * Verifies a GetNotificationsResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetNotificationsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetNotificationsResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.GetNotificationsResponse;
+
+                    /**
+                     * Creates a plain object from a GetNotificationsResponse message. Also converts values to other types if specified.
+                     * @param message GetNotificationsResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.GetNotificationsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetNotificationsResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -4272,178 +8806,6 @@ export namespace xsuportal {
                      */
                     public toJSON(): { [k: string]: any };
                 }
-            }
-        }
-
-        /** Namespace common. */
-        namespace common {
-
-            /** Properties of a DashboardRequest. */
-            interface IDashboardRequest {
-            }
-
-            /** Represents a DashboardRequest. */
-            class DashboardRequest implements IDashboardRequest {
-
-                /**
-                 * Constructs a new DashboardRequest.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: xsuportal.proto.common.IDashboardRequest);
-
-                /**
-                 * Creates a new DashboardRequest instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns DashboardRequest instance
-                 */
-                public static create(properties?: xsuportal.proto.common.IDashboardRequest): xsuportal.proto.common.DashboardRequest;
-
-                /**
-                 * Encodes the specified DashboardRequest message. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
-                 * @param message DashboardRequest message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encode(message: xsuportal.proto.common.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified DashboardRequest message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardRequest.verify|verify} messages.
-                 * @param message DashboardRequest message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encodeDelimited(message: xsuportal.proto.common.IDashboardRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes a DashboardRequest message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns DashboardRequest
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.common.DashboardRequest;
-
-                /**
-                 * Decodes a DashboardRequest message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns DashboardRequest
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.common.DashboardRequest;
-
-                /**
-                 * Verifies a DashboardRequest message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a DashboardRequest message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns DashboardRequest
-                 */
-                public static fromObject(object: { [k: string]: any }): xsuportal.proto.common.DashboardRequest;
-
-                /**
-                 * Creates a plain object from a DashboardRequest message. Also converts values to other types if specified.
-                 * @param message DashboardRequest
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: xsuportal.proto.common.DashboardRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this DashboardRequest to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a DashboardResponse. */
-            interface IDashboardResponse {
-            }
-
-            /** Represents a DashboardResponse. */
-            class DashboardResponse implements IDashboardResponse {
-
-                /**
-                 * Constructs a new DashboardResponse.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: xsuportal.proto.common.IDashboardResponse);
-
-                /**
-                 * Creates a new DashboardResponse instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns DashboardResponse instance
-                 */
-                public static create(properties?: xsuportal.proto.common.IDashboardResponse): xsuportal.proto.common.DashboardResponse;
-
-                /**
-                 * Encodes the specified DashboardResponse message. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
-                 * @param message DashboardResponse message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encode(message: xsuportal.proto.common.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified DashboardResponse message, length delimited. Does not implicitly {@link xsuportal.proto.common.DashboardResponse.verify|verify} messages.
-                 * @param message DashboardResponse message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encodeDelimited(message: xsuportal.proto.common.IDashboardResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes a DashboardResponse message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns DashboardResponse
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.common.DashboardResponse;
-
-                /**
-                 * Decodes a DashboardResponse message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns DashboardResponse
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.common.DashboardResponse;
-
-                /**
-                 * Verifies a DashboardResponse message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a DashboardResponse message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns DashboardResponse
-                 */
-                public static fromObject(object: { [k: string]: any }): xsuportal.proto.common.DashboardResponse;
-
-                /**
-                 * Creates a plain object from a DashboardResponse message. Also converts values to other types if specified.
-                 * @param message DashboardResponse
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: xsuportal.proto.common.DashboardResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this DashboardResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
             }
         }
     }

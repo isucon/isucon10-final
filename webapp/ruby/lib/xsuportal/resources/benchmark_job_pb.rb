@@ -14,13 +14,15 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :team_id, :int64, 2
       optional :target_id, :int64, 3
       optional :status, :enum, 4, "xsuportal.proto.resources.BenchmarkJob.Status"
-      optional :result, :message, 5, "xsuportal.proto.resources.BenchmarkResult"
-      optional :created_at, :message, 6, "google.protobuf.Timestamp"
-      optional :updated_at, :message, 7, "google.protobuf.Timestamp"
-      optional :started_at, :message, 8, "google.protobuf.Timestamp"
-      optional :finished_at, :message, 9, "google.protobuf.Timestamp"
+      optional :created_at, :message, 5, "google.protobuf.Timestamp"
+      optional :updated_at, :message, 6, "google.protobuf.Timestamp"
+      optional :started_at, :message, 7, "google.protobuf.Timestamp"
+      optional :finished_at, :message, 8, "google.protobuf.Timestamp"
+      optional :score, :int64, 9
+      optional :instance_name, :string, 10
       optional :team, :message, 16, "xsuportal.proto.resources.Team"
       optional :target, :message, 17, "xsuportal.proto.resources.ContestantInstance"
+      optional :result, :message, 18, "xsuportal.proto.resources.BenchmarkResult"
     end
     add_enum "xsuportal.proto.resources.BenchmarkJob.Status" do
       value :PENDING, 0

@@ -12,10 +12,10 @@ message Team {
   bool final_participation = 5;
   bool hidden = 6;
   bool withdrawn = 7;
+  bool disqualified = 9;
 
   message TeamDetail {
     string email_address = 1;
-    int64 benchmark_target_id = 2;
 
     string invite_token = 16;
   }

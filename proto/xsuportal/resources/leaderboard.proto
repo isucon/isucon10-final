@@ -1,0 +1,23 @@
+syntax = "proto3";
+package xsuportal.proto.resources;
+option go_package = "github.com/isucon/isucon10-final/proto/resources";
+
+import "google/protobuf/timestamp.proto";
+import "xsuportal/resources/team.proto";
+
+message Leaderboard {
+  message LeaderboardItem {
+    message LeaderboardScore {
+    int64 score = 1;
+    google.protobuf.Timestamp started_at = 2;
+    google.protobuf.Timestamp updated_at = 3;
+    }
+    repeated LeaderboardScore scores = 1;
+    Team team = 16;
+  }
+  repeated LeaderboardItem teams = 1;
+  repeated LeaderboardItem general_teams = 2;
+  repeated LeaderboardItem student_teams = 3;
+  repeated LeaderboardItem progresses = 4;
+  bool frozen = 5;
+}
