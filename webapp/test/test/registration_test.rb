@@ -148,4 +148,110 @@ class RegistrationTest < TestBase
       assert_equal 400, status
     end
   end
+
+  test 'update registration (leader)' do
+    login(contestant_id: 'alice01', password: 'password') do
+      request :get, '/api/session'
+      # assert_equal 'alice01@example.com', response[:team][:email_address]
+      assert_equal 'アリスボブキャロル01', response[:team][:name]
+      assert_equal true, response[:contestant][:is_student]
+      assert_equal(
+        {
+          team_id: response[:team][:id],
+          id: 'alice01',
+          name: 'alice01',
+          is_student: true,
+        },
+        response[:contestant],
+      )
+
+      request :put, '/api/registration', {
+        name: 'アリス',
+        is_student: false,
+        team_name: 'アリスと仲間達',
+        email_address: 'alice01-2@example.com',
+      }
+
+      request :get, '/api/session'
+      # assert_equal 'alice01-2@example.com', response[:team][:email_address]
+      assert_equal 'アリスと仲間達', response[:team][:name]
+      assert_equal false, response[:contestant][:is_student]
+      assert_equal(
+        {
+          team_id: response[:team][:id],
+          id: 'alice01',
+          name: 'アリス',
+          is_student: false,
+        },
+        response[:contestant],
+      )
+    end
+  end
+
+  test 'update registration (member)' do
+    login(contestant_id: 'bob01', password: 'password') do
+      request :get, '/api/session'
+      assert_equal 'alice01', response[:team][:leader][:id]
+      assert_equal 3, response[:team][:members].count
+      assert_equal(
+        {
+          team_id: response[:team][:id],
+          id: 'bob01',
+          name: 'bob01',
+          is_student: true,
+        },
+        response[:contestant],
+      )
+
+      request :put, '/api/registration', {
+        name: 'ボブ',
+        is_student: false,
+      }
+
+      request :get, '/api/session'
+      assert_equal(
+        {
+          team_id: response[:team][:id],
+          id: 'bob01',
+          name: 'ボブ',
+          is_student: false,
+        },
+        response[:contestant],
+      )
+    end
+  end
+  
+  test 'delete registration (leader)' do
+    login(contestant_id: 'alice02', password: 'password') do
+      request :get, '/api/session'
+      assert_not_equal nil, response[:team]
+      assert_not_equal 0, response[:contestant][:team_id]
+
+      request :delete, '/api/registration'
+
+      request :get, '/api/session'
+      assert_equal nil, response[:team]
+      assert_equal 0, response[:contestant][:team_id]
+    end
+
+    login(contestant_id: 'bob02', password: 'password') do
+      request :get, '/api/session'
+      assert_equal nil, response[:team]
+      assert_equal 0, response[:contestant][:team_id]
+    end
+  end
+  
+  test 'delete registration (member)' do
+    login(contestant_id: 'bob03', password: 'password') do
+      request :get, '/api/session'
+      assert_not_equal nil, response[:team]
+      assert_not_equal 0, response[:contestant][:team_id]
+
+      request :delete, '/api/registration'
+
+      request :get, '/api/session'
+      assert_equal nil, response[:team]
+      assert_equal 0, response[:contestant][:team_id]
+    end
+  end
 end

@@ -11,14 +11,16 @@ class TeamsAndContestants < FixtureBase
     create_member team_id: team_id, contestant_id: 'sorah'
     create_member team_id: team_id, contestant_id: 'rosylilly'
 
-    session = create_leader(
-      contestant_id: 'alice',
-      team_name: 'アリスボブキャロル',
-      email_address: 'alice@example.com',
-      is_student: true
-    )
-    team_id = session.fetch(:team).fetch(:id)
-    create_member team_id: team_id, contestant_id: 'bob', is_student: true
-    create_member team_id: team_id, contestant_id: 'carol', is_student: true
+    (1..3).each do |i|
+      session = create_leader(
+        contestant_id: 'alice%02d' % i,
+        team_name: 'アリスボブキャロル%02d' % i,
+        email_address: 'alice%02d@example.com' % i,
+        is_student: true
+      )
+      team_id = session.fetch(:team).fetch(:id)
+      create_member team_id: team_id, contestant_id: 'bob%02d' % i, is_student: true
+      create_member team_id: team_id, contestant_id: 'carol%02d' % i, is_student: true
+    end
   end
 end

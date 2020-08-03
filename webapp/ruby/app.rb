@@ -401,6 +401,10 @@ module Xsuportal
             'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
             current_team[:id],
           )
+          db.xquery(
+            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW() WHERE `team_id` = ?',
+            current_team[:id],
+          )
         end
 
         db.xquery(
