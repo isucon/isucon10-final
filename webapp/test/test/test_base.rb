@@ -47,4 +47,9 @@ class TestBase < Test::Unit::TestCase
   def request(method, path, payload={})
     client.request(method, path, payload)
   end
+
+  def login(contestant_id:, password:, create: false, &block)
+    client.login(contestant_id: contestant_id, password: password, create: create, &block)
+  end
+
 end

@@ -56,7 +56,29 @@ class ApiClient
     @response
   end
 
+  def login(contestant_id:, password:, create: false)
+    if create
+      request :post, '/api/signup', {
+        contestant_id: contestant_id,
+        password: password,
+      }
+    else
+      request :post, '/api/login', {
+        contestant_id: contestant_id,
+        password: password,
+      }
+    end
+    if block_given?
+      yield
+      logout
+    end
+  end
+
+  def logout
+    request :post, '/api/logout'
+  end
+
   def truncate!
-    request(:post, '/initialize')
+    request :post, '/initialize'
   end
 end

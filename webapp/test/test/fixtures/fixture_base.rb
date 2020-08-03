@@ -24,7 +24,7 @@ class FixtureBase
     invite_token = res.fetch(:member_invite_url).match(/invite_token=([^&]+)/)[1]
 
     @invite_tokens[team_id] = invite_token
-    logout
+    @client.logout
     res
   end
 
@@ -42,26 +42,7 @@ class FixtureBase
       team_id: team_id,
       is_student: is_student,
     }
-    logout
+    @client.logout
     @client.response
-  end
-
-  def login(contestant_id:, password: nil)
-    password ||= @credentials.fetch(contestant_id)
-    @client.request :post, '/api/login', {
-      contestant_id: contestant_id,
-      password: password,
-    }
-  end
-
-  def logout
-    @client.request :post, '/api/logout'
-  end
-
-  def as_a_contestant(contestant_id)
-    login contestant_id: contestant_id
-    result = yield
-    logout
-    result
   end
 end
