@@ -206,7 +206,7 @@ module Xsuportal
           name: team[:name],
           member_names: members.map { |_| _[:name] },
           final_participation: team[:final_participation],
-          is_student: team[:student],
+          is_student: members.all? { |_| _[:student] },
         )
       end
       encode_response_pb(
