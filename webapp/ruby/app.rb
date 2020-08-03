@@ -147,7 +147,6 @@ module Xsuportal
           withdrawn: team[:withdrawn],
           detail: detail ? Proto::Resources::Team::TeamDetail.new(
             email_address: team[:email_address],
-            benchmark_target_id: 0, # TODO:
             invite_token: team[:invite_token],
           ) : nil,
           leader: leader_pb,
