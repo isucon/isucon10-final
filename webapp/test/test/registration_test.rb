@@ -55,7 +55,7 @@ class RegistrationTest < TestBase
     end
 
     # Add member
-    login(contestant_id: 'akaihaato', password: 'haatoakai', create: true) do
+    login(contestant_id: 'akaihaato', password: 'haatoakai') do
       request :post, '/api/registration/contestant', {
         team_id: team_id,
         name: 'Akai Haato',

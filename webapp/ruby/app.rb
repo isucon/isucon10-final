@@ -75,6 +75,7 @@ module Xsuportal
           db_transaction_commit
         rescue => e
           db_transaction_rollback
+          puts e.full_message
           halt_pb 500, {
             name: e.class.to_s,
             human_message: e.to_s,
@@ -320,22 +321,28 @@ module Xsuportal
       db_transaction do
         unless current_contestant
           db_transaction_rollback
-          halt_pb 401, {
-            human_message: 'ログインが必要です'
-          }
+          halt_pb 401, human_message: 'ログインが必要です'
         end
 
         team = db.xquery(
-          'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE LIMIT 1 FOR UPDATE',
+          'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE AND `disqualified` = FALSE LIMIT 1 FOR UPDATE',
           req.team_id,
           req.invite_token,
         ).first
 
         unless team
           db_transaction_rollback
-          halt_pb 400, {
-            human_message: '招待URLが不正です'
-          }
+          halt_pb 400, human_message: '招待URLが不正です'
+        end
+
+        members = db.xquery(
+          'SELECT COUNT(*) AS `cnt` FROM `contestants` WHERE `team_id` = ?',
+          req.team_id,
+        ).first
+
+        if members[:cnt] >= 3
+          db_transaction_rollback
+          halt_pb 400, human_message: 'チーム人数の上限に達しています'
         end
 
         db.xquery(
@@ -357,15 +364,11 @@ module Xsuportal
 
         unless current_contestant(lock: true)
           db_transaction_rollback
-          halt_pb 401, {
-            human_message: 'ログインが必要です'
-          }
+          halt_pb 401, human_message: 'ログインが必要です'
         end
         unless current_team(lock: true)
           db_transaction_rollback
-          halt_pb 400, {
-            human_message: '参加登録されていません'
-          }
+          halt_pb 400, human_message: '参加登録されていません'
         end
 
         if current_team[:leader_id] == current_contestant[:id]
@@ -392,15 +395,11 @@ module Xsuportal
       db_transaction do
         unless current_contestant(lock: true)
           db_transaction_rollback
-          halt_pb 401, {
-            human_message: 'ログインが必要です'
-          }
+          halt_pb 401, human_message: 'ログインが必要です'
         end
         unless current_team(lock: true)
           db_transaction_rollback
-          halt_pb 400, {
-            human_message: 'チームに所属していません'
-          }
+          halt_pb 400, human_message: 'チームに所属していません'
         end
 
         if current_team[:leader_id] == current_contestant[:id]
