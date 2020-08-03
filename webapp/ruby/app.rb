@@ -76,10 +76,7 @@ module Xsuportal
         rescue => e
           db_transaction_rollback
           puts e.full_message
-          halt_pb 500, {
-            name: e.class.to_s,
-            human_message: e.to_s,
-          }
+          halt_pb 500, exception: e
         ensure
           db_ensure_transaction_close
         end
@@ -165,13 +162,13 @@ module Xsuportal
         cls.encode(cls.new(payload))
       end
 
-      def halt_pb(code, name:nil, human_message:nil, human_descriptions:[])
-        content_type 'application/vnd.google.protobuf; proto=isuxportal.proto.Error'
+      def halt_pb(code, human_message=nil, exception:nil)
+        content_type 'application/vnd.google.protobuf; proto=xsuportal.proto.Error'
         halt code, Proto::Error.encode(Proto::Error.new(
           code: code,
-          name: name,
-          human_message: human_message,
-          human_descriptions: human_descriptions,
+          name: exception ? exception.class.name : nil,
+          human_message: exception ? exception.message : nil,
+          human_descriptions: exception ? exception.full_message(highlight: false, order: :top).split("\n") : [human_message],
         ))
       end
     end
@@ -226,9 +223,7 @@ module Xsuportal
           params[:invite_token],
         ).first
         unless team
-          halt_pb 404, {
-            human_descriptions: ['招待URLが無効です'],
-          }
+          halt_pb 404, '招待URLが無効です'
         end
       end
 
@@ -273,7 +268,7 @@ module Xsuportal
 
         unless current_contestant(lock: true)
           db_transaction_rollback
-          halt 401, 'ログインが必要です'
+          halt_pb 401, 'ログインが必要です'
         end
 
         db.xquery(
@@ -285,7 +280,7 @@ module Xsuportal
         team_id = db.xquery('SELECT LAST_INSERT_ID() AS `id`').first&.fetch(:id)
         if !team_id
           db_transaction_rollback
-          halt 500, 'チームを登録できませんでした'
+          halt_pb 500, 'チームを登録できませんでした'
         end
 
         db.xquery(
@@ -314,7 +309,7 @@ module Xsuportal
       db_transaction do
         unless current_contestant
           db_transaction_rollback
-          halt_pb 401, human_message: 'ログインが必要です'
+          halt_pb 401, 'ログインが必要です'
         end
 
         team = db.xquery(
@@ -325,7 +320,7 @@ module Xsuportal
 
         unless team
           db_transaction_rollback
-          halt_pb 400, human_message: '招待URLが不正です'
+          halt_pb 400, '招待URLが不正です'
         end
 
         members = db.xquery(
@@ -335,7 +330,7 @@ module Xsuportal
 
         if members[:cnt] >= 3
           db_transaction_rollback
-          halt_pb 400, human_message: 'チーム人数の上限に達しています'
+          halt_pb 400, 'チーム人数の上限に達しています'
         end
 
         db.xquery(
@@ -357,11 +352,11 @@ module Xsuportal
 
         unless current_contestant(lock: true)
           db_transaction_rollback
-          halt_pb 401, human_message: 'ログインが必要です'
+          halt_pb 401, 'ログインが必要です'
         end
         unless current_team(lock: true)
           db_transaction_rollback
-          halt_pb 400, human_message: '参加登録されていません'
+          halt_pb 400, '参加登録されていません'
         end
 
         if current_team[:leader_id] == current_contestant[:id]
@@ -388,11 +383,11 @@ module Xsuportal
       db_transaction do
         unless current_contestant(lock: true)
           db_transaction_rollback
-          halt_pb 401, human_message: 'ログインが必要です'
+          halt_pb 401, 'ログインが必要です'
         end
         unless current_team(lock: true)
           db_transaction_rollback
-          halt_pb 400, human_message: 'チームに所属していません'
+          halt_pb 400, 'チームに所属していません'
         end
 
         if current_team[:leader_id] == current_contestant[:id]
@@ -427,12 +422,12 @@ module Xsuportal
         session[:contestant_id] = req.contestant_id
       rescue Mysql2::Error => e
         if e.errno == MYSQL_ER_DUP_ENTRY
-          halt 400, 'IDが既に登録されています'
+          halt_pb 400, 'IDが既に登録されています'
         else
-          halt 500, e.full_message
+          halt_pb 500, exception: e
         end
       end
-      
+
       encode_response_pb
     end
 
@@ -447,9 +442,10 @@ module Xsuportal
       if contestant && Rack::Utils.secure_compare(contestant[:password], Digest::SHA256.hexdigest(req.password))
         session[:contestant_id] = req.contestant_id
       else
-        halt 400, 'ログインIDまたはパスワードが正しくありません'
+        halt_pb 400, 'ログインIDまたはパスワードが正しくありません'
+        content_type 'application/vnd.google.protobuf; proto=xsuportal.proto.Error'
       end
-      
+
       encode_response_pb
     end
 
@@ -459,9 +455,9 @@ module Xsuportal
       if session[:contestant_id]
         session.delete(:contestant_id)
       else
-        halt 401, 'ログインしていません'
+        halt_pb 401, 'ログインしていません'
       end
-      
+
       encode_response_pb
     end
   end
