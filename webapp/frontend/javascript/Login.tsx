@@ -155,8 +155,8 @@ export class Login extends React.Component<Props, State> {
     event.preventDefault();
     if (this.state.requesting) return;
     try {
-      this.login();
       this.setState({ requesting: true });
+      await this.login();
       this.props.root.setState({ loggedin: true });
       this.setState({ loginSucceeded: true, error: null, requesting: false });
     } catch (err) {
