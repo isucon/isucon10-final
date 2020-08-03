@@ -1,20 +1,28 @@
 require 'test/unit'
 require 'net/http'
 require_relative './api_client'
+require_relative './fixtures/teams_and_contestants'
 
 class TestBase < Test::Unit::TestCase
   include Xsuportal::Routes
 
   class << self
     def startup
-      @client = ApiClient.new
     end
 
     def shutdown
     end
 
     def client
-      @client
+      @client ||= ApiClient.new
+    end
+
+    def fixtures
+      @fixtures ||= begin
+        {
+          teams_and_contestants: TeamsAndContestants.new(client),
+        }
+      end
     end
   end
 

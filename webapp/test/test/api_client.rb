@@ -55,4 +55,8 @@ class ApiClient
     @status = res.code.to_i
     @response
   end
+
+  def truncate!
+    request(:post, '/initialize')
+  end
 end
