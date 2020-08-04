@@ -4,16 +4,16 @@ option go_package = "github.com/isucon/isucon10-final/proto/services/bench";
 
 import "xsuportal/resources/benchmark_result.proto";
 
-service BenchmarkReportService {
-  rpc ReportBenchmarkResult(ReportBenchmarkResultRequest) returns (ReportBenchmarkResultResponse);
-  rpc StreamBenchmarkResult(stream ReportBenchmarkResultRequest) returns (stream ReportBenchmarkResultResponse);
+service BenchmarkReport {
+  rpc ReportBenchmarkResult(ReportBenchmarkResultRequest)
+      returns (ReportBenchmarkResultResponse);
 }
 
 message ReportBenchmarkResultRequest {
   int64 job_id = 1;
   string handle = 2;
-  xsuportal.proto.resources.BenchmarkResult result = 3;
+  int64 nonce = 3;
+  xsuportal.proto.resources.BenchmarkResult result = 4;
 }
 
-message ReportBenchmarkResultResponse {
-}
+message ReportBenchmarkResultResponse { int64 acked_nonce = 1; }

@@ -4955,11 +4955,11 @@ export namespace xsuportal {
             /** Namespace bench. */
             namespace bench {
 
-                /** Represents a BenchmarkQueueService */
-                class BenchmarkQueueService extends $protobuf.rpc.Service {
+                /** Represents a BenchmarkQueue */
+                class BenchmarkQueue extends $protobuf.rpc.Service {
 
                     /**
-                     * Constructs a new BenchmarkQueueService service.
+                     * Constructs a new BenchmarkQueue service.
                      * @param rpcImpl RPC implementation
                      * @param [requestDelimited=false] Whether requests are length-delimited
                      * @param [responseDelimited=false] Whether responses are length-delimited
@@ -4967,20 +4967,20 @@ export namespace xsuportal {
                     constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
 
                     /**
-                     * Creates new BenchmarkQueueService service using the specified rpc implementation.
+                     * Creates new BenchmarkQueue service using the specified rpc implementation.
                      * @param rpcImpl RPC implementation
                      * @param [requestDelimited=false] Whether requests are length-delimited
                      * @param [responseDelimited=false] Whether responses are length-delimited
                      * @returns RPC service. Useful where requests and/or responses are streamed.
                      */
-                    public static create(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean): BenchmarkQueueService;
+                    public static create(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean): BenchmarkQueue;
 
                     /**
                      * Calls ReceiveBenchmarkJob.
                      * @param request ReceiveBenchmarkJobRequest message or plain object
                      * @param callback Node-style callback called with the error, if any, and ReceiveBenchmarkJobResponse
                      */
-                    public receiveBenchmarkJob(request: xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest, callback: xsuportal.proto.services.bench.BenchmarkQueueService.ReceiveBenchmarkJobCallback): void;
+                    public receiveBenchmarkJob(request: xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest, callback: xsuportal.proto.services.bench.BenchmarkQueue.ReceiveBenchmarkJobCallback): void;
 
                     /**
                      * Calls ReceiveBenchmarkJob.
@@ -4990,10 +4990,10 @@ export namespace xsuportal {
                     public receiveBenchmarkJob(request: xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest): Promise<xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse>;
                 }
 
-                namespace BenchmarkQueueService {
+                namespace BenchmarkQueue {
 
                     /**
-                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkQueueService#receiveBenchmarkJob}.
+                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkQueue#receiveBenchmarkJob}.
                      * @param error Error, if any
                      * @param [response] ReceiveBenchmarkJobResponse
                      */
@@ -5303,11 +5303,11 @@ export namespace xsuportal {
                     }
                 }
 
-                /** Represents a BenchmarkReportService */
-                class BenchmarkReportService extends $protobuf.rpc.Service {
+                /** Represents a BenchmarkReport */
+                class BenchmarkReport extends $protobuf.rpc.Service {
 
                     /**
-                     * Constructs a new BenchmarkReportService service.
+                     * Constructs a new BenchmarkReport service.
                      * @param rpcImpl RPC implementation
                      * @param [requestDelimited=false] Whether requests are length-delimited
                      * @param [responseDelimited=false] Whether responses are length-delimited
@@ -5315,20 +5315,20 @@ export namespace xsuportal {
                     constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
 
                     /**
-                     * Creates new BenchmarkReportService service using the specified rpc implementation.
+                     * Creates new BenchmarkReport service using the specified rpc implementation.
                      * @param rpcImpl RPC implementation
                      * @param [requestDelimited=false] Whether requests are length-delimited
                      * @param [responseDelimited=false] Whether responses are length-delimited
                      * @returns RPC service. Useful where requests and/or responses are streamed.
                      */
-                    public static create(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean): BenchmarkReportService;
+                    public static create(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean): BenchmarkReport;
 
                     /**
                      * Calls ReportBenchmarkResult.
                      * @param request ReportBenchmarkResultRequest message or plain object
                      * @param callback Node-style callback called with the error, if any, and ReportBenchmarkResultResponse
                      */
-                    public reportBenchmarkResult(request: xsuportal.proto.services.bench.IReportBenchmarkResultRequest, callback: xsuportal.proto.services.bench.BenchmarkReportService.ReportBenchmarkResultCallback): void;
+                    public reportBenchmarkResult(request: xsuportal.proto.services.bench.IReportBenchmarkResultRequest, callback: xsuportal.proto.services.bench.BenchmarkReport.ReportBenchmarkResultCallback): void;
 
                     /**
                      * Calls ReportBenchmarkResult.
@@ -5336,37 +5336,16 @@ export namespace xsuportal {
                      * @returns Promise
                      */
                     public reportBenchmarkResult(request: xsuportal.proto.services.bench.IReportBenchmarkResultRequest): Promise<xsuportal.proto.services.bench.ReportBenchmarkResultResponse>;
-
-                    /**
-                     * Calls StreamBenchmarkResult.
-                     * @param request ReportBenchmarkResultRequest message or plain object
-                     * @param callback Node-style callback called with the error, if any, and ReportBenchmarkResultResponse
-                     */
-                    public streamBenchmarkResult(request: xsuportal.proto.services.bench.IReportBenchmarkResultRequest, callback: xsuportal.proto.services.bench.BenchmarkReportService.StreamBenchmarkResultCallback): void;
-
-                    /**
-                     * Calls StreamBenchmarkResult.
-                     * @param request ReportBenchmarkResultRequest message or plain object
-                     * @returns Promise
-                     */
-                    public streamBenchmarkResult(request: xsuportal.proto.services.bench.IReportBenchmarkResultRequest): Promise<xsuportal.proto.services.bench.ReportBenchmarkResultResponse>;
                 }
 
-                namespace BenchmarkReportService {
+                namespace BenchmarkReport {
 
                     /**
-                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkReportService#reportBenchmarkResult}.
+                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkReport#reportBenchmarkResult}.
                      * @param error Error, if any
                      * @param [response] ReportBenchmarkResultResponse
                      */
                     type ReportBenchmarkResultCallback = (error: (Error|null), response?: xsuportal.proto.services.bench.ReportBenchmarkResultResponse) => void;
-
-                    /**
-                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkReportService#streamBenchmarkResult}.
-                     * @param error Error, if any
-                     * @param [response] ReportBenchmarkResultResponse
-                     */
-                    type StreamBenchmarkResultCallback = (error: (Error|null), response?: xsuportal.proto.services.bench.ReportBenchmarkResultResponse) => void;
                 }
 
                 /** Properties of a ReportBenchmarkResultRequest. */
@@ -5377,6 +5356,9 @@ export namespace xsuportal {
 
                     /** ReportBenchmarkResultRequest handle */
                     handle?: (string|null);
+
+                    /** ReportBenchmarkResultRequest nonce */
+                    nonce?: (number|Long|null);
 
                     /** ReportBenchmarkResultRequest result */
                     result?: (xsuportal.proto.resources.IBenchmarkResult|null);
@@ -5396,6 +5378,9 @@ export namespace xsuportal {
 
                     /** ReportBenchmarkResultRequest handle. */
                     public handle: string;
+
+                    /** ReportBenchmarkResultRequest nonce. */
+                    public nonce: (number|Long);
 
                     /** ReportBenchmarkResultRequest result. */
                     public result?: (xsuportal.proto.resources.IBenchmarkResult|null);
@@ -5473,6 +5458,9 @@ export namespace xsuportal {
 
                 /** Properties of a ReportBenchmarkResultResponse. */
                 interface IReportBenchmarkResultResponse {
+
+                    /** ReportBenchmarkResultResponse ackedNonce */
+                    ackedNonce?: (number|Long|null);
                 }
 
                 /** Represents a ReportBenchmarkResultResponse. */
@@ -5483,6 +5471,9 @@ export namespace xsuportal {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: xsuportal.proto.services.bench.IReportBenchmarkResultResponse);
+
+                    /** ReportBenchmarkResultResponse ackedNonce. */
+                    public ackedNonce: (number|Long);
 
                     /**
                      * Creates a new ReportBenchmarkResultResponse instance using the specified properties.

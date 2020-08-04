@@ -12006,41 +12006,41 @@ $root.xsuportal = (function() {
                  */
                 var bench = {};
 
-                bench.BenchmarkQueueService = (function() {
+                bench.BenchmarkQueue = (function() {
 
                     /**
-                     * Constructs a new BenchmarkQueueService service.
+                     * Constructs a new BenchmarkQueue service.
                      * @memberof xsuportal.proto.services.bench
-                     * @classdesc Represents a BenchmarkQueueService
+                     * @classdesc Represents a BenchmarkQueue
                      * @extends $protobuf.rpc.Service
                      * @constructor
                      * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
                      * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
                      * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
                      */
-                    function BenchmarkQueueService(rpcImpl, requestDelimited, responseDelimited) {
+                    function BenchmarkQueue(rpcImpl, requestDelimited, responseDelimited) {
                         $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
                     }
 
-                    (BenchmarkQueueService.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = BenchmarkQueueService;
+                    (BenchmarkQueue.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = BenchmarkQueue;
 
                     /**
-                     * Creates new BenchmarkQueueService service using the specified rpc implementation.
+                     * Creates new BenchmarkQueue service using the specified rpc implementation.
                      * @function create
-                     * @memberof xsuportal.proto.services.bench.BenchmarkQueueService
+                     * @memberof xsuportal.proto.services.bench.BenchmarkQueue
                      * @static
                      * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
                      * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
                      * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
-                     * @returns {BenchmarkQueueService} RPC service. Useful where requests and/or responses are streamed.
+                     * @returns {BenchmarkQueue} RPC service. Useful where requests and/or responses are streamed.
                      */
-                    BenchmarkQueueService.create = function create(rpcImpl, requestDelimited, responseDelimited) {
+                    BenchmarkQueue.create = function create(rpcImpl, requestDelimited, responseDelimited) {
                         return new this(rpcImpl, requestDelimited, responseDelimited);
                     };
 
                     /**
-                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkQueueService#receiveBenchmarkJob}.
-                     * @memberof xsuportal.proto.services.bench.BenchmarkQueueService
+                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkQueue#receiveBenchmarkJob}.
+                     * @memberof xsuportal.proto.services.bench.BenchmarkQueue
                      * @typedef ReceiveBenchmarkJobCallback
                      * @type {function}
                      * @param {Error|null} error Error, if any
@@ -12050,28 +12050,28 @@ $root.xsuportal = (function() {
                     /**
                      * Calls ReceiveBenchmarkJob.
                      * @function receiveBenchmarkJob
-                     * @memberof xsuportal.proto.services.bench.BenchmarkQueueService
+                     * @memberof xsuportal.proto.services.bench.BenchmarkQueue
                      * @instance
                      * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest} request ReceiveBenchmarkJobRequest message or plain object
-                     * @param {xsuportal.proto.services.bench.BenchmarkQueueService.ReceiveBenchmarkJobCallback} callback Node-style callback called with the error, if any, and ReceiveBenchmarkJobResponse
+                     * @param {xsuportal.proto.services.bench.BenchmarkQueue.ReceiveBenchmarkJobCallback} callback Node-style callback called with the error, if any, and ReceiveBenchmarkJobResponse
                      * @returns {undefined}
                      * @variation 1
                      */
-                    Object.defineProperty(BenchmarkQueueService.prototype.receiveBenchmarkJob = function receiveBenchmarkJob(request, callback) {
+                    Object.defineProperty(BenchmarkQueue.prototype.receiveBenchmarkJob = function receiveBenchmarkJob(request, callback) {
                         return this.rpcCall(receiveBenchmarkJob, $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest, $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse, request, callback);
                     }, "name", { value: "ReceiveBenchmarkJob" });
 
                     /**
                      * Calls ReceiveBenchmarkJob.
                      * @function receiveBenchmarkJob
-                     * @memberof xsuportal.proto.services.bench.BenchmarkQueueService
+                     * @memberof xsuportal.proto.services.bench.BenchmarkQueue
                      * @instance
                      * @param {xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest} request ReceiveBenchmarkJobRequest message or plain object
                      * @returns {Promise<xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse>} Promise
                      * @variation 2
                      */
 
-                    return BenchmarkQueueService;
+                    return BenchmarkQueue;
                 })();
 
                 bench.ReceiveBenchmarkJobRequest = (function() {
@@ -12780,41 +12780,41 @@ $root.xsuportal = (function() {
                     return ReceiveBenchmarkJobResponse;
                 })();
 
-                bench.BenchmarkReportService = (function() {
+                bench.BenchmarkReport = (function() {
 
                     /**
-                     * Constructs a new BenchmarkReportService service.
+                     * Constructs a new BenchmarkReport service.
                      * @memberof xsuportal.proto.services.bench
-                     * @classdesc Represents a BenchmarkReportService
+                     * @classdesc Represents a BenchmarkReport
                      * @extends $protobuf.rpc.Service
                      * @constructor
                      * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
                      * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
                      * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
                      */
-                    function BenchmarkReportService(rpcImpl, requestDelimited, responseDelimited) {
+                    function BenchmarkReport(rpcImpl, requestDelimited, responseDelimited) {
                         $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
                     }
 
-                    (BenchmarkReportService.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = BenchmarkReportService;
+                    (BenchmarkReport.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = BenchmarkReport;
 
                     /**
-                     * Creates new BenchmarkReportService service using the specified rpc implementation.
+                     * Creates new BenchmarkReport service using the specified rpc implementation.
                      * @function create
-                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReport
                      * @static
                      * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
                      * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
                      * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
-                     * @returns {BenchmarkReportService} RPC service. Useful where requests and/or responses are streamed.
+                     * @returns {BenchmarkReport} RPC service. Useful where requests and/or responses are streamed.
                      */
-                    BenchmarkReportService.create = function create(rpcImpl, requestDelimited, responseDelimited) {
+                    BenchmarkReport.create = function create(rpcImpl, requestDelimited, responseDelimited) {
                         return new this(rpcImpl, requestDelimited, responseDelimited);
                     };
 
                     /**
-                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkReportService#reportBenchmarkResult}.
-                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkReport#reportBenchmarkResult}.
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReport
                      * @typedef ReportBenchmarkResultCallback
                      * @type {function}
                      * @param {Error|null} error Error, if any
@@ -12824,61 +12824,28 @@ $root.xsuportal = (function() {
                     /**
                      * Calls ReportBenchmarkResult.
                      * @function reportBenchmarkResult
-                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReport
                      * @instance
                      * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest} request ReportBenchmarkResultRequest message or plain object
-                     * @param {xsuportal.proto.services.bench.BenchmarkReportService.ReportBenchmarkResultCallback} callback Node-style callback called with the error, if any, and ReportBenchmarkResultResponse
+                     * @param {xsuportal.proto.services.bench.BenchmarkReport.ReportBenchmarkResultCallback} callback Node-style callback called with the error, if any, and ReportBenchmarkResultResponse
                      * @returns {undefined}
                      * @variation 1
                      */
-                    Object.defineProperty(BenchmarkReportService.prototype.reportBenchmarkResult = function reportBenchmarkResult(request, callback) {
+                    Object.defineProperty(BenchmarkReport.prototype.reportBenchmarkResult = function reportBenchmarkResult(request, callback) {
                         return this.rpcCall(reportBenchmarkResult, $root.xsuportal.proto.services.bench.ReportBenchmarkResultRequest, $root.xsuportal.proto.services.bench.ReportBenchmarkResultResponse, request, callback);
                     }, "name", { value: "ReportBenchmarkResult" });
 
                     /**
                      * Calls ReportBenchmarkResult.
                      * @function reportBenchmarkResult
-                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
+                     * @memberof xsuportal.proto.services.bench.BenchmarkReport
                      * @instance
                      * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest} request ReportBenchmarkResultRequest message or plain object
                      * @returns {Promise<xsuportal.proto.services.bench.ReportBenchmarkResultResponse>} Promise
                      * @variation 2
                      */
 
-                    /**
-                     * Callback as used by {@link xsuportal.proto.services.bench.BenchmarkReportService#streamBenchmarkResult}.
-                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
-                     * @typedef StreamBenchmarkResultCallback
-                     * @type {function}
-                     * @param {Error|null} error Error, if any
-                     * @param {xsuportal.proto.services.bench.ReportBenchmarkResultResponse} [response] ReportBenchmarkResultResponse
-                     */
-
-                    /**
-                     * Calls StreamBenchmarkResult.
-                     * @function streamBenchmarkResult
-                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
-                     * @instance
-                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest} request ReportBenchmarkResultRequest message or plain object
-                     * @param {xsuportal.proto.services.bench.BenchmarkReportService.StreamBenchmarkResultCallback} callback Node-style callback called with the error, if any, and ReportBenchmarkResultResponse
-                     * @returns {undefined}
-                     * @variation 1
-                     */
-                    Object.defineProperty(BenchmarkReportService.prototype.streamBenchmarkResult = function streamBenchmarkResult(request, callback) {
-                        return this.rpcCall(streamBenchmarkResult, $root.xsuportal.proto.services.bench.ReportBenchmarkResultRequest, $root.xsuportal.proto.services.bench.ReportBenchmarkResultResponse, request, callback);
-                    }, "name", { value: "StreamBenchmarkResult" });
-
-                    /**
-                     * Calls StreamBenchmarkResult.
-                     * @function streamBenchmarkResult
-                     * @memberof xsuportal.proto.services.bench.BenchmarkReportService
-                     * @instance
-                     * @param {xsuportal.proto.services.bench.IReportBenchmarkResultRequest} request ReportBenchmarkResultRequest message or plain object
-                     * @returns {Promise<xsuportal.proto.services.bench.ReportBenchmarkResultResponse>} Promise
-                     * @variation 2
-                     */
-
-                    return BenchmarkReportService;
+                    return BenchmarkReport;
                 })();
 
                 bench.ReportBenchmarkResultRequest = (function() {
@@ -12889,6 +12856,7 @@ $root.xsuportal = (function() {
                      * @interface IReportBenchmarkResultRequest
                      * @property {number|Long|null} [jobId] ReportBenchmarkResultRequest jobId
                      * @property {string|null} [handle] ReportBenchmarkResultRequest handle
+                     * @property {number|Long|null} [nonce] ReportBenchmarkResultRequest nonce
                      * @property {xsuportal.proto.resources.IBenchmarkResult|null} [result] ReportBenchmarkResultRequest result
                      */
 
@@ -12922,6 +12890,14 @@ $root.xsuportal = (function() {
                      * @instance
                      */
                     ReportBenchmarkResultRequest.prototype.handle = "";
+
+                    /**
+                     * ReportBenchmarkResultRequest nonce.
+                     * @member {number|Long} nonce
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
+                     * @instance
+                     */
+                    ReportBenchmarkResultRequest.prototype.nonce = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * ReportBenchmarkResultRequest result.
@@ -12959,8 +12935,10 @@ $root.xsuportal = (function() {
                             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.jobId);
                         if (message.handle != null && Object.hasOwnProperty.call(message, "handle"))
                             writer.uint32(/* id 2, wireType 2 =*/18).string(message.handle);
+                        if (message.nonce != null && Object.hasOwnProperty.call(message, "nonce"))
+                            writer.uint32(/* id 3, wireType 0 =*/24).int64(message.nonce);
                         if (message.result != null && Object.hasOwnProperty.call(message, "result"))
-                            $root.xsuportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                            $root.xsuportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                         return writer;
                     };
 
@@ -13002,6 +12980,9 @@ $root.xsuportal = (function() {
                                 message.handle = reader.string();
                                 break;
                             case 3:
+                                message.nonce = reader.int64();
+                                break;
+                            case 4:
                                 message.result = $root.xsuportal.proto.resources.BenchmarkResult.decode(reader, reader.uint32());
                                 break;
                             default:
@@ -13045,6 +13026,9 @@ $root.xsuportal = (function() {
                         if (message.handle != null && message.hasOwnProperty("handle"))
                             if (!$util.isString(message.handle))
                                 return "handle: string expected";
+                        if (message.nonce != null && message.hasOwnProperty("nonce"))
+                            if (!$util.isInteger(message.nonce) && !(message.nonce && $util.isInteger(message.nonce.low) && $util.isInteger(message.nonce.high)))
+                                return "nonce: integer|Long expected";
                         if (message.result != null && message.hasOwnProperty("result")) {
                             var error = $root.xsuportal.proto.resources.BenchmarkResult.verify(message.result);
                             if (error)
@@ -13076,6 +13060,15 @@ $root.xsuportal = (function() {
                                 message.jobId = new $util.LongBits(object.jobId.low >>> 0, object.jobId.high >>> 0).toNumber();
                         if (object.handle != null)
                             message.handle = String(object.handle);
+                        if (object.nonce != null)
+                            if ($util.Long)
+                                (message.nonce = $util.Long.fromValue(object.nonce)).unsigned = false;
+                            else if (typeof object.nonce === "string")
+                                message.nonce = parseInt(object.nonce, 10);
+                            else if (typeof object.nonce === "number")
+                                message.nonce = object.nonce;
+                            else if (typeof object.nonce === "object")
+                                message.nonce = new $util.LongBits(object.nonce.low >>> 0, object.nonce.high >>> 0).toNumber();
                         if (object.result != null) {
                             if (typeof object.result !== "object")
                                 throw TypeError(".xsuportal.proto.services.bench.ReportBenchmarkResultRequest.result: object expected");
@@ -13104,6 +13097,11 @@ $root.xsuportal = (function() {
                             } else
                                 object.jobId = options.longs === String ? "0" : 0;
                             object.handle = "";
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.nonce = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.nonce = options.longs === String ? "0" : 0;
                             object.result = null;
                         }
                         if (message.jobId != null && message.hasOwnProperty("jobId"))
@@ -13113,6 +13111,11 @@ $root.xsuportal = (function() {
                                 object.jobId = options.longs === String ? $util.Long.prototype.toString.call(message.jobId) : options.longs === Number ? new $util.LongBits(message.jobId.low >>> 0, message.jobId.high >>> 0).toNumber() : message.jobId;
                         if (message.handle != null && message.hasOwnProperty("handle"))
                             object.handle = message.handle;
+                        if (message.nonce != null && message.hasOwnProperty("nonce"))
+                            if (typeof message.nonce === "number")
+                                object.nonce = options.longs === String ? String(message.nonce) : message.nonce;
+                            else
+                                object.nonce = options.longs === String ? $util.Long.prototype.toString.call(message.nonce) : options.longs === Number ? new $util.LongBits(message.nonce.low >>> 0, message.nonce.high >>> 0).toNumber() : message.nonce;
                         if (message.result != null && message.hasOwnProperty("result"))
                             object.result = $root.xsuportal.proto.resources.BenchmarkResult.toObject(message.result, options);
                         return object;
@@ -13138,6 +13141,7 @@ $root.xsuportal = (function() {
                      * Properties of a ReportBenchmarkResultResponse.
                      * @memberof xsuportal.proto.services.bench
                      * @interface IReportBenchmarkResultResponse
+                     * @property {number|Long|null} [ackedNonce] ReportBenchmarkResultResponse ackedNonce
                      */
 
                     /**
@@ -13154,6 +13158,14 @@ $root.xsuportal = (function() {
                                 if (properties[keys[i]] != null)
                                     this[keys[i]] = properties[keys[i]];
                     }
+
+                    /**
+                     * ReportBenchmarkResultResponse ackedNonce.
+                     * @member {number|Long} ackedNonce
+                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultResponse
+                     * @instance
+                     */
+                    ReportBenchmarkResultResponse.prototype.ackedNonce = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * Creates a new ReportBenchmarkResultResponse instance using the specified properties.
@@ -13179,6 +13191,8 @@ $root.xsuportal = (function() {
                     ReportBenchmarkResultResponse.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
+                        if (message.ackedNonce != null && Object.hasOwnProperty.call(message, "ackedNonce"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.ackedNonce);
                         return writer;
                     };
 
@@ -13213,6 +13227,9 @@ $root.xsuportal = (function() {
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
+                            case 1:
+                                message.ackedNonce = reader.int64();
+                                break;
                             default:
                                 reader.skipType(tag & 7);
                                 break;
@@ -13248,6 +13265,9 @@ $root.xsuportal = (function() {
                     ReportBenchmarkResultResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
+                        if (message.ackedNonce != null && message.hasOwnProperty("ackedNonce"))
+                            if (!$util.isInteger(message.ackedNonce) && !(message.ackedNonce && $util.isInteger(message.ackedNonce.low) && $util.isInteger(message.ackedNonce.high)))
+                                return "ackedNonce: integer|Long expected";
                         return null;
                     };
 
@@ -13262,7 +13282,17 @@ $root.xsuportal = (function() {
                     ReportBenchmarkResultResponse.fromObject = function fromObject(object) {
                         if (object instanceof $root.xsuportal.proto.services.bench.ReportBenchmarkResultResponse)
                             return object;
-                        return new $root.xsuportal.proto.services.bench.ReportBenchmarkResultResponse();
+                        var message = new $root.xsuportal.proto.services.bench.ReportBenchmarkResultResponse();
+                        if (object.ackedNonce != null)
+                            if ($util.Long)
+                                (message.ackedNonce = $util.Long.fromValue(object.ackedNonce)).unsigned = false;
+                            else if (typeof object.ackedNonce === "string")
+                                message.ackedNonce = parseInt(object.ackedNonce, 10);
+                            else if (typeof object.ackedNonce === "number")
+                                message.ackedNonce = object.ackedNonce;
+                            else if (typeof object.ackedNonce === "object")
+                                message.ackedNonce = new $util.LongBits(object.ackedNonce.low >>> 0, object.ackedNonce.high >>> 0).toNumber();
+                        return message;
                     };
 
                     /**
@@ -13274,8 +13304,22 @@ $root.xsuportal = (function() {
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    ReportBenchmarkResultResponse.toObject = function toObject() {
-                        return {};
+                    ReportBenchmarkResultResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.ackedNonce = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.ackedNonce = options.longs === String ? "0" : 0;
+                        if (message.ackedNonce != null && message.hasOwnProperty("ackedNonce"))
+                            if (typeof message.ackedNonce === "number")
+                                object.ackedNonce = options.longs === String ? String(message.ackedNonce) : message.ackedNonce;
+                            else
+                                object.ackedNonce = options.longs === String ? $util.Long.prototype.toString.call(message.ackedNonce) : options.longs === Number ? new $util.LongBits(message.ackedNonce.low >>> 0, message.ackedNonce.high >>> 0).toNumber() : message.ackedNonce;
+                        return object;
                     };
 
                     /**

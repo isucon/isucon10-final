@@ -5,7 +5,9 @@ gem 'sinatra'
 gem 'mysql2'
 gem 'mysql2-cs-bind'
 gem 'griffin'
+gem 'griffin-interceptors'
 
 group :development do
   gem 'sinatra-contrib'
+  gem 'grpc-tools'
 end
