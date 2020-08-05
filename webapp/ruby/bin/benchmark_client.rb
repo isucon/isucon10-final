@@ -15,7 +15,7 @@ class ServiceClientBase
   def socket
     @socket ||= TCPSocket.new(HOST, PORT)
   end
-  
+
   def close
     @socket.close if @socket
   end
@@ -62,13 +62,10 @@ class BenchmarkClient
 
   def start
     loop do
-      # job を dequeue する
-      # もし job があったら benchmark を実行する
-      #   report する
-      # job がなかったら sleep
-      job_handle = queue_service_client.receive_benchmark_job({})
-      if job_handle
-        do_benchmark(job_handle)
+      response = queue_service_client.receive_benchmark_job({})
+      if response.job_handle
+        puts "Received job: #{response.job_handle}"
+        do_benchmark(response.job_handle)
       else
         sleep SLEEP_INTERVAL
       end
@@ -78,14 +75,32 @@ class BenchmarkClient
   def do_benchmark(job_handle)
     call = report_service_client.report_benchmark_result
     puts "Executing benchmark..."
+    request = report_service_client.make_request({
+      job_id: job_handle.job_id,
+      result: {
+        finished: false
+      },
+    })
+    call.send_msg(request)
+
     sleep 1
-    result = {
-      finished: true,
-      passed: true,
-      score: 1000,
-    }
-    puts "Finished benchmark! result=#{result.inspect}"
-    request = report_service_client.make_request({result: result})
+
+    request = report_service_client.make_request({
+      job_id: job_handle.job_id,
+      result: {
+        finished: true,
+        passed: true,
+        score: 1000,
+        score_breakdown: {
+          base: 1200,
+          deduction: 200,
+        },
+        reason: 'REASON',
+        stdout: 'succeeded',
+        stderr: 'no error',
+      },
+    })
+    puts "Finished benchmark! result=#{request}"
     call.send_msg(request)
   end
 

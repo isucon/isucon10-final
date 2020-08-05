@@ -8,17 +8,17 @@ service BenchmarkQueue {
 }
 
 message ReceiveBenchmarkJobRequest {
-  string token = 1;
-  string instance_name = 2;
+  // string token = 1;
+  // string instance_name = 2;
   int64 team_id = 3;
 }
 
 message ReceiveBenchmarkJobResponse {
   message JobHandle {
     int64 job_id = 1;
-    string handle = 2;
-    string target_ipv4_address = 3;
-    string description_human = 4;
+    // string handle = 2;
+    string target_hostname = 3;
+    // string description_human = 4;
   }
   // optional
   JobHandle job_handle = 1;

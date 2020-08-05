@@ -12080,8 +12080,6 @@ $root.xsuportal = (function() {
                      * Properties of a ReceiveBenchmarkJobRequest.
                      * @memberof xsuportal.proto.services.bench
                      * @interface IReceiveBenchmarkJobRequest
-                     * @property {string|null} [token] ReceiveBenchmarkJobRequest token
-                     * @property {string|null} [instanceName] ReceiveBenchmarkJobRequest instanceName
                      * @property {number|Long|null} [teamId] ReceiveBenchmarkJobRequest teamId
                      */
 
@@ -12099,22 +12097,6 @@ $root.xsuportal = (function() {
                                 if (properties[keys[i]] != null)
                                     this[keys[i]] = properties[keys[i]];
                     }
-
-                    /**
-                     * ReceiveBenchmarkJobRequest token.
-                     * @member {string} token
-                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
-                     * @instance
-                     */
-                    ReceiveBenchmarkJobRequest.prototype.token = "";
-
-                    /**
-                     * ReceiveBenchmarkJobRequest instanceName.
-                     * @member {string} instanceName
-                     * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest
-                     * @instance
-                     */
-                    ReceiveBenchmarkJobRequest.prototype.instanceName = "";
 
                     /**
                      * ReceiveBenchmarkJobRequest teamId.
@@ -12148,10 +12130,6 @@ $root.xsuportal = (function() {
                     ReceiveBenchmarkJobRequest.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.token != null && Object.hasOwnProperty.call(message, "token"))
-                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.token);
-                        if (message.instanceName != null && Object.hasOwnProperty.call(message, "instanceName"))
-                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.instanceName);
                         if (message.teamId != null && Object.hasOwnProperty.call(message, "teamId"))
                             writer.uint32(/* id 3, wireType 0 =*/24).int64(message.teamId);
                         return writer;
@@ -12188,12 +12166,6 @@ $root.xsuportal = (function() {
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
-                            case 1:
-                                message.token = reader.string();
-                                break;
-                            case 2:
-                                message.instanceName = reader.string();
-                                break;
                             case 3:
                                 message.teamId = reader.int64();
                                 break;
@@ -12232,12 +12204,6 @@ $root.xsuportal = (function() {
                     ReceiveBenchmarkJobRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.token != null && message.hasOwnProperty("token"))
-                            if (!$util.isString(message.token))
-                                return "token: string expected";
-                        if (message.instanceName != null && message.hasOwnProperty("instanceName"))
-                            if (!$util.isString(message.instanceName))
-                                return "instanceName: string expected";
                         if (message.teamId != null && message.hasOwnProperty("teamId"))
                             if (!$util.isInteger(message.teamId) && !(message.teamId && $util.isInteger(message.teamId.low) && $util.isInteger(message.teamId.high)))
                                 return "teamId: integer|Long expected";
@@ -12256,10 +12222,6 @@ $root.xsuportal = (function() {
                         if (object instanceof $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest)
                             return object;
                         var message = new $root.xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest();
-                        if (object.token != null)
-                            message.token = String(object.token);
-                        if (object.instanceName != null)
-                            message.instanceName = String(object.instanceName);
                         if (object.teamId != null)
                             if ($util.Long)
                                 (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
@@ -12285,19 +12247,12 @@ $root.xsuportal = (function() {
                         if (!options)
                             options = {};
                         var object = {};
-                        if (options.defaults) {
-                            object.token = "";
-                            object.instanceName = "";
+                        if (options.defaults)
                             if ($util.Long) {
                                 var long = new $util.Long(0, 0, false);
                                 object.teamId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                             } else
                                 object.teamId = options.longs === String ? "0" : 0;
-                        }
-                        if (message.token != null && message.hasOwnProperty("token"))
-                            object.token = message.token;
-                        if (message.instanceName != null && message.hasOwnProperty("instanceName"))
-                            object.instanceName = message.instanceName;
                         if (message.teamId != null && message.hasOwnProperty("teamId"))
                             if (typeof message.teamId === "number")
                                 object.teamId = options.longs === String ? String(message.teamId) : message.teamId;
@@ -12516,9 +12471,7 @@ $root.xsuportal = (function() {
                          * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse
                          * @interface IJobHandle
                          * @property {number|Long|null} [jobId] JobHandle jobId
-                         * @property {string|null} [handle] JobHandle handle
-                         * @property {string|null} [targetIpv4Address] JobHandle targetIpv4Address
-                         * @property {string|null} [descriptionHuman] JobHandle descriptionHuman
+                         * @property {string|null} [targetHostname] JobHandle targetHostname
                          */
 
                         /**
@@ -12545,28 +12498,12 @@ $root.xsuportal = (function() {
                         JobHandle.prototype.jobId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                         /**
-                         * JobHandle handle.
-                         * @member {string} handle
+                         * JobHandle targetHostname.
+                         * @member {string} targetHostname
                          * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
                          * @instance
                          */
-                        JobHandle.prototype.handle = "";
-
-                        /**
-                         * JobHandle targetIpv4Address.
-                         * @member {string} targetIpv4Address
-                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
-                         * @instance
-                         */
-                        JobHandle.prototype.targetIpv4Address = "";
-
-                        /**
-                         * JobHandle descriptionHuman.
-                         * @member {string} descriptionHuman
-                         * @memberof xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle
-                         * @instance
-                         */
-                        JobHandle.prototype.descriptionHuman = "";
+                        JobHandle.prototype.targetHostname = "";
 
                         /**
                          * Creates a new JobHandle instance using the specified properties.
@@ -12594,12 +12531,8 @@ $root.xsuportal = (function() {
                                 writer = $Writer.create();
                             if (message.jobId != null && Object.hasOwnProperty.call(message, "jobId"))
                                 writer.uint32(/* id 1, wireType 0 =*/8).int64(message.jobId);
-                            if (message.handle != null && Object.hasOwnProperty.call(message, "handle"))
-                                writer.uint32(/* id 2, wireType 2 =*/18).string(message.handle);
-                            if (message.targetIpv4Address != null && Object.hasOwnProperty.call(message, "targetIpv4Address"))
-                                writer.uint32(/* id 3, wireType 2 =*/26).string(message.targetIpv4Address);
-                            if (message.descriptionHuman != null && Object.hasOwnProperty.call(message, "descriptionHuman"))
-                                writer.uint32(/* id 4, wireType 2 =*/34).string(message.descriptionHuman);
+                            if (message.targetHostname != null && Object.hasOwnProperty.call(message, "targetHostname"))
+                                writer.uint32(/* id 3, wireType 2 =*/26).string(message.targetHostname);
                             return writer;
                         };
 
@@ -12637,14 +12570,8 @@ $root.xsuportal = (function() {
                                 case 1:
                                     message.jobId = reader.int64();
                                     break;
-                                case 2:
-                                    message.handle = reader.string();
-                                    break;
                                 case 3:
-                                    message.targetIpv4Address = reader.string();
-                                    break;
-                                case 4:
-                                    message.descriptionHuman = reader.string();
+                                    message.targetHostname = reader.string();
                                     break;
                                 default:
                                     reader.skipType(tag & 7);
@@ -12684,15 +12611,9 @@ $root.xsuportal = (function() {
                             if (message.jobId != null && message.hasOwnProperty("jobId"))
                                 if (!$util.isInteger(message.jobId) && !(message.jobId && $util.isInteger(message.jobId.low) && $util.isInteger(message.jobId.high)))
                                     return "jobId: integer|Long expected";
-                            if (message.handle != null && message.hasOwnProperty("handle"))
-                                if (!$util.isString(message.handle))
-                                    return "handle: string expected";
-                            if (message.targetIpv4Address != null && message.hasOwnProperty("targetIpv4Address"))
-                                if (!$util.isString(message.targetIpv4Address))
-                                    return "targetIpv4Address: string expected";
-                            if (message.descriptionHuman != null && message.hasOwnProperty("descriptionHuman"))
-                                if (!$util.isString(message.descriptionHuman))
-                                    return "descriptionHuman: string expected";
+                            if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
+                                if (!$util.isString(message.targetHostname))
+                                    return "targetHostname: string expected";
                             return null;
                         };
 
@@ -12717,12 +12638,8 @@ $root.xsuportal = (function() {
                                     message.jobId = object.jobId;
                                 else if (typeof object.jobId === "object")
                                     message.jobId = new $util.LongBits(object.jobId.low >>> 0, object.jobId.high >>> 0).toNumber();
-                            if (object.handle != null)
-                                message.handle = String(object.handle);
-                            if (object.targetIpv4Address != null)
-                                message.targetIpv4Address = String(object.targetIpv4Address);
-                            if (object.descriptionHuman != null)
-                                message.descriptionHuman = String(object.descriptionHuman);
+                            if (object.targetHostname != null)
+                                message.targetHostname = String(object.targetHostname);
                             return message;
                         };
 
@@ -12745,21 +12662,15 @@ $root.xsuportal = (function() {
                                     object.jobId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                                 } else
                                     object.jobId = options.longs === String ? "0" : 0;
-                                object.handle = "";
-                                object.targetIpv4Address = "";
-                                object.descriptionHuman = "";
+                                object.targetHostname = "";
                             }
                             if (message.jobId != null && message.hasOwnProperty("jobId"))
                                 if (typeof message.jobId === "number")
                                     object.jobId = options.longs === String ? String(message.jobId) : message.jobId;
                                 else
                                     object.jobId = options.longs === String ? $util.Long.prototype.toString.call(message.jobId) : options.longs === Number ? new $util.LongBits(message.jobId.low >>> 0, message.jobId.high >>> 0).toNumber() : message.jobId;
-                            if (message.handle != null && message.hasOwnProperty("handle"))
-                                object.handle = message.handle;
-                            if (message.targetIpv4Address != null && message.hasOwnProperty("targetIpv4Address"))
-                                object.targetIpv4Address = message.targetIpv4Address;
-                            if (message.descriptionHuman != null && message.hasOwnProperty("descriptionHuman"))
-                                object.descriptionHuman = message.descriptionHuman;
+                            if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
+                                object.targetHostname = message.targetHostname;
                             return object;
                         };
 

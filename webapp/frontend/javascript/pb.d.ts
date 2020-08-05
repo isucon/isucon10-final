@@ -5003,12 +5003,6 @@ export namespace xsuportal {
                 /** Properties of a ReceiveBenchmarkJobRequest. */
                 interface IReceiveBenchmarkJobRequest {
 
-                    /** ReceiveBenchmarkJobRequest token */
-                    token?: (string|null);
-
-                    /** ReceiveBenchmarkJobRequest instanceName */
-                    instanceName?: (string|null);
-
                     /** ReceiveBenchmarkJobRequest teamId */
                     teamId?: (number|Long|null);
                 }
@@ -5021,12 +5015,6 @@ export namespace xsuportal {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: xsuportal.proto.services.bench.IReceiveBenchmarkJobRequest);
-
-                    /** ReceiveBenchmarkJobRequest token. */
-                    public token: string;
-
-                    /** ReceiveBenchmarkJobRequest instanceName. */
-                    public instanceName: string;
 
                     /** ReceiveBenchmarkJobRequest teamId. */
                     public teamId: (number|Long);
@@ -5200,14 +5188,8 @@ export namespace xsuportal {
                         /** JobHandle jobId */
                         jobId?: (number|Long|null);
 
-                        /** JobHandle handle */
-                        handle?: (string|null);
-
-                        /** JobHandle targetIpv4Address */
-                        targetIpv4Address?: (string|null);
-
-                        /** JobHandle descriptionHuman */
-                        descriptionHuman?: (string|null);
+                        /** JobHandle targetHostname */
+                        targetHostname?: (string|null);
                     }
 
                     /** Represents a JobHandle. */
@@ -5222,14 +5204,8 @@ export namespace xsuportal {
                         /** JobHandle jobId. */
                         public jobId: (number|Long);
 
-                        /** JobHandle handle. */
-                        public handle: string;
-
-                        /** JobHandle targetIpv4Address. */
-                        public targetIpv4Address: string;
-
-                        /** JobHandle descriptionHuman. */
-                        public descriptionHuman: string;
+                        /** JobHandle targetHostname. */
+                        public targetHostname: string;
 
                         /**
                          * Creates a new JobHandle instance using the specified properties.
