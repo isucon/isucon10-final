@@ -5,8 +5,8 @@ option go_package = "github.com/isucon/isucon10-final/proto/services/bench";
 import "xsuportal/resources/benchmark_result.proto";
 
 service BenchmarkReport {
-  rpc ReportBenchmarkResult(ReportBenchmarkResultRequest)
-      returns (ReportBenchmarkResultResponse);
+  rpc ReportBenchmarkResult(stream ReportBenchmarkResultRequest)
+      returns (stream ReportBenchmarkResultResponse);
 }
 
 message ReportBenchmarkResultRequest {

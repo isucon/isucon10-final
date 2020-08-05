@@ -7,7 +7,7 @@ GEM
     ffi (1.13.1)
     get_process_mem (0.2.5)
       ffi (~> 1.0)
-    google-protobuf (3.12.2)
+    google-protobuf (3.12.4)
     googleapis-common-protos-types (1.0.5)
       google-protobuf (~> 3.11)
     griffin (0.2.4)
