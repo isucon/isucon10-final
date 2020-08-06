@@ -37,6 +37,18 @@ module Xsuportal
         Proto::Services::Registration::DeleteRegistrationRequest,
         Proto::Services::Registration::DeleteRegistrationResponse,
       ],
+      'POST /api/benchmark/job' => [
+        Proto::Services::Contestant::EnqueueBenchmarkJobRequest,
+        Proto::Services::Contestant::EnqueueBenchmarkJobResponse,
+      ],
+      'GET /api/benchmark/jobs' => [
+        Proto::Services::Contestant::ListBenchmarkJobsRequest,
+        Proto::Services::Contestant::ListBenchmarkJobsResponse,
+      ],
+      'GET /api/benchmark/job' => [
+        Proto::Services::Contestant::GetBenchmarkJobRequest,
+        Proto::Services::Contestant::GetBenchmarkJobResponse,
+      ],
       'POST /api/signup' => [
         Proto::Services::Contestant::SignupRequest,
         Proto::Services::Contestant::SignupResponse,

@@ -4,8 +4,7 @@ option go_package = "github.com/isucon/isucon10-final/proto/services/contestant"
 
 import "xsuportal/resources/benchmark_job.proto";
 
-message ListBenchmarkJobsRequest {
-}
+message ListBenchmarkJobsRequest {}
 
 message ListBenchmarkJobsResponse {
   repeated xsuportal.proto.resources.BenchmarkJob jobs = 1;
@@ -13,7 +12,8 @@ message ListBenchmarkJobsResponse {
 
 message EnqueueBenchmarkJobRequest {
   // target ContestantInstance id
-  int64 target_id = 1;
+  // int64 target_id = 1;
+  string target_hostname = 10;
 }
 
 message EnqueueBenchmarkJobResponse {
@@ -21,9 +21,7 @@ message EnqueueBenchmarkJobResponse {
 }
 
 // Query parameter
-message GetBenchmarkJobQuery {
-  int64 id = 1;
-}
+message GetBenchmarkJobQuery { int64 job_id = 1; }
 
 message GetBenchmarkJobResponse {
   xsuportal.proto.resources.BenchmarkJob job = 1;

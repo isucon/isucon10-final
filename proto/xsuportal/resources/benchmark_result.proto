@@ -16,9 +16,9 @@ message BenchmarkResult {
   string stdout = 6;
   string stderr = 7;
 
-  Survey survey = 8;
+  // Survey survey = 8;
 
-  message Survey {
-    string language = 1;
-  }
+  // message Survey {
+  //   string language = 1;
+  // }
 }

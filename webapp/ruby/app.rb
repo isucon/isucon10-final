@@ -105,6 +105,33 @@ module Xsuportal
         )
       end
 
+      def benchmark_job_pb(job)
+        Proto::Resources::BenchmarkJob.new(
+          id: job[:id],
+          team_id: job[:team_id],
+          status: job[:status],
+          created_at: job[:created_at],
+          updated_at: job[:updated_at],
+          started_at: job[:started_atj],
+          finished_at: job[:finished_at],
+        )
+      end
+
+      def benchmark_result_pb(result)
+        Proto::Resources::BenchmarkResult.new(
+          finished: result[:finished],
+          passed: result[:passed],
+          score: result[:score],
+          score_breakdown: result[:score_breakdown] ? Proto::Resources::BenchmarkResult::ScoreBreakdown.new(
+            base: result[:score_breakdown][:base],
+            deduction: result[:score_breakdown][:deduction],
+          ) : nil,
+          reason: result[:reason],
+          reason: result[:stdout],
+          reason: result[:stderr],
+        )
+      end
+
       def decode_request_pb
         cls = PB_TABLE.fetch(request.env.fetch('sinatra.route'))[0]
         cls.decode(request.body.read)
@@ -367,6 +394,80 @@ module Xsuportal
         end
       end
       encode_response_pb
+    end
+
+    post '/api/benchmark/job' do
+      Database.transaction do
+        unless current_contestant
+          Database.transaction_rollback
+          halt_pb 401, 'ログインが必要です'
+        end
+        unless current_team
+          Database.transaction_rollback
+          halt_pb 400, 'チームに所属していません'
+        end
+
+        db.xquery(
+          'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, NOW(), NOW())',
+          request.target_hostname,
+          current_team[:id],
+          'ready',
+        )
+      end
+      encode_response_pb
+    end
+
+    get '/api/benchmark/jobs' do
+      unless current_contestant
+        halt_pb 401, 'ログインが必要です'
+      end
+      unless current_team
+        halt_pb 400, 'チームに所属していません'
+      end
+
+      jobs = db.xquery(
+        'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC',
+        current_team[:id],
+      )
+      jobs_pb = jobs&.map { |job| benchmark_job_pb(job) };
+      encode_response_pb(
+        jobs: jobs_pb,
+      )
+    end
+
+    get '/api/benchmark/job' do
+      unless current_contestant
+        halt_pb 401, 'ログインが必要です'
+      end
+      unless current_team
+        halt_pb 400, 'チームに所属していません'
+      end
+
+      job = db.xquery(
+        'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `job_id` = ? LIMIT 1',
+        current_team[:id],
+        request.job_id,
+      ).first
+
+      unless job
+        halt_pb 404, 'ベンチマークジョブが見つかりません'
+      end
+
+      result = db.xquery(
+        <<~SQL,
+          SELECT r.* FROM `benchmark_results` r
+          RIGHT JOIN `benchmark_jobs` j ON j.`latest_benchmark_result_id` = r.id
+          WHERE r.benchmark_job_id = ? AND j.team_id = ?
+          LIMIT 1
+        SQL
+        request.job_id,
+        current_team[:id],
+      ).first
+
+      encode_response_pb(
+        job: benchmark_job_pb(job),
+        result: result ? benchmark_result_pb(result) : nil,
+      )
     end
 
     post '/api/signup' do
