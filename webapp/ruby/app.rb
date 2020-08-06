@@ -65,6 +65,17 @@ module Xsuportal
         end
       end
 
+      def login_required(team: true, lock: false)
+        unless current_contestant(lock: lock)
+          Database.ensure_transaction_close
+          halt_pb 401, 'ログインが必要です'
+        end
+        if team && !current_team(lock: lock)
+          Database.ensure_transaction_close
+          halt_pb 400, '参加登録が必要です'
+        end
+      end
+
       def current_contest_status
         contest = db.query(
           <<~SQL
@@ -364,12 +375,9 @@ module Xsuportal
       result = {}
 
       Database.transaction do
-        invite_token = SecureRandom.urlsafe_base64(64)
+        login_required(team: false, lock: true)
 
-        unless current_contestant(lock: true)
-          Database.transaction_rollback
-          halt_pb 401, 'ログインが必要です'
-        end
+        invite_token = SecureRandom.urlsafe_base64(64)
 
         db.xquery(
           'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`, `updated_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
@@ -407,10 +415,7 @@ module Xsuportal
       req = decode_request_pb
 
       Database.transaction do
-        unless current_contestant
-          Database.transaction_rollback
-          halt_pb 401, 'ログインが必要です'
-        end
+        login_required(team: false, lock: true)
 
         team = db.xquery(
           'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE AND `disqualified` = FALSE LIMIT 1 FOR UPDATE',
@@ -449,15 +454,7 @@ module Xsuportal
       req = decode_request_pb
 
       Database.transaction do
-
-        unless current_contestant(lock: true)
-          Database.transaction_rollback
-          halt_pb 401, 'ログインが必要です'
-        end
-        unless current_team(lock: true)
-          Database.transaction_rollback
-          halt_pb 400, '参加登録されていません'
-        end
+        login_required(lock: true)
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
@@ -481,14 +478,7 @@ module Xsuportal
 
     delete '/api/registration' do
       Database.transaction do
-        unless current_contestant(lock: true)
-          Database.transaction_rollback
-          halt_pb 401, 'ログインが必要です'
-        end
-        unless current_team(lock: true)
-          Database.transaction_rollback
-          halt_pb 400, 'チームに所属していません'
-        end
+        login_required(lock: true)
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
@@ -513,14 +503,7 @@ module Xsuportal
       req = decode_request_pb
 
       Database.transaction do
-        unless current_contestant
-          Database.transaction_rollback
-          halt_pb 401, 'ログインが必要です'
-        end
-        unless current_team
-          Database.transaction_rollback
-          halt_pb 400, 'チームに所属していません'
-        end
+        login_required
 
         db.xquery(
           'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
@@ -533,12 +516,7 @@ module Xsuportal
     end
 
     get '/api/contestant/benchmark_jobs' do
-      unless current_contestant
-        halt_pb 401, 'ログインが必要です'
-      end
-      unless current_team
-        halt_pb 400, 'チームに所属していません'
-      end
+      login_required
 
       jobs = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC',
@@ -551,12 +529,7 @@ module Xsuportal
     end
 
     get '/api/contestant/benchmark_jobs/:id' do
-      unless current_contestant
-        halt_pb 401, 'ログインが必要です'
-      end
-      unless current_team
-        halt_pb 400, 'チームに所属していません'
-      end
+      login_required
 
       job = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `id` = ? LIMIT 1',
