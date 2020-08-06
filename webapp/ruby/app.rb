@@ -226,30 +226,34 @@ module Xsuportal
     get '/api/contest' do
       contest = db.query(
         <<~SQL
-        SELECT *,
+        SELECT
+          *,
           NOW(6) AS `current_time`,
-          (NOW(6) < `registration_open_at`) AS `standby`,
-          (`registration_open_at` <= NOW(6) AND NOW(6) < `contest_start_at`) AS `registration`,
-          (`contest_start_at` <= NOW(6) AND NOW(6) < `contest_freeze_at`) AS `started`,
-          (`contest_freeze_at` <= NOW(6) AND NOW(6) < `contest_end_at`) AS `frozen`,
-          (`contest_end_at` <= NOW(6)) AS `finished`
+          CASE
+            WHEN NOW(6) < `registration_open_at` THEN 'standby'
+            WHEN `registration_open_at` <= NOW(6) AND NOW(6) < `contest_start_at` THEN 'registration'
+            WHEN `contest_start_at` <= NOW(6) AND NOW(6) < `contest_freeze_at` THEN 'started'
+            WHEN `contest_freeze_at` <= NOW(6) AND NOW(6) < `contest_end_at` THEN 'frozen'
+            WHEN `contest_end_at` <= NOW(6) THEN 'finished'
+            ELSE 'unknown'
+          END AS `status`
         FROM `contest_config`
         SQL
       ).first
 
-      status = case 1
-      when contest[:standby]
+      status = case contest[:status]
+      when 'standby'
         Proto::Resources::Contest::Status::STANDBY
-      when contest[:registration]
+      when 'registration'
         Proto::Resources::Contest::Status::REGISTRATION
-      when contest[:started]
+      when 'started'
         Proto::Resources::Contest::Status::STARTED
-      when contest[:frozen]
+      when 'frozen'
         Proto::Resources::Contest::Status::FROZEN
-      when contest[:finished]
+      when 'finished'
         Proto::Resources::Contest::Status::FINISHED
       else
-        raise 'Unexpected contest status'
+        raise "Unexpected contest status: #{contest[:status].inspect}"
       end
 
       encode_response_pb(
