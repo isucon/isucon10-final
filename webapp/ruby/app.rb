@@ -65,6 +65,51 @@ module Xsuportal
         end
       end
 
+      def current_contest_status
+        contest = db.query(
+          <<~SQL
+          SELECT
+            *,
+            NOW(6) AS `current_time`,
+            CASE
+              WHEN NOW(6) < `registration_open_at` THEN 'standby'
+              WHEN `registration_open_at` <= NOW(6) AND NOW(6) < `contest_start_at` THEN 'registration'
+              WHEN `contest_start_at` <= NOW(6) AND NOW(6) < `contest_freeze_at` THEN 'started'
+              WHEN `contest_freeze_at` <= NOW(6) AND NOW(6) < `contest_end_at` THEN 'frozen'
+              WHEN `contest_end_at` <= NOW(6) THEN 'finished'
+              ELSE 'unknown'
+            END AS `status`
+          FROM `contest_config`
+          SQL
+        ).first
+
+        status = case contest[:status]
+        when 'standby'
+          Proto::Resources::Contest::Status::STANDBY
+        when 'registration'
+          Proto::Resources::Contest::Status::REGISTRATION
+        when 'started'
+          Proto::Resources::Contest::Status::STARTED
+        when 'frozen'
+          Proto::Resources::Contest::Status::FROZEN
+        when 'finished'
+          Proto::Resources::Contest::Status::FINISHED
+        else
+          raise "Unexpected contest status: #{contest[:status].inspect}"
+        end
+
+        {
+          contest: {
+            registration_open_at: contest[:registration_open_at],
+            contest_start_at: contest[:contest_start_at],
+            contest_freeze_at: contest[:contest_freeze_at],
+            contest_end_at: contest[:contest_end_at],
+          },
+          current_time: contest[:current_time],
+          status: status,
+        }
+      end
+
       def contestant_pb(contestant, detail: false)
         Proto::Resources::Contestant.new(
           id: contestant[:id],
@@ -224,47 +269,18 @@ module Xsuportal
     end
 
     get '/api/contest' do
-      contest = db.query(
-        <<~SQL
-        SELECT
-          *,
-          NOW(6) AS `current_time`,
-          CASE
-            WHEN NOW(6) < `registration_open_at` THEN 'standby'
-            WHEN `registration_open_at` <= NOW(6) AND NOW(6) < `contest_start_at` THEN 'registration'
-            WHEN `contest_start_at` <= NOW(6) AND NOW(6) < `contest_freeze_at` THEN 'started'
-            WHEN `contest_freeze_at` <= NOW(6) AND NOW(6) < `contest_end_at` THEN 'frozen'
-            WHEN `contest_end_at` <= NOW(6) THEN 'finished'
-            ELSE 'unknown'
-          END AS `status`
-        FROM `contest_config`
-        SQL
-      ).first
-
-      status = case contest[:status]
-      when 'standby'
-        Proto::Resources::Contest::Status::STANDBY
-      when 'registration'
-        Proto::Resources::Contest::Status::REGISTRATION
-      when 'started'
-        Proto::Resources::Contest::Status::STARTED
-      when 'frozen'
-        Proto::Resources::Contest::Status::FROZEN
-      when 'finished'
-        Proto::Resources::Contest::Status::FINISHED
-      else
-        raise "Unexpected contest status: #{contest[:status].inspect}"
-      end
+      contest_status = current_contest_status
+      contest = contest_status[:contest]
 
       encode_response_pb(
-        contest: contest ? Proto::Resources::Contest.new(
+        contest: Proto::Resources::Contest.new(
           registration_open_at: contest[:registration_open_at],
           contest_start_at: contest[:contest_start_at],
           contest_freeze_at: contest[:contest_freeze_at],
           contest_end_at: contest[:contest_end_at],
-        ) : nil,
-        current_time: contest[:current_time],
-        status: status
+        ),
+        current_time: contest_status[:current_time],
+        status: contest_status[:status],
       )
     end
 
