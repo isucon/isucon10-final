@@ -1,3 +1,4 @@
+require 'xsuportal/resources/benchmark_job_pb'
 require 'xsuportal/services/bench/reporting_pb'
 require 'xsuportal/services/bench/reporting_services_pb'
 
@@ -22,8 +23,8 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           save_as_finished(request)
           break
         else
-          puts "#{request.job_id}: save as started"
-          save_as_started(request)
+          puts "#{request.job_id}: save as running"
+          save_as_running(request)
         end
 
         call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
@@ -75,7 +76,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         WHERE `id` = ? LIMIT 1
       SQL
       result_id,
-      Proto::Resources::BenchmarkJob::Status::FINISHED,
+      Xsuportal::Proto::Resources::BenchmarkJob::Status::FINISHED,
       request.job_id,
     )
   end
@@ -100,11 +101,12 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         UPDATE `benchmark_jobs` SET
           `latest_benchmark_result_id` = ?,
           `status` = ?,
+          `started_at` = NOW(),
           `updated_at` = NOW()
         WHERE `id` = ? LIMIT 1
       SQL
       result_id,
-      Proto::Resources::BenchmarkJob::Status::RUNNING,
+      Xsuportal::Proto::Resources::BenchmarkJob::Status::RUNNING,
       request.job_id,
     )
   end

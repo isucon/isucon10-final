@@ -1,3 +1,4 @@
+require 'xsuportal/resources/benchmark_job_pb'
 require 'xsuportal/services/bench/receiving_pb'
 require 'xsuportal/services/bench/receiving_services_pb'
 
@@ -6,7 +7,10 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
     db = Xsuportal::Database.connection
     job_handle = nil
     Xsuportal::Database.transaction do
-      job = db.xquery("SELECT * FROM `benchmark_jobs` WHERE `status` = 'ready' ORDER BY `id` LIMIT 1 FOR UPDATE").first
+      job = db.xquery(
+        'SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1 FOR UPDATE',
+        Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
+      ).first
       unless job
         break
       end
