@@ -72,7 +72,7 @@ module Xsuportal
         end
         if team && !current_team(lock: lock)
           Database.ensure_transaction_close
-          halt_pb 400, '参加登録が必要です'
+          halt_pb 403, '参加登録が必要です'
         end
       end
 
@@ -96,15 +96,15 @@ module Xsuportal
 
         status = case contest[:status]
         when 'standby'
-          Proto::Resources::Contest::Status::STANDBY
+          :STANDBY
         when 'registration'
-          Proto::Resources::Contest::Status::REGISTRATION
+          :REGISTRATION
         when 'started'
-          Proto::Resources::Contest::Status::STARTED
+          :STARTED
         when 'frozen'
-          Proto::Resources::Contest::Status::FROZEN
+          :FROZEN
         when 'finished'
-          Proto::Resources::Contest::Status::FINISHED
+          :FINISHED
         else
           raise "Unexpected contest status: #{contest[:status].inspect}"
         end
@@ -119,6 +119,14 @@ module Xsuportal
           current_time: contest[:current_time],
           status: status,
         }
+      end
+
+      def contest_status_restricted(statuses, msg)
+        statuses = [statuses] unless Array === statuses
+        unless statuses.include?(current_contest_status[:status])
+          Database.ensure_transaction_close
+          halt_pb 403, msg
+        end
       end
 
       def contestant_pb(contestant, detail: false)
@@ -227,7 +235,7 @@ module Xsuportal
       db.query('TRUNCATE `contest_config`')
 
       db.xquery(
-        'INSERT `contestants` (`id`, `password`, `staff`, `created_at`, `updated_at`) VAULES (?, ?, TRUE, NOW(6), NOW(6))',
+        'INSERT `contestants` (`id`, `password`, `staff`, `created_at`, `updated_at`) VALUES (?, ?, TRUE, NOW(6), NOW(6))',
         ADMIN_ID,
         ADMIN_PASSWORD,
       )
@@ -348,17 +356,17 @@ module Xsuportal
 
       status = case
       when current_contestant&.fetch(:team_id)
-        Proto::Services::Registration::GetRegistrationSessionResponse::Status::JOINED
+        :JOINED
       when team && members.count >= 3
-        Proto::Services::Registration::GetRegistrationSessionResponse::Status::NOT_JOINABLE
+        :NOT_JOINABLE
       # when !team && (!Contest.registration_open? || Contest.max_teams_reached?)
-      #   Proto::Services::Registration::GetRegistrationSessionResponse::Status::CLOSED
+      #   :CLOSED
       when !current_contestant
-        Proto::Services::Registration::GetRegistrationSessionResponse::Status::NOT_LOGGED_IN
+        :NOT_LOGGED_IN
       when team
-        Proto::Services::Registration::GetRegistrationSessionResponse::Status::JOINABLE
+        :JOINABLE
       when !team
-        Proto::Services::Registration::GetRegistrationSessionResponse::Status::CREATABLE
+        :CREATABLE
       else
         raise "undeterminable status"
       end
@@ -376,6 +384,7 @@ module Xsuportal
 
       Database.transaction do
         login_required(team: false, lock: true)
+        contest_status_restricted(:REGISTRATION, 'チーム登録期間ではありません')
 
         invite_token = SecureRandom.urlsafe_base64(64)
 
@@ -416,6 +425,7 @@ module Xsuportal
 
       Database.transaction do
         login_required(team: false, lock: true)
+        contest_status_restricted(:REGISTRATION, 'チーム登録期間ではありません')
 
         team = db.xquery(
           'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE AND `disqualified` = FALSE LIMIT 1 FOR UPDATE',
@@ -479,6 +489,7 @@ module Xsuportal
     delete '/api/registration' do
       Database.transaction do
         login_required(lock: true)
+        contest_status_restricted(:REGISTRATION, 'チーム登録期間外は辞退できません')
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
@@ -504,6 +515,7 @@ module Xsuportal
 
       Database.transaction do
         login_required
+        contest_status_restricted([:STARTED, :FROZEN], '競技時間外はベンチマークを実行できません')
 
         db.xquery(
           'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
