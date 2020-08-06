@@ -4,7 +4,7 @@ class RegistrationTest < TestBase
   class << self
     def startup
       client.truncate!
-      fixtures[:teams_and_contestants].create
+      fixtures[:teams_and_contestants].create(more: true)
     end
   end
 
@@ -221,7 +221,7 @@ class RegistrationTest < TestBase
       )
     end
   end
-  
+
   test 'delete registration (leader)' do
     login(contestant_id: 'alice02', password: 'password') do
       request :get, '/api/session'
@@ -241,7 +241,7 @@ class RegistrationTest < TestBase
       assert_equal 0, response[:contestant][:team_id]
     end
   end
-  
+
   test 'delete registration (member)' do
     login(contestant_id: 'bob03', password: 'password') do
       request :get, '/api/session'

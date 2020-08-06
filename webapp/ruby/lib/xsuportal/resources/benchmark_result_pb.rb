@@ -13,14 +13,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :reason, :string, 5
       optional :stdout, :string, 6
       optional :stderr, :string, 7
-      optional :survey, :message, 8, "xsuportal.proto.resources.BenchmarkResult.Survey"
     end
     add_message "xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown" do
       optional :base, :int64, 1
       optional :deduction, :int64, 2
-    end
-    add_message "xsuportal.proto.resources.BenchmarkResult.Survey" do
-      optional :language, :string, 1
     end
   end
 end
@@ -30,7 +26,6 @@ module Xsuportal
     module Resources
       BenchmarkResult = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.resources.BenchmarkResult").msgclass
       BenchmarkResult::ScoreBreakdown = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown").msgclass
-      BenchmarkResult::Survey = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.resources.BenchmarkResult.Survey").msgclass
     end
   end
 end

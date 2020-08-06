@@ -163,6 +163,8 @@ module Xsuportal
     post '/initialize' do
       db.query('TRUNCATE `teams`')
       db.query('TRUNCATE `contestants`')
+      db.query('TRUNCATE `benchmark_jobs`')
+      db.query('TRUNCATE `benchmark_results`')
 
       encode_response_pb(
         # TODO: 負荷レベルの指定
@@ -397,6 +399,8 @@ module Xsuportal
     end
 
     post '/api/benchmark/job' do
+      req = decode_request_pb
+
       Database.transaction do
         unless current_contestant
           Database.transaction_rollback
@@ -408,10 +412,10 @@ module Xsuportal
         end
 
         db.xquery(
-          'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, NOW(), NOW())',
-          request.target_hostname,
+          'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(), NOW())',
           current_team[:id],
-          'ready',
+          req.target_hostname,
+          Proto::Resources::BenchmarkJob::Status::PENDING,
         )
       end
       encode_response_pb

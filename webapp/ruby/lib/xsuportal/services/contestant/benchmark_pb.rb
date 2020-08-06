@@ -12,7 +12,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       repeated :jobs, :message, 1, "xsuportal.proto.resources.BenchmarkJob"
     end
     add_message "xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest" do
-      optional :target_id, :int64, 1
+      optional :target_hostname, :string, 10
     end
     add_message "xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse" do
       optional :job, :message, 1, "xsuportal.proto.resources.BenchmarkJob"

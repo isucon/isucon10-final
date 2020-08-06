@@ -4,7 +4,7 @@ class AudienceTest < TestBase
   class << self
     def startup
       client.truncate!
-      fixtures[:teams_and_contestants].create
+      fixtures[:teams_and_contestants].create(more: true)
     end
   end
 
