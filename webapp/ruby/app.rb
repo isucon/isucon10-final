@@ -398,7 +398,7 @@ module Xsuportal
       encode_response_pb
     end
 
-    post '/api/benchmark/job' do
+    post '/api/contestant/benchmark_jobs' do
       req = decode_request_pb
 
       Database.transaction do
@@ -421,7 +421,7 @@ module Xsuportal
       encode_response_pb
     end
 
-    get '/api/benchmark/jobs' do
+    get '/api/contestant/benchmark_jobs' do
       unless current_contestant
         halt_pb 401, 'ログインが必要です'
       end
@@ -439,7 +439,7 @@ module Xsuportal
       )
     end
 
-    get '/api/benchmark/:id' do
+    get '/api/contestant/benchmark_jobs/:id' do
       unless current_contestant
         halt_pb 401, 'ログインが必要です'
       end

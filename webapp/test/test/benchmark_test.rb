@@ -10,21 +10,21 @@ class BenchmarkTest < TestBase
 
   test 'enqueue and list benchmark' do
     login(contestant_id: 'mirakui', password: 'password') do
-      request :get, '/api/benchmark/jobs'
+      request :get, '/api/contestant/benchmark_jobs'
       assert_equal 200, status
       assert_equal 0, response[:jobs].length
 
-      request :post, '/api/benchmark/job', {
+      request :post, '/api/contestant/benchmark_jobs', {
         target_hostname: 'test-001',
       }
       assert_equal 200, status
 
-      request :post, '/api/benchmark/job', {
+      request :post, '/api/contestant/benchmark_jobs', {
         target_hostname: 'test-001',
       }
       assert_equal 200, status
 
-      request :get, '/api/benchmark/jobs'
+      request :get, '/api/contestant/benchmark_jobs'
       assert_equal 2, response[:jobs].length
     end
   end
