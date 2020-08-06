@@ -2,11 +2,10 @@ require 'sinatra/base'
 require 'google/protobuf'
 require 'digest/sha2'
 require 'securerandom'
-require 'mysql2'
-require 'mysql2-cs-bind'
 
 $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
 require 'routes'
+require 'database'
 
 module Xsuportal
   class App < Sinatra::Base
@@ -30,56 +29,11 @@ module Xsuportal
 
     set :session_secret, 'tagomoris'
     set :sessions, key: 'session_xsucon', expire_after: 3600
+    set :show_exceptions, false
 
     helpers do
       def db
-        Thread.current[:db] ||= Mysql2::Client.new(
-          host: ENV['MYSQL_HOSTNAME'] || '127.0.0.1',
-          port: ENV['MYSQL_PORT'] || '3306',
-          username: ENV['MYSQL_USER'] || 'xsuportal',
-          database: ENV['MYSQL_DATABASE'] || 'xsuportal',
-          password: ENV['MYSQL_PASSWORD'] || 'xsuportal',
-          charset: 'utf8mb4',
-          database_timezone: :local,
-          cast_booleans: true,
-          symbolize_keys: true,
-          reconnect: true,
-        )
-      end
-
-      def db_ensure_transaction_close
-        if Thread.current[:db_transaction] == :open
-          db_transaction_rollback
-        end
-      end
-
-      def db_transaction_begin
-        db.query('BEGIN')
-        Thread.current[:db_transaction] = :open
-      end
-
-      def db_transaction_commit
-        db.query('COMMIT')
-        Thread.current[:db_transaction] = nil
-      end
-
-      def db_transaction_rollback
-        db.query('ROLLBACK')
-        Thread.current[:db_transaction] = nil
-      end
-
-      def db_transaction
-        begin
-          db_transaction_begin
-          yield
-          db_transaction_commit
-        rescue => e
-          db_transaction_rollback
-          puts e.full_message
-          halt_pb 500, exception: e
-        ensure
-          db_ensure_transaction_close
-        end
+        Xsuportal::Database.connection
       end
 
       def current_contestant(lock: false)
@@ -173,6 +127,12 @@ module Xsuportal
       end
     end
 
+    error do
+      err = env['sinatra.error']
+      $stderr.puts err.full_message
+      halt_pb 500, exception: err
+    end
+
     post '/initialize' do
       db.query('TRUNCATE `teams`')
       db.query('TRUNCATE `contestants`')
@@ -251,7 +211,7 @@ module Xsuportal
       else
         raise "undeterminable status"
       end
-  
+
       encode_response_pb(
         team: team ? team_pb(team, detail: current_contestant&.fetch(:id) == current_team&.fetch(:leader_id), member_detail: true, enable_members: true) : nil,
         status: status,
@@ -263,11 +223,11 @@ module Xsuportal
       req = decode_request_pb
       result = {}
 
-      db_transaction do
+      Database.transaction do
         invite_token = SecureRandom.urlsafe_base64(64)
 
         unless current_contestant(lock: true)
-          db_transaction_rollback
+          Database.transaction_rollback
           halt_pb 401, 'ログインが必要です'
         end
 
@@ -279,7 +239,7 @@ module Xsuportal
         )
         team_id = db.xquery('SELECT LAST_INSERT_ID() AS `id`').first&.fetch(:id)
         if !team_id
-          db_transaction_rollback
+          Database.transaction_rollback
           halt_pb 500, 'チームを登録できませんでした'
         end
 
@@ -306,9 +266,9 @@ module Xsuportal
     post '/api/registration/contestant' do
       req = decode_request_pb
 
-      db_transaction do
+      Database.transaction do
         unless current_contestant
-          db_transaction_rollback
+          Database.transaction_rollback
           halt_pb 401, 'ログインが必要です'
         end
 
@@ -319,7 +279,7 @@ module Xsuportal
         ).first
 
         unless team
-          db_transaction_rollback
+          Database.transaction_rollback
           halt_pb 400, '招待URLが不正です'
         end
 
@@ -329,7 +289,7 @@ module Xsuportal
         ).first
 
         if members[:cnt] >= 3
-          db_transaction_rollback
+          Database.transaction_rollback
           halt_pb 400, 'チーム人数の上限に達しています'
         end
 
@@ -348,14 +308,14 @@ module Xsuportal
     put '/api/registration' do
       req = decode_request_pb
 
-      db_transaction do
+      Database.transaction do
 
         unless current_contestant(lock: true)
-          db_transaction_rollback
+          Database.transaction_rollback
           halt_pb 401, 'ログインが必要です'
         end
         unless current_team(lock: true)
-          db_transaction_rollback
+          Database.transaction_rollback
           halt_pb 400, '参加登録されていません'
         end
 
@@ -380,13 +340,13 @@ module Xsuportal
     end
 
     delete '/api/registration' do
-      db_transaction do
+      Database.transaction do
         unless current_contestant(lock: true)
-          db_transaction_rollback
+          Database.transaction_rollback
           halt_pb 401, 'ログインが必要です'
         end
         unless current_team(lock: true)
-          db_transaction_rollback
+          Database.transaction_rollback
           halt_pb 400, 'チームに所属していません'
         end
 

@@ -1,4 +1,5 @@
-CREATE TABLE IF NOT EXISTS `contestants` (
+DROP TABLE IF EXISTS `contestants`;
+CREATE TABLE `contestants` (
   `id` VARCHAR(255) PRIMARY KEY,
   `password` VARCHAR(255) NOT NULL,
   `team_id` BIGINT,
@@ -6,9 +7,10 @@ CREATE TABLE IF NOT EXISTS `contestants` (
   `student` TINYINT(1) DEFAULT FALSE,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `teams` (
+DROP TABLE IF EXISTS `teams`;
+CREATE TABLE `teams` (
   `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL,
   `leader_id` VARCHAR(255),
@@ -21,4 +23,37 @@ CREATE TABLE IF NOT EXISTS `teams` (
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NOT NULL,
   UNIQUE KEY (`leader_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
+
+DROP TABLE IF EXISTS `benchmark_jobs`;
+CREATE TABLE `benchmark_jobs` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `team_id` BIGINT NOT NULL,
+  `status` VARCHAR(255) NOT NULL,
+  -- `instance_name` VARCHAR(255),
+  -- `handle` VARCHAR(255),
+  `latest_benchmark_result_id` BIGINT,
+  `started_at` DATETIME,
+  `finished_at` DATETIME,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
+DROP TABLE IF EXISTS `benchmark_results`;
+CREATE TABLE `benchmark_results` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `benchmark_job_id` BIGINT NOT NULL,
+  `score` INT,
+  `score_raw` INT,
+  `score_deduction` INT,
+  `finished` TINYINT(1) NOT NULL,
+  `passed` TINYINT(1),
+  `marked_at` DATETIME,
+  `reason` TEXT,
+  `stdout` TEXT,
+  `stderr` TEXT,
+  -- `exit_status` INT,
+  -- `exit_signal` INT,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;

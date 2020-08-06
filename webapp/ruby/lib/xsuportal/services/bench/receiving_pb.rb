@@ -6,8 +6,6 @@ require 'google/protobuf'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/services/bench/receiving.proto", :syntax => :proto3) do
     add_message "xsuportal.proto.services.bench.ReceiveBenchmarkJobRequest" do
-      optional :token, :string, 1
-      optional :instance_name, :string, 2
       optional :team_id, :int64, 3
     end
     add_message "xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse" do
@@ -15,9 +13,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle" do
       optional :job_id, :int64, 1
-      optional :handle, :string, 2
-      optional :target_ipv4_address, :string, 3
-      optional :description_human, :string, 4
+      optional :target_hostname, :string, 3
     end
   end
 end
