@@ -1,5 +1,5 @@
 Dir.chdir('lib') do
-  Dir.glob("xsuportal/**/*_pb.rb").each {|f| require f }
+  Dir.glob("xsuportal/services/**/*_pb.rb").each {|f| require f }
 end
 
 module Xsuportal
