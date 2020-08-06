@@ -26,6 +26,11 @@ class BenchmarkTest < TestBase
 
       request :get, '/api/contestant/benchmark_jobs'
       assert_equal 2, response[:jobs].length
+
+      job = response[:jobs].first
+      request :get, "/api/contestant/benchmark_jobs/#{job[:id]}", nil, { route: 'GET /api/contestant/benchmark_jobs/:id' }
+      assert_equal 200, status
+      assert_equal :PENDING, job[:status]
     end
   end
 end

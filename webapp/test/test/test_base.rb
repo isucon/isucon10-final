@@ -44,8 +44,8 @@ class TestBase < Test::Unit::TestCase
     client.status
   end
 
-  def request(method, path, payload={})
-    client.request(method, path, payload)
+  def request(method, path, payload={}, opts={})
+    client.request(method, path, payload, opts)
   end
 
   def login(contestant_id:, password:, create: false, &block)

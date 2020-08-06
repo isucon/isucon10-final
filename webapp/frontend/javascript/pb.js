@@ -14079,6 +14079,7 @@ $root.xsuportal = (function() {
                      * @memberof xsuportal.proto.services.contestant
                      * @interface IGetBenchmarkJobResponse
                      * @property {xsuportal.proto.resources.IBenchmarkJob|null} [job] GetBenchmarkJobResponse job
+                     * @property {xsuportal.proto.resources.IBenchmarkResult|null} [result] GetBenchmarkJobResponse result
                      */
 
                     /**
@@ -14103,6 +14104,14 @@ $root.xsuportal = (function() {
                      * @instance
                      */
                     GetBenchmarkJobResponse.prototype.job = null;
+
+                    /**
+                     * GetBenchmarkJobResponse result.
+                     * @member {xsuportal.proto.resources.IBenchmarkResult|null|undefined} result
+                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
+                     * @instance
+                     */
+                    GetBenchmarkJobResponse.prototype.result = null;
 
                     /**
                      * Creates a new GetBenchmarkJobResponse instance using the specified properties.
@@ -14130,6 +14139,8 @@ $root.xsuportal = (function() {
                             writer = $Writer.create();
                         if (message.job != null && Object.hasOwnProperty.call(message, "job"))
                             $root.xsuportal.proto.resources.BenchmarkJob.encode(message.job, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        if (message.result != null && Object.hasOwnProperty.call(message, "result"))
+                            $root.xsuportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
                         return writer;
                     };
 
@@ -14166,6 +14177,9 @@ $root.xsuportal = (function() {
                             switch (tag >>> 3) {
                             case 1:
                                 message.job = $root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32());
+                                break;
+                            case 2:
+                                message.result = $root.xsuportal.proto.resources.BenchmarkResult.decode(reader, reader.uint32());
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -14207,6 +14221,11 @@ $root.xsuportal = (function() {
                             if (error)
                                 return "job." + error;
                         }
+                        if (message.result != null && message.hasOwnProperty("result")) {
+                            var error = $root.xsuportal.proto.resources.BenchmarkResult.verify(message.result);
+                            if (error)
+                                return "result." + error;
+                        }
                         return null;
                     };
 
@@ -14227,6 +14246,11 @@ $root.xsuportal = (function() {
                                 throw TypeError(".xsuportal.proto.services.contestant.GetBenchmarkJobResponse.job: object expected");
                             message.job = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.job);
                         }
+                        if (object.result != null) {
+                            if (typeof object.result !== "object")
+                                throw TypeError(".xsuportal.proto.services.contestant.GetBenchmarkJobResponse.result: object expected");
+                            message.result = $root.xsuportal.proto.resources.BenchmarkResult.fromObject(object.result);
+                        }
                         return message;
                     };
 
@@ -14243,10 +14267,14 @@ $root.xsuportal = (function() {
                         if (!options)
                             options = {};
                         var object = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.job = null;
+                            object.result = null;
+                        }
                         if (message.job != null && message.hasOwnProperty("job"))
                             object.job = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.job, options);
+                        if (message.result != null && message.hasOwnProperty("result"))
+                            object.result = $root.xsuportal.proto.resources.BenchmarkResult.toObject(message.result, options);
                         return object;
                     };
 

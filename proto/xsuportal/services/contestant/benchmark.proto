@@ -1,7 +1,9 @@
 syntax = "proto3";
+
 package xsuportal.proto.services.contestant;
 option go_package = "github.com/isucon/isucon10-final/proto/services/contestant";
 
+import "xsuportal/resources/benchmark_result.proto";
 import "xsuportal/resources/benchmark_job.proto";
 
 message ListBenchmarkJobsRequest {}
@@ -25,4 +27,5 @@ message GetBenchmarkJobQuery { int64 id = 1; }
 
 message GetBenchmarkJobResponse {
   xsuportal.proto.resources.BenchmarkJob job = 1;
+  xsuportal.proto.resources.BenchmarkResult result = 2;
 }

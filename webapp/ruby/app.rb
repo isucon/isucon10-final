@@ -448,7 +448,7 @@ module Xsuportal
       end
 
       job = db.xquery(
-        'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `job_id` = ? LIMIT 1',
+        'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `id` = ? LIMIT 1',
         current_team[:id],
         params[:id],
       ).first

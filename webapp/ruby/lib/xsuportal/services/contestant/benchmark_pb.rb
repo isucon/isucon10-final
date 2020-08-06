@@ -3,6 +3,7 @@
 
 require 'google/protobuf'
 
+require 'xsuportal/resources/benchmark_result_pb'
 require 'xsuportal/resources/benchmark_job_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/services/contestant/benchmark.proto", :syntax => :proto3) do
@@ -22,6 +23,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "xsuportal.proto.services.contestant.GetBenchmarkJobResponse" do
       optional :job, :message, 1, "xsuportal.proto.resources.BenchmarkJob"
+      optional :result, :message, 2, "xsuportal.proto.resources.BenchmarkResult"
     end
   end
 end
