@@ -346,9 +346,6 @@ export namespace xsuportal {
                 /** BenchmarkJob teamId */
                 teamId?: (number|Long|null);
 
-                /** BenchmarkJob targetId */
-                targetId?: (number|Long|null);
-
                 /** BenchmarkJob status */
                 status?: (xsuportal.proto.resources.BenchmarkJob.Status|null);
 
@@ -364,20 +361,8 @@ export namespace xsuportal {
                 /** BenchmarkJob finishedAt */
                 finishedAt?: (google.protobuf.ITimestamp|null);
 
-                /** BenchmarkJob score */
-                score?: (number|Long|null);
-
-                /** BenchmarkJob instanceName */
-                instanceName?: (string|null);
-
-                /** BenchmarkJob team */
-                team?: (xsuportal.proto.resources.ITeam|null);
-
-                /** BenchmarkJob target */
-                target?: (xsuportal.proto.resources.IContestantInstance|null);
-
-                /** BenchmarkJob result */
-                result?: (xsuportal.proto.resources.IBenchmarkResult|null);
+                /** BenchmarkJob targetHostname */
+                targetHostname?: (string|null);
             }
 
             /** Represents a BenchmarkJob. */
@@ -395,9 +380,6 @@ export namespace xsuportal {
                 /** BenchmarkJob teamId. */
                 public teamId: (number|Long);
 
-                /** BenchmarkJob targetId. */
-                public targetId: (number|Long);
-
                 /** BenchmarkJob status. */
                 public status: xsuportal.proto.resources.BenchmarkJob.Status;
 
@@ -413,20 +395,8 @@ export namespace xsuportal {
                 /** BenchmarkJob finishedAt. */
                 public finishedAt?: (google.protobuf.ITimestamp|null);
 
-                /** BenchmarkJob score. */
-                public score: (number|Long);
-
-                /** BenchmarkJob instanceName. */
-                public instanceName: string;
-
-                /** BenchmarkJob team. */
-                public team?: (xsuportal.proto.resources.ITeam|null);
-
-                /** BenchmarkJob target. */
-                public target?: (xsuportal.proto.resources.IContestantInstance|null);
-
-                /** BenchmarkJob result. */
-                public result?: (xsuportal.proto.resources.IBenchmarkResult|null);
+                /** BenchmarkJob targetHostname. */
+                public targetHostname: string;
 
                 /**
                  * Creates a new BenchmarkJob instance using the specified properties.
@@ -534,9 +504,6 @@ export namespace xsuportal {
 
                 /** BenchmarkResult stderr */
                 stderr?: (string|null);
-
-                /** BenchmarkResult survey */
-                survey?: (xsuportal.proto.resources.BenchmarkResult.ISurvey|null);
             }
 
             /** Represents a BenchmarkResult. */
@@ -568,9 +535,6 @@ export namespace xsuportal {
 
                 /** BenchmarkResult stderr. */
                 public stderr: string;
-
-                /** BenchmarkResult survey. */
-                public survey?: (xsuportal.proto.resources.BenchmarkResult.ISurvey|null);
 
                 /**
                  * Creates a new BenchmarkResult instance using the specified properties.
@@ -736,96 +700,6 @@ export namespace xsuportal {
 
                     /**
                      * Converts this ScoreBreakdown to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a Survey. */
-                interface ISurvey {
-
-                    /** Survey language */
-                    language?: (string|null);
-                }
-
-                /** Represents a Survey. */
-                class Survey implements ISurvey {
-
-                    /**
-                     * Constructs a new Survey.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: xsuportal.proto.resources.BenchmarkResult.ISurvey);
-
-                    /** Survey language. */
-                    public language: string;
-
-                    /**
-                     * Creates a new Survey instance using the specified properties.
-                     * @param [properties] Properties to set
-                     * @returns Survey instance
-                     */
-                    public static create(properties?: xsuportal.proto.resources.BenchmarkResult.ISurvey): xsuportal.proto.resources.BenchmarkResult.Survey;
-
-                    /**
-                     * Encodes the specified Survey message. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
-                     * @param message Survey message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encode(message: xsuportal.proto.resources.BenchmarkResult.ISurvey, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Encodes the specified Survey message, length delimited. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
-                     * @param message Survey message or plain object to encode
-                     * @param [writer] Writer to encode to
-                     * @returns Writer
-                     */
-                    public static encodeDelimited(message: xsuportal.proto.resources.BenchmarkResult.ISurvey, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                    /**
-                     * Decodes a Survey message from the specified reader or buffer.
-                     * @param reader Reader or buffer to decode from
-                     * @param [length] Message length if known beforehand
-                     * @returns Survey
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.BenchmarkResult.Survey;
-
-                    /**
-                     * Decodes a Survey message from the specified reader or buffer, length delimited.
-                     * @param reader Reader or buffer to decode from
-                     * @returns Survey
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.BenchmarkResult.Survey;
-
-                    /**
-                     * Verifies a Survey message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a Survey message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns Survey
-                     */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.BenchmarkResult.Survey;
-
-                    /**
-                     * Creates a plain object from a Survey message. Also converts values to other types if specified.
-                     * @param message Survey
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: xsuportal.proto.resources.BenchmarkResult.Survey, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this Survey to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -5803,8 +5677,8 @@ export namespace xsuportal {
                 /** Properties of an EnqueueBenchmarkJobRequest. */
                 interface IEnqueueBenchmarkJobRequest {
 
-                    /** EnqueueBenchmarkJobRequest targetId */
-                    targetId?: (number|Long|null);
+                    /** EnqueueBenchmarkJobRequest targetHostname */
+                    targetHostname?: (string|null);
                 }
 
                 /** Represents an EnqueueBenchmarkJobRequest. */
@@ -5816,8 +5690,8 @@ export namespace xsuportal {
                      */
                     constructor(properties?: xsuportal.proto.services.contestant.IEnqueueBenchmarkJobRequest);
 
-                    /** EnqueueBenchmarkJobRequest targetId. */
-                    public targetId: (number|Long);
+                    /** EnqueueBenchmarkJobRequest targetHostname. */
+                    public targetHostname: string;
 
                     /**
                      * Creates a new EnqueueBenchmarkJobRequest instance using the specified properties.

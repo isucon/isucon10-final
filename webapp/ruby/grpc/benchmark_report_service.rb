@@ -75,12 +75,12 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         WHERE `id` = ? LIMIT 1
       SQL
       result_id,
-      'finished',
+      Proto::Resources::BenchmarkJob::Status::FINISHED,
       request.job_id,
     )
   end
 
-  def save_as_started(request)
+  def save_as_running(request)
     db = Xsuportal::Database.connection
     db.xquery(
       <<~SQL,
@@ -104,7 +104,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         WHERE `id` = ? LIMIT 1
       SQL
       result_id,
-      'started',
+      Proto::Resources::BenchmarkJob::Status::RUNNING,
       request.job_id,
     )
   end

@@ -10,16 +10,11 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
       unless job
         break
       end
-
-      db.xquery(
-        "UPDATE `benchmark_jobs` SET `status` = 'sent', `updated_at` = NOW() WHERE `id` = ? LIMIT 1",
-        job[:id],
-      )
       puts "Sending job_id=#{job[:id]}"
 
       job_handle = {
         job_id: job[:id],
-        target_hostname: "xsu-%03d" % job[:team_id], # TODO: tekitou
+        target_hostname: job[:target_hostname], # TODO: tekitou
       }
     end
 

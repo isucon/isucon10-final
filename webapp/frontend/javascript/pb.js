@@ -893,17 +893,12 @@ $root.xsuportal = (function() {
                  * @interface IBenchmarkJob
                  * @property {number|Long|null} [id] BenchmarkJob id
                  * @property {number|Long|null} [teamId] BenchmarkJob teamId
-                 * @property {number|Long|null} [targetId] BenchmarkJob targetId
                  * @property {xsuportal.proto.resources.BenchmarkJob.Status|null} [status] BenchmarkJob status
                  * @property {google.protobuf.ITimestamp|null} [createdAt] BenchmarkJob createdAt
                  * @property {google.protobuf.ITimestamp|null} [updatedAt] BenchmarkJob updatedAt
                  * @property {google.protobuf.ITimestamp|null} [startedAt] BenchmarkJob startedAt
                  * @property {google.protobuf.ITimestamp|null} [finishedAt] BenchmarkJob finishedAt
-                 * @property {number|Long|null} [score] BenchmarkJob score
-                 * @property {string|null} [instanceName] BenchmarkJob instanceName
-                 * @property {xsuportal.proto.resources.ITeam|null} [team] BenchmarkJob team
-                 * @property {xsuportal.proto.resources.IContestantInstance|null} [target] BenchmarkJob target
-                 * @property {xsuportal.proto.resources.IBenchmarkResult|null} [result] BenchmarkJob result
+                 * @property {string|null} [targetHostname] BenchmarkJob targetHostname
                  */
 
                 /**
@@ -936,14 +931,6 @@ $root.xsuportal = (function() {
                  * @instance
                  */
                 BenchmarkJob.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                /**
-                 * BenchmarkJob targetId.
-                 * @member {number|Long} targetId
-                 * @memberof xsuportal.proto.resources.BenchmarkJob
-                 * @instance
-                 */
-                BenchmarkJob.prototype.targetId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
                  * BenchmarkJob status.
@@ -986,44 +973,12 @@ $root.xsuportal = (function() {
                 BenchmarkJob.prototype.finishedAt = null;
 
                 /**
-                 * BenchmarkJob score.
-                 * @member {number|Long} score
+                 * BenchmarkJob targetHostname.
+                 * @member {string} targetHostname
                  * @memberof xsuportal.proto.resources.BenchmarkJob
                  * @instance
                  */
-                BenchmarkJob.prototype.score = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                /**
-                 * BenchmarkJob instanceName.
-                 * @member {string} instanceName
-                 * @memberof xsuportal.proto.resources.BenchmarkJob
-                 * @instance
-                 */
-                BenchmarkJob.prototype.instanceName = "";
-
-                /**
-                 * BenchmarkJob team.
-                 * @member {xsuportal.proto.resources.ITeam|null|undefined} team
-                 * @memberof xsuportal.proto.resources.BenchmarkJob
-                 * @instance
-                 */
-                BenchmarkJob.prototype.team = null;
-
-                /**
-                 * BenchmarkJob target.
-                 * @member {xsuportal.proto.resources.IContestantInstance|null|undefined} target
-                 * @memberof xsuportal.proto.resources.BenchmarkJob
-                 * @instance
-                 */
-                BenchmarkJob.prototype.target = null;
-
-                /**
-                 * BenchmarkJob result.
-                 * @member {xsuportal.proto.resources.IBenchmarkResult|null|undefined} result
-                 * @memberof xsuportal.proto.resources.BenchmarkJob
-                 * @instance
-                 */
-                BenchmarkJob.prototype.result = null;
+                BenchmarkJob.prototype.targetHostname = "";
 
                 /**
                  * Creates a new BenchmarkJob instance using the specified properties.
@@ -1053,8 +1008,6 @@ $root.xsuportal = (function() {
                         writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
                     if (message.teamId != null && Object.hasOwnProperty.call(message, "teamId"))
                         writer.uint32(/* id 2, wireType 0 =*/16).int64(message.teamId);
-                    if (message.targetId != null && Object.hasOwnProperty.call(message, "targetId"))
-                        writer.uint32(/* id 3, wireType 0 =*/24).int64(message.targetId);
                     if (message.status != null && Object.hasOwnProperty.call(message, "status"))
                         writer.uint32(/* id 4, wireType 0 =*/32).int32(message.status);
                     if (message.createdAt != null && Object.hasOwnProperty.call(message, "createdAt"))
@@ -1065,16 +1018,8 @@ $root.xsuportal = (function() {
                         $root.google.protobuf.Timestamp.encode(message.startedAt, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
                     if (message.finishedAt != null && Object.hasOwnProperty.call(message, "finishedAt"))
                         $root.google.protobuf.Timestamp.encode(message.finishedAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-                    if (message.score != null && Object.hasOwnProperty.call(message, "score"))
-                        writer.uint32(/* id 9, wireType 0 =*/72).int64(message.score);
-                    if (message.instanceName != null && Object.hasOwnProperty.call(message, "instanceName"))
-                        writer.uint32(/* id 10, wireType 2 =*/82).string(message.instanceName);
-                    if (message.team != null && Object.hasOwnProperty.call(message, "team"))
-                        $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
-                    if (message.target != null && Object.hasOwnProperty.call(message, "target"))
-                        $root.xsuportal.proto.resources.ContestantInstance.encode(message.target, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
-                    if (message.result != null && Object.hasOwnProperty.call(message, "result"))
-                        $root.xsuportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 18, wireType 2 =*/146).fork()).ldelim();
+                    if (message.targetHostname != null && Object.hasOwnProperty.call(message, "targetHostname"))
+                        writer.uint32(/* id 30, wireType 2 =*/242).string(message.targetHostname);
                     return writer;
                 };
 
@@ -1115,9 +1060,6 @@ $root.xsuportal = (function() {
                         case 2:
                             message.teamId = reader.int64();
                             break;
-                        case 3:
-                            message.targetId = reader.int64();
-                            break;
                         case 4:
                             message.status = reader.int32();
                             break;
@@ -1133,20 +1075,8 @@ $root.xsuportal = (function() {
                         case 8:
                             message.finishedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
-                        case 9:
-                            message.score = reader.int64();
-                            break;
-                        case 10:
-                            message.instanceName = reader.string();
-                            break;
-                        case 16:
-                            message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
-                            break;
-                        case 17:
-                            message.target = $root.xsuportal.proto.resources.ContestantInstance.decode(reader, reader.uint32());
-                            break;
-                        case 18:
-                            message.result = $root.xsuportal.proto.resources.BenchmarkResult.decode(reader, reader.uint32());
+                        case 30:
+                            message.targetHostname = reader.string();
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -1189,9 +1119,6 @@ $root.xsuportal = (function() {
                     if (message.teamId != null && message.hasOwnProperty("teamId"))
                         if (!$util.isInteger(message.teamId) && !(message.teamId && $util.isInteger(message.teamId.low) && $util.isInteger(message.teamId.high)))
                             return "teamId: integer|Long expected";
-                    if (message.targetId != null && message.hasOwnProperty("targetId"))
-                        if (!$util.isInteger(message.targetId) && !(message.targetId && $util.isInteger(message.targetId.low) && $util.isInteger(message.targetId.high)))
-                            return "targetId: integer|Long expected";
                     if (message.status != null && message.hasOwnProperty("status"))
                         switch (message.status) {
                         default:
@@ -1223,27 +1150,9 @@ $root.xsuportal = (function() {
                         if (error)
                             return "finishedAt." + error;
                     }
-                    if (message.score != null && message.hasOwnProperty("score"))
-                        if (!$util.isInteger(message.score) && !(message.score && $util.isInteger(message.score.low) && $util.isInteger(message.score.high)))
-                            return "score: integer|Long expected";
-                    if (message.instanceName != null && message.hasOwnProperty("instanceName"))
-                        if (!$util.isString(message.instanceName))
-                            return "instanceName: string expected";
-                    if (message.team != null && message.hasOwnProperty("team")) {
-                        var error = $root.xsuportal.proto.resources.Team.verify(message.team);
-                        if (error)
-                            return "team." + error;
-                    }
-                    if (message.target != null && message.hasOwnProperty("target")) {
-                        var error = $root.xsuportal.proto.resources.ContestantInstance.verify(message.target);
-                        if (error)
-                            return "target." + error;
-                    }
-                    if (message.result != null && message.hasOwnProperty("result")) {
-                        var error = $root.xsuportal.proto.resources.BenchmarkResult.verify(message.result);
-                        if (error)
-                            return "result." + error;
-                    }
+                    if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
+                        if (!$util.isString(message.targetHostname))
+                            return "targetHostname: string expected";
                     return null;
                 };
 
@@ -1277,15 +1186,6 @@ $root.xsuportal = (function() {
                             message.teamId = object.teamId;
                         else if (typeof object.teamId === "object")
                             message.teamId = new $util.LongBits(object.teamId.low >>> 0, object.teamId.high >>> 0).toNumber();
-                    if (object.targetId != null)
-                        if ($util.Long)
-                            (message.targetId = $util.Long.fromValue(object.targetId)).unsigned = false;
-                        else if (typeof object.targetId === "string")
-                            message.targetId = parseInt(object.targetId, 10);
-                        else if (typeof object.targetId === "number")
-                            message.targetId = object.targetId;
-                        else if (typeof object.targetId === "object")
-                            message.targetId = new $util.LongBits(object.targetId.low >>> 0, object.targetId.high >>> 0).toNumber();
                     switch (object.status) {
                     case "PENDING":
                     case 0:
@@ -1328,32 +1228,8 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.BenchmarkJob.finishedAt: object expected");
                         message.finishedAt = $root.google.protobuf.Timestamp.fromObject(object.finishedAt);
                     }
-                    if (object.score != null)
-                        if ($util.Long)
-                            (message.score = $util.Long.fromValue(object.score)).unsigned = false;
-                        else if (typeof object.score === "string")
-                            message.score = parseInt(object.score, 10);
-                        else if (typeof object.score === "number")
-                            message.score = object.score;
-                        else if (typeof object.score === "object")
-                            message.score = new $util.LongBits(object.score.low >>> 0, object.score.high >>> 0).toNumber();
-                    if (object.instanceName != null)
-                        message.instanceName = String(object.instanceName);
-                    if (object.team != null) {
-                        if (typeof object.team !== "object")
-                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.team: object expected");
-                        message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
-                    }
-                    if (object.target != null) {
-                        if (typeof object.target !== "object")
-                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.target: object expected");
-                        message.target = $root.xsuportal.proto.resources.ContestantInstance.fromObject(object.target);
-                    }
-                    if (object.result != null) {
-                        if (typeof object.result !== "object")
-                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.result: object expected");
-                        message.result = $root.xsuportal.proto.resources.BenchmarkResult.fromObject(object.result);
-                    }
+                    if (object.targetHostname != null)
+                        message.targetHostname = String(object.targetHostname);
                     return message;
                 };
 
@@ -1381,25 +1257,12 @@ $root.xsuportal = (function() {
                             object.teamId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.teamId = options.longs === String ? "0" : 0;
-                        if ($util.Long) {
-                            var long = new $util.Long(0, 0, false);
-                            object.targetId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.targetId = options.longs === String ? "0" : 0;
                         object.status = options.enums === String ? "PENDING" : 0;
                         object.createdAt = null;
                         object.updatedAt = null;
                         object.startedAt = null;
                         object.finishedAt = null;
-                        if ($util.Long) {
-                            var long = new $util.Long(0, 0, false);
-                            object.score = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.score = options.longs === String ? "0" : 0;
-                        object.instanceName = "";
-                        object.team = null;
-                        object.target = null;
-                        object.result = null;
+                        object.targetHostname = "";
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
                         if (typeof message.id === "number")
@@ -1411,11 +1274,6 @@ $root.xsuportal = (function() {
                             object.teamId = options.longs === String ? String(message.teamId) : message.teamId;
                         else
                             object.teamId = options.longs === String ? $util.Long.prototype.toString.call(message.teamId) : options.longs === Number ? new $util.LongBits(message.teamId.low >>> 0, message.teamId.high >>> 0).toNumber() : message.teamId;
-                    if (message.targetId != null && message.hasOwnProperty("targetId"))
-                        if (typeof message.targetId === "number")
-                            object.targetId = options.longs === String ? String(message.targetId) : message.targetId;
-                        else
-                            object.targetId = options.longs === String ? $util.Long.prototype.toString.call(message.targetId) : options.longs === Number ? new $util.LongBits(message.targetId.low >>> 0, message.targetId.high >>> 0).toNumber() : message.targetId;
                     if (message.status != null && message.hasOwnProperty("status"))
                         object.status = options.enums === String ? $root.xsuportal.proto.resources.BenchmarkJob.Status[message.status] : message.status;
                     if (message.createdAt != null && message.hasOwnProperty("createdAt"))
@@ -1426,19 +1284,8 @@ $root.xsuportal = (function() {
                         object.startedAt = $root.google.protobuf.Timestamp.toObject(message.startedAt, options);
                     if (message.finishedAt != null && message.hasOwnProperty("finishedAt"))
                         object.finishedAt = $root.google.protobuf.Timestamp.toObject(message.finishedAt, options);
-                    if (message.score != null && message.hasOwnProperty("score"))
-                        if (typeof message.score === "number")
-                            object.score = options.longs === String ? String(message.score) : message.score;
-                        else
-                            object.score = options.longs === String ? $util.Long.prototype.toString.call(message.score) : options.longs === Number ? new $util.LongBits(message.score.low >>> 0, message.score.high >>> 0).toNumber() : message.score;
-                    if (message.instanceName != null && message.hasOwnProperty("instanceName"))
-                        object.instanceName = message.instanceName;
-                    if (message.team != null && message.hasOwnProperty("team"))
-                        object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
-                    if (message.target != null && message.hasOwnProperty("target"))
-                        object.target = $root.xsuportal.proto.resources.ContestantInstance.toObject(message.target, options);
-                    if (message.result != null && message.hasOwnProperty("result"))
-                        object.result = $root.xsuportal.proto.resources.BenchmarkResult.toObject(message.result, options);
+                    if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
+                        object.targetHostname = message.targetHostname;
                     return object;
                 };
 
@@ -1489,7 +1336,6 @@ $root.xsuportal = (function() {
                  * @property {string|null} [reason] BenchmarkResult reason
                  * @property {string|null} [stdout] BenchmarkResult stdout
                  * @property {string|null} [stderr] BenchmarkResult stderr
-                 * @property {xsuportal.proto.resources.BenchmarkResult.ISurvey|null} [survey] BenchmarkResult survey
                  */
 
                 /**
@@ -1564,14 +1410,6 @@ $root.xsuportal = (function() {
                 BenchmarkResult.prototype.stderr = "";
 
                 /**
-                 * BenchmarkResult survey.
-                 * @member {xsuportal.proto.resources.BenchmarkResult.ISurvey|null|undefined} survey
-                 * @memberof xsuportal.proto.resources.BenchmarkResult
-                 * @instance
-                 */
-                BenchmarkResult.prototype.survey = null;
-
-                /**
                  * Creates a new BenchmarkResult instance using the specified properties.
                  * @function create
                  * @memberof xsuportal.proto.resources.BenchmarkResult
@@ -1609,8 +1447,6 @@ $root.xsuportal = (function() {
                         writer.uint32(/* id 6, wireType 2 =*/50).string(message.stdout);
                     if (message.stderr != null && Object.hasOwnProperty.call(message, "stderr"))
                         writer.uint32(/* id 7, wireType 2 =*/58).string(message.stderr);
-                    if (message.survey != null && Object.hasOwnProperty.call(message, "survey"))
-                        $root.xsuportal.proto.resources.BenchmarkResult.Survey.encode(message.survey, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
                     return writer;
                 };
 
@@ -1665,9 +1501,6 @@ $root.xsuportal = (function() {
                             break;
                         case 7:
                             message.stderr = reader.string();
-                            break;
-                        case 8:
-                            message.survey = $root.xsuportal.proto.resources.BenchmarkResult.Survey.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -1727,11 +1560,6 @@ $root.xsuportal = (function() {
                     if (message.stderr != null && message.hasOwnProperty("stderr"))
                         if (!$util.isString(message.stderr))
                             return "stderr: string expected";
-                    if (message.survey != null && message.hasOwnProperty("survey")) {
-                        var error = $root.xsuportal.proto.resources.BenchmarkResult.Survey.verify(message.survey);
-                        if (error)
-                            return "survey." + error;
-                    }
                     return null;
                 };
 
@@ -1771,11 +1599,6 @@ $root.xsuportal = (function() {
                         message.stdout = String(object.stdout);
                     if (object.stderr != null)
                         message.stderr = String(object.stderr);
-                    if (object.survey != null) {
-                        if (typeof object.survey !== "object")
-                            throw TypeError(".xsuportal.proto.resources.BenchmarkResult.survey: object expected");
-                        message.survey = $root.xsuportal.proto.resources.BenchmarkResult.Survey.fromObject(object.survey);
-                    }
                     return message;
                 };
 
@@ -1804,7 +1627,6 @@ $root.xsuportal = (function() {
                         object.reason = "";
                         object.stdout = "";
                         object.stderr = "";
-                        object.survey = null;
                     }
                     if (message.finished != null && message.hasOwnProperty("finished"))
                         object.finished = message.finished;
@@ -1823,8 +1645,6 @@ $root.xsuportal = (function() {
                         object.stdout = message.stdout;
                     if (message.stderr != null && message.hasOwnProperty("stderr"))
                         object.stderr = message.stderr;
-                    if (message.survey != null && message.hasOwnProperty("survey"))
-                        object.survey = $root.xsuportal.proto.resources.BenchmarkResult.Survey.toObject(message.survey, options);
                     return object;
                 };
 
@@ -2075,193 +1895,6 @@ $root.xsuportal = (function() {
                     };
 
                     return ScoreBreakdown;
-                })();
-
-                BenchmarkResult.Survey = (function() {
-
-                    /**
-                     * Properties of a Survey.
-                     * @memberof xsuportal.proto.resources.BenchmarkResult
-                     * @interface ISurvey
-                     * @property {string|null} [language] Survey language
-                     */
-
-                    /**
-                     * Constructs a new Survey.
-                     * @memberof xsuportal.proto.resources.BenchmarkResult
-                     * @classdesc Represents a Survey.
-                     * @implements ISurvey
-                     * @constructor
-                     * @param {xsuportal.proto.resources.BenchmarkResult.ISurvey=} [properties] Properties to set
-                     */
-                    function Survey(properties) {
-                        if (properties)
-                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * Survey language.
-                     * @member {string} language
-                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
-                     * @instance
-                     */
-                    Survey.prototype.language = "";
-
-                    /**
-                     * Creates a new Survey instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
-                     * @static
-                     * @param {xsuportal.proto.resources.BenchmarkResult.ISurvey=} [properties] Properties to set
-                     * @returns {xsuportal.proto.resources.BenchmarkResult.Survey} Survey instance
-                     */
-                    Survey.create = function create(properties) {
-                        return new Survey(properties);
-                    };
-
-                    /**
-                     * Encodes the specified Survey message. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
-                     * @function encode
-                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
-                     * @static
-                     * @param {xsuportal.proto.resources.BenchmarkResult.ISurvey} message Survey message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    Survey.encode = function encode(message, writer) {
-                        if (!writer)
-                            writer = $Writer.create();
-                        if (message.language != null && Object.hasOwnProperty.call(message, "language"))
-                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.language);
-                        return writer;
-                    };
-
-                    /**
-                     * Encodes the specified Survey message, length delimited. Does not implicitly {@link xsuportal.proto.resources.BenchmarkResult.Survey.verify|verify} messages.
-                     * @function encodeDelimited
-                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
-                     * @static
-                     * @param {xsuportal.proto.resources.BenchmarkResult.ISurvey} message Survey message or plain object to encode
-                     * @param {$protobuf.Writer} [writer] Writer to encode to
-                     * @returns {$protobuf.Writer} Writer
-                     */
-                    Survey.encodeDelimited = function encodeDelimited(message, writer) {
-                        return this.encode(message, writer).ldelim();
-                    };
-
-                    /**
-                     * Decodes a Survey message from the specified reader or buffer.
-                     * @function decode
-                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.resources.BenchmarkResult.Survey} Survey
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    Survey.decode = function decode(reader, length) {
-                        if (!(reader instanceof $Reader))
-                            reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.BenchmarkResult.Survey();
-                        while (reader.pos < end) {
-                            var tag = reader.uint32();
-                            switch (tag >>> 3) {
-                            case 1:
-                                message.language = reader.string();
-                                break;
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
-                            }
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Decodes a Survey message from the specified reader or buffer, length delimited.
-                     * @function decodeDelimited
-                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
-                     * @static
-                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.resources.BenchmarkResult.Survey} Survey
-                     * @throws {Error} If the payload is not a reader or valid buffer
-                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                     */
-                    Survey.decodeDelimited = function decodeDelimited(reader) {
-                        if (!(reader instanceof $Reader))
-                            reader = new $Reader(reader);
-                        return this.decode(reader, reader.uint32());
-                    };
-
-                    /**
-                     * Verifies a Survey message.
-                     * @function verify
-                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    Survey.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.language != null && message.hasOwnProperty("language"))
-                            if (!$util.isString(message.language))
-                                return "language: string expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a Survey message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.resources.BenchmarkResult.Survey} Survey
-                     */
-                    Survey.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.resources.BenchmarkResult.Survey)
-                            return object;
-                        var message = new $root.xsuportal.proto.resources.BenchmarkResult.Survey();
-                        if (object.language != null)
-                            message.language = String(object.language);
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a Survey message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
-                     * @static
-                     * @param {xsuportal.proto.resources.BenchmarkResult.Survey} message Survey
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    Survey.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        var object = {};
-                        if (options.defaults)
-                            object.language = "";
-                        if (message.language != null && message.hasOwnProperty("language"))
-                            object.language = message.language;
-                        return object;
-                    };
-
-                    /**
-                     * Converts this Survey to JSON.
-                     * @function toJSON
-                     * @memberof xsuportal.proto.resources.BenchmarkResult.Survey
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    Survey.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return Survey;
                 })();
 
                 return BenchmarkResult;
@@ -13865,7 +13498,7 @@ $root.xsuportal = (function() {
                      * Properties of an EnqueueBenchmarkJobRequest.
                      * @memberof xsuportal.proto.services.contestant
                      * @interface IEnqueueBenchmarkJobRequest
-                     * @property {number|Long|null} [targetId] EnqueueBenchmarkJobRequest targetId
+                     * @property {string|null} [targetHostname] EnqueueBenchmarkJobRequest targetHostname
                      */
 
                     /**
@@ -13884,12 +13517,12 @@ $root.xsuportal = (function() {
                     }
 
                     /**
-                     * EnqueueBenchmarkJobRequest targetId.
-                     * @member {number|Long} targetId
+                     * EnqueueBenchmarkJobRequest targetHostname.
+                     * @member {string} targetHostname
                      * @memberof xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest
                      * @instance
                      */
-                    EnqueueBenchmarkJobRequest.prototype.targetId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                    EnqueueBenchmarkJobRequest.prototype.targetHostname = "";
 
                     /**
                      * Creates a new EnqueueBenchmarkJobRequest instance using the specified properties.
@@ -13915,8 +13548,8 @@ $root.xsuportal = (function() {
                     EnqueueBenchmarkJobRequest.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.targetId != null && Object.hasOwnProperty.call(message, "targetId"))
-                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.targetId);
+                        if (message.targetHostname != null && Object.hasOwnProperty.call(message, "targetHostname"))
+                            writer.uint32(/* id 10, wireType 2 =*/82).string(message.targetHostname);
                         return writer;
                     };
 
@@ -13951,8 +13584,8 @@ $root.xsuportal = (function() {
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
-                            case 1:
-                                message.targetId = reader.int64();
+                            case 10:
+                                message.targetHostname = reader.string();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -13989,9 +13622,9 @@ $root.xsuportal = (function() {
                     EnqueueBenchmarkJobRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.targetId != null && message.hasOwnProperty("targetId"))
-                            if (!$util.isInteger(message.targetId) && !(message.targetId && $util.isInteger(message.targetId.low) && $util.isInteger(message.targetId.high)))
-                                return "targetId: integer|Long expected";
+                        if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
+                            if (!$util.isString(message.targetHostname))
+                                return "targetHostname: string expected";
                         return null;
                     };
 
@@ -14007,15 +13640,8 @@ $root.xsuportal = (function() {
                         if (object instanceof $root.xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest)
                             return object;
                         var message = new $root.xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest();
-                        if (object.targetId != null)
-                            if ($util.Long)
-                                (message.targetId = $util.Long.fromValue(object.targetId)).unsigned = false;
-                            else if (typeof object.targetId === "string")
-                                message.targetId = parseInt(object.targetId, 10);
-                            else if (typeof object.targetId === "number")
-                                message.targetId = object.targetId;
-                            else if (typeof object.targetId === "object")
-                                message.targetId = new $util.LongBits(object.targetId.low >>> 0, object.targetId.high >>> 0).toNumber();
+                        if (object.targetHostname != null)
+                            message.targetHostname = String(object.targetHostname);
                         return message;
                     };
 
@@ -14033,16 +13659,9 @@ $root.xsuportal = (function() {
                             options = {};
                         var object = {};
                         if (options.defaults)
-                            if ($util.Long) {
-                                var long = new $util.Long(0, 0, false);
-                                object.targetId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                            } else
-                                object.targetId = options.longs === String ? "0" : 0;
-                        if (message.targetId != null && message.hasOwnProperty("targetId"))
-                            if (typeof message.targetId === "number")
-                                object.targetId = options.longs === String ? String(message.targetId) : message.targetId;
-                            else
-                                object.targetId = options.longs === String ? $util.Long.prototype.toString.call(message.targetId) : options.longs === Number ? new $util.LongBits(message.targetId.low >>> 0, message.targetId.high >>> 0).toNumber() : message.targetId;
+                            object.targetHostname = "";
+                        if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
+                            object.targetHostname = message.targetHostname;
                         return object;
                     };
 
