@@ -15,6 +15,7 @@ module Xsuportal
     MYSQL_ER_DUP_ENTRY = 1062
     ADMIN_ID = 'admin'
     ADMIN_PASSWORD = 'admin'
+    DEBUG_CONTEST_STATUS_FILE_PATH = '/tmp/XSUPORTAL_CONTEST_STATUS'
 
     configure :development do
       require 'sinatra/reloader'
@@ -94,7 +95,12 @@ module Xsuportal
           SQL
         ).first
 
-        status = case contest[:status]
+        contest_status_str = contest[:status]
+        if ENV['APP_ENV'] != :production && File.exist?(DEBUG_CONTEST_STATUS_FILE_PATH)
+          contest_status_str = File.read(DEBUG_CONTEST_STATUS_FILE_PATH).chomp
+        end
+
+        status = case contest_status_str
         when 'standby'
           :STANDBY
         when 'registration'
@@ -106,7 +112,7 @@ module Xsuportal
         when 'finished'
           :FINISHED
         else
-          raise "Unexpected contest status: #{contest[:status].inspect}"
+          raise "Unexpected contest status: #{contest_status_str.inspect}"
         end
 
         {

@@ -4,6 +4,8 @@ require_relative './api_client'
 require_relative './fixtures/teams_and_contestants'
 
 class TestBase < Test::Unit::TestCase
+  DEBUG_CONTEST_STATUS_FILE_PATH = '/tmp/XSUPORTAL_CONTEST_STATUS'
+
   include Xsuportal::Routes
 
   class << self
@@ -22,6 +24,24 @@ class TestBase < Test::Unit::TestCase
         {
           teams_and_contestants: TeamsAndContestants.new(client),
         }
+      end
+    end
+
+    def set_debug_contest_status(status)
+      if status
+        File.open(DEBUG_CONTEST_STATUS_FILE_PATH, 'w') do |f|
+          f.write status
+        end
+      else
+        File.delete(DEBUG_CONTEST_STATUS_FILE_PATH)
+      end
+    end
+
+    def get_debug_contest_status
+      if File.exist?(DEBUG_CONTEST_STATUS_FILE_PATH)
+        File.read(DEBUG_CONTEST_STATUS_FILE_PATH).chomp
+      else
+        nil
       end
     end
   end
