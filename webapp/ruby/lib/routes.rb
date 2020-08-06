@@ -42,11 +42,11 @@ module Xsuportal
         Proto::Services::Contestant::EnqueueBenchmarkJobResponse,
       ],
       'GET /api/benchmark/jobs' => [
-        Proto::Services::Contestant::ListBenchmarkJobsRequest,
+        nil,
         Proto::Services::Contestant::ListBenchmarkJobsResponse,
       ],
-      'GET /api/benchmark/job' => [
-        Proto::Services::Contestant::GetBenchmarkJobRequest,
+      'GET /api/benchmark/:id' => [
+        nil,
         Proto::Services::Contestant::GetBenchmarkJobResponse,
       ],
       'POST /api/signup' => [

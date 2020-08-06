@@ -435,7 +435,7 @@ module Xsuportal
       )
     end
 
-    get '/api/benchmark/job' do
+    get '/api/benchmark/:id' do
       unless current_contestant
         halt_pb 401, 'ログインが必要です'
       end
@@ -446,7 +446,7 @@ module Xsuportal
       job = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `job_id` = ? LIMIT 1',
         current_team[:id],
-        request.job_id,
+        params[:id],
       ).first
 
       unless job
@@ -460,7 +460,7 @@ module Xsuportal
           WHERE r.benchmark_job_id = ? AND j.team_id = ?
           LIMIT 1
         SQL
-        request.job_id,
+        params[:id],
         current_team[:id],
       ).first
 

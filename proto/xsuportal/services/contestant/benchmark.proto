@@ -21,7 +21,7 @@ message EnqueueBenchmarkJobResponse {
 }
 
 // Query parameter
-message GetBenchmarkJobQuery { int64 job_id = 1; }
+message GetBenchmarkJobQuery { int64 id = 1; }
 
 message GetBenchmarkJobResponse {
   xsuportal.proto.resources.BenchmarkJob job = 1;
