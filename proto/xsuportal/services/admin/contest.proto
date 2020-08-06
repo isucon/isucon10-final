@@ -1,0 +1,9 @@
+syntax = "proto3";
+package xsuportal.proto.services.admin;
+option go_package = "github.com/isucon/isucon10-final/proto/services/admin";
+
+import "xsuportal/resources/contest.proto";
+
+message UpdateContestRequest { xsuportal.proto.resources.Contest contest = 1; }
+
+message UpdateContestResponse {}

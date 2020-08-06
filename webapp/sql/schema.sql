@@ -5,6 +5,7 @@ CREATE TABLE `contestants` (
   `team_id` BIGINT,
   `name` VARCHAR(255),
   `student` TINYINT(1) DEFAULT FALSE,
+  `staff` TINYINT(1) DEFAULT FALSE,
   `created_at` DATETIME(6) NOT NULL,
   `updated_at` DATETIME(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
@@ -57,4 +58,12 @@ CREATE TABLE `benchmark_results` (
   -- `exit_signal` INT,
   `created_at` DATETIME(6) NOT NULL,
   `updated_at` DATETIME(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
+DROP TABLE IF EXISTS `contest_config`;
+CREATE TABLE `contest_config` (
+  `registration_open_at` DATETIME(6) NOT NULL,
+  `contest_start_at` DATETIME(6) NOT NULL,
+  `contest_freeze_at` DATETIME(6) NOT NULL,
+  `contest_end_at` DATETIME(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;

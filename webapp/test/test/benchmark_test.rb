@@ -5,6 +5,11 @@ class BenchmarkTest < TestBase
     def startup
       client.truncate!
       fixtures[:teams_and_contestants].create
+      set_debug_contest_status 'started'
+    end
+
+    def shutdown
+      set_debug_contest_status nil
     end
   end
 

@@ -1,0 +1,12 @@
+syntax = "proto3";
+package xsuportal.proto.services.common;
+option go_package = "github.com/isucon/isucon10-final/proto/services/common";
+
+import "google/protobuf/timestamp.proto";
+import "xsuportal/resources/contest.proto";
+
+message GetContestResponse {
+  xsuportal.proto.resources.Contest contest = 1;
+  google.protobuf.Timestamp current_time = 2;
+  xsuportal.proto.resources.Contest.Status status = 3;
+}

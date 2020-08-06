@@ -5,6 +5,11 @@ class RegistrationTest < TestBase
     def startup
       client.truncate!
       fixtures[:teams_and_contestants].create(more: true)
+      set_debug_contest_status 'registration'
+    end
+
+    def shutdown
+      set_debug_contest_status nil
     end
   end
 

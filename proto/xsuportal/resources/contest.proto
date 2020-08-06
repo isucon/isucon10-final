@@ -1,0 +1,20 @@
+syntax = "proto3";
+package xsuportal.proto.resources;
+option go_package = "github.com/isucon/isucon10-final/proto/resources";
+
+import "google/protobuf/timestamp.proto";
+
+message Contest {
+  google.protobuf.Timestamp registration_open_at = 1;
+  google.protobuf.Timestamp contest_start_at = 3;
+  google.protobuf.Timestamp contest_freeze_at = 4;
+  google.protobuf.Timestamp contest_end_at = 5;
+
+  enum Status {
+    STANDBY = 0;
+    REGISTRATION = 1;
+    STARTED = 2;
+    FROZEN = 3;
+    FINISHED = 4;
+  }
+}

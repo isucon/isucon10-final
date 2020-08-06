@@ -3686,6 +3686,300 @@ $root.xsuportal = (function() {
                 return Clarification;
             })();
 
+            resources.Contest = (function() {
+
+                /**
+                 * Properties of a Contest.
+                 * @memberof xsuportal.proto.resources
+                 * @interface IContest
+                 * @property {google.protobuf.ITimestamp|null} [registrationOpenAt] Contest registrationOpenAt
+                 * @property {google.protobuf.ITimestamp|null} [contestStartAt] Contest contestStartAt
+                 * @property {google.protobuf.ITimestamp|null} [contestFreezeAt] Contest contestFreezeAt
+                 * @property {google.protobuf.ITimestamp|null} [contestEndAt] Contest contestEndAt
+                 */
+
+                /**
+                 * Constructs a new Contest.
+                 * @memberof xsuportal.proto.resources
+                 * @classdesc Represents a Contest.
+                 * @implements IContest
+                 * @constructor
+                 * @param {xsuportal.proto.resources.IContest=} [properties] Properties to set
+                 */
+                function Contest(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Contest registrationOpenAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} registrationOpenAt
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @instance
+                 */
+                Contest.prototype.registrationOpenAt = null;
+
+                /**
+                 * Contest contestStartAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} contestStartAt
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @instance
+                 */
+                Contest.prototype.contestStartAt = null;
+
+                /**
+                 * Contest contestFreezeAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} contestFreezeAt
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @instance
+                 */
+                Contest.prototype.contestFreezeAt = null;
+
+                /**
+                 * Contest contestEndAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} contestEndAt
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @instance
+                 */
+                Contest.prototype.contestEndAt = null;
+
+                /**
+                 * Creates a new Contest instance using the specified properties.
+                 * @function create
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @static
+                 * @param {xsuportal.proto.resources.IContest=} [properties] Properties to set
+                 * @returns {xsuportal.proto.resources.Contest} Contest instance
+                 */
+                Contest.create = function create(properties) {
+                    return new Contest(properties);
+                };
+
+                /**
+                 * Encodes the specified Contest message. Does not implicitly {@link xsuportal.proto.resources.Contest.verify|verify} messages.
+                 * @function encode
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @static
+                 * @param {xsuportal.proto.resources.IContest} message Contest message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Contest.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.registrationOpenAt != null && Object.hasOwnProperty.call(message, "registrationOpenAt"))
+                        $root.google.protobuf.Timestamp.encode(message.registrationOpenAt, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                    if (message.contestStartAt != null && Object.hasOwnProperty.call(message, "contestStartAt"))
+                        $root.google.protobuf.Timestamp.encode(message.contestStartAt, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                    if (message.contestFreezeAt != null && Object.hasOwnProperty.call(message, "contestFreezeAt"))
+                        $root.google.protobuf.Timestamp.encode(message.contestFreezeAt, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                    if (message.contestEndAt != null && Object.hasOwnProperty.call(message, "contestEndAt"))
+                        $root.google.protobuf.Timestamp.encode(message.contestEndAt, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified Contest message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Contest.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @static
+                 * @param {xsuportal.proto.resources.IContest} message Contest message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Contest.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a Contest message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {xsuportal.proto.resources.Contest} Contest
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Contest.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Contest();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.registrationOpenAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            break;
+                        case 3:
+                            message.contestStartAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            break;
+                        case 4:
+                            message.contestFreezeAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            break;
+                        case 5:
+                            message.contestEndAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a Contest message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {xsuportal.proto.resources.Contest} Contest
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Contest.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a Contest message.
+                 * @function verify
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Contest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.registrationOpenAt != null && message.hasOwnProperty("registrationOpenAt")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.registrationOpenAt);
+                        if (error)
+                            return "registrationOpenAt." + error;
+                    }
+                    if (message.contestStartAt != null && message.hasOwnProperty("contestStartAt")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.contestStartAt);
+                        if (error)
+                            return "contestStartAt." + error;
+                    }
+                    if (message.contestFreezeAt != null && message.hasOwnProperty("contestFreezeAt")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.contestFreezeAt);
+                        if (error)
+                            return "contestFreezeAt." + error;
+                    }
+                    if (message.contestEndAt != null && message.hasOwnProperty("contestEndAt")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.contestEndAt);
+                        if (error)
+                            return "contestEndAt." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Contest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {xsuportal.proto.resources.Contest} Contest
+                 */
+                Contest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.xsuportal.proto.resources.Contest)
+                        return object;
+                    var message = new $root.xsuportal.proto.resources.Contest();
+                    if (object.registrationOpenAt != null) {
+                        if (typeof object.registrationOpenAt !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Contest.registrationOpenAt: object expected");
+                        message.registrationOpenAt = $root.google.protobuf.Timestamp.fromObject(object.registrationOpenAt);
+                    }
+                    if (object.contestStartAt != null) {
+                        if (typeof object.contestStartAt !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Contest.contestStartAt: object expected");
+                        message.contestStartAt = $root.google.protobuf.Timestamp.fromObject(object.contestStartAt);
+                    }
+                    if (object.contestFreezeAt != null) {
+                        if (typeof object.contestFreezeAt !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Contest.contestFreezeAt: object expected");
+                        message.contestFreezeAt = $root.google.protobuf.Timestamp.fromObject(object.contestFreezeAt);
+                    }
+                    if (object.contestEndAt != null) {
+                        if (typeof object.contestEndAt !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Contest.contestEndAt: object expected");
+                        message.contestEndAt = $root.google.protobuf.Timestamp.fromObject(object.contestEndAt);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Contest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @static
+                 * @param {xsuportal.proto.resources.Contest} message Contest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Contest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults) {
+                        object.registrationOpenAt = null;
+                        object.contestStartAt = null;
+                        object.contestFreezeAt = null;
+                        object.contestEndAt = null;
+                    }
+                    if (message.registrationOpenAt != null && message.hasOwnProperty("registrationOpenAt"))
+                        object.registrationOpenAt = $root.google.protobuf.Timestamp.toObject(message.registrationOpenAt, options);
+                    if (message.contestStartAt != null && message.hasOwnProperty("contestStartAt"))
+                        object.contestStartAt = $root.google.protobuf.Timestamp.toObject(message.contestStartAt, options);
+                    if (message.contestFreezeAt != null && message.hasOwnProperty("contestFreezeAt"))
+                        object.contestFreezeAt = $root.google.protobuf.Timestamp.toObject(message.contestFreezeAt, options);
+                    if (message.contestEndAt != null && message.hasOwnProperty("contestEndAt"))
+                        object.contestEndAt = $root.google.protobuf.Timestamp.toObject(message.contestEndAt, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this Contest to JSON.
+                 * @function toJSON
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Contest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Status enum.
+                 * @name xsuportal.proto.resources.Contest.Status
+                 * @enum {number}
+                 * @property {number} STANDBY=0 STANDBY value
+                 * @property {number} REGISTRATION=1 REGISTRATION value
+                 * @property {number} STARTED=2 STARTED value
+                 * @property {number} FROZEN=3 FROZEN value
+                 * @property {number} FINISHED=4 FINISHED value
+                 */
+                Contest.Status = (function() {
+                    var valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "STANDBY"] = 0;
+                    values[valuesById[1] = "REGISTRATION"] = 1;
+                    values[valuesById[2] = "STARTED"] = 2;
+                    values[valuesById[3] = "FROZEN"] = 3;
+                    values[valuesById[4] = "FINISHED"] = 4;
+                    return values;
+                })();
+
+                return Contest;
+            })();
+
             resources.Leaderboard = (function() {
 
                 /**
@@ -8130,6 +8424,358 @@ $root.xsuportal = (function() {
                     };
 
                     return CreateClarificationResponse;
+                })();
+
+                admin.UpdateContestRequest = (function() {
+
+                    /**
+                     * Properties of an UpdateContestRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IUpdateContestRequest
+                     * @property {xsuportal.proto.resources.IContest|null} [contest] UpdateContestRequest contest
+                     */
+
+                    /**
+                     * Constructs a new UpdateContestRequest.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents an UpdateContestRequest.
+                     * @implements IUpdateContestRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IUpdateContestRequest=} [properties] Properties to set
+                     */
+                    function UpdateContestRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * UpdateContestRequest contest.
+                     * @member {xsuportal.proto.resources.IContest|null|undefined} contest
+                     * @memberof xsuportal.proto.services.admin.UpdateContestRequest
+                     * @instance
+                     */
+                    UpdateContestRequest.prototype.contest = null;
+
+                    /**
+                     * Creates a new UpdateContestRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.UpdateContestRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateContestRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.UpdateContestRequest} UpdateContestRequest instance
+                     */
+                    UpdateContestRequest.create = function create(properties) {
+                        return new UpdateContestRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified UpdateContestRequest message. Does not implicitly {@link xsuportal.proto.services.admin.UpdateContestRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.UpdateContestRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateContestRequest} message UpdateContestRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UpdateContestRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.contest != null && Object.hasOwnProperty.call(message, "contest"))
+                            $root.xsuportal.proto.resources.Contest.encode(message.contest, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified UpdateContestRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.UpdateContestRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.UpdateContestRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateContestRequest} message UpdateContestRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UpdateContestRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an UpdateContestRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.UpdateContestRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.UpdateContestRequest} UpdateContestRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UpdateContestRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.UpdateContestRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.contest = $root.xsuportal.proto.resources.Contest.decode(reader, reader.uint32());
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an UpdateContestRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.UpdateContestRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.UpdateContestRequest} UpdateContestRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UpdateContestRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an UpdateContestRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.UpdateContestRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UpdateContestRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.contest != null && message.hasOwnProperty("contest")) {
+                            var error = $root.xsuportal.proto.resources.Contest.verify(message.contest);
+                            if (error)
+                                return "contest." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UpdateContestRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.UpdateContestRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.UpdateContestRequest} UpdateContestRequest
+                     */
+                    UpdateContestRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.UpdateContestRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.admin.UpdateContestRequest();
+                        if (object.contest != null) {
+                            if (typeof object.contest !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.UpdateContestRequest.contest: object expected");
+                            message.contest = $root.xsuportal.proto.resources.Contest.fromObject(object.contest);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an UpdateContestRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.UpdateContestRequest
+                     * @static
+                     * @param {xsuportal.proto.services.admin.UpdateContestRequest} message UpdateContestRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UpdateContestRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.contest = null;
+                        if (message.contest != null && message.hasOwnProperty("contest"))
+                            object.contest = $root.xsuportal.proto.resources.Contest.toObject(message.contest, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this UpdateContestRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.UpdateContestRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UpdateContestRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UpdateContestRequest;
+                })();
+
+                admin.UpdateContestResponse = (function() {
+
+                    /**
+                     * Properties of an UpdateContestResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @interface IUpdateContestResponse
+                     */
+
+                    /**
+                     * Constructs a new UpdateContestResponse.
+                     * @memberof xsuportal.proto.services.admin
+                     * @classdesc Represents an UpdateContestResponse.
+                     * @implements IUpdateContestResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.admin.IUpdateContestResponse=} [properties] Properties to set
+                     */
+                    function UpdateContestResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new UpdateContestResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.admin.UpdateContestResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateContestResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.admin.UpdateContestResponse} UpdateContestResponse instance
+                     */
+                    UpdateContestResponse.create = function create(properties) {
+                        return new UpdateContestResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified UpdateContestResponse message. Does not implicitly {@link xsuportal.proto.services.admin.UpdateContestResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.admin.UpdateContestResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateContestResponse} message UpdateContestResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UpdateContestResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified UpdateContestResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.UpdateContestResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.admin.UpdateContestResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.IUpdateContestResponse} message UpdateContestResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UpdateContestResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an UpdateContestResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.admin.UpdateContestResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.admin.UpdateContestResponse} UpdateContestResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UpdateContestResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.UpdateContestResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an UpdateContestResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.admin.UpdateContestResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.admin.UpdateContestResponse} UpdateContestResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UpdateContestResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an UpdateContestResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.admin.UpdateContestResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UpdateContestResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UpdateContestResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.admin.UpdateContestResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.admin.UpdateContestResponse} UpdateContestResponse
+                     */
+                    UpdateContestResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.admin.UpdateContestResponse)
+                            return object;
+                        return new $root.xsuportal.proto.services.admin.UpdateContestResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from an UpdateContestResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.admin.UpdateContestResponse
+                     * @static
+                     * @param {xsuportal.proto.services.admin.UpdateContestResponse} message UpdateContestResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UpdateContestResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this UpdateContestResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.admin.UpdateContestResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UpdateContestResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UpdateContestResponse;
                 })();
 
                 admin.ListContestantInstancesRequest = (function() {
@@ -12891,6 +13537,276 @@ $root.xsuportal = (function() {
                  * @namespace
                  */
                 var common = {};
+
+                common.GetContestResponse = (function() {
+
+                    /**
+                     * Properties of a GetContestResponse.
+                     * @memberof xsuportal.proto.services.common
+                     * @interface IGetContestResponse
+                     * @property {xsuportal.proto.resources.IContest|null} [contest] GetContestResponse contest
+                     * @property {google.protobuf.ITimestamp|null} [currentTime] GetContestResponse currentTime
+                     * @property {xsuportal.proto.resources.Contest.Status|null} [status] GetContestResponse status
+                     */
+
+                    /**
+                     * Constructs a new GetContestResponse.
+                     * @memberof xsuportal.proto.services.common
+                     * @classdesc Represents a GetContestResponse.
+                     * @implements IGetContestResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.common.IGetContestResponse=} [properties] Properties to set
+                     */
+                    function GetContestResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetContestResponse contest.
+                     * @member {xsuportal.proto.resources.IContest|null|undefined} contest
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @instance
+                     */
+                    GetContestResponse.prototype.contest = null;
+
+                    /**
+                     * GetContestResponse currentTime.
+                     * @member {google.protobuf.ITimestamp|null|undefined} currentTime
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @instance
+                     */
+                    GetContestResponse.prototype.currentTime = null;
+
+                    /**
+                     * GetContestResponse status.
+                     * @member {xsuportal.proto.resources.Contest.Status} status
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @instance
+                     */
+                    GetContestResponse.prototype.status = 0;
+
+                    /**
+                     * Creates a new GetContestResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.IGetContestResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.common.GetContestResponse} GetContestResponse instance
+                     */
+                    GetContestResponse.create = function create(properties) {
+                        return new GetContestResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified GetContestResponse message. Does not implicitly {@link xsuportal.proto.services.common.GetContestResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.IGetContestResponse} message GetContestResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetContestResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.contest != null && Object.hasOwnProperty.call(message, "contest"))
+                            $root.xsuportal.proto.resources.Contest.encode(message.contest, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        if (message.currentTime != null && Object.hasOwnProperty.call(message, "currentTime"))
+                            $root.google.protobuf.Timestamp.encode(message.currentTime, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                        if (message.status != null && Object.hasOwnProperty.call(message, "status"))
+                            writer.uint32(/* id 3, wireType 0 =*/24).int32(message.status);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified GetContestResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.GetContestResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.IGetContestResponse} message GetContestResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    GetContestResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a GetContestResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.common.GetContestResponse} GetContestResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetContestResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.common.GetContestResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.contest = $root.xsuportal.proto.resources.Contest.decode(reader, reader.uint32());
+                                break;
+                            case 2:
+                                message.currentTime = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                                break;
+                            case 3:
+                                message.status = reader.int32();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a GetContestResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.common.GetContestResponse} GetContestResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    GetContestResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a GetContestResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetContestResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.contest != null && message.hasOwnProperty("contest")) {
+                            var error = $root.xsuportal.proto.resources.Contest.verify(message.contest);
+                            if (error)
+                                return "contest." + error;
+                        }
+                        if (message.currentTime != null && message.hasOwnProperty("currentTime")) {
+                            var error = $root.google.protobuf.Timestamp.verify(message.currentTime);
+                            if (error)
+                                return "currentTime." + error;
+                        }
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                                break;
+                            }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetContestResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.common.GetContestResponse} GetContestResponse
+                     */
+                    GetContestResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.common.GetContestResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.common.GetContestResponse();
+                        if (object.contest != null) {
+                            if (typeof object.contest !== "object")
+                                throw TypeError(".xsuportal.proto.services.common.GetContestResponse.contest: object expected");
+                            message.contest = $root.xsuportal.proto.resources.Contest.fromObject(object.contest);
+                        }
+                        if (object.currentTime != null) {
+                            if (typeof object.currentTime !== "object")
+                                throw TypeError(".xsuportal.proto.services.common.GetContestResponse.currentTime: object expected");
+                            message.currentTime = $root.google.protobuf.Timestamp.fromObject(object.currentTime);
+                        }
+                        switch (object.status) {
+                        case "STANDBY":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "REGISTRATION":
+                        case 1:
+                            message.status = 1;
+                            break;
+                        case "STARTED":
+                        case 2:
+                            message.status = 2;
+                            break;
+                        case "FROZEN":
+                        case 3:
+                            message.status = 3;
+                            break;
+                        case "FINISHED":
+                        case 4:
+                            message.status = 4;
+                            break;
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetContestResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @static
+                     * @param {xsuportal.proto.services.common.GetContestResponse} message GetContestResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetContestResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.contest = null;
+                            object.currentTime = null;
+                            object.status = options.enums === String ? "STANDBY" : 0;
+                        }
+                        if (message.contest != null && message.hasOwnProperty("contest"))
+                            object.contest = $root.xsuportal.proto.resources.Contest.toObject(message.contest, options);
+                        if (message.currentTime != null && message.hasOwnProperty("currentTime"))
+                            object.currentTime = $root.google.protobuf.Timestamp.toObject(message.currentTime, options);
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.xsuportal.proto.resources.Contest.Status[message.status] : message.status;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetContestResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.common.GetContestResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetContestResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetContestResponse;
+                })();
 
                 common.GetCurrentSessionResponse = (function() {
 

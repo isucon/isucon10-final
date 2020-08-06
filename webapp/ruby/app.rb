@@ -7,11 +7,15 @@ $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
 require 'routes'
 require 'database'
 
+
 module Xsuportal
   class App < Sinatra::Base
     include Xsuportal::Routes
 
     MYSQL_ER_DUP_ENTRY = 1062
+    ADMIN_ID = 'admin'
+    ADMIN_PASSWORD = 'admin'
+    DEBUG_CONTEST_STATUS_FILE_PATH = '/tmp/XSUPORTAL_CONTEST_STATUS'
 
     configure :development do
       require 'sinatra/reloader'
@@ -59,6 +63,75 @@ module Xsuportal
           else
             nil
           end
+        end
+      end
+
+      def login_required(team: true, lock: false)
+        unless current_contestant(lock: lock)
+          Database.ensure_transaction_close
+          halt_pb 401, 'ログインが必要です'
+        end
+        if team && !current_team(lock: lock)
+          Database.ensure_transaction_close
+          halt_pb 403, '参加登録が必要です'
+        end
+      end
+
+      def current_contest_status
+        contest = db.query(
+          <<~SQL
+          SELECT
+            *,
+            NOW(6) AS `current_time`,
+            CASE
+              WHEN NOW(6) < `registration_open_at` THEN 'standby'
+              WHEN `registration_open_at` <= NOW(6) AND NOW(6) < `contest_start_at` THEN 'registration'
+              WHEN `contest_start_at` <= NOW(6) AND NOW(6) < `contest_freeze_at` THEN 'started'
+              WHEN `contest_freeze_at` <= NOW(6) AND NOW(6) < `contest_end_at` THEN 'frozen'
+              WHEN `contest_end_at` <= NOW(6) THEN 'finished'
+              ELSE 'unknown'
+            END AS `status`
+          FROM `contest_config`
+          SQL
+        ).first
+
+        contest_status_str = contest[:status]
+        if ENV['APP_ENV'] != :production && File.exist?(DEBUG_CONTEST_STATUS_FILE_PATH)
+          contest_status_str = File.read(DEBUG_CONTEST_STATUS_FILE_PATH).chomp
+        end
+
+        status = case contest_status_str
+        when 'standby'
+          :STANDBY
+        when 'registration'
+          :REGISTRATION
+        when 'started'
+          :STARTED
+        when 'frozen'
+          :FROZEN
+        when 'finished'
+          :FINISHED
+        else
+          raise "Unexpected contest status: #{contest_status_str.inspect}"
+        end
+
+        {
+          contest: {
+            registration_open_at: contest[:registration_open_at],
+            contest_start_at: contest[:contest_start_at],
+            contest_freeze_at: contest[:contest_freeze_at],
+            contest_end_at: contest[:contest_end_at],
+          },
+          current_time: contest[:current_time],
+          status: status,
+        }
+      end
+
+      def contest_status_restricted(statuses, msg)
+        statuses = [statuses] unless Array === statuses
+        unless statuses.include?(current_contest_status[:status])
+          Database.ensure_transaction_close
+          halt_pb 403, msg
         end
       end
 
@@ -127,8 +200,8 @@ module Xsuportal
             deduction: result[:score_breakdown][:deduction],
           ) : nil,
           reason: result[:reason],
-          reason: result[:stdout],
-          reason: result[:stderr],
+          stdout: result[:stdout],
+          stderr: result[:stderr],
         )
       end
 
@@ -165,11 +238,74 @@ module Xsuportal
       db.query('TRUNCATE `contestants`')
       db.query('TRUNCATE `benchmark_jobs`')
       db.query('TRUNCATE `benchmark_results`')
+      db.query('TRUNCATE `contest_config`')
+
+      db.xquery(
+        'INSERT `contestants` (`id`, `password`, `staff`, `created_at`, `updated_at`) VALUES (?, ?, TRUE, NOW(6), NOW(6))',
+        ADMIN_ID,
+        ADMIN_PASSWORD,
+      )
+
+      db.query(
+        <<~SQL,
+        INSERT `contest_config` (
+          `registration_open_at`,
+          `contest_start_at`,
+          `contest_freeze_at`,
+          `contest_end_at`
+        ) VALUES (
+          TIMESTAMPADD(SECOND, 0, NOW(6)),
+          TIMESTAMPADD(SECOND, 5, NOW(6)),
+          TIMESTAMPADD(SECOND, 40, NOW(6)),
+          TIMESTAMPADD(SECOND, 50, NOW(6))
+        )
+        SQL
+      )
 
       encode_response_pb(
         # TODO: 負荷レベルの指定
         # 実装言語
         language: 'ruby',
+      )
+    end
+
+    # いらんかも
+    put '/api/admin/contest' do
+      req = decode_request_pb
+      # TODO: admin authz
+      Database.transaction do
+        db.query('TRUNCATE `contest_config`')
+        db.xquery(
+          <<~SQL,
+          INSERT `contest_config` (
+            `registration_open_at`,
+            `contest_start_at`,
+            `contest_freeze_at`,
+            `contest_end_at`
+          ) VALUES (?, ?, ?, ?, ?)
+          SQL
+          req.contest?.registration_open_at,
+          req.contest?.contest_start_at,
+          req.contest?.contest_freeze_at,
+          req.contest?.contest_end_at,
+        )
+      end
+      encode_response_pb
+    end
+
+    get '/api/contest' do
+      contest_status = current_contest_status
+      contest = contest_status[:contest]
+
+      encode_response_pb(
+        contest: Proto::Resources::Contest.new(
+          registration_open_at: contest[:registration_open_at],
+          contest_start_at: contest[:contest_start_at],
+          contest_freeze_at: contest[:contest_freeze_at],
+          contest_end_at: contest[:contest_end_at],
+        ),
+        current_time: contest_status[:current_time],
+        status: contest_status[:status],
       )
     end
 
@@ -226,17 +362,17 @@ module Xsuportal
 
       status = case
       when current_contestant&.fetch(:team_id)
-        Proto::Services::Registration::GetRegistrationSessionResponse::Status::JOINED
+        :JOINED
       when team && members.count >= 3
-        Proto::Services::Registration::GetRegistrationSessionResponse::Status::NOT_JOINABLE
+        :NOT_JOINABLE
       # when !team && (!Contest.registration_open? || Contest.max_teams_reached?)
-      #   Proto::Services::Registration::GetRegistrationSessionResponse::Status::CLOSED
+      #   :CLOSED
       when !current_contestant
-        Proto::Services::Registration::GetRegistrationSessionResponse::Status::NOT_LOGGED_IN
+        :NOT_LOGGED_IN
       when team
-        Proto::Services::Registration::GetRegistrationSessionResponse::Status::JOINABLE
+        :JOINABLE
       when !team
-        Proto::Services::Registration::GetRegistrationSessionResponse::Status::CREATABLE
+        :CREATABLE
       else
         raise "undeterminable status"
       end
@@ -253,12 +389,10 @@ module Xsuportal
       result = {}
 
       Database.transaction do
-        invite_token = SecureRandom.urlsafe_base64(64)
+        login_required(team: false, lock: true)
+        contest_status_restricted(:REGISTRATION, 'チーム登録期間ではありません')
 
-        unless current_contestant(lock: true)
-          Database.transaction_rollback
-          halt_pb 401, 'ログインが必要です'
-        end
+        invite_token = SecureRandom.urlsafe_base64(64)
 
         db.xquery(
           'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`, `updated_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
@@ -296,10 +430,8 @@ module Xsuportal
       req = decode_request_pb
 
       Database.transaction do
-        unless current_contestant
-          Database.transaction_rollback
-          halt_pb 401, 'ログインが必要です'
-        end
+        login_required(team: false, lock: true)
+        contest_status_restricted(:REGISTRATION, 'チーム登録期間ではありません')
 
         team = db.xquery(
           'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE AND `disqualified` = FALSE LIMIT 1 FOR UPDATE',
@@ -338,15 +470,7 @@ module Xsuportal
       req = decode_request_pb
 
       Database.transaction do
-
-        unless current_contestant(lock: true)
-          Database.transaction_rollback
-          halt_pb 401, 'ログインが必要です'
-        end
-        unless current_team(lock: true)
-          Database.transaction_rollback
-          halt_pb 400, '参加登録されていません'
-        end
+        login_required(lock: true)
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
@@ -370,14 +494,8 @@ module Xsuportal
 
     delete '/api/registration' do
       Database.transaction do
-        unless current_contestant(lock: true)
-          Database.transaction_rollback
-          halt_pb 401, 'ログインが必要です'
-        end
-        unless current_team(lock: true)
-          Database.transaction_rollback
-          halt_pb 400, 'チームに所属していません'
-        end
+        login_required(lock: true)
+        contest_status_restricted(:REGISTRATION, 'チーム登録期間外は辞退できません')
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
@@ -402,14 +520,8 @@ module Xsuportal
       req = decode_request_pb
 
       Database.transaction do
-        unless current_contestant
-          Database.transaction_rollback
-          halt_pb 401, 'ログインが必要です'
-        end
-        unless current_team
-          Database.transaction_rollback
-          halt_pb 400, 'チームに所属していません'
-        end
+        login_required
+        contest_status_restricted([:STARTED, :FROZEN], '競技時間外はベンチマークを実行できません')
 
         db.xquery(
           'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
@@ -422,12 +534,7 @@ module Xsuportal
     end
 
     get '/api/contestant/benchmark_jobs' do
-      unless current_contestant
-        halt_pb 401, 'ログインが必要です'
-      end
-      unless current_team
-        halt_pb 400, 'チームに所属していません'
-      end
+      login_required
 
       jobs = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC',
@@ -440,12 +547,7 @@ module Xsuportal
     end
 
     get '/api/contestant/benchmark_jobs/:id' do
-      unless current_contestant
-        halt_pb 401, 'ログインが必要です'
-      end
-      unless current_team
-        halt_pb 400, 'チームに所属していません'
-      end
+      login_required
 
       job = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `id` = ? LIMIT 1',
