@@ -13,6 +13,8 @@ module Xsuportal
     include Xsuportal::Routes
 
     MYSQL_ER_DUP_ENTRY = 1062
+    ADMIN_ID = 'admin'
+    ADMIN_PASSWORD = 'admin'
 
     configure :development do
       require 'sinatra/reloader'
@@ -168,6 +170,28 @@ module Xsuportal
       db.query('TRUNCATE `benchmark_results`')
       db.query('TRUNCATE `contest_config`')
 
+      db.xquery(
+        'INSERT `contestants` (`id`, `password`, `staff`, `created_at`, `updated_at`) VAULES (?, ?, TRUE, NOW(6), NOW(6))',
+        ADMIN_ID,
+        ADMIN_PASSWORD,
+      )
+
+      db.query(
+        <<~SQL,
+        INSERT `contest_config` (
+          `registration_open_at`,
+          `contest_start_at`,
+          `contest_freeze_at`,
+          `contest_end_at`
+        ) VALUES (
+          TIMESTAMPADD(SECOND, 0, NOW(6)),
+          TIMESTAMPADD(SECOND, 5, NOW(6)),
+          TIMESTAMPADD(SECOND, 40, NOW(6)),
+          TIMESTAMPADD(SECOND, 50, NOW(6))
+        )
+        SQL
+      )
+
       encode_response_pb(
         # TODO: 負荷レベルの指定
         # 実装言語
@@ -175,6 +199,7 @@ module Xsuportal
       )
     end
 
+    # いらんかも
     put '/api/admin/contest' do
       req = decode_request_pb
       # TODO: admin authz
@@ -184,32 +209,58 @@ module Xsuportal
           <<~SQL,
           INSERT `contest_config` (
             `registration_open_at`,
-            `registration_close_at`,
-            `registration_start_at`,
-            `registration_freeze_at`,
-            `registration_end_at`
+            `contest_start_at`,
+            `contest_freeze_at`,
+            `contest_end_at`
           ) VALUES (?, ?, ?, ?, ?)
           SQL
           req.contest?.registration_open_at,
-          req.contest?.registration_close_at,
-          req.contest?.registration_start_at,
-          req.contest?.registration_freeze_at,
-          req.contest?.registration_end_at,
+          req.contest?.contest_start_at,
+          req.contest?.contest_freeze_at,
+          req.contest?.contest_end_at,
         )
       end
       encode_response_pb
     end
 
     get '/api/contest' do
-      contest = db.query('SELECT * FROM `contest_config` LIMIT 1').first
+      contest = db.query(
+        <<~SQL
+        SELECT *,
+          NOW(6) AS `current_time`,
+          (NOW(6) < `registration_open_at`) AS `standby`,
+          (`registration_open_at` <= NOW(6) AND NOW(6) < `contest_start_at`) AS `registration`,
+          (`contest_start_at` <= NOW(6) AND NOW(6) < `contest_freeze_at`) AS `started`,
+          (`contest_freeze_at` <= NOW(6) AND NOW(6) < `contest_end_at`) AS `frozen`,
+          (`contest_end_at` <= NOW(6)) AS `finished`
+        FROM `contest_config`
+        SQL
+      ).first
+
+      status = case 1
+      when contest[:standby]
+        Proto::Resources::Contest::Status::STANDBY
+      when contest[:registration]
+        Proto::Resources::Contest::Status::REGISTRATION
+      when contest[:started]
+        Proto::Resources::Contest::Status::STARTED
+      when contest[:frozen]
+        Proto::Resources::Contest::Status::FROZEN
+      when contest[:finished]
+        Proto::Resources::Contest::Status::FINISHED
+      else
+        raise 'Unexpected contest status'
+      end
+
       encode_response_pb(
         contest: contest ? Proto::Resources::Contest.new(
           registration_open_at: contest[:registration_open_at],
-          registration_close_at: contest[:registration_close_at],
-          registration_start_at: contest[:registration_start_at],
-          registration_freeze_at: contest[:registration_freeze_at],
-          registration_end_at: contest[:registration_end_at],
+          contest_start_at: contest[:contest_start_at],
+          contest_freeze_at: contest[:contest_freeze_at],
+          contest_end_at: contest[:contest_end_at],
         ) : nil,
+        current_time: contest[:current_time],
+        status: status
       )
     end
 

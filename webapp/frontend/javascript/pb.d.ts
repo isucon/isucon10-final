@@ -1352,17 +1352,14 @@ export namespace xsuportal {
                 /** Contest registrationOpenAt */
                 registrationOpenAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest registrationCloseAt */
-                registrationCloseAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestStartAt */
+                contestStartAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest registrationStartAt */
-                registrationStartAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestFreezeAt */
+                contestFreezeAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest registrationFreezeAt */
-                registrationFreezeAt?: (google.protobuf.ITimestamp|null);
-
-                /** Contest registrationEndAt */
-                registrationEndAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestEndAt */
+                contestEndAt?: (google.protobuf.ITimestamp|null);
             }
 
             /** Represents a Contest. */
@@ -1377,17 +1374,14 @@ export namespace xsuportal {
                 /** Contest registrationOpenAt. */
                 public registrationOpenAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest registrationCloseAt. */
-                public registrationCloseAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestStartAt. */
+                public contestStartAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest registrationStartAt. */
-                public registrationStartAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestFreezeAt. */
+                public contestFreezeAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest registrationFreezeAt. */
-                public registrationFreezeAt?: (google.protobuf.ITimestamp|null);
-
-                /** Contest registrationEndAt. */
-                public registrationEndAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestEndAt. */
+                public contestEndAt?: (google.protobuf.ITimestamp|null);
 
                 /**
                  * Creates a new Contest instance using the specified properties.
@@ -1458,6 +1452,18 @@ export namespace xsuportal {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace Contest {
+
+                /** Status enum. */
+                enum Status {
+                    STANDBY = 0,
+                    REGISTRATION = 1,
+                    STARTED = 2,
+                    FROZEN = 3,
+                    FINISHED = 4
+                }
             }
 
             /** Properties of a Leaderboard. */
@@ -5693,6 +5699,12 @@ export namespace xsuportal {
 
                     /** GetContestResponse contest */
                     contest?: (xsuportal.proto.resources.IContest|null);
+
+                    /** GetContestResponse currentTime */
+                    currentTime?: (google.protobuf.ITimestamp|null);
+
+                    /** GetContestResponse status */
+                    status?: (xsuportal.proto.resources.Contest.Status|null);
                 }
 
                 /** Represents a GetContestResponse. */
@@ -5706,6 +5718,12 @@ export namespace xsuportal {
 
                     /** GetContestResponse contest. */
                     public contest?: (xsuportal.proto.resources.IContest|null);
+
+                    /** GetContestResponse currentTime. */
+                    public currentTime?: (google.protobuf.ITimestamp|null);
+
+                    /** GetContestResponse status. */
+                    public status: xsuportal.proto.resources.Contest.Status;
 
                     /**
                      * Creates a new GetContestResponse instance using the specified properties.

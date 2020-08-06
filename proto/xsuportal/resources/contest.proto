@@ -6,8 +6,15 @@ import "google/protobuf/timestamp.proto";
 
 message Contest {
   google.protobuf.Timestamp registration_open_at = 1;
-  google.protobuf.Timestamp registration_close_at = 2;
-  google.protobuf.Timestamp registration_start_at = 3;
-  google.protobuf.Timestamp registration_freeze_at = 4;
-  google.protobuf.Timestamp registration_end_at = 5;
+  google.protobuf.Timestamp contest_start_at = 3;
+  google.protobuf.Timestamp contest_freeze_at = 4;
+  google.protobuf.Timestamp contest_end_at = 5;
+
+  enum Status {
+    STANDBY = 0;
+    REGISTRATION = 1;
+    STARTED = 2;
+    FROZEN = 3;
+    FINISHED = 4;
+  }
 }
