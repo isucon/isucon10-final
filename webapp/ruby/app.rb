@@ -105,6 +105,33 @@ module Xsuportal
         )
       end
 
+      def benchmark_job_pb(job)
+        Proto::Resources::BenchmarkJob.new(
+          id: job[:id],
+          team_id: job[:team_id],
+          status: job[:status],
+          created_at: job[:created_at],
+          updated_at: job[:updated_at],
+          started_at: job[:started_atj],
+          finished_at: job[:finished_at],
+        )
+      end
+
+      def benchmark_result_pb(result)
+        Proto::Resources::BenchmarkResult.new(
+          finished: result[:finished],
+          passed: result[:passed],
+          score: result[:score],
+          score_breakdown: result[:score_breakdown] ? Proto::Resources::BenchmarkResult::ScoreBreakdown.new(
+            base: result[:score_breakdown][:base],
+            deduction: result[:score_breakdown][:deduction],
+          ) : nil,
+          reason: result[:reason],
+          reason: result[:stdout],
+          reason: result[:stderr],
+        )
+      end
+
       def decode_request_pb
         cls = PB_TABLE.fetch(request.env.fetch('sinatra.route'))[0]
         cls.decode(request.body.read)
@@ -136,6 +163,8 @@ module Xsuportal
     post '/initialize' do
       db.query('TRUNCATE `teams`')
       db.query('TRUNCATE `contestants`')
+      db.query('TRUNCATE `benchmark_jobs`')
+      db.query('TRUNCATE `benchmark_results`')
 
       encode_response_pb(
         # TODO: 負荷レベルの指定
@@ -232,7 +261,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`, `updated_at`) VALUES (?, ?, ?, NOW(), NOW())',
+          'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`, `updated_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
           req.team_name,
           req.email_address,
           invite_token,
@@ -244,7 +273,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'UPDATE `contestants` SET `name` = ?, `student` = ?, `team_id` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          'UPDATE `contestants` SET `name` = ?, `student` = ?, `team_id` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
           req.name,
           req.is_student,
           team_id,
@@ -252,7 +281,7 @@ module Xsuportal
         )
 
         db.xquery(
-          'UPDATE `teams` SET `leader_id` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          'UPDATE `teams` SET `leader_id` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
           current_contestant[:id],
           team_id,
         )
@@ -294,7 +323,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'UPDATE `contestants` SET `team_id` = ?, `name` = ?, `student` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          'UPDATE `contestants` SET `team_id` = ?, `name` = ?, `student` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
           req.team_id,
           req.name,
           req.is_student,
@@ -321,7 +350,7 @@ module Xsuportal
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
-            'UPDATE `teams` SET `name` = ?, `email_address` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+            'UPDATE `teams` SET `name` = ?, `email_address` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
             req.team_name,
             req.email_address,
             current_team[:id],
@@ -329,7 +358,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'UPDATE `contestants` SET `name` = ?, `student` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          'UPDATE `contestants` SET `name` = ?, `student` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
           req.name,
           req.is_student,
           current_contestant[:id],
@@ -352,21 +381,97 @@ module Xsuportal
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
-            'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+            'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
             current_team[:id],
           )
           db.xquery(
-            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW() WHERE `team_id` = ?',
+            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW(6) WHERE `team_id` = ?',
             current_team[:id],
           )
         else
           db.xquery(
-            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
             current_contestant[:id],
           )
         end
       end
       encode_response_pb
+    end
+
+    post '/api/contestant/benchmark_jobs' do
+      req = decode_request_pb
+
+      Database.transaction do
+        unless current_contestant
+          Database.transaction_rollback
+          halt_pb 401, 'ログインが必要です'
+        end
+        unless current_team
+          Database.transaction_rollback
+          halt_pb 400, 'チームに所属していません'
+        end
+
+        db.xquery(
+          'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
+          current_team[:id],
+          req.target_hostname,
+          Proto::Resources::BenchmarkJob::Status::PENDING,
+        )
+      end
+      encode_response_pb
+    end
+
+    get '/api/contestant/benchmark_jobs' do
+      unless current_contestant
+        halt_pb 401, 'ログインが必要です'
+      end
+      unless current_team
+        halt_pb 400, 'チームに所属していません'
+      end
+
+      jobs = db.xquery(
+        'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC',
+        current_team[:id],
+      )
+      jobs_pb = jobs&.map { |job| benchmark_job_pb(job) };
+      encode_response_pb(
+        jobs: jobs_pb,
+      )
+    end
+
+    get '/api/contestant/benchmark_jobs/:id' do
+      unless current_contestant
+        halt_pb 401, 'ログインが必要です'
+      end
+      unless current_team
+        halt_pb 400, 'チームに所属していません'
+      end
+
+      job = db.xquery(
+        'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `id` = ? LIMIT 1',
+        current_team[:id],
+        params[:id],
+      ).first
+
+      unless job
+        halt_pb 404, 'ベンチマークジョブが見つかりません'
+      end
+
+      result = db.xquery(
+        <<~SQL,
+          SELECT r.* FROM `benchmark_results` r
+          RIGHT JOIN `benchmark_jobs` j ON j.`latest_benchmark_result_id` = r.id
+          WHERE r.benchmark_job_id = ? AND j.team_id = ?
+          LIMIT 1
+        SQL
+        params[:id],
+        current_team[:id],
+      ).first
+
+      encode_response_pb(
+        job: benchmark_job_pb(job),
+        result: result ? benchmark_result_pb(result) : nil,
+      )
     end
 
     post '/api/signup' do
@@ -375,7 +480,7 @@ module Xsuportal
 
       begin
         db.xquery(
-          'INSERT INTO `contestants` (`id`, `password`, `created_at`, `updated_at`) VALUES (?, ?, NOW(), NOW())',
+          'INSERT INTO `contestants` (`id`, `password`, `created_at`, `updated_at`) VALUES (?, ?, NOW(6), NOW(6))',
           req.contestant_id,
           Digest::SHA256.hexdigest(req.password)
         )

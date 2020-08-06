@@ -13,9 +13,9 @@ class ApiClient
     @cookie = {}
   end
 
-  def request(method, path, payload={})
+  def request(method, path, payload={}, opts={})
     path_wo_qs = path.split('?')[0]
-    route = "#{method.upcase} #{path_wo_qs}"
+    route = opts[:route] || "#{method.upcase} #{path_wo_qs}"
     request_class_pb, response_class_pb = PB_TABLE[route]
     req = nil
     case method

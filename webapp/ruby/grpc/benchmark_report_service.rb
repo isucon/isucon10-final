@@ -1,3 +1,4 @@
+require 'xsuportal/resources/benchmark_job_pb'
 require 'xsuportal/services/bench/reporting_pb'
 require 'xsuportal/services/bench/reporting_services_pb'
 
@@ -22,8 +23,8 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           save_as_finished(request)
           break
         else
-          puts "#{request.job_id}: save as started"
-          save_as_started(request)
+          puts "#{request.job_id}: save as running"
+          save_as_running(request)
         end
 
         call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
@@ -52,7 +53,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           `stderr`,
           `created_at`,
           `updated_at`
-        ) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, NOW(), NOW())
+        ) VALUES (?, ?, ?, ?, ?, ?, NOW(6), ?, ?, ?, NOW(6), NOW(6))
       SQL
       request.job_id,
       result.score,
@@ -70,17 +71,17 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         UPDATE `benchmark_jobs` SET
           `latest_benchmark_result_id` = ?,
           `status` = ?,
-          `finished_at` = NOW(),
-          `updated_at` = NOW()
+          `finished_at` = NOW(6),
+          `updated_at` = NOW(6)
         WHERE `id` = ? LIMIT 1
       SQL
       result_id,
-      'finished',
+      Xsuportal::Proto::Resources::BenchmarkJob::Status::FINISHED,
       request.job_id,
     )
   end
 
-  def save_as_started(request)
+  def save_as_running(request)
     db = Xsuportal::Database.connection
     db.xquery(
       <<~SQL,
@@ -89,7 +90,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           `finished`,
           `created_at`,
           `updated_at`
-        ) VALUES (?, ?, NOW(), NOW())
+        ) VALUES (?, ?, NOW(6), NOW(6))
       SQL
       request.job_id,
       false,
@@ -100,11 +101,12 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         UPDATE `benchmark_jobs` SET
           `latest_benchmark_result_id` = ?,
           `status` = ?,
-          `updated_at` = NOW()
+          `started_at` = NOW(6),
+          `updated_at` = NOW(6)
         WHERE `id` = ? LIMIT 1
       SQL
       result_id,
-      'started',
+      Xsuportal::Proto::Resources::BenchmarkJob::Status::RUNNING,
       request.job_id,
     )
   end
