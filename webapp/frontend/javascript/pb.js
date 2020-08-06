@@ -13816,6 +13816,7 @@ $root.xsuportal = (function() {
                      * @interface IGetCurrentSessionResponse
                      * @property {xsuportal.proto.resources.ITeam|null} [team] GetCurrentSessionResponse team
                      * @property {xsuportal.proto.resources.IContestant|null} [contestant] GetCurrentSessionResponse contestant
+                     * @property {xsuportal.proto.resources.Contest.Status|null} [contestStatus] GetCurrentSessionResponse contestStatus
                      */
 
                     /**
@@ -13850,6 +13851,14 @@ $root.xsuportal = (function() {
                     GetCurrentSessionResponse.prototype.contestant = null;
 
                     /**
+                     * GetCurrentSessionResponse contestStatus.
+                     * @member {xsuportal.proto.resources.Contest.Status} contestStatus
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @instance
+                     */
+                    GetCurrentSessionResponse.prototype.contestStatus = 0;
+
+                    /**
                      * Creates a new GetCurrentSessionResponse instance using the specified properties.
                      * @function create
                      * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
@@ -13877,6 +13886,8 @@ $root.xsuportal = (function() {
                             $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                         if (message.contestant != null && Object.hasOwnProperty.call(message, "contestant"))
                             $root.xsuportal.proto.resources.Contestant.encode(message.contestant, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                        if (message.contestStatus != null && Object.hasOwnProperty.call(message, "contestStatus"))
+                            writer.uint32(/* id 3, wireType 0 =*/24).int32(message.contestStatus);
                         return writer;
                     };
 
@@ -13916,6 +13927,9 @@ $root.xsuportal = (function() {
                                 break;
                             case 2:
                                 message.contestant = $root.xsuportal.proto.resources.Contestant.decode(reader, reader.uint32());
+                                break;
+                            case 3:
+                                message.contestStatus = reader.int32();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -13962,6 +13976,17 @@ $root.xsuportal = (function() {
                             if (error)
                                 return "contestant." + error;
                         }
+                        if (message.contestStatus != null && message.hasOwnProperty("contestStatus"))
+                            switch (message.contestStatus) {
+                            default:
+                                return "contestStatus: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                                break;
+                            }
                         return null;
                     };
 
@@ -13987,6 +14012,28 @@ $root.xsuportal = (function() {
                                 throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.contestant: object expected");
                             message.contestant = $root.xsuportal.proto.resources.Contestant.fromObject(object.contestant);
                         }
+                        switch (object.contestStatus) {
+                        case "STANDBY":
+                        case 0:
+                            message.contestStatus = 0;
+                            break;
+                        case "REGISTRATION":
+                        case 1:
+                            message.contestStatus = 1;
+                            break;
+                        case "STARTED":
+                        case 2:
+                            message.contestStatus = 2;
+                            break;
+                        case "FROZEN":
+                        case 3:
+                            message.contestStatus = 3;
+                            break;
+                        case "FINISHED":
+                        case 4:
+                            message.contestStatus = 4;
+                            break;
+                        }
                         return message;
                     };
 
@@ -14006,11 +14053,14 @@ $root.xsuportal = (function() {
                         if (options.defaults) {
                             object.team = null;
                             object.contestant = null;
+                            object.contestStatus = options.enums === String ? "STANDBY" : 0;
                         }
                         if (message.team != null && message.hasOwnProperty("team"))
                             object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                         if (message.contestant != null && message.hasOwnProperty("contestant"))
                             object.contestant = $root.xsuportal.proto.resources.Contestant.toObject(message.contestant, options);
+                        if (message.contestStatus != null && message.hasOwnProperty("contestStatus"))
+                            object.contestStatus = options.enums === String ? $root.xsuportal.proto.resources.Contest.Status[message.contestStatus] : message.contestStatus;
                         return object;
                     };
 

@@ -313,6 +313,7 @@ module Xsuportal
       encode_response_pb(
         contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
         team: current_team ? team_pb(current_team) : nil,
+        contest_status: current_contest_status[:status],
       )
     end
 

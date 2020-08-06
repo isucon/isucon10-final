@@ -5804,6 +5804,9 @@ export namespace xsuportal {
 
                     /** GetCurrentSessionResponse contestant */
                     contestant?: (xsuportal.proto.resources.IContestant|null);
+
+                    /** GetCurrentSessionResponse contestStatus */
+                    contestStatus?: (xsuportal.proto.resources.Contest.Status|null);
                 }
 
                 /** Represents a GetCurrentSessionResponse. */
@@ -5820,6 +5823,9 @@ export namespace xsuportal {
 
                     /** GetCurrentSessionResponse contestant. */
                     public contestant?: (xsuportal.proto.resources.IContestant|null);
+
+                    /** GetCurrentSessionResponse contestStatus. */
+                    public contestStatus: xsuportal.proto.resources.Contest.Status;
 
                     /**
                      * Creates a new GetCurrentSessionResponse instance using the specified properties.
