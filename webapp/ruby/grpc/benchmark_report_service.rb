@@ -53,7 +53,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           `stderr`,
           `created_at`,
           `updated_at`
-        ) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, NOW(), NOW())
+        ) VALUES (?, ?, ?, ?, ?, ?, NOW(6), ?, ?, ?, NOW(6), NOW(6))
       SQL
       request.job_id,
       result.score,
@@ -71,8 +71,8 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         UPDATE `benchmark_jobs` SET
           `latest_benchmark_result_id` = ?,
           `status` = ?,
-          `finished_at` = NOW(),
-          `updated_at` = NOW()
+          `finished_at` = NOW(6),
+          `updated_at` = NOW(6)
         WHERE `id` = ? LIMIT 1
       SQL
       result_id,
@@ -90,7 +90,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           `finished`,
           `created_at`,
           `updated_at`
-        ) VALUES (?, ?, NOW(), NOW())
+        ) VALUES (?, ?, NOW(6), NOW(6))
       SQL
       request.job_id,
       false,
@@ -101,8 +101,8 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         UPDATE `benchmark_jobs` SET
           `latest_benchmark_result_id` = ?,
           `status` = ?,
-          `started_at` = NOW(),
-          `updated_at` = NOW()
+          `started_at` = NOW(6),
+          `updated_at` = NOW(6)
         WHERE `id` = ? LIMIT 1
       SQL
       result_id,

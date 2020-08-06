@@ -20,7 +20,7 @@ end
 
 db = Xsuportal::Database.connection
 db.xquery(
-  'INSERT INTO `benchmark_jobs` (`team_id`, `status`, `target_hostname`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(), NOW())',
+  'INSERT INTO `benchmark_jobs` (`team_id`, `status`, `target_hostname`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
   team_id,
   status,
   hostname,

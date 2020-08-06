@@ -261,7 +261,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`, `updated_at`) VALUES (?, ?, ?, NOW(), NOW())',
+          'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`, `updated_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
           req.team_name,
           req.email_address,
           invite_token,
@@ -273,7 +273,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'UPDATE `contestants` SET `name` = ?, `student` = ?, `team_id` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          'UPDATE `contestants` SET `name` = ?, `student` = ?, `team_id` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
           req.name,
           req.is_student,
           team_id,
@@ -281,7 +281,7 @@ module Xsuportal
         )
 
         db.xquery(
-          'UPDATE `teams` SET `leader_id` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          'UPDATE `teams` SET `leader_id` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
           current_contestant[:id],
           team_id,
         )
@@ -323,7 +323,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'UPDATE `contestants` SET `team_id` = ?, `name` = ?, `student` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          'UPDATE `contestants` SET `team_id` = ?, `name` = ?, `student` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
           req.team_id,
           req.name,
           req.is_student,
@@ -350,7 +350,7 @@ module Xsuportal
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
-            'UPDATE `teams` SET `name` = ?, `email_address` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+            'UPDATE `teams` SET `name` = ?, `email_address` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
             req.team_name,
             req.email_address,
             current_team[:id],
@@ -358,7 +358,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'UPDATE `contestants` SET `name` = ?, `student` = ?, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+          'UPDATE `contestants` SET `name` = ?, `student` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
           req.name,
           req.is_student,
           current_contestant[:id],
@@ -381,16 +381,16 @@ module Xsuportal
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
-            'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+            'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
             current_team[:id],
           )
           db.xquery(
-            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW() WHERE `team_id` = ?',
+            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW(6) WHERE `team_id` = ?',
             current_team[:id],
           )
         else
           db.xquery(
-            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW() WHERE `id` = ? LIMIT 1',
+            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
             current_contestant[:id],
           )
         end
@@ -412,7 +412,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(), NOW())',
+          'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
           current_team[:id],
           req.target_hostname,
           Proto::Resources::BenchmarkJob::Status::PENDING,
@@ -480,7 +480,7 @@ module Xsuportal
 
       begin
         db.xquery(
-          'INSERT INTO `contestants` (`id`, `password`, `created_at`, `updated_at`) VALUES (?, ?, NOW(), NOW())',
+          'INSERT INTO `contestants` (`id`, `password`, `created_at`, `updated_at`) VALUES (?, ?, NOW(6), NOW(6))',
           req.contestant_id,
           Digest::SHA256.hexdigest(req.password)
         )
