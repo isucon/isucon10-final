@@ -1346,6 +1346,120 @@ export namespace xsuportal {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a Contest. */
+            interface IContest {
+
+                /** Contest registrationOpenAt */
+                registrationOpenAt?: (google.protobuf.ITimestamp|null);
+
+                /** Contest registrationCloseAt */
+                registrationCloseAt?: (google.protobuf.ITimestamp|null);
+
+                /** Contest registrationStartAt */
+                registrationStartAt?: (google.protobuf.ITimestamp|null);
+
+                /** Contest registrationFreezeAt */
+                registrationFreezeAt?: (google.protobuf.ITimestamp|null);
+
+                /** Contest registrationEndAt */
+                registrationEndAt?: (google.protobuf.ITimestamp|null);
+            }
+
+            /** Represents a Contest. */
+            class Contest implements IContest {
+
+                /**
+                 * Constructs a new Contest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: xsuportal.proto.resources.IContest);
+
+                /** Contest registrationOpenAt. */
+                public registrationOpenAt?: (google.protobuf.ITimestamp|null);
+
+                /** Contest registrationCloseAt. */
+                public registrationCloseAt?: (google.protobuf.ITimestamp|null);
+
+                /** Contest registrationStartAt. */
+                public registrationStartAt?: (google.protobuf.ITimestamp|null);
+
+                /** Contest registrationFreezeAt. */
+                public registrationFreezeAt?: (google.protobuf.ITimestamp|null);
+
+                /** Contest registrationEndAt. */
+                public registrationEndAt?: (google.protobuf.ITimestamp|null);
+
+                /**
+                 * Creates a new Contest instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns Contest instance
+                 */
+                public static create(properties?: xsuportal.proto.resources.IContest): xsuportal.proto.resources.Contest;
+
+                /**
+                 * Encodes the specified Contest message. Does not implicitly {@link xsuportal.proto.resources.Contest.verify|verify} messages.
+                 * @param message Contest message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: xsuportal.proto.resources.IContest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified Contest message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Contest.verify|verify} messages.
+                 * @param message Contest message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: xsuportal.proto.resources.IContest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a Contest message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns Contest
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Contest;
+
+                /**
+                 * Decodes a Contest message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns Contest
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Contest;
+
+                /**
+                 * Verifies a Contest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Contest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Contest
+                 */
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Contest;
+
+                /**
+                 * Creates a plain object from a Contest message. Also converts values to other types if specified.
+                 * @param message Contest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: xsuportal.proto.resources.Contest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Contest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a Leaderboard. */
             interface ILeaderboard {
 
@@ -3244,6 +3358,180 @@ export namespace xsuportal {
 
                     /**
                      * Converts this CreateClarificationResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an UpdateContestRequest. */
+                interface IUpdateContestRequest {
+
+                    /** UpdateContestRequest contest */
+                    contest?: (xsuportal.proto.resources.IContest|null);
+                }
+
+                /** Represents an UpdateContestRequest. */
+                class UpdateContestRequest implements IUpdateContestRequest {
+
+                    /**
+                     * Constructs a new UpdateContestRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IUpdateContestRequest);
+
+                    /** UpdateContestRequest contest. */
+                    public contest?: (xsuportal.proto.resources.IContest|null);
+
+                    /**
+                     * Creates a new UpdateContestRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns UpdateContestRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IUpdateContestRequest): xsuportal.proto.services.admin.UpdateContestRequest;
+
+                    /**
+                     * Encodes the specified UpdateContestRequest message. Does not implicitly {@link xsuportal.proto.services.admin.UpdateContestRequest.verify|verify} messages.
+                     * @param message UpdateContestRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IUpdateContestRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified UpdateContestRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.UpdateContestRequest.verify|verify} messages.
+                     * @param message UpdateContestRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IUpdateContestRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an UpdateContestRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns UpdateContestRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.UpdateContestRequest;
+
+                    /**
+                     * Decodes an UpdateContestRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns UpdateContestRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.UpdateContestRequest;
+
+                    /**
+                     * Verifies an UpdateContestRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an UpdateContestRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns UpdateContestRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.UpdateContestRequest;
+
+                    /**
+                     * Creates a plain object from an UpdateContestRequest message. Also converts values to other types if specified.
+                     * @param message UpdateContestRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.UpdateContestRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this UpdateContestRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an UpdateContestResponse. */
+                interface IUpdateContestResponse {
+                }
+
+                /** Represents an UpdateContestResponse. */
+                class UpdateContestResponse implements IUpdateContestResponse {
+
+                    /**
+                     * Constructs a new UpdateContestResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.admin.IUpdateContestResponse);
+
+                    /**
+                     * Creates a new UpdateContestResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns UpdateContestResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.admin.IUpdateContestResponse): xsuportal.proto.services.admin.UpdateContestResponse;
+
+                    /**
+                     * Encodes the specified UpdateContestResponse message. Does not implicitly {@link xsuportal.proto.services.admin.UpdateContestResponse.verify|verify} messages.
+                     * @param message UpdateContestResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.admin.IUpdateContestResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified UpdateContestResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.UpdateContestResponse.verify|verify} messages.
+                     * @param message UpdateContestResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.admin.IUpdateContestResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an UpdateContestResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns UpdateContestResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.UpdateContestResponse;
+
+                    /**
+                     * Decodes an UpdateContestResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns UpdateContestResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.UpdateContestResponse;
+
+                    /**
+                     * Verifies an UpdateContestResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an UpdateContestResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns UpdateContestResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.UpdateContestResponse;
+
+                    /**
+                     * Creates a plain object from an UpdateContestResponse message. Also converts values to other types if specified.
+                     * @param message UpdateContestResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.admin.UpdateContestResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this UpdateContestResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -5399,6 +5687,96 @@ export namespace xsuportal {
 
             /** Namespace common. */
             namespace common {
+
+                /** Properties of a GetContestResponse. */
+                interface IGetContestResponse {
+
+                    /** GetContestResponse contest */
+                    contest?: (xsuportal.proto.resources.IContest|null);
+                }
+
+                /** Represents a GetContestResponse. */
+                class GetContestResponse implements IGetContestResponse {
+
+                    /**
+                     * Constructs a new GetContestResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.common.IGetContestResponse);
+
+                    /** GetContestResponse contest. */
+                    public contest?: (xsuportal.proto.resources.IContest|null);
+
+                    /**
+                     * Creates a new GetContestResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns GetContestResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.common.IGetContestResponse): xsuportal.proto.services.common.GetContestResponse;
+
+                    /**
+                     * Encodes the specified GetContestResponse message. Does not implicitly {@link xsuportal.proto.services.common.GetContestResponse.verify|verify} messages.
+                     * @param message GetContestResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.common.IGetContestResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified GetContestResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.common.GetContestResponse.verify|verify} messages.
+                     * @param message GetContestResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.common.IGetContestResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a GetContestResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns GetContestResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.common.GetContestResponse;
+
+                    /**
+                     * Decodes a GetContestResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns GetContestResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.common.GetContestResponse;
+
+                    /**
+                     * Verifies a GetContestResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetContestResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetContestResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.common.GetContestResponse;
+
+                    /**
+                     * Creates a plain object from a GetContestResponse message. Also converts values to other types if specified.
+                     * @param message GetContestResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.common.GetContestResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetContestResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
 
                 /** Properties of a GetCurrentSessionResponse. */
                 interface IGetCurrentSessionResponse {

@@ -7,6 +7,7 @@ $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
 require 'routes'
 require 'database'
 
+
 module Xsuportal
   class App < Sinatra::Base
     include Xsuportal::Routes
@@ -127,8 +128,8 @@ module Xsuportal
             deduction: result[:score_breakdown][:deduction],
           ) : nil,
           reason: result[:reason],
-          reason: result[:stdout],
-          reason: result[:stderr],
+          stdout: result[:stdout],
+          stderr: result[:stderr],
         )
       end
 
@@ -165,11 +166,50 @@ module Xsuportal
       db.query('TRUNCATE `contestants`')
       db.query('TRUNCATE `benchmark_jobs`')
       db.query('TRUNCATE `benchmark_results`')
+      db.query('TRUNCATE `contest_config`')
 
       encode_response_pb(
         # TODO: 負荷レベルの指定
         # 実装言語
         language: 'ruby',
+      )
+    end
+
+    put '/api/admin/contest' do
+      req = decode_request_pb
+      # TODO: admin authz
+      Database.transaction do
+        db.query('TRUNCATE `contest_config`')
+        db.xquery(
+          <<~SQL,
+          INSERT `contest_config` (
+            `registration_open_at`,
+            `registration_close_at`,
+            `registration_start_at`,
+            `registration_freeze_at`,
+            `registration_end_at`
+          ) VALUES (?, ?, ?, ?, ?)
+          SQL
+          req.contest?.registration_open_at,
+          req.contest?.registration_close_at,
+          req.contest?.registration_start_at,
+          req.contest?.registration_freeze_at,
+          req.contest?.registration_end_at,
+        )
+      end
+      encode_response_pb
+    end
+
+    get '/api/contest' do
+      contest = db.query('SELECT * FROM `contest_config` LIMIT 1').first
+      encode_response_pb(
+        contest: contest ? Proto::Resources::Contest.new(
+          registration_open_at: contest[:registration_open_at],
+          registration_close_at: contest[:registration_close_at],
+          registration_start_at: contest[:registration_start_at],
+          registration_freeze_at: contest[:registration_freeze_at],
+          registration_end_at: contest[:registration_end_at],
+        ) : nil,
       )
     end
 

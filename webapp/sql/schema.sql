@@ -58,3 +58,12 @@ CREATE TABLE `benchmark_results` (
   `created_at` DATETIME(6) NOT NULL,
   `updated_at` DATETIME(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
+DROP TABLE IF EXISTS `contest_config`;
+CREATE TABLE `contest_config` (
+  `registration_open_at` DATETIME(6) NOT NULL,
+  `registration_close_at` DATETIME(6) NOT NULL,
+  `registration_start_at` DATETIME(6) NOT NULL,
+  `registration_freeze_at` DATETIME(6) NOT NULL,
+  `registration_end_at` DATETIME(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
