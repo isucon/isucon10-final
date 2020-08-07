@@ -361,9 +361,6 @@ export namespace xsuportal {
                 /** BenchmarkJob finishedAt */
                 finishedAt?: (google.protobuf.ITimestamp|null);
 
-                /** BenchmarkJob contestStartedAt */
-                contestStartedAt?: (google.protobuf.ITimestamp|null);
-
                 /** BenchmarkJob targetHostname */
                 targetHostname?: (string|null);
             }
@@ -397,9 +394,6 @@ export namespace xsuportal {
 
                 /** BenchmarkJob finishedAt. */
                 public finishedAt?: (google.protobuf.ITimestamp|null);
-
-                /** BenchmarkJob contestStartedAt. */
-                public contestStartedAt?: (google.protobuf.ITimestamp|null);
 
                 /** BenchmarkJob targetHostname. */
                 public targetHostname: string;

@@ -898,7 +898,6 @@ $root.xsuportal = (function() {
                  * @property {google.protobuf.ITimestamp|null} [updatedAt] BenchmarkJob updatedAt
                  * @property {google.protobuf.ITimestamp|null} [startedAt] BenchmarkJob startedAt
                  * @property {google.protobuf.ITimestamp|null} [finishedAt] BenchmarkJob finishedAt
-                 * @property {google.protobuf.ITimestamp|null} [contestStartedAt] BenchmarkJob contestStartedAt
                  * @property {string|null} [targetHostname] BenchmarkJob targetHostname
                  */
 
@@ -974,14 +973,6 @@ $root.xsuportal = (function() {
                 BenchmarkJob.prototype.finishedAt = null;
 
                 /**
-                 * BenchmarkJob contestStartedAt.
-                 * @member {google.protobuf.ITimestamp|null|undefined} contestStartedAt
-                 * @memberof xsuportal.proto.resources.BenchmarkJob
-                 * @instance
-                 */
-                BenchmarkJob.prototype.contestStartedAt = null;
-
-                /**
                  * BenchmarkJob targetHostname.
                  * @member {string} targetHostname
                  * @memberof xsuportal.proto.resources.BenchmarkJob
@@ -1027,8 +1018,6 @@ $root.xsuportal = (function() {
                         $root.google.protobuf.Timestamp.encode(message.startedAt, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
                     if (message.finishedAt != null && Object.hasOwnProperty.call(message, "finishedAt"))
                         $root.google.protobuf.Timestamp.encode(message.finishedAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-                    if (message.contestStartedAt != null && Object.hasOwnProperty.call(message, "contestStartedAt"))
-                        $root.google.protobuf.Timestamp.encode(message.contestStartedAt, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
                     if (message.targetHostname != null && Object.hasOwnProperty.call(message, "targetHostname"))
                         writer.uint32(/* id 30, wireType 2 =*/242).string(message.targetHostname);
                     return writer;
@@ -1085,9 +1074,6 @@ $root.xsuportal = (function() {
                             break;
                         case 8:
                             message.finishedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                            break;
-                        case 11:
-                            message.contestStartedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
                         case 30:
                             message.targetHostname = reader.string();
@@ -1164,11 +1150,6 @@ $root.xsuportal = (function() {
                         var error = $root.google.protobuf.Timestamp.verify(message.finishedAt);
                         if (error)
                             return "finishedAt." + error;
-                    }
-                    if (message.contestStartedAt != null && message.hasOwnProperty("contestStartedAt")) {
-                        var error = $root.google.protobuf.Timestamp.verify(message.contestStartedAt);
-                        if (error)
-                            return "contestStartedAt." + error;
                     }
                     if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
                         if (!$util.isString(message.targetHostname))
@@ -1252,11 +1233,6 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.BenchmarkJob.finishedAt: object expected");
                         message.finishedAt = $root.google.protobuf.Timestamp.fromObject(object.finishedAt);
                     }
-                    if (object.contestStartedAt != null) {
-                        if (typeof object.contestStartedAt !== "object")
-                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.contestStartedAt: object expected");
-                        message.contestStartedAt = $root.google.protobuf.Timestamp.fromObject(object.contestStartedAt);
-                    }
                     if (object.targetHostname != null)
                         message.targetHostname = String(object.targetHostname);
                     return message;
@@ -1291,7 +1267,6 @@ $root.xsuportal = (function() {
                         object.updatedAt = null;
                         object.startedAt = null;
                         object.finishedAt = null;
-                        object.contestStartedAt = null;
                         object.targetHostname = "";
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -1314,8 +1289,6 @@ $root.xsuportal = (function() {
                         object.startedAt = $root.google.protobuf.Timestamp.toObject(message.startedAt, options);
                     if (message.finishedAt != null && message.hasOwnProperty("finishedAt"))
                         object.finishedAt = $root.google.protobuf.Timestamp.toObject(message.finishedAt, options);
-                    if (message.contestStartedAt != null && message.hasOwnProperty("contestStartedAt"))
-                        object.contestStartedAt = $root.google.protobuf.Timestamp.toObject(message.contestStartedAt, options);
                     if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
                         object.targetHostname = message.targetHostname;
                     return object;
