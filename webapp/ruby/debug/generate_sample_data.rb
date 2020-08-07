@@ -45,20 +45,16 @@ class SampleGenerator
     out
   end
 
-  def timetostr(time)
-    time.strftime("%Y-%m-%d %H:%M:%S")
-  end
-
   def generate_contestants
     team_ids = Set.new
     leaders = {}
 
-    general_contestants = []
+    @general_contestants = []
     30.times do |i|
-      team_id = (i+1)/3+100
+      team_id = (i+1)/3+10000
       team_ids << team_id
       id = "user#{i}"
-      general_contestants << {
+      @general_contestants << {
         id: id,
         team_id: team_id,
         password: Digest::SHA256.hexdigest(id),
@@ -71,12 +67,12 @@ class SampleGenerator
       leaders[team_id] ||= id
     end
 
-    student_contestants = []
+    @student_contestants = []
     15.times do |i|
-      team_id = (i+1)/3+200
+      team_id = (i+1)/3+20000
       team_ids << team_id
       id = "student#{i}"
-      student_contestants << {
+      @student_contestants << {
         id: id,
         team_id: team_id,
         password: Digest::SHA256.hexdigest(id),
@@ -89,7 +85,7 @@ class SampleGenerator
       leaders[team_id] ||= id
     end
 
-    teams = team_ids.map do |team_id|
+    @teams = team_ids.map do |team_id|
       {
         id: team_id,
         name: "Team #{team_id}",
@@ -101,8 +97,8 @@ class SampleGenerator
       }
     end
 
-    @out.puts to_sql('contestants', general_contestants + student_contestants)
-    @out.puts to_sql('teams', teams)
+    @out.puts to_sql('contestants', @general_contestants + @student_contestants)
+    @out.puts to_sql('teams', @teams)
   end
 
   def to_sql(table, data)
@@ -111,7 +107,7 @@ class SampleGenerator
     col_names = data.first.keys
     header = col_names.map{|h| "`#{h.to_s}`"}.join(', ')
 
-    sql.puts %Q!INSERT INTO `#{table}` (#{header}) VALUES !
+    sql.puts %Q!INSERT IGNORE INTO `#{table}` (#{header}) VALUES !
     data.each_with_index do |row, i|
       columns = col_names.map do |h|
         v = row[h]
@@ -135,6 +131,60 @@ class SampleGenerator
   end
 
   def generate_scores
+    @job_id_count = 10000
+    @result_id_count = 10000
+    @teams.each do |team|
+      generate_team_scores(team)
+    end
+  end
+
+  def generate_team_scores(team)
+    score_base_time = @base_time + 5
+    jobs = []
+    results_started = []
+    results_finished = []
+    score_pattern = score_patterns[team[:id] % score_patterns.length]
+    score_pattern.each do |ptn|
+      result_id = @result_id_count += 1
+      job_id = @job_id_count += 1
+      jobs << {
+        id: job_id,
+        team_id: team[:id],
+        status: 5, # FINISHED
+        target_hostname: "xsu-#{team[:id]}",
+        latest_benchmark_result_id: result_id+1,
+        started_at: score_base_time + ptn[:time],
+        finished_at: score_base_time + ptn[:time] + 1,
+        created_at: score_base_time + ptn[:time],
+        updated_at: score_base_time + ptn[:time],
+      }
+
+      results_started << {
+        id: result_id,
+        benchmark_job_id: job_id,
+        finished: false,
+        created_at: score_base_time + ptn[:time],
+        updated_at: score_base_time + ptn[:time],
+      }
+
+      result_id = @result_id_count += 1
+      created_at = score_base_time + ptn[:time] + (ptn[:status] == 'fast-fail' ? 0 : 1)
+      results_finished << {
+        id: result_id,
+        benchmark_job_id: job_id,
+        score: ptn[:score_raw] + ptn[:deduction],
+        score_raw: ptn[:score_raw],
+        score_deduction: ptn[:deduction],
+        finished: true,
+        passed: ptn[:status] == 'pass',
+        created_at: created_at,
+        updated_at: created_at,
+      }
+    end
+
+    @out.puts to_sql('benchmark_jobs', jobs)
+    @out.puts to_sql('benchmark_results', results_started)
+    @out.puts to_sql('benchmark_results', results_finished)
   end
 
   def out
