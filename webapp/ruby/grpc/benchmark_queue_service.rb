@@ -12,6 +12,7 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
         Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
       ).first
       unless job
+        Xsuportal::Database.transaction_rollback
         break
       end
       puts "Sending job_id=#{job[:id]}"
