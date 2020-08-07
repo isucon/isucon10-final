@@ -15,6 +15,11 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
         break
       end
       puts "Sending job_id=#{job[:id]}"
+      db.xquery(
+        'UPDATE `benchmark_jobs` SET `status` = ? WHERE `id` = ? LIMIT 1',
+        Xsuportal::Proto::Resources::BenchmarkJob::Status::SENT,
+        job[:id],
+      )
 
       job_handle = {
         job_id: job[:id],

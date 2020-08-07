@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 
+# 仮想ベンチマーカー本体
+#
+# このファイルは本番では Go に書き換えてバイナリで配布する予定です
+# 競技の際にはコードの中身は読めない体でおねがいします
+
 $: << File.expand_path('../lib', __dir__)
 require 'socket'
 require 'griffin'
@@ -10,6 +15,7 @@ require 'xsuportal/services/bench/reporting_services_pb'
 
 HOST = ENV.fetch('GRPC_HOST', 'localhost')
 PORT = ENV.fetch('GRPC_PORT', 50051)
+NUM_THREADS = ENV.fetch('NUM_THREADS', 10).to_i
 
 class ServiceClientBase
   def socket
@@ -61,10 +67,17 @@ class BenchmarkClient
   end
 
   def start
+    @stop_client = false
+    log "Start"
     loop do
+      # Thread.pass
+      if stop?
+        log "Stopped"
+        break
+      end
       response = queue_service_client.receive_benchmark_job({})
       if response.job_handle
-        puts "Received job: #{response.job_handle}"
+        log "Received job: #{response.job_handle}"
         do_benchmark(response.job_handle)
       else
         sleep SLEEP_INTERVAL
@@ -74,7 +87,7 @@ class BenchmarkClient
 
   def do_benchmark(job_handle)
     call = report_service_client.report_benchmark_result
-    puts "Executing benchmark..."
+    log "Executing benchmark..."
     request = report_service_client.make_request({
       job_id: job_handle.job_id,
       result: {
@@ -100,7 +113,7 @@ class BenchmarkClient
         stderr: 'no error',
       },
     })
-    puts "Finished benchmark! result=#{request}"
+    log "Finished benchmark! result=#{request}"
     call.send_msg(request)
   end
 
@@ -111,7 +124,30 @@ class BenchmarkClient
   def report_service_client
     @report_service_client ||= ReportServiceClient.new
   end
+
+  def log(str)
+    puts "[#{Thread.current.object_id}] #{str}"
+  end
+
+  def stop
+    @stop_client = true
+  end
+
+  def stop?
+    @stop_client
+  end
 end
 
-client = BenchmarkClient.new
-client.start
+threads = []
+NUM_THREADS.times do
+  threads << Thread.new do
+    Thread.current[:client] = BenchmarkClient.new
+    Thread.current[:client].start
+  end
+end
+
+Signal.trap(:INT) do
+  threads.map {|t| t[:client].stop }
+end
+
+threads.first.join

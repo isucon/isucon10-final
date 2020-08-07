@@ -15,10 +15,11 @@ message BenchmarkJob {
   Status status = 4;
   enum Status {
     PENDING = 0;
-    RUNNING = 1;
-    ERRORED = 2;
-    CANCELLED = 3;
-    FINISHED = 4;
+    SENT = 1;
+    RUNNING = 2;
+    ERRORED = 3;
+    CANCELLED = 4;
+    FINISHED = 5;
   }
 
   google.protobuf.Timestamp created_at = 5;
