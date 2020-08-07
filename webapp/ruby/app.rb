@@ -85,10 +85,10 @@ module Xsuportal
             NOW(6) AS `current_time`,
             CASE
               WHEN NOW(6) < `registration_open_at` THEN 'standby'
-              WHEN `registration_open_at` <= NOW(6) AND NOW(6) < `contest_start_at` THEN 'registration'
-              WHEN `contest_start_at` <= NOW(6) AND NOW(6) < `contest_freeze_at` THEN 'started'
-              WHEN `contest_freeze_at` <= NOW(6) AND NOW(6) < `contest_end_at` THEN 'frozen'
-              WHEN `contest_end_at` <= NOW(6) THEN 'finished'
+              WHEN `registration_open_at` <= NOW(6) AND NOW(6) < `contest_starts_at` THEN 'registration'
+              WHEN `contest_starts_at` <= NOW(6) AND NOW(6) < `contest_freezes_at` THEN 'started'
+              WHEN `contest_freezes_at` <= NOW(6) AND NOW(6) < `contest_ends_at` THEN 'frozen'
+              WHEN `contest_ends_at` <= NOW(6) THEN 'finished'
               ELSE 'unknown'
             END AS `status`
           FROM `contest_config`
@@ -118,9 +118,9 @@ module Xsuportal
         {
           contest: {
             registration_open_at: contest[:registration_open_at],
-            contest_start_at: contest[:contest_start_at],
-            contest_freeze_at: contest[:contest_freeze_at],
-            contest_end_at: contest[:contest_end_at],
+            contest_starts_at: contest[:contest_starts_at],
+            contest_freezes_at: contest[:contest_freezes_at],
+            contest_ends_at: contest[:contest_ends_at],
           },
           current_time: contest[:current_time],
           status: status,
@@ -187,6 +187,7 @@ module Xsuportal
           updated_at: job[:updated_at],
           started_at: job[:started_atj],
           finished_at: job[:finished_at],
+          contest_started_at: current_contest_status[:contest_starts_at],
         )
       end
 
@@ -238,9 +239,9 @@ module Xsuportal
           student_teams: [],
           progresses: [],
           frozen: frozen,
-          contest_starts_at: contest_status[:contest_start_at],
-          contest_freezes_at: contest_status[:contest_freeze_at],
-          contest_ends_at: contest_status[:contest_end_at],
+          contest_starts_at: contest_status[:contest_starts_at],
+          contest_freezes_at: contest_status[:contest_freezes_at],
+          contest_ends_at: contest_status[:contest_ends_at],
         }
         teams_with_highscore.each do |team|
           team_pb(team)
@@ -292,9 +293,9 @@ module Xsuportal
         <<~SQL,
         INSERT `contest_config` (
           `registration_open_at`,
-          `contest_start_at`,
-          `contest_freeze_at`,
-          `contest_end_at`
+          `contest_starts_at`,
+          `contest_freezes_at`,
+          `contest_ends_at`
         ) VALUES (
           TIMESTAMPADD(SECOND, 0, NOW(6)),
           TIMESTAMPADD(SECOND, 5, NOW(6)),
@@ -321,15 +322,15 @@ module Xsuportal
           <<~SQL,
           INSERT `contest_config` (
             `registration_open_at`,
-            `contest_start_at`,
-            `contest_freeze_at`,
-            `contest_end_at`
+            `contest_starts_at`,
+            `contest_freezes_at`,
+            `contest_ends_at`
           ) VALUES (?, ?, ?, ?, ?)
           SQL
           req.contest?.registration_open_at,
-          req.contest?.contest_start_at,
-          req.contest?.contest_freeze_at,
-          req.contest?.contest_end_at,
+          req.contest?.contest_starts_at,
+          req.contest?.contest_freezes_at,
+          req.contest?.contest_ends_at,
         )
       end
       encode_response_pb
@@ -342,9 +343,9 @@ module Xsuportal
       encode_response_pb(
         contest: Proto::Resources::Contest.new(
           registration_open_at: contest[:registration_open_at],
-          contest_start_at: contest[:contest_start_at],
-          contest_freeze_at: contest[:contest_freeze_at],
-          contest_end_at: contest[:contest_end_at],
+          contest_starts_at: contest[:contest_starts_at],
+          contest_freezes_at: contest[:contest_freezes_at],
+          contest_ends_at: contest[:contest_ends_at],
         ),
         current_time: contest_status[:current_time],
         status: contest_status[:status],

@@ -8,9 +8,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/resources/contest.proto", :syntax => :proto3) do
     add_message "xsuportal.proto.resources.Contest" do
       optional :registration_open_at, :message, 1, "google.protobuf.Timestamp"
-      optional :contest_start_at, :message, 3, "google.protobuf.Timestamp"
-      optional :contest_freeze_at, :message, 4, "google.protobuf.Timestamp"
-      optional :contest_end_at, :message, 5, "google.protobuf.Timestamp"
+      optional :contest_starts_at, :message, 3, "google.protobuf.Timestamp"
+      optional :contest_freezes_at, :message, 4, "google.protobuf.Timestamp"
+      optional :contest_ends_at, :message, 5, "google.protobuf.Timestamp"
     end
     add_enum "xsuportal.proto.resources.Contest.Status" do
       value :STANDBY, 0

@@ -898,6 +898,7 @@ $root.xsuportal = (function() {
                  * @property {google.protobuf.ITimestamp|null} [updatedAt] BenchmarkJob updatedAt
                  * @property {google.protobuf.ITimestamp|null} [startedAt] BenchmarkJob startedAt
                  * @property {google.protobuf.ITimestamp|null} [finishedAt] BenchmarkJob finishedAt
+                 * @property {google.protobuf.ITimestamp|null} [contestStartedAt] BenchmarkJob contestStartedAt
                  * @property {string|null} [targetHostname] BenchmarkJob targetHostname
                  */
 
@@ -973,6 +974,14 @@ $root.xsuportal = (function() {
                 BenchmarkJob.prototype.finishedAt = null;
 
                 /**
+                 * BenchmarkJob contestStartedAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} contestStartedAt
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
+                 * @instance
+                 */
+                BenchmarkJob.prototype.contestStartedAt = null;
+
+                /**
                  * BenchmarkJob targetHostname.
                  * @member {string} targetHostname
                  * @memberof xsuportal.proto.resources.BenchmarkJob
@@ -1018,6 +1027,8 @@ $root.xsuportal = (function() {
                         $root.google.protobuf.Timestamp.encode(message.startedAt, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
                     if (message.finishedAt != null && Object.hasOwnProperty.call(message, "finishedAt"))
                         $root.google.protobuf.Timestamp.encode(message.finishedAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                    if (message.contestStartedAt != null && Object.hasOwnProperty.call(message, "contestStartedAt"))
+                        $root.google.protobuf.Timestamp.encode(message.contestStartedAt, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
                     if (message.targetHostname != null && Object.hasOwnProperty.call(message, "targetHostname"))
                         writer.uint32(/* id 30, wireType 2 =*/242).string(message.targetHostname);
                     return writer;
@@ -1074,6 +1085,9 @@ $root.xsuportal = (function() {
                             break;
                         case 8:
                             message.finishedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            break;
+                        case 11:
+                            message.contestStartedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
                         case 30:
                             message.targetHostname = reader.string();
@@ -1150,6 +1164,11 @@ $root.xsuportal = (function() {
                         var error = $root.google.protobuf.Timestamp.verify(message.finishedAt);
                         if (error)
                             return "finishedAt." + error;
+                    }
+                    if (message.contestStartedAt != null && message.hasOwnProperty("contestStartedAt")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.contestStartedAt);
+                        if (error)
+                            return "contestStartedAt." + error;
                     }
                     if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
                         if (!$util.isString(message.targetHostname))
@@ -1233,6 +1252,11 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.BenchmarkJob.finishedAt: object expected");
                         message.finishedAt = $root.google.protobuf.Timestamp.fromObject(object.finishedAt);
                     }
+                    if (object.contestStartedAt != null) {
+                        if (typeof object.contestStartedAt !== "object")
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.contestStartedAt: object expected");
+                        message.contestStartedAt = $root.google.protobuf.Timestamp.fromObject(object.contestStartedAt);
+                    }
                     if (object.targetHostname != null)
                         message.targetHostname = String(object.targetHostname);
                     return message;
@@ -1267,6 +1291,7 @@ $root.xsuportal = (function() {
                         object.updatedAt = null;
                         object.startedAt = null;
                         object.finishedAt = null;
+                        object.contestStartedAt = null;
                         object.targetHostname = "";
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -1289,6 +1314,8 @@ $root.xsuportal = (function() {
                         object.startedAt = $root.google.protobuf.Timestamp.toObject(message.startedAt, options);
                     if (message.finishedAt != null && message.hasOwnProperty("finishedAt"))
                         object.finishedAt = $root.google.protobuf.Timestamp.toObject(message.finishedAt, options);
+                    if (message.contestStartedAt != null && message.hasOwnProperty("contestStartedAt"))
+                        object.contestStartedAt = $root.google.protobuf.Timestamp.toObject(message.contestStartedAt, options);
                     if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
                         object.targetHostname = message.targetHostname;
                     return object;
@@ -3700,9 +3727,9 @@ $root.xsuportal = (function() {
                  * @memberof xsuportal.proto.resources
                  * @interface IContest
                  * @property {google.protobuf.ITimestamp|null} [registrationOpenAt] Contest registrationOpenAt
-                 * @property {google.protobuf.ITimestamp|null} [contestStartAt] Contest contestStartAt
-                 * @property {google.protobuf.ITimestamp|null} [contestFreezeAt] Contest contestFreezeAt
-                 * @property {google.protobuf.ITimestamp|null} [contestEndAt] Contest contestEndAt
+                 * @property {google.protobuf.ITimestamp|null} [contestStartsAt] Contest contestStartsAt
+                 * @property {google.protobuf.ITimestamp|null} [contestFreezesAt] Contest contestFreezesAt
+                 * @property {google.protobuf.ITimestamp|null} [contestEndsAt] Contest contestEndsAt
                  */
 
                 /**
@@ -3729,28 +3756,28 @@ $root.xsuportal = (function() {
                 Contest.prototype.registrationOpenAt = null;
 
                 /**
-                 * Contest contestStartAt.
-                 * @member {google.protobuf.ITimestamp|null|undefined} contestStartAt
+                 * Contest contestStartsAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} contestStartsAt
                  * @memberof xsuportal.proto.resources.Contest
                  * @instance
                  */
-                Contest.prototype.contestStartAt = null;
+                Contest.prototype.contestStartsAt = null;
 
                 /**
-                 * Contest contestFreezeAt.
-                 * @member {google.protobuf.ITimestamp|null|undefined} contestFreezeAt
+                 * Contest contestFreezesAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} contestFreezesAt
                  * @memberof xsuportal.proto.resources.Contest
                  * @instance
                  */
-                Contest.prototype.contestFreezeAt = null;
+                Contest.prototype.contestFreezesAt = null;
 
                 /**
-                 * Contest contestEndAt.
-                 * @member {google.protobuf.ITimestamp|null|undefined} contestEndAt
+                 * Contest contestEndsAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} contestEndsAt
                  * @memberof xsuportal.proto.resources.Contest
                  * @instance
                  */
-                Contest.prototype.contestEndAt = null;
+                Contest.prototype.contestEndsAt = null;
 
                 /**
                  * Creates a new Contest instance using the specified properties.
@@ -3778,12 +3805,12 @@ $root.xsuportal = (function() {
                         writer = $Writer.create();
                     if (message.registrationOpenAt != null && Object.hasOwnProperty.call(message, "registrationOpenAt"))
                         $root.google.protobuf.Timestamp.encode(message.registrationOpenAt, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                    if (message.contestStartAt != null && Object.hasOwnProperty.call(message, "contestStartAt"))
-                        $root.google.protobuf.Timestamp.encode(message.contestStartAt, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-                    if (message.contestFreezeAt != null && Object.hasOwnProperty.call(message, "contestFreezeAt"))
-                        $root.google.protobuf.Timestamp.encode(message.contestFreezeAt, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-                    if (message.contestEndAt != null && Object.hasOwnProperty.call(message, "contestEndAt"))
-                        $root.google.protobuf.Timestamp.encode(message.contestEndAt, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                    if (message.contestStartsAt != null && Object.hasOwnProperty.call(message, "contestStartsAt"))
+                        $root.google.protobuf.Timestamp.encode(message.contestStartsAt, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                    if (message.contestFreezesAt != null && Object.hasOwnProperty.call(message, "contestFreezesAt"))
+                        $root.google.protobuf.Timestamp.encode(message.contestFreezesAt, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                    if (message.contestEndsAt != null && Object.hasOwnProperty.call(message, "contestEndsAt"))
+                        $root.google.protobuf.Timestamp.encode(message.contestEndsAt, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
                     return writer;
                 };
 
@@ -3822,13 +3849,13 @@ $root.xsuportal = (function() {
                             message.registrationOpenAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
                         case 3:
-                            message.contestStartAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            message.contestStartsAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
                         case 4:
-                            message.contestFreezeAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            message.contestFreezesAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
                         case 5:
-                            message.contestEndAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            message.contestEndsAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -3870,20 +3897,20 @@ $root.xsuportal = (function() {
                         if (error)
                             return "registrationOpenAt." + error;
                     }
-                    if (message.contestStartAt != null && message.hasOwnProperty("contestStartAt")) {
-                        var error = $root.google.protobuf.Timestamp.verify(message.contestStartAt);
+                    if (message.contestStartsAt != null && message.hasOwnProperty("contestStartsAt")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.contestStartsAt);
                         if (error)
-                            return "contestStartAt." + error;
+                            return "contestStartsAt." + error;
                     }
-                    if (message.contestFreezeAt != null && message.hasOwnProperty("contestFreezeAt")) {
-                        var error = $root.google.protobuf.Timestamp.verify(message.contestFreezeAt);
+                    if (message.contestFreezesAt != null && message.hasOwnProperty("contestFreezesAt")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.contestFreezesAt);
                         if (error)
-                            return "contestFreezeAt." + error;
+                            return "contestFreezesAt." + error;
                     }
-                    if (message.contestEndAt != null && message.hasOwnProperty("contestEndAt")) {
-                        var error = $root.google.protobuf.Timestamp.verify(message.contestEndAt);
+                    if (message.contestEndsAt != null && message.hasOwnProperty("contestEndsAt")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.contestEndsAt);
                         if (error)
-                            return "contestEndAt." + error;
+                            return "contestEndsAt." + error;
                     }
                     return null;
                 };
@@ -3905,20 +3932,20 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.Contest.registrationOpenAt: object expected");
                         message.registrationOpenAt = $root.google.protobuf.Timestamp.fromObject(object.registrationOpenAt);
                     }
-                    if (object.contestStartAt != null) {
-                        if (typeof object.contestStartAt !== "object")
-                            throw TypeError(".xsuportal.proto.resources.Contest.contestStartAt: object expected");
-                        message.contestStartAt = $root.google.protobuf.Timestamp.fromObject(object.contestStartAt);
+                    if (object.contestStartsAt != null) {
+                        if (typeof object.contestStartsAt !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Contest.contestStartsAt: object expected");
+                        message.contestStartsAt = $root.google.protobuf.Timestamp.fromObject(object.contestStartsAt);
                     }
-                    if (object.contestFreezeAt != null) {
-                        if (typeof object.contestFreezeAt !== "object")
-                            throw TypeError(".xsuportal.proto.resources.Contest.contestFreezeAt: object expected");
-                        message.contestFreezeAt = $root.google.protobuf.Timestamp.fromObject(object.contestFreezeAt);
+                    if (object.contestFreezesAt != null) {
+                        if (typeof object.contestFreezesAt !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Contest.contestFreezesAt: object expected");
+                        message.contestFreezesAt = $root.google.protobuf.Timestamp.fromObject(object.contestFreezesAt);
                     }
-                    if (object.contestEndAt != null) {
-                        if (typeof object.contestEndAt !== "object")
-                            throw TypeError(".xsuportal.proto.resources.Contest.contestEndAt: object expected");
-                        message.contestEndAt = $root.google.protobuf.Timestamp.fromObject(object.contestEndAt);
+                    if (object.contestEndsAt != null) {
+                        if (typeof object.contestEndsAt !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Contest.contestEndsAt: object expected");
+                        message.contestEndsAt = $root.google.protobuf.Timestamp.fromObject(object.contestEndsAt);
                     }
                     return message;
                 };
@@ -3938,18 +3965,18 @@ $root.xsuportal = (function() {
                     var object = {};
                     if (options.defaults) {
                         object.registrationOpenAt = null;
-                        object.contestStartAt = null;
-                        object.contestFreezeAt = null;
-                        object.contestEndAt = null;
+                        object.contestStartsAt = null;
+                        object.contestFreezesAt = null;
+                        object.contestEndsAt = null;
                     }
                     if (message.registrationOpenAt != null && message.hasOwnProperty("registrationOpenAt"))
                         object.registrationOpenAt = $root.google.protobuf.Timestamp.toObject(message.registrationOpenAt, options);
-                    if (message.contestStartAt != null && message.hasOwnProperty("contestStartAt"))
-                        object.contestStartAt = $root.google.protobuf.Timestamp.toObject(message.contestStartAt, options);
-                    if (message.contestFreezeAt != null && message.hasOwnProperty("contestFreezeAt"))
-                        object.contestFreezeAt = $root.google.protobuf.Timestamp.toObject(message.contestFreezeAt, options);
-                    if (message.contestEndAt != null && message.hasOwnProperty("contestEndAt"))
-                        object.contestEndAt = $root.google.protobuf.Timestamp.toObject(message.contestEndAt, options);
+                    if (message.contestStartsAt != null && message.hasOwnProperty("contestStartsAt"))
+                        object.contestStartsAt = $root.google.protobuf.Timestamp.toObject(message.contestStartsAt, options);
+                    if (message.contestFreezesAt != null && message.hasOwnProperty("contestFreezesAt"))
+                        object.contestFreezesAt = $root.google.protobuf.Timestamp.toObject(message.contestFreezesAt, options);
+                    if (message.contestEndsAt != null && message.hasOwnProperty("contestEndsAt"))
+                        object.contestEndsAt = $root.google.protobuf.Timestamp.toObject(message.contestEndsAt, options);
                     return object;
                 };
 

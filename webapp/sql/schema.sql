@@ -63,7 +63,7 @@ CREATE TABLE `benchmark_results` (
 DROP TABLE IF EXISTS `contest_config`;
 CREATE TABLE `contest_config` (
   `registration_open_at` DATETIME(6) NOT NULL,
-  `contest_start_at` DATETIME(6) NOT NULL,
-  `contest_freeze_at` DATETIME(6) NOT NULL,
-  `contest_end_at` DATETIME(6) NOT NULL
+  `contest_starts_at` DATETIME(6) NOT NULL,
+  `contest_freezes_at` DATETIME(6) NOT NULL,
+  `contest_ends_at` DATETIME(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;

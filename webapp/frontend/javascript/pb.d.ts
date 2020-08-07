@@ -361,6 +361,9 @@ export namespace xsuportal {
                 /** BenchmarkJob finishedAt */
                 finishedAt?: (google.protobuf.ITimestamp|null);
 
+                /** BenchmarkJob contestStartedAt */
+                contestStartedAt?: (google.protobuf.ITimestamp|null);
+
                 /** BenchmarkJob targetHostname */
                 targetHostname?: (string|null);
             }
@@ -394,6 +397,9 @@ export namespace xsuportal {
 
                 /** BenchmarkJob finishedAt. */
                 public finishedAt?: (google.protobuf.ITimestamp|null);
+
+                /** BenchmarkJob contestStartedAt. */
+                public contestStartedAt?: (google.protobuf.ITimestamp|null);
 
                 /** BenchmarkJob targetHostname. */
                 public targetHostname: string;
@@ -1353,14 +1359,14 @@ export namespace xsuportal {
                 /** Contest registrationOpenAt */
                 registrationOpenAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest contestStartAt */
-                contestStartAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestStartsAt */
+                contestStartsAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest contestFreezeAt */
-                contestFreezeAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestFreezesAt */
+                contestFreezesAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest contestEndAt */
-                contestEndAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestEndsAt */
+                contestEndsAt?: (google.protobuf.ITimestamp|null);
             }
 
             /** Represents a Contest. */
@@ -1375,14 +1381,14 @@ export namespace xsuportal {
                 /** Contest registrationOpenAt. */
                 public registrationOpenAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest contestStartAt. */
-                public contestStartAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestStartsAt. */
+                public contestStartsAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest contestFreezeAt. */
-                public contestFreezeAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestFreezesAt. */
+                public contestFreezesAt?: (google.protobuf.ITimestamp|null);
 
-                /** Contest contestEndAt. */
-                public contestEndAt?: (google.protobuf.ITimestamp|null);
+                /** Contest contestEndsAt. */
+                public contestEndsAt?: (google.protobuf.ITimestamp|null);
 
                 /**
                  * Creates a new Contest instance using the specified properties.
