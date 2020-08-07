@@ -177,6 +177,7 @@ class SampleGenerator
         score_deduction: ptn[:deduction],
         finished: true,
         passed: ptn[:status] == 'pass',
+        marked_at: created_at,
         created_at: created_at,
         updated_at: created_at,
       }
