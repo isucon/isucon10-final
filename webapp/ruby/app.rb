@@ -285,7 +285,7 @@ module Xsuportal
       db.xquery(
         'INSERT `contestants` (`id`, `password`, `staff`, `created_at`, `updated_at`) VALUES (?, ?, TRUE, NOW(6), NOW(6))',
         ADMIN_ID,
-        ADMIN_PASSWORD,
+        Digest::SHA256.hexdigest(ADMIN_PASSWORD),
       )
 
       db.query(
