@@ -22,7 +22,7 @@ help: ## Display this help screen
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 go.sum: go.mod
-	go mod update
+	go mod download
 
 bin/benchmarker: go.mod $(GOFILES) $(GOPROTOFILES)
 	go build -o bin/benchmarker -v ./benchmarker

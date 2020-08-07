@@ -1,12 +1,16 @@
 package session
 
 import (
+	"compress/flate"
+	"compress/gzip"
+	"github.com/andybalholm/brotli"
 	"github.com/isucon/isucon10-final/benchmarker/failure"
 	"io"
 	"net"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -33,9 +37,11 @@ func New(base string) (*Session, error) {
 	s := &Session{
 		baseURL: baseURL,
 		httpClient: &http.Client{
-			Transport: &http.Transport{},
-			Jar:       jar,
-			Timeout:   SESSION_REQUEST_TIMEOUT,
+			Transport: &http.Transport{
+				DisableCompression: true,
+			},
+			Jar:     jar,
+			Timeout: SESSION_REQUEST_TIMEOUT,
 		},
 	}
 
@@ -57,7 +63,39 @@ func (s *Session) Do(req *http.Request) (*http.Response, error) {
 		return nil, err
 	}
 
+	contentEncoding := res.Header.Get("Content-Encoding")
+	if strings.EqualFold(contentEncoding, "br") {
+		res.Body = &bReader{r: res.Body}
+		res.Header.Del("Content-Length")
+		res.ContentLength = -1
+		res.Uncompressed = true
+	} else if strings.EqualFold(contentEncoding, "gzip") {
+		res.Body, err = gzip.NewReader(res.Body)
+		if err != nil {
+			return nil, err
+		}
+		res.Header.Del("Content-Length")
+		res.ContentLength = -1
+		res.Uncompressed = true
+	} else if strings.EqualFold(contentEncoding, "deflate") {
+		res.Body = flate.NewReader(res.Body)
+		res.Header.Del("Content-Length")
+		res.ContentLength = -1
+		res.Uncompressed = true
+	}
+
 	return res, nil
+}
+
+func (s *Session) NewRequest(method string, target url.URL, body io.Reader) (*http.Request, error) {
+	req, err := http.NewRequest(method, target.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+
+	return req, nil
 }
 
 func (s *Session) NewGetRequest(rpath string) (*http.Request, error) {
@@ -66,7 +104,7 @@ func (s *Session) NewGetRequest(rpath string) (*http.Request, error) {
 		target.Path = rpath
 	}
 
-	req, err := http.NewRequest(http.MethodGet, target.String(), nil)
+	req, err := s.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +120,7 @@ func (s *Session) NewGetRequestWithQuery(rpath string, q url.Values) (*http.Requ
 
 	target.RawQuery = q.Encode()
 
-	req, err := http.NewRequest(http.MethodGet, target.String(), nil)
+	req, err := s.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +134,7 @@ func (s *Session) NewPostRequest(rpath string, contentType string, body io.Reade
 		target.Path = rpath
 	}
 
-	req, err := http.NewRequest(http.MethodPost, target.String(), body)
+	req, err := s.NewRequest(http.MethodPost, target, body)
 	if err != nil {
 		return nil, err
 	}
@@ -131,4 +169,21 @@ func (s *Session) Post(rpath string, contentType string, body io.Reader) (*http.
 	}
 
 	return s.Do(req)
+}
+
+type bReader struct {
+	br *brotli.Reader
+	r  io.ReadCloser
+}
+
+func (br *bReader) Read(p []byte) (n int, err error) {
+	if br.br == nil {
+		br.br = brotli.NewReader(br.r)
+	}
+
+	return br.br.Read(p)
+}
+
+func (br *bReader) Close() error {
+	return br.r.Close()
 }

@@ -1,6 +1,6 @@
 syntax = "proto3";
 package xsuportal.proto.services.registration;
-option go_package = "github.com/isucon/isucon10-final/proto/services/registration";
+option go_package = "github.com/isucon/isucon10-final/proto/xsuportal/services/registration";
 
 message CreateTeamRequest {
   string team_name = 1;
