@@ -213,6 +213,32 @@ module Xsuportal
         )
       end
 
+      def highest_score(team_id)
+        db.xquery(
+          <<~SQL,
+            SELECT `score`, `marked_at`
+            FROM `benchmark_results` `r`
+              INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
+            WHERE `team_id` = ?
+            ORDER BY `score` DESC LIMIT 1
+          SQL
+          team_id
+        ).first
+      end
+
+      def latest_score(team_id)
+        db.xquery(
+          <<~SQL,
+            SELECT `score`, `marked_at`, `passed`
+            FROM `benchmark_results` `r`
+              INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
+            WHERE `team_id` = ?
+            ORDER BY `r`.`id` DESC LIMIT 1
+          SQL
+          team_id
+        ).first
+      end
+
       def leaderboard_pb
         contest_status = current_contest_status
         frozen = contest_status[:status] == :FROZEN
