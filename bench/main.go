@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"github.com/isucon/isucon10-final/bench/session"
+)
 
 func main() {
-	fmt.Println("benchmarker")
+	s, _ := session.New("http://localhost:9292/")
+	s.Get("/favicon.ico")
 }
