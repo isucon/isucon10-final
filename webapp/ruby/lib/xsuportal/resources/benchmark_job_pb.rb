@@ -21,10 +21,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_enum "xsuportal.proto.resources.BenchmarkJob.Status" do
       value :PENDING, 0
-      value :RUNNING, 1
-      value :ERRORED, 2
-      value :CANCELLED, 3
-      value :FINISHED, 4
+      value :SENT, 1
+      value :RUNNING, 2
+      value :ERRORED, 3
+      value :CANCELLED, 4
+      value :FINISHED, 5
     end
   end
 end
