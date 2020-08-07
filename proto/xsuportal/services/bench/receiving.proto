@@ -2,6 +2,8 @@ syntax = "proto3";
 package xsuportal.proto.services.bench;
 option go_package = "github.com/isucon/isucon10-final/proto/services/bench";
 
+import "google/protobuf/timestamp.proto";
+
 service BenchmarkQueue {
   rpc ReceiveBenchmarkJob(ReceiveBenchmarkJobRequest)
       returns (ReceiveBenchmarkJobResponse);
@@ -19,6 +21,8 @@ message ReceiveBenchmarkJobResponse {
     // string handle = 2;
     string target_hostname = 3;
     // string description_human = 4;
+    google.protobuf.Timestamp contest_started_at = 10;
+    google.protobuf.Timestamp job_created_at = 11;
   }
   // optional
   JobHandle job_handle = 1;

@@ -5383,6 +5383,12 @@ export namespace xsuportal {
 
                         /** JobHandle targetHostname */
                         targetHostname?: (string|null);
+
+                        /** JobHandle contestStartedAt */
+                        contestStartedAt?: (google.protobuf.ITimestamp|null);
+
+                        /** JobHandle jobCreatedAt */
+                        jobCreatedAt?: (google.protobuf.ITimestamp|null);
                     }
 
                     /** Represents a JobHandle. */
@@ -5399,6 +5405,12 @@ export namespace xsuportal {
 
                         /** JobHandle targetHostname. */
                         public targetHostname: string;
+
+                        /** JobHandle contestStartedAt. */
+                        public contestStartedAt?: (google.protobuf.ITimestamp|null);
+
+                        /** JobHandle jobCreatedAt. */
+                        public jobCreatedAt?: (google.protobuf.ITimestamp|null);
 
                         /**
                          * Creates a new JobHandle instance using the specified properties.

@@ -187,7 +187,6 @@ module Xsuportal
           updated_at: job[:updated_at],
           started_at: job[:started_atj],
           finished_at: job[:finished_at],
-          contest_started_at: current_contest_status[:contest_starts_at],
         )
       end
 

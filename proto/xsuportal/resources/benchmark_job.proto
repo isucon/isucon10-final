@@ -26,7 +26,6 @@ message BenchmarkJob {
   google.protobuf.Timestamp updated_at = 6;
   google.protobuf.Timestamp started_at = 7;
   google.protobuf.Timestamp finished_at = 8;
-  google.protobuf.Timestamp contest_started_at = 11;
 
   // int64 score = 9;
   // // instance_name is not available for contestant
