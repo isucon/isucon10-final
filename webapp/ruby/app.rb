@@ -190,6 +190,14 @@ module Xsuportal
         )
       end
 
+      def benchmark_jobs_pb
+        jobs = db.xquery(
+          'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC',
+          current_team[:id],
+        )
+        jobs&.map { |job| benchmark_job_pb(job) }
+      end
+
       def benchmark_result_pb(result)
         Proto::Resources::BenchmarkResult.new(
           finished: result[:finished],
@@ -203,6 +211,40 @@ module Xsuportal
           stdout: result[:stdout],
           stderr: result[:stderr],
         )
+      end
+
+      def leaderboard_pb
+        contest_status = current_contest_status
+        frozen = contest_status[:status] == :FROZEN
+
+        teams_with_highscore = db.xquery(
+          <<~SQL
+            SELECT `t`.*, `h`.`highscore`
+            FROM
+              `teams` `t` LEFT JOIN (
+                SELECT `team_id`, MAX(`score`) AS `highscore`
+                FROM `benchmark_results` `r`
+                  INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
+                WHERE `r`.`passed` = TRUE
+                GROUP BY `j`.`team_id`
+              ) `h`
+              ON `t`.`id` = `h`.`team_id`
+            ORDER BY `h`.`highscore` DESC
+          SQL
+        )
+        result = {
+          teams: [],
+          general_teams: [],
+          student_teams: [],
+          progresses: [],
+          frozen: frozen,
+          contest_starts_at: contest_status[:contest_start_at],
+          contest_freezes_at: contest_status[:contest_freeze_at],
+          contest_ends_at: contest_status[:contest_end_at],
+        }
+        teams_with_highscore.each do |team|
+          team_pb(team)
+        end
       end
 
       def decode_request_pb
@@ -537,13 +579,8 @@ module Xsuportal
     get '/api/contestant/benchmark_jobs' do
       login_required
 
-      jobs = db.xquery(
-        'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC',
-        current_team[:id],
-      )
-      jobs_pb = jobs&.map { |job| benchmark_job_pb(job) };
       encode_response_pb(
-        jobs: jobs_pb,
+        jobs: benchmark_jobs_pb,
       )
     end
 
@@ -574,6 +611,15 @@ module Xsuportal
       encode_response_pb(
         job: benchmark_job_pb(job),
         result: result ? benchmark_result_pb(result) : nil,
+      )
+    end
+
+    get '/api/contestant/dashboard' do
+      login_required
+
+      encode_response_pb(
+        leaderboard: leaderboard_pb,
+        jobs: benchmark_jobs_pb,
       )
     end
 

@@ -13,6 +13,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       repeated :student_teams, :message, 3, "xsuportal.proto.resources.Leaderboard.LeaderboardItem"
       repeated :progresses, :message, 4, "xsuportal.proto.resources.Leaderboard.LeaderboardItem"
       optional :frozen, :bool, 5
+      optional :contest_starts_at, :message, 6, "google.protobuf.Timestamp"
+      optional :contest_freezes_at, :message, 7, "google.protobuf.Timestamp"
+      optional :contest_ends_at, :message, 8, "google.protobuf.Timestamp"
     end
     add_message "xsuportal.proto.resources.Leaderboard.LeaderboardItem" do
       repeated :scores, :message, 1, "xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore"

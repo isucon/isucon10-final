@@ -474,10 +474,11 @@ export namespace xsuportal {
                 /** Status enum. */
                 enum Status {
                     PENDING = 0,
-                    RUNNING = 1,
-                    ERRORED = 2,
-                    CANCELLED = 3,
-                    FINISHED = 4
+                    SENT = 1,
+                    RUNNING = 2,
+                    ERRORED = 3,
+                    CANCELLED = 4,
+                    FINISHED = 5
                 }
             }
 
@@ -1483,6 +1484,15 @@ export namespace xsuportal {
 
                 /** Leaderboard frozen */
                 frozen?: (boolean|null);
+
+                /** Leaderboard contestStartsAt */
+                contestStartsAt?: (google.protobuf.ITimestamp|null);
+
+                /** Leaderboard contestFreezesAt */
+                contestFreezesAt?: (google.protobuf.ITimestamp|null);
+
+                /** Leaderboard contestEndsAt */
+                contestEndsAt?: (google.protobuf.ITimestamp|null);
             }
 
             /** Represents a Leaderboard. */
@@ -1508,6 +1518,15 @@ export namespace xsuportal {
 
                 /** Leaderboard frozen. */
                 public frozen: boolean;
+
+                /** Leaderboard contestStartsAt. */
+                public contestStartsAt?: (google.protobuf.ITimestamp|null);
+
+                /** Leaderboard contestFreezesAt. */
+                public contestFreezesAt?: (google.protobuf.ITimestamp|null);
+
+                /** Leaderboard contestEndsAt. */
+                public contestEndsAt?: (google.protobuf.ITimestamp|null);
 
                 /**
                  * Creates a new Leaderboard instance using the specified properties.
@@ -6886,9 +6905,6 @@ export namespace xsuportal {
                     /** DashboardResponse leaderboard */
                     leaderboard?: (xsuportal.proto.resources.ILeaderboard|null);
 
-                    /** DashboardResponse instances */
-                    instances?: (xsuportal.proto.resources.IContestantInstance[]|null);
-
                     /** DashboardResponse jobs */
                     jobs?: (xsuportal.proto.resources.IBenchmarkJob[]|null);
                 }
@@ -6904,9 +6920,6 @@ export namespace xsuportal {
 
                     /** DashboardResponse leaderboard. */
                     public leaderboard?: (xsuportal.proto.resources.ILeaderboard|null);
-
-                    /** DashboardResponse instances. */
-                    public instances: xsuportal.proto.resources.IContestantInstance[];
 
                     /** DashboardResponse jobs. */
                     public jobs: xsuportal.proto.resources.IBenchmarkJob[];

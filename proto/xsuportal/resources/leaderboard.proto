@@ -8,9 +8,9 @@ import "xsuportal/resources/team.proto";
 message Leaderboard {
   message LeaderboardItem {
     message LeaderboardScore {
-    int64 score = 1;
-    google.protobuf.Timestamp started_at = 2;
-    google.protobuf.Timestamp updated_at = 3;
+      int64 score = 1;
+      google.protobuf.Timestamp started_at = 2;
+      google.protobuf.Timestamp updated_at = 3;
     }
     repeated LeaderboardScore scores = 1;
     Team team = 16;
@@ -20,4 +20,7 @@ message Leaderboard {
   repeated LeaderboardItem student_teams = 3;
   repeated LeaderboardItem progresses = 4;
   bool frozen = 5;
+  google.protobuf.Timestamp contest_starts_at = 6;
+  google.protobuf.Timestamp contest_freezes_at = 7;
+  google.protobuf.Timestamp contest_ends_at = 8;
 }

@@ -1,0 +1,14 @@
+time	status	score_raw	deduction	score
+0	pass	1077	94	983
+5	pass	1154	121	1033
+10	pass	1045	0	1045
+15	fast-fail	0	0	0
+20	pass	1343	159	1184
+25	pass	1761	0	1761
+30	pass	1997	214	1783
+35	pass	2357	0	2357
+40	pass	2492	250	2242
+45	pass	2880	0	2880
+50	pass	3596	0	3596
+55	pass	4016	376	3640
+60	pass	4712	485	4227

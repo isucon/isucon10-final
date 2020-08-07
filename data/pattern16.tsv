@@ -1,0 +1,14 @@
+time	status	score_raw	deduction	score
+0	slow-fail	0	0	0
+5	pass	1126	97	1029
+10	pass	1018	85	933
+15	pass	1045	0	1045
+20	pass	1003	0	1003
+25	slow-fail	0	0	0
+30	pass	1845	0	1845
+35	pass	2239	231	2008
+40	pass	2603	261	2342
+45	pass	3058	0	3058
+50	pass	3628	0	3628
+55	pass	4094	0	4094
+60	pass	5036	0	5036

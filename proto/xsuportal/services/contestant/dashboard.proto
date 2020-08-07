@@ -6,11 +6,10 @@ import "xsuportal/resources/leaderboard.proto";
 import "xsuportal/resources/contestant_instance.proto";
 import "xsuportal/resources/benchmark_job.proto";
 
-message DashboardRequest {
-}
+message DashboardRequest {}
 
 message DashboardResponse {
   xsuportal.proto.resources.Leaderboard leaderboard = 1;
-  repeated xsuportal.proto.resources.ContestantInstance instances = 2;
+  // repeated xsuportal.proto.resources.ContestantInstance instances = 2;
   repeated xsuportal.proto.resources.BenchmarkJob jobs = 3;
 }
