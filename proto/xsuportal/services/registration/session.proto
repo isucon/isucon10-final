@@ -1,6 +1,6 @@
 syntax = "proto3";
 package xsuportal.proto.services.registration;
-option go_package = "github.com/isucon/isucon10-final/proto/services/registraiton";
+option go_package = "github.com/isucon/isucon10-final/proto/xsuportal/services/registration";
 
 import "xsuportal/resources/team.proto";
 

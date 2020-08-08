@@ -1,6 +1,6 @@
 syntax = "proto3";
 package xsuportal.proto.services.common;
-option go_package = "github.com/isucon/isucon10-final/proto/services/common";
+option go_package = "github.com/isucon/isucon10-final/proto/xsuportal/services/common";
 
 import "xsuportal/resources/team.proto";
 import "xsuportal/resources/contestant.proto";
