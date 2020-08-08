@@ -42,9 +42,10 @@ class RegistrationTest < TestBase
       member_invite_url = response[:member_invite_url]
       assert_equal 200, status
       assert_match(/team_id=\d+/, member_invite_url)
-      assert_match(/invite_token=[0-9a-zA-Z\-]+/ , member_invite_url)
+      assert_match(/invite_token=[0-9a-zA-Z\-_]+/ , member_invite_url)
 
-      invite_token = member_invite_url.match(/invite_token=([^&]+)/)[1]
+      invite_token = response[:invite_token]
+      assert_match(/\A[0-9a-zA-Z\-_]+\z/ , invite_token)
     end
 
     get_registration_session_url = "/api/registration/session?team_id=#{team_id}&invite_token=#{invite_token}"

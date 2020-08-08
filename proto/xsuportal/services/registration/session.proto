@@ -22,6 +22,7 @@ message GetRegistrationSessionResponse {
   }
   Status status = 2;
   string member_invite_url = 3;
+  string invite_token = 4;
 }
 
 message UpdateRegistrationRequest {

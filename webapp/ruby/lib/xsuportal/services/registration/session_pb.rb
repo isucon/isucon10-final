@@ -14,6 +14,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :team, :message, 1, "xsuportal.proto.resources.Team"
       optional :status, :enum, 2, "xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status"
       optional :member_invite_url, :string, 3
+      optional :invite_token, :string, 4
     end
     add_enum "xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status" do
       value :CLOSED, 0

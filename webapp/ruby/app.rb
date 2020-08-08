@@ -455,6 +455,7 @@ module Xsuportal
         team: team ? team_pb(team, detail: current_contestant&.fetch(:id) == current_team&.fetch(:leader_id), member_detail: true, enable_members: true) : nil,
         status: status,
         member_invite_url: team ? "/registration?team_id=#{team[:id]}&invite_token=#{team[:invite_token]}" : nil,
+        invite_token: team ? team[:invite_token] : nil,
       )
     end
 
