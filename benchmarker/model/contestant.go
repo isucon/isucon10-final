@@ -1,0 +1,31 @@
+package model
+
+import (
+	"github.com/isucon/isucon10-final/benchmarker/random"
+	"net/http/cookiejar"
+)
+
+const (
+	CONTESTANT_ID_LENGTH       = 12
+	CONTESTANT_PASSWORD_LENGTH = 64
+)
+
+type Contestant struct {
+	ID       string
+	Password string
+
+	CookieJar *cookiejar.Jar
+}
+
+func NewContestant() (*Contestant, error) {
+	jar, err := cookiejar.New(&cookiejar.Options{})
+	if err != nil {
+		return nil, err
+	}
+
+	return &Contestant{
+		ID:        random.Alphabet(CONTESTANT_ID_LENGTH),
+		Password:  random.Alphabet(CONTESTANT_PASSWORD_LENGTH),
+		CookieJar: jar,
+	}, nil
+}
