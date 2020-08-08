@@ -57,6 +57,10 @@ module Xsuportal
         nil,
         Proto::Services::Contestant::GetBenchmarkJobResponse,
       ],
+      'GET /api/contestant/dashboard' => [
+        nil,
+        Proto::Services::Contestant::DashboardResponse,
+      ],
       'POST /api/signup' => [
         Proto::Services::Contestant::SignupRequest,
         Proto::Services::Contestant::SignupResponse,

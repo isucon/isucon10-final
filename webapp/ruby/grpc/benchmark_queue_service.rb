@@ -12,6 +12,7 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
         Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
       ).first
       unless job
+        Xsuportal::Database.transaction_rollback
         break
       end
       puts "Sending job_id=#{job[:id]}"
@@ -21,9 +22,12 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
         job[:id],
       )
 
+      contest = db.query('SELECT `contest_starts_at` FROM `contest_config` LIMIT 1').first
       job_handle = {
         job_id: job[:id],
-        target_hostname: job[:target_hostname], # TODO: tekitou
+        target_hostname: job[:target_hostname],
+        contest_started_at: contest[:contest_starts_at],
+        job_created_at: job[:created_at],
       }
     end
 

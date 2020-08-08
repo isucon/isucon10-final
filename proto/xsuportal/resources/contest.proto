@@ -6,9 +6,9 @@ import "google/protobuf/timestamp.proto";
 
 message Contest {
   google.protobuf.Timestamp registration_open_at = 1;
-  google.protobuf.Timestamp contest_start_at = 3;
-  google.protobuf.Timestamp contest_freeze_at = 4;
-  google.protobuf.Timestamp contest_end_at = 5;
+  google.protobuf.Timestamp contest_starts_at = 3;
+  google.protobuf.Timestamp contest_freezes_at = 4;
+  google.protobuf.Timestamp contest_ends_at = 5;
 
   enum Status {
     STANDBY = 0;

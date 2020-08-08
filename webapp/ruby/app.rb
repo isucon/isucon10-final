@@ -85,10 +85,10 @@ module Xsuportal
             NOW(6) AS `current_time`,
             CASE
               WHEN NOW(6) < `registration_open_at` THEN 'standby'
-              WHEN `registration_open_at` <= NOW(6) AND NOW(6) < `contest_start_at` THEN 'registration'
-              WHEN `contest_start_at` <= NOW(6) AND NOW(6) < `contest_freeze_at` THEN 'started'
-              WHEN `contest_freeze_at` <= NOW(6) AND NOW(6) < `contest_end_at` THEN 'frozen'
-              WHEN `contest_end_at` <= NOW(6) THEN 'finished'
+              WHEN `registration_open_at` <= NOW(6) AND NOW(6) < `contest_starts_at` THEN 'registration'
+              WHEN `contest_starts_at` <= NOW(6) AND NOW(6) < `contest_freezes_at` THEN 'started'
+              WHEN `contest_freezes_at` <= NOW(6) AND NOW(6) < `contest_ends_at` THEN 'frozen'
+              WHEN `contest_ends_at` <= NOW(6) THEN 'finished'
               ELSE 'unknown'
             END AS `status`
           FROM `contest_config`
@@ -118,9 +118,9 @@ module Xsuportal
         {
           contest: {
             registration_open_at: contest[:registration_open_at],
-            contest_start_at: contest[:contest_start_at],
-            contest_freeze_at: contest[:contest_freeze_at],
-            contest_end_at: contest[:contest_end_at],
+            contest_starts_at: contest[:contest_starts_at],
+            contest_freezes_at: contest[:contest_freezes_at],
+            contest_ends_at: contest[:contest_ends_at],
           },
           current_time: contest[:current_time],
           status: status,
@@ -190,6 +190,14 @@ module Xsuportal
         )
       end
 
+      def benchmark_jobs_pb
+        jobs = db.xquery(
+          'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC',
+          current_team[:id],
+        )
+        jobs&.map { |job| benchmark_job_pb(job) }
+      end
+
       def benchmark_result_pb(result)
         Proto::Resources::BenchmarkResult.new(
           finished: result[:finished],
@@ -203,6 +211,66 @@ module Xsuportal
           stdout: result[:stdout],
           stderr: result[:stderr],
         )
+      end
+
+      def highest_score(team_id)
+        db.xquery(
+          <<~SQL,
+            SELECT `score`, `marked_at`
+            FROM `benchmark_results` `r`
+              INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
+            WHERE `team_id` = ?
+            ORDER BY `score` DESC LIMIT 1
+          SQL
+          team_id
+        ).first
+      end
+
+      def latest_score(team_id)
+        db.xquery(
+          <<~SQL,
+            SELECT `score`, `marked_at`, `passed`
+            FROM `benchmark_results` `r`
+              INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
+            WHERE `team_id` = ?
+            ORDER BY `r`.`id` DESC LIMIT 1
+          SQL
+          team_id
+        ).first
+      end
+
+      def leaderboard_pb
+        contest_status = current_contest_status
+        frozen = contest_status[:status] == :FROZEN
+
+        teams_with_highscore = db.xquery(
+          <<~SQL
+            SELECT `t`.*, `h`.`highscore`
+            FROM
+              `teams` `t` LEFT JOIN (
+                SELECT `team_id`, MAX(`score`) AS `highscore`
+                FROM `benchmark_results` `r`
+                  INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
+                WHERE `r`.`passed` = TRUE
+                GROUP BY `j`.`team_id`
+              ) `h`
+              ON `t`.`id` = `h`.`team_id`
+            ORDER BY `h`.`highscore` DESC
+          SQL
+        )
+        result = {
+          teams: [],
+          general_teams: [],
+          student_teams: [],
+          progresses: [],
+          frozen: frozen,
+          contest_starts_at: contest_status[:contest_starts_at],
+          contest_freezes_at: contest_status[:contest_freezes_at],
+          contest_ends_at: contest_status[:contest_ends_at],
+        }
+        teams_with_highscore.each do |team|
+          team_pb(team)
+        end
       end
 
       def decode_request_pb
@@ -243,16 +311,16 @@ module Xsuportal
       db.xquery(
         'INSERT `contestants` (`id`, `password`, `staff`, `created_at`, `updated_at`) VALUES (?, ?, TRUE, NOW(6), NOW(6))',
         ADMIN_ID,
-        ADMIN_PASSWORD,
+        Digest::SHA256.hexdigest(ADMIN_PASSWORD),
       )
 
       db.query(
         <<~SQL,
         INSERT `contest_config` (
           `registration_open_at`,
-          `contest_start_at`,
-          `contest_freeze_at`,
-          `contest_end_at`
+          `contest_starts_at`,
+          `contest_freezes_at`,
+          `contest_ends_at`
         ) VALUES (
           TIMESTAMPADD(SECOND, 0, NOW(6)),
           TIMESTAMPADD(SECOND, 5, NOW(6)),
@@ -279,15 +347,15 @@ module Xsuportal
           <<~SQL,
           INSERT `contest_config` (
             `registration_open_at`,
-            `contest_start_at`,
-            `contest_freeze_at`,
-            `contest_end_at`
+            `contest_starts_at`,
+            `contest_freezes_at`,
+            `contest_ends_at`
           ) VALUES (?, ?, ?, ?, ?)
           SQL
           req.contest?.registration_open_at,
-          req.contest?.contest_start_at,
-          req.contest?.contest_freeze_at,
-          req.contest?.contest_end_at,
+          req.contest?.contest_starts_at,
+          req.contest?.contest_freezes_at,
+          req.contest?.contest_ends_at,
         )
       end
       encode_response_pb
@@ -300,9 +368,9 @@ module Xsuportal
       encode_response_pb(
         contest: Proto::Resources::Contest.new(
           registration_open_at: contest[:registration_open_at],
-          contest_start_at: contest[:contest_start_at],
-          contest_freeze_at: contest[:contest_freeze_at],
-          contest_end_at: contest[:contest_end_at],
+          contest_starts_at: contest[:contest_starts_at],
+          contest_freezes_at: contest[:contest_freezes_at],
+          contest_ends_at: contest[:contest_ends_at],
         ),
         current_time: contest_status[:current_time],
         status: contest_status[:status],
@@ -537,13 +605,8 @@ module Xsuportal
     get '/api/contestant/benchmark_jobs' do
       login_required
 
-      jobs = db.xquery(
-        'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC',
-        current_team[:id],
-      )
-      jobs_pb = jobs&.map { |job| benchmark_job_pb(job) };
       encode_response_pb(
-        jobs: jobs_pb,
+        jobs: benchmark_jobs_pb,
       )
     end
 
@@ -574,6 +637,15 @@ module Xsuportal
       encode_response_pb(
         job: benchmark_job_pb(job),
         result: result ? benchmark_result_pb(result) : nil,
+      )
+    end
+
+    get '/api/contestant/dashboard' do
+      login_required
+
+      encode_response_pb(
+        leaderboard: leaderboard_pb,
+        jobs: benchmark_jobs_pb,
       )
     end
 

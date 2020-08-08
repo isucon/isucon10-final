@@ -2,11 +2,12 @@
 
 # 仮想ベンチマーカー本体
 #
-# このファイルは本番では Go に書き換えてバイナリで配布する予定です
+# 本番では実ベンチマーカーに統合され、このコードは配布されません
 # 競技の際にはコードの中身は読めない体でおねがいします
 
 $: << File.expand_path('../lib', __dir__)
 require 'socket'
+require 'csv'
 require 'griffin'
 require 'xsuportal/services/bench/receiving_pb'
 require 'xsuportal/services/bench/reporting_pb'
@@ -16,6 +17,8 @@ require 'xsuportal/services/bench/reporting_services_pb'
 HOST = ENV.fetch('GRPC_HOST', 'localhost')
 PORT = ENV.fetch('GRPC_PORT', 50051)
 NUM_THREADS = ENV.fetch('NUM_THREADS', 10).to_i
+SCORE_PATTERN_DIR = File.join(__dir__, '../../../data')
+SCORE_PATTERN_INTERVAL_SEC = 5
 
 class ServiceClientBase
   def socket
@@ -64,6 +67,36 @@ class BenchmarkClient
   SLEEP_INTERVAL = 1
 
   def initialize
+    load_score_patterns
+  end
+
+  def load_score_patterns
+    @score_patterns = []
+    Dir.glob("#{SCORE_PATTERN_DIR}/pattern*.tsv") do |path|
+      tsv = CSV.read(path, col_sep: "\t", headers: true)
+      pattern = []
+      tsv.each do |line|
+        pattern << {
+          time: line['time'].to_i,
+          status: line['status'],
+          score_raw: line['score_raw'].to_i,
+          deduction: line['deduction'].to_i,
+        }
+      end
+      @score_patterns << pattern
+    end
+    @score_patterns
+  end
+
+  def score_patterns
+    @score_patterns
+  end
+
+  def get_score(pattern_idx, seconds_since_contest_started)
+    pattern = score_patterns[pattern_idx]
+    raise "unexpected pattern index: #{pattern_idx}" unless pattern
+    time_idx = (seconds_since_contest_started / SCORE_PATTERN_INTERVAL_SEC).floor
+    pattern[[time_idx, pattern.length-1].min]
   end
 
   def start
@@ -96,17 +129,21 @@ class BenchmarkClient
     })
     call.send_msg(request)
 
-    sleep 1
+    score = get_score(0, job_handle.job_created_at.seconds - job_handle.contest_started_at.seconds)
+    unless score[:status] == 'fast-fail'
+      sleep 1
+    end
+    log "score=#{score.inspect}"
 
     request = report_service_client.make_request({
       job_id: job_handle.job_id,
       result: {
         finished: true,
-        passed: true,
-        score: 1000,
+        passed: score[:status] == 'pass',
+        score: score[:score_raw] - score[:deduction],
         score_breakdown: {
-          base: 1200,
-          deduction: 200,
+          base: score[:score_raw],
+          deduction: score[:deduction],
         },
         reason: 'REASON',
         stdout: 'succeeded',
