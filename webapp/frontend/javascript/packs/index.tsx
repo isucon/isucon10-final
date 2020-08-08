@@ -1,3 +1,4 @@
+import "../application.scss";
 import { ApiClient } from "../ApiClient";
 import { Index } from "../Index";
 import React from "react";
