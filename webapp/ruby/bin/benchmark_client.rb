@@ -16,7 +16,7 @@ require 'xsuportal/services/bench/reporting_services_pb'
 
 HOST = ENV.fetch('GRPC_HOST', 'localhost')
 PORT = ENV.fetch('GRPC_PORT', 50051)
-NUM_THREADS = ENV.fetch('NUM_THREADS', 10).to_i
+NUM_THREADS = ENV.fetch('NUM_THREADS', 3).to_i
 SCORE_PATTERN_DIR = File.join(__dir__, '../../../data')
 SCORE_PATTERN_INTERVAL_SEC = 5
 
@@ -121,6 +121,7 @@ class BenchmarkClient
   def do_benchmark(job_handle)
     call = report_service_client.report_benchmark_result
     log "Executing benchmark..."
+    # TODO: send and validate nonce
     request = report_service_client.make_request({
       job_id: job_handle.job_id,
       result: {
@@ -128,6 +129,11 @@ class BenchmarkClient
       },
     })
     call.send_msg(request)
+
+    call.each do |req|
+      log "Received response: #{req.inspect}"
+      break
+    end
 
     score = get_score(0, job_handle.job_created_at.seconds - job_handle.contest_started_at.seconds)
     unless score[:status] == 'fast-fail'
@@ -152,6 +158,12 @@ class BenchmarkClient
     })
     log "Finished benchmark! result=#{request}"
     call.send_msg(request)
+
+    call.each do |req|
+      log "Received response: #{req.inspect}"
+      break
+    end
+
   end
 
   def queue_service_client
@@ -183,8 +195,4 @@ NUM_THREADS.times do
   end
 end
 
-Signal.trap(:INT) do
-  threads.map {|t| t[:client].stop }
-end
-
-threads.first.join
+threads.each(&:join)
