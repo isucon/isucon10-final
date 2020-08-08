@@ -45,8 +45,6 @@ export class Index extends React.Component<Props, State> {
   public render() {
     return (
       <>
-        <p>loggedin={this.state.loggedin?.toString()}</p>
-        <p>registered={this.state.registered?.toString()}</p>
         <Router>
           <nav
             className="navbar is-dark"
