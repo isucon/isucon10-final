@@ -5,12 +5,13 @@ import (
 	"compress/gzip"
 	"github.com/andybalholm/brotli"
 	"github.com/isucon/isucon10-final/benchmarker/failure"
+	"github.com/isucon/isucon10-final/benchmarker/model"
 	"io"
 	"net"
 	"net/http"
-	"net/http/cookiejar"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -20,7 +21,10 @@ const (
 
 type Session struct {
 	baseURL    *url.URL
+	lock       sync.Mutex
 	httpClient *http.Client
+
+	Contestant *model.Contestant
 }
 
 func New(base string) (*Session, error) {
@@ -29,18 +33,13 @@ func New(base string) (*Session, error) {
 		return nil, err
 	}
 
-	jar, err := cookiejar.New(&cookiejar.Options{})
-	if err != nil {
-		return nil, err
-	}
-
 	s := &Session{
 		baseURL: baseURL,
+		lock:    sync.Mutex{},
 		httpClient: &http.Client{
 			Transport: &http.Transport{
 				DisableCompression: true,
 			},
-			Jar:     jar,
 			Timeout: SESSION_REQUEST_TIMEOUT,
 		},
 	}
@@ -49,6 +48,12 @@ func New(base string) (*Session, error) {
 }
 
 func (s *Session) Do(req *http.Request) (*http.Response, error) {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
+	if s.Contestant != nil {
+		s.httpClient.Jar = s.Contestant.CookieJar
+	}
 	res, err := s.httpClient.Do(req)
 
 	if err != nil {

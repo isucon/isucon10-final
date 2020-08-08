@@ -3,37 +3,46 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/session"
-	"github.com/isucon/isucon10-final/proto/xsuportal/services/admin"
-	"io/ioutil"
-	"net/http"
 )
 
 func main() {
 	s, _ := session.New("http://localhost:9292/")
 
-	req := &admin.InitializeRequest{}
-	res := &admin.InitializeResponse{}
-	err := s.Call(context.Background(), http.MethodPost, "/initialize", req, res)
+	ctx := context.Background()
+	var err error
+
+	init, _, err := s.InitializeAction(ctx)
 	if err != nil {
 		fmt.Printf("%+v", err)
 		return
 	}
+	fmt.Printf("%s\n", init.String())
 
-	fmt.Println(res.String())
+	contestant, _ := model.NewContestant()
+	s.Contestant = contestant
 
-	hres, err := s.Get("/packs/index.js")
+	signup, xerr, err := s.SignupAction(ctx)
 	if err != nil {
 		fmt.Printf("%+v", err)
 		return
 	}
+	fmt.Printf("%s\n", xerr.String())
+	fmt.Printf("%s\n", signup.String())
 
-	fmt.Printf("CE: %s\n", hres.Header.Get("Content-Encoding"))
-	buf, err := ioutil.ReadAll(hres.Body)
+	login, xerr, err := s.LoginAction(ctx)
 	if err != nil {
 		fmt.Printf("%+v", err)
 		return
 	}
+	fmt.Printf("%s\n", xerr.String())
+	fmt.Printf("%s\n", login.String())
 
-	fmt.Printf("%s", buf)
+	logout, xerr, err := s.LogoutAction(ctx)
+	if err != nil {
+		fmt.Printf("%+v", err)
+		return
+	}
+	fmt.Printf("%s\n", logout.String())
 }

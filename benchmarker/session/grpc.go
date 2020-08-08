@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"github.com/golang/protobuf/proto"
+	"github.com/isucon/isucon10-final/proto/xsuportal"
 	"io/ioutil"
 )
 
@@ -14,7 +15,7 @@ type CallOption struct {
 	Res    proto.Message
 }
 
-func (s *Session) Call(ctx context.Context, method string, rpath string, msg proto.Message, res proto.Message) error {
+func (s *Session) Call(ctx context.Context, method string, rpath string, msg proto.Message, res proto.Message) (*xsuportal.Error, error) {
 	target := *s.baseURL
 	if len(rpath) > 0 {
 		target.Path = rpath
@@ -22,13 +23,13 @@ func (s *Session) Call(ctx context.Context, method string, rpath string, msg pro
 
 	pb, err := proto.Marshal(msg)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	body := bytes.NewBuffer(pb)
 
 	httpreq, err := s.NewRequest(method, target, body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	httpreq.WithContext(ctx)
@@ -36,15 +37,24 @@ func (s *Session) Call(ctx context.Context, method string, rpath string, msg pro
 
 	httpres, err := s.Do(httpreq)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	respb, err := ioutil.ReadAll(httpres.Body)
 	defer httpres.Body.Close()
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return proto.Unmarshal(respb, res)
+	if httpres.Header.Get("Content-Type") == "application/vnd.google.protobuf; proto=xsuportal.proto.Error" {
+		xError := &xsuportal.Error{}
+		err := proto.Unmarshal(respb, xError)
+		if err != nil {
+			return nil, err
+		}
+		return xError, nil
+	}
+
+	return nil, proto.Unmarshal(respb, res)
 }

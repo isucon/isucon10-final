@@ -1,25 +1,25 @@
 package failure
 
 import (
-	"sync"
 	"github.com/morikuni/failure"
+	"sync"
 )
 
 const ILLEGAL_ERROR = "想定外のエラーです。大会運営委員会へ連絡してください。"
 
 const (
-	ErrCritical failure.StringCode = "Critical Error"
+	ErrCritical    failure.StringCode = "Critical Error"
 	ErrApplication failure.StringCode = "Application Error"
-	ErrTimeout failure.StringCode = "Timeout Error"
-	ErrTemporary failure.StringCode = "Temporary Error"
+	ErrTimeout     failure.StringCode = "Timeout Error"
+	ErrTemporary   failure.StringCode = "Temporary Error"
 )
 
 type Error struct {
 	Messages []string
 
-	critical int
+	critical    int
 	application int
-	trivial int
+	trivial     int
 
 	mu sync.Mutex
 }
@@ -28,11 +28,11 @@ func New() *Error {
 	messages := make([]string, 0, 100)
 
 	return &Error{
-		Messages: messages,
-		critical: 0,
+		Messages:    messages,
+		critical:    0,
 		application: 0,
-		trivial: 0,
-		mu: sync.Mutex{},
+		trivial:     0,
+		mu:          sync.Mutex{},
 	}
 }
 
@@ -51,8 +51,8 @@ func (e *Error) Get() (msgs []string, critical, application, trivial int) {
 }
 
 func (e *Error) Add(err error) {
-	if (err == nil) {
-		return;
+	if err == nil {
+		return
 	}
 
 	e.mu.Lock()
@@ -80,11 +80,10 @@ func (e *Error) Add(err error) {
 
 		e.Messages = append(e.Messages, msg)
 	} else {
-		e.critical++;
+		e.critical++
 		e.Messages = append(e.Messages, ILLEGAL_ERROR)
 	}
 }
-
 
 func Translate(err error, code failure.StringCode) error {
 	return failure.Translate(err, code)
