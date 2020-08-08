@@ -10,9 +10,9 @@ import (
 )
 
 func main() {
-	s, _ := session.New("http://localhost:9292/")
-	s2, _ := session.New("http://localhost:9292/")
-	s3, _ := session.New("http://localhost:9292/")
+	s, _ := session.NewBrowser("http://localhost:9292/")
+	s2, _ := session.NewBrowser("http://localhost:9292/")
+	s3, _ := session.NewBrowser("http://localhost:9292/")
 
 	ctx := context.Background()
 	var err error
@@ -128,6 +128,19 @@ func main() {
 	}
 	fmt.Printf("%s\n", xerr.String())
 	fmt.Printf("%s\n", job.String())
+
+	benchmarker, err := session.NewBenchmarker(team, init.GetBenchmarkServer().GetHost(), init.GetBenchmarkServer().GetPort())
+	if err != nil {
+		fmt.Printf("%+v", err)
+		return
+	}
+
+	err = benchmarker.Do(ctx)
+	if err != nil {
+		panic(err)
+		fmt.Printf("%+v", err)
+		return
+	}
 
 	logout, xerr, err := s.LogoutAction(ctx)
 	if err != nil {

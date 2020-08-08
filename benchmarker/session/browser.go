@@ -1,12 +1,17 @@
 package session
 
 import (
+	"bytes"
 	"compress/flate"
 	"compress/gzip"
+	"context"
 	"github.com/andybalholm/brotli"
+	"github.com/golang/protobuf/proto"
 	"github.com/isucon/isucon10-final/benchmarker/failure"
 	"github.com/isucon/isucon10-final/benchmarker/model"
+	"github.com/isucon/isucon10-final/proto/xsuportal"
 	"io"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
@@ -19,7 +24,7 @@ const (
 	SESSION_REQUEST_TIMEOUT = 10 * time.Second
 )
 
-type Session struct {
+type Browser struct {
 	baseURL    *url.URL
 	lock       sync.Mutex
 	httpClient *http.Client
@@ -27,13 +32,13 @@ type Session struct {
 	Contestant *model.Contestant
 }
 
-func New(base string) (*Session, error) {
+func NewBrowser(base string) (*Browser, error) {
 	baseURL, err := url.Parse(base)
 	if err != nil {
 		return nil, err
 	}
 
-	s := &Session{
+	s := &Browser{
 		baseURL: baseURL,
 		lock:    sync.Mutex{},
 		httpClient: &http.Client{
@@ -47,7 +52,7 @@ func New(base string) (*Session, error) {
 	return s, nil
 }
 
-func (s *Session) Do(req *http.Request) (*http.Response, error) {
+func (s *Browser) Do(req *http.Request) (*http.Response, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -92,7 +97,7 @@ func (s *Session) Do(req *http.Request) (*http.Response, error) {
 	return res, nil
 }
 
-func (s *Session) NewRequest(method string, target url.URL, body io.Reader) (*http.Request, error) {
+func (s *Browser) NewRequest(method string, target url.URL, body io.Reader) (*http.Request, error) {
 	req, err := http.NewRequest(method, target.String(), body)
 	if err != nil {
 		return nil, err
@@ -103,7 +108,7 @@ func (s *Session) NewRequest(method string, target url.URL, body io.Reader) (*ht
 	return req, nil
 }
 
-func (s *Session) NewGetRequest(rpath string) (*http.Request, error) {
+func (s *Browser) NewGetRequest(rpath string) (*http.Request, error) {
 	target := *s.baseURL
 	if len(rpath) > 0 {
 		target.Path = rpath
@@ -117,7 +122,7 @@ func (s *Session) NewGetRequest(rpath string) (*http.Request, error) {
 	return req, nil
 }
 
-func (s *Session) NewGetRequestWithQuery(rpath string, q url.Values) (*http.Request, error) {
+func (s *Browser) NewGetRequestWithQuery(rpath string, q url.Values) (*http.Request, error) {
 	target := *s.baseURL
 	if len(rpath) > 0 {
 		target.Path = rpath
@@ -133,7 +138,7 @@ func (s *Session) NewGetRequestWithQuery(rpath string, q url.Values) (*http.Requ
 	return req, nil
 }
 
-func (s *Session) NewPostRequest(rpath string, contentType string, body io.Reader) (*http.Request, error) {
+func (s *Browser) NewPostRequest(rpath string, contentType string, body io.Reader) (*http.Request, error) {
 	target := *s.baseURL
 	if len(rpath) > 0 {
 		target.Path = rpath
@@ -149,7 +154,7 @@ func (s *Session) NewPostRequest(rpath string, contentType string, body io.Reade
 	return req, nil
 }
 
-func (s *Session) Get(rpath string) (*http.Response, error) {
+func (s *Browser) Get(rpath string) (*http.Response, error) {
 	req, err := s.NewGetRequest(rpath)
 	if err != nil {
 		return nil, err
@@ -158,7 +163,7 @@ func (s *Session) Get(rpath string) (*http.Response, error) {
 	return s.Do(req)
 }
 
-func (s *Session) GetWithQuery(rpath string, q url.Values) (*http.Response, error) {
+func (s *Browser) GetWithQuery(rpath string, q url.Values) (*http.Response, error) {
 	req, err := s.NewGetRequestWithQuery(rpath, q)
 	if err != nil {
 		return nil, err
@@ -167,7 +172,7 @@ func (s *Session) GetWithQuery(rpath string, q url.Values) (*http.Response, erro
 	return s.Do(req)
 }
 
-func (s *Session) Post(rpath string, contentType string, body io.Reader) (*http.Response, error) {
+func (s *Browser) Post(rpath string, contentType string, body io.Reader) (*http.Response, error) {
 	req, err := s.NewPostRequest(rpath, contentType, body)
 	if err != nil {
 		return nil, err
@@ -191,4 +196,54 @@ func (br *bReader) Read(p []byte) (n int, err error) {
 
 func (br *bReader) Close() error {
 	return br.r.Close()
+}
+
+func (s *Browser) GRPC(ctx context.Context, method string, rpath string, msg proto.Message, res proto.Message) (*xsuportal.Error, error) {
+	target := *s.baseURL
+	if len(rpath) > 0 {
+		target.Path = rpath
+	}
+
+	var body io.Reader
+
+	if msg != nil {
+		pb, err := proto.Marshal(msg)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewBuffer(pb)
+	} else {
+		body = nil
+	}
+
+	httpreq, err := s.NewRequest(method, target, body)
+	if err != nil {
+		return nil, err
+	}
+
+	httpreq.WithContext(ctx)
+	httpreq.Header.Set("Content-Type", "application/vnd.google.protobuf")
+
+	httpres, err := s.Do(httpreq)
+	if err != nil {
+		return nil, err
+	}
+
+	respb, err := ioutil.ReadAll(httpres.Body)
+	defer httpres.Body.Close()
+
+	if err != nil {
+		return nil, err
+	}
+
+	if httpres.Header.Get("Content-Type") == "application/vnd.google.protobuf; proto=xsuportal.proto.Error" {
+		xError := &xsuportal.Error{}
+		err := proto.Unmarshal(respb, xError)
+		if err != nil {
+			return nil, err
+		}
+		return xError, nil
+	}
+
+	return nil, proto.Unmarshal(respb, res)
 }

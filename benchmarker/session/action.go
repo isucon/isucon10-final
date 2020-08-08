@@ -14,45 +14,45 @@ import (
 	"net/http"
 )
 
-func (s *Session) InitializeAction(ctx context.Context) (*admin.InitializeResponse, *xsuportal.Error, error) {
+func (s *Browser) InitializeAction(ctx context.Context) (*admin.InitializeResponse, *xsuportal.Error, error) {
 	req := &admin.InitializeRequest{}
 	res := &admin.InitializeResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodPost, "/initialize", req, res)
+	xerr, err := s.GRPC(ctx, http.MethodPost, "/initialize", req, res)
 	return res, xerr, err
 }
 
-func (s *Session) SignupAction(ctx context.Context) (*contestant.SignupResponse, *xsuportal.Error, error) {
+func (s *Browser) SignupAction(ctx context.Context) (*contestant.SignupResponse, *xsuportal.Error, error) {
 	req := &contestant.SignupRequest{
 		ContestantId: s.Contestant.ID,
 		Password:     s.Contestant.Password,
 	}
 	res := &contestant.SignupResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodPost, "/api/signup", req, res)
+	xerr, err := s.GRPC(ctx, http.MethodPost, "/api/signup", req, res)
 	return res, xerr, err
 }
 
-func (s *Session) LoginAction(ctx context.Context) (*contestant.LoginResponse, *xsuportal.Error, error) {
+func (s *Browser) LoginAction(ctx context.Context) (*contestant.LoginResponse, *xsuportal.Error, error) {
 	req := &contestant.LoginRequest{
 		ContestantId: s.Contestant.ID,
 		Password:     s.Contestant.Password,
 	}
 	res := &contestant.LoginResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodPost, "/api/login", req, res)
+	xerr, err := s.GRPC(ctx, http.MethodPost, "/api/login", req, res)
 	return res, xerr, err
 }
 
-func (s *Session) LogoutAction(ctx context.Context) (*contestant.LogoutResponse, *xsuportal.Error, error) {
+func (s *Browser) LogoutAction(ctx context.Context) (*contestant.LogoutResponse, *xsuportal.Error, error) {
 	req := &contestant.LogoutRequest{}
 	res := &contestant.LogoutResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodPost, "/api/logout", req, res)
+	xerr, err := s.GRPC(ctx, http.MethodPost, "/api/logout", req, res)
 	return res, xerr, err
 }
 
-func (s *Session) UpdateContest(ctx context.Context, contest *model.Contest) (*admin.UpdateContestResponse, *xsuportal.Error, error) {
+func (s *Browser) UpdateContest(ctx context.Context, contest *model.Contest) (*admin.UpdateContestResponse, *xsuportal.Error, error) {
 	req := &admin.UpdateContestRequest{
 		Contest: &resources.Contest{
 			RegistrationOpenAt: time2Timestamp(contest.RegistrationOpenAt),
@@ -63,39 +63,39 @@ func (s *Session) UpdateContest(ctx context.Context, contest *model.Contest) (*a
 	}
 	res := &admin.UpdateContestResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodPut, "/api/admin/contest", req, res)
+	xerr, err := s.GRPC(ctx, http.MethodPut, "/api/admin/contest", req, res)
 	return res, xerr, err
 }
 
-func (s *Session) GetContest(ctx context.Context) (*common.GetContestResponse, *xsuportal.Error, error) {
+func (s *Browser) GetContest(ctx context.Context) (*common.GetContestResponse, *xsuportal.Error, error) {
 	res := &common.GetContestResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodGet, "/api/contest", nil, res)
+	xerr, err := s.GRPC(ctx, http.MethodGet, "/api/contest", nil, res)
 	return res, xerr, err
 }
 
-func (s *Session) GetCurrentSession(ctx context.Context) (*common.GetCurrentSessionResponse, *xsuportal.Error, error) {
+func (s *Browser) GetCurrentSession(ctx context.Context) (*common.GetCurrentSessionResponse, *xsuportal.Error, error) {
 	res := &common.GetCurrentSessionResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodGet, "/api/session", nil, res)
+	xerr, err := s.GRPC(ctx, http.MethodGet, "/api/session", nil, res)
 	return res, xerr, err
 }
 
-func (s *Session) ListTeams(ctx context.Context) (*audience.ListTeamsResponse, *xsuportal.Error, error) {
+func (s *Browser) ListTeams(ctx context.Context) (*audience.ListTeamsResponse, *xsuportal.Error, error) {
 	res := &audience.ListTeamsResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodGet, "/api/audience/teams", nil, res)
+	xerr, err := s.GRPC(ctx, http.MethodGet, "/api/audience/teams", nil, res)
 	return res, xerr, err
 }
 
-func (s *Session) GetRegistrationSession(ctx context.Context) (*registration.GetRegistrationSessionResponse, *xsuportal.Error, error) {
+func (s *Browser) GetRegistrationSession(ctx context.Context) (*registration.GetRegistrationSessionResponse, *xsuportal.Error, error) {
 	res := &registration.GetRegistrationSessionResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodGet, "/api/registration/session", nil, res)
+	xerr, err := s.GRPC(ctx, http.MethodGet, "/api/registration/session", nil, res)
 	return res, xerr, err
 }
 
-func (s *Session) CreateTeam(ctx context.Context, team *model.Team) (*registration.CreateTeamResponse, *xsuportal.Error, error) {
+func (s *Browser) CreateTeam(ctx context.Context, team *model.Team) (*registration.CreateTeamResponse, *xsuportal.Error, error) {
 	req := &registration.CreateTeamRequest{
 		TeamName:     team.TeamName,
 		EmailAddress: team.EmailAddress,
@@ -104,7 +104,7 @@ func (s *Session) CreateTeam(ctx context.Context, team *model.Team) (*registrati
 	}
 	res := &registration.CreateTeamResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodPost, "/api/registration/team", req, res)
+	xerr, err := s.GRPC(ctx, http.MethodPost, "/api/registration/team", req, res)
 
 	if res != nil && xerr == nil && err == nil {
 		team.ID = res.GetTeamId()
@@ -112,7 +112,7 @@ func (s *Session) CreateTeam(ctx context.Context, team *model.Team) (*registrati
 	return res, xerr, err
 }
 
-func (s *Session) JoinTeam(ctx context.Context, team *model.Team, inviteToken string) (*registration.JoinTeamResponse, *xsuportal.Error, error) {
+func (s *Browser) JoinTeam(ctx context.Context, team *model.Team, inviteToken string) (*registration.JoinTeamResponse, *xsuportal.Error, error) {
 	req := &registration.JoinTeamRequest{
 		TeamId:      team.ID,
 		InviteToken: inviteToken,
@@ -121,11 +121,11 @@ func (s *Session) JoinTeam(ctx context.Context, team *model.Team, inviteToken st
 	}
 	res := &registration.JoinTeamResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodPost, "/api/registration/contestant", req, res)
+	xerr, err := s.GRPC(ctx, http.MethodPost, "/api/registration/contestant", req, res)
 	return res, xerr, err
 }
 
-func (s *Session) UpdateRegistration(ctx context.Context, team *model.Team) (*registration.UpdateRegistrationResponse, *xsuportal.Error, error) {
+func (s *Browser) UpdateRegistration(ctx context.Context, team *model.Team) (*registration.UpdateRegistrationResponse, *xsuportal.Error, error) {
 	req := &registration.UpdateRegistrationRequest{
 		TeamName:     team.TeamName,
 		EmailAddress: team.EmailAddress,
@@ -134,45 +134,45 @@ func (s *Session) UpdateRegistration(ctx context.Context, team *model.Team) (*re
 	}
 	res := &registration.UpdateRegistrationResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodPut, "/api/registration", req, res)
+	xerr, err := s.GRPC(ctx, http.MethodPut, "/api/registration", req, res)
 	return res, xerr, err
 }
 
-func (s *Session) DeleteRegistration(ctx context.Context, team *model.Team, inviteToken string) (*registration.DeleteRegistrationResponse, *xsuportal.Error, error) {
+func (s *Browser) DeleteRegistration(ctx context.Context, team *model.Team, inviteToken string) (*registration.DeleteRegistrationResponse, *xsuportal.Error, error) {
 	req := &registration.DeleteRegistrationRequest{}
 	res := &registration.DeleteRegistrationResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodDelete, "/api/registration", req, res)
+	xerr, err := s.GRPC(ctx, http.MethodDelete, "/api/registration", req, res)
 	return res, xerr, err
 }
 
-func (s *Session) EnqueueBenchmarkJob(ctx context.Context, team *model.Team) (*contestant.EnqueueBenchmarkJobResponse, *xsuportal.Error, error) {
+func (s *Browser) EnqueueBenchmarkJob(ctx context.Context, team *model.Team) (*contestant.EnqueueBenchmarkJobResponse, *xsuportal.Error, error) {
 	req := &contestant.EnqueueBenchmarkJobRequest{
 		TargetHostname: team.TargetHost(),
 	}
 	res := &contestant.EnqueueBenchmarkJobResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodPost, "/api/contestant/benchmark_jobs", req, res)
+	xerr, err := s.GRPC(ctx, http.MethodPost, "/api/contestant/benchmark_jobs", req, res)
 	return res, xerr, err
 }
 
-func (s *Session) ListBenchmarkJobs(ctx context.Context) (*contestant.ListBenchmarkJobsResponse, *xsuportal.Error, error) {
+func (s *Browser) ListBenchmarkJobs(ctx context.Context) (*contestant.ListBenchmarkJobsResponse, *xsuportal.Error, error) {
 	res := &contestant.ListBenchmarkJobsResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodGet, "/api/contestant/benchmark_jobs", nil, res)
+	xerr, err := s.GRPC(ctx, http.MethodGet, "/api/contestant/benchmark_jobs", nil, res)
 	return res, xerr, err
 }
 
-func (s *Session) GetBenchmarkJob(ctx context.Context, id int64) (*contestant.GetBenchmarkJobResponse, *xsuportal.Error, error) {
+func (s *Browser) GetBenchmarkJob(ctx context.Context, id int64) (*contestant.GetBenchmarkJobResponse, *xsuportal.Error, error) {
 	res := &contestant.GetBenchmarkJobResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodGet, fmt.Sprintf("/api/contestant/benchmark_jobs/%d", id), nil, res)
+	xerr, err := s.GRPC(ctx, http.MethodGet, fmt.Sprintf("/api/contestant/benchmark_jobs/%d", id), nil, res)
 	return res, xerr, err
 }
 
-func (s *Session) Dashboard(ctx context.Context) (*contestant.DashboardResponse, *xsuportal.Error, error) {
+func (s *Browser) Dashboard(ctx context.Context) (*contestant.DashboardResponse, *xsuportal.Error, error) {
 	res := &contestant.DashboardResponse{}
 
-	xerr, err := s.Call(ctx, http.MethodGet, "/api/contestant/dashboard", nil, res)
+	xerr, err := s.GRPC(ctx, http.MethodGet, "/api/contestant/dashboard", nil, res)
 	return res, xerr, err
 }
