@@ -20168,6 +20168,7 @@ $root.xsuportal = (function() {
                      * @property {xsuportal.proto.resources.ITeam|null} [team] GetRegistrationSessionResponse team
                      * @property {xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status|null} [status] GetRegistrationSessionResponse status
                      * @property {string|null} [memberInviteUrl] GetRegistrationSessionResponse memberInviteUrl
+                     * @property {string|null} [inviteToken] GetRegistrationSessionResponse inviteToken
                      */
 
                     /**
@@ -20210,6 +20211,14 @@ $root.xsuportal = (function() {
                     GetRegistrationSessionResponse.prototype.memberInviteUrl = "";
 
                     /**
+                     * GetRegistrationSessionResponse inviteToken.
+                     * @member {string} inviteToken
+                     * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
+                     * @instance
+                     */
+                    GetRegistrationSessionResponse.prototype.inviteToken = "";
+
+                    /**
                      * Creates a new GetRegistrationSessionResponse instance using the specified properties.
                      * @function create
                      * @memberof xsuportal.proto.services.registration.GetRegistrationSessionResponse
@@ -20239,6 +20248,8 @@ $root.xsuportal = (function() {
                             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.status);
                         if (message.memberInviteUrl != null && Object.hasOwnProperty.call(message, "memberInviteUrl"))
                             writer.uint32(/* id 3, wireType 2 =*/26).string(message.memberInviteUrl);
+                        if (message.inviteToken != null && Object.hasOwnProperty.call(message, "inviteToken"))
+                            writer.uint32(/* id 4, wireType 2 =*/34).string(message.inviteToken);
                         return writer;
                     };
 
@@ -20281,6 +20292,9 @@ $root.xsuportal = (function() {
                                 break;
                             case 3:
                                 message.memberInviteUrl = reader.string();
+                                break;
+                            case 4:
+                                message.inviteToken = reader.string();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -20337,6 +20351,9 @@ $root.xsuportal = (function() {
                         if (message.memberInviteUrl != null && message.hasOwnProperty("memberInviteUrl"))
                             if (!$util.isString(message.memberInviteUrl))
                                 return "memberInviteUrl: string expected";
+                        if (message.inviteToken != null && message.hasOwnProperty("inviteToken"))
+                            if (!$util.isString(message.inviteToken))
+                                return "inviteToken: string expected";
                         return null;
                     };
 
@@ -20385,6 +20402,8 @@ $root.xsuportal = (function() {
                         }
                         if (object.memberInviteUrl != null)
                             message.memberInviteUrl = String(object.memberInviteUrl);
+                        if (object.inviteToken != null)
+                            message.inviteToken = String(object.inviteToken);
                         return message;
                     };
 
@@ -20405,6 +20424,7 @@ $root.xsuportal = (function() {
                             object.team = null;
                             object.status = options.enums === String ? "CLOSED" : 0;
                             object.memberInviteUrl = "";
+                            object.inviteToken = "";
                         }
                         if (message.team != null && message.hasOwnProperty("team"))
                             object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
@@ -20412,6 +20432,8 @@ $root.xsuportal = (function() {
                             object.status = options.enums === String ? $root.xsuportal.proto.services.registration.GetRegistrationSessionResponse.Status[message.status] : message.status;
                         if (message.memberInviteUrl != null && message.hasOwnProperty("memberInviteUrl"))
                             object.memberInviteUrl = message.memberInviteUrl;
+                        if (message.inviteToken != null && message.hasOwnProperty("inviteToken"))
+                            object.inviteToken = message.inviteToken;
                         return object;
                     };
 

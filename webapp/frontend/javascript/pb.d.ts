@@ -8718,6 +8718,9 @@ export namespace xsuportal {
 
                     /** GetRegistrationSessionResponse memberInviteUrl */
                     memberInviteUrl?: (string|null);
+
+                    /** GetRegistrationSessionResponse inviteToken */
+                    inviteToken?: (string|null);
                 }
 
                 /** Represents a GetRegistrationSessionResponse. */
@@ -8737,6 +8740,9 @@ export namespace xsuportal {
 
                     /** GetRegistrationSessionResponse memberInviteUrl. */
                     public memberInviteUrl: string;
+
+                    /** GetRegistrationSessionResponse inviteToken. */
+                    public inviteToken: string;
 
                     /**
                      * Creates a new GetRegistrationSessionResponse instance using the specified properties.

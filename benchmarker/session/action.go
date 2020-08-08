@@ -2,6 +2,7 @@ package session
 
 import (
 	"context"
+	"fmt"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/proto/xsuportal"
 	"github.com/isucon/isucon10-final/proto/xsuportal/resources"
@@ -142,5 +143,36 @@ func (s *Session) DeleteRegistration(ctx context.Context, team *model.Team, invi
 	res := &registration.DeleteRegistrationResponse{}
 
 	xerr, err := s.Call(ctx, http.MethodDelete, "/api/registration", req, res)
+	return res, xerr, err
+}
+
+func (s *Session) EnqueueBenchmarkJob(ctx context.Context, team *model.Team) (*contestant.EnqueueBenchmarkJobResponse, *xsuportal.Error, error) {
+	req := &contestant.EnqueueBenchmarkJobRequest{
+		TargetHostname: team.TargetHost(),
+	}
+	res := &contestant.EnqueueBenchmarkJobResponse{}
+
+	xerr, err := s.Call(ctx, http.MethodPost, "/api/contestant/benchmark_jobs", req, res)
+	return res, xerr, err
+}
+
+func (s *Session) ListBenchmarkJobs(ctx context.Context) (*contestant.ListBenchmarkJobsResponse, *xsuportal.Error, error) {
+	res := &contestant.ListBenchmarkJobsResponse{}
+
+	xerr, err := s.Call(ctx, http.MethodGet, "/api/contestant/benchmark_jobs", nil, res)
+	return res, xerr, err
+}
+
+func (s *Session) GetBenchmarkJob(ctx context.Context, id int64) (*contestant.GetBenchmarkJobResponse, *xsuportal.Error, error) {
+	res := &contestant.GetBenchmarkJobResponse{}
+
+	xerr, err := s.Call(ctx, http.MethodGet, fmt.Sprintf("/api/contestant/benchmark_jobs/%d", id), nil, res)
+	return res, xerr, err
+}
+
+func (s *Session) Dashboard(ctx context.Context) (*contestant.DashboardResponse, *xsuportal.Error, error) {
+	res := &contestant.DashboardResponse{}
+
+	xerr, err := s.Call(ctx, http.MethodGet, "/api/contestant/dashboard", nil, res)
 	return res, xerr, err
 }

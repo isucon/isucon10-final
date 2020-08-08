@@ -6,14 +6,21 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/session"
 	"net/url"
+	"time"
 )
 
 func main() {
 	s, _ := session.New("http://localhost:9292/")
 	s2, _ := session.New("http://localhost:9292/")
+	s3, _ := session.New("http://localhost:9292/")
 
 	ctx := context.Background()
 	var err error
+
+	admin, _ := model.NewAdmin()
+	s3.Contestant = admin
+
+	contest := model.NewContest()
 
 	init, _, err := s.InitializeAction(ctx)
 	if err != nil {
@@ -82,6 +89,45 @@ func main() {
 	}
 	fmt.Printf("%s\n", xerr.String())
 	fmt.Printf("%s\n", update.String())
+
+	contest.RegistrationOpenAt = time.Now().Add(-1 * time.Hour)
+	contest.ContestStartsAt = time.Now().Add(-30 * time.Minute)
+	contest.ContestFreezesAt = time.Now().Add(30 * time.Minute)
+	contest.ContestEndsAt = time.Now().Add(1 * time.Hour)
+
+	updateC, xerr, err := s3.UpdateContest(ctx, contest)
+	if err != nil {
+		fmt.Printf("%+v", err)
+		return
+	}
+	fmt.Printf("%s\n", xerr.String())
+	fmt.Printf("%s\n", updateC.String())
+
+	enqueue, xerr, err := s.EnqueueBenchmarkJob(ctx, team)
+	if err != nil {
+		fmt.Printf("%+v", err)
+		return
+	}
+	fmt.Printf("%s\n", xerr.String())
+	fmt.Printf("%s\n", enqueue.String())
+
+	list, xerr, err := s.ListBenchmarkJobs(ctx)
+	if err != nil {
+		fmt.Printf("%+v", err)
+		return
+	}
+	fmt.Printf("%s\n", xerr.String())
+	fmt.Printf("%s\n", list.String())
+
+	jobId := list.GetJobs()[0].GetId()
+
+	job, xerr, err := s.GetBenchmarkJob(ctx, jobId)
+	if err != nil {
+		fmt.Printf("%+v", err)
+		return
+	}
+	fmt.Printf("%s\n", xerr.String())
+	fmt.Printf("%s\n", job.String())
 
 	logout, xerr, err := s.LogoutAction(ctx)
 	if err != nil {

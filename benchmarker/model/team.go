@@ -5,6 +5,8 @@ type Team struct {
 	TeamName     string
 	EmailAddress string
 
+	Hosts []*Host
+
 	Leader    *Contestant
 	Developer *Contestant
 	Operator  *Contestant
@@ -24,9 +26,16 @@ func NewTeam() (*Team, error) {
 		return nil, err
 	}
 
+	hosts := []*Host{{}, {}, {}}
+
 	return &Team{
+		Hosts:     hosts,
 		Leader:    leader,
 		Developer: developer,
 		Operator:  operator,
 	}, nil
+}
+
+func (t *Team) TargetHost() string {
+	return t.Hosts[0].Name
 }

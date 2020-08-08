@@ -11,3 +11,13 @@ type Contest struct {
 	ContestEndsAt      time.Time
 	Teams              []*Team
 }
+
+func NewContest() *Contest {
+	return &Contest{
+		RegistrationOpenAt: time.Now(),
+		ContestStartsAt:    time.Now(),
+		ContestFreezesAt:   time.Now(),
+		ContestEndsAt:      time.Now(),
+		Teams:              []*Team{},
+	}
+}

@@ -355,12 +355,12 @@ module Xsuportal
             `contest_starts_at`,
             `contest_freezes_at`,
             `contest_ends_at`
-          ) VALUES (?, ?, ?, ?, ?)
+          ) VALUES (?, ?, ?, ?)
           SQL
-          req.contest?.registration_open_at,
-          req.contest?.contest_starts_at,
-          req.contest?.contest_freezes_at,
-          req.contest?.contest_ends_at,
+          Time.at(req.contest.registration_open_at.seconds),
+          Time.at(req.contest.contest_starts_at.seconds),
+          Time.at(req.contest.contest_freezes_at.seconds),
+          Time.at(req.contest.contest_ends_at.seconds),
         )
       end
       encode_response_pb
