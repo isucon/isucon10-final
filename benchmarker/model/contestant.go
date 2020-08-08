@@ -11,8 +11,10 @@ const (
 )
 
 type Contestant struct {
-	ID       string
-	Password string
+	ID        string
+	Password  string
+	Name      string
+	IsStudent bool
 
 	CookieJar *cookiejar.Jar
 }
@@ -26,6 +28,19 @@ func NewContestant() (*Contestant, error) {
 	return &Contestant{
 		ID:        random.Alphabet(CONTESTANT_ID_LENGTH),
 		Password:  random.Alphabet(CONTESTANT_PASSWORD_LENGTH),
+		Name:      "",
+		IsStudent: false,
 		CookieJar: jar,
 	}, nil
+}
+
+func NewAdmin() (*Contestant, error) {
+	admin, err := NewContestant()
+	if err != nil {
+		return nil, err
+	}
+
+	admin.ID = "admin"
+	admin.Password = "admin"
+	return admin, nil
 }

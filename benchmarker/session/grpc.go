@@ -5,6 +5,7 @@ import (
 	"context"
 	"github.com/golang/protobuf/proto"
 	"github.com/isucon/isucon10-final/proto/xsuportal"
+	"io"
 	"io/ioutil"
 )
 
@@ -21,11 +22,17 @@ func (s *Session) Call(ctx context.Context, method string, rpath string, msg pro
 		target.Path = rpath
 	}
 
-	pb, err := proto.Marshal(msg)
-	if err != nil {
-		return nil, err
+	var body io.Reader
+
+	if msg != nil {
+		pb, err := proto.Marshal(msg)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewBuffer(pb)
+	} else {
+		body = nil
 	}
-	body := bytes.NewBuffer(pb)
 
 	httpreq, err := s.NewRequest(method, target, body)
 	if err != nil {
