@@ -683,7 +683,6 @@ module Xsuportal
         session[:contestant_id] = req.contestant_id
       else
         halt_pb 400, 'ログインIDまたはパスワードが正しくありません'
-        content_type 'application/vnd.google.protobuf; proto=xsuportal.proto.Error'
       end
 
       encode_response_pb
