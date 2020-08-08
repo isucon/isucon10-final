@@ -9795,6 +9795,7 @@ $root.xsuportal = (function() {
                      * @memberof xsuportal.proto.services.admin
                      * @interface IInitializeResponse
                      * @property {string|null} [language] InitializeResponse language
+                     * @property {xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer|null} [benchmarkServer] InitializeResponse benchmarkServer
                      */
 
                     /**
@@ -9819,6 +9820,14 @@ $root.xsuportal = (function() {
                      * @instance
                      */
                     InitializeResponse.prototype.language = "";
+
+                    /**
+                     * InitializeResponse benchmarkServer.
+                     * @member {xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer|null|undefined} benchmarkServer
+                     * @memberof xsuportal.proto.services.admin.InitializeResponse
+                     * @instance
+                     */
+                    InitializeResponse.prototype.benchmarkServer = null;
 
                     /**
                      * Creates a new InitializeResponse instance using the specified properties.
@@ -9846,6 +9855,8 @@ $root.xsuportal = (function() {
                             writer = $Writer.create();
                         if (message.language != null && Object.hasOwnProperty.call(message, "language"))
                             writer.uint32(/* id 1, wireType 2 =*/10).string(message.language);
+                        if (message.benchmarkServer != null && Object.hasOwnProperty.call(message, "benchmarkServer"))
+                            $root.xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer.encode(message.benchmarkServer, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
                         return writer;
                     };
 
@@ -9882,6 +9893,9 @@ $root.xsuportal = (function() {
                             switch (tag >>> 3) {
                             case 1:
                                 message.language = reader.string();
+                                break;
+                            case 2:
+                                message.benchmarkServer = $root.xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer.decode(reader, reader.uint32());
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -9921,6 +9935,11 @@ $root.xsuportal = (function() {
                         if (message.language != null && message.hasOwnProperty("language"))
                             if (!$util.isString(message.language))
                                 return "language: string expected";
+                        if (message.benchmarkServer != null && message.hasOwnProperty("benchmarkServer")) {
+                            var error = $root.xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer.verify(message.benchmarkServer);
+                            if (error)
+                                return "benchmarkServer." + error;
+                        }
                         return null;
                     };
 
@@ -9938,6 +9957,11 @@ $root.xsuportal = (function() {
                         var message = new $root.xsuportal.proto.services.admin.InitializeResponse();
                         if (object.language != null)
                             message.language = String(object.language);
+                        if (object.benchmarkServer != null) {
+                            if (typeof object.benchmarkServer !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.InitializeResponse.benchmarkServer: object expected");
+                            message.benchmarkServer = $root.xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer.fromObject(object.benchmarkServer);
+                        }
                         return message;
                     };
 
@@ -9954,10 +9978,14 @@ $root.xsuportal = (function() {
                         if (!options)
                             options = {};
                         var object = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.language = "";
+                            object.benchmarkServer = null;
+                        }
                         if (message.language != null && message.hasOwnProperty("language"))
                             object.language = message.language;
+                        if (message.benchmarkServer != null && message.hasOwnProperty("benchmarkServer"))
+                            object.benchmarkServer = $root.xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer.toObject(message.benchmarkServer, options);
                         return object;
                     };
 
@@ -9971,6 +9999,230 @@ $root.xsuportal = (function() {
                     InitializeResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
+
+                    InitializeResponse.BenchmarkServer = (function() {
+
+                        /**
+                         * Properties of a BenchmarkServer.
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse
+                         * @interface IBenchmarkServer
+                         * @property {string|null} [host] BenchmarkServer host
+                         * @property {number|Long|null} [port] BenchmarkServer port
+                         */
+
+                        /**
+                         * Constructs a new BenchmarkServer.
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse
+                         * @classdesc Represents a BenchmarkServer.
+                         * @implements IBenchmarkServer
+                         * @constructor
+                         * @param {xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer=} [properties] Properties to set
+                         */
+                        function BenchmarkServer(properties) {
+                            if (properties)
+                                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * BenchmarkServer host.
+                         * @member {string} host
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @instance
+                         */
+                        BenchmarkServer.prototype.host = "";
+
+                        /**
+                         * BenchmarkServer port.
+                         * @member {number|Long} port
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @instance
+                         */
+                        BenchmarkServer.prototype.port = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                        /**
+                         * Creates a new BenchmarkServer instance using the specified properties.
+                         * @function create
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @static
+                         * @param {xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer=} [properties] Properties to set
+                         * @returns {xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer} BenchmarkServer instance
+                         */
+                        BenchmarkServer.create = function create(properties) {
+                            return new BenchmarkServer(properties);
+                        };
+
+                        /**
+                         * Encodes the specified BenchmarkServer message. Does not implicitly {@link xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer.verify|verify} messages.
+                         * @function encode
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @static
+                         * @param {xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer} message BenchmarkServer message or plain object to encode
+                         * @param {$protobuf.Writer} [writer] Writer to encode to
+                         * @returns {$protobuf.Writer} Writer
+                         */
+                        BenchmarkServer.encode = function encode(message, writer) {
+                            if (!writer)
+                                writer = $Writer.create();
+                            if (message.host != null && Object.hasOwnProperty.call(message, "host"))
+                                writer.uint32(/* id 1, wireType 2 =*/10).string(message.host);
+                            if (message.port != null && Object.hasOwnProperty.call(message, "port"))
+                                writer.uint32(/* id 2, wireType 0 =*/16).int64(message.port);
+                            return writer;
+                        };
+
+                        /**
+                         * Encodes the specified BenchmarkServer message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer.verify|verify} messages.
+                         * @function encodeDelimited
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @static
+                         * @param {xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer} message BenchmarkServer message or plain object to encode
+                         * @param {$protobuf.Writer} [writer] Writer to encode to
+                         * @returns {$protobuf.Writer} Writer
+                         */
+                        BenchmarkServer.encodeDelimited = function encodeDelimited(message, writer) {
+                            return this.encode(message, writer).ldelim();
+                        };
+
+                        /**
+                         * Decodes a BenchmarkServer message from the specified reader or buffer.
+                         * @function decode
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @static
+                         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                         * @param {number} [length] Message length if known beforehand
+                         * @returns {xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer} BenchmarkServer
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        BenchmarkServer.decode = function decode(reader, length) {
+                            if (!(reader instanceof $Reader))
+                                reader = $Reader.create(reader);
+                            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer();
+                            while (reader.pos < end) {
+                                var tag = reader.uint32();
+                                switch (tag >>> 3) {
+                                case 1:
+                                    message.host = reader.string();
+                                    break;
+                                case 2:
+                                    message.port = reader.int64();
+                                    break;
+                                default:
+                                    reader.skipType(tag & 7);
+                                    break;
+                                }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Decodes a BenchmarkServer message from the specified reader or buffer, length delimited.
+                         * @function decodeDelimited
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @static
+                         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                         * @returns {xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer} BenchmarkServer
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        BenchmarkServer.decodeDelimited = function decodeDelimited(reader) {
+                            if (!(reader instanceof $Reader))
+                                reader = new $Reader(reader);
+                            return this.decode(reader, reader.uint32());
+                        };
+
+                        /**
+                         * Verifies a BenchmarkServer message.
+                         * @function verify
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        BenchmarkServer.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.host != null && message.hasOwnProperty("host"))
+                                if (!$util.isString(message.host))
+                                    return "host: string expected";
+                            if (message.port != null && message.hasOwnProperty("port"))
+                                if (!$util.isInteger(message.port) && !(message.port && $util.isInteger(message.port.low) && $util.isInteger(message.port.high)))
+                                    return "port: integer|Long expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a BenchmarkServer message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer} BenchmarkServer
+                         */
+                        BenchmarkServer.fromObject = function fromObject(object) {
+                            if (object instanceof $root.xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer)
+                                return object;
+                            var message = new $root.xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer();
+                            if (object.host != null)
+                                message.host = String(object.host);
+                            if (object.port != null)
+                                if ($util.Long)
+                                    (message.port = $util.Long.fromValue(object.port)).unsigned = false;
+                                else if (typeof object.port === "string")
+                                    message.port = parseInt(object.port, 10);
+                                else if (typeof object.port === "number")
+                                    message.port = object.port;
+                                else if (typeof object.port === "object")
+                                    message.port = new $util.LongBits(object.port.low >>> 0, object.port.high >>> 0).toNumber();
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a BenchmarkServer message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @static
+                         * @param {xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer} message BenchmarkServer
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        BenchmarkServer.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            var object = {};
+                            if (options.defaults) {
+                                object.host = "";
+                                if ($util.Long) {
+                                    var long = new $util.Long(0, 0, false);
+                                    object.port = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                } else
+                                    object.port = options.longs === String ? "0" : 0;
+                            }
+                            if (message.host != null && message.hasOwnProperty("host"))
+                                object.host = message.host;
+                            if (message.port != null && message.hasOwnProperty("port"))
+                                if (typeof message.port === "number")
+                                    object.port = options.longs === String ? String(message.port) : message.port;
+                                else
+                                    object.port = options.longs === String ? $util.Long.prototype.toString.call(message.port) : options.longs === Number ? new $util.LongBits(message.port.low >>> 0, message.port.high >>> 0).toNumber() : message.port;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this BenchmarkServer to JSON.
+                         * @function toJSON
+                         * @memberof xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        BenchmarkServer.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return BenchmarkServer;
+                    })();
 
                     return InitializeResponse;
                 })();

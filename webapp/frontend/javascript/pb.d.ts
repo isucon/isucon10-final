@@ -4005,6 +4005,9 @@ export namespace xsuportal {
 
                     /** InitializeResponse language */
                     language?: (string|null);
+
+                    /** InitializeResponse benchmarkServer */
+                    benchmarkServer?: (xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer|null);
                 }
 
                 /** Represents an InitializeResponse. */
@@ -4018,6 +4021,9 @@ export namespace xsuportal {
 
                     /** InitializeResponse language. */
                     public language: string;
+
+                    /** InitializeResponse benchmarkServer. */
+                    public benchmarkServer?: (xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer|null);
 
                     /**
                      * Creates a new InitializeResponse instance using the specified properties.
@@ -4088,6 +4094,105 @@ export namespace xsuportal {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                namespace InitializeResponse {
+
+                    /** Properties of a BenchmarkServer. */
+                    interface IBenchmarkServer {
+
+                        /** BenchmarkServer host */
+                        host?: (string|null);
+
+                        /** BenchmarkServer port */
+                        port?: (number|Long|null);
+                    }
+
+                    /** Represents a BenchmarkServer. */
+                    class BenchmarkServer implements IBenchmarkServer {
+
+                        /**
+                         * Constructs a new BenchmarkServer.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer);
+
+                        /** BenchmarkServer host. */
+                        public host: string;
+
+                        /** BenchmarkServer port. */
+                        public port: (number|Long);
+
+                        /**
+                         * Creates a new BenchmarkServer instance using the specified properties.
+                         * @param [properties] Properties to set
+                         * @returns BenchmarkServer instance
+                         */
+                        public static create(properties?: xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer): xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer;
+
+                        /**
+                         * Encodes the specified BenchmarkServer message. Does not implicitly {@link xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer.verify|verify} messages.
+                         * @param message BenchmarkServer message or plain object to encode
+                         * @param [writer] Writer to encode to
+                         * @returns Writer
+                         */
+                        public static encode(message: xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                        /**
+                         * Encodes the specified BenchmarkServer message, length delimited. Does not implicitly {@link xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer.verify|verify} messages.
+                         * @param message BenchmarkServer message or plain object to encode
+                         * @param [writer] Writer to encode to
+                         * @returns Writer
+                         */
+                        public static encodeDelimited(message: xsuportal.proto.services.admin.InitializeResponse.IBenchmarkServer, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                        /**
+                         * Decodes a BenchmarkServer message from the specified reader or buffer.
+                         * @param reader Reader or buffer to decode from
+                         * @param [length] Message length if known beforehand
+                         * @returns BenchmarkServer
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer;
+
+                        /**
+                         * Decodes a BenchmarkServer message from the specified reader or buffer, length delimited.
+                         * @param reader Reader or buffer to decode from
+                         * @returns BenchmarkServer
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer;
+
+                        /**
+                         * Verifies a BenchmarkServer message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a BenchmarkServer message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns BenchmarkServer
+                         */
+                        public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer;
+
+                        /**
+                         * Creates a plain object from a BenchmarkServer message. Also converts values to other types if specified.
+                         * @param message BenchmarkServer
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this BenchmarkServer to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
                 }
 
                 /** Properties of a ListTeamsRequest. */

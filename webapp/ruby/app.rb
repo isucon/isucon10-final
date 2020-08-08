@@ -334,6 +334,11 @@ module Xsuportal
         # TODO: 負荷レベルの指定
         # 実装言語
         language: 'ruby',
+        # 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報
+        benchmark_server: {
+          host: 'localhost',
+          port: 50051,
+        },
       )
     end
 

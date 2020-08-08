@@ -9,6 +9,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "xsuportal.proto.services.admin.InitializeResponse" do
       optional :language, :string, 1
+      optional :benchmark_server, :message, 2, "xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer"
+    end
+    add_message "xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer" do
+      optional :host, :string, 1
+      optional :port, :int64, 2
     end
   end
 end
@@ -19,6 +24,7 @@ module Xsuportal
       module Admin
         InitializeRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.admin.InitializeRequest").msgclass
         InitializeResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.admin.InitializeResponse").msgclass
+        InitializeResponse::BenchmarkServer = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("xsuportal.proto.services.admin.InitializeResponse.BenchmarkServer").msgclass
       end
     end
   end

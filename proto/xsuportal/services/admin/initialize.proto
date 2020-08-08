@@ -4,4 +4,14 @@ option go_package = "github.com/isucon/isucon10-final/proto/xsuportal/services/a
 
 message InitializeRequest {}
 
-message InitializeResponse { string language = 1; }
+message InitializeResponse {
+  message BenchmarkServer {
+    string host = 1;
+    int64 port = 2;
+  }
+  // 実装言語
+  string language = 1;
+  // 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報
+  BenchmarkServer benchmark_server = 2;
+
+}
