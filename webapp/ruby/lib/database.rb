@@ -19,37 +19,47 @@ module Xsuportal
         )
       end
 
-      def ensure_transaction_close
-        if Thread.current[:db_transaction] == :open
-          transaction_rollback
+      def ensure_transaction_close(name=:default)
+        Thread.current[:db_transaction] ||= {}
+        if Thread.current[:db_transaction][name] == :open
+          puts "Warning: transaction closed implicitly (#{$$},#{Thread.current.object_id}): #{name}"
+          puts Thread.current[:db_transaction]["#{name}_caller"]
+          transaction_rollback(name)
         end
       end
 
-      def transaction_begin
+      def transaction_begin(name=:default)
+        Thread.current[:db_transaction] ||= {}
+        # puts "BEGIN(#{$$},#{Thread.current.object_id}): #{name}"
         connection.query('BEGIN')
-        Thread.current[:db_transaction] = :open
+        Thread.current[:db_transaction]["#{name}_caller"] = caller(1)
+        Thread.current[:db_transaction][name] = :open
       end
 
-      def transaction_commit
+      def transaction_commit(name=:default)
+        Thread.current[:db_transaction] ||= {}
+        # puts "COMMIT(#{$$},#{Thread.current.object_id}): #{name}"
         connection.query('COMMIT')
-        Thread.current[:db_transaction] = nil
+        Thread.current[:db_transaction][name] = nil
       end
 
-      def transaction_rollback
+      def transaction_rollback(name=:default)
+        Thread.current[:db_transaction] ||= {}
+        # puts "ROLLBACK(#{$$},#{Thread.current.object_id}): #{name}"
         connection.query('ROLLBACK')
-        Thread.current[:db_transaction] = nil
+        Thread.current[:db_transaction][name] = nil
       end
 
-      def transaction
+      def transaction(name=:default)
         begin
-          transaction_begin
+          transaction_begin(name)
           yield
-          transaction_commit
+          transaction_commit(name)
         rescue => e
-          transaction_rollback
+          transaction_rollback(name)
           raise e
         ensure
-          ensure_transaction_close
+          ensure_transaction_close(name)
         end
       end
     end

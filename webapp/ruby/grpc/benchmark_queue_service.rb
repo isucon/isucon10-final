@@ -6,13 +6,13 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
   def receive_benchmark_job(request, _call)
     db = Xsuportal::Database.connection
     job_handle = nil
-    Xsuportal::Database.transaction do
+    Xsuportal::Database.transaction('benchmark_queue_service') do
       job = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1 FOR UPDATE',
         Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
       ).first
       unless job
-        Xsuportal::Database.transaction_rollback
+        Xsuportal::Database.transaction_rollback('benchmark_queue_service')
         break
       end
       puts "Sending job_id=#{job[:id]}"
@@ -21,6 +21,7 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
         Xsuportal::Proto::Resources::BenchmarkJob::Status::SENT,
         job[:id],
       )
+      puts "Updated job_id=#{job[:id]}"
 
       contest = db.query('SELECT `contest_starts_at` FROM `contest_config` LIMIT 1').first
       job_handle = {
