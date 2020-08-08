@@ -4,6 +4,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
+import { Dashboard } from "./Dashboard";
 import { TeamList } from "./TeamList";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
@@ -63,6 +64,9 @@ export class Index extends React.Component<Props, State> {
                   <Link className="navbar-item" to="/">
                     チーム一覧
                   </Link>
+                  <Link className="navbar-item" to="/dashboard">
+                    ダッシュボード
+                  </Link>
                   <a className="navbar-item" href="/terms">
                     規約
                   </a>
@@ -111,6 +115,9 @@ export class Index extends React.Component<Props, State> {
                   client={this.props.client}
                   root={this}
                 />
+              </Route>
+              <Route path="/dashboard">
+                <Dashboard client={this.props.client} />
               </Route>
               <Route path="/">
                 <TeamList
