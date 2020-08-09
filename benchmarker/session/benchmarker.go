@@ -77,7 +77,7 @@ func (b *Benchmarker) Do(ctx context.Context) error {
 		return errors.New("Invalid Nonce")
 	}
 
-	time.Sleep(5 * time.Second)
+	time.Sleep(1 * time.Second)
 
 	reporter.Send(&bench.ReportBenchmarkResultRequest{
 		JobId: jobHandle.GetJobId(),

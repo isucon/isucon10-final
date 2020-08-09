@@ -11,6 +11,10 @@ setup: go.sum ## Setup dependency modules
 .PHONY: build
 build: bin/benchmarker ## Build benchmarker
 
+.PHONY: test
+test: go.mod $(GOPROTOFILES) $(GOFILES)
+	go test -count=1 github.com/isucon/isucon10-final/benchmarker/story
+
 .PHONY: clean
 clean: ## Cleanup working directory
 	find ./proto -name '*.pb.go' | xargs rm

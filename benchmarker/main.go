@@ -5,20 +5,20 @@ import (
 	"fmt"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/session"
+	"github.com/isucon/isucon10-final/proto/xsuportal/services/admin"
 	"net/url"
+	"sync"
 	"time"
 )
 
 func main() {
 	s, _ := session.NewBrowser("http://localhost:9292/")
-	s2, _ := session.NewBrowser("http://localhost:9292/")
-	s3, _ := session.NewBrowser("http://localhost:9292/")
 
 	ctx := context.Background()
 	var err error
 
 	admin, _ := model.NewAdmin()
-	s3.Contestant = admin
+	s.Contestant = admin
 
 	contest := model.NewContest()
 
@@ -28,6 +28,32 @@ func main() {
 		return
 	}
 	fmt.Printf("%s\n", init.String())
+
+	wg := &sync.WaitGroup{}
+	ch := make(chan bool, 20)
+	for i := 0; i < 30; i++ {
+		go func() {
+			wg.Add(1)
+			ch <- true
+			Do(contest, init)
+			<-ch
+			wg.Done()
+		}()
+	}
+
+	wg.Wait()
+}
+
+func Do(contest *model.Contest, init *admin.InitializeResponse) {
+	s, _ := session.NewBrowser("http://localhost:9292/")
+	s2, _ := session.NewBrowser("http://localhost:9292/")
+	s3, _ := session.NewBrowser("http://localhost:9292/")
+
+	admin, _ := model.NewAdmin()
+	s3.Contestant = admin
+
+	ctx := context.Background()
+	var err error
 
 	team, _ := model.NewTeam()
 	contestant := team.Leader
@@ -118,6 +144,10 @@ func main() {
 	}
 	fmt.Printf("%s\n", xerr.String())
 	fmt.Printf("%s\n", list.String())
+
+	if len(list.GetJobs()) == 0 {
+		return
+	}
 
 	jobId := list.GetJobs()[0].GetId()
 
