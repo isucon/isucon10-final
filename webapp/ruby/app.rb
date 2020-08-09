@@ -145,21 +145,24 @@ module Xsuportal
       end
 
       def team_pb(team, detail: false, enable_members: true, member_detail: false)
-        leader = nil
         members = nil
-        if team[:leader_id]
-          leader = db.xquery(
-            'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1',
-            team[:leader_id],
-          ).first
+
+        leader_pb, members_pb = nil
+        if enable_members
+          if team[:leader_id]
+            leader = db.xquery(
+              'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1',
+              team[:leader_id],
+            ).first
+          end
+          members = db.xquery(
+            'SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`',
+            team[:id],
+          )
+          leader_pb = leader ? contestant_pb(leader, detail: member_detail) : nil
+          members_pb = members ?
+            members.map { |_| contestant_pb(_, detail: member_detail) } : nil
         end
-        members = db.xquery(
-          'SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`',
-          team[:id],
-        )
-        leader_pb = enable_members && leader ? contestant_pb(leader, detail: member_detail) : nil
-        members_pb = enable_members && members ?
-          members.map { |_| contestant_pb(_, detail: member_detail) } : nil
 
         Proto::Resources::Team.new(
           id: team[:id],
@@ -213,64 +216,144 @@ module Xsuportal
         )
       end
 
-      def highest_score(team_id)
-        db.xquery(
-          <<~SQL,
-            SELECT `score`, `marked_at`
-            FROM `benchmark_results` `r`
-              INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
-            WHERE `team_id` = ?
-            ORDER BY `score` DESC LIMIT 1
-          SQL
-          team_id
-        ).first
-      end
-
-      def latest_score(team_id)
-        db.xquery(
-          <<~SQL,
-            SELECT `score`, `marked_at`, `passed`
-            FROM `benchmark_results` `r`
-              INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
-            WHERE `team_id` = ?
-            ORDER BY `r`.`id` DESC LIMIT 1
-          SQL
-          team_id
-        ).first
-      end
-
       def leaderboard_pb
         contest_status = current_contest_status
         frozen = contest_status[:status] == :FROZEN
 
-        teams_with_highscore = db.xquery(
+        # TODO: score freeze したら自分チームのスコア以外は freeze されてるようにする
+        leaderboard = db.query(
           <<~SQL
-            SELECT `t`.*, `h`.`highscore`
+            SELECT
+              `teams`.`id` AS `id`,
+              `teams`.`name` AS `name`,
+              `teams`.`leader_id` AS `leader_id`,
+              `teams`.`final_participation` AS `final_participation`,
+              `teams`.`is_hidden` AS `is_hidden`,
+              `teams`.`withdrawn` AS `withdrawn`,
+              `team_student_flags`.`student` AS `student`,
+              (`best_score_results`.`score_raw` - `best_score_results`.`score_deduction`) AS `best_score`,
+              `best_score_jobs`.`started_at` AS `best_score_started_at`,
+              `best_score_results`.`marked_at` AS `best_score_marked_at`,
+              (`latest_score_results`.`score_raw` - `latest_score_results`.`score_deduction`) AS `latest_score`,
+              `latest_score_jobs`.`started_at` AS `latest_score_started_at`,
+              `latest_score_results`.`marked_at` AS `latest_score_marked_at`
             FROM
-              `teams` `t` LEFT JOIN (
-                SELECT `team_id`, MAX(`score`) AS `highscore`
-                FROM `benchmark_results` `r`
+              `teams`
+              -- latest scores
+              LEFT JOIN (
+                SELECT
+                  MAX(`r`.`id`) AS `result_id`,
+                  `team_id`
+                FROM
+                  `benchmark_results` `r`
                   INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
-                WHERE `r`.`passed` = TRUE
-                GROUP BY `j`.`team_id`
-              ) `h`
-              ON `t`.`id` = `h`.`team_id`
-            ORDER BY `h`.`highscore` DESC
+                GROUP BY
+                  `team_id`
+              ) `latest_result_ids` ON `latest_result_ids`.`team_id` = `teams`.`id`
+              LEFT JOIN `benchmark_results` `latest_score_results` ON `latest_result_ids`.`result_id` = `latest_score_results`.`id`
+              LEFT JOIN `benchmark_jobs` `latest_score_jobs` ON `latest_result_ids`.`result_id` = `latest_score_jobs`.`latest_benchmark_result_id`
+              -- best scores
+              LEFT JOIN (
+                SELECT
+                  `best_scores`.`team_id`,
+                  MAX(`r2`.`id`) AS `result_id`
+                FROM (
+                  SELECT
+                    `team_id`,
+                    MAX(`r`.`score_raw` - `r`.`score_deduction`) AS `score`
+                  FROM
+                    `benchmark_results` `r`
+                    INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
+                  GROUP BY
+                    `team_id`
+                ) `best_scores` LEFT JOIN `benchmark_results` `r2` ON (`r2`.`score_raw` - `r2`.`score_deduction`) = `best_scores`.`score`
+                GROUP BY
+                  `team_id`
+                ORDER BY
+                  `team_id`
+              ) `best_score_result_ids` ON `best_score_result_ids`.`team_id` = `teams`.`id`
+              LEFT JOIN `benchmark_results` `best_score_results` ON `best_score_result_ids`.`result_id` = `best_score_results`.`id`
+              LEFT JOIN `benchmark_jobs` `best_score_jobs` ON `best_score_result_ids`.`result_id` = `best_score_jobs`.`latest_benchmark_result_id`
+              -- check student teams
+              LEFT JOIN (
+                SELECT
+                  `team_id`,
+                  (SUM(`student`) = COUNT(*)) AS `student`
+                FROM
+                  `contestants`
+                GROUP BY
+                  `contestants`.`team_id`
+              ) `team_student_flags` ON `team_student_flags`.`team_id` = `teams`.`id`
+            ORDER BY
+              `latest_score` DESC,
+              `teams`.`id` ASC
           SQL
         )
-        result = {
-          teams: [],
-          general_teams: [],
-          student_teams: [],
-          progresses: [],
+
+        team_graph_scores = {}
+        db.query(
+          <<~SQL
+          SELECT
+            `benchmark_jobs`.`team_id` AS `team_id`,
+            (`benchmark_results`.`score_raw` - `benchmark_results`.`score_deduction`) AS `score`,
+            `benchmark_jobs`.`started_at` AS `started_at`,
+            `benchmark_results`.`marked_at` AS `marked_at`
+          FROM
+            `benchmark_jobs`
+            LEFT JOIN `benchmark_results` ON `benchmark_jobs`.`latest_benchmark_result_id` = `benchmark_results`.`id`
+          WHERE
+            `score` IS NOT NULL
+            AND `started_at` IS NOT NULL
+            AND `marked_at` IS NOT NULL
+          ORDER BY
+            `benchmark_results`.`id`
+          SQL
+        ).each do |result|
+          team_graph_scores[result[:team_id]] ||= []
+          team_graph_scores[result[:team_id]] << Proto::Resources::Leaderboard::LeaderboardItem::LeaderboardScore.new(
+            score: result[:score],
+            started_at: result[:started_at],
+            marked_at: result[:marked_at],
+          )
+        end
+
+        teams = []
+        general_teams = []
+        student_teams = []
+
+        leaderboard.each do |team|
+          item = Proto::Resources::Leaderboard::LeaderboardItem.new(
+            scores: team_graph_scores[team[:id]],
+            best_score: Proto::Resources::Leaderboard::LeaderboardItem::LeaderboardScore.new(
+              score: team[:best_score],
+              started_at: team[:best_score_started_at],
+              marked_at: team[:best_score_marked_at],
+            ),
+            latest_score: Proto::Resources::Leaderboard::LeaderboardItem::LeaderboardScore.new(
+              score: team[:latest_score],
+              started_at: team[:latest_score_started_at],
+              marked_at: team[:latest_score_marked_at],
+            ),
+            team: team_pb(team, enable_members: false),
+          )
+          if team[:student] == 1
+            student_teams << item
+          else
+            general_teams << item
+          end
+          teams << item
+        end
+
+        Proto::Resources::Leaderboard.new(
+          teams: teams,
+          general_teams: general_teams,
+          student_teams: student_teams,
+          progresses: [], # TODO
           frozen: frozen,
           contest_starts_at: contest_status[:contest_starts_at],
           contest_freezes_at: contest_status[:contest_freezes_at],
           contest_ends_at: contest_status[:contest_ends_at],
-        }
-        teams_with_highscore.each do |team|
-          team_pb(team)
-        end
+        )
       end
 
       def decode_request_pb

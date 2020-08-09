@@ -10,9 +10,11 @@ message Leaderboard {
     message LeaderboardScore {
       int64 score = 1;
       google.protobuf.Timestamp started_at = 2;
-      google.protobuf.Timestamp updated_at = 3;
+      google.protobuf.Timestamp marked_at = 3;
     }
     repeated LeaderboardScore scores = 1;
+    LeaderboardScore best_score = 2;
+    LeaderboardScore latest_score = 3;
     Team team = 16;
   }
   repeated LeaderboardItem teams = 1;

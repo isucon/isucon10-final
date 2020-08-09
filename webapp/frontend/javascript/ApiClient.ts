@@ -201,7 +201,19 @@ export class ApiClient {
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async getLeaderboard() {
+  public async getDashboard() {
+    const responseClass = xsuportal.proto.services.contestant.DashboardResponse;
+    const payloadClass = xsuportal.proto.services.contestant.DashboardRequest;
+    const resp = await this.request(
+      `${this.baseUrl}/api/contestant/dashboard`,
+      "GET",
+      null,
+      null
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async getLeaderboard2() {
     return [
       {
         score: 20000,

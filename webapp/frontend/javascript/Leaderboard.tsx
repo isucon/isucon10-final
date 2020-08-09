@@ -11,16 +11,19 @@ type Team = {
 
 interface TeamItemProps {
   rank: number;
-  team: Team;
+  item: xsuportal.proto.resources.Leaderboard.ILeaderboardItem;
 }
 
-const TeamItem: React.FC<TeamItemProps> = ({ rank, team }) => (
+const TeamItem: React.FC<TeamItemProps> = ({ rank, item }) => (
   <tr>
     <th>{rank}</th>
-    <td>{team.score}</td>
-    <td>{team.team.name}</td>
+    <th>id</th>
+    <td>{item.team?.name}</td>
+    <td>{item.bestScore?.score}</td>
+    <td>{item.latestScore?.score}</td>
+    <td>{item.latestScore?.markedAt}</td>
     <td>
-      {team.team.isStudent && (
+      {item.team?.student?.status && (
         <span className="tag is-info is-pulled-right">学生チーム</span>
       )}
     </td>
@@ -31,19 +34,24 @@ type Mode = "all" | "general" | "students";
 
 interface Props {
   client: ApiClient;
+  dashboard: xsuportal.proto.services.contestant.DashboardResponse | null;
 }
 
-export const Leaderboard: React.FC<Props> = ({ client }) => {
+export const Leaderboard: React.FC<Props> = ({ client, dashboard }) => {
   const [mode, setMode] = useState<Mode>("all");
-  const [topTeams, setTopTeams] = useState<Team[]>([]);
+  const [leaderboard, setLeaderboard] = useState<
+    xsuportal.proto.resources.ILeaderboard
+  >();
 
-  useInterval(
-    async () => {
-      setTopTeams(await client.getLeaderboard());
-    },
-    1000,
-    true
-  );
+  // useInterval(
+  //   async () => {
+  //     if (dashboard?.leaderboard) {
+  //       setLeaderboard(dashboard.leaderboard);
+  //     }
+  //   },
+  //   5000,
+  //   true
+  // );
 
   return (
     <>
@@ -70,28 +78,33 @@ export const Leaderboard: React.FC<Props> = ({ client }) => {
         <thead>
           <tr className="has-background-light">
             <th>Rank</th>
-            <th>Score</th>
-            <th>Team</th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Best Score</th>
+            <th>Latest Score</th>
+            <th>Finish Time</th>
             <th>{/* isStudent? */}</th>
           </tr>
         </thead>
         <tbody>
-          {topTeams
-            .filter(({ team }) => {
-              switch (mode) {
-                case "all":
-                  return true;
-                case "general":
-                  return !team.isStudent;
-                case "students":
-                  return team.isStudent;
-                default:
-                  true;
-              }
-            })
-            .map((team, rank) => (
-              <TeamItem team={team} rank={rank} key={rank} />
-            ))}
+          {leaderboard?.teams
+            ? leaderboard.teams
+                .filter(({ team }) => {
+                  switch (mode) {
+                    case "all":
+                      return true;
+                    case "general":
+                      return !team?.student?.status;
+                    case "students":
+                      return team?.student?.status;
+                    default:
+                      true;
+                  }
+                })
+                .map((team, rank) => (
+                  <TeamItem item={team} rank={rank} key={rank} />
+                ))
+            : null}
         </tbody>
       </table>
     </>

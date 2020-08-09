@@ -873,6 +873,9 @@ export namespace xsuportal {
                 /** Team disqualified */
                 disqualified?: (boolean|null);
 
+                /** Team student */
+                student?: (xsuportal.proto.resources.Team.IStudentStatus|null);
+
                 /** Team detail */
                 detail?: (xsuportal.proto.resources.Team.ITeamDetail|null);
 
@@ -915,6 +918,9 @@ export namespace xsuportal {
 
                 /** Team disqualified. */
                 public disqualified: boolean;
+
+                /** Team student. */
+                public student?: (xsuportal.proto.resources.Team.IStudentStatus|null);
 
                 /** Team detail. */
                 public detail?: (xsuportal.proto.resources.Team.ITeamDetail|null);
@@ -997,6 +1003,96 @@ export namespace xsuportal {
             }
 
             namespace Team {
+
+                /** Properties of a StudentStatus. */
+                interface IStudentStatus {
+
+                    /** StudentStatus status */
+                    status?: (boolean|null);
+                }
+
+                /** Represents a StudentStatus. */
+                class StudentStatus implements IStudentStatus {
+
+                    /**
+                     * Constructs a new StudentStatus.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.resources.Team.IStudentStatus);
+
+                    /** StudentStatus status. */
+                    public status: boolean;
+
+                    /**
+                     * Creates a new StudentStatus instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns StudentStatus instance
+                     */
+                    public static create(properties?: xsuportal.proto.resources.Team.IStudentStatus): xsuportal.proto.resources.Team.StudentStatus;
+
+                    /**
+                     * Encodes the specified StudentStatus message. Does not implicitly {@link xsuportal.proto.resources.Team.StudentStatus.verify|verify} messages.
+                     * @param message StudentStatus message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.resources.Team.IStudentStatus, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified StudentStatus message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Team.StudentStatus.verify|verify} messages.
+                     * @param message StudentStatus message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.resources.Team.IStudentStatus, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a StudentStatus message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns StudentStatus
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Team.StudentStatus;
+
+                    /**
+                     * Decodes a StudentStatus message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns StudentStatus
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Team.StudentStatus;
+
+                    /**
+                     * Verifies a StudentStatus message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a StudentStatus message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns StudentStatus
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Team.StudentStatus;
+
+                    /**
+                     * Creates a plain object from a StudentStatus message. Also converts values to other types if specified.
+                     * @param message StudentStatus
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.resources.Team.StudentStatus, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this StudentStatus to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
 
                 /** Properties of a TeamDetail. */
                 interface ITeamDetail {
@@ -1607,6 +1703,12 @@ export namespace xsuportal {
                     /** LeaderboardItem scores */
                     scores?: (xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore[]|null);
 
+                    /** LeaderboardItem bestScore */
+                    bestScore?: (xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null);
+
+                    /** LeaderboardItem latestScore */
+                    latestScore?: (xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null);
+
                     /** LeaderboardItem team */
                     team?: (xsuportal.proto.resources.ITeam|null);
                 }
@@ -1622,6 +1724,12 @@ export namespace xsuportal {
 
                     /** LeaderboardItem scores. */
                     public scores: xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore[];
+
+                    /** LeaderboardItem bestScore. */
+                    public bestScore?: (xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null);
+
+                    /** LeaderboardItem latestScore. */
+                    public latestScore?: (xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null);
 
                     /** LeaderboardItem team. */
                     public team?: (xsuportal.proto.resources.ITeam|null);
@@ -1708,8 +1816,8 @@ export namespace xsuportal {
                         /** LeaderboardScore startedAt */
                         startedAt?: (google.protobuf.ITimestamp|null);
 
-                        /** LeaderboardScore updatedAt */
-                        updatedAt?: (google.protobuf.ITimestamp|null);
+                        /** LeaderboardScore markedAt */
+                        markedAt?: (google.protobuf.ITimestamp|null);
                     }
 
                     /** Represents a LeaderboardScore. */
@@ -1727,8 +1835,8 @@ export namespace xsuportal {
                         /** LeaderboardScore startedAt. */
                         public startedAt?: (google.protobuf.ITimestamp|null);
 
-                        /** LeaderboardScore updatedAt. */
-                        public updatedAt?: (google.protobuf.ITimestamp|null);
+                        /** LeaderboardScore markedAt. */
+                        public markedAt?: (google.protobuf.ITimestamp|null);
 
                         /**
                          * Creates a new LeaderboardScore instance using the specified properties.
