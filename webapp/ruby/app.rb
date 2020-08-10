@@ -178,6 +178,9 @@ module Xsuportal
           ) : nil,
           leader: leader_pb,
           members: members_pb,
+          student: team[:student] ? Proto::Resources::Team::StudentStatus.new(
+            status: team[:student] != 0 && !!team[:student],
+          ) : nil,
         )
       end
 

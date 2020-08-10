@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useInterval from "use-interval";
 import { ApiClient } from "./ApiClient";
 
@@ -14,21 +14,27 @@ interface TeamItemProps {
   item: xsuportal.proto.resources.Leaderboard.ILeaderboardItem;
 }
 
-const TeamItem: React.FC<TeamItemProps> = ({ rank, item }) => (
-  <tr>
-    <th>{rank}</th>
-    <th>id</th>
-    <td>{item.team?.name}</td>
-    <td>{item.bestScore?.score}</td>
-    <td>{item.latestScore?.score}</td>
-    <td>{item.latestScore?.markedAt}</td>
-    <td>
-      {item.team?.student?.status && (
-        <span className="tag is-info is-pulled-right">学生チーム</span>
-      )}
-    </td>
-  </tr>
-);
+const TeamItem: React.FC<TeamItemProps> = ({ rank, item }) => {
+  const latestScoreMarkedAt =
+    item.latestScore?.markedAt?.seconds &&
+    new Date(
+      (item.latestScore.markedAt.seconds as number) * 1000
+    ).toLocaleTimeString();
+  const studentStatus = item.team?.student?.status && (
+    <span className="tag is-info is-pulled-right">学生チーム</span>
+  );
+  return (
+    <tr>
+      <th>{rank + 1}</th>
+      <td>{item.team?.id}</td>
+      <td>{item.team?.name}</td>
+      <td>{item.bestScore?.score}</td>
+      <td>{item.latestScore?.score}</td>
+      <td>{latestScoreMarkedAt}</td>
+      <td>{studentStatus}</td>
+    </tr>
+  );
+};
 
 type Mode = "all" | "general" | "students";
 
@@ -43,15 +49,11 @@ export const Leaderboard: React.FC<Props> = ({ client, dashboard }) => {
     xsuportal.proto.resources.ILeaderboard
   >();
 
-  // useInterval(
-  //   async () => {
-  //     if (dashboard?.leaderboard) {
-  //       setLeaderboard(dashboard.leaderboard);
-  //     }
-  //   },
-  //   5000,
-  //   true
-  // );
+  useEffect(() => {
+    if (dashboard?.leaderboard) {
+      setLeaderboard(dashboard.leaderboard);
+    }
+  }, [dashboard]);
 
   return (
     <>

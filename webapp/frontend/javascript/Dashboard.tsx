@@ -1,4 +1,5 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
+import useInterval from "use-interval";
 
 import { ScoreGraph } from "./ScoreGraph";
 import { Leaderboard } from "./Leaderboard";
@@ -19,10 +20,18 @@ export const Dashboard: React.FC<Props> = ({ client }) => {
     null
   );
   useEffect(() => {
+    if (!dashboard) {
+      (async () => {
+        setDashboard(await client.getDashboard());
+      })();
+    }
+  }, [dashboard]);
+
+  useInterval(() => {
     (async () => {
       setDashboard(await client.getDashboard());
     })();
-  }, [client]);
+  }, 5000);
 
   return (
     <div className="container">
