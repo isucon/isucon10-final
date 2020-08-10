@@ -3,6 +3,7 @@ package story
 import (
 	"bytes"
 	"fmt"
+	"github.com/isucon/isucon10-final/benchmarker/failure"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/rs/zerolog"
 )
@@ -15,6 +16,7 @@ type Story struct {
 
 	Admin *model.Contestant
 
+	errors       *failure.Errors
 	stdout       *bytes.Buffer
 	stdoutLogger zerolog.Logger
 	stderr       *bytes.Buffer
@@ -33,12 +35,15 @@ func NewStory(targetHostName string) (*Story, error) {
 	stderr := bytes.NewBuffer([]byte{})
 	stderrLogger := zerolog.New(stderr).With().Timestamp().Logger()
 
+	errors := failure.NewErrors()
+
 	return &Story{
 		targetHostName: targetHostName,
 		targetBaseURL:  fmt.Sprintf("http://%s", targetHostName),
 		grpcHostName:   fmt.Sprintf("%s:50051", targetHostName),
 		contest:        model.NewContest(),
 		Admin:          admin,
+		errors:         errors,
 		stdout:         stdout,
 		stdoutLogger:   stdoutLogger,
 		stderr:         stderr,

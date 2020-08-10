@@ -5,6 +5,7 @@ import (
 	"compress/flate"
 	"compress/gzip"
 	"context"
+	"fmt"
 	"github.com/andybalholm/brotli"
 	"github.com/golang/protobuf/proto"
 	"github.com/isucon/isucon10-final/benchmarker/failure"
@@ -66,9 +67,9 @@ func (s *Browser) Do(ctx context.Context, req *http.Request) (*http.Response, er
 	if err != nil {
 		if nerr, ok := err.(net.Error); ok {
 			if nerr.Timeout() {
-				return nil, failure.Translate(err, failure.ErrTimeout)
+				return nil, failure.New(failure.ErrTimeout, fmt.Sprintf("%s: %s", req.Method, req.URL.String()))
 			} else if nerr.Temporary() {
-				return nil, failure.Translate(err, failure.ErrTemporary)
+				return nil, failure.New(failure.ErrTemporary, fmt.Sprintf("%s: %s", req.Method, req.URL.String()))
 			}
 		}
 

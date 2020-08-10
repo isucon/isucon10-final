@@ -29,7 +29,7 @@ func NewContestant() (*Contestant, error) {
 		ID:        random.Alphabet(CONTESTANT_ID_LENGTH),
 		Password:  random.Alphabet(CONTESTANT_PASSWORD_LENGTH),
 		Name:      "",
-		IsStudent: false,
+		IsStudent: random.Pecentage(1, 10),
 		CookieJar: jar,
 	}, nil
 }

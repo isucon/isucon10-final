@@ -13,7 +13,7 @@ build: bin/benchmarker ## Build benchmarker
 
 .PHONY: test
 test: go.mod $(GOPROTOFILES) $(GOFILES)
-	go test -count=1 github.com/isucon/isucon10-final/benchmarker/story
+	go test -count=1 -v github.com/isucon/isucon10-final/benchmarker/story
 
 .PHONY: clean
 clean: ## Cleanup working directory

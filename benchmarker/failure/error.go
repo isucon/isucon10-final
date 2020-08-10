@@ -14,7 +14,7 @@ const (
 	ErrTemporary   failure.StringCode = "Temporary Error"
 )
 
-type Error struct {
+type Errors struct {
 	Messages []string
 
 	critical    int
@@ -24,10 +24,10 @@ type Error struct {
 	mu sync.Mutex
 }
 
-func New() *Error {
+func NewErrors() *Errors {
 	messages := make([]string, 0, 100)
 
-	return &Error{
+	return &Errors{
 		Messages:    messages,
 		critical:    0,
 		application: 0,
@@ -36,21 +36,28 @@ func New() *Error {
 	}
 }
 
-func (e *Error) GetMessages() (msgs []string) {
+func (e *Errors) GetMessages() (msgs []string) {
 	e.mu.Lock()
 	defer e.mu.Unlock()
 
 	return e.Messages[:]
 }
 
-func (e *Error) Get() (msgs []string, critical, application, trivial int) {
+func (e *Errors) Len() int {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+
+	return e.critical + e.application + e.trivial
+}
+
+func (e *Errors) Get() (msgs []string, critical, application, trivial int) {
 	e.mu.Lock()
 	defer e.mu.Unlock()
 
 	return e.Messages[:], e.critical, e.application, e.trivial
 }
 
-func (e *Error) Add(err error) {
+func (e *Errors) Add(err error) {
 	if err == nil {
 		return
 	}
@@ -58,8 +65,8 @@ func (e *Error) Add(err error) {
 	e.mu.Lock()
 	defer e.mu.Unlock()
 
-	msg, ok := failure.MessageOf(err)
-	code, _ := failure.CodeOf(err)
+	code, ok := failure.CodeOf(err)
+	msg, _ := failure.MessageOf(err)
 
 	if ok {
 		switch code {
@@ -85,6 +92,10 @@ func (e *Error) Add(err error) {
 	}
 }
 
+func New(code failure.Code, message string) error {
+	return failure.New(code, failure.Message(message))
+}
+
 func Translate(err error, code failure.StringCode) error {
-	return failure.Translate(err, code)
+	return failure.Custom(err, failure.WithCode(code), failure.WithFormatter(), failure.WithCallStackSkip(1))
 }

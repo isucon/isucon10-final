@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestPrologue(t *testing.T) {
+func TestMain(t *testing.T) {
 	story, err := NewStory("localhost:9292")
 	if err != nil {
 		t.Fatal(err)
@@ -13,7 +13,7 @@ func TestPrologue(t *testing.T) {
 
 	ctx := context.Background()
 
-	err = story.Prologue(ctx)
+	err = story.Main(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
