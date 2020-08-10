@@ -1,6 +1,7 @@
 package failure
 
 import (
+	"context"
 	"github.com/morikuni/failure"
 	"sync"
 )
@@ -59,6 +60,10 @@ func (e *Errors) Get() (msgs []string, critical, application, trivial int) {
 
 func (e *Errors) Add(err error) {
 	if err == nil {
+		return
+	}
+
+	if err == context.Canceled {
 		return
 	}
 

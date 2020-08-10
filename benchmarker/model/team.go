@@ -47,11 +47,13 @@ func NewTeam() (*Team, error) {
 	hosts := []*Host{{}, {}, {}}
 
 	return &Team{
-		Hosts:     hosts,
-		IsStudent: isStudent,
-		Leader:    leader,
-		Developer: developer,
-		Operator:  operator,
+		TeamName:     random.Alphabet(20),
+		EmailAddress: random.Alphabet(16) + "@example.com",
+		Hosts:        hosts,
+		IsStudent:    isStudent,
+		Leader:       leader,
+		Developer:    developer,
+		Operator:     operator,
 	}, nil
 }
 
