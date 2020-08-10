@@ -17,4 +17,6 @@ func TestPrologue(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	t.Log(story.stdout.String())
 }

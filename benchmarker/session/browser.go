@@ -52,9 +52,11 @@ func NewBrowser(base string) (*Browser, error) {
 	return s, nil
 }
 
-func (s *Browser) Do(req *http.Request) (*http.Response, error) {
+func (s *Browser) Do(ctx context.Context, req *http.Request) (*http.Response, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
+
+	req = req.WithContext(ctx)
 
 	if s.Contestant != nil {
 		s.httpClient.Jar = s.Contestant.CookieJar
@@ -154,31 +156,31 @@ func (s *Browser) NewPostRequest(rpath string, contentType string, body io.Reade
 	return req, nil
 }
 
-func (s *Browser) Get(rpath string) (*http.Response, error) {
+func (s *Browser) Get(ctx context.Context, rpath string) (*http.Response, error) {
 	req, err := s.NewGetRequest(rpath)
 	if err != nil {
 		return nil, err
 	}
 
-	return s.Do(req)
+	return s.Do(ctx, req)
 }
 
-func (s *Browser) GetWithQuery(rpath string, q url.Values) (*http.Response, error) {
+func (s *Browser) GetWithQuery(ctx context.Context, rpath string, q url.Values) (*http.Response, error) {
 	req, err := s.NewGetRequestWithQuery(rpath, q)
 	if err != nil {
 		return nil, err
 	}
 
-	return s.Do(req)
+	return s.Do(ctx, req)
 }
 
-func (s *Browser) Post(rpath string, contentType string, body io.Reader) (*http.Response, error) {
+func (s *Browser) Post(ctx context.Context, rpath string, contentType string, body io.Reader) (*http.Response, error) {
 	req, err := s.NewPostRequest(rpath, contentType, body)
 	if err != nil {
 		return nil, err
 	}
 
-	return s.Do(req)
+	return s.Do(ctx, req)
 }
 
 type bReader struct {
@@ -221,10 +223,9 @@ func (s *Browser) GRPC(ctx context.Context, method string, rpath string, msg pro
 		return nil, err
 	}
 
-	httpreq.WithContext(ctx)
 	httpreq.Header.Set("Content-Type", "application/vnd.google.protobuf")
 
-	httpres, err := s.Do(httpreq)
+	httpres, err := s.Do(ctx, httpreq)
 	if err != nil {
 		return nil, err
 	}

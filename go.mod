@@ -4,11 +4,13 @@ go 1.14
 
 require (
 	github.com/andybalholm/brotli v1.0.0
-	github.com/golang/mock v1.1.1
+	github.com/golang/mock v1.2.0
 	github.com/golang/protobuf v1.4.2
 	github.com/morikuni/failure v0.13.0
 	github.com/mvdan/xurls v1.1.0 // indirect
+	github.com/rs/zerolog v1.19.0
 	golang.org/x/mod v0.3.0 // indirect
+	golang.org/x/net/http2/h2demo v0.0.0-20200707034311-ab3426394381 // indirect
 	golang.org/x/text v0.3.3 // indirect
 	golang.org/x/tools/gopls v0.4.4 // indirect
 	google.golang.org/genproto v0.0.0-20200806141610-86f49bd18e98 // indirect
