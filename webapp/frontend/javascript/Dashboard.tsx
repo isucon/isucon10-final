@@ -42,7 +42,7 @@ export const Dashboard: React.FC<Props> = ({ client }) => {
         <div className="column is-7 px-5">
           <section className="py-5">
             <p className="title"> Leader Board </p>
-            <Leaderboard client={client} dashboard={dashboard} />
+            <Leaderboard leaderboard={dashboard?.leaderboard} />
           </section>
         </div>
         <div className="column is-5 px-5">

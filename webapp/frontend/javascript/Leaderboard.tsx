@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
-import useInterval from "use-interval";
-import { ApiClient } from "./ApiClient";
 
 import type { xsuportal } from "./pb";
-
-type Team = {
-  score: number;
-  team: xsuportal.proto.services.audience.ListTeamsResponse.ITeamListItem;
-};
 
 interface TeamItemProps {
   rank: number;
@@ -39,21 +32,11 @@ const TeamItem: React.FC<TeamItemProps> = ({ rank, item }) => {
 type Mode = "all" | "general" | "students";
 
 interface Props {
-  client: ApiClient;
-  dashboard: xsuportal.proto.services.contestant.DashboardResponse | null;
+  leaderboard: xsuportal.proto.resources.ILeaderboard | undefined | null;
 }
 
-export const Leaderboard: React.FC<Props> = ({ client, dashboard }) => {
+export const Leaderboard: React.FC<Props> = ({ leaderboard }) => {
   const [mode, setMode] = useState<Mode>("all");
-  const [leaderboard, setLeaderboard] = useState<
-    xsuportal.proto.resources.ILeaderboard
-  >();
-
-  useEffect(() => {
-    if (dashboard?.leaderboard) {
-      setLeaderboard(dashboard.leaderboard);
-    }
-  }, [dashboard]);
 
   return (
     <>
