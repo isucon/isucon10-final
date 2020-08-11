@@ -1,7 +1,9 @@
 package model
 
 import (
+	"fmt"
 	"github.com/isucon/isucon10-final/benchmarker/random"
+	"github.com/isucon/isucon10-final/proto/xsuportal/services/contestant"
 )
 
 type Team struct {
@@ -15,6 +17,8 @@ type Team struct {
 	Leader    *Contestant
 	Developer *Contestant
 	Operator  *Contestant
+
+	LatestEnqueuedBenchmarkJob *contestant.EnqueueBenchmarkJobResponse
 }
 
 func NewTeam() (*Team, error) {
@@ -54,9 +58,15 @@ func NewTeam() (*Team, error) {
 		Leader:       leader,
 		Developer:    developer,
 		Operator:     operator,
+
+		LatestEnqueuedBenchmarkJob: nil,
 	}, nil
 }
 
 func (t *Team) TargetHost() string {
+	if t.ID != 0 {
+		return fmt.Sprintf("xsu-contestant-%05d", t.ID)
+	}
+
 	return t.Hosts[0].Name
 }

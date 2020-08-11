@@ -2,6 +2,7 @@ package failure
 
 import (
 	"context"
+	"fmt"
 	"github.com/morikuni/failure"
 	"sync"
 )
@@ -93,6 +94,7 @@ func (e *Errors) Add(err error) {
 		e.Messages = append(e.Messages, msg)
 	} else {
 		e.critical++
+		fmt.Printf("%+v\n", err)
 		e.Messages = append(e.Messages, ILLEGAL_ERROR)
 	}
 }

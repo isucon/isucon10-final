@@ -6,7 +6,7 @@ import (
 )
 
 func TestMain(t *testing.T) {
-	story, err := NewStory("localhost:9292")
+	story, err := NewStory("127.0.0.1:9292")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -19,5 +19,6 @@ func TestMain(t *testing.T) {
 	}
 
 	t.Log(story.stdout.String())
+	t.Log(story.errors.GetMessages())
 	t.Log(story.errors.GetMessages())
 }

@@ -18,13 +18,14 @@ type Story struct {
 
 	Admin *model.Contestant
 
-	lock         *sync.Mutex
-	errors       *failure.Errors
-	stdout       *bytes.Buffer
-	stdoutLogger zerolog.Logger
-	stderr       *bytes.Buffer
-	stderrLogger zerolog.Logger
-	browserPool  *sync.Pool
+	lock          *sync.Mutex
+	errors        *failure.Errors
+	stdout        *bytes.Buffer
+	stdoutLogger  zerolog.Logger
+	stderr        *bytes.Buffer
+	stderrLogger  zerolog.Logger
+	browserPool   *sync.Pool
+	benchmarkPool *sync.Pool
 }
 
 func NewStory(targetHostName string) (*Story, error) {
@@ -42,6 +43,7 @@ func NewStory(targetHostName string) (*Story, error) {
 	errors := failure.NewErrors()
 
 	targetBaseURL := fmt.Sprintf("http://%s", targetHostName)
+	contest := model.NewContest()
 
 	browserPool := &sync.Pool{
 		New: func() interface{} {
@@ -53,11 +55,21 @@ func NewStory(targetHostName string) (*Story, error) {
 		},
 	}
 
+	benchmarkPool := &sync.Pool{
+		New: func() interface{} {
+			benchmarker, err := session.NewBenchmarker(nil, contest.GRPCHost, contest.GRPCPort)
+			if err != nil {
+				errors.Add(failure.New(failure.ErrCritical, "ベンチマーカーの生成に失敗しました"))
+			}
+			return benchmarker
+		},
+	}
+
 	return &Story{
 		targetHostName: targetHostName,
 		targetBaseURL:  targetBaseURL,
 		grpcHostName:   fmt.Sprintf("%s:50051", targetHostName),
-		contest:        model.NewContest(),
+		contest:        contest,
 		Admin:          admin,
 		lock:           &sync.Mutex{},
 		errors:         errors,
@@ -66,6 +78,7 @@ func NewStory(targetHostName string) (*Story, error) {
 		stderr:         stderr,
 		stderrLogger:   stderrLogger,
 		browserPool:    browserPool,
+		benchmarkPool:  benchmarkPool,
 	}, nil
 }
 

@@ -8,7 +8,6 @@ import (
 	"github.com/isucon/isucon10-final/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/proto/xsuportal/services/bench"
 	"google.golang.org/grpc"
-	"time"
 )
 
 type Benchmarker struct {
@@ -36,9 +35,11 @@ func NewBenchmarker(team *model.Team, host string, port int64) (*Benchmarker, er
 }
 
 func (b *Benchmarker) Do(ctx context.Context) error {
-	jobResponse, err := b.queueClinet.ReceiveBenchmarkJob(ctx, &bench.ReceiveBenchmarkJobRequest{
-		TeamId: b.Team.ID,
-	})
+	req := &bench.ReceiveBenchmarkJobRequest{}
+	if b.Team != nil {
+		req.TeamId = b.Team.ID
+	}
+	jobResponse, err := b.queueClinet.ReceiveBenchmarkJob(ctx, req)
 
 	if err != nil {
 		return err
@@ -76,8 +77,6 @@ func (b *Benchmarker) Do(ctx context.Context) error {
 	if reportResponse.AckedNonce != 1 {
 		return errors.New("Invalid Nonce")
 	}
-
-	time.Sleep(1 * time.Second)
 
 	reporter.Send(&bench.ReportBenchmarkResultRequest{
 		JobId: jobHandle.GetJobId(),

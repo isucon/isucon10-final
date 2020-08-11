@@ -16,6 +16,22 @@ func (s *Story) Main(ctx context.Context) error {
 	s.initialize(ctx)
 	s.registration(ctx)
 
+	// s.makeBenchmarkers(ctx)
+
+	now := time.Now()
+	startTimer := time.After(s.contest.ContestStartsAt.Sub(now))
+	<-startTimer
+
+	go s.executeBenchmarkers(ctx)
+	go func() {
+		for {
+			s.enqueueBenchmark(ctx)
+			<-time.After(5 * time.Second)
+		}
+	}()
+
+	<-time.After(30 * time.Second)
+
 	return ctx.Err()
 }
 
@@ -48,6 +64,8 @@ func (s *Story) initialize(ctx context.Context) error {
 
 		benchmarkServer := init.GetBenchmarkServer()
 		s.grpcHostName = fmt.Sprintf("%s:%d", benchmarkServer.GetHost(), benchmarkServer.GetPort())
+		s.contest.GRPCHost = benchmarkServer.GetHost()
+		s.contest.GRPCPort = benchmarkServer.GetPort()
 		s.stdoutLogger.Debug().
 			Str("language", init.GetLanguage()).
 			Str("grpcServerHost", s.grpcHostName).
@@ -246,4 +264,76 @@ func (s *Story) joinTeam(ctx context.Context, inviteToken string, team *model.Te
 	}
 
 	return nil
+}
+
+func (s *Story) makeBenchmarkers(ctx context.Context) error {
+	for _, team := range s.contest.Teams {
+		bench, err := session.NewBenchmarker(team, s.contest.GRPCHost, s.contest.GRPCPort)
+		if err != nil {
+			return err
+		}
+		s.benchmarkPool.Put(bench)
+	}
+	return nil
+}
+
+func (s *Story) enqueueBenchmark(ctx context.Context) error {
+	wg := &sync.WaitGroup{}
+	parallelism := make(chan bool, 10)
+
+	for _, team := range s.contest.Teams {
+		wg.Add(1)
+		parallelism <- true
+		go func(team *model.Team) {
+			defer wg.Done()
+			defer func() { <-parallelism }()
+
+			if team.LatestEnqueuedBenchmarkJob != nil {
+				return
+			}
+
+			browser := s.browserPool.Get().(*session.Browser)
+			defer s.browserPool.Put(browser)
+
+			browser.Contestant = team.Developer
+
+			job, xerr, err := browser.EnqueueBenchmarkJob(ctx, team)
+			if xerr != nil {
+				err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+			}
+			if err != nil {
+				s.errors.Add(err)
+				return
+			}
+
+			team.LatestEnqueuedBenchmarkJob = job
+		}(team)
+	}
+
+	wg.Wait()
+
+	return nil
+}
+
+func (s *Story) executeBenchmarkers(ctx context.Context) {
+	now := time.Now()
+	endTimer := time.After(s.contest.ContestEndsAt.Sub(now))
+	execute := true
+	parallelism := make(chan bool, 20)
+
+	go func() {
+		for execute {
+			benchmarker := s.benchmarkPool.Get().(*session.Benchmarker)
+			parallelism <- true
+			go func() {
+				defer s.benchmarkPool.Put(benchmarker)
+				defer func() { <-parallelism }()
+				benchmarker.Do(ctx)
+			}()
+			<-time.After(1 * time.Millisecond)
+		}
+	}()
+
+	<-endTimer
+	execute = false
 }
