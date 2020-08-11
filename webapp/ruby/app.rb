@@ -289,7 +289,7 @@ module Xsuportal
         halt code, Proto::Error.encode(Proto::Error.new(
           code: code,
           name: exception ? exception.class.name : nil,
-          human_message: exception ? exception.message : nil,
+          human_message: human_message,
           human_descriptions: exception ? exception.full_message(highlight: false, order: :top).split("\n") : [human_message],
         ))
       end
