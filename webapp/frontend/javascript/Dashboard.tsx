@@ -52,7 +52,7 @@ export const Dashboard: React.FC<Props> = ({ client }) => {
           </section>
           <section className="py-5">
             <p className="title"> Job List </p>
-            <JobList client={client} />
+            <JobList jobs={dashboard?.jobs} />
           </section>
         </div>
       </div>

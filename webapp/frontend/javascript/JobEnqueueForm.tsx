@@ -8,7 +8,7 @@ interface Props {
 export const JobEnqueueForm: React.FC<Props> = ({ client }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClick = useCallback(() => {
-    client.enqueueBenchmarkJob();
+    client.enqueueBenchmarkJob({ targetHostname: inputRef.current?.innerText });
   }, [!inputRef]);
 
   return (
@@ -17,7 +17,7 @@ export const JobEnqueueForm: React.FC<Props> = ({ client }) => {
         <input
           className="input"
           type="text"
-          placeholder="IP Address"
+          placeholder="Target Hostname"
           ref={inputRef}
         />
       </div>
