@@ -36,7 +36,7 @@ export const Dashboard: React.FC<Props> = ({ client }) => {
   return (
     <div className="container">
       <section className="is-fullwidth px-5 py-5">
-        <ScoreGraph client={client} />
+        <ScoreGraph teams={dashboard?.leaderboard?.teams} />
       </section>
       <div className="columns">
         <div className="column is-7 px-5">

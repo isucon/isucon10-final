@@ -1,22 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ResponsiveLine } from "@nivo/line";
 import { BasicTooltip } from "@nivo/tooltip";
-import useInterval from "use-interval";
+import dayjs from "dayjs";
 
 import type { PointTooltipProps, Serie } from "@nivo/line";
-import { ApiClient } from "./ApiClient";
-
-const getRandomSeries = () =>
-  [...new Array(5)].map(() => {
-    let x = 0;
-    return {
-      id: Math.random().toString(32).substring(2),
-      data: [...new Array(10)].map(() => {
-        x += ~~(Math.random() * 100);
-        return { x, y: ~~(Math.random() * 2000) };
-      }),
-    };
-  });
+import { xsuportal } from "./pb";
 
 const ToolTip = React.memo<PointTooltipProps>(({ point }) => (
   <BasicTooltip
@@ -28,6 +16,9 @@ const ToolTip = React.memo<PointTooltipProps>(({ point }) => (
         <p>
           <strong>Score:</strong> {point.data.yFormatted}
         </p>
+        <p>
+          <strong>Marked At:</strong> {point.data.xFormatted}
+        </p>
       </div>
     }
     enableChip={false}
@@ -36,31 +27,52 @@ const ToolTip = React.memo<PointTooltipProps>(({ point }) => (
 ));
 
 interface Props {
-  client: ApiClient;
+  teams:
+    | xsuportal.proto.resources.Leaderboard.ILeaderboardItem[]
+    | undefined
+    | null;
 }
 
-export const ScoreGraph: React.FC<Props> = ({ client }) => {
+export const ScoreGraph: React.FC<Props> = ({ teams }) => {
   const [series, setSeries] = useState<Serie[]>([]);
 
-  useInterval(
-    async () => {
-      setSeries(getRandomSeries());
-    },
-    1000,
-    true
-  );
+  useEffect(() => {
+    if (teams) {
+      setSeries(
+        teams.map((team) => {
+          return {
+            id: team.team?.name || "",
+            data:
+              team.scores?.map((score) => {
+                const time = dayjs(
+                  (score.markedAt?.seconds as number) * 1000
+                ).format("HH:mm:ss");
+                return {
+                  x: time,
+                  y: score.score as number,
+                };
+              }) || [],
+          };
+        })
+      );
+    }
+  }, [teams]);
 
   return (
     <div className="is-fullwidth" style={{ height: 480 }}>
       <ResponsiveLine
         data={series}
         margin={{ top: 10, right: 100, bottom: 55, left: 55 }}
-        xScale={{ type: "linear" }}
+        xScale={{
+          type: "time",
+          format: "%H:%M:%S",
+          useUTC: false,
+          precision: "second",
+        }}
+        xFormat="time:%H:%M:%S"
         yScale={{ type: "linear" }}
         axisBottom={{
-          orient: "bottom",
-          tickSize: 5,
-          tickRotation: 0,
+          format: "%H:%M:%S",
           legend: "Time",
           legendOffset: 50,
           legendPosition: "middle",
