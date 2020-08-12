@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/isucon/isucon10-final/benchmarker/model"
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/admin"
 	"github.com/isucon/isucon10-final/benchmarker/session"
-	"github.com/isucon/isucon10-final/proto/xsuportal/services/admin"
 	"net/url"
 	"sync"
 	"time"
@@ -128,54 +128,4 @@ func Do(contest *model.Contest, init *admin.InitializeResponse) {
 	}
 	fmt.Printf("%s\n", xerr.String())
 	fmt.Printf("%s\n", updateC.String())
-
-	enqueue, xerr, err := s.EnqueueBenchmarkJob(ctx, team)
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
-	}
-	fmt.Printf("%s\n", xerr.String())
-	fmt.Printf("%s\n", enqueue.String())
-
-	list, xerr, err := s.ListBenchmarkJobs(ctx)
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
-	}
-	fmt.Printf("%s\n", xerr.String())
-	fmt.Printf("%s\n", list.String())
-
-	if len(list.GetJobs()) == 0 {
-		return
-	}
-
-	jobId := list.GetJobs()[0].GetId()
-
-	job, xerr, err := s.GetBenchmarkJob(ctx, jobId)
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
-	}
-	fmt.Printf("%s\n", xerr.String())
-	fmt.Printf("%s\n", job.String())
-
-	benchmarker, err := session.NewBenchmarker(team, init.GetBenchmarkServer().GetHost(), init.GetBenchmarkServer().GetPort())
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
-	}
-
-	err = benchmarker.Do(ctx)
-	if err != nil {
-		panic(err)
-		fmt.Printf("%+v", err)
-		return
-	}
-
-	logout, xerr, err := s.LogoutAction(ctx)
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
-	}
-	fmt.Printf("%s\n", logout.String())
 }

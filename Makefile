@@ -1,6 +1,6 @@
 GOFILES=$(shell find . -name *.go)
-PROTOFILES=$(shell find ./proto -name *.proto)
-GOPROTOFILES=$(PROTOFILES:%.proto=%.pb.go)
+PROTOFILES=$(shell find proto -name *.proto)
+GOPROTOFILES=$(addprefix benchmarker/,$(PROTOFILES:%.proto=%.pb.go))
 
 .PHONY: all
 all: setup build ## Execute all tasks
@@ -31,5 +31,5 @@ go.sum: go.mod
 bin/benchmarker: go.mod $(GOFILES) $(GOPROTOFILES)
 	go build -o bin/benchmarker -v ./benchmarker
 
-%.pb.go: %.proto
-	protoc  --go_out=plugins=grpc:./proto --go_opt=paths=source_relative -I ./proto $<
+$(GOPROTOFILES): $(PROTOFILES)
+	protoc  --go_out=plugins=grpc:./benchmarker/proto --go_opt=paths=source_relative -I ./proto $(PROTOFILES)

@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/random"
-	"github.com/isucon/isucon10-final/proto/xsuportal/resources"
-	"github.com/isucon/isucon10-final/proto/xsuportal/services/bench"
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench"
 	"google.golang.org/grpc"
 )
 

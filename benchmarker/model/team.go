@@ -3,7 +3,7 @@ package model
 import (
 	"fmt"
 	"github.com/isucon/isucon10-final/benchmarker/random"
-	"github.com/isucon/isucon10-final/proto/xsuportal/services/contestant"
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"sync"
 )
 

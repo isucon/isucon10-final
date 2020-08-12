@@ -1,6 +1,6 @@
 syntax = "proto3";
 package xsuportal.proto.resources;
-option go_package = "github.com/isucon/isucon10-final/proto/xsuportal/resources";
+option go_package = "github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources";
 
 import "xsuportal/resources/team.proto";
 import "google/protobuf/timestamp.proto";
