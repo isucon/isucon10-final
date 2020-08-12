@@ -2329,6 +2329,7 @@ $root.xsuportal = (function() {
                  * @property {boolean|null} [hidden] Team hidden
                  * @property {boolean|null} [withdrawn] Team withdrawn
                  * @property {boolean|null} [disqualified] Team disqualified
+                 * @property {xsuportal.proto.resources.Team.IStudentStatus|null} [student] Team student
                  * @property {xsuportal.proto.resources.Team.ITeamDetail|null} [detail] Team detail
                  * @property {xsuportal.proto.resources.IContestant|null} [leader] Team leader
                  * @property {Array.<xsuportal.proto.resources.IContestant>|null} [members] Team members
@@ -2416,6 +2417,14 @@ $root.xsuportal = (function() {
                 Team.prototype.disqualified = false;
 
                 /**
+                 * Team student.
+                 * @member {xsuportal.proto.resources.Team.IStudentStatus|null|undefined} student
+                 * @memberof xsuportal.proto.resources.Team
+                 * @instance
+                 */
+                Team.prototype.student = null;
+
+                /**
                  * Team detail.
                  * @member {xsuportal.proto.resources.Team.ITeamDetail|null|undefined} detail
                  * @memberof xsuportal.proto.resources.Team
@@ -2482,6 +2491,8 @@ $root.xsuportal = (function() {
                         $root.xsuportal.proto.resources.Team.TeamDetail.encode(message.detail, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
                     if (message.disqualified != null && Object.hasOwnProperty.call(message, "disqualified"))
                         writer.uint32(/* id 9, wireType 0 =*/72).bool(message.disqualified);
+                    if (message.student != null && Object.hasOwnProperty.call(message, "student"))
+                        $root.xsuportal.proto.resources.Team.StudentStatus.encode(message.student, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
                     if (message.leader != null && Object.hasOwnProperty.call(message, "leader"))
                         $root.xsuportal.proto.resources.Contestant.encode(message.leader, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                     if (message.members != null && message.members.length)
@@ -2546,6 +2557,9 @@ $root.xsuportal = (function() {
                             break;
                         case 9:
                             message.disqualified = reader.bool();
+                            break;
+                        case 10:
+                            message.student = $root.xsuportal.proto.resources.Team.StudentStatus.decode(reader, reader.uint32());
                             break;
                         case 8:
                             message.detail = $root.xsuportal.proto.resources.Team.TeamDetail.decode(reader, reader.uint32());
@@ -2621,6 +2635,11 @@ $root.xsuportal = (function() {
                     if (message.disqualified != null && message.hasOwnProperty("disqualified"))
                         if (typeof message.disqualified !== "boolean")
                             return "disqualified: boolean expected";
+                    if (message.student != null && message.hasOwnProperty("student")) {
+                        var error = $root.xsuportal.proto.resources.Team.StudentStatus.verify(message.student);
+                        if (error)
+                            return "student." + error;
+                    }
                     if (message.detail != null && message.hasOwnProperty("detail")) {
                         var error = $root.xsuportal.proto.resources.Team.TeamDetail.verify(message.detail);
                         if (error)
@@ -2683,6 +2702,11 @@ $root.xsuportal = (function() {
                         message.withdrawn = Boolean(object.withdrawn);
                     if (object.disqualified != null)
                         message.disqualified = Boolean(object.disqualified);
+                    if (object.student != null) {
+                        if (typeof object.student !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Team.student: object expected");
+                        message.student = $root.xsuportal.proto.resources.Team.StudentStatus.fromObject(object.student);
+                    }
                     if (object.detail != null) {
                         if (typeof object.detail !== "object")
                             throw TypeError(".xsuportal.proto.resources.Team.detail: object expected");
@@ -2736,6 +2760,7 @@ $root.xsuportal = (function() {
                         object.withdrawn = false;
                         object.detail = null;
                         object.disqualified = false;
+                        object.student = null;
                         object.leader = null;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -2762,6 +2787,8 @@ $root.xsuportal = (function() {
                         object.detail = $root.xsuportal.proto.resources.Team.TeamDetail.toObject(message.detail, options);
                     if (message.disqualified != null && message.hasOwnProperty("disqualified"))
                         object.disqualified = message.disqualified;
+                    if (message.student != null && message.hasOwnProperty("student"))
+                        object.student = $root.xsuportal.proto.resources.Team.StudentStatus.toObject(message.student, options);
                     if (message.leader != null && message.hasOwnProperty("leader"))
                         object.leader = $root.xsuportal.proto.resources.Contestant.toObject(message.leader, options);
                     if (message.members && message.members.length) {
@@ -2782,6 +2809,193 @@ $root.xsuportal = (function() {
                 Team.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
+
+                Team.StudentStatus = (function() {
+
+                    /**
+                     * Properties of a StudentStatus.
+                     * @memberof xsuportal.proto.resources.Team
+                     * @interface IStudentStatus
+                     * @property {boolean|null} [status] StudentStatus status
+                     */
+
+                    /**
+                     * Constructs a new StudentStatus.
+                     * @memberof xsuportal.proto.resources.Team
+                     * @classdesc Represents a StudentStatus.
+                     * @implements IStudentStatus
+                     * @constructor
+                     * @param {xsuportal.proto.resources.Team.IStudentStatus=} [properties] Properties to set
+                     */
+                    function StudentStatus(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * StudentStatus status.
+                     * @member {boolean} status
+                     * @memberof xsuportal.proto.resources.Team.StudentStatus
+                     * @instance
+                     */
+                    StudentStatus.prototype.status = false;
+
+                    /**
+                     * Creates a new StudentStatus instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.resources.Team.StudentStatus
+                     * @static
+                     * @param {xsuportal.proto.resources.Team.IStudentStatus=} [properties] Properties to set
+                     * @returns {xsuportal.proto.resources.Team.StudentStatus} StudentStatus instance
+                     */
+                    StudentStatus.create = function create(properties) {
+                        return new StudentStatus(properties);
+                    };
+
+                    /**
+                     * Encodes the specified StudentStatus message. Does not implicitly {@link xsuportal.proto.resources.Team.StudentStatus.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.resources.Team.StudentStatus
+                     * @static
+                     * @param {xsuportal.proto.resources.Team.IStudentStatus} message StudentStatus message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    StudentStatus.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.status != null && Object.hasOwnProperty.call(message, "status"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).bool(message.status);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified StudentStatus message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Team.StudentStatus.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.resources.Team.StudentStatus
+                     * @static
+                     * @param {xsuportal.proto.resources.Team.IStudentStatus} message StudentStatus message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    StudentStatus.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a StudentStatus message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.resources.Team.StudentStatus
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.resources.Team.StudentStatus} StudentStatus
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    StudentStatus.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Team.StudentStatus();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.status = reader.bool();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a StudentStatus message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.resources.Team.StudentStatus
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.resources.Team.StudentStatus} StudentStatus
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    StudentStatus.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a StudentStatus message.
+                     * @function verify
+                     * @memberof xsuportal.proto.resources.Team.StudentStatus
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    StudentStatus.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            if (typeof message.status !== "boolean")
+                                return "status: boolean expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a StudentStatus message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.resources.Team.StudentStatus
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.resources.Team.StudentStatus} StudentStatus
+                     */
+                    StudentStatus.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.resources.Team.StudentStatus)
+                            return object;
+                        var message = new $root.xsuportal.proto.resources.Team.StudentStatus();
+                        if (object.status != null)
+                            message.status = Boolean(object.status);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a StudentStatus message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.resources.Team.StudentStatus
+                     * @static
+                     * @param {xsuportal.proto.resources.Team.StudentStatus} message StudentStatus
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    StudentStatus.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.status = false;
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = message.status;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this StudentStatus to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.resources.Team.StudentStatus
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    StudentStatus.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return StudentStatus;
+                })();
 
                 Team.TeamDetail = (function() {
 
@@ -4434,6 +4648,8 @@ $root.xsuportal = (function() {
                      * @memberof xsuportal.proto.resources.Leaderboard
                      * @interface ILeaderboardItem
                      * @property {Array.<xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore>|null} [scores] LeaderboardItem scores
+                     * @property {xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null} [bestScore] LeaderboardItem bestScore
+                     * @property {xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null} [latestScore] LeaderboardItem latestScore
                      * @property {xsuportal.proto.resources.ITeam|null} [team] LeaderboardItem team
                      */
 
@@ -4460,6 +4676,22 @@ $root.xsuportal = (function() {
                      * @instance
                      */
                     LeaderboardItem.prototype.scores = $util.emptyArray;
+
+                    /**
+                     * LeaderboardItem bestScore.
+                     * @member {xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null|undefined} bestScore
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @instance
+                     */
+                    LeaderboardItem.prototype.bestScore = null;
+
+                    /**
+                     * LeaderboardItem latestScore.
+                     * @member {xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null|undefined} latestScore
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @instance
+                     */
+                    LeaderboardItem.prototype.latestScore = null;
 
                     /**
                      * LeaderboardItem team.
@@ -4496,6 +4728,10 @@ $root.xsuportal = (function() {
                         if (message.scores != null && message.scores.length)
                             for (var i = 0; i < message.scores.length; ++i)
                                 $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.encode(message.scores[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        if (message.bestScore != null && Object.hasOwnProperty.call(message, "bestScore"))
+                            $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.encode(message.bestScore, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                        if (message.latestScore != null && Object.hasOwnProperty.call(message, "latestScore"))
+                            $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.encode(message.latestScore, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
                         if (message.team != null && Object.hasOwnProperty.call(message, "team"))
                             $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                         return writer;
@@ -4536,6 +4772,12 @@ $root.xsuportal = (function() {
                                 if (!(message.scores && message.scores.length))
                                     message.scores = [];
                                 message.scores.push($root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.decode(reader, reader.uint32()));
+                                break;
+                            case 2:
+                                message.bestScore = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.decode(reader, reader.uint32());
+                                break;
+                            case 3:
+                                message.latestScore = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.decode(reader, reader.uint32());
                                 break;
                             case 16:
                                 message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
@@ -4584,6 +4826,16 @@ $root.xsuportal = (function() {
                                     return "scores." + error;
                             }
                         }
+                        if (message.bestScore != null && message.hasOwnProperty("bestScore")) {
+                            var error = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.verify(message.bestScore);
+                            if (error)
+                                return "bestScore." + error;
+                        }
+                        if (message.latestScore != null && message.hasOwnProperty("latestScore")) {
+                            var error = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.verify(message.latestScore);
+                            if (error)
+                                return "latestScore." + error;
+                        }
                         if (message.team != null && message.hasOwnProperty("team")) {
                             var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                             if (error)
@@ -4614,6 +4866,16 @@ $root.xsuportal = (function() {
                                 message.scores[i] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.fromObject(object.scores[i]);
                             }
                         }
+                        if (object.bestScore != null) {
+                            if (typeof object.bestScore !== "object")
+                                throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.bestScore: object expected");
+                            message.bestScore = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.fromObject(object.bestScore);
+                        }
+                        if (object.latestScore != null) {
+                            if (typeof object.latestScore !== "object")
+                                throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.latestScore: object expected");
+                            message.latestScore = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.fromObject(object.latestScore);
+                        }
                         if (object.team != null) {
                             if (typeof object.team !== "object")
                                 throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.team: object expected");
@@ -4637,13 +4899,20 @@ $root.xsuportal = (function() {
                         var object = {};
                         if (options.arrays || options.defaults)
                             object.scores = [];
-                        if (options.defaults)
+                        if (options.defaults) {
+                            object.bestScore = null;
+                            object.latestScore = null;
                             object.team = null;
+                        }
                         if (message.scores && message.scores.length) {
                             object.scores = [];
                             for (var j = 0; j < message.scores.length; ++j)
                                 object.scores[j] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.toObject(message.scores[j], options);
                         }
+                        if (message.bestScore != null && message.hasOwnProperty("bestScore"))
+                            object.bestScore = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.toObject(message.bestScore, options);
+                        if (message.latestScore != null && message.hasOwnProperty("latestScore"))
+                            object.latestScore = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.toObject(message.latestScore, options);
                         if (message.team != null && message.hasOwnProperty("team"))
                             object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                         return object;
@@ -4668,7 +4937,7 @@ $root.xsuportal = (function() {
                          * @interface ILeaderboardScore
                          * @property {number|Long|null} [score] LeaderboardScore score
                          * @property {google.protobuf.ITimestamp|null} [startedAt] LeaderboardScore startedAt
-                         * @property {google.protobuf.ITimestamp|null} [updatedAt] LeaderboardScore updatedAt
+                         * @property {google.protobuf.ITimestamp|null} [markedAt] LeaderboardScore markedAt
                          */
 
                         /**
@@ -4703,12 +4972,12 @@ $root.xsuportal = (function() {
                         LeaderboardScore.prototype.startedAt = null;
 
                         /**
-                         * LeaderboardScore updatedAt.
-                         * @member {google.protobuf.ITimestamp|null|undefined} updatedAt
+                         * LeaderboardScore markedAt.
+                         * @member {google.protobuf.ITimestamp|null|undefined} markedAt
                          * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore
                          * @instance
                          */
-                        LeaderboardScore.prototype.updatedAt = null;
+                        LeaderboardScore.prototype.markedAt = null;
 
                         /**
                          * Creates a new LeaderboardScore instance using the specified properties.
@@ -4738,8 +5007,8 @@ $root.xsuportal = (function() {
                                 writer.uint32(/* id 1, wireType 0 =*/8).int64(message.score);
                             if (message.startedAt != null && Object.hasOwnProperty.call(message, "startedAt"))
                                 $root.google.protobuf.Timestamp.encode(message.startedAt, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                            if (message.updatedAt != null && Object.hasOwnProperty.call(message, "updatedAt"))
-                                $root.google.protobuf.Timestamp.encode(message.updatedAt, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                            if (message.markedAt != null && Object.hasOwnProperty.call(message, "markedAt"))
+                                $root.google.protobuf.Timestamp.encode(message.markedAt, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
                             return writer;
                         };
 
@@ -4781,7 +5050,7 @@ $root.xsuportal = (function() {
                                     message.startedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                                     break;
                                 case 3:
-                                    message.updatedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                                    message.markedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                                     break;
                                 default:
                                     reader.skipType(tag & 7);
@@ -4826,10 +5095,10 @@ $root.xsuportal = (function() {
                                 if (error)
                                     return "startedAt." + error;
                             }
-                            if (message.updatedAt != null && message.hasOwnProperty("updatedAt")) {
-                                var error = $root.google.protobuf.Timestamp.verify(message.updatedAt);
+                            if (message.markedAt != null && message.hasOwnProperty("markedAt")) {
+                                var error = $root.google.protobuf.Timestamp.verify(message.markedAt);
                                 if (error)
-                                    return "updatedAt." + error;
+                                    return "markedAt." + error;
                             }
                             return null;
                         };
@@ -4860,10 +5129,10 @@ $root.xsuportal = (function() {
                                     throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.startedAt: object expected");
                                 message.startedAt = $root.google.protobuf.Timestamp.fromObject(object.startedAt);
                             }
-                            if (object.updatedAt != null) {
-                                if (typeof object.updatedAt !== "object")
-                                    throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.updatedAt: object expected");
-                                message.updatedAt = $root.google.protobuf.Timestamp.fromObject(object.updatedAt);
+                            if (object.markedAt != null) {
+                                if (typeof object.markedAt !== "object")
+                                    throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.markedAt: object expected");
+                                message.markedAt = $root.google.protobuf.Timestamp.fromObject(object.markedAt);
                             }
                             return message;
                         };
@@ -4888,7 +5157,7 @@ $root.xsuportal = (function() {
                                 } else
                                     object.score = options.longs === String ? "0" : 0;
                                 object.startedAt = null;
-                                object.updatedAt = null;
+                                object.markedAt = null;
                             }
                             if (message.score != null && message.hasOwnProperty("score"))
                                 if (typeof message.score === "number")
@@ -4897,8 +5166,8 @@ $root.xsuportal = (function() {
                                     object.score = options.longs === String ? $util.Long.prototype.toString.call(message.score) : options.longs === Number ? new $util.LongBits(message.score.low >>> 0, message.score.high >>> 0).toNumber() : message.score;
                             if (message.startedAt != null && message.hasOwnProperty("startedAt"))
                                 object.startedAt = $root.google.protobuf.Timestamp.toObject(message.startedAt, options);
-                            if (message.updatedAt != null && message.hasOwnProperty("updatedAt"))
-                                object.updatedAt = $root.google.protobuf.Timestamp.toObject(message.updatedAt, options);
+                            if (message.markedAt != null && message.hasOwnProperty("markedAt"))
+                                object.markedAt = $root.google.protobuf.Timestamp.toObject(message.markedAt, options);
                             return object;
                         };
 

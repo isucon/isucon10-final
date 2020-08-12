@@ -201,111 +201,36 @@ export class ApiClient {
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async getLeaderboard() {
-    return [
-      {
-        score: 20000,
-        team: { name: "超すごいチーム", isStudent: false },
-      },
-      {
-        score: 19000,
-        team: { name: "結構すごいチーム", isStudent: true },
-      },
-      {
-        score: 18000,
-        team: { name: "だいぶすごいチーム", isStudent: false },
-      },
-      {
-        score: 17000,
-        team: { name: "すごいチーム", isStudent: false },
-      },
-      {
-        score: 16000,
-        team: { name: "ちょっとすごいチーム", isStudent: true },
-      },
-      {
-        score: 15000,
-        team: { name: "少しすごいチーム", isStudent: false },
-      },
-      {
-        score: 14000,
-        team: { name: "まあ普通なチーム", isStudent: false },
-      },
-      {
-        score: 13000,
-        team: { name: "普通なチーム", isStudent: false },
-      },
-      {
-        score: 12000,
-        team: { name: "普通なチーム", isStudent: false },
-      },
-      {
-        score: 11000,
-        team: { name: "普通なチーム", isStudent: false },
-      },
-      {
-        score: 10000,
-        team: { name: "普通なチーム", isStudent: true },
-      },
-      {
-        score: 9000,
-        team: { name: "普通なチーム", isStudent: false },
-      },
-      {
-        score: 8000,
-        team: { name: "普通なチーム", isStudent: false },
-      },
-      {
-        score: 7000,
-        team: { name: "普通なチーム", isStudent: false },
-      },
-      {
-        score: 6000,
-        team: { name: "普通なチーム", isStudent: false },
-      },
-      {
-        score: 5000,
-        team: { name: "普通なチーム", isStudent: true },
-      },
-      {
-        score: 4000,
-        team: { name: "普通なチーム", isStudent: true },
-      },
-      {
-        score: 3000,
-        team: { name: "普通なチーム", isStudent: false },
-      },
-      {
-        score: 2000,
-        team: { name: "普通なチーム", isStudent: true },
-      },
-      {
-        score: 1000,
-        team: { name: "普通なチーム", isStudent: false },
-      },
-    ] as {
-      score: number;
-      team: xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem;
-    }[];
+  public async getDashboard() {
+    const responseClass = xsuportal.proto.services.contestant.DashboardResponse;
+    const payloadClass = xsuportal.proto.services.contestant.DashboardRequest;
+    const resp = await this.request(
+      `${this.baseUrl}/api/contestant/dashboard`,
+      "GET",
+      null,
+      null
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async listBenchmarkJobs() {
-    return [
-      { status: 0 },
-      { status: 1 },
-      { status: 4 },
-      { status: 2 },
-      { status: 4 },
-      { status: 3 },
-      { status: 4 },
-      { status: 4 },
-      { status: 2 },
-      { status: 4 },
-      { status: 2 },
-    ] as xsuportal.proto.resources.BenchmarkJob[];
+  public async enqueueBenchmarkJob(
+    payload: xsuportal.proto.services.contestant.IEnqueueBenchmarkJobRequest
+  ) {
+    const responseClass =
+      xsuportal.proto.services.contestant.EnqueueBenchmarkJobResponse;
+    const payloadClass =
+      xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest;
+    const payloadMessage = payload
+      ? payloadClass.encode(payloadClass.fromObject(payload)).finish()
+      : null;
+    const resp = await this.request(
+      `${this.baseUrl}/api/contestant/benchmark_jobs`,
+      "POST",
+      null,
+      payloadMessage
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
-
-  public async enqueueBenchmarkJob() {}
 
   public async request(
     path: string,

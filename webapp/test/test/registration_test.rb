@@ -67,6 +67,7 @@ class RegistrationTest < TestBase
           withdrawn: false,
           disqualified: false,
           detail: nil,
+          student: nil,
           leader: { id: 'kiryucoco', team_id: team_id, name: 'Kiryu Coco', is_student: false },
           members: [{ id: 'kiryucoco', team_id: team_id, name: 'Kiryu Coco', is_student: false }],
         },
