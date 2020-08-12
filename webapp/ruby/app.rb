@@ -289,7 +289,7 @@ module Xsuportal
               ) `team_student_flags` ON `team_student_flags`.`team_id` = `teams`.`id`
             ORDER BY
               `latest_score` DESC,
-              `teams`.`id` ASC
+              `latest_score_marked_at` ASC
           SQL
         )
 
