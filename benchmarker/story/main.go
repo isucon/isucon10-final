@@ -348,11 +348,11 @@ func (s *Story) executeBenchmarkers(ctx context.Context) {
 				defer s.benchmarkPool.Put(benchmarker)
 				defer func() { <-parallelism }()
 				nowDuration := finishedAt.Sub(time.Now())
-				nowIndex := int64((float64(nowDuration) / float64(duration)) * 100)
+				nowIndex := 100 - int64((float64(nowDuration)/float64(duration))*100)
 
 				resp, err := benchmarker.Do(ctx, nowIndex, nil)
 				if err == nil && resp != nil {
-					fmt.Printf("%+v\n", resp)
+					fmt.Printf("%d\n", nowIndex)
 					if team, ok := s.teamByJobID[resp.GetJobId()]; ok {
 						team.Lock.Lock()
 						defer team.Lock.Unlock()
