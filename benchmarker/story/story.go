@@ -26,6 +26,8 @@ type Story struct {
 	stderrLogger  zerolog.Logger
 	browserPool   *sync.Pool
 	benchmarkPool *sync.Pool
+
+	teamByJobID map[int64]*model.Team
 }
 
 func NewStory(targetHostName string) (*Story, error) {
@@ -79,6 +81,7 @@ func NewStory(targetHostName string) (*Story, error) {
 		stderrLogger:   stderrLogger,
 		browserPool:    browserPool,
 		benchmarkPool:  benchmarkPool,
+		teamByJobID:    map[int64]*model.Team{},
 	}, nil
 }
 
