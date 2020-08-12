@@ -93,8 +93,8 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 			Passed:   !(score.FastFail || score.SlowFail),
 			Score:    score.Int(),
 			ScoreBreakdown: &resources.BenchmarkResult_ScoreBreakdown{
-				Base:      score.Base,
-				Deduction: score.Deduction,
+				Base:      score.BaseInt(),
+				Deduction: score.DeductionInt(),
 			},
 			Reason: "",
 			Stdout: "",

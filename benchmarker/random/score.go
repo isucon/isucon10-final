@@ -92,3 +92,19 @@ func (s *Score) Int() int64 {
 		return s.Base - s.Deduction
 	}
 }
+
+func (s *Score) BaseInt() int64 {
+	if s.FastFail || s.SlowFail {
+		return 0
+	} else {
+		return s.Base
+	}
+}
+
+func (s *Score) DeductionInt() int64 {
+	if s.FastFail || s.SlowFail {
+		return 0
+	} else {
+		return s.Deduction
+	}
+}
