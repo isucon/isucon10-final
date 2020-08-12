@@ -8,7 +8,10 @@ interface Props {
 export const JobEnqueueForm: React.FC<Props> = ({ client }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClick = useCallback(() => {
-    client.enqueueBenchmarkJob({ targetHostname: inputRef.current?.innerText });
+    if (inputRef?.current?.value && inputRef.current.value.length > 0) {
+      client.enqueueBenchmarkJob({ targetHostname: inputRef.current.value });
+      inputRef.current.value = "";
+    }
   }, [!inputRef]);
 
   return (

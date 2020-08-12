@@ -189,6 +189,7 @@ module Xsuportal
           id: job[:id],
           team_id: job[:team_id],
           status: job[:status],
+          target_hostname: job[:target_hostname],
           created_at: job[:created_at],
           updated_at: job[:updated_at],
           started_at: job[:started_atj],
@@ -196,9 +197,9 @@ module Xsuportal
         )
       end
 
-      def benchmark_jobs_pb
+      def benchmark_jobs_pb(limit:nil)
         jobs = db.xquery(
-          'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC',
+          "SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC#{ limit ? " LIMIT #{limit}" : ''}",
           current_team[:id],
         )
         jobs&.map { |job| benchmark_job_pb(job) }
@@ -737,7 +738,7 @@ module Xsuportal
 
       encode_response_pb(
         leaderboard: leaderboard_pb,
-        jobs: benchmark_jobs_pb,
+        jobs: benchmark_jobs_pb(limit: 5),
       )
     end
 

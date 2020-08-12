@@ -16,6 +16,7 @@ const STATUS_COLOR_MAP = new Map<number, string>([
 
 const STATUS_TEXT_MAP = new Map<number, string>([
   [xsuportal.proto.resources.BenchmarkJob.Status.PENDING, "Pending"],
+  [xsuportal.proto.resources.BenchmarkJob.Status.SENT, "Sent"],
   [xsuportal.proto.resources.BenchmarkJob.Status.RUNNING, "Running"],
   [xsuportal.proto.resources.BenchmarkJob.Status.ERRORED, "Failed"],
   [xsuportal.proto.resources.BenchmarkJob.Status.CANCELLED, "Cancelled"],
@@ -23,31 +24,29 @@ const STATUS_TEXT_MAP = new Map<number, string>([
 ]);
 
 const JobListItem: React.FC<JobListItemProps> = ({ job }) => {
-  if (job?.status) {
-    return (
-      <tr className={`has-background-${STATUS_COLOR_MAP.get(job?.status)}`}>
-        <td className="has-text-centered">
-          {job.startedAt?.seconds
-            ? dayjs((job.startedAt?.seconds as number) * 1000).format(
-                "HH:MM:ss"
-              )
-            : ""}
-        </td>
-        <td className="has-text-centered">
-          {job.finishedAt?.seconds
-            ? dayjs((job.finishedAt?.seconds as number) * 1000).format(
-                "HH:MM:ss"
-              )
-            : ""}
-        </td>
-        <td className="has-text-centered">
-          {STATUS_TEXT_MAP.get(job?.status)}
-        </td>
-      </tr>
-    );
-  } else {
-    return <></>;
-  }
+  const trClassName =
+    job.status != null
+      ? `has-background-${STATUS_COLOR_MAP.get(job.status)}`
+      : "";
+  return (
+    <tr className={trClassName}>
+      <td className="has-text-centered">{job.id}</td>
+      <td className="has-text-centered">{job.targetHostname}</td>
+      <td className="has-text-centered">
+        {job.createdAt?.seconds
+          ? dayjs((job.createdAt?.seconds as number) * 1000).format("HH:MM:ss")
+          : ""}
+      </td>
+      <td className="has-text-centered">
+        {job.finishedAt?.seconds
+          ? dayjs((job.finishedAt?.seconds as number) * 1000).format("HH:MM:ss")
+          : ""}
+      </td>
+      <td className="has-text-centered">
+        {job.status != null ? STATUS_TEXT_MAP.get(job.status) : ""}
+      </td>
+    </tr>
+  );
 };
 
 interface Props {
@@ -59,7 +58,9 @@ export const JobList: React.FC<Props> = ({ jobs }) => {
     <table className="table is-fullwidth">
       <thead>
         <tr className="has-background-light">
-          <th className="has-text-centered">Started</th>
+          <th className="has-text-centered">Job ID</th>
+          <th className="has-text-centered">Target</th>
+          <th className="has-text-centered">Created</th>
           <th className="has-text-centered">Finished</th>
           <th className="has-text-centered">Status</th>
         </tr>
