@@ -10,7 +10,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/isucon/isucon10-final/benchmarker/failure"
 	"github.com/isucon/isucon10-final/benchmarker/model"
-	"github.com/isucon/isucon10-final/proto/xsuportal"
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal"
 	"io"
 	"io/ioutil"
 	"net"
