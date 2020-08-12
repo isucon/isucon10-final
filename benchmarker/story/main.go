@@ -22,15 +22,17 @@ func (s *Story) Main(ctx context.Context) error {
 	startTimer := time.After(s.contest.ContestStartsAt.Sub(now))
 	<-startTimer
 
+	enqueue := true
 	go s.executeBenchmarkers(ctx)
 	go func() {
-		for {
+		for enqueue {
 			s.enqueueBenchmark(ctx)
-			<-time.After(5 * time.Second)
+			<-time.After(1 * time.Second)
 		}
 	}()
 
 	<-time.After(30 * time.Second)
+	enqueue = false
 
 	return ctx.Err()
 }
@@ -221,15 +223,19 @@ func (s *Story) registerTeam(ctx context.Context) error {
 
 	inviteToken := registrationSession.GetInviteToken()
 
-	s.joinTeam(ctx, inviteToken, team, team.Developer)
-	s.joinTeam(ctx, inviteToken, team, team.Operator)
+	if ok, _ := s.joinTeam(ctx, inviteToken, team, team.Developer); !ok {
+		team.Developer = team.Leader
+	}
+	if ok, _ := s.joinTeam(ctx, inviteToken, team, team.Operator); !ok {
+		team.Operator = team.Leader
+	}
 
 	return nil
 }
 
-func (s *Story) joinTeam(ctx context.Context, inviteToken string, team *model.Team, contestant *model.Contestant) error {
+func (s *Story) joinTeam(ctx context.Context, inviteToken string, team *model.Team, contestant *model.Contestant) (bool, error) {
 	if team.Leader.ID == contestant.ID {
-		return nil
+		return false, nil
 	}
 
 	browser := s.browserPool.Get().(*session.Browser)
@@ -242,7 +248,7 @@ func (s *Story) joinTeam(ctx context.Context, inviteToken string, team *model.Te
 	}
 	if err != nil {
 		s.errors.Add(err)
-		return nil
+		return false, nil
 	}
 
 	_, xerr, err = browser.LoginAction(ctx)
@@ -251,19 +257,22 @@ func (s *Story) joinTeam(ctx context.Context, inviteToken string, team *model.Te
 	}
 	if err != nil {
 		s.errors.Add(err)
-		return nil
+		return false, nil
 	}
 
 	_, xerr, err = browser.JoinTeam(ctx, team, inviteToken)
 	if xerr != nil {
+		if xerr.GetCode() == 403 {
+			return false, nil
+		}
 		err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
 	}
 	if err != nil {
 		s.errors.Add(err)
-		return nil
+		return false, nil
 	}
 
-	return nil
+	return true, nil
 }
 
 func (s *Story) makeBenchmarkers(ctx context.Context) error {
@@ -279,7 +288,7 @@ func (s *Story) makeBenchmarkers(ctx context.Context) error {
 
 func (s *Story) enqueueBenchmark(ctx context.Context) error {
 	wg := &sync.WaitGroup{}
-	parallelism := make(chan bool, 10)
+	parallelism := make(chan bool, 30)
 
 	for _, team := range s.contest.Teams {
 		wg.Add(1)
@@ -287,6 +296,9 @@ func (s *Story) enqueueBenchmark(ctx context.Context) error {
 		go func(team *model.Team) {
 			defer wg.Done()
 			defer func() { <-parallelism }()
+
+			team.Lock.Lock()
+			defer team.Lock.Unlock()
 
 			if team.LatestEnqueuedBenchmarkJob != nil {
 				return
@@ -306,6 +318,9 @@ func (s *Story) enqueueBenchmark(ctx context.Context) error {
 				return
 			}
 
+			jobId := job.GetJob().GetId()
+			fmt.Printf("job id: %d\n", jobId)
+			s.teamByJobID[jobId] = team
 			team.LatestEnqueuedBenchmarkJob = job
 		}(team)
 	}
@@ -317,6 +332,10 @@ func (s *Story) enqueueBenchmark(ctx context.Context) error {
 
 func (s *Story) executeBenchmarkers(ctx context.Context) {
 	now := time.Now()
+	startedAt := now
+	finishedAt := s.contest.ContestEndsAt
+	duration := finishedAt.Sub(startedAt)
+
 	endTimer := time.After(s.contest.ContestEndsAt.Sub(now))
 	execute := true
 	parallelism := make(chan bool, 20)
@@ -328,9 +347,21 @@ func (s *Story) executeBenchmarkers(ctx context.Context) {
 			go func() {
 				defer s.benchmarkPool.Put(benchmarker)
 				defer func() { <-parallelism }()
-				benchmarker.Do(ctx)
+				nowDuration := finishedAt.Sub(time.Now())
+				nowIndex := int64((float64(nowDuration) / float64(duration)) * 100)
+
+				resp, err := benchmarker.Do(ctx, nowIndex, nil)
+				if err == nil && resp != nil {
+					fmt.Printf("%+v\n", resp)
+					if team, ok := s.teamByJobID[resp.GetJobId()]; ok {
+						team.Lock.Lock()
+						defer team.Lock.Unlock()
+						team.LatestEnqueuedBenchmarkJob = nil
+						fmt.Printf("team %d unlock\n", team.ID)
+					}
+				}
 			}()
-			<-time.After(1 * time.Millisecond)
+			// <-time.After(1 * time.Millisecond)
 		}
 	}()
 

@@ -18,7 +18,6 @@ func TestMain(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Log(story.stdout.String())
-	t.Log(story.errors.GetMessages())
+	// t.Log(story.stdout.String())
 	t.Log(story.errors.GetMessages())
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/isucon/isucon10-final/benchmarker/random"
 	"github.com/isucon/isucon10-final/proto/xsuportal/services/contestant"
+	"sync"
 )
 
 type Team struct {
@@ -18,6 +19,9 @@ type Team struct {
 	Developer *Contestant
 	Operator  *Contestant
 
+	Lock                       *sync.Mutex
+	ScoreGenerator             *random.ScoreGenerator
+	ScoreHistory               []*random.Score
 	LatestEnqueuedBenchmarkJob *contestant.EnqueueBenchmarkJobResponse
 }
 
@@ -59,6 +63,9 @@ func NewTeam() (*Team, error) {
 		Developer:    developer,
 		Operator:     operator,
 
+		Lock:                       &sync.Mutex{},
+		ScoreGenerator:             random.NewScoreGenerator(),
+		ScoreHistory:               make([]*random.Score, 0, 10),
 		LatestEnqueuedBenchmarkJob: nil,
 	}, nil
 }

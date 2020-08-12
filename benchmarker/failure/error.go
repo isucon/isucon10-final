@@ -95,7 +95,7 @@ func (e *Errors) Add(err error) {
 	} else {
 		e.critical++
 		fmt.Printf("%+v\n", err)
-		e.Messages = append(e.Messages, ILLEGAL_ERROR)
+		e.Messages = append(e.Messages, ILLEGAL_ERROR+" "+err.Error())
 	}
 }
 

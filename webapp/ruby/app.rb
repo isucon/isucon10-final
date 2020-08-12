@@ -7,6 +7,8 @@ $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
 require 'routes'
 require 'database'
 
+# TODO: 競技時は消す
+TEAM_CAPACITY = 3
 
 module Xsuportal
   class App < Sinatra::Base
@@ -289,8 +291,8 @@ module Xsuportal
         halt code, Proto::Error.encode(Proto::Error.new(
           code: code,
           name: exception ? exception.class.name : nil,
-          human_message: exception ? exception.message : nil,
-          human_descriptions: exception ? exception.full_message(highlight: false, order: :top).split("\n") : [human_message],
+          human_message: human_message || exception&.message,
+          human_descriptions: human_message ? [human_message] : exception&.full_message(highlight: false, order: :top)&.split("\n") || [],
         ))
       end
     end
@@ -469,6 +471,11 @@ module Xsuportal
 
         invite_token = SecureRandom.urlsafe_base64(64)
 
+        if (db.xquery('SELECT COUNT(id) as `count` FROM `teams`').first&.fetch(:count) || 0) >= TEAM_CAPACITY
+          halt_pb 403, "チーム登録数上限です"
+        end
+
+
         db.xquery(
           'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`, `updated_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
           req.team_name,
@@ -594,6 +601,8 @@ module Xsuportal
     post '/api/contestant/benchmark_jobs' do
       req = decode_request_pb
 
+      job = nil
+
       Database.transaction do
         login_required
         contest_status_restricted([:STARTED, :FROZEN], '競技時間外はベンチマークを実行できません')
@@ -604,8 +613,13 @@ module Xsuportal
           req.target_hostname,
           Proto::Resources::BenchmarkJob::Status::PENDING,
         )
+
+        job = db.query('SELECT * FROM `benchmark_jobs` WHERE `id` = (SELECT LAST_INSERT_ID()) LIMIT 1').first
       end
-      encode_response_pb
+
+      encode_response_pb(
+        job: benchmark_job_pb(job)
+      )
     end
 
     get '/api/contestant/benchmark_jobs' do

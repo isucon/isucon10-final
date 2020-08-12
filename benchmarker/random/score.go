@@ -37,6 +37,22 @@ type Score struct {
 	SlowFail  bool
 }
 
+func NewScoreGenerator() *ScoreGenerator {
+	return &ScoreGenerator{
+		InitialScore:         1000,
+		Deviation:            300,
+		FastFailRatio:        rand.Int63n(45),
+		SlowFailRatio:        rand.Int63n(5) + 5,
+		RiseCoefficient1:     float64(10 + rand.Int63n(90)),
+		RiseCoefficient2:     float64((10 + rand.Int63n(10))) / 10,
+		RisingIndex:          2,
+		LateBloomConst:       rand.Int63n(40),
+		DeductionProbability: 50,
+		DeductionRatio:       0.1,
+		DeductionDeviation:   50,
+	}
+}
+
 func (s *ScoreGenerator) BaseScore(index int64) int64 {
 	deviation := index
 	if index > s.LateBloomConst {
