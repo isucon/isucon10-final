@@ -3,129 +3,23 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/isucon/isucon10-final/benchmarker/model"
-	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/admin"
-	"github.com/isucon/isucon10-final/benchmarker/session"
-	"net/url"
-	"sync"
-	"time"
+	"github.com/isucon/isucon10-final/benchmarker/story"
 )
 
 func main() {
-	s, _ := session.NewBrowser("http://localhost:9292/")
-
-	ctx := context.Background()
-	var err error
-
-	admin, _ := model.NewAdmin()
-	s.Contestant = admin
-
-	contest := model.NewContest()
-
-	init, _, err := s.InitializeAction(ctx)
+	s, err := story.NewStory("localhost:9292")
 	if err != nil {
-		fmt.Printf("%+v", err)
+		fmt.Println(err.Error())
 		return
 	}
-	fmt.Printf("%s\n", init.String())
 
-	wg := &sync.WaitGroup{}
-	ch := make(chan bool, 20)
-	for i := 0; i < 30; i++ {
-		go func() {
-			wg.Add(1)
-			ch <- true
-			Do(contest, init)
-			<-ch
-			wg.Done()
-		}()
-	}
-
-	wg.Wait()
-}
-
-func Do(contest *model.Contest, init *admin.InitializeResponse) {
-	s, _ := session.NewBrowser("http://localhost:9292/")
-	s2, _ := session.NewBrowser("http://localhost:9292/")
-	s3, _ := session.NewBrowser("http://localhost:9292/")
-
-	admin, _ := model.NewAdmin()
-	s3.Contestant = admin
-
-	ctx := context.Background()
-	var err error
-
-	team, _ := model.NewTeam()
-	contestant := team.Leader
-	s.Contestant = contestant
-	s2.Contestant = team.Developer
-
-	signup, xerr, err := s.SignupAction(ctx)
+	err = s.Main(context.TODO())
 	if err != nil {
-		fmt.Printf("%+v", err)
+		fmt.Println(err.Error())
 		return
 	}
-	fmt.Printf("%s\n", xerr.String())
-	fmt.Printf("%s\n", signup.String())
 
-	login, xerr, err := s.LoginAction(ctx)
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
+	for _, msg := range s.ErrorMessages() {
+		fmt.Println(msg)
 	}
-	fmt.Printf("%s\n", xerr.String())
-	fmt.Printf("%s\n", login.String())
-
-	create, xerr, err := s.CreateTeam(ctx, team)
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
-	}
-	fmt.Printf("%s\n", xerr.String())
-	fmt.Printf("%s\n", create.String())
-
-	rs, xerr, err := s.GetRegistrationSession(ctx)
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
-	}
-	fmt.Printf("%s\n", xerr.String())
-	fmt.Printf("%s\n", rs.String())
-
-	s2.SignupAction(ctx)
-	s2.LoginAction(ctx)
-
-	inviteUrl, _ := url.Parse(rs.GetMemberInviteUrl())
-	inviteToken := inviteUrl.Query().Get("invite_token")
-
-	fmt.Printf("inviteToken: %s\n", inviteToken)
-	join, xerr, err := s2.JoinTeam(ctx, team, inviteToken)
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
-	}
-	fmt.Printf("%s\n", xerr.String())
-	fmt.Printf("%s\n", join.String())
-
-	team.TeamName = "白金動物園"
-	update, xerr, err := s.UpdateRegistration(ctx, team)
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
-	}
-	fmt.Printf("%s\n", xerr.String())
-	fmt.Printf("%s\n", update.String())
-
-	contest.RegistrationOpenAt = time.Now().Add(-1 * time.Hour)
-	contest.ContestStartsAt = time.Now().Add(-30 * time.Minute)
-	contest.ContestFreezesAt = time.Now().Add(30 * time.Minute)
-	contest.ContestEndsAt = time.Now().Add(1 * time.Hour)
-
-	updateC, xerr, err := s3.UpdateContest(ctx, contest)
-	if err != nil {
-		fmt.Printf("%+v", err)
-		return
-	}
-	fmt.Printf("%s\n", xerr.String())
-	fmt.Printf("%s\n", updateC.String())
 }

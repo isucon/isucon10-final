@@ -13,26 +13,44 @@ import (
 func (s *Story) Main(ctx context.Context) error {
 	s.stdoutLogger.Info().Msg("Start main check")
 
-	s.initialize(ctx)
+	if err := s.initialize(ctx); err != nil {
+		s.errors.Add(err)
+		return nil
+	}
+
 	s.registration(ctx)
 
 	// s.makeBenchmarkers(ctx)
 
-	now := time.Now()
-	startTimer := time.After(s.contest.ContestStartsAt.Sub(now))
+	startTimer := time.After(s.contest.ContestStartsAt.Sub(time.Now()))
 	<-startTimer
 
-	enqueue := true
-	go s.executeBenchmarkers(ctx)
-	go func() {
-		for enqueue {
-			s.enqueueBenchmark(ctx)
-			<-time.After(1 * time.Second)
+	bctx, cancel := context.WithCancel(ctx)
+	go s.executeBenchmarkers(bctx)
+	go func(bctx context.Context) {
+		for {
+			s.enqueueBenchmark(bctx)
+			select {
+			case <-time.After(1 * time.Second):
+			case <-bctx.Done():
+				return
+			}
 		}
-	}()
+	}(bctx)
 
-	<-time.After(30 * time.Second)
-	enqueue = false
+	go func(bctx context.Context) {
+		for {
+			s.getDashboard(bctx)
+			select {
+			case <-time.After(1 * time.Second):
+			case <-bctx.Done():
+				return
+			}
+		}
+	}(bctx)
+
+	<-time.After(s.contest.ContestEndsAt.Sub(time.Now()))
+	cancel()
 
 	return ctx.Err()
 }
@@ -122,7 +140,7 @@ func (s *Story) initialize(ctx context.Context) error {
 	wg.Wait()
 
 	if s.errors.Len() > 0 {
-		return nil
+		return failure.New(failure.ErrCritical, "initialize に失敗しました")
 	}
 
 	return nil
@@ -130,33 +148,38 @@ func (s *Story) initialize(ctx context.Context) error {
 
 func (s *Story) registration(ctx context.Context) {
 	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
 	now := time.Now()
 	timer := time.After(s.contest.ContestStartsAt.Sub(now) - 1*time.Second)
 
 	// TODO: 20並列で登録だなんだのリクエストを送りつけてるけど、これ80ぐらいにすると通らない
 	parallelism := make(chan bool, 40)
 	wg := &sync.WaitGroup{}
-	execute := true
+	// execute := true
 
 	go func() {
 		<-timer
-		execute = false
-
-		<-time.After(1 * time.Second)
 		close(parallelism)
-		cancel()
 	}()
 
 	wg.Add(1)
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				return
+			}
+		}()
+
 		defer wg.Done()
-		for execute {
+		for {
 			parallelism <- true
 			wg.Add(1)
 			go func() {
-				defer func() { <-parallelism }()
 				defer wg.Done()
-				s.registerTeam(ctx)
+				if err := s.registerTeam(ctx); err == nil {
+				}
+				<-parallelism
 			}()
 		}
 	}()
@@ -199,7 +222,7 @@ func (s *Story) registerTeam(ctx context.Context) error {
 	if xerr != nil {
 		if xerr.GetCode() == 403 {
 			// チーム登録期間外に達したため失敗
-			return nil
+			return failure.New(failure.ErrApplication, "チーム登録に失敗しました")
 		} else {
 			err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
 		}
@@ -288,7 +311,7 @@ func (s *Story) makeBenchmarkers(ctx context.Context) error {
 
 func (s *Story) enqueueBenchmark(ctx context.Context) error {
 	wg := &sync.WaitGroup{}
-	parallelism := make(chan bool, 30)
+	parallelism := make(chan bool, len(s.contest.Teams))
 
 	for _, team := range s.contest.Teams {
 		wg.Add(1)
@@ -311,6 +334,9 @@ func (s *Story) enqueueBenchmark(ctx context.Context) error {
 
 			job, xerr, err := browser.EnqueueBenchmarkJob(ctx, team)
 			if xerr != nil {
+				if xerr.GetCode() == 403 {
+					return
+				}
 				err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
 			}
 			if err != nil {
@@ -319,7 +345,6 @@ func (s *Story) enqueueBenchmark(ctx context.Context) error {
 			}
 
 			jobId := job.GetJob().GetId()
-			fmt.Printf("job id: %d\n", jobId)
 			s.teamByJobID[jobId] = team
 			team.LatestEnqueuedBenchmarkJob = job
 		}(team)
@@ -337,11 +362,16 @@ func (s *Story) executeBenchmarkers(ctx context.Context) {
 	duration := finishedAt.Sub(startedAt)
 
 	endTimer := time.After(s.contest.ContestEndsAt.Sub(now))
-	execute := true
-	parallelism := make(chan bool, 20)
+	parallelism := make(chan bool, s.benchmarkParalellism)
 
 	go func() {
-		for execute {
+		defer func() {
+			if err := recover(); err != nil {
+				return
+			}
+		}()
+
+		for {
 			benchmarker := s.benchmarkPool.Get().(*session.Benchmarker)
 			parallelism <- true
 			go func() {
@@ -352,19 +382,42 @@ func (s *Story) executeBenchmarkers(ctx context.Context) {
 
 				resp, err := benchmarker.Do(ctx, nowIndex, nil)
 				if err == nil && resp != nil {
-					fmt.Printf("%d\n", nowIndex)
 					if team, ok := s.teamByJobID[resp.GetJobId()]; ok {
 						team.Lock.Lock()
 						defer team.Lock.Unlock()
 						team.LatestEnqueuedBenchmarkJob = nil
-						fmt.Printf("team %d unlock\n", team.ID)
 					}
 				}
 			}()
-			// <-time.After(1 * time.Millisecond)
 		}
 	}()
 
 	<-endTimer
-	execute = false
+	close(parallelism)
+}
+
+func (s *Story) getDashboard(ctx context.Context) {
+	wg := &sync.WaitGroup{}
+
+	for _, team := range s.contest.Teams {
+		wg.Add(1)
+		go func(team *model.Team) {
+			defer wg.Done()
+
+			browser := s.browserPool.Get().(*session.Browser)
+			browser.Contestant = team.Operator
+
+			res, xerr, err := browser.Dashboard(ctx)
+			if xerr != nil {
+				err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+			}
+			if err != nil {
+				s.errors.Add(err)
+			}
+
+			res.GetLeaderboard()
+		}(team)
+	}
+
+	wg.Wait()
 }

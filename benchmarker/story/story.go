@@ -10,6 +10,11 @@ import (
 	"sync"
 )
 
+const (
+	BENCHMARK_EXECUTE_PARALELLISM_DEFAULT = 30
+	BENCHMARK_EXECUTE_PARALELLISM_STEP    = 1.5
+)
+
 type Story struct {
 	targetHostName string
 	targetBaseURL  string
@@ -28,6 +33,8 @@ type Story struct {
 	benchmarkPool *sync.Pool
 
 	teamByJobID map[int64]*model.Team
+
+	benchmarkParalellism int
 }
 
 func NewStory(targetHostName string) (*Story, error) {
@@ -68,20 +75,21 @@ func NewStory(targetHostName string) (*Story, error) {
 	}
 
 	return &Story{
-		targetHostName: targetHostName,
-		targetBaseURL:  targetBaseURL,
-		grpcHostName:   fmt.Sprintf("%s:50051", targetHostName),
-		contest:        contest,
-		Admin:          admin,
-		lock:           &sync.Mutex{},
-		errors:         errors,
-		stdout:         stdout,
-		stdoutLogger:   stdoutLogger,
-		stderr:         stderr,
-		stderrLogger:   stderrLogger,
-		browserPool:    browserPool,
-		benchmarkPool:  benchmarkPool,
-		teamByJobID:    map[int64]*model.Team{},
+		targetHostName:       targetHostName,
+		targetBaseURL:        targetBaseURL,
+		grpcHostName:         fmt.Sprintf("%s:50051", targetHostName),
+		contest:              contest,
+		Admin:                admin,
+		lock:                 &sync.Mutex{},
+		errors:               errors,
+		stdout:               stdout,
+		stdoutLogger:         stdoutLogger,
+		stderr:               stderr,
+		stderrLogger:         stderrLogger,
+		browserPool:          browserPool,
+		benchmarkPool:        benchmarkPool,
+		teamByJobID:          map[int64]*model.Team{},
+		benchmarkParalellism: BENCHMARK_EXECUTE_PARALELLISM_DEFAULT,
 	}, nil
 }
 
@@ -90,4 +98,16 @@ func (s *Story) AddTeam(team *model.Team) {
 	defer s.lock.Unlock()
 
 	s.contest.Teams = append(s.contest.Teams, team)
+}
+
+func (s *Story) Stdout() string {
+	return s.stdout.String()
+}
+
+func (s *Story) Stderr() string {
+	return s.stderr.String()
+}
+
+func (s *Story) ErrorMessages() []string {
+	return s.errors.GetMessages()
 }
