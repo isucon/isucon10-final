@@ -232,6 +232,30 @@ export class ApiClient {
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
+  public async listBenchmarkJobs() {
+    const responseClass =
+      xsuportal.proto.services.contestant.ListBenchmarkJobsResponse;
+    const resp = await this.request(
+      `${this.baseUrl}/api/contestant/benchmark_jobs`,
+      "GET",
+      null,
+      null
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async getBenchmarkJob(id: number) {
+    const responseClass =
+      xsuportal.proto.services.contestant.GetBenchmarkJobResponse;
+    const resp = await this.request(
+      `${this.baseUrl}/api/contestant/benchmark_jobs/${id}`,
+      "GET",
+      null,
+      null
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
   public async request(
     path: string,
     method: string,

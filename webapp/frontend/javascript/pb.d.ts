@@ -361,6 +361,12 @@ export namespace xsuportal {
                 /** BenchmarkJob finishedAt */
                 finishedAt?: (google.protobuf.ITimestamp|null);
 
+                /** BenchmarkJob team */
+                team?: (xsuportal.proto.resources.ITeam|null);
+
+                /** BenchmarkJob result */
+                result?: (xsuportal.proto.resources.IBenchmarkResult|null);
+
                 /** BenchmarkJob targetHostname */
                 targetHostname?: (string|null);
             }
@@ -394,6 +400,12 @@ export namespace xsuportal {
 
                 /** BenchmarkJob finishedAt. */
                 public finishedAt?: (google.protobuf.ITimestamp|null);
+
+                /** BenchmarkJob team. */
+                public team?: (xsuportal.proto.resources.ITeam|null);
+
+                /** BenchmarkJob result. */
+                public result?: (xsuportal.proto.resources.IBenchmarkResult|null);
 
                 /** BenchmarkJob targetHostname. */
                 public targetHostname: string;
@@ -500,11 +512,8 @@ export namespace xsuportal {
                 /** BenchmarkResult reason */
                 reason?: (string|null);
 
-                /** BenchmarkResult stdout */
-                stdout?: (string|null);
-
-                /** BenchmarkResult stderr */
-                stderr?: (string|null);
+                /** BenchmarkResult markedAt */
+                markedAt?: (google.protobuf.ITimestamp|null);
             }
 
             /** Represents a BenchmarkResult. */
@@ -531,11 +540,8 @@ export namespace xsuportal {
                 /** BenchmarkResult reason. */
                 public reason: string;
 
-                /** BenchmarkResult stdout. */
-                public stdout: string;
-
-                /** BenchmarkResult stderr. */
-                public stderr: string;
+                /** BenchmarkResult markedAt. */
+                public markedAt?: (google.protobuf.ITimestamp|null);
 
                 /**
                  * Creates a new BenchmarkResult instance using the specified properties.
@@ -613,8 +619,8 @@ export namespace xsuportal {
                 /** Properties of a ScoreBreakdown. */
                 interface IScoreBreakdown {
 
-                    /** ScoreBreakdown base */
-                    base?: (number|Long|null);
+                    /** ScoreBreakdown raw */
+                    raw?: (number|Long|null);
 
                     /** ScoreBreakdown deduction */
                     deduction?: (number|Long|null);
@@ -629,8 +635,8 @@ export namespace xsuportal {
                      */
                     constructor(properties?: xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown);
 
-                    /** ScoreBreakdown base. */
-                    public base: (number|Long);
+                    /** ScoreBreakdown raw. */
+                    public raw: (number|Long);
 
                     /** ScoreBreakdown deduction. */
                     public deduction: (number|Long);

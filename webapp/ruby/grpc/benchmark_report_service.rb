@@ -63,7 +63,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       SQL
       request.job_id,
       result.score,
-      result.score_breakdown&.base,
+      result.score_breakdown&.raw,
       result.score_breakdown&.deduction,
       true,
       result.passed,

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+
 import dayjs from "dayjs";
 import { xsuportal } from "./pb";
 
@@ -30,7 +32,9 @@ const JobListItem: React.FC<JobListItemProps> = ({ job }) => {
       : "";
   return (
     <tr className={trClassName}>
-      <td className="has-text-centered">{job.id}</td>
+      <td className="has-text-centered">
+        <Link to={`/benchmark_jobs/${job.id}`}>{job.id}</Link>
+      </td>
       <td className="has-text-centered">{job.targetHostname}</td>
       <td className="has-text-centered">
         {job.createdAt?.seconds

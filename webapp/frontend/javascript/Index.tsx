@@ -10,6 +10,9 @@ import { Signup } from "./Signup";
 import { Login } from "./Login";
 import { Logout } from "./Logout";
 import { Registration } from "./Registration";
+import { JobList } from "./JobList";
+import { BenchmarkJobDetail } from "./BenchmarkJobDetail";
+import { BenchmarkJobList } from "./BenchmarkJobList";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
@@ -65,6 +68,9 @@ export class Index extends React.Component<Props, State> {
                   <Link className="navbar-item" to="/dashboard">
                     ダッシュボード
                   </Link>
+                  <Link className="navbar-item" to="/benchmark_jobs">
+                    ジョブ一覧
+                  </Link>
                   <a className="navbar-item" href="/terms">
                     規約
                   </a>
@@ -115,7 +121,28 @@ export class Index extends React.Component<Props, State> {
                 />
               </Route>
               <Route path="/dashboard">
-                <Dashboard client={this.props.client} />
+                <Dashboard
+                  session={this.props.session}
+                  client={this.props.client}
+                />
+              </Route>
+              <Route
+                path="/benchmark_jobs/:id"
+                render={({ match }) => {
+                  return (
+                    <BenchmarkJobDetail
+                      client={this.props.client}
+                      id={match.params.id}
+                    />
+                  );
+                }}
+              />
+              <Route path="/benchmark_jobs">
+                <BenchmarkJobList
+                  session={this.props.session}
+                  client={this.props.client}
+                  incompleteOnly={false}
+                />
               </Route>
               <Route path="/">
                 <TeamList

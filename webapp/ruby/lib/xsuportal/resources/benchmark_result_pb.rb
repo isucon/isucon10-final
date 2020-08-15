@@ -3,6 +3,7 @@
 
 require 'google/protobuf'
 
+require 'google/protobuf/timestamp_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/resources/benchmark_result.proto", :syntax => :proto3) do
     add_message "xsuportal.proto.resources.BenchmarkResult" do
@@ -11,11 +12,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :score, :int64, 3
       optional :score_breakdown, :message, 4, "xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown"
       optional :reason, :string, 5
-      optional :stdout, :string, 6
-      optional :stderr, :string, 7
+      optional :marked_at, :message, 6, "google.protobuf.Timestamp"
     end
     add_message "xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown" do
-      optional :base, :int64, 1
+      optional :raw, :int64, 1
       optional :deduction, :int64, 2
     end
   end
