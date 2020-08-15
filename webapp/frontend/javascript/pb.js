@@ -898,6 +898,8 @@ $root.xsuportal = (function() {
                  * @property {google.protobuf.ITimestamp|null} [updatedAt] BenchmarkJob updatedAt
                  * @property {google.protobuf.ITimestamp|null} [startedAt] BenchmarkJob startedAt
                  * @property {google.protobuf.ITimestamp|null} [finishedAt] BenchmarkJob finishedAt
+                 * @property {xsuportal.proto.resources.ITeam|null} [team] BenchmarkJob team
+                 * @property {xsuportal.proto.resources.IBenchmarkResult|null} [result] BenchmarkJob result
                  * @property {string|null} [targetHostname] BenchmarkJob targetHostname
                  */
 
@@ -973,6 +975,22 @@ $root.xsuportal = (function() {
                 BenchmarkJob.prototype.finishedAt = null;
 
                 /**
+                 * BenchmarkJob team.
+                 * @member {xsuportal.proto.resources.ITeam|null|undefined} team
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
+                 * @instance
+                 */
+                BenchmarkJob.prototype.team = null;
+
+                /**
+                 * BenchmarkJob result.
+                 * @member {xsuportal.proto.resources.IBenchmarkResult|null|undefined} result
+                 * @memberof xsuportal.proto.resources.BenchmarkJob
+                 * @instance
+                 */
+                BenchmarkJob.prototype.result = null;
+
+                /**
                  * BenchmarkJob targetHostname.
                  * @member {string} targetHostname
                  * @memberof xsuportal.proto.resources.BenchmarkJob
@@ -1018,6 +1036,10 @@ $root.xsuportal = (function() {
                         $root.google.protobuf.Timestamp.encode(message.startedAt, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
                     if (message.finishedAt != null && Object.hasOwnProperty.call(message, "finishedAt"))
                         $root.google.protobuf.Timestamp.encode(message.finishedAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                    if (message.team != null && Object.hasOwnProperty.call(message, "team"))
+                        $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
+                    if (message.result != null && Object.hasOwnProperty.call(message, "result"))
+                        $root.xsuportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 18, wireType 2 =*/146).fork()).ldelim();
                     if (message.targetHostname != null && Object.hasOwnProperty.call(message, "targetHostname"))
                         writer.uint32(/* id 30, wireType 2 =*/242).string(message.targetHostname);
                     return writer;
@@ -1074,6 +1096,12 @@ $root.xsuportal = (function() {
                             break;
                         case 8:
                             message.finishedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            break;
+                        case 16:
+                            message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
+                            break;
+                        case 18:
+                            message.result = $root.xsuportal.proto.resources.BenchmarkResult.decode(reader, reader.uint32());
                             break;
                         case 30:
                             message.targetHostname = reader.string();
@@ -1150,6 +1178,16 @@ $root.xsuportal = (function() {
                         var error = $root.google.protobuf.Timestamp.verify(message.finishedAt);
                         if (error)
                             return "finishedAt." + error;
+                    }
+                    if (message.team != null && message.hasOwnProperty("team")) {
+                        var error = $root.xsuportal.proto.resources.Team.verify(message.team);
+                        if (error)
+                            return "team." + error;
+                    }
+                    if (message.result != null && message.hasOwnProperty("result")) {
+                        var error = $root.xsuportal.proto.resources.BenchmarkResult.verify(message.result);
+                        if (error)
+                            return "result." + error;
                     }
                     if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
                         if (!$util.isString(message.targetHostname))
@@ -1233,6 +1271,16 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.BenchmarkJob.finishedAt: object expected");
                         message.finishedAt = $root.google.protobuf.Timestamp.fromObject(object.finishedAt);
                     }
+                    if (object.team != null) {
+                        if (typeof object.team !== "object")
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.team: object expected");
+                        message.team = $root.xsuportal.proto.resources.Team.fromObject(object.team);
+                    }
+                    if (object.result != null) {
+                        if (typeof object.result !== "object")
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkJob.result: object expected");
+                        message.result = $root.xsuportal.proto.resources.BenchmarkResult.fromObject(object.result);
+                    }
                     if (object.targetHostname != null)
                         message.targetHostname = String(object.targetHostname);
                     return message;
@@ -1267,6 +1315,8 @@ $root.xsuportal = (function() {
                         object.updatedAt = null;
                         object.startedAt = null;
                         object.finishedAt = null;
+                        object.team = null;
+                        object.result = null;
                         object.targetHostname = "";
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -1289,6 +1339,10 @@ $root.xsuportal = (function() {
                         object.startedAt = $root.google.protobuf.Timestamp.toObject(message.startedAt, options);
                     if (message.finishedAt != null && message.hasOwnProperty("finishedAt"))
                         object.finishedAt = $root.google.protobuf.Timestamp.toObject(message.finishedAt, options);
+                    if (message.team != null && message.hasOwnProperty("team"))
+                        object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
+                    if (message.result != null && message.hasOwnProperty("result"))
+                        object.result = $root.xsuportal.proto.resources.BenchmarkResult.toObject(message.result, options);
                     if (message.targetHostname != null && message.hasOwnProperty("targetHostname"))
                         object.targetHostname = message.targetHostname;
                     return object;
@@ -1341,8 +1395,7 @@ $root.xsuportal = (function() {
                  * @property {number|Long|null} [score] BenchmarkResult score
                  * @property {xsuportal.proto.resources.BenchmarkResult.IScoreBreakdown|null} [scoreBreakdown] BenchmarkResult scoreBreakdown
                  * @property {string|null} [reason] BenchmarkResult reason
-                 * @property {string|null} [stdout] BenchmarkResult stdout
-                 * @property {string|null} [stderr] BenchmarkResult stderr
+                 * @property {google.protobuf.ITimestamp|null} [markedAt] BenchmarkResult markedAt
                  */
 
                 /**
@@ -1401,20 +1454,12 @@ $root.xsuportal = (function() {
                 BenchmarkResult.prototype.reason = "";
 
                 /**
-                 * BenchmarkResult stdout.
-                 * @member {string} stdout
+                 * BenchmarkResult markedAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} markedAt
                  * @memberof xsuportal.proto.resources.BenchmarkResult
                  * @instance
                  */
-                BenchmarkResult.prototype.stdout = "";
-
-                /**
-                 * BenchmarkResult stderr.
-                 * @member {string} stderr
-                 * @memberof xsuportal.proto.resources.BenchmarkResult
-                 * @instance
-                 */
-                BenchmarkResult.prototype.stderr = "";
+                BenchmarkResult.prototype.markedAt = null;
 
                 /**
                  * Creates a new BenchmarkResult instance using the specified properties.
@@ -1450,10 +1495,8 @@ $root.xsuportal = (function() {
                         $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.encode(message.scoreBreakdown, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                     if (message.reason != null && Object.hasOwnProperty.call(message, "reason"))
                         writer.uint32(/* id 5, wireType 2 =*/42).string(message.reason);
-                    if (message.stdout != null && Object.hasOwnProperty.call(message, "stdout"))
-                        writer.uint32(/* id 6, wireType 2 =*/50).string(message.stdout);
-                    if (message.stderr != null && Object.hasOwnProperty.call(message, "stderr"))
-                        writer.uint32(/* id 7, wireType 2 =*/58).string(message.stderr);
+                    if (message.markedAt != null && Object.hasOwnProperty.call(message, "markedAt"))
+                        $root.google.protobuf.Timestamp.encode(message.markedAt, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
                     return writer;
                 };
 
@@ -1504,10 +1547,7 @@ $root.xsuportal = (function() {
                             message.reason = reader.string();
                             break;
                         case 6:
-                            message.stdout = reader.string();
-                            break;
-                        case 7:
-                            message.stderr = reader.string();
+                            message.markedAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -1561,12 +1601,11 @@ $root.xsuportal = (function() {
                     if (message.reason != null && message.hasOwnProperty("reason"))
                         if (!$util.isString(message.reason))
                             return "reason: string expected";
-                    if (message.stdout != null && message.hasOwnProperty("stdout"))
-                        if (!$util.isString(message.stdout))
-                            return "stdout: string expected";
-                    if (message.stderr != null && message.hasOwnProperty("stderr"))
-                        if (!$util.isString(message.stderr))
-                            return "stderr: string expected";
+                    if (message.markedAt != null && message.hasOwnProperty("markedAt")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.markedAt);
+                        if (error)
+                            return "markedAt." + error;
+                    }
                     return null;
                 };
 
@@ -1602,10 +1641,11 @@ $root.xsuportal = (function() {
                     }
                     if (object.reason != null)
                         message.reason = String(object.reason);
-                    if (object.stdout != null)
-                        message.stdout = String(object.stdout);
-                    if (object.stderr != null)
-                        message.stderr = String(object.stderr);
+                    if (object.markedAt != null) {
+                        if (typeof object.markedAt !== "object")
+                            throw TypeError(".xsuportal.proto.resources.BenchmarkResult.markedAt: object expected");
+                        message.markedAt = $root.google.protobuf.Timestamp.fromObject(object.markedAt);
+                    }
                     return message;
                 };
 
@@ -1632,8 +1672,7 @@ $root.xsuportal = (function() {
                             object.score = options.longs === String ? "0" : 0;
                         object.scoreBreakdown = null;
                         object.reason = "";
-                        object.stdout = "";
-                        object.stderr = "";
+                        object.markedAt = null;
                     }
                     if (message.finished != null && message.hasOwnProperty("finished"))
                         object.finished = message.finished;
@@ -1648,10 +1687,8 @@ $root.xsuportal = (function() {
                         object.scoreBreakdown = $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown.toObject(message.scoreBreakdown, options);
                     if (message.reason != null && message.hasOwnProperty("reason"))
                         object.reason = message.reason;
-                    if (message.stdout != null && message.hasOwnProperty("stdout"))
-                        object.stdout = message.stdout;
-                    if (message.stderr != null && message.hasOwnProperty("stderr"))
-                        object.stderr = message.stderr;
+                    if (message.markedAt != null && message.hasOwnProperty("markedAt"))
+                        object.markedAt = $root.google.protobuf.Timestamp.toObject(message.markedAt, options);
                     return object;
                 };
 
@@ -1672,7 +1709,7 @@ $root.xsuportal = (function() {
                      * Properties of a ScoreBreakdown.
                      * @memberof xsuportal.proto.resources.BenchmarkResult
                      * @interface IScoreBreakdown
-                     * @property {number|Long|null} [base] ScoreBreakdown base
+                     * @property {number|Long|null} [raw] ScoreBreakdown raw
                      * @property {number|Long|null} [deduction] ScoreBreakdown deduction
                      */
 
@@ -1692,12 +1729,12 @@ $root.xsuportal = (function() {
                     }
 
                     /**
-                     * ScoreBreakdown base.
-                     * @member {number|Long} base
+                     * ScoreBreakdown raw.
+                     * @member {number|Long} raw
                      * @memberof xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown
                      * @instance
                      */
-                    ScoreBreakdown.prototype.base = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                    ScoreBreakdown.prototype.raw = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * ScoreBreakdown deduction.
@@ -1731,8 +1768,8 @@ $root.xsuportal = (function() {
                     ScoreBreakdown.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.base != null && Object.hasOwnProperty.call(message, "base"))
-                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.base);
+                        if (message.raw != null && Object.hasOwnProperty.call(message, "raw"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.raw);
                         if (message.deduction != null && Object.hasOwnProperty.call(message, "deduction"))
                             writer.uint32(/* id 2, wireType 0 =*/16).int64(message.deduction);
                         return writer;
@@ -1770,7 +1807,7 @@ $root.xsuportal = (function() {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
                             case 1:
-                                message.base = reader.int64();
+                                message.raw = reader.int64();
                                 break;
                             case 2:
                                 message.deduction = reader.int64();
@@ -1810,9 +1847,9 @@ $root.xsuportal = (function() {
                     ScoreBreakdown.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.base != null && message.hasOwnProperty("base"))
-                            if (!$util.isInteger(message.base) && !(message.base && $util.isInteger(message.base.low) && $util.isInteger(message.base.high)))
-                                return "base: integer|Long expected";
+                        if (message.raw != null && message.hasOwnProperty("raw"))
+                            if (!$util.isInteger(message.raw) && !(message.raw && $util.isInteger(message.raw.low) && $util.isInteger(message.raw.high)))
+                                return "raw: integer|Long expected";
                         if (message.deduction != null && message.hasOwnProperty("deduction"))
                             if (!$util.isInteger(message.deduction) && !(message.deduction && $util.isInteger(message.deduction.low) && $util.isInteger(message.deduction.high)))
                                 return "deduction: integer|Long expected";
@@ -1831,15 +1868,15 @@ $root.xsuportal = (function() {
                         if (object instanceof $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown)
                             return object;
                         var message = new $root.xsuportal.proto.resources.BenchmarkResult.ScoreBreakdown();
-                        if (object.base != null)
+                        if (object.raw != null)
                             if ($util.Long)
-                                (message.base = $util.Long.fromValue(object.base)).unsigned = false;
-                            else if (typeof object.base === "string")
-                                message.base = parseInt(object.base, 10);
-                            else if (typeof object.base === "number")
-                                message.base = object.base;
-                            else if (typeof object.base === "object")
-                                message.base = new $util.LongBits(object.base.low >>> 0, object.base.high >>> 0).toNumber();
+                                (message.raw = $util.Long.fromValue(object.raw)).unsigned = false;
+                            else if (typeof object.raw === "string")
+                                message.raw = parseInt(object.raw, 10);
+                            else if (typeof object.raw === "number")
+                                message.raw = object.raw;
+                            else if (typeof object.raw === "object")
+                                message.raw = new $util.LongBits(object.raw.low >>> 0, object.raw.high >>> 0).toNumber();
                         if (object.deduction != null)
                             if ($util.Long)
                                 (message.deduction = $util.Long.fromValue(object.deduction)).unsigned = false;
@@ -1868,20 +1905,20 @@ $root.xsuportal = (function() {
                         if (options.defaults) {
                             if ($util.Long) {
                                 var long = new $util.Long(0, 0, false);
-                                object.base = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                                object.raw = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                             } else
-                                object.base = options.longs === String ? "0" : 0;
+                                object.raw = options.longs === String ? "0" : 0;
                             if ($util.Long) {
                                 var long = new $util.Long(0, 0, false);
                                 object.deduction = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                             } else
                                 object.deduction = options.longs === String ? "0" : 0;
                         }
-                        if (message.base != null && message.hasOwnProperty("base"))
-                            if (typeof message.base === "number")
-                                object.base = options.longs === String ? String(message.base) : message.base;
+                        if (message.raw != null && message.hasOwnProperty("raw"))
+                            if (typeof message.raw === "number")
+                                object.raw = options.longs === String ? String(message.raw) : message.raw;
                             else
-                                object.base = options.longs === String ? $util.Long.prototype.toString.call(message.base) : options.longs === Number ? new $util.LongBits(message.base.low >>> 0, message.base.high >>> 0).toNumber() : message.base;
+                                object.raw = options.longs === String ? $util.Long.prototype.toString.call(message.raw) : options.longs === Number ? new $util.LongBits(message.raw.low >>> 0, message.raw.high >>> 0).toNumber() : message.raw;
                         if (message.deduction != null && message.hasOwnProperty("deduction"))
                             if (typeof message.deduction === "number")
                                 object.deduction = options.longs === String ? String(message.deduction) : message.deduction;

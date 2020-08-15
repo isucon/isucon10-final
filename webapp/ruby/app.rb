@@ -25,7 +25,7 @@ module Xsuportal
       register Sinatra::Reloader
       also_reload './utils.rb'
 
-      %w[/ /dashboard /registration /signup /login /logout].each do |path|
+      %w[/ /dashboard /registration /signup /login /logout /benchmark_jobs /benchmark_jobs/:id].each do |path|
         get path do
           File.read(File.join('public', 'index.html'))
         end
@@ -213,12 +213,10 @@ module Xsuportal
           passed: result[:passed],
           score: result[:score],
           score_breakdown: result[:score_breakdown] ? Proto::Resources::BenchmarkResult::ScoreBreakdown.new(
-            base: result[:score_breakdown][:base],
+            raw: result[:score_breakdown][:raw],
             deduction: result[:score_breakdown][:deduction],
           ) : nil,
           reason: result[:reason],
-          stdout: result[:stdout],
-          stderr: result[:stderr],
         )
       end
 

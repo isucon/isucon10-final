@@ -31,10 +31,10 @@ message BenchmarkJob {
   // // instance_name is not available for contestant
   // string instance_name = 10;
 
-  // Team team = 16;
-  // // target & result are only available at GetBenchmarkJobResponse
+  Team team = 16;
+  // target & result are only available at GetBenchmarkJobResponse
   // ContestantInstance target = 17;
-  // BenchmarkResult result = 18;
+  BenchmarkResult result = 18;
 
   string target_hostname = 30;
 }

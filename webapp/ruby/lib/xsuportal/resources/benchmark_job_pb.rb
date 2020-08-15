@@ -17,6 +17,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :updated_at, :message, 6, "google.protobuf.Timestamp"
       optional :started_at, :message, 7, "google.protobuf.Timestamp"
       optional :finished_at, :message, 8, "google.protobuf.Timestamp"
+      optional :team, :message, 16, "xsuportal.proto.resources.Team"
+      optional :result, :message, 18, "xsuportal.proto.resources.BenchmarkResult"
       optional :target_hostname, :string, 30
     end
     add_enum "xsuportal.proto.resources.BenchmarkJob.Status" do
