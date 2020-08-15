@@ -17,9 +17,8 @@ test: go.mod $(GOPROTOFILES) $(GOFILES)
 
 .PHONY: clean
 clean: ## Cleanup working directory
-	find ./proto -name '*.pb.go' | xargs rm
+	$(RM) bin/benchmarker $(GOPROTOFILES)
 	go clean
-	rm -rf bin/benchmarker
 
 .PHONY: help
 help: ## Display this help screen
