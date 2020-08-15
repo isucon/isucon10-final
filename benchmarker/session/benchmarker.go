@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/isucon/isucon10-final/benchmarker/model"
-	"github.com/isucon/isucon10-final/benchmarker/random"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench"
+	"github.com/isucon/isucon10-final/benchmarker/random"
 	"google.golang.org/grpc"
 )
 
@@ -68,12 +68,10 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 			Finished: false,
 			Score:    score.Int() / 2,
 			ScoreBreakdown: &resources.BenchmarkResult_ScoreBreakdown{
-				Base:      score.Base / 2,
+				Raw:       score.Base / 2,
 				Deduction: score.Deduction / 2,
 			},
 			Reason: "",
-			Stdout: "",
-			Stderr: "",
 		},
 		Nonce: 1,
 	}
@@ -93,12 +91,10 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 			Passed:   !(score.FastFail || score.SlowFail),
 			Score:    score.Int(),
 			ScoreBreakdown: &resources.BenchmarkResult_ScoreBreakdown{
-				Base:      score.BaseInt(),
+				Raw:       score.BaseInt(),
 				Deduction: score.DeductionInt(),
 			},
 			Reason: "",
-			Stdout: "",
-			Stderr: "",
 		},
 		Nonce: 2,
 	}

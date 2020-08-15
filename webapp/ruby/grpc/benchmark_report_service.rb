@@ -55,11 +55,9 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           `passed`,
           `marked_at`,
           `reason`,
-          `stdout`,
-          `stderr`,
           `created_at`,
           `updated_at`
-        ) VALUES (?, ?, ?, ?, ?, ?, NOW(6), ?, ?, ?, NOW(6), NOW(6))
+        ) VALUES (?, ?, ?, ?, ?, ?, NOW(6), ?, NOW(6), NOW(6))
       SQL
       request.job_id,
       result.score,
@@ -68,8 +66,6 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       true,
       result.passed,
       result.reason,
-      result.stdout,
-      result.stderr,
     )
     result_id = db.query('SELECT LAST_INSERT_ID() AS `id`').first.fetch(:id)
     db.xquery(
