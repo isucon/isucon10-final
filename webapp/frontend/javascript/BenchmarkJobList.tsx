@@ -10,6 +10,7 @@ import { ErrorMessage } from "./common/ErrorMessage";
 import { TimeDuration } from "./common/TimeDuration";
 import { Index } from "./Index";
 import { LoginRequired } from "./common/LoginRequired";
+import { Timestamp } from "./common/Timestamp";
 
 type ListFilterProps = {
   teamId: number | null;
@@ -139,7 +140,6 @@ export class BenchmarkJobList extends React.Component<Props, State> {
             </header>
             <main>
               {this.renderForm()}
-              {this.renderFilter()}
               {this.renderError()}
               {this.renderList()}
             </main>
@@ -164,20 +164,6 @@ export class BenchmarkJobList extends React.Component<Props, State> {
     return <p>(form予定地)</p>;
   }
 
-  renderFilter() {
-    const teamId = this.props.session.team?.id;
-    if (teamId != null) {
-      return (
-        <ListFilter
-          teamId={teamId as number}
-          incompleteOnly={this.props.incompleteOnly}
-        />
-      );
-    } else {
-      return <></>;
-    }
-  }
-
   renderList() {
     if (!this.state.list) return <p>Loading...</p>;
     return (
@@ -185,10 +171,11 @@ export class BenchmarkJobList extends React.Component<Props, State> {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Team</th>
-            <th>Score</th>
-            <th>Target Hostname</th>
+            <th>Target</th>
             <th>Status</th>
+            <th>Result</th>
+            <th>Score</th>
+            <th>Enqueued</th>
             <th>Duration</th>
           </tr>
         </thead>
@@ -199,6 +186,37 @@ export class BenchmarkJobList extends React.Component<Props, State> {
     );
   }
 
+  renderJobStatus(
+    status: xsuportal.proto.resources.BenchmarkJob.Status | null | undefined
+  ) {
+    switch (status) {
+      case xsuportal.proto.resources.BenchmarkJob.Status.FINISHED:
+        return <span className="tag is-success">Finished</span>;
+      case xsuportal.proto.resources.BenchmarkJob.Status.ERRORED:
+        return <span className="tag is-danger">Error</span>;
+      case xsuportal.proto.resources.BenchmarkJob.Status.CANCELLED:
+        return <span className="tag is-dark">Cancelled</span>;
+      case xsuportal.proto.resources.BenchmarkJob.Status.PENDING:
+        return <span className="tag is-primary">Pending</span>;
+      case xsuportal.proto.resources.BenchmarkJob.Status.RUNNING:
+        return <span className="tag is-link">Running</span>;
+      case xsuportal.proto.resources.BenchmarkJob.Status.SENT:
+        return <span className="tag is-info">Sent</span>;
+    }
+    return <span className="tag is-dark">Unknown({status})</span>;
+  }
+
+  renderJobResult(passed: boolean | null | undefined) {
+    if (passed == null) {
+      return <></>;
+    }
+    if (passed) {
+      return <span className="tag is-success">Passed</span>;
+    } else {
+      return <span className="tag is-danger">Failed</span>;
+    }
+  }
+
   renderJob(job: xsuportal.proto.resources.IBenchmarkJob, i: number) {
     const id = job.id!.toString();
     return (
@@ -206,10 +224,13 @@ export class BenchmarkJobList extends React.Component<Props, State> {
         <td>
           <Link to={`/benchmark_jobs/${encodeURIComponent(id)}`}>#{id}</Link>
         </td>
-        <td>{this.props.session.team?.name}</td>
-        <td>{job.result?.score}</td>
         <td>{job.targetHostname}</td>
-        <td>{xsuportal.proto.resources.BenchmarkJob.Status[job.status!]}</td>
+        <td>{this.renderJobStatus(job.status)}</td>
+        <td>{this.renderJobResult(job.result?.passed)}</td>
+        <td>{job.result?.score}</td>
+        <td>
+          <Timestamp timestamp={job.createdAt!}></Timestamp>
+        </td>
         <td>
           <TimeDuration a={job.createdAt!} b={job.finishedAt} />
         </td>
