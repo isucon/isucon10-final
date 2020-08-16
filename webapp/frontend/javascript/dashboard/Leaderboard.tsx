@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import type { xsuportal } from "./pb";
+import type { xsuportal } from "../pb";
 
 interface TeamItemProps {
   rank: number;

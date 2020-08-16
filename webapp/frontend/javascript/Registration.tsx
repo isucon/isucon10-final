@@ -1,13 +1,13 @@
 import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./ApiClient";
+import { ApiError, ApiClient } from "./common/ApiClient";
 import React from "react";
 
-import { ErrorMessage } from "./ErrorMessage";
+import { ErrorMessage } from "./common/ErrorMessage";
 
-import { RegistrationForm } from "./RegistrationForm";
-import { RegistrationStatus } from "./RegistrationStatus";
+import { RegistrationForm } from "./registration/RegistrationForm";
+import { RegistrationStatus } from "./registration/RegistrationStatus";
 import { Index } from "./Index";
-import { LoginRequired } from "./LoginRequired";
+import { LoginRequired } from "./common/LoginRequired";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;

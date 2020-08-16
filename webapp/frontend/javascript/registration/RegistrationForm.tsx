@@ -1,9 +1,9 @@
-import { xsuportal } from "./pb";
-import { ApiClient } from "./ApiClient";
+import { xsuportal } from "../pb";
+import { ApiClient } from "../common/ApiClient";
 import React from "react";
 
-import { ErrorMessage } from "./ErrorMessage";
-import { Index } from "./Index";
+import { ErrorMessage } from "../common/ErrorMessage";
+import { Index } from "../Index";
 
 export interface Props {
   client: ApiClient;

@@ -3,8 +3,8 @@ import { xsuportal } from "./pb";
 import React, { useEffect, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { Timestamp } from "./Timestamp";
-import { ApiClient } from "./ApiClient";
+import { Timestamp } from "./common/Timestamp";
+import { ApiClient } from "./common/ApiClient";
 
 export interface Props {
   client: ApiClient;

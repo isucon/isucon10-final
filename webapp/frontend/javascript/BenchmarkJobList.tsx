@@ -1,13 +1,13 @@
 import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./ApiClient";
+import { ApiError, ApiClient } from "./common/ApiClient";
 
 import React from "react";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { ErrorMessage } from "./ErrorMessage";
-import { TimeDuration } from "./TimeDuration";
+import { ErrorMessage } from "./common/ErrorMessage";
+import { TimeDuration } from "./common/TimeDuration";
 
 type ListFilterProps = {
   teamId: number | null;

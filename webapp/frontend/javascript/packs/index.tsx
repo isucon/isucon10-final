@@ -1,5 +1,5 @@
 import "./application.scss";
-import { ApiClient } from "../ApiClient";
+import { ApiClient } from "../common/ApiClient";
 import { Index } from "../Index";
 import React from "react";
 import ReactDOM from "react-dom";

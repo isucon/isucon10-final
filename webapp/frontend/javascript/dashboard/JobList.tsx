@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import dayjs from "dayjs";
-import { xsuportal } from "./pb";
+import { xsuportal } from "../pb";
 
 interface JobListItemProps {
   job: xsuportal.proto.resources.IBenchmarkJob;

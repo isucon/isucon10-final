@@ -1,4 +1,4 @@
-import { xsuportal } from "./pb";
+import { xsuportal } from "../pb";
 // import * as Rails from "@rails/ujs";
 
 export class ApiError extends Error {

@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from "react";
-import { ApiClient } from "./ApiClient";
+import { ApiClient } from "../common/ApiClient";
 
 interface Props {
   client: ApiClient;

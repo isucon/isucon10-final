@@ -4,7 +4,7 @@ import { BasicTooltip } from "@nivo/tooltip";
 import dayjs from "dayjs";
 
 import type { PointTooltipProps, Serie } from "@nivo/line";
-import { xsuportal } from "./pb";
+import { xsuportal } from "../pb";
 
 const ToolTip = React.memo<PointTooltipProps>(({ point }) => (
   <BasicTooltip

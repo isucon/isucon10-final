@@ -1,9 +1,9 @@
 import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./ApiClient";
+import { ApiError, ApiClient } from "./common/ApiClient";
 import React from "react";
 import { Redirect } from "react-router-dom";
 
-import { ErrorMessage } from "./ErrorMessage";
+import { ErrorMessage } from "./common/ErrorMessage";
 import { Index } from "./Index";
 
 export interface Props {

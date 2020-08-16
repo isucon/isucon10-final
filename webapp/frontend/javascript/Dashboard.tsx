@@ -2,11 +2,11 @@ import React, { useEffect, useCallback, useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import useInterval from "use-interval";
 
-import { ScoreGraph } from "./ScoreGraph";
-import { Leaderboard } from "./Leaderboard";
-import { JobEnqueueForm } from "./JobEnqueueForm";
-import { JobList } from "./JobList";
-import { ApiClient } from "./ApiClient";
+import { ScoreGraph } from "./dashboard/ScoreGraph";
+import { Leaderboard } from "./dashboard/Leaderboard";
+import { JobEnqueueForm } from "./dashboard/JobEnqueueForm";
+import { JobList } from "./dashboard/JobList";
+import { ApiClient } from "./common/ApiClient";
 import { xsuportal } from "./pb";
 
 import { BenchmarkJobList } from "./BenchmarkJobList";
