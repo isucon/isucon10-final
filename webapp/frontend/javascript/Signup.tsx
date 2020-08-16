@@ -7,13 +7,11 @@ import { ErrorMessage } from "./common/ErrorMessage";
 import { Index } from "./Index";
 
 export interface Props {
-  session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
   root: Index;
 }
 
 export interface State {
-  session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   error: Error | null;
   contestantId: string;
   password: string;
@@ -25,7 +23,6 @@ export class Signup extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      session: this.props.session,
       error: null,
       contestantId: "",
       password: "",

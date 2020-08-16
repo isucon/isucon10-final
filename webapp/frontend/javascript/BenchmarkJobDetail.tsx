@@ -7,6 +7,7 @@ import { Timestamp } from "./common/Timestamp";
 import { ApiClient } from "./common/ApiClient";
 import { Index } from "./Index";
 import { LoginRequired } from "./common/LoginRequired";
+import { ErrorMessage } from "./common/ErrorMessage";
 
 export interface Props {
   client: ApiClient;
@@ -109,15 +110,29 @@ const renderJobExecution = (job: xsuportal.proto.resources.IBenchmarkJob) => {
   );
 };
 
+const renderError = (error: any) => {
+  if (error != null) {
+    return;
+    <ErrorMessage error={error}></ErrorMessage>;
+  } else {
+    return <></>;
+  }
+};
+
 export const BenchmarkJobDetail: React.FC<Props> = ({ client, id, root }) => {
   const [
     job,
     setJob,
   ] = React.useState<xsuportal.proto.resources.IBenchmarkJob | null>(null);
+  const [error, setError] = React.useState<any>(null);
   useEffect(() => {
     if (!job) {
       (async () => {
-        setJob(await client.getBenchmarkJob(id));
+        try {
+          setJob(await client.getBenchmarkJob(id));
+        } catch (err) {
+          setError(err);
+        }
       })();
     }
   }, [job]);
@@ -126,6 +141,7 @@ export const BenchmarkJobDetail: React.FC<Props> = ({ client, id, root }) => {
       <>
         <LoginRequired root={root}></LoginRequired>
         <section>
+          {renderError(error)}
           {renderJobSummary(job)}
           {renderJobResult(job)}
           {renderJobExecution(job)}
@@ -133,6 +149,11 @@ export const BenchmarkJobDetail: React.FC<Props> = ({ client, id, root }) => {
       </>
     );
   } else {
-    return <LoginRequired root={root}></LoginRequired>;
+    return (
+      <>
+        <LoginRequired root={root}></LoginRequired>
+        {renderError(error)}
+      </>
+    );
   }
 };

@@ -8,13 +8,11 @@ import { ErrorMessage } from "./common/ErrorMessage";
 import { Index } from "./Index";
 
 export interface Props {
-  session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
   root: Index;
 }
 
 export interface State {
-  session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   error: Error | null;
   contestantId: string;
   password: string;
@@ -26,7 +24,6 @@ export class Login extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      session: this.props.session,
       error: null,
       contestantId: "",
       password: "",
@@ -156,18 +153,24 @@ export class Login extends React.Component<Props, State> {
     if (this.state.requesting) return;
     try {
       this.setState({ requesting: true });
-      await this.login();
-      this.props.root.setState({ loggedin: true });
+      await this.props.client.login({
+        contestantId: this.state.contestantId,
+        password: this.state.password,
+      });
+      const session = await this.props.client.getCurrentSession();
+      this.props.root.setState({
+        loggedin: true,
+        registered: !!session.team,
+        session: session,
+      });
       this.setState({ loginSucceeded: true, error: null, requesting: false });
     } catch (err) {
       this.setState({ error: err, requesting: false });
     }
-  }
 
-  login() {
-    return this.props.client.login({
-      contestantId: this.state.contestantId,
-      password: this.state.password,
-    });
+    try {
+    } catch (err) {
+      this.setState({ error: err, requesting: false });
+    }
   }
 }

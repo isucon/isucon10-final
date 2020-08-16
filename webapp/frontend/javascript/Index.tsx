@@ -84,11 +84,7 @@ export class Index extends React.Component<Props, State> {
                 />
               </Route>
               <Route path="/login">
-                <Login
-                  session={this.props.session}
-                  client={this.props.client}
-                  root={this}
-                />
+                <Login client={this.props.client} root={this} />
               </Route>
               <Route path="/logout">
                 <Logout
@@ -98,11 +94,7 @@ export class Index extends React.Component<Props, State> {
                 />
               </Route>
               <Route path="/signup">
-                <Signup
-                  session={this.props.session}
-                  client={this.props.client}
-                  root={this}
-                />
+                <Signup client={this.props.client} root={this} />
               </Route>
               <Route path="/dashboard">
                 <Dashboard
