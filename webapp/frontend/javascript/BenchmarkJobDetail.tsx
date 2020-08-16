@@ -5,10 +5,13 @@ import { Link } from "react-router-dom";
 
 import { Timestamp } from "./common/Timestamp";
 import { ApiClient } from "./common/ApiClient";
+import { Index } from "./Index";
+import { LoginRequired } from "./common/LoginRequired";
 
 export interface Props {
   client: ApiClient;
   id: number;
+  root: Index;
 }
 
 const renderJobSummary = (job: xsuportal.proto.resources.IBenchmarkJob) => {
@@ -40,23 +43,6 @@ const renderJobSummary = (job: xsuportal.proto.resources.IBenchmarkJob) => {
         <p>
           <b>Finished At:</b>
           {job.finishedAt ? <Timestamp timestamp={job.finishedAt} /> : "N/A"}
-        </p>
-      </div>
-    </div>
-  );
-};
-
-const renderTeam = (team: xsuportal.proto.resources.ITeam) => {
-  return (
-    <div className="card mt-5">
-      <header className="card-header">
-        <h4 className="is-4 card-header-title">Team</h4>
-      </header>
-      <div className="card-content">
-        <p>
-          <Link to={`/admin/teams/${encodeURIComponent(team.id!.toString())}`}>
-            {team.name} (#{team.id!.toString()})
-          </Link>
         </p>
       </div>
     </div>
@@ -123,7 +109,7 @@ const renderJobExecution = (job: xsuportal.proto.resources.IBenchmarkJob) => {
   );
 };
 
-export const BenchmarkJobDetail: React.FC<Props> = ({ client, id }) => {
+export const BenchmarkJobDetail: React.FC<Props> = ({ client, id, root }) => {
   const [
     job,
     setJob,
@@ -137,13 +123,16 @@ export const BenchmarkJobDetail: React.FC<Props> = ({ client, id }) => {
   }, [job]);
   if (job) {
     return (
-      <section>
-        {renderJobSummary(job)}
-        {renderJobResult(job)}
-        {renderJobExecution(job)}
-      </section>
+      <>
+        <LoginRequired root={root}></LoginRequired>
+        <section>
+          {renderJobSummary(job)}
+          {renderJobResult(job)}
+          {renderJobExecution(job)}
+        </section>
+      </>
     );
   } else {
-    return <>何も出ない</>;
+    return <LoginRequired root={root}></LoginRequired>;
   }
 };

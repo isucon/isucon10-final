@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "./common/ErrorMessage";
 import { TimeDuration } from "./common/TimeDuration";
+import { Index } from "./Index";
+import { LoginRequired } from "./common/LoginRequired";
 
 type ListFilterProps = {
   teamId: number | null;
@@ -36,53 +38,55 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
   });
 
   return (
-    <div className="card mt-5">
-      {redirect}
-      <div className="card-content">
-        <form onSubmit={onSubmit}>
-          <div className="columns">
-            <div className="column is-3 field">
-              <label
-                className="label"
-                htmlFor="AdminBenchmarkJobListFilter-teamId"
-              >
-                Team ID
-              </label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  name="teamId"
-                  id="AdminBenchmarkJobListFilter-teamId"
-                  ref={register}
-                />
+    <>
+      <div className="card mt-5">
+        {redirect}
+        <div className="card-content">
+          <form onSubmit={onSubmit}>
+            <div className="columns">
+              <div className="column is-3 field">
+                <label
+                  className="label"
+                  htmlFor="AdminBenchmarkJobListFilter-teamId"
+                >
+                  Team ID
+                </label>
+                <div className="control">
+                  <input
+                    className="input"
+                    type="text"
+                    name="teamId"
+                    id="AdminBenchmarkJobListFilter-teamId"
+                    ref={register}
+                  />
+                </div>
+              </div>
+              <div className="column is-3 field">
+                <label
+                  className="label"
+                  htmlFor="AdminBenchmarkJobListFilter-incompleteOnly"
+                >
+                  Incomplete only
+                </label>
+                <div className="control">
+                  <input
+                    type="checkbox"
+                    name="incompleteOnly"
+                    id="AdminBenchmarkJobListFilter-incompleteOnly"
+                    ref={register}
+                  />
+                </div>
+              </div>
+              <div className="column is-3 field">
+                <button className="button is-link" type="submit">
+                  Filter
+                </button>
               </div>
             </div>
-            <div className="column is-3 field">
-              <label
-                className="label"
-                htmlFor="AdminBenchmarkJobListFilter-incompleteOnly"
-              >
-                Incomplete only
-              </label>
-              <div className="control">
-                <input
-                  type="checkbox"
-                  name="incompleteOnly"
-                  id="AdminBenchmarkJobListFilter-incompleteOnly"
-                  ref={register}
-                />
-              </div>
-            </div>
-            <div className="column is-3 field">
-              <button className="button is-link" type="submit">
-                Filter
-              </button>
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -90,6 +94,7 @@ export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
   incompleteOnly: boolean;
+  root: Index;
 }
 
 export interface State {
@@ -126,6 +131,7 @@ export class BenchmarkJobList extends React.Component<Props, State> {
   public render() {
     return (
       <>
+        <LoginRequired root={this.props.root}></LoginRequired>
         <Switch>
           <Route exact path="/benchmark_jobs">
             <header>

@@ -60,21 +60,7 @@ export class Index extends React.Component<Props, State> {
               </div>
               <div className="navbar-menu is-active">
                 <div className="navbar-start">
-                  <Link className="navbar-item" to="/">
-                    チーム一覧
-                  </Link>
-                  <Link className="navbar-item" to="/dashboard">
-                    ダッシュボード
-                  </Link>
-                  <Link className="navbar-item" to="/benchmark_jobs">
-                    ジョブ一覧
-                  </Link>
-                  <a className="navbar-item" href="/terms">
-                    規約
-                  </a>
-                  <a className="navbar-item" href="/rules">
-                    レギュレーション
-                  </a>
+                  {this.renderNavbarMenuButtons()}
                 </div>
                 <div className="navbar-end">
                   <div className="navbar-item">
@@ -122,6 +108,7 @@ export class Index extends React.Component<Props, State> {
                 <Dashboard
                   session={this.props.session}
                   client={this.props.client}
+                  root={this}
                 />
               </Route>
               <Route
@@ -131,6 +118,7 @@ export class Index extends React.Component<Props, State> {
                     <BenchmarkJobDetail
                       client={this.props.client}
                       id={match.params.id}
+                      root={this}
                     />
                   );
                 }}
@@ -140,6 +128,7 @@ export class Index extends React.Component<Props, State> {
                   session={this.props.session}
                   client={this.props.client}
                   incompleteOnly={false}
+                  root={this}
                 />
               </Route>
               <Route path="/">
@@ -153,6 +142,44 @@ export class Index extends React.Component<Props, State> {
         </Router>
       </>
     );
+  }
+
+  public renderNavbarMenuButtons() {
+    if (this.state.loggedin) {
+      return (
+        <>
+          <Link className="navbar-item" to="/">
+            チーム一覧
+          </Link>
+          <Link className="navbar-item" to="/dashboard">
+            ダッシュボード
+          </Link>
+          <Link className="navbar-item" to="/benchmark_jobs">
+            ジョブ一覧
+          </Link>
+          <a className="navbar-item" href="/terms">
+            規約
+          </a>
+          <a className="navbar-item" href="/rules">
+            レギュレーション
+          </a>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Link className="navbar-item" to="/">
+            チーム一覧
+          </Link>
+          <a className="navbar-item" href="/terms">
+            規約
+          </a>
+          <a className="navbar-item" href="/rules">
+            レギュレーション
+          </a>
+        </>
+      );
+    }
   }
 
   public renderNavbarRegistrationButtons() {
