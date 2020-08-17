@@ -196,12 +196,38 @@ module Xsuportal
           updated_at: job[:updated_at],
           started_at: job[:started_atj],
           finished_at: job[:finished_at],
+          result: job[:result_created_at] ? benchmark_result_pb(job) : nil,
         )
       end
 
       def benchmark_jobs_pb(limit:nil)
         jobs = db.xquery(
-          "SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC#{ limit ? " LIMIT #{limit}" : ''}",
+          <<~SQL,
+            SELECT
+              `j`.`id` AS `id`,
+              `j`.`team_id` AS `team_id`,
+              `j`.`status` AS `status`,
+              `j`.`target_hostname` AS `target_hostname`,
+              `j`.`created_at` AS `created_at`,
+              `j`.`updated_at` AS `updated_at`,
+              `j`.`started_at` AS `started_at`,
+              `j`.`started_at` AS `finished_at`,
+              `r`.`created_at` AS `result_created_at`,
+              `r`.`finished` AS `finished`,
+              `r`.`passed` AS `passed`,
+              (`r`.`score_raw` - `r`.`score_deduction`) AS `score`,
+              `r`.`score_raw` AS `score_raw`,
+              `r`.`score_deduction` AS `score_deduction`,
+              `r`.`reason` AS `reason`
+            FROM
+              `benchmark_jobs` `j`
+              LEFT JOIN `benchmark_results` `r` ON `r`.`id` = `j`.latest_benchmark_result_id
+            WHERE
+              `j`.`team_id` = ?
+            ORDER BY
+              `j`.`created_at` DESC
+            #{ limit ? "LIMIT #{limit}" : ''}
+          SQL
           current_team[:id],
         )
         jobs&.map { |job| benchmark_job_pb(job) }
