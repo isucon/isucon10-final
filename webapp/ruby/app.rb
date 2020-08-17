@@ -211,7 +211,7 @@ module Xsuportal
               `j`.`created_at` AS `created_at`,
               `j`.`updated_at` AS `updated_at`,
               `j`.`started_at` AS `started_at`,
-              `j`.`started_at` AS `finished_at`,
+              `j`.`finished_at` AS `finished_at`,
               `r`.`created_at` AS `result_created_at`,
               `r`.`finished` AS `finished`,
               `r`.`passed` AS `passed`,
