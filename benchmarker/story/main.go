@@ -6,11 +6,18 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/failure"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/session"
+	"sort"
 	"sync"
 	"time"
 )
 
 func (s *Story) Main(ctx context.Context) error {
+	defer func() {
+		if err := recover(); err != nil {
+			s.errors.Add(failure.New(failure.ErrCritical, fmt.Sprintf("%+v", err)))
+		}
+	}()
+
 	s.stdoutLogger.Info().Msg("Start main check")
 
 	if err := s.initialize(ctx); err != nil {
@@ -244,6 +251,8 @@ func (s *Story) registerTeam(ctx context.Context) error {
 		return nil
 	}
 
+	s.AddScore(SCORE_CREATE_TEAM)
+
 	inviteToken := registrationSession.GetInviteToken()
 
 	if ok, _ := s.joinTeam(ctx, inviteToken, team, team.Developer); !ok {
@@ -347,6 +356,7 @@ func (s *Story) enqueueBenchmark(ctx context.Context) error {
 			jobId := job.GetJob().GetId()
 			s.teamByJobID[jobId] = team
 			team.LatestEnqueuedBenchmarkJob = job
+			s.AddScore(SCORE_FINISH_BENCHMARK)
 		}(team)
 	}
 
@@ -380,12 +390,12 @@ func (s *Story) executeBenchmarkers(ctx context.Context) {
 				nowDuration := finishedAt.Sub(time.Now())
 				nowIndex := 100 - int64((float64(nowDuration)/float64(duration))*100)
 
-				resp, err := benchmarker.Do(ctx, nowIndex, nil)
-				if err == nil && resp != nil {
-					if team, ok := s.teamByJobID[resp.GetJobId()]; ok {
-						team.Lock.Lock()
-						defer team.Lock.Unlock()
-						team.LatestEnqueuedBenchmarkJob = nil
+				result, err := benchmarker.Do(ctx, nowIndex, nil)
+				if err == nil && result != nil {
+					if team, ok := s.teamByJobID[result.GetJobId()]; ok {
+						team.AddScore(result)
+
+						s.verifyLeaderboard(ctx, team, true)
 					}
 				}
 			}()
@@ -404,20 +414,95 @@ func (s *Story) getDashboard(ctx context.Context) {
 		go func(team *model.Team) {
 			defer wg.Done()
 
-			browser := s.browserPool.Get().(*session.Browser)
-			browser.Contestant = team.Operator
-
-			res, xerr, err := browser.Dashboard(ctx)
-			if xerr != nil {
-				err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
-			}
-			if err != nil {
-				s.errors.Add(err)
-			}
-
-			res.GetLeaderboard()
+			s.verifyLeaderboard(ctx, team, false)
 		}(team)
 	}
 
 	wg.Wait()
+}
+
+func (s *Story) verifyLeaderboard(ctx context.Context, team *model.Team, verifyScore bool) {
+	team.Lock.Lock()
+	defer team.Lock.Unlock()
+
+	errored := false
+
+	defer func() {
+		if !errored {
+			if verifyScore {
+				s.AddScore(SCORE_GET_DASHBOARD_BY_DEVELOPER)
+			} else {
+				s.AddScore(SCORE_GET_DASHBOARD_BY_OPERATOR)
+			}
+		}
+	}()
+
+	browser := s.browserPool.Get().(*session.Browser)
+	browser.Contestant = team.Operator
+
+	res, xerr, err := browser.Dashboard(ctx)
+	if xerr != nil {
+		err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+	}
+	if err != nil {
+		errored = true
+		s.errors.Add(err)
+	}
+
+	leaderboard := res.GetLeaderboard()
+
+	// リーダーボードのソート順が正確か検証する
+	teams := leaderboard.GetTeams()
+	sorted := sort.SliceIsSorted(teams, func(i int, j int) bool {
+		a := teams[i]
+		aLatest := a.GetLatestScore()
+		b := teams[j]
+		bLatest := b.GetLatestScore()
+
+		if aLatest.GetScore() == 0 && bLatest.GetScore() == 0 {
+			return false
+		}
+
+		if aLatest.GetScore() == bLatest.GetScore() {
+			return bLatest.GetMarkedAt().AsTime().After(aLatest.GetMarkedAt().AsTime())
+		}
+		return aLatest.GetScore() > bLatest.GetScore()
+	})
+	if !sorted {
+		errored = true
+		s.errors.Add(failure.New(failure.ErrApplication, "リーダーボードのソート順が間違っています"))
+	}
+
+	if !verifyScore {
+		return
+	}
+
+	// 自分のチームの最新スコアと最高スコアとスコアグラフが正しいかを検証する
+	for _, t := range teams {
+		if t.GetTeam().GetId() == team.ID {
+			if t.GetLatestScore().GetScore() != team.LatestScore {
+				errored = true
+				s.errors.Add(failure.New(failure.ErrApplication, "最終スコアの検証に失敗しました"))
+			}
+			if t.GetBestScore().GetScore() != team.BestScore {
+				errored = true
+				s.errors.Add(failure.New(failure.ErrApplication, "ベストスコアの検証に失敗しました"))
+			}
+
+			if len(t.GetScores()) != len(team.Scores) {
+				errored = true
+				s.errors.Add(failure.New(failure.ErrApplication, "スコアグラフの検証に失敗しました"))
+			} else {
+				for idx, sc := range t.GetScores() {
+					score := team.Scores[idx]
+					if sc.GetScore() != score.GetResult().GetScore() {
+						errored = true
+						s.errors.Add(failure.New(failure.ErrApplication, "スコアグラフの検証に失敗しました"))
+					}
+				}
+			}
+
+			break
+		}
+	}
 }

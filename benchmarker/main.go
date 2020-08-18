@@ -22,4 +22,5 @@ func main() {
 	for _, msg := range s.ErrorMessages() {
 		fmt.Println(msg)
 	}
+	fmt.Printf("Score: %d\n", s.GetScore())
 }
