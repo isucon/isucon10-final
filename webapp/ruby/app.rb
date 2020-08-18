@@ -748,10 +748,8 @@ module Xsuportal
         if e.errno == MYSQL_ER_DUP_ENTRY
           halt_pb 400, 'IDが既に登録されています'
         else
-          halt_pb 500, exception: e
+          raise e
         end
-      rescue
-        halt_pb 500, exception: e
       end
 
       encode_response_pb
