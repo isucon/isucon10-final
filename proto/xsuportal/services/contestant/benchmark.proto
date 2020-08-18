@@ -27,5 +27,4 @@ message GetBenchmarkJobQuery { int64 id = 1; }
 
 message GetBenchmarkJobResponse {
   xsuportal.proto.resources.BenchmarkJob job = 1;
-  xsuportal.proto.resources.BenchmarkResult result = 2;
 }

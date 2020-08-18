@@ -46,40 +46,21 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
     result = request.result
     db.xquery(
       <<~SQL,
-        INSERT `benchmark_results` (
-          `benchmark_job_id`,
-          `score`,
-          `score_raw`,
-          `score_deduction`,
-          `finished`,
-          `passed`,
-          `marked_at`,
-          `reason`,
-          `created_at`,
-          `updated_at`
-        ) VALUES (?, ?, ?, ?, ?, ?, NOW(6), ?, NOW(6), NOW(6))
+        UPDATE `benchmark_jobs` SET
+          `status` = ?,
+          `score_raw` = ?,
+          `score_deduction` = ?,
+          `finished` = TRUE,
+          `passed` = ?,
+          `reason` = ?,
+          `updated_at` = NOW(6),
+          `finished_at` = NOW(6)
       SQL
-      request.job_id,
-      result.score,
+      Xsuportal::Proto::Resources::BenchmarkJob::Status::FINISHED,
       result.score_breakdown&.raw,
       result.score_breakdown&.deduction,
-      true,
       result.passed,
       result.reason,
-    )
-    result_id = db.query('SELECT LAST_INSERT_ID() AS `id`').first.fetch(:id)
-    db.xquery(
-      <<~SQL,
-        UPDATE `benchmark_jobs` SET
-          `latest_benchmark_result_id` = ?,
-          `status` = ?,
-          `finished_at` = NOW(6),
-          `updated_at` = NOW(6)
-        WHERE `id` = ? LIMIT 1
-      SQL
-      result_id,
-      Xsuportal::Proto::Resources::BenchmarkJob::Status::FINISHED,
-      request.job_id,
     )
   end
 
@@ -87,29 +68,17 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
     db = Xsuportal::Database.connection
     db.xquery(
       <<~SQL,
-        INSERT `benchmark_results` (
-          `benchmark_job_id`,
-          `finished`,
-          `created_at`,
-          `updated_at`
-        ) VALUES (?, ?, NOW(6), NOW(6))
-      SQL
-      request.job_id,
-      false,
-    )
-    result_id = db.query('SELECT LAST_INSERT_ID() AS `id`').first.fetch(:id)
-    db.xquery(
-      <<~SQL,
         UPDATE `benchmark_jobs` SET
-          `latest_benchmark_result_id` = ?,
           `status` = ?,
-          `started_at` = NOW(6),
-          `updated_at` = NOW(6)
-        WHERE `id` = ? LIMIT 1
+          `score_raw` = NULL,
+          `score_deduction` = NULL,
+          `finished` = FALSE,
+          `passed` = FALSE,
+          `reason` = NULL,
+          `updated_at` = NOW(6),
+          `finished_at` = NULL
       SQL
-      result_id,
       Xsuportal::Proto::Resources::BenchmarkJob::Status::RUNNING,
-      request.job_id,
     )
   end
 end
