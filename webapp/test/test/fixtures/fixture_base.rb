@@ -32,7 +32,6 @@ class FixtureBase
     @credentials[contestant_id] = password || 'password'
     name ||= contestant_id
     invite_token ||= @invite_tokens.fetch(team_id)
-    require 'pry-byebug'; binding.pry
     @client.request :post, '/api/signup', {
       contestant_id: contestant_id,
       password: @credentials[contestant_id],
