@@ -8,7 +8,6 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/session"
 	"github.com/rs/zerolog"
 	"sync"
-	"sync/atomic"
 )
 
 const (
@@ -17,7 +16,7 @@ const (
 )
 
 type Story struct {
-	score          *int64
+	Scores         *Scores
 	targetHostName string
 	targetBaseURL  string
 	grpcHostName   string
@@ -76,10 +75,8 @@ func NewStory(targetHostName string) (*Story, error) {
 		},
 	}
 
-	score := int64(0)
-
 	return &Story{
-		score:                &score,
+		Scores:               NewScores(),
 		targetHostName:       targetHostName,
 		targetBaseURL:        targetBaseURL,
 		grpcHostName:         fmt.Sprintf("%s:50051", targetHostName),
@@ -117,10 +114,6 @@ func (s *Story) ErrorMessages() []string {
 	return s.errors.GetMessages()
 }
 
-func (s *Story) AddScore(n int64) {
-	atomic.AddInt64(s.score, n)
-}
-
 func (s *Story) GetScore() int64 {
-	return atomic.LoadInt64(s.score)
+	return s.Scores.Sum()
 }

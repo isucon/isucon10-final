@@ -251,7 +251,7 @@ func (s *Story) registerTeam(ctx context.Context) error {
 		return nil
 	}
 
-	s.AddScore(SCORE_CREATE_TEAM)
+	s.Scores.CreateTeam.Incr()
 
 	inviteToken := registrationSession.GetInviteToken()
 
@@ -356,7 +356,7 @@ func (s *Story) enqueueBenchmark(ctx context.Context) error {
 			jobId := job.GetJob().GetId()
 			s.teamByJobID[jobId] = team
 			team.LatestEnqueuedBenchmarkJob = job
-			s.AddScore(SCORE_FINISH_BENCHMARK)
+			s.Scores.FinishBenchmark.Incr()
 		}(team)
 	}
 
@@ -430,9 +430,9 @@ func (s *Story) verifyLeaderboard(ctx context.Context, team *model.Team, verifyS
 	defer func() {
 		if !errored {
 			if verifyScore {
-				s.AddScore(SCORE_GET_DASHBOARD_BY_DEVELOPER)
+				s.Scores.GetDashboardByDeveloper.Incr()
 			} else {
-				s.AddScore(SCORE_GET_DASHBOARD_BY_OPERATOR)
+				s.Scores.GetDashboardByOperator.Incr()
 			}
 		}
 	}()
