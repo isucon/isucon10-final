@@ -736,7 +736,6 @@ module Xsuportal
     post '/api/signup' do
       req = decode_request_pb
       result = nil
-      require 'pry-byebug'; binding.pry
 
       begin
         db.xquery(
