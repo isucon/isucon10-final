@@ -9,10 +9,7 @@ message Team {
   string name = 2;
   string leader_id = 3;
   repeated string member_ids = 4;
-  bool final_participation = 5;
-  bool hidden = 6;
   bool withdrawn = 7;
-  bool disqualified = 9;
 
   message StudentStatus {
     bool status = 1;

@@ -867,17 +867,8 @@ export namespace xsuportal {
                 /** Team memberIds */
                 memberIds?: (string[]|null);
 
-                /** Team finalParticipation */
-                finalParticipation?: (boolean|null);
-
-                /** Team hidden */
-                hidden?: (boolean|null);
-
                 /** Team withdrawn */
                 withdrawn?: (boolean|null);
-
-                /** Team disqualified */
-                disqualified?: (boolean|null);
 
                 /** Team student */
                 student?: (xsuportal.proto.resources.Team.IStudentStatus|null);
@@ -913,17 +904,8 @@ export namespace xsuportal {
                 /** Team memberIds. */
                 public memberIds: string[];
 
-                /** Team finalParticipation. */
-                public finalParticipation: boolean;
-
-                /** Team hidden. */
-                public hidden: boolean;
-
                 /** Team withdrawn. */
                 public withdrawn: boolean;
-
-                /** Team disqualified. */
-                public disqualified: boolean;
 
                 /** Team student. */
                 public student?: (xsuportal.proto.resources.Team.IStudentStatus|null);
@@ -4497,17 +4479,11 @@ export namespace xsuportal {
                         /** TeamListItem memberNames */
                         memberNames?: (string[]|null);
 
-                        /** TeamListItem finalParticipation */
-                        finalParticipation?: (boolean|null);
-
                         /** TeamListItem isStudent */
                         isStudent?: (boolean|null);
 
                         /** TeamListItem withdrawn */
                         withdrawn?: (boolean|null);
-
-                        /** TeamListItem disqualified */
-                        disqualified?: (boolean|null);
                     }
 
                     /** Represents a TeamListItem. */
@@ -4528,17 +4504,11 @@ export namespace xsuportal {
                         /** TeamListItem memberNames. */
                         public memberNames: string[];
 
-                        /** TeamListItem finalParticipation. */
-                        public finalParticipation: boolean;
-
                         /** TeamListItem isStudent. */
                         public isStudent: boolean;
 
                         /** TeamListItem withdrawn. */
                         public withdrawn: boolean;
-
-                        /** TeamListItem disqualified. */
-                        public disqualified: boolean;
 
                         /**
                          * Creates a new TeamListItem instance using the specified properties.

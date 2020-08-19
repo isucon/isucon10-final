@@ -16,10 +16,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :team_id, :int64, 1
       optional :name, :string, 2
       repeated :member_names, :string, 3
-      optional :final_participation, :bool, 4
       optional :is_student, :bool, 5
       optional :withdrawn, :bool, 6
-      optional :disqualified, :bool, 7
     end
     add_message "xsuportal.proto.services.admin.GetTeamRequest" do
       optional :id, :int64, 1

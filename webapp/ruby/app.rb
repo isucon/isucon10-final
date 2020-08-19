@@ -171,8 +171,6 @@ module Xsuportal
           name: team[:name],
           leader_id: team[:leader_id],
           member_ids: members ? members.map { |_| _[:id] } : nil,
-          final_participation: team[:final_participation],
-          hidden: team[:is_hidden],
           withdrawn: team[:withdrawn],
           detail: detail ? Proto::Resources::Team::TeamDetail.new(
             email_address: team[:email_address],
@@ -479,7 +477,6 @@ module Xsuportal
           team_id: team[:id],
           name: team[:name],
           member_names: members.map { |_| _[:name] },
-          final_participation: team[:final_participation],
           is_student: members.all? { |_| _[:student] },
         )
       end

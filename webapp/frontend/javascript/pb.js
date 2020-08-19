@@ -2362,10 +2362,7 @@ $root.xsuportal = (function() {
                  * @property {string|null} [name] Team name
                  * @property {string|null} [leaderId] Team leaderId
                  * @property {Array.<string>|null} [memberIds] Team memberIds
-                 * @property {boolean|null} [finalParticipation] Team finalParticipation
-                 * @property {boolean|null} [hidden] Team hidden
                  * @property {boolean|null} [withdrawn] Team withdrawn
-                 * @property {boolean|null} [disqualified] Team disqualified
                  * @property {xsuportal.proto.resources.Team.IStudentStatus|null} [student] Team student
                  * @property {xsuportal.proto.resources.Team.ITeamDetail|null} [detail] Team detail
                  * @property {xsuportal.proto.resources.IContestant|null} [leader] Team leader
@@ -2422,36 +2419,12 @@ $root.xsuportal = (function() {
                 Team.prototype.memberIds = $util.emptyArray;
 
                 /**
-                 * Team finalParticipation.
-                 * @member {boolean} finalParticipation
-                 * @memberof xsuportal.proto.resources.Team
-                 * @instance
-                 */
-                Team.prototype.finalParticipation = false;
-
-                /**
-                 * Team hidden.
-                 * @member {boolean} hidden
-                 * @memberof xsuportal.proto.resources.Team
-                 * @instance
-                 */
-                Team.prototype.hidden = false;
-
-                /**
                  * Team withdrawn.
                  * @member {boolean} withdrawn
                  * @memberof xsuportal.proto.resources.Team
                  * @instance
                  */
                 Team.prototype.withdrawn = false;
-
-                /**
-                 * Team disqualified.
-                 * @member {boolean} disqualified
-                 * @memberof xsuportal.proto.resources.Team
-                 * @instance
-                 */
-                Team.prototype.disqualified = false;
 
                 /**
                  * Team student.
@@ -2518,16 +2491,10 @@ $root.xsuportal = (function() {
                     if (message.memberIds != null && message.memberIds.length)
                         for (var i = 0; i < message.memberIds.length; ++i)
                             writer.uint32(/* id 4, wireType 2 =*/34).string(message.memberIds[i]);
-                    if (message.finalParticipation != null && Object.hasOwnProperty.call(message, "finalParticipation"))
-                        writer.uint32(/* id 5, wireType 0 =*/40).bool(message.finalParticipation);
-                    if (message.hidden != null && Object.hasOwnProperty.call(message, "hidden"))
-                        writer.uint32(/* id 6, wireType 0 =*/48).bool(message.hidden);
                     if (message.withdrawn != null && Object.hasOwnProperty.call(message, "withdrawn"))
                         writer.uint32(/* id 7, wireType 0 =*/56).bool(message.withdrawn);
                     if (message.detail != null && Object.hasOwnProperty.call(message, "detail"))
                         $root.xsuportal.proto.resources.Team.TeamDetail.encode(message.detail, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-                    if (message.disqualified != null && Object.hasOwnProperty.call(message, "disqualified"))
-                        writer.uint32(/* id 9, wireType 0 =*/72).bool(message.disqualified);
                     if (message.student != null && Object.hasOwnProperty.call(message, "student"))
                         $root.xsuportal.proto.resources.Team.StudentStatus.encode(message.student, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
                     if (message.leader != null && Object.hasOwnProperty.call(message, "leader"))
@@ -2583,17 +2550,8 @@ $root.xsuportal = (function() {
                                 message.memberIds = [];
                             message.memberIds.push(reader.string());
                             break;
-                        case 5:
-                            message.finalParticipation = reader.bool();
-                            break;
-                        case 6:
-                            message.hidden = reader.bool();
-                            break;
                         case 7:
                             message.withdrawn = reader.bool();
-                            break;
-                        case 9:
-                            message.disqualified = reader.bool();
                             break;
                         case 10:
                             message.student = $root.xsuportal.proto.resources.Team.StudentStatus.decode(reader, reader.uint32());
@@ -2660,18 +2618,9 @@ $root.xsuportal = (function() {
                             if (!$util.isString(message.memberIds[i]))
                                 return "memberIds: string[] expected";
                     }
-                    if (message.finalParticipation != null && message.hasOwnProperty("finalParticipation"))
-                        if (typeof message.finalParticipation !== "boolean")
-                            return "finalParticipation: boolean expected";
-                    if (message.hidden != null && message.hasOwnProperty("hidden"))
-                        if (typeof message.hidden !== "boolean")
-                            return "hidden: boolean expected";
                     if (message.withdrawn != null && message.hasOwnProperty("withdrawn"))
                         if (typeof message.withdrawn !== "boolean")
                             return "withdrawn: boolean expected";
-                    if (message.disqualified != null && message.hasOwnProperty("disqualified"))
-                        if (typeof message.disqualified !== "boolean")
-                            return "disqualified: boolean expected";
                     if (message.student != null && message.hasOwnProperty("student")) {
                         var error = $root.xsuportal.proto.resources.Team.StudentStatus.verify(message.student);
                         if (error)
@@ -2731,14 +2680,8 @@ $root.xsuportal = (function() {
                         for (var i = 0; i < object.memberIds.length; ++i)
                             message.memberIds[i] = String(object.memberIds[i]);
                     }
-                    if (object.finalParticipation != null)
-                        message.finalParticipation = Boolean(object.finalParticipation);
-                    if (object.hidden != null)
-                        message.hidden = Boolean(object.hidden);
                     if (object.withdrawn != null)
                         message.withdrawn = Boolean(object.withdrawn);
-                    if (object.disqualified != null)
-                        message.disqualified = Boolean(object.disqualified);
                     if (object.student != null) {
                         if (typeof object.student !== "object")
                             throw TypeError(".xsuportal.proto.resources.Team.student: object expected");
@@ -2792,11 +2735,8 @@ $root.xsuportal = (function() {
                             object.id = options.longs === String ? "0" : 0;
                         object.name = "";
                         object.leaderId = "";
-                        object.finalParticipation = false;
-                        object.hidden = false;
                         object.withdrawn = false;
                         object.detail = null;
-                        object.disqualified = false;
                         object.student = null;
                         object.leader = null;
                     }
@@ -2814,16 +2754,10 @@ $root.xsuportal = (function() {
                         for (var j = 0; j < message.memberIds.length; ++j)
                             object.memberIds[j] = message.memberIds[j];
                     }
-                    if (message.finalParticipation != null && message.hasOwnProperty("finalParticipation"))
-                        object.finalParticipation = message.finalParticipation;
-                    if (message.hidden != null && message.hasOwnProperty("hidden"))
-                        object.hidden = message.hidden;
                     if (message.withdrawn != null && message.hasOwnProperty("withdrawn"))
                         object.withdrawn = message.withdrawn;
                     if (message.detail != null && message.hasOwnProperty("detail"))
                         object.detail = $root.xsuportal.proto.resources.Team.TeamDetail.toObject(message.detail, options);
-                    if (message.disqualified != null && message.hasOwnProperty("disqualified"))
-                        object.disqualified = message.disqualified;
                     if (message.student != null && message.hasOwnProperty("student"))
                         object.student = $root.xsuportal.proto.resources.Team.StudentStatus.toObject(message.student, options);
                     if (message.leader != null && message.hasOwnProperty("leader"))
@@ -10907,10 +10841,8 @@ $root.xsuportal = (function() {
                          * @property {number|Long|null} [teamId] TeamListItem teamId
                          * @property {string|null} [name] TeamListItem name
                          * @property {Array.<string>|null} [memberNames] TeamListItem memberNames
-                         * @property {boolean|null} [finalParticipation] TeamListItem finalParticipation
                          * @property {boolean|null} [isStudent] TeamListItem isStudent
                          * @property {boolean|null} [withdrawn] TeamListItem withdrawn
-                         * @property {boolean|null} [disqualified] TeamListItem disqualified
                          */
 
                         /**
@@ -10954,14 +10886,6 @@ $root.xsuportal = (function() {
                         TeamListItem.prototype.memberNames = $util.emptyArray;
 
                         /**
-                         * TeamListItem finalParticipation.
-                         * @member {boolean} finalParticipation
-                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
-                         * @instance
-                         */
-                        TeamListItem.prototype.finalParticipation = false;
-
-                        /**
                          * TeamListItem isStudent.
                          * @member {boolean} isStudent
                          * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
@@ -10976,14 +10900,6 @@ $root.xsuportal = (function() {
                          * @instance
                          */
                         TeamListItem.prototype.withdrawn = false;
-
-                        /**
-                         * TeamListItem disqualified.
-                         * @member {boolean} disqualified
-                         * @memberof xsuportal.proto.services.admin.ListTeamsResponse.TeamListItem
-                         * @instance
-                         */
-                        TeamListItem.prototype.disqualified = false;
 
                         /**
                          * Creates a new TeamListItem instance using the specified properties.
@@ -11016,14 +10932,10 @@ $root.xsuportal = (function() {
                             if (message.memberNames != null && message.memberNames.length)
                                 for (var i = 0; i < message.memberNames.length; ++i)
                                     writer.uint32(/* id 3, wireType 2 =*/26).string(message.memberNames[i]);
-                            if (message.finalParticipation != null && Object.hasOwnProperty.call(message, "finalParticipation"))
-                                writer.uint32(/* id 4, wireType 0 =*/32).bool(message.finalParticipation);
                             if (message.isStudent != null && Object.hasOwnProperty.call(message, "isStudent"))
                                 writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isStudent);
                             if (message.withdrawn != null && Object.hasOwnProperty.call(message, "withdrawn"))
                                 writer.uint32(/* id 6, wireType 0 =*/48).bool(message.withdrawn);
-                            if (message.disqualified != null && Object.hasOwnProperty.call(message, "disqualified"))
-                                writer.uint32(/* id 7, wireType 0 =*/56).bool(message.disqualified);
                             return writer;
                         };
 
@@ -11069,17 +10981,11 @@ $root.xsuportal = (function() {
                                         message.memberNames = [];
                                     message.memberNames.push(reader.string());
                                     break;
-                                case 4:
-                                    message.finalParticipation = reader.bool();
-                                    break;
                                 case 5:
                                     message.isStudent = reader.bool();
                                     break;
                                 case 6:
                                     message.withdrawn = reader.bool();
-                                    break;
-                                case 7:
-                                    message.disqualified = reader.bool();
                                     break;
                                 default:
                                     reader.skipType(tag & 7);
@@ -11129,18 +11035,12 @@ $root.xsuportal = (function() {
                                     if (!$util.isString(message.memberNames[i]))
                                         return "memberNames: string[] expected";
                             }
-                            if (message.finalParticipation != null && message.hasOwnProperty("finalParticipation"))
-                                if (typeof message.finalParticipation !== "boolean")
-                                    return "finalParticipation: boolean expected";
                             if (message.isStudent != null && message.hasOwnProperty("isStudent"))
                                 if (typeof message.isStudent !== "boolean")
                                     return "isStudent: boolean expected";
                             if (message.withdrawn != null && message.hasOwnProperty("withdrawn"))
                                 if (typeof message.withdrawn !== "boolean")
                                     return "withdrawn: boolean expected";
-                            if (message.disqualified != null && message.hasOwnProperty("disqualified"))
-                                if (typeof message.disqualified !== "boolean")
-                                    return "disqualified: boolean expected";
                             return null;
                         };
 
@@ -11174,14 +11074,10 @@ $root.xsuportal = (function() {
                                 for (var i = 0; i < object.memberNames.length; ++i)
                                     message.memberNames[i] = String(object.memberNames[i]);
                             }
-                            if (object.finalParticipation != null)
-                                message.finalParticipation = Boolean(object.finalParticipation);
                             if (object.isStudent != null)
                                 message.isStudent = Boolean(object.isStudent);
                             if (object.withdrawn != null)
                                 message.withdrawn = Boolean(object.withdrawn);
-                            if (object.disqualified != null)
-                                message.disqualified = Boolean(object.disqualified);
                             return message;
                         };
 
@@ -11207,10 +11103,8 @@ $root.xsuportal = (function() {
                                 } else
                                     object.teamId = options.longs === String ? "0" : 0;
                                 object.name = "";
-                                object.finalParticipation = false;
                                 object.isStudent = false;
                                 object.withdrawn = false;
-                                object.disqualified = false;
                             }
                             if (message.teamId != null && message.hasOwnProperty("teamId"))
                                 if (typeof message.teamId === "number")
@@ -11224,14 +11118,10 @@ $root.xsuportal = (function() {
                                 for (var j = 0; j < message.memberNames.length; ++j)
                                     object.memberNames[j] = message.memberNames[j];
                             }
-                            if (message.finalParticipation != null && message.hasOwnProperty("finalParticipation"))
-                                object.finalParticipation = message.finalParticipation;
                             if (message.isStudent != null && message.hasOwnProperty("isStudent"))
                                 object.isStudent = message.isStudent;
                             if (message.withdrawn != null && message.hasOwnProperty("withdrawn"))
                                 object.withdrawn = message.withdrawn;
-                            if (message.disqualified != null && message.hasOwnProperty("disqualified"))
-                                object.disqualified = message.disqualified;
                             return object;
                         };
 
