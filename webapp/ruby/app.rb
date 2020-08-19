@@ -70,11 +70,11 @@ module Xsuportal
 
       def login_required(team: true, lock: false)
         unless current_contestant(lock: lock)
-          Database.ensure_transaction_close
+          Database.transaction_rollback if Database.transaction?
           halt_pb 401, 'ログインが必要です'
         end
         if team && !current_team(lock: lock)
-          Database.ensure_transaction_close
+          Database.transaction_rollback if Database.transaction?
           halt_pb 403, '参加登録が必要です'
         end
       end
@@ -132,7 +132,7 @@ module Xsuportal
       def contest_status_restricted(statuses, msg)
         statuses = [statuses] unless Array === statuses
         unless statuses.include?(current_contest_status[:status])
-          Database.ensure_transaction_close
+          Database.transaction_rollback if Database.transaction?
           halt_pb 403, msg
         end
       end

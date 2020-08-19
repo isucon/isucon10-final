@@ -21,7 +21,7 @@ module Xsuportal
 
       def ensure_transaction_close(name=:default)
         Thread.current[:db_transaction] ||= {}
-        if Thread.current[:db_transaction][name] == :open
+        if transaction?
           puts "Warning: transaction closed implicitly (#{$$},#{Thread.current.object_id}): #{name}"
           puts Thread.current[:db_transaction]["#{name}_caller"]
           transaction_rollback(name)
@@ -48,6 +48,10 @@ module Xsuportal
         # puts "ROLLBACK(#{$$},#{Thread.current.object_id}): #{name}"
         connection.query('ROLLBACK')
         Thread.current[:db_transaction][name] = nil
+      end
+
+      def transaction?(name=:default)
+        Thread.current[:db_transaction][name] == :open
       end
 
       def transaction(name=:default)
