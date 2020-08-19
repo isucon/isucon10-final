@@ -8,7 +8,7 @@ require 'routes'
 require 'database'
 
 # TODO: 競技時は消す
-TEAM_CAPACITY = 3
+TEAM_CAPACITY = 10
 
 module Xsuportal
   class App < Sinatra::Base
@@ -547,10 +547,10 @@ module Xsuportal
 
         invite_token = SecureRandom.urlsafe_base64(64)
 
-        if (db.xquery('SELECT COUNT(id) as `count` FROM `teams`').first&.fetch(:count) || 0) >= TEAM_CAPACITY
+        within_capacity = db.xquery('SELECT COUNT(id) <= ? AS `within_capacity` FROM `teams`', TEAM_CAPACITY).first
+        if within_capacity&.fetch(:within_capacity) != 1
           halt_pb 403, "チーム登録数上限です"
         end
-
 
         db.xquery(
           'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`) VALUES (?, ?, ?, NOW(6))',
