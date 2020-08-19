@@ -493,12 +493,12 @@ func (s *Story) verifyLeaderboard(ctx context.Context, team *model.Team, verifyS
 		if t.GetTeam().GetId() == team.ID {
 			if t.GetLatestScore().GetScore() != team.LatestScore {
 				errored = true
-				s.stderrLogger.Error().Int64("TeamID", team.ID).Int64("expected", team.LatestScore).Int64("actual", t.GetLatestScore().GetScore()).Msg("最終スコアの検証失敗")
+				s.stderrLogger.Error().Int64("TeamID", team.ID).Int64("expected", team.LatestScore).Int64("actual", t.GetLatestScore().GetScore()).Str("protobuf", t.String()).Msg("最終スコアの検証失敗")
 				s.errors.Add(failure.New(failure.ErrApplication, "最終スコアの検証に失敗しました"))
 			}
 			if t.GetBestScore().GetScore() != team.BestScore {
 				errored = true
-				s.stderrLogger.Error().Int64("TeamID", team.ID).Int64("expected", team.BestScore).Int64("actual", t.GetBestScore().GetScore()).Msg("ベストスコアの検証失敗")
+				s.stderrLogger.Error().Int64("TeamID", team.ID).Int64("expected", team.BestScore).Int64("actual", t.GetBestScore().GetScore()).Str("protobuf", t.String()).Msg("ベストスコアの検証失敗")
 				s.errors.Add(failure.New(failure.ErrApplication, "ベストスコアの検証に失敗しました"))
 			}
 
