@@ -51,7 +51,7 @@ module Xsuportal
       end
 
       def transaction?(name=:default)
-        Thread.current[:db_transaction][name] == :open
+        Thread.current[:db_transaction] && Thread.current[:db_transaction][name] == :open
       end
 
       def transaction(name=:default)
