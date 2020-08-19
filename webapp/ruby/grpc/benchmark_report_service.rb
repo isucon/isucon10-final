@@ -54,12 +54,15 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           `reason` = ?,
           `updated_at` = NOW(6),
           `finished_at` = NOW(6)
+        WHERE `id` = ?
+        LIMIT 1
       SQL
       Xsuportal::Proto::Resources::BenchmarkJob::Status::FINISHED,
       result.score_breakdown&.raw,
       result.score_breakdown&.deduction,
       result.passed,
       result.reason,
+      request.job_id,
     )
   end
 
@@ -75,6 +78,8 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           `reason` = NULL,
           `updated_at` = NOW(6),
           `finished_at` = NULL
+        WHERE `id` = ?
+        LIMIT 1
       SQL
       Xsuportal::Proto::Resources::BenchmarkJob::Status::RUNNING,
     )
