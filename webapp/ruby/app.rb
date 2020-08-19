@@ -548,7 +548,7 @@ module Xsuportal
 
         invite_token = SecureRandom.urlsafe_base64(64)
 
-        within_capacity = db.xquery('SELECT COUNT(*) <= ? AS `within_capacity` FROM `teams` FOR UPDATE', TEAM_CAPACITY).first
+        within_capacity = db.xquery('SELECT COUNT(*) < ? AS `within_capacity` FROM `teams`', TEAM_CAPACITY).first
         if within_capacity&.fetch(:within_capacity) != 1
           halt_pb 403, "チーム登録数上限です"
         end
