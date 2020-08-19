@@ -16,6 +16,7 @@ const (
 )
 
 type Story struct {
+	Scores         *Scores
 	targetHostName string
 	targetBaseURL  string
 	grpcHostName   string
@@ -75,6 +76,7 @@ func NewStory(targetHostName string) (*Story, error) {
 	}
 
 	return &Story{
+		Scores:               NewScores(),
 		targetHostName:       targetHostName,
 		targetBaseURL:        targetBaseURL,
 		grpcHostName:         fmt.Sprintf("%s:50051", targetHostName),
@@ -110,4 +112,8 @@ func (s *Story) Stderr() string {
 
 func (s *Story) ErrorMessages() []string {
 	return s.errors.GetMessages()
+}
+
+func (s *Story) GetScore() int64 {
+	return s.Scores.Sum()
 }

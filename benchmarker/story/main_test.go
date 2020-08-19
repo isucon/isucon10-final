@@ -20,4 +20,5 @@ func TestMain(t *testing.T) {
 
 	// t.Log(story.stdout.String())
 	t.Log(story.errors.GetMessages())
+	t.Logf("%d", story.GetScore())
 }

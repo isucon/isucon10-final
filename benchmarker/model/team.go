@@ -2,8 +2,9 @@ package model
 
 import (
 	"fmt"
-	"github.com/isucon/isucon10-final/benchmarker/random"
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
+	"github.com/isucon/isucon10-final/benchmarker/random"
 	"sync"
 )
 
@@ -21,7 +22,9 @@ type Team struct {
 
 	Lock                       *sync.Mutex
 	ScoreGenerator             *random.ScoreGenerator
-	ScoreHistory               []*random.Score
+	Scores                     []*bench.ReportBenchmarkResultRequest
+	LatestScore                int64
+	BestScore                  int64
 	LatestEnqueuedBenchmarkJob *contestant.EnqueueBenchmarkJobResponse
 }
 
@@ -65,7 +68,9 @@ func NewTeam() (*Team, error) {
 
 		Lock:                       &sync.Mutex{},
 		ScoreGenerator:             random.NewScoreGenerator(),
-		ScoreHistory:               make([]*random.Score, 0, 10),
+		Scores:                     make([]*bench.ReportBenchmarkResultRequest, 0, 10),
+		LatestScore:                0,
+		BestScore:                  0,
 		LatestEnqueuedBenchmarkJob: nil,
 	}, nil
 }
@@ -76,4 +81,17 @@ func (t *Team) TargetHost() string {
 	}
 
 	return t.Hosts[0].Name
+}
+
+func (t *Team) AddScore(score *bench.ReportBenchmarkResultRequest) {
+	t.Lock.Lock()
+	defer t.Lock.Unlock()
+
+	t.Scores = append(t.Scores, score)
+	num := score.GetResult().GetScore()
+	t.LatestScore = num
+	if t.BestScore < num {
+		t.BestScore = num
+	}
+	t.LatestEnqueuedBenchmarkJob = nil
 }
