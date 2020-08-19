@@ -76,6 +76,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           `score_deduction` = NULL,
           `passed` = FALSE,
           `reason` = NULL,
+          `started_at` = NOW(6),
           `updated_at` = NOW(6),
           `finished_at` = NULL
         WHERE `id` = ?
