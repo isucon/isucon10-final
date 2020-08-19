@@ -247,6 +247,8 @@ module Xsuportal
                 `team_id`
               FROM
                 `benchmark_jobs`
+              WHERE
+                `finished_at` IS NOT NULL
               GROUP BY
                 `team_id`
             ) `latest_score_job_ids` ON `latest_score_job_ids`.`team_id` = `teams`.`id`
@@ -263,6 +265,8 @@ module Xsuportal
                     MAX(`score_raw` - `score_deduction`) AS `score`
                   FROM
                     `benchmark_jobs`
+                  WHERE
+                    `finished_at` IS NOT NULL
                   GROUP BY
                     `team_id`
                 ) `best_scores`
