@@ -5254,9 +5254,6 @@ export namespace xsuportal {
                         /** TeamListItem memberNames */
                         memberNames?: (string[]|null);
 
-                        /** TeamListItem finalParticipation */
-                        finalParticipation?: (boolean|null);
-
                         /** TeamListItem isStudent */
                         isStudent?: (boolean|null);
                     }
@@ -5278,9 +5275,6 @@ export namespace xsuportal {
 
                         /** TeamListItem memberNames. */
                         public memberNames: string[];
-
-                        /** TeamListItem finalParticipation. */
-                        public finalParticipation: boolean;
 
                         /** TeamListItem isStudent. */
                         public isStudent: boolean;
@@ -5748,9 +5742,6 @@ export namespace xsuportal {
                     /** ReportBenchmarkResultRequest jobId */
                     jobId?: (number|Long|null);
 
-                    /** ReportBenchmarkResultRequest handle */
-                    handle?: (string|null);
-
                     /** ReportBenchmarkResultRequest nonce */
                     nonce?: (number|Long|null);
 
@@ -5769,9 +5760,6 @@ export namespace xsuportal {
 
                     /** ReportBenchmarkResultRequest jobId. */
                     public jobId: (number|Long);
-
-                    /** ReportBenchmarkResultRequest handle. */
-                    public handle: string;
 
                     /** ReportBenchmarkResultRequest nonce. */
                     public nonce: (number|Long);
@@ -6601,9 +6589,6 @@ export namespace xsuportal {
 
                     /** GetBenchmarkJobResponse job */
                     job?: (xsuportal.proto.resources.IBenchmarkJob|null);
-
-                    /** GetBenchmarkJobResponse result */
-                    result?: (xsuportal.proto.resources.IBenchmarkResult|null);
                 }
 
                 /** Represents a GetBenchmarkJobResponse. */
@@ -6617,9 +6602,6 @@ export namespace xsuportal {
 
                     /** GetBenchmarkJobResponse job. */
                     public job?: (xsuportal.proto.resources.IBenchmarkJob|null);
-
-                    /** GetBenchmarkJobResponse result. */
-                    public result?: (xsuportal.proto.resources.IBenchmarkResult|null);
 
                     /**
                      * Creates a new GetBenchmarkJobResponse instance using the specified properties.

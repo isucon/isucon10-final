@@ -12619,7 +12619,6 @@ $root.xsuportal = (function() {
                          * @property {number|Long|null} [teamId] TeamListItem teamId
                          * @property {string|null} [name] TeamListItem name
                          * @property {Array.<string>|null} [memberNames] TeamListItem memberNames
-                         * @property {boolean|null} [finalParticipation] TeamListItem finalParticipation
                          * @property {boolean|null} [isStudent] TeamListItem isStudent
                          */
 
@@ -12664,14 +12663,6 @@ $root.xsuportal = (function() {
                         TeamListItem.prototype.memberNames = $util.emptyArray;
 
                         /**
-                         * TeamListItem finalParticipation.
-                         * @member {boolean} finalParticipation
-                         * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
-                         * @instance
-                         */
-                        TeamListItem.prototype.finalParticipation = false;
-
-                        /**
                          * TeamListItem isStudent.
                          * @member {boolean} isStudent
                          * @memberof xsuportal.proto.services.audience.ListTeamsResponse.TeamListItem
@@ -12710,8 +12701,6 @@ $root.xsuportal = (function() {
                             if (message.memberNames != null && message.memberNames.length)
                                 for (var i = 0; i < message.memberNames.length; ++i)
                                     writer.uint32(/* id 3, wireType 2 =*/26).string(message.memberNames[i]);
-                            if (message.finalParticipation != null && Object.hasOwnProperty.call(message, "finalParticipation"))
-                                writer.uint32(/* id 4, wireType 0 =*/32).bool(message.finalParticipation);
                             if (message.isStudent != null && Object.hasOwnProperty.call(message, "isStudent"))
                                 writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isStudent);
                             return writer;
@@ -12758,9 +12747,6 @@ $root.xsuportal = (function() {
                                     if (!(message.memberNames && message.memberNames.length))
                                         message.memberNames = [];
                                     message.memberNames.push(reader.string());
-                                    break;
-                                case 4:
-                                    message.finalParticipation = reader.bool();
                                     break;
                                 case 5:
                                     message.isStudent = reader.bool();
@@ -12813,9 +12799,6 @@ $root.xsuportal = (function() {
                                     if (!$util.isString(message.memberNames[i]))
                                         return "memberNames: string[] expected";
                             }
-                            if (message.finalParticipation != null && message.hasOwnProperty("finalParticipation"))
-                                if (typeof message.finalParticipation !== "boolean")
-                                    return "finalParticipation: boolean expected";
                             if (message.isStudent != null && message.hasOwnProperty("isStudent"))
                                 if (typeof message.isStudent !== "boolean")
                                     return "isStudent: boolean expected";
@@ -12852,8 +12835,6 @@ $root.xsuportal = (function() {
                                 for (var i = 0; i < object.memberNames.length; ++i)
                                     message.memberNames[i] = String(object.memberNames[i]);
                             }
-                            if (object.finalParticipation != null)
-                                message.finalParticipation = Boolean(object.finalParticipation);
                             if (object.isStudent != null)
                                 message.isStudent = Boolean(object.isStudent);
                             return message;
@@ -12881,7 +12862,6 @@ $root.xsuportal = (function() {
                                 } else
                                     object.teamId = options.longs === String ? "0" : 0;
                                 object.name = "";
-                                object.finalParticipation = false;
                                 object.isStudent = false;
                             }
                             if (message.teamId != null && message.hasOwnProperty("teamId"))
@@ -12896,8 +12876,6 @@ $root.xsuportal = (function() {
                                 for (var j = 0; j < message.memberNames.length; ++j)
                                     object.memberNames[j] = message.memberNames[j];
                             }
-                            if (message.finalParticipation != null && message.hasOwnProperty("finalParticipation"))
-                                object.finalParticipation = message.finalParticipation;
                             if (message.isStudent != null && message.hasOwnProperty("isStudent"))
                                 object.isStudent = message.isStudent;
                             return object;
@@ -13746,7 +13724,6 @@ $root.xsuportal = (function() {
                      * @memberof xsuportal.proto.services.bench
                      * @interface IReportBenchmarkResultRequest
                      * @property {number|Long|null} [jobId] ReportBenchmarkResultRequest jobId
-                     * @property {string|null} [handle] ReportBenchmarkResultRequest handle
                      * @property {number|Long|null} [nonce] ReportBenchmarkResultRequest nonce
                      * @property {xsuportal.proto.resources.IBenchmarkResult|null} [result] ReportBenchmarkResultRequest result
                      */
@@ -13773,14 +13750,6 @@ $root.xsuportal = (function() {
                      * @instance
                      */
                     ReportBenchmarkResultRequest.prototype.jobId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                    /**
-                     * ReportBenchmarkResultRequest handle.
-                     * @member {string} handle
-                     * @memberof xsuportal.proto.services.bench.ReportBenchmarkResultRequest
-                     * @instance
-                     */
-                    ReportBenchmarkResultRequest.prototype.handle = "";
 
                     /**
                      * ReportBenchmarkResultRequest nonce.
@@ -13824,8 +13793,6 @@ $root.xsuportal = (function() {
                             writer = $Writer.create();
                         if (message.jobId != null && Object.hasOwnProperty.call(message, "jobId"))
                             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.jobId);
-                        if (message.handle != null && Object.hasOwnProperty.call(message, "handle"))
-                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.handle);
                         if (message.nonce != null && Object.hasOwnProperty.call(message, "nonce"))
                             writer.uint32(/* id 3, wireType 0 =*/24).int64(message.nonce);
                         if (message.result != null && Object.hasOwnProperty.call(message, "result"))
@@ -13866,9 +13833,6 @@ $root.xsuportal = (function() {
                             switch (tag >>> 3) {
                             case 1:
                                 message.jobId = reader.int64();
-                                break;
-                            case 2:
-                                message.handle = reader.string();
                                 break;
                             case 3:
                                 message.nonce = reader.int64();
@@ -13914,9 +13878,6 @@ $root.xsuportal = (function() {
                         if (message.jobId != null && message.hasOwnProperty("jobId"))
                             if (!$util.isInteger(message.jobId) && !(message.jobId && $util.isInteger(message.jobId.low) && $util.isInteger(message.jobId.high)))
                                 return "jobId: integer|Long expected";
-                        if (message.handle != null && message.hasOwnProperty("handle"))
-                            if (!$util.isString(message.handle))
-                                return "handle: string expected";
                         if (message.nonce != null && message.hasOwnProperty("nonce"))
                             if (!$util.isInteger(message.nonce) && !(message.nonce && $util.isInteger(message.nonce.low) && $util.isInteger(message.nonce.high)))
                                 return "nonce: integer|Long expected";
@@ -13949,8 +13910,6 @@ $root.xsuportal = (function() {
                                 message.jobId = object.jobId;
                             else if (typeof object.jobId === "object")
                                 message.jobId = new $util.LongBits(object.jobId.low >>> 0, object.jobId.high >>> 0).toNumber();
-                        if (object.handle != null)
-                            message.handle = String(object.handle);
                         if (object.nonce != null)
                             if ($util.Long)
                                 (message.nonce = $util.Long.fromValue(object.nonce)).unsigned = false;
@@ -13987,7 +13946,6 @@ $root.xsuportal = (function() {
                                 object.jobId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                             } else
                                 object.jobId = options.longs === String ? "0" : 0;
-                            object.handle = "";
                             if ($util.Long) {
                                 var long = new $util.Long(0, 0, false);
                                 object.nonce = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -14000,8 +13958,6 @@ $root.xsuportal = (function() {
                                 object.jobId = options.longs === String ? String(message.jobId) : message.jobId;
                             else
                                 object.jobId = options.longs === String ? $util.Long.prototype.toString.call(message.jobId) : options.longs === Number ? new $util.LongBits(message.jobId.low >>> 0, message.jobId.high >>> 0).toNumber() : message.jobId;
-                        if (message.handle != null && message.hasOwnProperty("handle"))
-                            object.handle = message.handle;
                         if (message.nonce != null && message.hasOwnProperty("nonce"))
                             if (typeof message.nonce === "number")
                                 object.nonce = options.longs === String ? String(message.nonce) : message.nonce;
@@ -15746,7 +15702,6 @@ $root.xsuportal = (function() {
                      * @memberof xsuportal.proto.services.contestant
                      * @interface IGetBenchmarkJobResponse
                      * @property {xsuportal.proto.resources.IBenchmarkJob|null} [job] GetBenchmarkJobResponse job
-                     * @property {xsuportal.proto.resources.IBenchmarkResult|null} [result] GetBenchmarkJobResponse result
                      */
 
                     /**
@@ -15771,14 +15726,6 @@ $root.xsuportal = (function() {
                      * @instance
                      */
                     GetBenchmarkJobResponse.prototype.job = null;
-
-                    /**
-                     * GetBenchmarkJobResponse result.
-                     * @member {xsuportal.proto.resources.IBenchmarkResult|null|undefined} result
-                     * @memberof xsuportal.proto.services.contestant.GetBenchmarkJobResponse
-                     * @instance
-                     */
-                    GetBenchmarkJobResponse.prototype.result = null;
 
                     /**
                      * Creates a new GetBenchmarkJobResponse instance using the specified properties.
@@ -15806,8 +15753,6 @@ $root.xsuportal = (function() {
                             writer = $Writer.create();
                         if (message.job != null && Object.hasOwnProperty.call(message, "job"))
                             $root.xsuportal.proto.resources.BenchmarkJob.encode(message.job, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                        if (message.result != null && Object.hasOwnProperty.call(message, "result"))
-                            $root.xsuportal.proto.resources.BenchmarkResult.encode(message.result, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
                         return writer;
                     };
 
@@ -15844,9 +15789,6 @@ $root.xsuportal = (function() {
                             switch (tag >>> 3) {
                             case 1:
                                 message.job = $root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32());
-                                break;
-                            case 2:
-                                message.result = $root.xsuportal.proto.resources.BenchmarkResult.decode(reader, reader.uint32());
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -15888,11 +15830,6 @@ $root.xsuportal = (function() {
                             if (error)
                                 return "job." + error;
                         }
-                        if (message.result != null && message.hasOwnProperty("result")) {
-                            var error = $root.xsuportal.proto.resources.BenchmarkResult.verify(message.result);
-                            if (error)
-                                return "result." + error;
-                        }
                         return null;
                     };
 
@@ -15913,11 +15850,6 @@ $root.xsuportal = (function() {
                                 throw TypeError(".xsuportal.proto.services.contestant.GetBenchmarkJobResponse.job: object expected");
                             message.job = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.job);
                         }
-                        if (object.result != null) {
-                            if (typeof object.result !== "object")
-                                throw TypeError(".xsuportal.proto.services.contestant.GetBenchmarkJobResponse.result: object expected");
-                            message.result = $root.xsuportal.proto.resources.BenchmarkResult.fromObject(object.result);
-                        }
                         return message;
                     };
 
@@ -15934,14 +15866,10 @@ $root.xsuportal = (function() {
                         if (!options)
                             options = {};
                         var object = {};
-                        if (options.defaults) {
+                        if (options.defaults)
                             object.job = null;
-                            object.result = null;
-                        }
                         if (message.job != null && message.hasOwnProperty("job"))
                             object.job = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.job, options);
-                        if (message.result != null && message.hasOwnProperty("result"))
-                            object.result = $root.xsuportal.proto.resources.BenchmarkResult.toObject(message.result, options);
                         return object;
                     };
 

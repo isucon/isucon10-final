@@ -8,7 +8,6 @@ message ListTeamsResponse {
     int64 team_id = 1;
     string name = 2;
     repeated string member_names = 3;
-    bool final_participation = 4;
     bool is_student = 5;
   }
 }

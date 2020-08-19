@@ -217,7 +217,7 @@ module Xsuportal
             raw: job[:score_raw],
             deduction: job[:score_deduction],
           ) : nil,
-          reason: result[:reason],
+          reason: job[:reason],
         )
       end
 
@@ -310,7 +310,7 @@ module Xsuportal
           team_graph_scores[result[:team_id]] << Proto::Resources::Leaderboard::LeaderboardItem::LeaderboardScore.new(
             score: result[:score],
             started_at: result[:started_at],
-            marked_at: result[:marked_at],
+            marked_at: result[:finished_at],
           )
         end
 
