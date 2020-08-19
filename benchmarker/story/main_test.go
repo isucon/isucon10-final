@@ -2,6 +2,8 @@ package story
 
 import (
 	"context"
+	"github.com/rs/zerolog"
+	"os"
 	"testing"
 )
 
@@ -10,6 +12,9 @@ func TestMain(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	story.stderrLogger.Level(zerolog.DebugLevel)
+	story.stderrLogger.Output(os.Stderr)
 
 	ctx := context.Background()
 
