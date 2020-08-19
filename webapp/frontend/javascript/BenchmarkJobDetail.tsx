@@ -129,7 +129,8 @@ export const BenchmarkJobDetail: React.FC<Props> = ({ client, id, root }) => {
     if (!job) {
       (async () => {
         try {
-          setJob(await client.getBenchmarkJob(id));
+          const getBenchmarkJobResponse = await client.getBenchmarkJob(id);
+          setJob(getBenchmarkJobResponse.job!);
         } catch (err) {
           setError(err);
         }

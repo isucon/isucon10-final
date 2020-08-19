@@ -2,6 +2,19 @@ require 'net/http'
 require 'routes'
 
 class ApiClient
+  class HttpError < StandardError
+    def initialize(method, path, payload, status, body)
+      @method = method
+      @path = path
+      @payload = payload
+      @status = status
+      @body = body
+    end
+
+    def to_s
+      "[#{@status}] #{@method.upcase} #{@path} #{@payload.inspect} => #{@body.inspect}"
+    end
+  end
   include Xsuportal::Routes
 
   attr_reader :response, :status
@@ -57,15 +70,23 @@ class ApiClient
     @response
   end
 
+  def request!(method, path, payload={}, opts={})
+    resp = request(method, path, payload, opts)
+    if @status != 200
+      raise HttpError.new(method, path, payload, @status, @response)
+    end
+    resp
+  end
+
   def login(contestant_id:, password:, create: false)
     if create
-      request :post, '/api/signup', {
+      request! :post, '/api/signup', {
         contestant_id: contestant_id,
         password: password,
       }
       raise "signup failed: #{contestant_id}" unless [200, 201].include?(@status)
     else
-      request :post, '/api/login', {
+      request! :post, '/api/login', {
         contestant_id: contestant_id,
         password: password,
       }
@@ -78,10 +99,10 @@ class ApiClient
   end
 
   def logout
-    request :post, '/api/logout'
+    request! :post, '/api/logout'
   end
 
   def truncate!
-    request :post, '/initialize'
+    request! :post, '/initialize'
   end
 end

@@ -8,7 +8,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/services/bench/reporting.proto", :syntax => :proto3) do
     add_message "xsuportal.proto.services.bench.ReportBenchmarkResultRequest" do
       optional :job_id, :int64, 1
-      optional :handle, :string, 2
       optional :nonce, :int64, 3
       optional :result, :message, 4, "xsuportal.proto.resources.BenchmarkResult"
     end

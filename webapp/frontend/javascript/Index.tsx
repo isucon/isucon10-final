@@ -76,27 +76,27 @@ export class Index extends React.Component<Props, State> {
 
           <div className="container mt-5">
             <Switch>
-              <Route path="/registration">
+              <Route path="/registration" exact={true}>
                 <Registration
                   session={this.props.session}
                   client={this.props.client}
                   root={this}
                 />
               </Route>
-              <Route path="/login">
+              <Route path="/login" exact={true}>
                 <Login client={this.props.client} root={this} />
               </Route>
-              <Route path="/logout">
+              <Route path="/logout" exact={true}>
                 <Logout
                   session={this.props.session}
                   client={this.props.client}
                   root={this}
                 />
               </Route>
-              <Route path="/signup">
+              <Route path="/signup" exact={true}>
                 <Signup client={this.props.client} root={this} />
               </Route>
-              <Route path="/dashboard">
+              <Route path="/dashboard" exact={true}>
                 <Dashboard
                   session={this.props.session}
                   client={this.props.client}
@@ -105,6 +105,7 @@ export class Index extends React.Component<Props, State> {
               </Route>
               <Route
                 path="/benchmark_jobs/:id"
+                exact={true}
                 render={({ match }) => {
                   return (
                     <BenchmarkJobDetail
@@ -115,7 +116,7 @@ export class Index extends React.Component<Props, State> {
                   );
                 }}
               />
-              <Route path="/benchmark_jobs">
+              <Route path="/benchmark_jobs" exact={true}>
                 <BenchmarkJobList
                   session={this.props.session}
                   client={this.props.client}
@@ -123,7 +124,7 @@ export class Index extends React.Component<Props, State> {
                   root={this}
                 />
               </Route>
-              <Route path="/">
+              <Route path="/" exact={true}>
                 <TeamList
                   session={this.props.session}
                   client={this.props.client}

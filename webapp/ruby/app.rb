@@ -8,7 +8,7 @@ require 'routes'
 require 'database'
 
 # TODO: 競技時は消す
-TEAM_CAPACITY = 3
+TEAM_CAPACITY = 10
 
 module Xsuportal
   class App < Sinatra::Base
@@ -171,8 +171,6 @@ module Xsuportal
           name: team[:name],
           leader_id: team[:leader_id],
           member_ids: members ? members.map { |_| _[:id] } : nil,
-          final_participation: team[:final_participation],
-          hidden: team[:is_hidden],
           withdrawn: team[:withdrawn],
           detail: detail ? Proto::Resources::Team::TeamDetail.new(
             email_address: team[:email_address],
@@ -193,56 +191,31 @@ module Xsuportal
           status: job[:status],
           target_hostname: job[:target_hostname],
           created_at: job[:created_at],
-          updated_at: job[:updated_at],
           started_at: job[:started_atj],
           finished_at: job[:finished_at],
-          result: job[:result_created_at] ? benchmark_result_pb(job) : nil,
+          result: job[:finished_at] ? benchmark_result_pb(job) : nil
         )
       end
 
       def benchmark_jobs_pb(limit:nil)
         jobs = db.xquery(
-          <<~SQL,
-            SELECT
-              `j`.`id` AS `id`,
-              `j`.`team_id` AS `team_id`,
-              `j`.`status` AS `status`,
-              `j`.`target_hostname` AS `target_hostname`,
-              `j`.`created_at` AS `created_at`,
-              `j`.`updated_at` AS `updated_at`,
-              `j`.`started_at` AS `started_at`,
-              `j`.`finished_at` AS `finished_at`,
-              `r`.`created_at` AS `result_created_at`,
-              `r`.`finished` AS `finished`,
-              `r`.`passed` AS `passed`,
-              (`r`.`score_raw` - `r`.`score_deduction`) AS `score`,
-              `r`.`score_raw` AS `score_raw`,
-              `r`.`score_deduction` AS `score_deduction`,
-              `r`.`reason` AS `reason`
-            FROM
-              `benchmark_jobs` `j`
-              LEFT JOIN `benchmark_results` `r` ON `r`.`id` = `j`.latest_benchmark_result_id
-            WHERE
-              `j`.`team_id` = ?
-            ORDER BY
-              `j`.`created_at` DESC
-            #{ limit ? "LIMIT #{limit}" : ''}
-          SQL
+          "SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? ORDER BY `created_at` DESC #{ limit ? "LIMIT #{limit}" : ''}",
           current_team[:id],
         )
         jobs&.map { |job| benchmark_job_pb(job) }
       end
 
-      def benchmark_result_pb(result)
+      def benchmark_result_pb(job)
+        has_score = job[:score_raw] && job[:score_deduction]
         Proto::Resources::BenchmarkResult.new(
-          finished: result[:finished],
-          passed: result[:passed],
-          score: result[:score],
-          score_breakdown: result[:score_breakdown] ? Proto::Resources::BenchmarkResult::ScoreBreakdown.new(
-            raw: result[:score_breakdown][:raw],
-            deduction: result[:score_breakdown][:deduction],
+          finished: !!job[:finished_at],
+          passed: job[:passed],
+          score: has_score ? (job[:score_raw] - job[:score_deduction]) : nil,
+          score_breakdown: has_score ? Proto::Resources::BenchmarkResult::ScoreBreakdown.new(
+            raw: job[:score_raw],
+            deduction: job[:score_deduction],
           ) : nil,
-          reason: result[:reason],
+          reason: job[:reason],
         )
       end
 
@@ -253,97 +226,89 @@ module Xsuportal
         # TODO: score freeze したら自分チームのスコア以外は freeze されてるようにする
         leaderboard = db.query(
           <<~SQL
-            SELECT
-              `teams`.`id` AS `id`,
-              `teams`.`name` AS `name`,
-              `teams`.`leader_id` AS `leader_id`,
-              `teams`.`final_participation` AS `final_participation`,
-              `teams`.`is_hidden` AS `is_hidden`,
-              `teams`.`withdrawn` AS `withdrawn`,
-              `team_student_flags`.`student` AS `student`,
-              (`best_score_results`.`score_raw` - `best_score_results`.`score_deduction`) AS `best_score`,
-              `best_score_jobs`.`started_at` AS `best_score_started_at`,
-              `best_score_results`.`marked_at` AS `best_score_marked_at`,
-              (`latest_score_results`.`score_raw` - `latest_score_results`.`score_deduction`) AS `latest_score`,
-              `latest_score_jobs`.`started_at` AS `latest_score_started_at`,
-              `latest_score_results`.`marked_at` AS `latest_score_marked_at`
-            FROM
-              `teams`
-              -- latest scores
-              LEFT JOIN (
-                SELECT
-                  MAX(`r`.`id`) AS `result_id`,
-                  `team_id`
-                FROM
-                  `benchmark_results` `r`
-                  INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
-                GROUP BY
-                  `team_id`
-              ) `latest_result_ids` ON `latest_result_ids`.`team_id` = `teams`.`id`
-              LEFT JOIN `benchmark_results` `latest_score_results` ON `latest_result_ids`.`result_id` = `latest_score_results`.`id`
-              LEFT JOIN `benchmark_jobs` `latest_score_jobs` ON `latest_result_ids`.`result_id` = `latest_score_jobs`.`latest_benchmark_result_id`
-              -- best scores
-              LEFT JOIN (
-                SELECT
-                  `best_scores`.`team_id`,
-                  MAX(`r2`.`id`) AS `result_id`
-                FROM (
+          SELECT
+            `teams`.`id` AS `id`,
+            `teams`.`name` AS `name`,
+            `teams`.`leader_id` AS `leader_id`,
+            `teams`.`withdrawn` AS `withdrawn`,
+            `team_student_flags`.`student` AS `student`,
+            (`best_score_jobs`.`score_raw` - `best_score_jobs`.`score_deduction`) AS `best_score`,
+            `best_score_jobs`.`started_at` AS `best_score_started_at`,
+            `best_score_jobs`.`finished_at` AS `best_score_marked_at`,
+            (`latest_score_jobs`.`score_raw` - `latest_score_jobs`.`score_deduction`) AS `latest_score`,
+            `latest_score_jobs`.`started_at` AS `latest_score_started_at`,
+            `latest_score_jobs`.`finished_at` AS `latest_score_marked_at`
+          FROM
+            `teams`
+            -- latest scores
+            LEFT JOIN (
+              SELECT
+                MAX(`id`) AS `id`,
+                `team_id`
+              FROM
+                `benchmark_jobs`
+              GROUP BY
+                `team_id`
+            ) `latest_score_job_ids` ON `latest_score_job_ids`.`team_id` = `teams`.`id`
+            LEFT JOIN `benchmark_jobs` `latest_score_jobs` ON `latest_score_job_ids`.`id` = `latest_score_jobs`.`id`
+            -- best scores
+            LEFT JOIN (
+              SELECT
+                MAX(`j`.`id`) AS `id`,
+                `j`.`team_id` AS `team_id`
+              FROM
+                (
                   SELECT
                     `team_id`,
-                    MAX(`r`.`score_raw` - `r`.`score_deduction`) AS `score`
+                    MAX(`score_raw` - `score_deduction`) AS `score`
                   FROM
-                    `benchmark_results` `r`
-                    INNER JOIN `benchmark_jobs` `j` ON `j`.`latest_benchmark_result_id` = `r`.`id`
+                    `benchmark_jobs`
                   GROUP BY
                     `team_id`
-                ) `best_scores` LEFT JOIN `benchmark_results` `r2` ON (`r2`.`score_raw` - `r2`.`score_deduction`) = `best_scores`.`score`
-                GROUP BY
-                  `team_id`
-                ORDER BY
-                  `team_id`
-              ) `best_score_result_ids` ON `best_score_result_ids`.`team_id` = `teams`.`id`
-              LEFT JOIN `benchmark_results` `best_score_results` ON `best_score_result_ids`.`result_id` = `best_score_results`.`id`
-              LEFT JOIN `benchmark_jobs` `best_score_jobs` ON `best_score_result_ids`.`result_id` = `best_score_jobs`.`latest_benchmark_result_id`
-              -- check student teams
-              LEFT JOIN (
-                SELECT
-                  `team_id`,
-                  (SUM(`student`) = COUNT(*)) AS `student`
-                FROM
-                  `contestants`
-                GROUP BY
-                  `contestants`.`team_id`
-              ) `team_student_flags` ON `team_student_flags`.`team_id` = `teams`.`id`
-            ORDER BY
-              `latest_score` DESC,
-              `latest_score_marked_at` ASC
+                ) `best_scores`
+                LEFT JOIN `benchmark_jobs` `j` ON (`j`.`score_raw` - `j`.`score_deduction`) = `best_scores`.`score`
+              GROUP BY
+                `j`.`team_id`
+            ) `best_score_job_ids` ON `best_score_job_ids`.`team_id` = `teams`.`id`
+            LEFT JOIN `benchmark_jobs` `best_score_jobs` ON `best_score_jobs`.`id` = `best_score_job_ids`.`id`
+            -- check student teams
+            LEFT JOIN (
+              SELECT
+                `team_id`,
+                (SUM(`student`) = COUNT(*)) AS `student`
+              FROM
+                `contestants`
+              GROUP BY
+                `contestants`.`team_id`
+            ) `team_student_flags` ON `team_student_flags`.`team_id` = `teams`.`id`
+          ORDER BY
+            `latest_score` DESC,
+            `latest_score_marked_at` ASC
           SQL
         )
 
         team_graph_scores = {}
         db.query(
           <<~SQL
-          SELECT
-            `benchmark_jobs`.`team_id` AS `team_id`,
-            (`benchmark_results`.`score_raw` - `benchmark_results`.`score_deduction`) AS `score`,
-            `benchmark_jobs`.`started_at` AS `started_at`,
-            `benchmark_results`.`marked_at` AS `marked_at`
-          FROM
-            `benchmark_jobs`
-            LEFT JOIN `benchmark_results` ON `benchmark_jobs`.`latest_benchmark_result_id` = `benchmark_results`.`id`
-          WHERE
-            `score` IS NOT NULL
-            AND `started_at` IS NOT NULL
-            AND `marked_at` IS NOT NULL
-          ORDER BY
-            `benchmark_results`.`id`
+            SELECT
+              `team_id` AS `team_id`,
+              (`score_raw` - `score_deduction`) AS `score`,
+              `started_at` AS `started_at`,
+              `finished_at` AS `finished_at`
+            FROM
+              `benchmark_jobs`
+            WHERE
+              `started_at` IS NOT NULL
+              AND `finished_at` IS NOT NULL
+            ORDER BY
+              `id`
           SQL
         ).each do |result|
           team_graph_scores[result[:team_id]] ||= []
           team_graph_scores[result[:team_id]] << Proto::Resources::Leaderboard::LeaderboardItem::LeaderboardScore.new(
             score: result[:score],
             started_at: result[:started_at],
-            marked_at: result[:marked_at],
+            marked_at: result[:finished_at],
           )
         end
 
@@ -378,7 +343,6 @@ module Xsuportal
           teams: teams,
           general_teams: general_teams,
           student_teams: student_teams,
-          progresses: [], # TODO
           frozen: frozen,
           contest_starts_at: contest_status[:contest_starts_at],
           contest_freezes_at: contest_status[:contest_freezes_at],
@@ -418,11 +382,10 @@ module Xsuportal
       db.query('TRUNCATE `teams`')
       db.query('TRUNCATE `contestants`')
       db.query('TRUNCATE `benchmark_jobs`')
-      db.query('TRUNCATE `benchmark_results`')
       db.query('TRUNCATE `contest_config`')
 
       db.xquery(
-        'INSERT `contestants` (`id`, `password`, `staff`, `created_at`, `updated_at`) VALUES (?, ?, TRUE, NOW(6), NOW(6))',
+        'INSERT `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, TRUE, NOW(6))',
         ADMIN_ID,
         Digest::SHA256.hexdigest(ADMIN_PASSWORD),
       )
@@ -504,7 +467,7 @@ module Xsuportal
     end
 
     get '/api/audience/teams' do
-      teams = db.query('SELECT * FROM `teams` WHERE `withdrawn` = FALSE AND `disqualified` = FALSE ORDER BY `updated_at` DESC')
+      teams = db.query('SELECT * FROM `teams` WHERE `withdrawn` = FALSE ORDER BY `created_at` DESC')
       items = teams.map do |team|
         members = db.xquery(
           'SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`',
@@ -514,7 +477,6 @@ module Xsuportal
           team_id: team[:id],
           name: team[:name],
           member_names: members.map { |_| _[:name] },
-          final_participation: team[:final_participation],
           is_student: members.all? { |_| _[:student] },
         )
       end
@@ -582,13 +544,13 @@ module Xsuportal
 
         invite_token = SecureRandom.urlsafe_base64(64)
 
-        if (db.xquery('SELECT COUNT(id) as `count` FROM `teams`').first&.fetch(:count) || 0) >= TEAM_CAPACITY
+        within_capacity = db.xquery('SELECT COUNT(*) <= ? AS `within_capacity` FROM `teams` FOR UPDATE', TEAM_CAPACITY).first
+        if within_capacity&.fetch(:within_capacity) != 1
           halt_pb 403, "チーム登録数上限です"
         end
 
-
         db.xquery(
-          'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`, `updated_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
+          'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`) VALUES (?, ?, ?, NOW(6))',
           req.team_name,
           req.email_address,
           invite_token,
@@ -600,7 +562,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'UPDATE `contestants` SET `name` = ?, `student` = ?, `team_id` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
+          'UPDATE `contestants` SET `name` = ?, `student` = ?, `team_id` = ? WHERE `id` = ? LIMIT 1',
           req.name,
           req.is_student,
           team_id,
@@ -608,7 +570,7 @@ module Xsuportal
         )
 
         db.xquery(
-          'UPDATE `teams` SET `leader_id` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
+          'UPDATE `teams` SET `leader_id` = ? WHERE `id` = ? LIMIT 1',
           current_contestant[:id],
           team_id,
         )
@@ -627,7 +589,7 @@ module Xsuportal
         contest_status_restricted(:REGISTRATION, 'チーム登録期間ではありません')
 
         team = db.xquery(
-          'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE AND `disqualified` = FALSE LIMIT 1 FOR UPDATE',
+          'SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE LIMIT 1 FOR UPDATE',
           req.team_id,
           req.invite_token,
         ).first
@@ -648,7 +610,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'UPDATE `contestants` SET `team_id` = ?, `name` = ?, `student` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
+          'UPDATE `contestants` SET `team_id` = ?, `name` = ?, `student` = ? WHERE `id` = ? LIMIT 1',
           req.team_id,
           req.name,
           req.is_student,
@@ -667,7 +629,7 @@ module Xsuportal
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
-            'UPDATE `teams` SET `name` = ?, `email_address` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
+            'UPDATE `teams` SET `name` = ?, `email_address` = ? WHERE `id` = ? LIMIT 1',
             req.team_name,
             req.email_address,
             current_team[:id],
@@ -675,7 +637,7 @@ module Xsuportal
         end
 
         db.xquery(
-          'UPDATE `contestants` SET `name` = ?, `student` = ?, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
+          'UPDATE `contestants` SET `name` = ?, `student` = ? WHERE `id` = ? LIMIT 1',
           req.name,
           req.is_student,
           current_contestant[:id],
@@ -692,16 +654,16 @@ module Xsuportal
 
         if current_team[:leader_id] == current_contestant[:id]
           db.xquery(
-            'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
+            'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL WHERE `id` = ? LIMIT 1',
             current_team[:id],
           )
           db.xquery(
-            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW(6) WHERE `team_id` = ?',
+            'UPDATE `contestants` SET `team_id` = NULL WHERE `team_id` = ?',
             current_team[:id],
           )
         else
           db.xquery(
-            'UPDATE `contestants` SET `team_id` = NULL, `updated_at` = NOW(6) WHERE `id` = ? LIMIT 1',
+            'UPDATE `contestants` SET `team_id` = NULL WHERE `id` = ? LIMIT 1',
             current_contestant[:id],
           )
         end
@@ -754,20 +716,8 @@ module Xsuportal
         halt_pb 404, 'ベンチマークジョブが見つかりません'
       end
 
-      result = db.xquery(
-        <<~SQL,
-          SELECT r.* FROM `benchmark_results` r
-          RIGHT JOIN `benchmark_jobs` j ON j.`latest_benchmark_result_id` = r.id
-          WHERE r.benchmark_job_id = ? AND j.team_id = ?
-          LIMIT 1
-        SQL
-        params[:id],
-        current_team[:id],
-      ).first
-
       encode_response_pb(
         job: benchmark_job_pb(job),
-        result: result ? benchmark_result_pb(result) : nil,
       )
     end
 
@@ -776,7 +726,7 @@ module Xsuportal
 
       encode_response_pb(
         leaderboard: leaderboard_pb,
-        jobs: benchmark_jobs_pb(limit: 5),
+        jobs: benchmark_jobs_pb(limit: 5), # TODO: 分離する
       )
     end
 
@@ -786,7 +736,7 @@ module Xsuportal
 
       begin
         db.xquery(
-          'INSERT INTO `contestants` (`id`, `password`, `created_at`, `updated_at`) VALUES (?, ?, NOW(6), NOW(6))',
+          'INSERT INTO `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, FALSE, NOW(6))',
           req.contestant_id,
           Digest::SHA256.hexdigest(req.password)
         )
@@ -795,7 +745,7 @@ module Xsuportal
         if e.errno == MYSQL_ER_DUP_ENTRY
           halt_pb 400, 'IDが既に登録されています'
         else
-          halt_pb 500, exception: e
+          raise e
         end
       end
 

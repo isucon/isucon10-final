@@ -60,9 +60,7 @@ class SampleGenerator
         password: Digest::SHA256.hexdigest(id),
         name: "User #{i}",
         student: false,
-        staff: false,
         created_at: @base_time,
-        updated_at: @base_time,
       }
       leaders[team_id] ||= id
     end
@@ -80,7 +78,6 @@ class SampleGenerator
         student: true,
         staff: false,
         created_at: @base_time,
-        updated_at: @base_time,
       }
       leaders[team_id] ||= id
     end
@@ -93,7 +90,6 @@ class SampleGenerator
         email_address: "team#{team_id}@example.com",
         invite_token: SecureRandom.urlsafe_base64(64),
         created_at: @base_time,
-        updated_at: @base_time,
       }
     end
 
@@ -141,51 +137,27 @@ class SampleGenerator
   def generate_team_scores(team)
     score_base_time = @base_time + 5
     jobs = []
-    results_started = []
-    results_finished = []
     score_pattern = score_patterns[team[:id] % score_patterns.length]
     score_pattern.each do |ptn|
-      result_id = @result_id_count += 1
       job_id = @job_id_count += 1
+      start_duration = rand()
+      finished_at = score_base_time + ptn[:time] + start_duration + (ptn[:status] == 'fast-fail' ? 0 : 1)
       jobs << {
         id: job_id,
         team_id: team[:id],
         status: 5, # FINISHED
         target_hostname: "xsu-#{team[:id]}",
-        latest_benchmark_result_id: result_id+1,
-        started_at: score_base_time + ptn[:time],
-        finished_at: score_base_time + ptn[:time] + 1,
+        started_at: score_base_time + ptn[:time] + start_duration,
+        finished_at: finished_at,
         created_at: score_base_time + ptn[:time],
-        updated_at: score_base_time + ptn[:time],
-      }
-
-      results_started << {
-        id: result_id,
-        benchmark_job_id: job_id,
-        finished: false,
-        created_at: score_base_time + ptn[:time],
-        updated_at: score_base_time + ptn[:time],
-      }
-
-      result_id = @result_id_count += 1
-      created_at = score_base_time + ptn[:time] + (ptn[:status] == 'fast-fail' ? 0 : 1)
-      results_finished << {
-        id: result_id,
-        benchmark_job_id: job_id,
-        score: ptn[:score_raw] + ptn[:deduction],
+        updated_at: finished_at,
         score_raw: ptn[:score_raw],
         score_deduction: ptn[:deduction],
-        finished: true,
         passed: ptn[:status] == 'pass',
-        marked_at: created_at,
-        created_at: created_at,
-        updated_at: created_at,
       }
     end
 
     @out.puts to_sql('benchmark_jobs', jobs)
-    @out.puts to_sql('benchmark_results', results_started)
-    @out.puts to_sql('benchmark_results', results_finished)
   end
 
   def out

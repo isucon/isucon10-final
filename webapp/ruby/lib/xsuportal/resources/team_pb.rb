@@ -11,10 +11,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :name, :string, 2
       optional :leader_id, :string, 3
       repeated :member_ids, :string, 4
-      optional :final_participation, :bool, 5
-      optional :hidden, :bool, 6
       optional :withdrawn, :bool, 7
-      optional :disqualified, :bool, 9
       optional :student, :message, 10, "xsuportal.proto.resources.Team.StudentStatus"
       optional :detail, :message, 8, "xsuportal.proto.resources.Team.TeamDetail"
       optional :leader, :message, 16, "xsuportal.proto.resources.Contestant"
