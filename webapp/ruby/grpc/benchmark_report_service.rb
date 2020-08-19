@@ -82,6 +82,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         LIMIT 1
       SQL
       Xsuportal::Proto::Resources::BenchmarkJob::Status::RUNNING,
+      request.job_id,
     )
   end
 end
