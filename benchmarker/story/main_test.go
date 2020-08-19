@@ -23,7 +23,8 @@ func TestMain(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// t.Log(story.stdout.String())
+	t.Log(story.stderr.String())
 	t.Log(story.errors.GetMessages())
-	t.Logf("%d", story.GetScore())
+	t.Logf("Score: %d", story.GetScore())
+	t.Logf("Score: %s", story.Scores.String())
 }

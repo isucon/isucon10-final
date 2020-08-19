@@ -25,9 +25,11 @@ func NewContestant() (*Contestant, error) {
 		return nil, err
 	}
 
+	id := random.Alphabet(CONTESTANT_ID_LENGTH)
+
 	return &Contestant{
-		ID:        random.Alphabet(CONTESTANT_ID_LENGTH),
-		Password:  "password", // random.Alphabet(CONTESTANT_PASSWORD_LENGTH),
+		ID:        id,
+		Password:  id, // random.Alphabet(CONTESTANT_PASSWORD_LENGTH),
 		Name:      random.Alphabet(20),
 		IsStudent: random.Pecentage(1, 10),
 		CookieJar: jar,

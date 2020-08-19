@@ -33,6 +33,7 @@ type Scores struct {
 	GetDashboardByOperator  *Score
 	GetDashboardByDeveloper *Score
 	FinishBenchmark         *Score
+	GetListBenchmarks       *Score
 }
 
 func NewScores() *Scores {
@@ -41,6 +42,7 @@ func NewScores() *Scores {
 		GetDashboardByOperator:  NewScore(),
 		GetDashboardByDeveloper: NewScore(),
 		FinishBenchmark:         NewScore(),
+		GetListBenchmarks:       NewScore(),
 	}
 }
 
@@ -54,6 +56,7 @@ const (
 	SCORE_GET_DASHBOARD_BY_DEVELOPER = 3
 	SCORE_FINISH_BENCHMARK           = 10
 	SCORE_CREATE_TEAM                = 5
+	SCORE_GET_LIST_BENCHMARKS        = 1
 )
 
 func (s *Scores) Sum() int64 {
@@ -61,6 +64,7 @@ func (s *Scores) Sum() int64 {
 	getDashboardByOperator := s.GetDashboardByOperator.Load() * SCORE_GET_DASHBOARD_BY_OPERATOR
 	getDashboardByDeveloper := s.GetDashboardByDeveloper.Load() * SCORE_GET_DASHBOARD_BY_DEVELOPER
 	finishBenchmark := s.FinishBenchmark.Load() * SCORE_FINISH_BENCHMARK
+	getListBenchmarks := s.GetListBenchmarks.Load() * SCORE_GET_LIST_BENCHMARKS
 
-	return createTeam + getDashboardByOperator + getDashboardByDeveloper + finishBenchmark
+	return createTeam + getDashboardByOperator + getDashboardByDeveloper + finishBenchmark + getListBenchmarks
 }

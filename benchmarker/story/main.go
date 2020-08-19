@@ -38,7 +38,7 @@ func (s *Story) Main(ctx context.Context) error {
 		for {
 			s.enqueueBenchmark(bctx)
 			select {
-			case <-time.After(1 * time.Second):
+			case <-time.After(10 * time.Millisecond):
 			case <-bctx.Done():
 				return
 			}
@@ -48,6 +48,17 @@ func (s *Story) Main(ctx context.Context) error {
 	go func(bctx context.Context) {
 		for {
 			s.getDashboard(bctx)
+			select {
+			case <-time.After(1 * time.Second):
+			case <-bctx.Done():
+				return
+			}
+		}
+	}(bctx)
+
+	go func(bctx context.Context) {
+		for {
+			s.listBenchmark(bctx)
 			select {
 			case <-time.After(1 * time.Second):
 			case <-bctx.Done():
@@ -509,4 +520,57 @@ func (s *Story) verifyLeaderboard(ctx context.Context, team *model.Team, verifyS
 			break
 		}
 	}
+}
+
+func (s *Story) listBenchmark(ctx context.Context) {
+	wg := &sync.WaitGroup{}
+
+	for _, team := range s.contest.Teams {
+		wg.Add(1)
+		go func(team *model.Team) {
+			defer wg.Done()
+
+			browser := s.browserPool.Get().(*session.Browser)
+			browser.Contestant = team.Leader
+
+			res, xerr, err := browser.ListBenchmarkJobs(ctx)
+			if xerr != nil {
+				err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+			}
+			if err != nil {
+				s.errors.Add(err)
+				return
+			}
+
+			errored := false
+			jobs := res.GetJobs()
+			sorted := sort.SliceIsSorted(jobs, func(i int, j int) bool {
+				a := jobs[i]
+				b := jobs[j]
+				return a.GetCreatedAt().AsTime().After(b.GetCreatedAt().AsTime())
+			})
+			if !sorted {
+				errored = true
+				s.errors.Add(failure.New(failure.ErrApplication, "ベンチマークジョブリストの並び順が不正です"))
+			}
+
+			for _, job := range jobs {
+				for _, score := range team.Scores {
+					if score.GetJobId() == job.GetId() {
+						if score.GetResult().String() != job.GetResult().String() {
+							s.stderrLogger.Error().Int64("TeamID", team.ID).Str("expected", score.GetResult().String()).Str("actual", job.GetResult().String()).Msg("ベンチマークリストジョブ詳細不一致")
+							errored = true
+							s.errors.Add(failure.New(failure.ErrApplication, "ベンチマーク結果が期待と一致しません"))
+						}
+					}
+				}
+			}
+
+			if !errored {
+				s.Scores.GetListBenchmarks.Incr()
+			}
+		}(team)
+	}
+
+	wg.Wait()
 }

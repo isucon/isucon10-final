@@ -17,6 +17,8 @@ require (
 	google.golang.org/grpc v1.31.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v0.0.0-20200807164945-d3e3e7a46f57 // indirect
 	google.golang.org/grpc/examples v0.0.0-20200807164945-d3e3e7a46f57 // indirect
+	google.golang.org/grpc/security/advancedtls v0.0.0-20200818224027-0f73133e3aa3 // indirect
+	google.golang.org/grpc/test/tools v0.0.0-20200818224027-0f73133e3aa3 // indirect
 	google.golang.org/protobuf v1.25.0
 	mvdan.cc/xurls v1.1.0 // indirect
 )
