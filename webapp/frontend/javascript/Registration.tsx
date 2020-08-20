@@ -68,7 +68,7 @@ export class Registration extends React.Component<Props, State> {
   public render() {
     return (
       <>
-        <LoginRequired root={this.props.root}></LoginRequired>
+        <LoginRequired root={this.props.root} />
         <header>
           <h1 className="title is-1">参加登録</h1>
         </header>

@@ -25,7 +25,7 @@ module Xsuportal
       register Sinatra::Reloader
       also_reload './utils.rb'
 
-      %w[/ /dashboard /registration /signup /login /logout /benchmark_jobs /benchmark_jobs/:id].each do |path|
+      %w[/ /registration /signup /login /logout /contestant/dashboard /contestant/benchmark_jobs /contestant/benchmark_jobs/:id].each do |path|
         get path do
           File.read(File.join('public', 'index.html'))
         end

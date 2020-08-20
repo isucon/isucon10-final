@@ -96,7 +96,7 @@ export class Index extends React.Component<Props, State> {
               <Route path="/signup" exact={true}>
                 <Signup client={this.props.client} root={this} />
               </Route>
-              <Route path="/dashboard" exact={true}>
+              <Route path="/contestant/dashboard" exact={true}>
                 <Dashboard
                   session={this.props.session}
                   client={this.props.client}
@@ -104,7 +104,7 @@ export class Index extends React.Component<Props, State> {
                 />
               </Route>
               <Route
-                path="/benchmark_jobs/:id"
+                path="/contestant/benchmark_jobs/:id"
                 exact={true}
                 render={({ match }) => {
                   return (
@@ -116,7 +116,7 @@ export class Index extends React.Component<Props, State> {
                   );
                 }}
               />
-              <Route path="/benchmark_jobs" exact={true}>
+              <Route path="/contestant/benchmark_jobs" exact={true}>
                 <BenchmarkJobList
                   session={this.props.session}
                   client={this.props.client}
@@ -144,10 +144,10 @@ export class Index extends React.Component<Props, State> {
           <Link className="navbar-item" to="/">
             チーム一覧
           </Link>
-          <Link className="navbar-item" to="/dashboard">
+          <Link className="navbar-item" to="/contestant/dashboard">
             ダッシュボード
           </Link>
-          <Link className="navbar-item" to="/benchmark_jobs">
+          <Link className="navbar-item" to="/contestant/benchmark_jobs">
             ジョブ一覧
           </Link>
           <a className="navbar-item" href="/terms">

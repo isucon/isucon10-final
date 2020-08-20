@@ -34,7 +34,7 @@ const JobListItem: React.FC<JobListItemProps> = ({ job }) => {
   return (
     <tr className={trClassName}>
       <td className="has-text-centered">
-        <Link to={`/benchmark_jobs/${job.id}`}>{job.id}</Link>
+        <Link to={`/contestant/benchmark_jobs/${job.id}`}>{job.id}</Link>
       </td>
       <td className="has-text-centered">{job.targetHostname}</td>
       <td className="has-text-centered">

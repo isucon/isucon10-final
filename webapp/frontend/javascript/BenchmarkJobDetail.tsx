@@ -141,7 +141,7 @@ export const BenchmarkJobDetail: React.FC<Props> = ({ client, id, root }) => {
   if (job) {
     return (
       <>
-        <LoginRequired root={root}></LoginRequired>
+        <LoginRequired root={root} />
         <section>
           {renderError(error)}
           {renderJobSummary(job)}
@@ -153,7 +153,7 @@ export const BenchmarkJobDetail: React.FC<Props> = ({ client, id, root }) => {
   } else {
     return (
       <>
-        <LoginRequired root={root}></LoginRequired>
+        <LoginRequired root={root} />
         {renderError(error)}
       </>
     );

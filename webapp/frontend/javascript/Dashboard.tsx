@@ -43,7 +43,7 @@ export const Dashboard: React.FC<Props> = ({ session, client, root }) => {
 
   return (
     <>
-      <LoginRequired root={root}></LoginRequired>
+      <LoginRequired root={root} />
       <div className="container">
         <section className="is-fullwidth px-5 py-5">
           <ScoreGraph teams={dashboard?.leaderboard?.teams} />
@@ -63,7 +63,7 @@ export const Dashboard: React.FC<Props> = ({ session, client, root }) => {
             <section className="py-5">
               <p className="title"> Job List </p>
               <p>
-                <Link to="/benchmark_jobs">Show All</Link>
+                <Link to="/contestant/benchmark_jobs">Show All</Link>
               </p>
               <JobList jobs={dashboard?.jobs} />
             </section>

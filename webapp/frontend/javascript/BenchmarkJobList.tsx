@@ -28,15 +28,6 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
     const search = new URLSearchParams();
     search.set("team_id", data.teamId != null ? data.teamId.toString() : "");
     search.set("incompleteOnly", data.incompleteOnly ? "1" : "0");
-    setRedirect(
-      <Redirect
-        push={true}
-        to={{
-          pathname: "/admin/benchmark_jobs",
-          search: `?${search.toString()}`,
-        }}
-      />
-    );
   });
 
   return (
@@ -133,9 +124,9 @@ export class BenchmarkJobList extends React.Component<Props, State> {
   public render() {
     return (
       <>
-        <LoginRequired root={this.props.root}></LoginRequired>
+        <LoginRequired root={this.props.root} />
         <Switch>
-          <Route exact path="/benchmark_jobs">
+          <Route exact path="/contestant/benchmark_jobs">
             <header>
               <h1 className="title is-1">Benchmark Jobs</h1>
             </header>
@@ -212,7 +203,9 @@ export class BenchmarkJobList extends React.Component<Props, State> {
     return (
       <tr key={id}>
         <td>
-          <Link to={`/benchmark_jobs/${encodeURIComponent(id)}`}>#{id}</Link>
+          <Link to={`/contestant/benchmark_jobs/${encodeURIComponent(id)}`}>
+            #{id}
+          </Link>
         </td>
         <td>{job.targetHostname}</td>
         <td>
