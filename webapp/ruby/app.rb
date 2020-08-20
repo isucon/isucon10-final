@@ -70,11 +70,9 @@ module Xsuportal
 
       def login_required(team: true, lock: false)
         unless current_contestant(lock: lock)
-          Database.transaction_rollback if Database.transaction?
           halt_pb 401, 'ログインが必要です'
         end
         if team && !current_team(lock: lock)
-          Database.transaction_rollback if Database.transaction?
           halt_pb 403, '参加登録が必要です'
         end
       end
@@ -132,7 +130,6 @@ module Xsuportal
       def contest_status_restricted(statuses, msg)
         statuses = [statuses] unless Array === statuses
         unless statuses.include?(current_contest_status[:status])
-          Database.transaction_rollback if Database.transaction?
           halt_pb 403, msg
         end
       end
@@ -366,6 +363,7 @@ module Xsuportal
       end
 
       def halt_pb(code, human_message=nil, exception:nil)
+        Database.transaction_rollback if Database.transaction?
         content_type 'application/vnd.google.protobuf; proto=xsuportal.proto.Error'
         halt code, Proto::Error.encode(Proto::Error.new(
           code: code,
@@ -561,7 +559,6 @@ module Xsuportal
         )
         team_id = db.xquery('SELECT LAST_INSERT_ID() AS `id`').first&.fetch(:id)
         if !team_id
-          Database.transaction_rollback
           halt_pb 500, 'チームを登録できませんでした'
         end
 
@@ -599,7 +596,6 @@ module Xsuportal
         ).first
 
         unless team
-          Database.transaction_rollback
           halt_pb 400, '招待URLが不正です'
         end
 
@@ -609,7 +605,6 @@ module Xsuportal
         ).first
 
         if members[:cnt] >= 3
-          Database.transaction_rollback
           halt_pb 400, 'チーム人数の上限に達しています'
         end
 
