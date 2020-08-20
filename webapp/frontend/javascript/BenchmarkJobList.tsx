@@ -140,7 +140,7 @@ export class BenchmarkJobList extends React.Component<Props, State> {
               <h1 className="title is-1">Benchmark Jobs</h1>
             </header>
             <main>
-              {this.renderForm()}
+              {/* {this.renderForm()} */}
               {this.renderError()}
               {this.renderList()}
             </main>
