@@ -269,6 +269,7 @@ module Xsuportal
                     `team_id`
                 ) `best_scores`
                 LEFT JOIN `benchmark_jobs` `j` ON (`j`.`score_raw` - `j`.`score_deduction`) = `best_scores`.`score`
+                  AND `j`.`team_id` = `best_scores`.`team_id`
               GROUP BY
                 `j`.`team_id`
             ) `best_score_job_ids` ON `best_score_job_ids`.`team_id` = `teams`.`id`
@@ -317,8 +318,10 @@ module Xsuportal
         teams = []
         general_teams = []
         student_teams = []
-
         leaderboard.each do |team|
+          # if team_graph_scores[team[:id]]
+          #   binding.pry if team_graph_scores[team[:id]].map{|_|_.score}.max != team[:best_score]
+          # end
           item = Proto::Resources::Leaderboard::LeaderboardItem.new(
             scores: team_graph_scores[team[:id]],
             best_score: Proto::Resources::Leaderboard::LeaderboardItem::LeaderboardScore.new(
