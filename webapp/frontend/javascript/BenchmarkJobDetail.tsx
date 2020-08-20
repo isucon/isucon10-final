@@ -8,6 +8,7 @@ import { ApiClient } from "./common/ApiClient";
 import { Index } from "./Index";
 import { LoginRequired } from "./common/LoginRequired";
 import { ErrorMessage } from "./common/ErrorMessage";
+import { BenchmarkJobStatus } from "./dashboard/BenchmarkJobStatus";
 
 export interface Props {
   client: ApiClient;
@@ -27,7 +28,7 @@ const renderJobSummary = (job: xsuportal.proto.resources.IBenchmarkJob) => {
         </p>
         <p>
           <b>Status:</b>
-          {xsuportal.proto.resources.BenchmarkJob.Status[job.status!]}
+          <BenchmarkJobStatus status={job.status!} />
         </p>
         <p>
           <b>Enqueued At:</b>
@@ -61,7 +62,7 @@ const renderJobResult = (job: xsuportal.proto.resources.IBenchmarkJob) => {
       <div className="card-content">
         <p>
           {result.finished ? (
-            <span className="tag is-info">Finished</span>
+            <span className="tag is-success">Finished</span>
           ) : (
             <span className="tag is-warning">In progress</span>
           )}

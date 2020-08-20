@@ -11,6 +11,7 @@ import { TimeDuration } from "./common/TimeDuration";
 import { Index } from "./Index";
 import { LoginRequired } from "./common/LoginRequired";
 import { Timestamp } from "./common/Timestamp";
+import { BenchmarkJobStatus } from "./dashboard/BenchmarkJobStatus";
 
 type ListFilterProps = {
   teamId: number | null;
@@ -173,7 +174,6 @@ export class BenchmarkJobList extends React.Component<Props, State> {
             <th>ID</th>
             <th>Target</th>
             <th>Status</th>
-            <th>Result</th>
             <th>Score</th>
             <th>Enqueued</th>
             <th>Duration</th>
@@ -189,21 +189,11 @@ export class BenchmarkJobList extends React.Component<Props, State> {
   renderJobStatus(
     status: xsuportal.proto.resources.BenchmarkJob.Status | null | undefined
   ) {
-    switch (status) {
-      case xsuportal.proto.resources.BenchmarkJob.Status.FINISHED:
-        return <span className="tag is-success">Finished</span>;
-      case xsuportal.proto.resources.BenchmarkJob.Status.ERRORED:
-        return <span className="tag is-danger">Error</span>;
-      case xsuportal.proto.resources.BenchmarkJob.Status.CANCELLED:
-        return <span className="tag is-dark">Cancelled</span>;
-      case xsuportal.proto.resources.BenchmarkJob.Status.PENDING:
-        return <span className="tag is-primary">Pending</span>;
-      case xsuportal.proto.resources.BenchmarkJob.Status.RUNNING:
-        return <span className="tag is-link">Running</span>;
-      case xsuportal.proto.resources.BenchmarkJob.Status.SENT:
-        return <span className="tag is-info">Sent</span>;
+    if (status != null) {
+      return <BenchmarkJobStatus status={status}></BenchmarkJobStatus>;
+    } else {
+      return <></>;
     }
-    return <span className="tag is-dark">Unknown({status})</span>;
   }
 
   renderJobResult(passed: boolean | null | undefined) {
@@ -225,8 +215,10 @@ export class BenchmarkJobList extends React.Component<Props, State> {
           <Link to={`/benchmark_jobs/${encodeURIComponent(id)}`}>#{id}</Link>
         </td>
         <td>{job.targetHostname}</td>
-        <td>{this.renderJobStatus(job.status)}</td>
-        <td>{this.renderJobResult(job.result?.passed)}</td>
+        <td>
+          {this.renderJobStatus(job.status)}
+          {this.renderJobResult(job.result?.passed)}
+        </td>
         <td>{job.result?.score}</td>
         <td>
           <Timestamp timestamp={job.createdAt!}></Timestamp>

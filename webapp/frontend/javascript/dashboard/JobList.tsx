@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import dayjs from "dayjs";
 import { xsuportal } from "../pb";
+import { BenchmarkJobStatus } from "./BenchmarkJobStatus";
 
 interface JobListItemProps {
   job: xsuportal.proto.resources.IBenchmarkJob;
@@ -47,8 +48,16 @@ const JobListItem: React.FC<JobListItemProps> = ({ job }) => {
           : ""}
       </td>
       <td className="has-text-centered">
-        {job.status != null ? STATUS_TEXT_MAP.get(job.status) : ""}
+        <BenchmarkJobStatus status={job.status!} />
+        {job.result?.finished ? (
+          job.result.passed ? (
+            <span className="tag is-success">Passed</span>
+          ) : (
+            <span className="tag is-danger">Failed</span>
+          )
+        ) : null}
       </td>
+      <td className="has-text-centered">{job.result?.score}</td>
     </tr>
   );
 };
@@ -67,6 +76,7 @@ export const JobList: React.FC<Props> = ({ jobs }) => {
           <th className="has-text-centered">Created</th>
           <th className="has-text-centered">Finished</th>
           <th className="has-text-centered">Status</th>
+          <th className="has-text-centered">Score</th>
         </tr>
       </thead>
       <tbody>
