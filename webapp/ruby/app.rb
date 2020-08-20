@@ -188,7 +188,8 @@ module Xsuportal
           status: job[:status],
           target_hostname: job[:target_hostname],
           created_at: job[:created_at],
-          started_at: job[:started_atj],
+          updated_at: job[:updated_at],
+          started_at: job[:started_at],
           finished_at: job[:finished_at],
           result: job[:finished_at] ? benchmark_result_pb(job) : nil
         )
