@@ -86,11 +86,11 @@ module Xsuportal
             CASE
               WHEN NOW(6) < `registration_open_at` THEN 'standby'
               WHEN `registration_open_at` <= NOW(6) AND NOW(6) < `contest_starts_at` THEN 'registration'
-              WHEN `contest_starts_at` <= NOW(6) AND NOW(6) < `contest_freezes_at` THEN 'started'
-              WHEN `contest_freezes_at` <= NOW(6) AND NOW(6) < `contest_ends_at` THEN 'frozen'
+              WHEN `contest_starts_at` <= NOW(6) AND NOW(6) < `contest_ends_at` THEN 'started'
               WHEN `contest_ends_at` <= NOW(6) THEN 'finished'
               ELSE 'unknown'
-            END AS `status`
+            END AS `status`,
+            IF(`contest_starts_at` <= NOW(6) AND NOW(6) < `contest_freezes_at`, 1, 0) AS `frozen`
           FROM `contest_config`
           SQL
         ).first
@@ -107,8 +107,6 @@ module Xsuportal
           :REGISTRATION
         when 'started'
           :STARTED
-        when 'frozen'
-          :FROZEN
         when 'finished'
           :FINISHED
         else
@@ -121,15 +119,20 @@ module Xsuportal
             contest_starts_at: contest[:contest_starts_at],
             contest_freezes_at: contest[:contest_freezes_at],
             contest_ends_at: contest[:contest_ends_at],
+            frozen: contest[:frozen] == 1,
+            status: status,
           },
           current_time: contest[:current_time],
-          status: status,
         }
+      end
+
+      def contest_pb
+        Proto::Resources::Contest.new(current_contest_status[:contest])
       end
 
       def contest_status_restricted(statuses, msg)
         statuses = [statuses] unless Array === statuses
-        unless statuses.include?(current_contest_status[:status])
+        unless statuses.include?(current_contest_status[:contest][:status])
           halt_pb 403, msg
         end
       end
@@ -218,17 +221,16 @@ module Xsuportal
       end
 
       def leaderboard_pb
-        contest_status = current_contest_status
-        contest_frozen = contest_status[:status] == :FROZEN
-        contest_finished = contest_status[:status] == :FINISHED
-        contest_freezes_at = contest_status[:contest][:contest_freezes_at]
+        contest = current_contest_status[:contest]
+        contest_frozen = contest[:status] == :FROZEN
+        contest_finished = contest[:status] == :FINISHED
+        contest_freezes_at = contest[:contest_freezes_at]
         team_id = current_team[:id]
 
         leaderboard = nil
         job_results = nil
         team_graph_scores = {}
         Database.transaction('leaderboard_pb') do
-          # TODO: score freeze したら自分チームのスコア以外は freeze されてるようにする
           leaderboard = db.xquery(
             <<~SQL,
               SELECT
@@ -368,10 +370,7 @@ module Xsuportal
           teams: teams,
           general_teams: general_teams,
           student_teams: student_teams,
-          frozen: contest_frozen,
-          contest_starts_at: contest_status[:contest_starts_at],
-          contest_freezes_at: contest_status[:contest_freezes_at],
-          contest_ends_at: contest_status[:contest_ends_at],
+          contest: contest_pb,
         )
       end
 
@@ -473,14 +472,8 @@ module Xsuportal
       contest = contest_status[:contest]
 
       encode_response_pb(
-        contest: Proto::Resources::Contest.new(
-          registration_open_at: contest[:registration_open_at],
-          contest_starts_at: contest[:contest_starts_at],
-          contest_freezes_at: contest[:contest_freezes_at],
-          contest_ends_at: contest[:contest_ends_at],
-        ),
+        contest: contest_pb,
         current_time: contest_status[:current_time],
-        status: contest_status[:status],
       )
     end
 
@@ -488,7 +481,6 @@ module Xsuportal
       encode_response_pb(
         contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
         team: current_team ? team_pb(current_team) : nil,
-        contest_status: current_contest_status[:status],
       )
     end
 

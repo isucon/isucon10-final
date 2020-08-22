@@ -14,7 +14,8 @@ message Contest {
     STANDBY = 0;
     REGISTRATION = 1;
     STARTED = 2;
-    FROZEN = 3;
-    FINISHED = 4;
+    FINISHED = 3;
   }
+  Status status = 6;
+  bool frozen = 7;
 }

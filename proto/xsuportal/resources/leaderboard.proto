@@ -4,6 +4,7 @@ option go_package = "github.com/isucon/isucon10-final/benchmarker/proto/xsuporta
 
 import "google/protobuf/timestamp.proto";
 import "xsuportal/resources/team.proto";
+import "xsuportal/resources/contest.proto";
 
 message Leaderboard {
   message LeaderboardItem {
@@ -21,8 +22,6 @@ message Leaderboard {
   repeated LeaderboardItem general_teams = 2;
   repeated LeaderboardItem student_teams = 3;
   repeated LeaderboardItem progresses = 4;
-  bool frozen = 5;
-  google.protobuf.Timestamp contest_starts_at = 6;
-  google.protobuf.Timestamp contest_freezes_at = 7;
-  google.protobuf.Timestamp contest_ends_at = 8;
+
+  Contest contest = 5;
 }

@@ -4,10 +4,8 @@ option go_package = "github.com/isucon/isucon10-final/benchmarker/proto/xsuporta
 
 import "xsuportal/resources/team.proto";
 import "xsuportal/resources/contestant.proto";
-import "xsuportal/resources/contest.proto";
 
 message GetCurrentSessionResponse {
   xsuportal.proto.resources.Team team = 1;
   xsuportal.proto.resources.Contestant contestant = 2;
-  xsuportal.proto.resources.Contest.Status contest_status = 3;
 }

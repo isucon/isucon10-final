@@ -3888,6 +3888,8 @@ $root.xsuportal = (function() {
                  * @property {google.protobuf.ITimestamp|null} [contestStartsAt] Contest contestStartsAt
                  * @property {google.protobuf.ITimestamp|null} [contestFreezesAt] Contest contestFreezesAt
                  * @property {google.protobuf.ITimestamp|null} [contestEndsAt] Contest contestEndsAt
+                 * @property {xsuportal.proto.resources.Contest.Status|null} [status] Contest status
+                 * @property {boolean|null} [frozen] Contest frozen
                  */
 
                 /**
@@ -3938,6 +3940,22 @@ $root.xsuportal = (function() {
                 Contest.prototype.contestEndsAt = null;
 
                 /**
+                 * Contest status.
+                 * @member {xsuportal.proto.resources.Contest.Status} status
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @instance
+                 */
+                Contest.prototype.status = 0;
+
+                /**
+                 * Contest frozen.
+                 * @member {boolean} frozen
+                 * @memberof xsuportal.proto.resources.Contest
+                 * @instance
+                 */
+                Contest.prototype.frozen = false;
+
+                /**
                  * Creates a new Contest instance using the specified properties.
                  * @function create
                  * @memberof xsuportal.proto.resources.Contest
@@ -3969,6 +3987,10 @@ $root.xsuportal = (function() {
                         $root.google.protobuf.Timestamp.encode(message.contestFreezesAt, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                     if (message.contestEndsAt != null && Object.hasOwnProperty.call(message, "contestEndsAt"))
                         $root.google.protobuf.Timestamp.encode(message.contestEndsAt, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                    if (message.status != null && Object.hasOwnProperty.call(message, "status"))
+                        writer.uint32(/* id 6, wireType 0 =*/48).int32(message.status);
+                    if (message.frozen != null && Object.hasOwnProperty.call(message, "frozen"))
+                        writer.uint32(/* id 7, wireType 0 =*/56).bool(message.frozen);
                     return writer;
                 };
 
@@ -4014,6 +4036,12 @@ $root.xsuportal = (function() {
                             break;
                         case 5:
                             message.contestEndsAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            break;
+                        case 6:
+                            message.status = reader.int32();
+                            break;
+                        case 7:
+                            message.frozen = reader.bool();
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -4070,6 +4098,19 @@ $root.xsuportal = (function() {
                         if (error)
                             return "contestEndsAt." + error;
                     }
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        switch (message.status) {
+                        default:
+                            return "status: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            break;
+                        }
+                    if (message.frozen != null && message.hasOwnProperty("frozen"))
+                        if (typeof message.frozen !== "boolean")
+                            return "frozen: boolean expected";
                     return null;
                 };
 
@@ -4105,6 +4146,26 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.Contest.contestEndsAt: object expected");
                         message.contestEndsAt = $root.google.protobuf.Timestamp.fromObject(object.contestEndsAt);
                     }
+                    switch (object.status) {
+                    case "STANDBY":
+                    case 0:
+                        message.status = 0;
+                        break;
+                    case "REGISTRATION":
+                    case 1:
+                        message.status = 1;
+                        break;
+                    case "STARTED":
+                    case 2:
+                        message.status = 2;
+                        break;
+                    case "FINISHED":
+                    case 3:
+                        message.status = 3;
+                        break;
+                    }
+                    if (object.frozen != null)
+                        message.frozen = Boolean(object.frozen);
                     return message;
                 };
 
@@ -4126,6 +4187,8 @@ $root.xsuportal = (function() {
                         object.contestStartsAt = null;
                         object.contestFreezesAt = null;
                         object.contestEndsAt = null;
+                        object.status = options.enums === String ? "STANDBY" : 0;
+                        object.frozen = false;
                     }
                     if (message.registrationOpenAt != null && message.hasOwnProperty("registrationOpenAt"))
                         object.registrationOpenAt = $root.google.protobuf.Timestamp.toObject(message.registrationOpenAt, options);
@@ -4135,6 +4198,10 @@ $root.xsuportal = (function() {
                         object.contestFreezesAt = $root.google.protobuf.Timestamp.toObject(message.contestFreezesAt, options);
                     if (message.contestEndsAt != null && message.hasOwnProperty("contestEndsAt"))
                         object.contestEndsAt = $root.google.protobuf.Timestamp.toObject(message.contestEndsAt, options);
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        object.status = options.enums === String ? $root.xsuportal.proto.resources.Contest.Status[message.status] : message.status;
+                    if (message.frozen != null && message.hasOwnProperty("frozen"))
+                        object.frozen = message.frozen;
                     return object;
                 };
 
@@ -4156,16 +4223,14 @@ $root.xsuportal = (function() {
                  * @property {number} STANDBY=0 STANDBY value
                  * @property {number} REGISTRATION=1 REGISTRATION value
                  * @property {number} STARTED=2 STARTED value
-                 * @property {number} FROZEN=3 FROZEN value
-                 * @property {number} FINISHED=4 FINISHED value
+                 * @property {number} FINISHED=3 FINISHED value
                  */
                 Contest.Status = (function() {
                     var valuesById = {}, values = Object.create(valuesById);
                     values[valuesById[0] = "STANDBY"] = 0;
                     values[valuesById[1] = "REGISTRATION"] = 1;
                     values[valuesById[2] = "STARTED"] = 2;
-                    values[valuesById[3] = "FROZEN"] = 3;
-                    values[valuesById[4] = "FINISHED"] = 4;
+                    values[valuesById[3] = "FINISHED"] = 3;
                     return values;
                 })();
 
@@ -4182,10 +4247,7 @@ $root.xsuportal = (function() {
                  * @property {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>|null} [generalTeams] Leaderboard generalTeams
                  * @property {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>|null} [studentTeams] Leaderboard studentTeams
                  * @property {Array.<xsuportal.proto.resources.Leaderboard.ILeaderboardItem>|null} [progresses] Leaderboard progresses
-                 * @property {boolean|null} [frozen] Leaderboard frozen
-                 * @property {google.protobuf.ITimestamp|null} [contestStartsAt] Leaderboard contestStartsAt
-                 * @property {google.protobuf.ITimestamp|null} [contestFreezesAt] Leaderboard contestFreezesAt
-                 * @property {google.protobuf.ITimestamp|null} [contestEndsAt] Leaderboard contestEndsAt
+                 * @property {xsuportal.proto.resources.IContest|null} [contest] Leaderboard contest
                  */
 
                 /**
@@ -4240,36 +4302,12 @@ $root.xsuportal = (function() {
                 Leaderboard.prototype.progresses = $util.emptyArray;
 
                 /**
-                 * Leaderboard frozen.
-                 * @member {boolean} frozen
+                 * Leaderboard contest.
+                 * @member {xsuportal.proto.resources.IContest|null|undefined} contest
                  * @memberof xsuportal.proto.resources.Leaderboard
                  * @instance
                  */
-                Leaderboard.prototype.frozen = false;
-
-                /**
-                 * Leaderboard contestStartsAt.
-                 * @member {google.protobuf.ITimestamp|null|undefined} contestStartsAt
-                 * @memberof xsuportal.proto.resources.Leaderboard
-                 * @instance
-                 */
-                Leaderboard.prototype.contestStartsAt = null;
-
-                /**
-                 * Leaderboard contestFreezesAt.
-                 * @member {google.protobuf.ITimestamp|null|undefined} contestFreezesAt
-                 * @memberof xsuportal.proto.resources.Leaderboard
-                 * @instance
-                 */
-                Leaderboard.prototype.contestFreezesAt = null;
-
-                /**
-                 * Leaderboard contestEndsAt.
-                 * @member {google.protobuf.ITimestamp|null|undefined} contestEndsAt
-                 * @memberof xsuportal.proto.resources.Leaderboard
-                 * @instance
-                 */
-                Leaderboard.prototype.contestEndsAt = null;
+                Leaderboard.prototype.contest = null;
 
                 /**
                  * Creates a new Leaderboard instance using the specified properties.
@@ -4307,14 +4345,8 @@ $root.xsuportal = (function() {
                     if (message.progresses != null && message.progresses.length)
                         for (var i = 0; i < message.progresses.length; ++i)
                             $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.encode(message.progresses[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-                    if (message.frozen != null && Object.hasOwnProperty.call(message, "frozen"))
-                        writer.uint32(/* id 5, wireType 0 =*/40).bool(message.frozen);
-                    if (message.contestStartsAt != null && Object.hasOwnProperty.call(message, "contestStartsAt"))
-                        $root.google.protobuf.Timestamp.encode(message.contestStartsAt, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
-                    if (message.contestFreezesAt != null && Object.hasOwnProperty.call(message, "contestFreezesAt"))
-                        $root.google.protobuf.Timestamp.encode(message.contestFreezesAt, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
-                    if (message.contestEndsAt != null && Object.hasOwnProperty.call(message, "contestEndsAt"))
-                        $root.google.protobuf.Timestamp.encode(message.contestEndsAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                    if (message.contest != null && Object.hasOwnProperty.call(message, "contest"))
+                        $root.xsuportal.proto.resources.Contest.encode(message.contest, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
                     return writer;
                 };
 
@@ -4370,16 +4402,7 @@ $root.xsuportal = (function() {
                             message.progresses.push($root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.decode(reader, reader.uint32()));
                             break;
                         case 5:
-                            message.frozen = reader.bool();
-                            break;
-                        case 6:
-                            message.contestStartsAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                            break;
-                        case 7:
-                            message.contestFreezesAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                            break;
-                        case 8:
-                            message.contestEndsAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            message.contest = $root.xsuportal.proto.resources.Contest.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -4452,23 +4475,10 @@ $root.xsuportal = (function() {
                                 return "progresses." + error;
                         }
                     }
-                    if (message.frozen != null && message.hasOwnProperty("frozen"))
-                        if (typeof message.frozen !== "boolean")
-                            return "frozen: boolean expected";
-                    if (message.contestStartsAt != null && message.hasOwnProperty("contestStartsAt")) {
-                        var error = $root.google.protobuf.Timestamp.verify(message.contestStartsAt);
+                    if (message.contest != null && message.hasOwnProperty("contest")) {
+                        var error = $root.xsuportal.proto.resources.Contest.verify(message.contest);
                         if (error)
-                            return "contestStartsAt." + error;
-                    }
-                    if (message.contestFreezesAt != null && message.hasOwnProperty("contestFreezesAt")) {
-                        var error = $root.google.protobuf.Timestamp.verify(message.contestFreezesAt);
-                        if (error)
-                            return "contestFreezesAt." + error;
-                    }
-                    if (message.contestEndsAt != null && message.hasOwnProperty("contestEndsAt")) {
-                        var error = $root.google.protobuf.Timestamp.verify(message.contestEndsAt);
-                        if (error)
-                            return "contestEndsAt." + error;
+                            return "contest." + error;
                     }
                     return null;
                 };
@@ -4525,22 +4535,10 @@ $root.xsuportal = (function() {
                             message.progresses[i] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.fromObject(object.progresses[i]);
                         }
                     }
-                    if (object.frozen != null)
-                        message.frozen = Boolean(object.frozen);
-                    if (object.contestStartsAt != null) {
-                        if (typeof object.contestStartsAt !== "object")
-                            throw TypeError(".xsuportal.proto.resources.Leaderboard.contestStartsAt: object expected");
-                        message.contestStartsAt = $root.google.protobuf.Timestamp.fromObject(object.contestStartsAt);
-                    }
-                    if (object.contestFreezesAt != null) {
-                        if (typeof object.contestFreezesAt !== "object")
-                            throw TypeError(".xsuportal.proto.resources.Leaderboard.contestFreezesAt: object expected");
-                        message.contestFreezesAt = $root.google.protobuf.Timestamp.fromObject(object.contestFreezesAt);
-                    }
-                    if (object.contestEndsAt != null) {
-                        if (typeof object.contestEndsAt !== "object")
-                            throw TypeError(".xsuportal.proto.resources.Leaderboard.contestEndsAt: object expected");
-                        message.contestEndsAt = $root.google.protobuf.Timestamp.fromObject(object.contestEndsAt);
+                    if (object.contest != null) {
+                        if (typeof object.contest !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Leaderboard.contest: object expected");
+                        message.contest = $root.xsuportal.proto.resources.Contest.fromObject(object.contest);
                     }
                     return message;
                 };
@@ -4564,12 +4562,8 @@ $root.xsuportal = (function() {
                         object.studentTeams = [];
                         object.progresses = [];
                     }
-                    if (options.defaults) {
-                        object.frozen = false;
-                        object.contestStartsAt = null;
-                        object.contestFreezesAt = null;
-                        object.contestEndsAt = null;
-                    }
+                    if (options.defaults)
+                        object.contest = null;
                     if (message.teams && message.teams.length) {
                         object.teams = [];
                         for (var j = 0; j < message.teams.length; ++j)
@@ -4590,14 +4584,8 @@ $root.xsuportal = (function() {
                         for (var j = 0; j < message.progresses.length; ++j)
                             object.progresses[j] = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.toObject(message.progresses[j], options);
                     }
-                    if (message.frozen != null && message.hasOwnProperty("frozen"))
-                        object.frozen = message.frozen;
-                    if (message.contestStartsAt != null && message.hasOwnProperty("contestStartsAt"))
-                        object.contestStartsAt = $root.google.protobuf.Timestamp.toObject(message.contestStartsAt, options);
-                    if (message.contestFreezesAt != null && message.hasOwnProperty("contestFreezesAt"))
-                        object.contestFreezesAt = $root.google.protobuf.Timestamp.toObject(message.contestFreezesAt, options);
-                    if (message.contestEndsAt != null && message.hasOwnProperty("contestEndsAt"))
-                        object.contestEndsAt = $root.google.protobuf.Timestamp.toObject(message.contestEndsAt, options);
+                    if (message.contest != null && message.hasOwnProperty("contest"))
+                        object.contest = $root.xsuportal.proto.resources.Contest.toObject(message.contest, options);
                     return object;
                 };
 
@@ -14261,7 +14249,6 @@ $root.xsuportal = (function() {
                             case 1:
                             case 2:
                             case 3:
-                            case 4:
                                 break;
                             }
                         return null;
@@ -14302,13 +14289,9 @@ $root.xsuportal = (function() {
                         case 2:
                             message.status = 2;
                             break;
-                        case "FROZEN":
+                        case "FINISHED":
                         case 3:
                             message.status = 3;
-                            break;
-                        case "FINISHED":
-                        case 4:
-                            message.status = 4;
                             break;
                         }
                         return message;
@@ -14363,7 +14346,6 @@ $root.xsuportal = (function() {
                      * @interface IGetCurrentSessionResponse
                      * @property {xsuportal.proto.resources.ITeam|null} [team] GetCurrentSessionResponse team
                      * @property {xsuportal.proto.resources.IContestant|null} [contestant] GetCurrentSessionResponse contestant
-                     * @property {xsuportal.proto.resources.Contest.Status|null} [contestStatus] GetCurrentSessionResponse contestStatus
                      */
 
                     /**
@@ -14398,14 +14380,6 @@ $root.xsuportal = (function() {
                     GetCurrentSessionResponse.prototype.contestant = null;
 
                     /**
-                     * GetCurrentSessionResponse contestStatus.
-                     * @member {xsuportal.proto.resources.Contest.Status} contestStatus
-                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
-                     * @instance
-                     */
-                    GetCurrentSessionResponse.prototype.contestStatus = 0;
-
-                    /**
                      * Creates a new GetCurrentSessionResponse instance using the specified properties.
                      * @function create
                      * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
@@ -14433,8 +14407,6 @@ $root.xsuportal = (function() {
                             $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                         if (message.contestant != null && Object.hasOwnProperty.call(message, "contestant"))
                             $root.xsuportal.proto.resources.Contestant.encode(message.contestant, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                        if (message.contestStatus != null && Object.hasOwnProperty.call(message, "contestStatus"))
-                            writer.uint32(/* id 3, wireType 0 =*/24).int32(message.contestStatus);
                         return writer;
                     };
 
@@ -14474,9 +14446,6 @@ $root.xsuportal = (function() {
                                 break;
                             case 2:
                                 message.contestant = $root.xsuportal.proto.resources.Contestant.decode(reader, reader.uint32());
-                                break;
-                            case 3:
-                                message.contestStatus = reader.int32();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -14523,17 +14492,6 @@ $root.xsuportal = (function() {
                             if (error)
                                 return "contestant." + error;
                         }
-                        if (message.contestStatus != null && message.hasOwnProperty("contestStatus"))
-                            switch (message.contestStatus) {
-                            default:
-                                return "contestStatus: enum value expected";
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                                break;
-                            }
                         return null;
                     };
 
@@ -14559,28 +14517,6 @@ $root.xsuportal = (function() {
                                 throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.contestant: object expected");
                             message.contestant = $root.xsuportal.proto.resources.Contestant.fromObject(object.contestant);
                         }
-                        switch (object.contestStatus) {
-                        case "STANDBY":
-                        case 0:
-                            message.contestStatus = 0;
-                            break;
-                        case "REGISTRATION":
-                        case 1:
-                            message.contestStatus = 1;
-                            break;
-                        case "STARTED":
-                        case 2:
-                            message.contestStatus = 2;
-                            break;
-                        case "FROZEN":
-                        case 3:
-                            message.contestStatus = 3;
-                            break;
-                        case "FINISHED":
-                        case 4:
-                            message.contestStatus = 4;
-                            break;
-                        }
                         return message;
                     };
 
@@ -14600,14 +14536,11 @@ $root.xsuportal = (function() {
                         if (options.defaults) {
                             object.team = null;
                             object.contestant = null;
-                            object.contestStatus = options.enums === String ? "STANDBY" : 0;
                         }
                         if (message.team != null && message.hasOwnProperty("team"))
                             object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                         if (message.contestant != null && message.hasOwnProperty("contestant"))
                             object.contestant = $root.xsuportal.proto.resources.Contestant.toObject(message.contestant, options);
-                        if (message.contestStatus != null && message.hasOwnProperty("contestStatus"))
-                            object.contestStatus = options.enums === String ? $root.xsuportal.proto.resources.Contest.Status[message.contestStatus] : message.contestStatus;
                         return object;
                     };
 

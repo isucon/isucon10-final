@@ -11,13 +11,14 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :contest_starts_at, :message, 3, "google.protobuf.Timestamp"
       optional :contest_freezes_at, :message, 4, "google.protobuf.Timestamp"
       optional :contest_ends_at, :message, 5, "google.protobuf.Timestamp"
+      optional :status, :enum, 6, "xsuportal.proto.resources.Contest.Status"
+      optional :frozen, :bool, 7
     end
     add_enum "xsuportal.proto.resources.Contest.Status" do
       value :STANDBY, 0
       value :REGISTRATION, 1
       value :STARTED, 2
-      value :FROZEN, 3
-      value :FINISHED, 4
+      value :FINISHED, 3
     end
   end
 end

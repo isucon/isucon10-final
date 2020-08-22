@@ -5,6 +5,7 @@ require 'google/protobuf'
 
 require 'google/protobuf/timestamp_pb'
 require 'xsuportal/resources/team_pb'
+require 'xsuportal/resources/contest_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/resources/leaderboard.proto", :syntax => :proto3) do
     add_message "xsuportal.proto.resources.Leaderboard" do
@@ -12,10 +13,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       repeated :general_teams, :message, 2, "xsuportal.proto.resources.Leaderboard.LeaderboardItem"
       repeated :student_teams, :message, 3, "xsuportal.proto.resources.Leaderboard.LeaderboardItem"
       repeated :progresses, :message, 4, "xsuportal.proto.resources.Leaderboard.LeaderboardItem"
-      optional :frozen, :bool, 5
-      optional :contest_starts_at, :message, 6, "google.protobuf.Timestamp"
-      optional :contest_freezes_at, :message, 7, "google.protobuf.Timestamp"
-      optional :contest_ends_at, :message, 8, "google.protobuf.Timestamp"
+      optional :contest, :message, 5, "xsuportal.proto.resources.Contest"
     end
     add_message "xsuportal.proto.resources.Leaderboard.LeaderboardItem" do
       repeated :scores, :message, 1, "xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore"

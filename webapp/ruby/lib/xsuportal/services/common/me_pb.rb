@@ -5,13 +5,11 @@ require 'google/protobuf'
 
 require 'xsuportal/resources/team_pb'
 require 'xsuportal/resources/contestant_pb'
-require 'xsuportal/resources/contest_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/services/common/me.proto", :syntax => :proto3) do
     add_message "xsuportal.proto.services.common.GetCurrentSessionResponse" do
       optional :team, :message, 1, "xsuportal.proto.resources.Team"
       optional :contestant, :message, 2, "xsuportal.proto.resources.Contestant"
-      optional :contest_status, :enum, 3, "xsuportal.proto.resources.Contest.Status"
     end
   end
 end

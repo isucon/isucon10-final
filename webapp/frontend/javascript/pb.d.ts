@@ -1445,6 +1445,12 @@ export namespace xsuportal {
 
                 /** Contest contestEndsAt */
                 contestEndsAt?: (google.protobuf.ITimestamp|null);
+
+                /** Contest status */
+                status?: (xsuportal.proto.resources.Contest.Status|null);
+
+                /** Contest frozen */
+                frozen?: (boolean|null);
             }
 
             /** Represents a Contest. */
@@ -1467,6 +1473,12 @@ export namespace xsuportal {
 
                 /** Contest contestEndsAt. */
                 public contestEndsAt?: (google.protobuf.ITimestamp|null);
+
+                /** Contest status. */
+                public status: xsuportal.proto.resources.Contest.Status;
+
+                /** Contest frozen. */
+                public frozen: boolean;
 
                 /**
                  * Creates a new Contest instance using the specified properties.
@@ -1546,8 +1558,7 @@ export namespace xsuportal {
                     STANDBY = 0,
                     REGISTRATION = 1,
                     STARTED = 2,
-                    FROZEN = 3,
-                    FINISHED = 4
+                    FINISHED = 3
                 }
             }
 
@@ -1566,17 +1577,8 @@ export namespace xsuportal {
                 /** Leaderboard progresses */
                 progresses?: (xsuportal.proto.resources.Leaderboard.ILeaderboardItem[]|null);
 
-                /** Leaderboard frozen */
-                frozen?: (boolean|null);
-
-                /** Leaderboard contestStartsAt */
-                contestStartsAt?: (google.protobuf.ITimestamp|null);
-
-                /** Leaderboard contestFreezesAt */
-                contestFreezesAt?: (google.protobuf.ITimestamp|null);
-
-                /** Leaderboard contestEndsAt */
-                contestEndsAt?: (google.protobuf.ITimestamp|null);
+                /** Leaderboard contest */
+                contest?: (xsuportal.proto.resources.IContest|null);
             }
 
             /** Represents a Leaderboard. */
@@ -1600,17 +1602,8 @@ export namespace xsuportal {
                 /** Leaderboard progresses. */
                 public progresses: xsuportal.proto.resources.Leaderboard.ILeaderboardItem[];
 
-                /** Leaderboard frozen. */
-                public frozen: boolean;
-
-                /** Leaderboard contestStartsAt. */
-                public contestStartsAt?: (google.protobuf.ITimestamp|null);
-
-                /** Leaderboard contestFreezesAt. */
-                public contestFreezesAt?: (google.protobuf.ITimestamp|null);
-
-                /** Leaderboard contestEndsAt. */
-                public contestEndsAt?: (google.protobuf.ITimestamp|null);
+                /** Leaderboard contest. */
+                public contest?: (xsuportal.proto.resources.IContest|null);
 
                 /**
                  * Creates a new Leaderboard instance using the specified properties.
@@ -6012,9 +6005,6 @@ export namespace xsuportal {
 
                     /** GetCurrentSessionResponse contestant */
                     contestant?: (xsuportal.proto.resources.IContestant|null);
-
-                    /** GetCurrentSessionResponse contestStatus */
-                    contestStatus?: (xsuportal.proto.resources.Contest.Status|null);
                 }
 
                 /** Represents a GetCurrentSessionResponse. */
@@ -6031,9 +6021,6 @@ export namespace xsuportal {
 
                     /** GetCurrentSessionResponse contestant. */
                     public contestant?: (xsuportal.proto.resources.IContestant|null);
-
-                    /** GetCurrentSessionResponse contestStatus. */
-                    public contestStatus: xsuportal.proto.resources.Contest.Status;
 
                     /**
                      * Creates a new GetCurrentSessionResponse instance using the specified properties.
