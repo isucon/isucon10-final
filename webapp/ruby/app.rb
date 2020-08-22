@@ -219,7 +219,8 @@ module Xsuportal
 
       def leaderboard_pb
         contest_status = current_contest_status
-        frozen = contest_status[:status] == :FROZEN
+        contest_frozen = contest_status[:status] == :FROZEN
+        contest_finished = contest_status[:status] == :FINISHED
         contest_freezes_at = contest_status[:contest][:contest_freezes_at]
         team_id = current_team[:id]
 
@@ -252,9 +253,9 @@ module Xsuportal
                   FROM
                     `benchmark_jobs`
                   WHERE
+                    `finished_at` IS NOT NULL
                     -- score freeze
-                    (`team_id` = ? AND `finished_at` IS NOT NULL)
-                    OR (`team_id` != ? AND `finished_at` < ?)
+                    AND (`team_id` = ? OR (`team_id` != ? AND (? = TRUE OR `finished_at` < ?)))
                   GROUP BY
                     `team_id`
                 ) `latest_score_job_ids` ON `latest_score_job_ids`.`team_id` = `teams`.`id`
@@ -272,9 +273,9 @@ module Xsuportal
                       FROM
                         `benchmark_jobs`
                       WHERE
+                        `finished_at` IS NOT NULL
                         -- score freeze
-                        (`team_id` = ? AND `finished_at` IS NOT NULL)
-                        OR (`team_id` != ? AND `finished_at` < ?)
+                        AND (`team_id` = ? OR (`team_id` != ? AND (? = TRUE OR `finished_at` < ?)))
                       GROUP BY
                         `team_id`
                     ) `best_scores`
@@ -298,10 +299,8 @@ module Xsuportal
                 `latest_score` DESC,
                 `latest_score_marked_at` ASC
             SQL
-            team_id,
-            team_id, contest_freezes_at,
-            team_id,
-            team_id, contest_freezes_at,
+            team_id, team_id, contest_finished, contest_freezes_at,
+            team_id, team_id, contest_finished, contest_freezes_at,
           )
 
           job_results = db.xquery(
@@ -316,15 +315,14 @@ module Xsuportal
               WHERE
                 `started_at` IS NOT NULL
                 AND (
+                  `finished_at` IS NOT NULL
                   -- score freeze
-                  (`team_id` = ? AND `finished_at` IS NOT NULL)
-                  OR (`team_id` != ? AND `finished_at` < ?)
+                  AND (`team_id` = ? OR (`team_id` != ? AND (? = TRUE OR `finished_at` < ?)))
                 )
               ORDER BY
                 `id`
             SQL
-            team_id,
-            team_id, contest_freezes_at,
+            team_id, team_id, contest_finished, contest_freezes_at,
           )
         end
 
@@ -370,7 +368,7 @@ module Xsuportal
           teams: teams,
           general_teams: general_teams,
           student_teams: student_teams,
-          frozen: frozen,
+          frozen: contest_frozen,
           contest_starts_at: contest_status[:contest_starts_at],
           contest_freezes_at: contest_status[:contest_freezes_at],
           contest_ends_at: contest_status[:contest_ends_at],
