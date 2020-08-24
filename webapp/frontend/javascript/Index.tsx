@@ -48,7 +48,7 @@ export class Index extends React.Component<Props, State> {
       <>
         <Router>
           <nav
-            className="navbar is-dark"
+            className="navbar is-danger"
             role="navigation"
             aria-label="main navigation"
           >
