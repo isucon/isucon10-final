@@ -244,14 +244,16 @@ module Xsuportal
                 `best_score_jobs`.`finished_at` AS `best_score_marked_at`,
                 (`latest_score_jobs`.`score_raw` - `latest_score_jobs`.`score_deduction`) AS `latest_score`,
                 `latest_score_jobs`.`started_at` AS `latest_score_started_at`,
-                `latest_score_jobs`.`finished_at` AS `latest_score_marked_at`
+                `latest_score_jobs`.`finished_at` AS `latest_score_marked_at`,
+                `latest_score_job_ids`.`finish_count` AS `finish_count`
               FROM
                 `teams`
                 -- latest scores
                 LEFT JOIN (
                   SELECT
                     MAX(`id`) AS `id`,
-                    `team_id`
+                    `team_id`,
+                    COUNT(*) AS `finish_count`
                   FROM
                     `benchmark_jobs`
                   WHERE
@@ -357,6 +359,7 @@ module Xsuportal
               marked_at: team[:latest_score_marked_at],
             ),
             team: team_pb(team, enable_members: false),
+            finish_count: team[:finish_count],
           )
           if team[:student] == 1
             student_teams << item

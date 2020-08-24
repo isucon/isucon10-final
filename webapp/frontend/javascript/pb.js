@@ -4609,6 +4609,7 @@ $root.xsuportal = (function() {
                      * @property {Array.<xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore>|null} [scores] LeaderboardItem scores
                      * @property {xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null} [bestScore] LeaderboardItem bestScore
                      * @property {xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null} [latestScore] LeaderboardItem latestScore
+                     * @property {number|Long|null} [finishCount] LeaderboardItem finishCount
                      * @property {xsuportal.proto.resources.ITeam|null} [team] LeaderboardItem team
                      */
 
@@ -4653,6 +4654,14 @@ $root.xsuportal = (function() {
                     LeaderboardItem.prototype.latestScore = null;
 
                     /**
+                     * LeaderboardItem finishCount.
+                     * @member {number|Long} finishCount
+                     * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
+                     * @instance
+                     */
+                    LeaderboardItem.prototype.finishCount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
                      * LeaderboardItem team.
                      * @member {xsuportal.proto.resources.ITeam|null|undefined} team
                      * @memberof xsuportal.proto.resources.Leaderboard.LeaderboardItem
@@ -4691,6 +4700,8 @@ $root.xsuportal = (function() {
                             $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.encode(message.bestScore, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
                         if (message.latestScore != null && Object.hasOwnProperty.call(message, "latestScore"))
                             $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.encode(message.latestScore, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                        if (message.finishCount != null && Object.hasOwnProperty.call(message, "finishCount"))
+                            writer.uint32(/* id 4, wireType 0 =*/32).int64(message.finishCount);
                         if (message.team != null && Object.hasOwnProperty.call(message, "team"))
                             $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                         return writer;
@@ -4737,6 +4748,9 @@ $root.xsuportal = (function() {
                                 break;
                             case 3:
                                 message.latestScore = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.decode(reader, reader.uint32());
+                                break;
+                            case 4:
+                                message.finishCount = reader.int64();
                                 break;
                             case 16:
                                 message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
@@ -4795,6 +4809,9 @@ $root.xsuportal = (function() {
                             if (error)
                                 return "latestScore." + error;
                         }
+                        if (message.finishCount != null && message.hasOwnProperty("finishCount"))
+                            if (!$util.isInteger(message.finishCount) && !(message.finishCount && $util.isInteger(message.finishCount.low) && $util.isInteger(message.finishCount.high)))
+                                return "finishCount: integer|Long expected";
                         if (message.team != null && message.hasOwnProperty("team")) {
                             var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                             if (error)
@@ -4835,6 +4852,15 @@ $root.xsuportal = (function() {
                                 throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.latestScore: object expected");
                             message.latestScore = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.fromObject(object.latestScore);
                         }
+                        if (object.finishCount != null)
+                            if ($util.Long)
+                                (message.finishCount = $util.Long.fromValue(object.finishCount)).unsigned = false;
+                            else if (typeof object.finishCount === "string")
+                                message.finishCount = parseInt(object.finishCount, 10);
+                            else if (typeof object.finishCount === "number")
+                                message.finishCount = object.finishCount;
+                            else if (typeof object.finishCount === "object")
+                                message.finishCount = new $util.LongBits(object.finishCount.low >>> 0, object.finishCount.high >>> 0).toNumber();
                         if (object.team != null) {
                             if (typeof object.team !== "object")
                                 throw TypeError(".xsuportal.proto.resources.Leaderboard.LeaderboardItem.team: object expected");
@@ -4861,6 +4887,11 @@ $root.xsuportal = (function() {
                         if (options.defaults) {
                             object.bestScore = null;
                             object.latestScore = null;
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.finishCount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.finishCount = options.longs === String ? "0" : 0;
                             object.team = null;
                         }
                         if (message.scores && message.scores.length) {
@@ -4872,6 +4903,11 @@ $root.xsuportal = (function() {
                             object.bestScore = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.toObject(message.bestScore, options);
                         if (message.latestScore != null && message.hasOwnProperty("latestScore"))
                             object.latestScore = $root.xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore.toObject(message.latestScore, options);
+                        if (message.finishCount != null && message.hasOwnProperty("finishCount"))
+                            if (typeof message.finishCount === "number")
+                                object.finishCount = options.longs === String ? String(message.finishCount) : message.finishCount;
+                            else
+                                object.finishCount = options.longs === String ? $util.Long.prototype.toString.call(message.finishCount) : options.longs === Number ? new $util.LongBits(message.finishCount.low >>> 0, message.finishCount.high >>> 0).toNumber() : message.finishCount;
                         if (message.team != null && message.hasOwnProperty("team"))
                             object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                         return object;

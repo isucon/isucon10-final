@@ -1690,6 +1690,9 @@ export namespace xsuportal {
                     /** LeaderboardItem latestScore */
                     latestScore?: (xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null);
 
+                    /** LeaderboardItem finishCount */
+                    finishCount?: (number|Long|null);
+
                     /** LeaderboardItem team */
                     team?: (xsuportal.proto.resources.ITeam|null);
                 }
@@ -1711,6 +1714,9 @@ export namespace xsuportal {
 
                     /** LeaderboardItem latestScore. */
                     public latestScore?: (xsuportal.proto.resources.Leaderboard.LeaderboardItem.ILeaderboardScore|null);
+
+                    /** LeaderboardItem finishCount. */
+                    public finishCount: (number|Long);
 
                     /** LeaderboardItem team. */
                     public team?: (xsuportal.proto.resources.ITeam|null);

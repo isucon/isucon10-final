@@ -23,6 +23,7 @@ const TeamItem: React.FC<TeamItemProps> = ({ rank, item }) => {
       <td>{item.team?.name}</td>
       <td>{item.bestScore?.score}</td>
       <td>{item.latestScore?.score}</td>
+      <td>{item.finishCount}</td>
       <td>{latestScoreMarkedAt}</td>
       <td>{studentStatus}</td>
     </tr>
@@ -67,6 +68,7 @@ export const Leaderboard: React.FC<Props> = ({ leaderboard }) => {
             <th>Name</th>
             <th>Best Score</th>
             <th>Latest Score</th>
+            <th>Finish Count</th>
             <th>Finish Time</th>
             <th>{/* isStudent? */}</th>
           </tr>

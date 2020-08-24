@@ -19,6 +19,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       repeated :scores, :message, 1, "xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore"
       optional :best_score, :message, 2, "xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore"
       optional :latest_score, :message, 3, "xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore"
+      optional :finish_count, :int64, 4
       optional :team, :message, 16, "xsuportal.proto.resources.Team"
     end
     add_message "xsuportal.proto.resources.Leaderboard.LeaderboardItem.LeaderboardScore" do

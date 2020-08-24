@@ -16,6 +16,7 @@ message Leaderboard {
     repeated LeaderboardScore scores = 1;
     LeaderboardScore best_score = 2;
     LeaderboardScore latest_score = 3;
+    int64 finish_count = 4;
     Team team = 16;
   }
   repeated LeaderboardItem teams = 1;
