@@ -106,6 +106,11 @@ export class BenchmarkJobList extends React.Component<Props, State> {
 
   public componentDidMount() {
     this.updateList();
+    setInterval(() => {
+      (async () => {
+        await this.updateList();
+      })();
+    }, 5000);
   }
 
   public componentDidUpdate(prevProps: Props, prevState: State) {
