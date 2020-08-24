@@ -517,8 +517,15 @@ func (s *Story) verifyLeaderboard(ctx context.Context, team *model.Team, verifyS
 					}
 				}
 			}
-
-			break
+		} else {
+			// 自分以外のチーム
+			for _, sc := range t.GetScores() {
+				if sc.GetMarkedAt().AsTime().After(s.contest.ContestFreezesAt) {
+					errored = true
+					s.stderrLogger.Error().Int64("TeamID", t.GetTeam().GetId()).TimeDiff("marked_at", sc.GetMarkedAt().AsTime(), s.contest.ContestFreezesAt).Msg("凍結時刻チェックエラー")
+					s.errors.Add(failure.New(failure.ErrApplication, "規定された凍結時刻以降のスコアが反映されています"))
+				}
+			}
 		}
 	}
 }
@@ -530,6 +537,8 @@ func (s *Story) listBenchmark(ctx context.Context) {
 		wg.Add(1)
 		go func(team *model.Team) {
 			defer wg.Done()
+			team.Lock.Lock()
+			defer team.Lock.Unlock()
 
 			browser := s.browserPool.Get().(*session.Browser)
 			browser.Contestant = team.Leader

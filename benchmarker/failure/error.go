@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/morikuni/failure"
+	"strings"
 	"sync"
 )
 
@@ -64,7 +65,7 @@ func (e *Errors) Add(err error) {
 		return
 	}
 
-	if err == context.Canceled {
+	if err == context.Canceled || strings.Contains(err.Error(), "context canceled") {
 		return
 	}
 
