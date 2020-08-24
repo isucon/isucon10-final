@@ -33,6 +33,8 @@ func (s *Story) Main(ctx context.Context) error {
 	<-startTimer
 
 	bctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
 	go s.executeBenchmarkers(bctx)
 	go func(bctx context.Context) {
 		for {
@@ -68,7 +70,6 @@ func (s *Story) Main(ctx context.Context) error {
 	}(bctx)
 
 	<-time.After(s.contest.ContestEndsAt.Sub(time.Now()))
-	cancel()
 
 	return ctx.Err()
 }
