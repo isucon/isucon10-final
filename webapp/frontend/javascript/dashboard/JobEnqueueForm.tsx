@@ -1,5 +1,14 @@
-import React, { useRef, useCallback } from "react";
-import { ApiClient } from "../common/ApiClient";
+import React, { useRef, useCallback, useState } from "react";
+import { ApiClient, ApiError } from "../common/ApiClient";
+import { ErrorMessage } from "../common/ErrorMessage";
+
+const renderError = (error: Error | ApiError | null) => {
+  if (error) {
+    return <ErrorMessage error={error} />;
+  } else {
+    return <></>;
+  }
+};
 
 interface Props {
   client: ApiClient;
@@ -7,28 +16,39 @@ interface Props {
 
 export const JobEnqueueForm: React.FC<Props> = ({ client }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const handleClick = useCallback(() => {
+  const [error, setError] = useState<Error | ApiError | null>(null);
+  const handleClick = useCallback(async () => {
     if (inputRef?.current?.value && inputRef.current.value.length > 0) {
-      client.enqueueBenchmarkJob({ targetHostname: inputRef.current.value });
-      inputRef.current.value = "";
+      try {
+        await client.enqueueBenchmarkJob({
+          targetHostname: inputRef.current.value,
+        });
+        inputRef.current.value = "";
+        setError(null);
+      } catch (error) {
+        setError(error);
+      }
     }
-  }, [!inputRef]);
+  }, [!inputRef, error]);
 
   return (
-    <div className="field has-addons">
-      <div className="control">
-        <input
-          className="input"
-          type="text"
-          placeholder="Target Hostname"
-          ref={inputRef}
-        />
+    <>
+      <div className="field has-addons">
+        <div className="control">
+          <input
+            className="input"
+            type="text"
+            placeholder="Target Hostname"
+            ref={inputRef}
+          />
+        </div>
+        <div className="control">
+          <button className="button is-primary" onClick={handleClick}>
+            Enqueue
+          </button>
+        </div>
       </div>
-      <div className="control">
-        <button className="button is-primary" onClick={handleClick}>
-          Enqueue
-        </button>
-      </div>
-    </div>
+      {renderError(error)}
+    </>
   );
 };
