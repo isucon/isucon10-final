@@ -695,6 +695,15 @@ module Xsuportal
         login_required
         contest_status_restricted([:STARTED, :FROZEN], '競技時間外はベンチマークを実行できません')
 
+        job_count = db.xquery(
+          'SELECT COUNT(*) AS `cnt` FROM `benchmark_jobs` WHERE `team_id` = ? AND `finished_at` IS NULL',
+          current_team[:id],
+        ).first
+
+        if job_count && job_count[:cnt] > 0
+          halt_pb 403, '既にベンチマークを実行中です'
+        end
+
         db.xquery(
           'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
           current_team[:id],
