@@ -12,7 +12,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "xsuportal.proto.services.contestant.DashboardResponse" do
       optional :leaderboard, :message, 1, "xsuportal.proto.resources.Leaderboard"
-      repeated :jobs, :message, 3, "xsuportal.proto.resources.BenchmarkJob"
     end
   end
 end

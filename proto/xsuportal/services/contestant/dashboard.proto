@@ -10,6 +10,4 @@ message DashboardRequest {}
 
 message DashboardResponse {
   xsuportal.proto.resources.Leaderboard leaderboard = 1;
-  // repeated xsuportal.proto.resources.ContestantInstance instances = 2;
-  repeated xsuportal.proto.resources.BenchmarkJob jobs = 3;
 }

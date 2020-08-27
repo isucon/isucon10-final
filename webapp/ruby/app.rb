@@ -756,7 +756,6 @@ module Xsuportal
 
       encode_response_pb(
         leaderboard: leaderboard_pb,
-        jobs: benchmark_jobs_pb(limit: 5), # TODO: 分離する
       )
     end
 

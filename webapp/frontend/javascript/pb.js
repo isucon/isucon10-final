@@ -16660,7 +16660,6 @@ $root.xsuportal = (function() {
                      * @memberof xsuportal.proto.services.contestant
                      * @interface IDashboardResponse
                      * @property {xsuportal.proto.resources.ILeaderboard|null} [leaderboard] DashboardResponse leaderboard
-                     * @property {Array.<xsuportal.proto.resources.IBenchmarkJob>|null} [jobs] DashboardResponse jobs
                      */
 
                     /**
@@ -16672,7 +16671,6 @@ $root.xsuportal = (function() {
                      * @param {xsuportal.proto.services.contestant.IDashboardResponse=} [properties] Properties to set
                      */
                     function DashboardResponse(properties) {
-                        this.jobs = [];
                         if (properties)
                             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -16686,14 +16684,6 @@ $root.xsuportal = (function() {
                      * @instance
                      */
                     DashboardResponse.prototype.leaderboard = null;
-
-                    /**
-                     * DashboardResponse jobs.
-                     * @member {Array.<xsuportal.proto.resources.IBenchmarkJob>} jobs
-                     * @memberof xsuportal.proto.services.contestant.DashboardResponse
-                     * @instance
-                     */
-                    DashboardResponse.prototype.jobs = $util.emptyArray;
 
                     /**
                      * Creates a new DashboardResponse instance using the specified properties.
@@ -16721,9 +16711,6 @@ $root.xsuportal = (function() {
                             writer = $Writer.create();
                         if (message.leaderboard != null && Object.hasOwnProperty.call(message, "leaderboard"))
                             $root.xsuportal.proto.resources.Leaderboard.encode(message.leaderboard, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                        if (message.jobs != null && message.jobs.length)
-                            for (var i = 0; i < message.jobs.length; ++i)
-                                $root.xsuportal.proto.resources.BenchmarkJob.encode(message.jobs[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
                         return writer;
                     };
 
@@ -16760,11 +16747,6 @@ $root.xsuportal = (function() {
                             switch (tag >>> 3) {
                             case 1:
                                 message.leaderboard = $root.xsuportal.proto.resources.Leaderboard.decode(reader, reader.uint32());
-                                break;
-                            case 3:
-                                if (!(message.jobs && message.jobs.length))
-                                    message.jobs = [];
-                                message.jobs.push($root.xsuportal.proto.resources.BenchmarkJob.decode(reader, reader.uint32()));
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -16806,15 +16788,6 @@ $root.xsuportal = (function() {
                             if (error)
                                 return "leaderboard." + error;
                         }
-                        if (message.jobs != null && message.hasOwnProperty("jobs")) {
-                            if (!Array.isArray(message.jobs))
-                                return "jobs: array expected";
-                            for (var i = 0; i < message.jobs.length; ++i) {
-                                var error = $root.xsuportal.proto.resources.BenchmarkJob.verify(message.jobs[i]);
-                                if (error)
-                                    return "jobs." + error;
-                            }
-                        }
                         return null;
                     };
 
@@ -16835,16 +16808,6 @@ $root.xsuportal = (function() {
                                 throw TypeError(".xsuportal.proto.services.contestant.DashboardResponse.leaderboard: object expected");
                             message.leaderboard = $root.xsuportal.proto.resources.Leaderboard.fromObject(object.leaderboard);
                         }
-                        if (object.jobs) {
-                            if (!Array.isArray(object.jobs))
-                                throw TypeError(".xsuportal.proto.services.contestant.DashboardResponse.jobs: array expected");
-                            message.jobs = [];
-                            for (var i = 0; i < object.jobs.length; ++i) {
-                                if (typeof object.jobs[i] !== "object")
-                                    throw TypeError(".xsuportal.proto.services.contestant.DashboardResponse.jobs: object expected");
-                                message.jobs[i] = $root.xsuportal.proto.resources.BenchmarkJob.fromObject(object.jobs[i]);
-                            }
-                        }
                         return message;
                     };
 
@@ -16861,17 +16824,10 @@ $root.xsuportal = (function() {
                         if (!options)
                             options = {};
                         var object = {};
-                        if (options.arrays || options.defaults)
-                            object.jobs = [];
                         if (options.defaults)
                             object.leaderboard = null;
                         if (message.leaderboard != null && message.hasOwnProperty("leaderboard"))
                             object.leaderboard = $root.xsuportal.proto.resources.Leaderboard.toObject(message.leaderboard, options);
-                        if (message.jobs && message.jobs.length) {
-                            object.jobs = [];
-                            for (var j = 0; j < message.jobs.length; ++j)
-                                object.jobs[j] = $root.xsuportal.proto.resources.BenchmarkJob.toObject(message.jobs[j], options);
-                        }
                         return object;
                     };
 

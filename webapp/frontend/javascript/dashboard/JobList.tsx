@@ -63,7 +63,7 @@ const JobListItem: React.FC<JobListItemProps> = ({ job }) => {
 };
 
 interface Props {
-  jobs: xsuportal.proto.resources.IBenchmarkJob[] | undefined;
+  jobs: xsuportal.proto.resources.IBenchmarkJob[] | null;
 }
 
 export const JobList: React.FC<Props> = ({ jobs }) => {
@@ -80,7 +80,7 @@ export const JobList: React.FC<Props> = ({ jobs }) => {
         </tr>
       </thead>
       <tbody>
-        {jobs?.map((job, key) => (
+        {jobs?.slice(0, 5).map((job, key) => (
           <JobListItem job={job} key={key} />
         ))}
       </tbody>

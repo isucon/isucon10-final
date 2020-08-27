@@ -7080,9 +7080,6 @@ export namespace xsuportal {
 
                     /** DashboardResponse leaderboard */
                     leaderboard?: (xsuportal.proto.resources.ILeaderboard|null);
-
-                    /** DashboardResponse jobs */
-                    jobs?: (xsuportal.proto.resources.IBenchmarkJob[]|null);
                 }
 
                 /** Represents a DashboardResponse. */
@@ -7096,9 +7093,6 @@ export namespace xsuportal {
 
                     /** DashboardResponse leaderboard. */
                     public leaderboard?: (xsuportal.proto.resources.ILeaderboard|null);
-
-                    /** DashboardResponse jobs. */
-                    public jobs: xsuportal.proto.resources.IBenchmarkJob[];
 
                     /**
                      * Creates a new DashboardResponse instance using the specified properties.

@@ -27,17 +27,26 @@ export const Dashboard: React.FC<Props> = ({ session, client, root }) => {
   ] = React.useState<xsuportal.proto.services.contestant.DashboardResponse | null>(
     null
   );
+  const [jobs, setJobs] = React.useState<
+    xsuportal.proto.resources.IBenchmarkJob[] | null
+  >(null);
+
+  const updateDashboard = async () => {
+    setDashboard(await client.getDashboard());
+    setJobs((await client.listBenchmarkJobs())?.jobs);
+  };
+
   useEffect(() => {
     if (!dashboard) {
       (async () => {
-        setDashboard(await client.getDashboard());
+        updateDashboard();
       })();
     }
-  }, [dashboard]);
+  }, [dashboard, jobs]);
 
   useInterval(() => {
     (async () => {
-      setDashboard(await client.getDashboard());
+      updateDashboard();
     })();
   }, 5000);
 
@@ -65,7 +74,7 @@ export const Dashboard: React.FC<Props> = ({ session, client, root }) => {
               <p>
                 <Link to="/contestant/benchmark_jobs">Show All</Link>
               </p>
-              <JobList jobs={dashboard?.jobs} />
+              <JobList jobs={jobs} />
             </section>
           </div>
         </div>
