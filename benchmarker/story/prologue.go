@@ -36,7 +36,7 @@ func (s *Story) Prologue(ctx context.Context) error {
 			return
 		}
 		if err != nil {
-			s.errors.Add(failure.New(failure.ErrCritical, err.Error()))
+			s.errors.Add(failure.Translate(err, failure.ErrCritical))
 			return
 		}
 

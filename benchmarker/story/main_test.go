@@ -25,6 +25,6 @@ func TestMain(t *testing.T) {
 
 	t.Log(story.stderr.String())
 	t.Log(story.errors.GetMessages())
-	t.Logf("Score: %d", story.GetScore())
+	t.Logf("Score: %d", story.GetTotalScore())
 	t.Logf("Score: %s", story.Scores.String())
 }

@@ -2,6 +2,7 @@ package story
 
 import (
 	"encoding/json"
+	"github.com/isucon/isucon10-final/benchmarker/failure"
 	"sync/atomic"
 )
 
@@ -67,4 +68,16 @@ func (s *Scores) Sum() int64 {
 	getListBenchmarks := s.GetListBenchmarks.Load() * SCORE_GET_LIST_BENCHMARKS
 
 	return createTeam + getDashboardByOperator + getDashboardByDeveloper + finishBenchmark + getListBenchmarks
+}
+
+const (
+	SCORE_DEDUCTION_CRITICAL    = 1000
+	SCORE_DECUCTION_APPLICATION = 20
+	SCORE_DECUCTION_TRIVIAL     = 1
+)
+
+func (s *Scores) Deduction(errors *failure.Errors) int64 {
+	_, critical, application, trivial := errors.Get()
+
+	return int64(critical*SCORE_DEDUCTION_CRITICAL + application*SCORE_DECUCTION_APPLICATION + trivial*SCORE_DECUCTION_TRIVIAL)
 }

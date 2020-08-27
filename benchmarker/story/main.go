@@ -243,11 +243,12 @@ func (s *Story) registerTeam(ctx context.Context) error {
 			// チーム登録期間外に達したため失敗
 			return failure.New(failure.ErrApplication, "チーム登録に失敗しました")
 		} else {
-			err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+			s.errors.Add(failure.New(failure.ErrApplication, xerr.GetHumanMessage()))
+			return nil
 		}
 	}
 	if err != nil {
-		s.errors.Add(err)
+		s.errors.Add(failure.Translate(err, failure.ErrApplication))
 		return nil
 	}
 
@@ -256,10 +257,11 @@ func (s *Story) registerTeam(ctx context.Context) error {
 
 	registrationSession, xerr, err := browser.GetRegistrationSession(ctx)
 	if xerr != nil {
-		err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+		s.errors.Add(failure.New(failure.ErrApplication, xerr.GetHumanMessage()))
+		return nil
 	}
 	if err != nil {
-		s.errors.Add(err)
+		s.errors.Add(failure.Translate(err, failure.ErrApplication))
 		return nil
 	}
 
@@ -288,19 +290,21 @@ func (s *Story) joinTeam(ctx context.Context, inviteToken string, team *model.Te
 	browser.Contestant = contestant
 	_, xerr, err := browser.SignupAction(ctx)
 	if xerr != nil {
-		err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+		s.errors.Add(failure.New(failure.ErrApplication, xerr.GetHumanMessage()))
+		return false, nil
 	}
 	if err != nil {
-		s.errors.Add(err)
+		s.errors.Add(failure.Translate(err, failure.ErrApplication))
 		return false, nil
 	}
 
 	_, xerr, err = browser.LoginAction(ctx)
 	if xerr != nil {
-		err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+		s.errors.Add(failure.New(failure.ErrApplication, xerr.GetHumanMessage()))
+		return false, nil
 	}
 	if err != nil {
-		s.errors.Add(err)
+		s.errors.Add(failure.Translate(err, failure.ErrApplication))
 		return false, nil
 	}
 
@@ -309,10 +313,11 @@ func (s *Story) joinTeam(ctx context.Context, inviteToken string, team *model.Te
 		if xerr.GetCode() == 403 {
 			return false, nil
 		}
-		err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+		s.errors.Add(failure.New(failure.ErrApplication, xerr.GetHumanMessage()))
+		return false, nil
 	}
 	if err != nil {
-		s.errors.Add(err)
+		s.errors.Add(failure.Translate(err, failure.ErrApplication))
 		return false, nil
 	}
 
@@ -358,15 +363,18 @@ func (s *Story) enqueueBenchmark(ctx context.Context) error {
 				if xerr.GetCode() == 403 {
 					return
 				}
-				err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+				s.errors.Add(failure.New(failure.ErrApplication, xerr.GetHumanMessage()))
+				return
 			}
 			if err != nil {
-				s.errors.Add(err)
+				s.errors.Add(failure.Translate(err, failure.ErrApplication))
 				return
 			}
 
 			jobId := job.GetJob().GetId()
+			s.Lock()
 			s.teamByJobID[jobId] = team
+			s.Unlock()
 			team.LatestEnqueuedBenchmarkJob = job
 			s.Scores.FinishBenchmark.Incr()
 		}(team)
@@ -454,11 +462,12 @@ func (s *Story) verifyLeaderboard(ctx context.Context, team *model.Team, verifyS
 
 	res, xerr, err := browser.Dashboard(ctx)
 	if xerr != nil {
-		err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+		errored = true
+		s.errors.Add(failure.New(failure.ErrApplication, xerr.GetHumanMessage()))
 	}
 	if err != nil {
 		errored = true
-		s.errors.Add(err)
+		s.errors.Add(failure.Translate(err, failure.ErrApplication))
 	}
 
 	leaderboard := res.GetLeaderboard()
@@ -545,10 +554,11 @@ func (s *Story) listBenchmark(ctx context.Context) {
 
 			res, xerr, err := browser.ListBenchmarkJobs(ctx)
 			if xerr != nil {
-				err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+				s.errors.Add(failure.New(failure.ErrApplication, xerr.GetHumanMessage()))
+				return
 			}
 			if err != nil {
-				s.errors.Add(err)
+				s.errors.Add(failure.Translate(err, failure.ErrApplication))
 				return
 			}
 

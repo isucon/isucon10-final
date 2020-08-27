@@ -17,6 +17,7 @@ const (
 )
 
 type Story struct {
+	*sync.Mutex
 	Scores         *Scores
 	targetHostName string
 	targetBaseURL  string
@@ -77,6 +78,7 @@ func NewStory(targetHostName string) (*Story, error) {
 	}
 
 	return &Story{
+		Mutex:                &sync.Mutex{},
 		Scores:               NewScores(),
 		targetHostName:       targetHostName,
 		targetBaseURL:        targetBaseURL,
@@ -144,6 +146,19 @@ func (s *Story) ErrorMessages() []string {
 	return s.errors.GetMessages()
 }
 
-func (s *Story) GetScore() int64 {
+func (s *Story) SumScore() int64 {
 	return s.Scores.Sum()
+}
+
+func (s *Story) ScoreDeduction() int64 {
+	return s.Scores.Deduction(s.errors)
+}
+
+func (s *Story) GetTotalScore() int64 {
+	score := s.SumScore() - s.ScoreDeduction()
+	if score < 0 {
+		return 0
+	} else {
+		return score
+	}
 }

@@ -2,7 +2,6 @@ package failure
 
 import (
 	"context"
-	"fmt"
 	"github.com/morikuni/failure"
 	"strings"
 	"sync"
@@ -72,8 +71,8 @@ func (e *Errors) Add(err error) {
 	e.mu.Lock()
 	defer e.mu.Unlock()
 
-	code, ok := failure.CodeOf(err)
-	msg, _ := failure.MessageOf(err)
+	code, _ := failure.CodeOf(err)
+	msg, ok := failure.MessageOf(err)
 
 	if ok {
 		switch code {
@@ -95,7 +94,6 @@ func (e *Errors) Add(err error) {
 		e.Messages = append(e.Messages, msg)
 	} else {
 		e.critical++
-		fmt.Printf("%+v\n", err)
 		e.Messages = append(e.Messages, ILLEGAL_ERROR+" "+err.Error())
 	}
 }
@@ -105,5 +103,9 @@ func New(code failure.Code, message string) error {
 }
 
 func Translate(err error, code failure.StringCode) error {
-	return failure.Custom(err, failure.WithCode(code), failure.WithFormatter(), failure.WithCallStackSkip(1))
+	if _, ok := failure.CodeOf(err); !ok {
+		err = New(code, err.Error())
+	}
+
+	return err
 }
