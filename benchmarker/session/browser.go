@@ -23,6 +23,7 @@ import (
 
 const (
 	SESSION_REQUEST_TIMEOUT = 10 * time.Second
+	MYSQL_TIME_FORMAT       = "2006-01-02 15:04:05.999999999"
 )
 
 type Browser struct {
@@ -59,7 +60,7 @@ func (s *Browser) Do(ctx context.Context, req *http.Request) (*http.Response, er
 
 	req = req.WithContext(ctx)
 
-	req.Header.Set("X-Now", time.Now().Format(time.RFC3339Nano))
+	req.Header.Set("X-Now", time.Now().Format(MYSQL_TIME_FORMAT))
 	if s.Contestant != nil {
 		s.httpClient.Jar = s.Contestant.CookieJar
 	}
