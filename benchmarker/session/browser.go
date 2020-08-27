@@ -59,6 +59,7 @@ func (s *Browser) Do(ctx context.Context, req *http.Request) (*http.Response, er
 
 	req = req.WithContext(ctx)
 
+	req.Header.Set("X-Now", time.Now().Format(time.RFC3339Nano))
 	if s.Contestant != nil {
 		s.httpClient.Jar = s.Contestant.CookieJar
 	}
