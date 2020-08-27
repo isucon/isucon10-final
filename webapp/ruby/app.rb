@@ -559,10 +559,11 @@ module Xsuportal
       req = decode_request_pb
       result = {}
 
-      Database.transaction do
-        login_required(team: false, lock: true)
-        contest_status_restricted(:REGISTRATION, 'チーム登録期間ではありません')
+      login_required(team: false, lock: true)
+      contest_status_restricted(:REGISTRATION, 'チーム登録期間ではありません')
 
+      begin
+        db.query('LOCK TABLES `teams` WRITE, `contestants` WRITE')
         invite_token = SecureRandom.urlsafe_base64(64)
 
         within_capacity = db.xquery('SELECT COUNT(*) < ? AS `within_capacity` FROM `teams`', TEAM_CAPACITY).first
@@ -596,6 +597,8 @@ module Xsuportal
         )
 
         result = { team_id: team_id }
+      ensure
+        db.query('UNLOCK TABLES')
       end
 
       encode_response_pb(result)
