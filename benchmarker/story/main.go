@@ -173,7 +173,7 @@ func (s *Story) registration(ctx context.Context) {
 	timer := time.After(s.contest.ContestStartsAt.Sub(now) - 1*time.Second)
 
 	// TODO: 20並列で登録だなんだのリクエストを送りつけてるけど、これ80ぐらいにすると通らない
-	parallelism := make(chan bool, 40)
+	parallelism := make(chan bool, 100)
 	wg := &sync.WaitGroup{}
 	// execute := true
 
