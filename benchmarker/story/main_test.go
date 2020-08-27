@@ -26,5 +26,8 @@ func TestMain(t *testing.T) {
 	t.Log(story.stderr.String())
 	t.Log(story.errors.GetMessages())
 	t.Logf("Score: %d", story.GetTotalScore())
+	t.Logf("Score: %d / %d", story.SumScore(), story.ScoreDeduction())
 	t.Logf("Score: %s", story.Scores.String())
+	_, critical, application, trivial := story.errors.Get()
+	t.Logf("Error: Critical: %d / Application: %d / Trivial: %d", critical, application, trivial)
 }

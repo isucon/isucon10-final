@@ -39,6 +39,7 @@ func NewBenchmarker(team *model.Team, host string, port int64) (*Benchmarker, er
 
 func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*bench.ReportBenchmarkResultRequest, error) {
 	defer func() {
+		// 高負荷時だと Transport が SEGV するので一旦 recover でやりすごすけどどうしようかなこれ
 		recover()
 	}()
 
