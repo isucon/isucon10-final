@@ -566,10 +566,10 @@ module Xsuportal
         db.query('LOCK TABLES `teams` WRITE, `contestants` WRITE')
         invite_token = SecureRandom.urlsafe_base64(64)
 
-        # within_capacity = db.xquery('SELECT COUNT(*) < ? AS `within_capacity` FROM `teams`', TEAM_CAPACITY).first
-        # if within_capacity&.fetch(:within_capacity) != 1
-        #   halt_pb 403, "チーム登録数上限です"
-        # end
+        within_capacity = db.xquery('SELECT COUNT(*) < ? AS `within_capacity` FROM `teams`', TEAM_CAPACITY).first
+        if within_capacity&.fetch(:within_capacity) != 1
+          halt_pb 403, "チーム登録数上限です"
+        end
 
         db.xquery(
           'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`) VALUES (?, ?, ?, NOW(6))',
