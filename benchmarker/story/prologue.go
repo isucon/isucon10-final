@@ -31,11 +31,12 @@ func (s *Story) Prologue(ctx context.Context) error {
 		s.stdoutLogger.Debug().Msg("Initialize call")
 
 		init, xerr, err := admin.InitializeAction(ctx)
-		if xerr != nil && err == nil {
-			err = failure.New(failure.ErrApplication, xerr.GetHumanMessage())
+		if xerr != nil {
+			s.errors.Add(failure.New(failure.ErrApplication, xerr.GetHumanMessage()))
+			return
 		}
 		if err != nil {
-			s.errors.Add(failure.Translate(err, failure.ErrCritical))
+			s.errors.Add(failure.New(failure.ErrCritical, err.Error()))
 			return
 		}
 

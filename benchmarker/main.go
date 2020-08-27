@@ -2,18 +2,25 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"github.com/isucon/isucon10-final/benchmarker/story"
 )
 
+var (
+	host = flag.String("host", "localhost:9292", "Target host")
+)
+
 func main() {
-	s, err := story.NewStory("localhost:9292")
+	flag.Parse()
+
+	s, err := story.NewStory(*host)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 
-	err = s.Main(context.TODO())
+	err = s.Run(context.TODO())
 	if err != nil {
 		fmt.Println(err.Error())
 		return

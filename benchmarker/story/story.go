@@ -2,6 +2,7 @@ package story
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"github.com/isucon/isucon10-final/benchmarker/failure"
 	"github.com/isucon/isucon10-final/benchmarker/model"
@@ -93,6 +94,35 @@ func NewStory(targetHostName string) (*Story, error) {
 		teamByJobID:          map[int64]*model.Team{},
 		benchmarkParalellism: BENCHMARK_EXECUTE_PARALELLISM_DEFAULT,
 	}, nil
+}
+
+func (s *Story) Run(ctx context.Context) error {
+	defer func() {
+		err := recover()
+		if err != nil {
+			s.errors.Add(failure.New(failure.ErrCritical, fmt.Sprintf("%v", err)))
+		}
+	}()
+
+	if err := s.Prologue(ctx); err != nil {
+		s.errors.Add(failure.New(failure.ErrCritical, err.Error()))
+		return nil
+	}
+
+	if s.errors.Len() > 0 {
+		return nil
+	}
+
+	if err := s.Main(ctx); err != nil {
+		s.errors.Add(failure.New(failure.ErrCritical, err.Error()))
+		return nil
+	}
+
+	if s.errors.Len() > 0 {
+		return nil
+	}
+
+	return nil
 }
 
 func (s *Story) AddTeam(team *model.Team) {
