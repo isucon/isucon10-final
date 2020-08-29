@@ -37,6 +37,8 @@ CREATE TABLE `benchmark_jobs` (
   `updated_at` DATETIME(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
+ALTER TABLE `benchmark_jobs` ADD INDEX `idx1` (`status`);
+
 DROP TABLE IF EXISTS `contest_config`;
 CREATE TABLE `contest_config` (
   `registration_open_at` DATETIME(6) NOT NULL,
