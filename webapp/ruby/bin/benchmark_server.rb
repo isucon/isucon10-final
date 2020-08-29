@@ -27,7 +27,7 @@ Griffin::Server.configure do |c|
   c.pool_size 10, 10
   c.connection_size 10, 10
 
-  c.logger Logger.new($stdout)
+  c.logger Logger.new('benchmark_server.log')
 end
 
 Griffin::Server.run

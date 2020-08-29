@@ -1,11 +1,24 @@
 require 'xsuportal/resources/benchmark_job_pb'
 require 'xsuportal/services/bench/reporting_pb'
 require 'xsuportal/services/bench/reporting_services_pb'
+require 'benchmark'
 
 class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkReport::Service
+  def measure(msg, &block)
+    result = nil
+    duration = Benchmark.realtime do
+      result = block.call
+    end
+
+    GRPC.logger.debug "MEASURE(%s) %.3f" % [msg, duration]
+    result
+  end
+
   def report_benchmark_result(call)
     db = Xsuportal::Database.connection
-    call.each do |request|
+    t = Time.now
+    call.each_with_index do |request, i|
+      GRPC.logger.info "MEASURE(call.each): %d, %.3f" % [i, Time.now - t]
       Xsuportal::Database.transaction_begin('report_benchmark_result')
       job = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `id` = ? LIMIT 1 FOR UPDATE',
@@ -34,6 +47,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
         acked_nonce: request.nonce,
       )
+      t = Time.now
     end
   ensure
     Xsuportal::Database.ensure_transaction_close('report_benchmark_result')
