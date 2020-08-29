@@ -7,7 +7,6 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
     db = Xsuportal::Database.connection
     call.each do |request|
       Xsuportal::Database.transaction_begin('report_benchmark_result')
-      puts "Got reported: #{request.inspect}"
       job = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `id` = ? LIMIT 1 FOR UPDATE',
         request.job_id,
@@ -15,12 +14,12 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
 
       unless job
         Xsuportal::Database.transaction_rollback('report_benchmark_result')
-        puts "Job not found: job_id=#{request.job_id}"
+        GRPC.logger.error "Job not found: job_id=#{request.job_id}"
         break
       end
 
       if request.result.finished
-        puts "#{request.job_id}: save as finished"
+        GRPC.logger.debug "#{request.job_id}: save as finished"
         save_as_finished(request)
         Xsuportal::Database.transaction_commit('report_benchmark_result')
         call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
@@ -28,7 +27,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         )
         break
       else
-        puts "#{request.job_id}: save as running"
+        GRPC.logger.debug "#{request.job_id}: save as running"
         save_as_running(request)
         Xsuportal::Database.transaction_commit('report_benchmark_result')
       end
