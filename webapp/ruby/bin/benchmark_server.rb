@@ -24,8 +24,8 @@ Griffin::Server.configure do |c|
   ]
 
   c.workers 2
-  c.pool_size 10, 10
-  c.connection_size 10, 10
+  c.pool_size 1, 1
+  c.connection_size 1, 1
 
   c.logger Logger.new('benchmark_server.log')
 end

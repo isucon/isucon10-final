@@ -18,7 +18,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
     db = Xsuportal::Database.connection
     t = Time.now
     call.each_with_index do |request, i|
-      GRPC.logger.info "MEASURE(call.each): %d, %.3f" % [i, Time.now - t]
+      GRPC.logger.info "MEASURE(call.each): i=%d, job=%d, %.3f" % [i, request.job_id, Time.now - t]
       Xsuportal::Database.transaction_begin('report_benchmark_result')
       job = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `id` = ? LIMIT 1 FOR UPDATE',

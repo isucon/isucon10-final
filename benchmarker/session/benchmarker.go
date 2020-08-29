@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench"
@@ -81,7 +83,12 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 		Nonce: 1,
 	}
 	reporter.Send(result)
+	t0 := time.Now()
+
 	reportResponse, err := reporter.Recv()
+	t1 := time.Now()
+	fmt.Printf("DEBUG: job=%d, %.3f sec\n", jobHandle.GetJobId(), (t1.Sub(t0)).Seconds())
+
 	if err != nil {
 		return nil, err
 	}
@@ -103,6 +110,8 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 		},
 		Nonce: 2,
 	}
+	t2 := time.Now()
+	fmt.Printf("DEBUG: job=%d, %.3f, %.3f\n", jobHandle.GetJobId(), (t1.Sub(t0)).Seconds(), (t2.Sub(t1)).Seconds())
 	reporter.Send(result)
 	reporter.CloseSend()
 
