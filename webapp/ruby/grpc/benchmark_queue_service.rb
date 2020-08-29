@@ -15,13 +15,11 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
         Xsuportal::Database.transaction_rollback('benchmark_queue_service')
         break
       end
-      puts "Sending job_id=#{job[:id]}"
       db.xquery(
         'UPDATE `benchmark_jobs` SET `status` = ? WHERE `id` = ? LIMIT 1',
         Xsuportal::Proto::Resources::BenchmarkJob::Status::SENT,
         job[:id],
       )
-      puts "Updated job_id=#{job[:id]}"
 
       contest = db.query('SELECT `contest_starts_at` FROM `contest_config` LIMIT 1').first
       job_handle = {
