@@ -1,0 +1,8 @@
+syntax = "proto3";
+package xsuportal.proto.services.bench;
+option go_package = "github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench";
+
+service Foo { rpc Hello(stream FooRequest) returns (stream FooResponse); }
+
+message FooRequest { string msg = 1; }
+message FooResponse { string msg = 1; }

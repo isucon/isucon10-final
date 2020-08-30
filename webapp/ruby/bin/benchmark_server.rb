@@ -7,6 +7,7 @@ require 'grpc'
 require 'griffin/interceptors/server/logging_interceptor'
 require_relative '../grpc/benchmark_queue_service'
 require_relative '../grpc/benchmark_report_service'
+require_relative '../grpc/foo_service'
 require 'database'
 
 Xsuportal::Database.connection
@@ -15,6 +16,7 @@ Griffin::Server.configure do |c|
   c.bind '0.0.0.0'
 
   c.services [
+    FooService,
     BenchmarkQueueService,
     BenchmarkReportService,
   ]

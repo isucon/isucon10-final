@@ -1,21 +1,13 @@
 require 'griffin'
 require 'socket'
-require 'xsuportal/services/bench/receiving_pb'
-require 'xsuportal/services/bench/reporting_pb'
-require 'xsuportal/services/bench/receiving_services_pb'
-require 'xsuportal/services/bench/reporting_services_pb'
+require 'xsuportal/services/bench/foo_pb'
+require 'xsuportal/services/bench/foo_services_pb'
 require 'pry-byebug'
 
 socket = TCPSocket.new('localhost', 50051)
-stub = Xsuportal::Proto::Services::Bench::BenchmarkQueue::Stub.new(socket)
-req = Xsuportal::Proto::Services::Bench::ReceiveBenchmarkJobRequest.new({token: 'hoge'})
+stub = Xsuportal::Proto::Services::Bench::Foo::Stub.new(socket)
 
-message = stub.receive_benchmark_job(req)
-
-socket2 = TCPSocket.new('localhost', 50051)
-stub = Xsuportal::Proto::Services::Bench::BenchmarkReport::Stub.new(socket2)
-
-call = stub.report_benchmark_result({})
+call = stub.hello({})
 
 t = Thread.new do
   call.each do |rn|
@@ -24,9 +16,10 @@ t = Thread.new do
 end
 
 (1..3).each do |i|
-  req = Xsuportal::Proto::Services::Bench::ReportBenchmarkResultRequest.new({job_id: i})
+  req = Xsuportal::Proto::Services::Bench::FooRequest.new({msg: "hey(#{i})"})
   call.send_msg(req)
 end
+# call.send_msg(Xsuportal::Proto::Services::Bench::FooRequest.new({msg: "end"})
 call.close_and_send
 t.join
 

@@ -5324,6 +5324,231 @@ export namespace xsuportal {
             /** Namespace bench. */
             namespace bench {
 
+                /** Represents a Foo */
+                class Foo extends $protobuf.rpc.Service {
+
+                    /**
+                     * Constructs a new Foo service.
+                     * @param rpcImpl RPC implementation
+                     * @param [requestDelimited=false] Whether requests are length-delimited
+                     * @param [responseDelimited=false] Whether responses are length-delimited
+                     */
+                    constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                    /**
+                     * Creates new Foo service using the specified rpc implementation.
+                     * @param rpcImpl RPC implementation
+                     * @param [requestDelimited=false] Whether requests are length-delimited
+                     * @param [responseDelimited=false] Whether responses are length-delimited
+                     * @returns RPC service. Useful where requests and/or responses are streamed.
+                     */
+                    public static create(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean): Foo;
+
+                    /**
+                     * Calls Hello.
+                     * @param request FooRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and FooResponse
+                     */
+                    public hello(request: xsuportal.proto.services.bench.IFooRequest, callback: xsuportal.proto.services.bench.Foo.HelloCallback): void;
+
+                    /**
+                     * Calls Hello.
+                     * @param request FooRequest message or plain object
+                     * @returns Promise
+                     */
+                    public hello(request: xsuportal.proto.services.bench.IFooRequest): Promise<xsuportal.proto.services.bench.FooResponse>;
+                }
+
+                namespace Foo {
+
+                    /**
+                     * Callback as used by {@link xsuportal.proto.services.bench.Foo#hello}.
+                     * @param error Error, if any
+                     * @param [response] FooResponse
+                     */
+                    type HelloCallback = (error: (Error|null), response?: xsuportal.proto.services.bench.FooResponse) => void;
+                }
+
+                /** Properties of a FooRequest. */
+                interface IFooRequest {
+
+                    /** FooRequest msg */
+                    msg?: (string|null);
+                }
+
+                /** Represents a FooRequest. */
+                class FooRequest implements IFooRequest {
+
+                    /**
+                     * Constructs a new FooRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.bench.IFooRequest);
+
+                    /** FooRequest msg. */
+                    public msg: string;
+
+                    /**
+                     * Creates a new FooRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns FooRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.bench.IFooRequest): xsuportal.proto.services.bench.FooRequest;
+
+                    /**
+                     * Encodes the specified FooRequest message. Does not implicitly {@link xsuportal.proto.services.bench.FooRequest.verify|verify} messages.
+                     * @param message FooRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.bench.IFooRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified FooRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.bench.FooRequest.verify|verify} messages.
+                     * @param message FooRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.bench.IFooRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a FooRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns FooRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.bench.FooRequest;
+
+                    /**
+                     * Decodes a FooRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns FooRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.bench.FooRequest;
+
+                    /**
+                     * Verifies a FooRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FooRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FooRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.bench.FooRequest;
+
+                    /**
+                     * Creates a plain object from a FooRequest message. Also converts values to other types if specified.
+                     * @param message FooRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.bench.FooRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FooRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FooResponse. */
+                interface IFooResponse {
+
+                    /** FooResponse msg */
+                    msg?: (string|null);
+                }
+
+                /** Represents a FooResponse. */
+                class FooResponse implements IFooResponse {
+
+                    /**
+                     * Constructs a new FooResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.bench.IFooResponse);
+
+                    /** FooResponse msg. */
+                    public msg: string;
+
+                    /**
+                     * Creates a new FooResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns FooResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.bench.IFooResponse): xsuportal.proto.services.bench.FooResponse;
+
+                    /**
+                     * Encodes the specified FooResponse message. Does not implicitly {@link xsuportal.proto.services.bench.FooResponse.verify|verify} messages.
+                     * @param message FooResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.bench.IFooResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified FooResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.bench.FooResponse.verify|verify} messages.
+                     * @param message FooResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.bench.IFooResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a FooResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns FooResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.bench.FooResponse;
+
+                    /**
+                     * Decodes a FooResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns FooResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.bench.FooResponse;
+
+                    /**
+                     * Verifies a FooResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FooResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FooResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.bench.FooResponse;
+
+                    /**
+                     * Creates a plain object from a FooResponse message. Also converts values to other types if specified.
+                     * @param message FooResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.bench.FooResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FooResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
                 /** Represents a BenchmarkQueue */
                 class BenchmarkQueue extends $protobuf.rpc.Service {
 

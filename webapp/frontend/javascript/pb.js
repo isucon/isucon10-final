@@ -12824,6 +12824,448 @@ $root.xsuportal = (function() {
                  */
                 var bench = {};
 
+                bench.Foo = (function() {
+
+                    /**
+                     * Constructs a new Foo service.
+                     * @memberof xsuportal.proto.services.bench
+                     * @classdesc Represents a Foo
+                     * @extends $protobuf.rpc.Service
+                     * @constructor
+                     * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                     * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                     * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                     */
+                    function Foo(rpcImpl, requestDelimited, responseDelimited) {
+                        $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                    }
+
+                    (Foo.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = Foo;
+
+                    /**
+                     * Creates new Foo service using the specified rpc implementation.
+                     * @function create
+                     * @memberof xsuportal.proto.services.bench.Foo
+                     * @static
+                     * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                     * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                     * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                     * @returns {Foo} RPC service. Useful where requests and/or responses are streamed.
+                     */
+                    Foo.create = function create(rpcImpl, requestDelimited, responseDelimited) {
+                        return new this(rpcImpl, requestDelimited, responseDelimited);
+                    };
+
+                    /**
+                     * Callback as used by {@link xsuportal.proto.services.bench.Foo#hello}.
+                     * @memberof xsuportal.proto.services.bench.Foo
+                     * @typedef HelloCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {xsuportal.proto.services.bench.FooResponse} [response] FooResponse
+                     */
+
+                    /**
+                     * Calls Hello.
+                     * @function hello
+                     * @memberof xsuportal.proto.services.bench.Foo
+                     * @instance
+                     * @param {xsuportal.proto.services.bench.IFooRequest} request FooRequest message or plain object
+                     * @param {xsuportal.proto.services.bench.Foo.HelloCallback} callback Node-style callback called with the error, if any, and FooResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(Foo.prototype.hello = function hello(request, callback) {
+                        return this.rpcCall(hello, $root.xsuportal.proto.services.bench.FooRequest, $root.xsuportal.proto.services.bench.FooResponse, request, callback);
+                    }, "name", { value: "Hello" });
+
+                    /**
+                     * Calls Hello.
+                     * @function hello
+                     * @memberof xsuportal.proto.services.bench.Foo
+                     * @instance
+                     * @param {xsuportal.proto.services.bench.IFooRequest} request FooRequest message or plain object
+                     * @returns {Promise<xsuportal.proto.services.bench.FooResponse>} Promise
+                     * @variation 2
+                     */
+
+                    return Foo;
+                })();
+
+                bench.FooRequest = (function() {
+
+                    /**
+                     * Properties of a FooRequest.
+                     * @memberof xsuportal.proto.services.bench
+                     * @interface IFooRequest
+                     * @property {string|null} [msg] FooRequest msg
+                     */
+
+                    /**
+                     * Constructs a new FooRequest.
+                     * @memberof xsuportal.proto.services.bench
+                     * @classdesc Represents a FooRequest.
+                     * @implements IFooRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.bench.IFooRequest=} [properties] Properties to set
+                     */
+                    function FooRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * FooRequest msg.
+                     * @member {string} msg
+                     * @memberof xsuportal.proto.services.bench.FooRequest
+                     * @instance
+                     */
+                    FooRequest.prototype.msg = "";
+
+                    /**
+                     * Creates a new FooRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.bench.FooRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IFooRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.bench.FooRequest} FooRequest instance
+                     */
+                    FooRequest.create = function create(properties) {
+                        return new FooRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified FooRequest message. Does not implicitly {@link xsuportal.proto.services.bench.FooRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.bench.FooRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IFooRequest} message FooRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    FooRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.msg != null && Object.hasOwnProperty.call(message, "msg"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.msg);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified FooRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.bench.FooRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.bench.FooRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IFooRequest} message FooRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    FooRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a FooRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.bench.FooRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.bench.FooRequest} FooRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    FooRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.bench.FooRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.msg = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a FooRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.bench.FooRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.bench.FooRequest} FooRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    FooRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a FooRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.bench.FooRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    FooRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.msg != null && message.hasOwnProperty("msg"))
+                            if (!$util.isString(message.msg))
+                                return "msg: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a FooRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.bench.FooRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.bench.FooRequest} FooRequest
+                     */
+                    FooRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.bench.FooRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.bench.FooRequest();
+                        if (object.msg != null)
+                            message.msg = String(object.msg);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a FooRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.bench.FooRequest
+                     * @static
+                     * @param {xsuportal.proto.services.bench.FooRequest} message FooRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    FooRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.msg = "";
+                        if (message.msg != null && message.hasOwnProperty("msg"))
+                            object.msg = message.msg;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this FooRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.bench.FooRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    FooRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return FooRequest;
+                })();
+
+                bench.FooResponse = (function() {
+
+                    /**
+                     * Properties of a FooResponse.
+                     * @memberof xsuportal.proto.services.bench
+                     * @interface IFooResponse
+                     * @property {string|null} [msg] FooResponse msg
+                     */
+
+                    /**
+                     * Constructs a new FooResponse.
+                     * @memberof xsuportal.proto.services.bench
+                     * @classdesc Represents a FooResponse.
+                     * @implements IFooResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.bench.IFooResponse=} [properties] Properties to set
+                     */
+                    function FooResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * FooResponse msg.
+                     * @member {string} msg
+                     * @memberof xsuportal.proto.services.bench.FooResponse
+                     * @instance
+                     */
+                    FooResponse.prototype.msg = "";
+
+                    /**
+                     * Creates a new FooResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.bench.FooResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IFooResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.bench.FooResponse} FooResponse instance
+                     */
+                    FooResponse.create = function create(properties) {
+                        return new FooResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified FooResponse message. Does not implicitly {@link xsuportal.proto.services.bench.FooResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.bench.FooResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IFooResponse} message FooResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    FooResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.msg != null && Object.hasOwnProperty.call(message, "msg"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.msg);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified FooResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.bench.FooResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.bench.FooResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.IFooResponse} message FooResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    FooResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a FooResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.bench.FooResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.bench.FooResponse} FooResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    FooResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.bench.FooResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.msg = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a FooResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.bench.FooResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.bench.FooResponse} FooResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    FooResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a FooResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.bench.FooResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    FooResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.msg != null && message.hasOwnProperty("msg"))
+                            if (!$util.isString(message.msg))
+                                return "msg: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a FooResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.bench.FooResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.bench.FooResponse} FooResponse
+                     */
+                    FooResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.bench.FooResponse)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.bench.FooResponse();
+                        if (object.msg != null)
+                            message.msg = String(object.msg);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a FooResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.bench.FooResponse
+                     * @static
+                     * @param {xsuportal.proto.services.bench.FooResponse} message FooResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    FooResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.msg = "";
+                        if (message.msg != null && message.hasOwnProperty("msg"))
+                            object.msg = message.msg;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this FooResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.bench.FooResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    FooResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return FooResponse;
+                })();
+
                 bench.BenchmarkQueue = (function() {
 
                     /**
