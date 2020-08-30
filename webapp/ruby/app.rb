@@ -449,7 +449,11 @@ module Xsuportal
     # いらんかも
     put '/api/admin/contest' do
       req = decode_request_pb
-      # TODO: admin authz
+      login_required(team: false)
+      unless current_contestant[:staff]
+        halt_pb 403, '管理者権限が必要です'
+      end
+
       Database.transaction do
         db.query('TRUNCATE `contest_config`')
         db.xquery(
