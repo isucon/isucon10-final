@@ -53,6 +53,18 @@ export class ApiClient {
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
+  public async getAudienceDashboard() {
+    const responseClass = xsuportal.proto.services.audience.DashboardResponse;
+    const payloadClass = xsuportal.proto.services.audience.DashboardRequest;
+    const resp = await this.request(
+      `${this.baseUrl}/api/audience/dashboard`,
+      "GET",
+      null,
+      null
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
   public async getCurrentSession() {
     const klass = xsuportal.proto.services.common.GetCurrentSessionResponse;
     // const pb = payload ? klass.encode(klass.fromObject(payload)).finish() : null;
@@ -201,7 +213,7 @@ export class ApiClient {
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async getDashboard() {
+  public async getContestantDashboard() {
     const responseClass = xsuportal.proto.services.contestant.DashboardResponse;
     const payloadClass = xsuportal.proto.services.contestant.DashboardRequest;
     const resp = await this.request(

@@ -3,7 +3,7 @@ import { ApiError, ApiClient } from "./common/ApiClient";
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import { Dashboard } from "./Dashboard";
+import { ContestantDashboard } from "./ContestantDashboard";
 import { TeamList } from "./TeamList";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
@@ -11,6 +11,7 @@ import { Logout } from "./Logout";
 import { Registration } from "./Registration";
 import { BenchmarkJobDetail } from "./BenchmarkJobDetail";
 import { BenchmarkJobList } from "./BenchmarkJobList";
+import { AudienceDashboard } from "./AudienceDashboard";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
@@ -97,7 +98,7 @@ export class Index extends React.Component<Props, State> {
                 <Signup client={this.props.client} root={this} />
               </Route>
               <Route path="/contestant/dashboard" exact={true}>
-                <Dashboard
+                <ContestantDashboard
                   session={this.props.session}
                   client={this.props.client}
                   root={this}
@@ -123,6 +124,9 @@ export class Index extends React.Component<Props, State> {
                   incompleteOnly={false}
                   root={this}
                 />
+              </Route>
+              <Route path="/audience/dashboard" exact={true}>
+                <AudienceDashboard client={this.props.client} />
               </Route>
               <Route path="/" exact={true}>
                 <TeamList
@@ -163,6 +167,9 @@ export class Index extends React.Component<Props, State> {
         <>
           <Link className="navbar-item" to="/">
             チーム一覧
+          </Link>
+          <Link className="navbar-item" to="/audience/dashboard">
+            ダッシュボード
           </Link>
           <a className="navbar-item" href="/terms">
             規約

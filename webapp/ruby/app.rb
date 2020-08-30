@@ -25,7 +25,7 @@ module Xsuportal
       register Sinatra::Reloader
       also_reload './utils.rb'
 
-      %w[/ /registration /signup /login /logout /contestant/dashboard /contestant/benchmark_jobs /contestant/benchmark_jobs/:id].each do |path|
+      %w[/ /registration /signup /login /logout /audience/dashboard /contestant/dashboard /contestant/benchmark_jobs /contestant/benchmark_jobs/:id].each do |path|
         get path do
           File.read(File.join('public', 'index.html'))
         end
@@ -220,12 +220,11 @@ module Xsuportal
         )
       end
 
-      def leaderboard_pb
+      def leaderboard_pb(team_id:0)
         contest = current_contest_status[:contest]
         contest_frozen = contest[:status] == :FROZEN
         contest_finished = contest[:status] == :FINISHED
         contest_freezes_at = contest[:contest_freezes_at]
-        team_id = current_team[:id]
 
         leaderboard = nil
         job_results = nil
@@ -446,7 +445,6 @@ module Xsuportal
       )
     end
 
-    # いらんかも
     put '/api/admin/contest' do
       req = decode_request_pb
       login_required(team: false)
@@ -507,6 +505,12 @@ module Xsuportal
       end
       encode_response_pb(
         teams: items,
+      )
+    end
+
+    get '/api/audience/dashboard' do
+      encode_response_pb(
+        leaderboard: leaderboard_pb,
       )
     end
 
@@ -759,7 +763,7 @@ module Xsuportal
       login_required
 
       encode_response_pb(
-        leaderboard: leaderboard_pb,
+        leaderboard: leaderboard_pb(team_id: current_team[:id]),
       )
     end
 

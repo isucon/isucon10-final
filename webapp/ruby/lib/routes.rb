@@ -25,6 +25,10 @@ module Xsuportal
         nil,
         Proto::Services::Audience::ListTeamsResponse,
       ],
+      'GET /api/audience/dashboard' => [
+        nil,
+        Proto::Services::Audience::DashboardResponse,
+      ],
       'GET /api/registration/session' => [
         nil,
         Proto::Services::Registration::GetRegistrationSessionResponse,

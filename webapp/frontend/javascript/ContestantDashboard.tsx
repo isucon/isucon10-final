@@ -20,7 +20,11 @@ interface Props {
   root: Index;
 }
 
-export const Dashboard: React.FC<Props> = ({ session, client, root }) => {
+export const ContestantDashboard: React.FC<Props> = ({
+  session,
+  client,
+  root,
+}) => {
   const [
     dashboard,
     setDashboard,
@@ -32,7 +36,7 @@ export const Dashboard: React.FC<Props> = ({ session, client, root }) => {
   >(null);
 
   const updateDashboard = async () => {
-    setDashboard(await client.getDashboard());
+    setDashboard(await client.getContestantDashboard());
     setJobs((await client.listBenchmarkJobs())?.jobs);
   };
 

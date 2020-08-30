@@ -4,11 +4,8 @@ option go_package = "github.com/isucon/isucon10-final/benchmarker/proto/xsuporta
 
 import "xsuportal/resources/leaderboard.proto";
 
-message DashboardRequest {
-}
+message DashboardRequest {}
 
 message DashboardResponse {
   xsuportal.proto.resources.Leaderboard leaderboard = 1;
 }
-
-
