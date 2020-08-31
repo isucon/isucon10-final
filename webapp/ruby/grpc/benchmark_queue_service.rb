@@ -1,3 +1,4 @@
+require 'securerandom'
 require 'xsuportal/resources/benchmark_job_pb'
 require 'xsuportal/services/bench/receiving_pb'
 require 'xsuportal/services/bench/receiving_services_pb'
@@ -25,15 +26,18 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
       ).first
 
       if got_lock
+        handle = SecureRandom.base64
         db.xquery(
-          'UPDATE `benchmark_jobs` SET `status` = ? WHERE `id` = ? AND `status` = ? LIMIT 1',
+          'UPDATE `benchmark_jobs` SET `status` = ?, handle = ? WHERE `id` = ? AND `status` = ? LIMIT 1',
           Xsuportal::Proto::Resources::BenchmarkJob::Status::SENT,
+          handle,
           job[:id],
           Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
         )
         contest = db.query('SELECT `contest_starts_at` FROM `contest_config` LIMIT 1').first
         job_handle = {
           job_id: job[:id],
+          handle: handle,
           target_hostname: job[:target_hostname],
           contest_started_at: contest[:contest_starts_at],
           job_created_at: job[:created_at],

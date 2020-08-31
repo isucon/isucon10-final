@@ -8,13 +8,14 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
     call.each do |request|
       Xsuportal::Database.transaction_begin('report_benchmark_result')
       job = db.xquery(
-        'SELECT * FROM `benchmark_jobs` WHERE `id` = ? LIMIT 1 FOR UPDATE',
+        'SELECT * FROM `benchmark_jobs` WHERE `id` = ? AND `handle` = ? LIMIT 1 FOR UPDATE',
         request.job_id,
+        request.handle,
       ).first
 
       unless job
         Xsuportal::Database.transaction_rollback('report_benchmark_result')
-        GRPC.logger.error "Job not found: job_id=#{request.job_id}"
+        GRPC.logger.error "Job not found: job_id=#{request.job_id}, handle=#{request.handle.inspect}"
         break
       end
 

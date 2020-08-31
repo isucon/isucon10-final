@@ -27,6 +27,7 @@ CREATE TABLE `benchmark_jobs` (
   `team_id` BIGINT NOT NULL,
   `status` INT NOT NULL,
   `target_hostname` VARCHAR(255) NOT NULL,
+  `handle` VARCHAR(255),
   `score_raw` INT,
   `score_deduction` INT,
   `reason` TEXT,
