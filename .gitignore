@@ -1,3 +1,4 @@
 /proto/**/*.go
 /benchmarker/proto/**/*.go
 /bin/benchmarker
+log/
