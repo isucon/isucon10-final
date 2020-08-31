@@ -12,4 +12,5 @@ gem 'griffin-interceptors'
 group :development do
   gem 'sinatra-contrib'
   gem 'grpc-tools'
+  gem 'pry-byebug'
 end
