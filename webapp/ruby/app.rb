@@ -25,12 +25,12 @@ module Xsuportal
       register Sinatra::Reloader
       also_reload './utils.rb'
 
-      %w[/ /registration /signup /login /logout /audience/dashboard /contestant/dashboard /contestant/benchmark_jobs /contestant/benchmark_jobs/:id].each do |path|
-        get path do
-          File.read(File.join('public', 'index.html'))
-        end
-      end
+    end
 
+    %w[/ /registration /signup /login /logout /audience/dashboard /contestant/dashboard /contestant/benchmark_jobs /contestant/benchmark_jobs/:id].each do |path|
+      get path do
+        File.read(File.join('public', 'index.html'))
+      end
     end
 
     set :session_secret, 'tagomoris'
