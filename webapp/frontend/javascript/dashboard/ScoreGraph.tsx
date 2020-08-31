@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ResponsiveLine } from "@nivo/line";
 import { BasicTooltip } from "@nivo/tooltip";
-import dayjs from "dayjs";
 
 import type { PointTooltipProps, Serie } from "@nivo/line";
 import { xsuportal } from "../pb";
@@ -44,9 +43,10 @@ export const ScoreGraph: React.FC<Props> = ({ teams }) => {
             id: team.team?.name || "",
             data:
               team.scores?.map((score) => {
-                const time = dayjs(
-                  (score.markedAt?.seconds as number) * 1000
-                ).format("HH:mm:ss");
+                const time = new Date(
+                  (score.markedAt?.seconds as number) * 1000 +
+                    (score.markedAt?.nanos as number) / 1000000
+                );
                 return {
                   x: time,
                   y: score.score as number,
@@ -65,11 +65,11 @@ export const ScoreGraph: React.FC<Props> = ({ teams }) => {
         margin={{ top: 10, right: 100, bottom: 55, left: 55 }}
         xScale={{
           type: "time",
-          format: "%H:%M:%S",
+          format: "native",
           useUTC: false,
-          precision: "second",
+          precision: "millisecond",
         }}
-        xFormat="time:%H:%M:%S"
+        xFormat="time:%H:%M:%S.%f"
         yScale={{ type: "linear" }}
         axisBottom={{
           format: "%H:%M:%S",
