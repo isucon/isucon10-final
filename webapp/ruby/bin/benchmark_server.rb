@@ -26,10 +26,10 @@ Griffin::Server.configure do |c|
   ]
 
   c.workers 2
-  c.pool_size 1, 1
-  c.connection_size 1, 1
+  c.pool_size 100, 100
+  c.connection_size 100, 100
 
-  c.logger Logger.new('benchmark_server.log')
+  c.logger Logger.new('log/benchmark_server.log')
 end
 
 Griffin::Server.run
