@@ -8,7 +8,7 @@ require 'routes'
 require 'database'
 
 # TODO: 競技時は消す
-TEAM_CAPACITY = 1
+TEAM_CAPACITY = 100
 
 module Xsuportal
   class App < Sinatra::Base
