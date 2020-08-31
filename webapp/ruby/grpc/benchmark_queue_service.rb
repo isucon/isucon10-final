@@ -19,7 +19,8 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
     measure('queue transaction') do
       Xsuportal::Database.transaction('benchmark_queue_service') do
         job = measure('queue sql 1') {db.xquery(
-          'SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1 FOR UPDATE',
+          # 'SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1 FOR UPDATE',
+          'SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1',
           Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
         ).first }
         unless job
