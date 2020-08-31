@@ -16,7 +16,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       unless job
         Xsuportal::Database.transaction_rollback('report_benchmark_result')
         GRPC.logger.error "Job not found: job_id=#{request.job_id}, handle=#{request.handle.inspect}"
-        break
+        raise GRPC::NotFound.new("Job not found or handle is wrong")
       end
 
       if request.result.finished
