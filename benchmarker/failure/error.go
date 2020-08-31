@@ -103,6 +103,10 @@ func New(code failure.Code, message string) error {
 }
 
 func Translate(err error, code failure.StringCode) error {
+	if err == context.Canceled {
+		return err
+	}
+
 	if _, ok := failure.CodeOf(err); !ok {
 		err = New(code, err.Error())
 	}

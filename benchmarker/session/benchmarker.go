@@ -13,7 +13,6 @@ import (
 )
 
 type Benchmarker struct {
-	conn           *grpc.ClientConn
 	queueClinet    bench.BenchmarkQueueClient
 	reportClient   bench.BenchmarkReportClient
 	scoreGenerator *random.ScoreGenerator
@@ -24,15 +23,19 @@ type Benchmarker struct {
 func NewBenchmarker(team *model.Team, host string, port int64) (*Benchmarker, error) {
 	host = fmt.Sprintf("%s:%d", host, port)
 
-	conn, err := grpc.Dial(host, grpc.WithInsecure())
+	queueConn, err := grpc.Dial(host, grpc.WithInsecure())
+	if err != nil {
+		return nil, err
+	}
+
+	reportConn, err := grpc.Dial(host, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}
 
 	return &Benchmarker{
-		conn:           conn,
-		queueClinet:    bench.NewBenchmarkQueueClient(conn),
-		reportClient:   bench.NewBenchmarkReportClient(conn),
+		queueClinet:    bench.NewBenchmarkQueueClient(queueConn),
+		reportClient:   bench.NewBenchmarkReportClient(reportConn),
 		scoreGenerator: random.NewScoreGenerator(),
 		Team:           team,
 	}, nil
@@ -41,7 +44,9 @@ func NewBenchmarker(team *model.Team, host string, port int64) (*Benchmarker, er
 func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*bench.ReportBenchmarkResultRequest, error) {
 	defer func() {
 		// 高負荷時だと Transport が SEGV するので一旦 recover でやりすごすけどどうしようかなこれ
-		recover()
+		if err := recover(); err != nil {
+			fmt.Printf("%+v\n", err)
+		}
 	}()
 
 	scoreG := b.scoreGenerator
@@ -82,7 +87,10 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 		},
 		Nonce: 1,
 	}
-	reporter.Send(result)
+	err = reporter.Send(result)
+	if err != nil {
+		return nil, err
+	}
 	reportResponse, err := reporter.Recv()
 	if err != nil {
 		return nil, err
@@ -106,8 +114,14 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 		},
 		Nonce: 2,
 	}
-	reporter.Send(result)
-	reporter.CloseSend()
+	err = reporter.Send(result)
+	if err != nil {
+		return nil, err
+	}
+	err = reporter.CloseSend()
+	if err != nil {
+		return nil, err
+	}
 
 	reportResponse, err = reporter.Recv()
 	if err != nil {
