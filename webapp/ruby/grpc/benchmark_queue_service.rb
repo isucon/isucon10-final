@@ -7,50 +7,36 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
     db = Xsuportal::Database.connection
     job_handle = nil
 
-    while true
-      Xsuportal::Database.transaction_begin('receive_benchmark_job')
+    contest = db.query('SELECT `contest_starts_at` FROM `contest_config` LIMIT 1').first
+
+    db.query('LOCK TABLES `benchmark_jobs` WRITE')
+    begin
       job = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1',
         Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
       ).first
-      unless job
-        Xsuportal::Database.transaction_rollback('receive_benchmark_job')
-        break
-      end
 
-      got_lock = db.xquery(
-        'SELECT 1 FROM `benchmark_jobs` WHERE `id` = ? AND `status` = ? FOR UPDATE',
-        job[:id],
-        Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
-      ).first
-
-      if got_lock
+      if job
         db.xquery(
           'UPDATE `benchmark_jobs` SET `status` = ? WHERE `id` = ? AND `status` = ? LIMIT 1',
           Xsuportal::Proto::Resources::BenchmarkJob::Status::SENT,
           job[:id],
           Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
         )
-        contest = db.query('SELECT `contest_starts_at` FROM `contest_config` LIMIT 1').first
         job_handle = {
           job_id: job[:id],
           target_hostname: job[:target_hostname],
           contest_started_at: contest[:contest_starts_at],
           job_created_at: job[:created_at],
         }
-        Xsuportal::Database.transaction_commit('receive_benchmark_job')
-        break
-      else
-        Xsuportal::Database.transaction_rollback('receive_benchmark_job')
-        next
       end
+    ensure
+      db.query('UNLOCK TABLES')
     end
 
     GRPC.logger.debug "Dequeued: job_handle=#{job_handle.inspect}"
     Xsuportal::Proto::Services::Bench::ReceiveBenchmarkJobResponse.new(
       job_handle: job_handle
     )
-  ensure
-    Xsuportal::Database.ensure_transaction_close('receive_benchmark_job')
   end
 end
