@@ -69,7 +69,8 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 	}
 
 	result := &bench.ReportBenchmarkResultRequest{
-		JobId: jobHandle.GetJobId(),
+		JobId:  jobHandle.GetJobId(),
+		Handle: jobHandle.GetHandle(),
 		Result: &resources.BenchmarkResult{
 			Finished: false,
 			Score:    score.Int() / 2,
@@ -91,7 +92,8 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 	}
 
 	result = &bench.ReportBenchmarkResultRequest{
-		JobId: jobHandle.GetJobId(),
+		JobId:  jobHandle.GetJobId(),
+		Handle: jobHandle.GetHandle(),
 		Result: &resources.BenchmarkResult{
 			Finished: true,
 			Passed:   !(score.FastFail || score.SlowFail),
