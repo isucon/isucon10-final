@@ -1,26 +1,32 @@
+GIT
+  remote: https://isucon10-public.s3.dualstack.ap-northeast-1.amazonaws.com/git/6MGgQp9lDmsK6G0CNa0DCOWHkOXID9-1davWxzKzI28/grpc_kit.git
+  revision: b1d7a24f5194f5956cd69f48825c414608b494ee
+  ref: blocking-recv-buffer
+  specs:
+    grpc_kit (0.3.9)
+      ds9 (>= 1.4.0)
+      google-protobuf (>= 3.7.0)
+      googleapis-common-protos-types (>= 1.0.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    backports (3.18.1)
+    backports (3.18.2)
     ds9 (1.4.1)
       mini_portile2 (>= 2.2.0)
     ffi (1.13.1)
-    get_process_mem (0.2.5)
+    get_process_mem (0.2.7)
       ffi (~> 1.0)
-    google-protobuf (3.12.4)
+    google-protobuf (3.13.0)
     googleapis-common-protos-types (1.0.5)
       google-protobuf (~> 3.11)
     griffin (0.2.4)
       grpc_kit (>= 0.3.8)
       serverengine (~> 2.0.7)
-    griffin-interceptors (0.1.8)
+    griffin-interceptors (0.1.9)
       get_process_mem (~> 0.2.3)
       griffin (>= 0.2.3)
-    grpc-tools (1.30.2)
-    grpc_kit (0.3.9)
-      ds9 (>= 1.4.0)
-      google-protobuf (>= 3.7.0)
-      googleapis-common-protos-types (>= 1.0.2)
+    grpc-tools (1.31.1)
     mini_portile2 (2.5.0)
     multi_json (1.15.0)
     mustermann (1.1.1)
@@ -59,6 +65,7 @@ DEPENDENCIES
   griffin
   griffin-interceptors
   grpc-tools
+  grpc_kit!
   mysql2
   mysql2-cs-bind
   puma
