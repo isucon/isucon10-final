@@ -323,7 +323,7 @@ module Xsuportal
                   AND (`team_id` = ? OR (`team_id` != ? AND (? = TRUE OR `finished_at` < ?)))
                 )
               ORDER BY
-                `id`
+                `finished_at`
             SQL
             team_id, team_id, contest_finished, contest_freezes_at,
           )
