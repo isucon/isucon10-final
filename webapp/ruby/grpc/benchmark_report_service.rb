@@ -16,7 +16,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       unless job
         Xsuportal::Database.transaction_rollback('report_benchmark_result')
         GRPC.logger.error "Job not found: job_id=#{request.job_id}, handle=#{request.handle.inspect}"
-        break
+        raise GRPC::NotFound.new("Job not found or handle is wrong")
       end
 
       if request.result.finished
@@ -26,6 +26,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
           acked_nonce: request.nonce,
         )
+        # TODO: これわざわざストリームこっちから切る理由はない気がする (本番では複数ジョブ跨いで受け付けてます) これやるなら1ストリームで複数ジョブ流してくるのは Bad Request であるということにしたい ~sorah
         break
       else
         GRPC.logger.debug "#{request.job_id}: save as running"
@@ -67,6 +68,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
   end
 
   def save_as_running(request)
+    # TODO: いわゆるバリデーションがないので finished → ufinished も可能なコードになっているがそれはいいのか?
     db = Xsuportal::Database.connection
     db.xquery(
       <<~SQL,
