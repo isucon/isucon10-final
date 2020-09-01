@@ -8,9 +8,9 @@ module Xsuportal
         Thread.current[:db] ||= Mysql2::Client.new(
           host: ENV['MYSQL_HOSTNAME'] || '127.0.0.1',
           port: ENV['MYSQL_PORT'] || '3306',
-          username: ENV['MYSQL_USER'] || 'xsuportal',
+          username: ENV['MYSQL_USER'] || 'isucon',
           database: ENV['MYSQL_DATABASE'] || 'xsuportal',
-          password: ENV['MYSQL_PASSWORD'] || 'xsuportal',
+          password: ENV['MYSQL_PASS'] || 'isucon',
           charset: 'utf8mb4',
           database_timezone: :local,
           cast_booleans: true,

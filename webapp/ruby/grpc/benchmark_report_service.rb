@@ -1,34 +1,22 @@
 require 'xsuportal/resources/benchmark_job_pb'
 require 'xsuportal/services/bench/reporting_pb'
 require 'xsuportal/services/bench/reporting_services_pb'
-require 'benchmark'
 
 class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkReport::Service
-  def measure(msg, &block)
-    result = nil
-    duration = Benchmark.realtime do
-      result = block.call
-    end
-
-    GRPC.logger.debug "MEASURE(%s) %.3f" % [msg, duration]
-    result
-  end
-
   def report_benchmark_result(call)
     db = Xsuportal::Database.connection
-    t = Time.now
-    call.each_with_index do |request, i|
-      GRPC.logger.info "MEASURE(call.each): i=%d, job=%d, %.3f" % [i, request.job_id, Time.now - t]
+    call.each do |request|
       Xsuportal::Database.transaction_begin('report_benchmark_result')
       job = db.xquery(
-        'SELECT * FROM `benchmark_jobs` WHERE `id` = ? LIMIT 1 FOR UPDATE',
+        'SELECT * FROM `benchmark_jobs` WHERE `id` = ? AND `handle` = ? LIMIT 1 FOR UPDATE',
         request.job_id,
+        request.handle,
       ).first
 
       unless job
         Xsuportal::Database.transaction_rollback('report_benchmark_result')
-        GRPC.logger.error "Job not found: job_id=#{request.job_id}"
-        break
+        GRPC.logger.error "Job not found: job_id=#{request.job_id}, handle=#{request.handle.inspect}"
+        raise GRPC::NotFound.new("Job not found or handle is wrong")
       end
 
       if request.result.finished
@@ -38,6 +26,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
           acked_nonce: request.nonce,
         )
+        # TODO: これわざわざストリームこっちから切る理由はない気がする (本番では複数ジョブ跨いで受け付けてます) これやるなら1ストリームで複数ジョブ流してくるのは Bad Request であるということにしたい ~sorah
         break
       else
         GRPC.logger.debug "#{request.job_id}: save as running"
@@ -47,7 +36,6 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
         acked_nonce: request.nonce,
       )
-      t = Time.now
     end
   ensure
     Xsuportal::Database.ensure_transaction_close('report_benchmark_result')
@@ -80,6 +68,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
   end
 
   def save_as_running(request)
+    # TODO: いわゆるバリデーションがないので finished → ufinished も可能なコードになっているがそれはいいのか?
     db = Xsuportal::Database.connection
     db.xquery(
       <<~SQL,
