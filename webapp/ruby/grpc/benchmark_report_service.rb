@@ -16,12 +16,12 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       unless job
         Xsuportal::Database.transaction_rollback('report_benchmark_result')
         GRPC.logger.error "Job not found: job_id=#{request.job_id}, handle=#{request.handle.inspect}"
-        raise GRPC::NotFound.new("Job not found or handle is wrong")
+        raise GRPC::NotFound.new("Job #{request.job_id} not found or handle is wrong")
       end
 
       if request.result.finished
         GRPC.logger.debug "#{request.job_id}: save as finished"
-        save_as_finished(request)
+        save_as_finished(job, request)
         Xsuportal::Database.transaction_commit('report_benchmark_result')
         call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
           acked_nonce: request.nonce,
@@ -30,7 +30,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         break
       else
         GRPC.logger.debug "#{request.job_id}: save as running"
-        save_as_running(request)
+        save_as_running(job, request)
         Xsuportal::Database.transaction_commit('report_benchmark_result')
       end
       call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
@@ -42,7 +42,12 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
   end
 
   private
-  def save_as_finished(request)
+  def save_as_finished(job, request)
+    if !job[:started_at] || job[:finished_at]
+      Xsuportal::Database.transaction_rollback('report_benchmark_result')
+      raise GRPC::Internal.new("Job #{request.job_id} has already finished or has not started yet")
+    end
+
     db = Xsuportal::Database.connection
     result = request.result
     db.xquery(
@@ -67,8 +72,12 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
     )
   end
 
-  def save_as_running(request)
-    # TODO: いわゆるバリデーションがないので finished → ufinished も可能なコードになっているがそれはいいのか?
+  def save_as_running(job, request)
+    if job[:started_at]
+      Xsuportal::Database.transaction_rollback('report_benchmark_result')
+      raise GRPC::Internal.new("Job #{request.job_id} has been already running")
+    end
+
     db = Xsuportal::Database.connection
     db.xquery(
       <<~SQL,
