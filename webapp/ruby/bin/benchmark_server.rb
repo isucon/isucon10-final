@@ -24,8 +24,8 @@ Griffin::Server.configure do |c|
   ]
 
   c.workers 2
-  c.pool_size 20, 20
-  c.connection_size 20, 20
+  c.pool_size 100,100
+  c.connection_size 100,100
 
   c.logger Logger.new($stdout)
 end
