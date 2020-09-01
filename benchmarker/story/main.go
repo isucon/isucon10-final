@@ -411,6 +411,10 @@ func (s *Story) executeBenchmarkers(ctx context.Context) {
 				nowIndex := 100 - int64((float64(nowDuration)/float64(duration))*100)
 
 				result, err := benchmarker.Do(ctx, nowIndex, nil)
+				if err != nil {
+					s.errors.Add(failure.Translate(err, failure.ErrApplication))
+					return
+				}
 				if err == nil && result != nil {
 					if team, ok := s.teamByJobID[result.GetJobId()]; ok {
 						team.AddScore(result)

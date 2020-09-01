@@ -17,7 +17,7 @@ module Xsuportal
             self.unmarshal_class_method = :decode
             self.service_name = 'xsuportal.proto.services.dcim.InstanceManagementService'
 
-            rpc :InformInstanceStateUpdate, Xsuportal::Proto::Services::Dcim::InformInstanceStateUpdateRequest, Xsuportal::Proto::Services::Dcim::InformInstanceStateUpdateResponse
+            rpc :InformInstanceStateUpdate, ::Xsuportal::Proto::Services::Dcim::InformInstanceStateUpdateRequest, ::Xsuportal::Proto::Services::Dcim::InformInstanceStateUpdateResponse
           end
 
           Stub = Service.rpc_stub_class

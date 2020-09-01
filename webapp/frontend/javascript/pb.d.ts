@@ -5782,6 +5782,9 @@ export namespace xsuportal {
                         /** JobHandle jobId */
                         jobId?: (number|Long|null);
 
+                        /** JobHandle handle */
+                        handle?: (string|null);
+
                         /** JobHandle targetHostname */
                         targetHostname?: (string|null);
 
@@ -5803,6 +5806,9 @@ export namespace xsuportal {
 
                         /** JobHandle jobId. */
                         public jobId: (number|Long);
+
+                        /** JobHandle handle. */
+                        public handle: string;
 
                         /** JobHandle targetHostname. */
                         public targetHostname: string;
@@ -5936,6 +5942,9 @@ export namespace xsuportal {
                     /** ReportBenchmarkResultRequest jobId */
                     jobId?: (number|Long|null);
 
+                    /** ReportBenchmarkResultRequest handle */
+                    handle?: (string|null);
+
                     /** ReportBenchmarkResultRequest nonce */
                     nonce?: (number|Long|null);
 
@@ -5954,6 +5963,9 @@ export namespace xsuportal {
 
                     /** ReportBenchmarkResultRequest jobId. */
                     public jobId: (number|Long);
+
+                    /** ReportBenchmarkResultRequest handle. */
+                    public handle: string;
 
                     /** ReportBenchmarkResultRequest nonce. */
                     public nonce: (number|Long);

@@ -17,7 +17,7 @@ module Xsuportal
             self.unmarshal_class_method = :decode
             self.service_name = 'xsuportal.proto.services.bench.BenchmarkQueue'
 
-            rpc :ReceiveBenchmarkJob, Xsuportal::Proto::Services::Bench::ReceiveBenchmarkJobRequest, Xsuportal::Proto::Services::Bench::ReceiveBenchmarkJobResponse
+            rpc :ReceiveBenchmarkJob, ::Xsuportal::Proto::Services::Bench::ReceiveBenchmarkJobRequest, ::Xsuportal::Proto::Services::Bench::ReceiveBenchmarkJobResponse
           end
 
           Stub = Service.rpc_stub_class

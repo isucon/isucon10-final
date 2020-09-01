@@ -14,6 +14,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "xsuportal.proto.services.bench.ReceiveBenchmarkJobResponse.JobHandle" do
       optional :job_id, :int64, 1
+      optional :handle, :string, 2
       optional :target_hostname, :string, 3
       optional :contest_started_at, :message, 10, "google.protobuf.Timestamp"
       optional :job_created_at, :message, 11, "google.protobuf.Timestamp"

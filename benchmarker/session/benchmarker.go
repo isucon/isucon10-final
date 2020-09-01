@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
@@ -14,7 +13,6 @@ import (
 )
 
 type Benchmarker struct {
-	conn           *grpc.ClientConn
 	queueClinet    bench.BenchmarkQueueClient
 	reportClient   bench.BenchmarkReportClient
 	scoreGenerator *random.ScoreGenerator
@@ -25,15 +23,19 @@ type Benchmarker struct {
 func NewBenchmarker(team *model.Team, host string, port int64) (*Benchmarker, error) {
 	host = fmt.Sprintf("%s:%d", host, port)
 
-	conn, err := grpc.Dial(host, grpc.WithInsecure())
+	queueConn, err := grpc.Dial(host, grpc.WithInsecure())
+	if err != nil {
+		return nil, err
+	}
+
+	reportConn, err := grpc.Dial(host, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}
 
 	return &Benchmarker{
-		conn:           conn,
-		queueClinet:    bench.NewBenchmarkQueueClient(conn),
-		reportClient:   bench.NewBenchmarkReportClient(conn),
+		queueClinet:    bench.NewBenchmarkQueueClient(queueConn),
+		reportClient:   bench.NewBenchmarkReportClient(reportConn),
 		scoreGenerator: random.NewScoreGenerator(),
 		Team:           team,
 	}, nil
@@ -42,7 +44,9 @@ func NewBenchmarker(team *model.Team, host string, port int64) (*Benchmarker, er
 func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*bench.ReportBenchmarkResultRequest, error) {
 	defer func() {
 		// 高負荷時だと Transport が SEGV するので一旦 recover でやりすごすけどどうしようかなこれ
-		recover()
+		if err := recover(); err != nil {
+			fmt.Printf("%+v\n", err)
+		}
 	}()
 
 	scoreG := b.scoreGenerator
@@ -70,7 +74,8 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 	}
 
 	result := &bench.ReportBenchmarkResultRequest{
-		JobId: jobHandle.GetJobId(),
+		JobId:  jobHandle.GetJobId(),
+		Handle: jobHandle.GetHandle(),
 		Result: &resources.BenchmarkResult{
 			Finished: false,
 			Score:    score.Int() / 2,
@@ -82,13 +87,11 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 		},
 		Nonce: 1,
 	}
-	reporter.Send(result)
-	t0 := time.Now()
-
+	err = reporter.Send(result)
+	if err != nil {
+		return nil, err
+	}
 	reportResponse, err := reporter.Recv()
-	t1 := time.Now()
-	fmt.Printf("DEBUG: job=%d, %.3f sec\n", jobHandle.GetJobId(), (t1.Sub(t0)).Seconds())
-
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +100,8 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 	}
 
 	result = &bench.ReportBenchmarkResultRequest{
-		JobId: jobHandle.GetJobId(),
+		JobId:  jobHandle.GetJobId(),
+		Handle: jobHandle.GetHandle(),
 		Result: &resources.BenchmarkResult{
 			Finished: true,
 			Passed:   !(score.FastFail || score.SlowFail),
@@ -110,10 +114,14 @@ func (b *Benchmarker) Do(ctx context.Context, idx int64, team *model.Team) (*ben
 		},
 		Nonce: 2,
 	}
-	t2 := time.Now()
-	fmt.Printf("DEBUG: job=%d, %.3f, %.3f\n", jobHandle.GetJobId(), (t1.Sub(t0)).Seconds(), (t2.Sub(t1)).Seconds())
-	reporter.Send(result)
-	reporter.CloseSend()
+	err = reporter.Send(result)
+	if err != nil {
+		return nil, err
+	}
+	err = reporter.CloseSend()
+	if err != nil {
+		return nil, err
+	}
 
 	reportResponse, err = reporter.Recv()
 	if err != nil {

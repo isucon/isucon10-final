@@ -11,6 +11,7 @@ service BenchmarkReport {
 
 message ReportBenchmarkResultRequest {
   int64 job_id = 1;
+  string handle = 2;
   int64 nonce = 3;
   xsuportal.proto.resources.BenchmarkResult result = 4;
 }

@@ -17,7 +17,7 @@ module Xsuportal
             self.unmarshal_class_method = :decode
             self.service_name = 'xsuportal.proto.services.bench.Foo'
 
-            rpc :Hello, stream(Xsuportal::Proto::Services::Bench::FooRequest), stream(Xsuportal::Proto::Services::Bench::FooResponse)
+            rpc :Hello, stream(::Xsuportal::Proto::Services::Bench::FooRequest), stream(::Xsuportal::Proto::Services::Bench::FooResponse)
           end
 
           Stub = Service.rpc_stub_class

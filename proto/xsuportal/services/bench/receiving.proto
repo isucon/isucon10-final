@@ -18,7 +18,7 @@ message ReceiveBenchmarkJobRequest {
 message ReceiveBenchmarkJobResponse {
   message JobHandle {
     int64 job_id = 1;
-    // string handle = 2;
+    string handle = 2;
     string target_hostname = 3;
     // string description_human = 4;
     google.protobuf.Timestamp contest_started_at = 10;

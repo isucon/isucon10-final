@@ -203,7 +203,7 @@ func (br *bReader) Close() error {
 	return br.r.Close()
 }
 
-func (s *Browser) GRPC(ctx context.Context, method string, rpath string, msg proto.Message, res proto.Message) (*xsuportal.Error, error) {
+func (s *Browser) ProtobufReq(ctx context.Context, method string, rpath string, msg proto.Message, res proto.Message) (*xsuportal.Error, error) {
 	target := *s.baseURL
 	if len(rpath) > 0 {
 		target.Path = rpath
