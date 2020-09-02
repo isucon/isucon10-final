@@ -2,3 +2,4 @@
 /benchmarker/proto/**/*.go
 /bin/benchmarker
 log/
+*.rdb

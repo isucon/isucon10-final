@@ -6,6 +6,7 @@ require 'securerandom'
 $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
 require 'routes'
 require 'database'
+require 'xsu_redis'
 
 # TODO: 競技時は消す
 TEAM_CAPACITY = 100
@@ -40,6 +41,10 @@ module Xsuportal
     helpers do
       def db
         Xsuportal::Database.connection
+      end
+
+      def redis
+        Xsuportal::XsuRedis.connection
       end
 
       def current_contestant(lock: false)
@@ -406,6 +411,10 @@ module Xsuportal
     end
 
     post '/initialize' do
+      redis.keys('xsuportal:*').each_slice(100) do |ks|
+        redis.del(*ks)
+      end
+
       db.query('TRUNCATE `teams`')
       db.query('TRUNCATE `contestants`')
       db.query('TRUNCATE `benchmark_jobs`')
@@ -726,6 +735,11 @@ module Xsuportal
         )
 
         job = db.query('SELECT * FROM `benchmark_jobs` WHERE `id` = (SELECT LAST_INSERT_ID()) LIMIT 1').first
+
+        if job
+          job_marshal = Marshal.dump({ id: job[:id], target_hostname: job[:target_hostname], created_at: job[:created_at] })
+          redis.lpush('xsuportal:pending_jobs', job_marshal)
+        end
       end
 
       encode_response_pb(

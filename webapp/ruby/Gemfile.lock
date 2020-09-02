@@ -50,6 +50,7 @@ GEM
     rack-protection (2.0.8.1)
       rack
     rack-timeout (0.6.0)
+    redis (4.2.1)
     ruby2_keywords (0.0.2)
     serverengine (2.0.7)
       sigdump (~> 0.2.2)
@@ -81,6 +82,7 @@ DEPENDENCIES
   pry-byebug
   puma
   rack-timeout
+  redis
   sinatra
   sinatra-contrib
 
