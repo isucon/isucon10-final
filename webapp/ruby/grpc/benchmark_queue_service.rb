@@ -7,7 +7,7 @@ require 'xsu_redis'
 class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue::Service
   def receive_benchmark_job(request, _call)
     job_handle = nil
-    job_marshal = redis.brpop('xsuportal:pending_jobs', 2)
+    job_marshal = redis.brpop('xsuportal:pending_jobs', 10)
     if job_marshal
       job = Marshal.load(job_marshal[1])
       handle = SecureRandom.base64

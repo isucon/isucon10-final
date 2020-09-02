@@ -18,8 +18,29 @@ CREATE TABLE `teams` (
   `invite_token` VARCHAR(255) NOT NULL,
   `withdrawn` TINYINT(1) DEFAULT FALSE,
   `created_at` DATETIME(6) NOT NULL,
+  `student` TINYINT(1),
   UNIQUE KEY (`leader_id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
+
+DROP TABLE IF EXISTS `leaderboard`;
+CREATE TABLE `leaderboard` (
+  `team_id` BIGINT NOT NULL PRIMARY KEY,
+  `best_score` INT,
+  `best_score_started_at` DATETIME(6),
+  `best_score_marked_at` DATETIME(6),
+  `frozen_best_score` INT,
+  `frozen_best_score_started_at` DATETIME(6),
+  `frozen_best_score_marked_at` DATETIME(6),
+  `latest_score` INT,
+  `latest_score_started_at` DATETIME(6),
+  `latest_score_marked_at` DATETIME(6),
+  `frozen_latest_score` INT,
+  `frozen_latest_score_started_at` DATETIME(6),
+  `frozen_latest_score_marked_at` DATETIME(6),
+  `finish_count` INT NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
+
+ALTER TABLE `leaderboard` ADD INDEX `idx1`(`frozen_latest_score` DESC, `frozen_score_marked_at` DESC);
 
 DROP TABLE IF EXISTS `benchmark_jobs`;
 CREATE TABLE `benchmark_jobs` (
