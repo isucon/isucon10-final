@@ -70,33 +70,6 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       result.reason,
       request.job_id,
     )
-    leaderboard = db.xquery('SELECT * FROM `leaderboard` WHERE `team_id` = ? LIMIT 1', job[:team_id]).first
-    score = result.score_breakdown&.raw - result.score_breakdown&.deduction
-    is_new_record = leaderboard[:best_score].to_i < score
-    contest = db.query('SELECT `contest_freezes_at` <= NOW(6) AND NOW(6) < `contest_ends_at` AS `frozen` FROM contest_config').first
-
-    sql = 'UPDATE `leaderboard` SET `latest_score` = ?, `latest_score_started_at` = ?, `latest_score_marked_at` = NOW(6), `finish_count` = `finish_count` + 1'
-    args = [score, job[:started_at]]
-
-    if contest[:frozen] != 1
-      sql += ", `frozen_latest_score` = ?, `frozen_latest_score_started_at` = ?, `frozen_latest_score_marked_at` = NOW(6) "
-      args.concat([score, job[:started_at]])
-    end
-
-    if is_new_record
-      sql += ", `best_score` = ?, `best_score_started_at` = ?, `best_score_marked_at` = NOW(6) "
-      args.concat([score, job[:started_at]])
-      if contest[:frozen] != 1
-        sql += ", `frozen_best_score` = ?, `frozen_best_score_started_at` = ?, `frozen_best_score_marked_at` = NOW(6) "
-        args.concat([score, job[:started_at]])
-      end
-    end
-
-    sql += " WHERE `team_id` = ? LIMIT 1"
-    args << job[:team_id]
-
-    GRPC.logger.info("DEBUG: leaderboard=#{[sql, args].inspect}")
-    db.xquery(sql, *args)
   end
 
   def save_as_running(job, request)
@@ -124,5 +97,4 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       request.job_id,
     )
   end
-
 end

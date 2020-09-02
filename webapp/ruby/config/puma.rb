@@ -1,5 +1,5 @@
 environment 'production'
-threads 100,100
+threads 64, 64
 # workers 3
 preload_app!
 persistent_timeout 2
