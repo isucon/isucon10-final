@@ -1,6 +1,5 @@
 environment 'production'
 threads 64, 64
-# workers 3
 preload_app!
 persistent_timeout 2
 first_data_timeout 3
