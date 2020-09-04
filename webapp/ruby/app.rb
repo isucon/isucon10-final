@@ -9,7 +9,7 @@ require 'database'
 require 'xsu_redis'
 
 # TODO: 競技時は消す
-TEAM_CAPACITY = 100
+TEAM_CAPACITY = 10
 
 module Xsuportal
   class App < Sinatra::Base

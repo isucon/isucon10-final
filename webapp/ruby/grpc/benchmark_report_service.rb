@@ -1,9 +1,11 @@
 require 'xsuportal/resources/benchmark_job_pb'
 require 'xsuportal/services/bench/reporting_pb'
 require 'xsuportal/services/bench/reporting_services_pb'
+require 'stopwatch'
 
 class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkReport::Service
   def report_benchmark_result(call)
+    s = Xsuportal::Stopwatch.new('report', GRPC.logger)
     db = Xsuportal::Database.connection
     call.each do |request|
       Xsuportal::Database.transaction_begin('report_benchmark_result')
@@ -12,6 +14,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         request.job_id,
         request.handle,
       ).first
+      s.lap
 
       unless job
         Xsuportal::Database.transaction_rollback('report_benchmark_result')
@@ -33,10 +36,13 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         save_as_running(job, request)
         Xsuportal::Database.transaction_commit('report_benchmark_result')
       end
+      s.lap
       call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
         acked_nonce: request.nonce,
       )
+      s.lap
     end
+    s.stop
   ensure
     Xsuportal::Database.ensure_transaction_close('report_benchmark_result')
   end
