@@ -38,6 +38,18 @@ CREATE TABLE `benchmark_jobs` (
   `updated_at` DATETIME(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
+DROP TABLE IF EXISTS `clarifications`;
+CREATE TABLE `clarifications` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `team_id` BIGINT NOT NULL,
+  `disclosed` TINYINT(1),
+  `question` TEXT,
+  `answer` TEXT,
+  `answered_at` DATETIME(6),
+  `created_at` DATETIME(6) NOT NULL,
+  `updated_at` DATETIME(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
 DROP TABLE IF EXISTS `contest_config`;
 CREATE TABLE `contest_config` (
   `registration_open_at` DATETIME(6) NOT NULL,

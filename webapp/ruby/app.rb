@@ -27,7 +27,7 @@ module Xsuportal
 
     end
 
-    %w[/ /registration /signup /login /logout /audience/dashboard /contestant/dashboard /contestant/benchmark_jobs /contestant/benchmark_jobs/:id].each do |path|
+    %w[/ /registration /signup /login /logout /audience/dashboard /contestant/dashboard /contestant/benchmark_jobs /contestant/benchmark_jobs/:id /contestant/clarifications].each do |path|
       get path do
         File.read(File.join('public', 'index.html'))
       end
@@ -373,6 +373,20 @@ module Xsuportal
           general_teams: general_teams,
           student_teams: student_teams,
           contest: contest_pb,
+        )
+      end
+
+      def clarification_pb(clar, team)
+        Proto::Resources::Clarification.new(
+          id: clar[:id],
+          team_id: clar[:team_id],
+          answered: clar[:answered] == 1,
+          disclosed: clar[:disclosed] == 1,
+          question: clar[:question],
+          answer: clar[:answer],
+          created_at: clar[:created_at],
+          answered_at: clar[:answered_at],
+          team: team_pb(team),
         )
       end
 
@@ -756,6 +770,47 @@ module Xsuportal
 
       encode_response_pb(
         job: benchmark_job_pb(job),
+      )
+    end
+
+    get '/api/contestant/clarifications' do
+      login_required
+
+      clars = db.xquery(
+        'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `updated_at` DESC',
+        current_team[:id],
+      )
+
+      clar_pbs = clars.map do |clar|
+        team = db.xquery(
+          'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+          clar[:team_id],
+        ).first
+        clarification_pb(clar, team)
+      end
+
+      encode_response_pb(
+        clarifications: clar_pbs,
+      )
+    end
+
+    post '/api/contestant/clarifications' do
+      login_required
+
+      req = decode_request_pb
+
+      clar = nil
+      Database.transaction do
+        db.xquery(
+          'INSERT INTO `clarifications` (`team_id`, `question`, `created_at`, `updated_at`) VALUES (?, ?, NOW(6), NOW(6))',
+          current_team[:id],
+          req.question,
+        )
+        clar = db.query('SELECT * FROM `clarifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1').first
+      end
+
+      encode_response_pb(
+        clarification: clarification_pb(clar, current_team)
       )
     end
 

@@ -65,6 +65,14 @@ module Xsuportal
         nil,
         Proto::Services::Contestant::DashboardResponse,
       ],
+      'GET /api/contestant/clarifications' => [
+        nil,
+        Proto::Services::Contestant::ListClarificationsResponse,
+      ],
+      'POST /api/contestant/clarifications' => [
+        Proto::Services::Contestant::RequestClarificationRequest,
+        Proto::Services::Contestant::RequestClarificationResponse,
+      ],
       'POST /api/signup' => [
         Proto::Services::Contestant::SignupRequest,
         Proto::Services::Contestant::SignupResponse,

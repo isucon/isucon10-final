@@ -3463,7 +3463,6 @@ $root.xsuportal = (function() {
                  * @property {string|null} [answer] Clarification answer
                  * @property {google.protobuf.ITimestamp|null} [createdAt] Clarification createdAt
                  * @property {google.protobuf.ITimestamp|null} [answeredAt] Clarification answeredAt
-                 * @property {string|null} [originalQuestion] Clarification originalQuestion
                  * @property {xsuportal.proto.resources.ITeam|null} [team] Clarification team
                  */
 
@@ -3547,14 +3546,6 @@ $root.xsuportal = (function() {
                 Clarification.prototype.answeredAt = null;
 
                 /**
-                 * Clarification originalQuestion.
-                 * @member {string} originalQuestion
-                 * @memberof xsuportal.proto.resources.Clarification
-                 * @instance
-                 */
-                Clarification.prototype.originalQuestion = "";
-
-                /**
                  * Clarification team.
                  * @member {xsuportal.proto.resources.ITeam|null|undefined} team
                  * @memberof xsuportal.proto.resources.Clarification
@@ -3602,8 +3593,6 @@ $root.xsuportal = (function() {
                         $root.google.protobuf.Timestamp.encode(message.createdAt, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
                     if (message.answeredAt != null && Object.hasOwnProperty.call(message, "answeredAt"))
                         $root.google.protobuf.Timestamp.encode(message.answeredAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-                    if (message.originalQuestion != null && Object.hasOwnProperty.call(message, "originalQuestion"))
-                        writer.uint32(/* id 9, wireType 2 =*/74).string(message.originalQuestion);
                     if (message.team != null && Object.hasOwnProperty.call(message, "team"))
                         $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                     return writer;
@@ -3663,9 +3652,6 @@ $root.xsuportal = (function() {
                             break;
                         case 8:
                             message.answeredAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                            break;
-                        case 9:
-                            message.originalQuestion = reader.string();
                             break;
                         case 16:
                             message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
@@ -3733,9 +3719,6 @@ $root.xsuportal = (function() {
                         if (error)
                             return "answeredAt." + error;
                     }
-                    if (message.originalQuestion != null && message.hasOwnProperty("originalQuestion"))
-                        if (!$util.isString(message.originalQuestion))
-                            return "originalQuestion: string expected";
                     if (message.team != null && message.hasOwnProperty("team")) {
                         var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                         if (error)
@@ -3792,8 +3775,6 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.Clarification.answeredAt: object expected");
                         message.answeredAt = $root.google.protobuf.Timestamp.fromObject(object.answeredAt);
                     }
-                    if (object.originalQuestion != null)
-                        message.originalQuestion = String(object.originalQuestion);
                     if (object.team != null) {
                         if (typeof object.team !== "object")
                             throw TypeError(".xsuportal.proto.resources.Clarification.team: object expected");
@@ -3832,7 +3813,6 @@ $root.xsuportal = (function() {
                         object.answer = "";
                         object.createdAt = null;
                         object.answeredAt = null;
-                        object.originalQuestion = "";
                         object.team = null;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -3857,8 +3837,6 @@ $root.xsuportal = (function() {
                         object.createdAt = $root.google.protobuf.Timestamp.toObject(message.createdAt, options);
                     if (message.answeredAt != null && message.hasOwnProperty("answeredAt"))
                         object.answeredAt = $root.google.protobuf.Timestamp.toObject(message.answeredAt, options);
-                    if (message.originalQuestion != null && message.hasOwnProperty("originalQuestion"))
-                        object.originalQuestion = message.originalQuestion;
                     if (message.team != null && message.hasOwnProperty("team"))
                         object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                     return object;

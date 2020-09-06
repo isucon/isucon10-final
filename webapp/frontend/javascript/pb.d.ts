@@ -1314,9 +1314,6 @@ export namespace xsuportal {
                 /** Clarification answeredAt */
                 answeredAt?: (google.protobuf.ITimestamp|null);
 
-                /** Clarification originalQuestion */
-                originalQuestion?: (string|null);
-
                 /** Clarification team */
                 team?: (xsuportal.proto.resources.ITeam|null);
             }
@@ -1353,9 +1350,6 @@ export namespace xsuportal {
 
                 /** Clarification answeredAt. */
                 public answeredAt?: (google.protobuf.ITimestamp|null);
-
-                /** Clarification originalQuestion. */
-                public originalQuestion: string;
 
                 /** Clarification team. */
                 public team?: (xsuportal.proto.resources.ITeam|null);

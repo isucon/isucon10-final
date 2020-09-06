@@ -268,6 +268,37 @@ export class ApiClient {
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
 
+  public async listClarifications() {
+    const klass =
+      xsuportal.proto.services.contestant.ListClarificationsResponse;
+    const resp = await this.request(
+      `${this.baseUrl}/api/contestant/clarifications`,
+      "GET",
+      null,
+      null
+    );
+    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async requestClarification(
+    payload: xsuportal.proto.services.contestant.IRequestClarificationRequest
+  ) {
+    const responseClass =
+      xsuportal.proto.services.contestant.RequestClarificationResponse;
+    const payloadClass =
+      xsuportal.proto.services.contestant.RequestClarificationRequest;
+    const payloadMessage = payload
+      ? payloadClass.encode(payloadClass.fromObject(payload)).finish()
+      : null;
+    const resp = await this.request(
+      `${this.baseUrl}/api/contestant/clarifications`,
+      "POST",
+      null,
+      payloadMessage
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
   public async request(
     path: string,
     method: string,
