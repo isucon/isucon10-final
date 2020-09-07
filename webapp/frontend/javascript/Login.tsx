@@ -16,6 +16,7 @@ export interface State {
   error: Error | null;
   contestantId: string;
   password: string;
+  isStaff: boolean | null | undefined;
   requesting: boolean;
   loginSucceeded: boolean;
 }
@@ -27,6 +28,7 @@ export class Login extends React.Component<Props, State> {
       error: null,
       contestantId: "",
       password: "",
+      isStaff: null,
       requesting: false,
       loginSucceeded: false,
     };
@@ -41,7 +43,9 @@ export class Login extends React.Component<Props, State> {
         console.log("redirect: ", params.redirect.toString());
         return <Redirect to={params.redirect.toString()}></Redirect>;
       } else {
-        if (this.props.root.state.registered) {
+        if (this.state.isStaff) {
+          return <a href="/admin/">管理画面へ</a>;
+        } else if (this.props.root.state.registered) {
           return <Redirect to="/"></Redirect>;
         } else {
           return (
@@ -163,7 +167,12 @@ export class Login extends React.Component<Props, State> {
         registered: !!session.team,
         session: session,
       });
-      this.setState({ loginSucceeded: true, error: null, requesting: false });
+      this.setState({
+        loginSucceeded: true,
+        error: null,
+        requesting: false,
+        isStaff: session.contestant?.isStaff,
+      });
     } catch (err) {
       this.setState({ error: err, requesting: false });
     }

@@ -13,6 +13,18 @@ module Xsuportal
         Proto::Services::Admin::UpdateContestRequest,
         Proto::Services::Admin::UpdateContestResponse,
       ],
+      'GET /api/admin/clarifications' => [
+        nil,
+        Proto::Services::Admin::ListClarificationsResponse,
+      ],
+      'GET /api/admin/clarifications/:id' => [
+        nil,
+        Proto::Services::Admin::GetClarificationResponse,
+      ],
+      'PUT /api/admin/clarifications/:id' => [
+        Proto::Services::Admin::RespondClarificationRequest,
+        Proto::Services::Admin::RespondClarificationResponse,
+      ],
       'GET /api/contest' => [
         nil,
         Proto::Services::Common::GetContestResponse,

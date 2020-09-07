@@ -7,4 +7,5 @@ message Contestant {
   int64 team_id = 2;
   string name = 3;
   bool is_student = 4;
+  bool is_staff = 5;
 }

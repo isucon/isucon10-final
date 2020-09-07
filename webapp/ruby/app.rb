@@ -33,6 +33,12 @@ module Xsuportal
       end
     end
 
+    %w[/admin /admin/ /admin/clarifications /admin/clarifications/:id].each do |path|
+      get path do
+        File.read(File.join('public', 'admin.html'))
+      end
+    end
+
     set :session_secret, 'tagomoris'
     set :sessions, key: 'session_xsucon', expire_after: 3600
     set :show_exceptions, false
@@ -143,6 +149,7 @@ module Xsuportal
           team_id: contestant[:team_id],
           name: contestant[:name],
           is_student: contestant[:student],
+          is_staff: contestant[:staff],
         )
       end
 
@@ -380,8 +387,8 @@ module Xsuportal
         Proto::Resources::Clarification.new(
           id: clar[:id],
           team_id: clar[:team_id],
-          answered: clar[:answered] == 1,
-          disclosed: clar[:disclosed] == 1,
+          answered: !!clar[:answered_at],
+          disclosed: clar[:disclosed],
           question: clar[:question],
           answer: clar[:answer],
           created_at: clar[:created_at],
@@ -484,6 +491,93 @@ module Xsuportal
         )
       end
       encode_response_pb
+    end
+
+    get '/api/admin/clarifications' do
+      login_required(team: false)
+      unless current_contestant[:staff]
+        halt_pb 403, '管理者権限が必要です'
+      end
+
+      clars = db.xquery(
+        'SELECT * FROM `clarifications` ORDER BY `updated_at` DESC',
+      )
+
+      clar_pbs = clars.map do |clar|
+        team = db.xquery(
+          'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+          clar[:team_id],
+        ).first
+        clarification_pb(clar, team)
+      end
+
+      encode_response_pb(
+        clarifications: clar_pbs,
+      )
+    end
+
+    get '/api/admin/clarifications/:id' do
+      login_required(team: false)
+      unless current_contestant[:staff]
+        halt_pb 403, '管理者権限が必要です'
+      end
+
+      clar = db.xquery(
+        'SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1',
+        params[:id],
+      ).first
+
+      team = db.xquery(
+        'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+        clar[:team_id],
+      ).first
+
+      encode_response_pb(
+        clarification: clarification_pb(clar, team)
+      )
+    end
+
+    put '/api/admin/clarifications/:id' do
+      login_required(team: false)
+      unless current_contestant[:staff]
+        halt_pb 403, '管理者権限が必要です'
+      end
+
+      req = decode_request_pb
+
+      clar_pb = nil
+      Database.transaction do
+        db.xquery(
+          <<~SQL,
+            UPDATE `clarifications` SET
+              `disclosed` = ?,
+              `answer` = ?,
+              `updated_at` = NOW(6),
+              `answered_at` = NOW(6)
+            WHERE `id` = ?
+            LIMIT 1
+          SQL
+          req.disclose,
+          req.answer,
+          params[:id],
+        )
+
+        clar = db.xquery(
+          'SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1',
+          params[:id],
+        ).first
+
+        team = db.xquery(
+          'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+          clar[:team_id],
+        ).first
+
+        clar_pb = clarification_pb(clar, team)
+      end
+
+      encode_response_pb(
+        clarification: clar_pb
+      )
     end
 
     get '/api/contest' do

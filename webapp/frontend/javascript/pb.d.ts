@@ -1193,6 +1193,9 @@ export namespace xsuportal {
 
                 /** Contestant isStudent */
                 isStudent?: (boolean|null);
+
+                /** Contestant isStaff */
+                isStaff?: (boolean|null);
             }
 
             /** Represents a Contestant. */
@@ -1215,6 +1218,9 @@ export namespace xsuportal {
 
                 /** Contestant isStudent. */
                 public isStudent: boolean;
+
+                /** Contestant isStaff. */
+                public isStaff: boolean;
 
                 /**
                  * Creates a new Contestant instance using the specified properties.
@@ -3288,14 +3294,14 @@ export namespace xsuportal {
                 /** Properties of a CreateClarificationRequest. */
                 interface ICreateClarificationRequest {
 
-                    /** CreateClarificationRequest id */
-                    id?: (number|Long|null);
-
                     /** CreateClarificationRequest answer */
                     answer?: (string|null);
 
                     /** CreateClarificationRequest question */
                     question?: (string|null);
+
+                    /** CreateClarificationRequest teamId */
+                    teamId?: (number|Long|null);
                 }
 
                 /** Represents a CreateClarificationRequest. */
@@ -3307,14 +3313,14 @@ export namespace xsuportal {
                      */
                     constructor(properties?: xsuportal.proto.services.admin.ICreateClarificationRequest);
 
-                    /** CreateClarificationRequest id. */
-                    public id: (number|Long);
-
                     /** CreateClarificationRequest answer. */
                     public answer: string;
 
                     /** CreateClarificationRequest question. */
                     public question: string;
+
+                    /** CreateClarificationRequest teamId. */
+                    public teamId: (number|Long);
 
                     /**
                      * Creates a new CreateClarificationRequest instance using the specified properties.

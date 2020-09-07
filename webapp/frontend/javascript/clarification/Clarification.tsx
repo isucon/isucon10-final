@@ -61,19 +61,7 @@ export const Clarification: React.FC<Props> = (props: Props) => {
               {clar.team ? (
                 <>
                   チーム:
-                  {props.admin ? (
-                    <Link
-                      to={`/admin/teams/${encodeURIComponent(
-                        clar.team!.id!.toString()
-                      )}`}
-                    >
-                      {clar.team.name} (#{clar.team.id!.toString()})
-                    </Link>
-                  ) : (
-                    <>
-                      {clar.team.name} (#{clar.team.id!.toString()})
-                    </>
-                  )}
+                  {clar.team.name} (#{clar.team.id!.toString()})
                 </>
               ) : null}
             </div>
