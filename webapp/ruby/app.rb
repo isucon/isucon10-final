@@ -27,9 +27,15 @@ module Xsuportal
 
     end
 
-    %w[/ /registration /signup /login /logout /audience/dashboard /contestant/dashboard /contestant/benchmark_jobs /contestant/benchmark_jobs/:id].each do |path|
+    %w[/ /registration /signup /login /logout /audience/dashboard /contestant/dashboard /contestant/benchmark_jobs /contestant/benchmark_jobs/:id /contestant/clarifications].each do |path|
       get path do
         File.read(File.join('public', 'index.html'))
+      end
+    end
+
+    %w[/admin /admin/ /admin/clarifications /admin/clarifications/:id].each do |path|
+      get path do
+        File.read(File.join('public', 'admin.html'))
       end
     end
 
@@ -143,6 +149,7 @@ module Xsuportal
           team_id: contestant[:team_id],
           name: contestant[:name],
           is_student: contestant[:student],
+          is_staff: contestant[:staff],
         )
       end
 
@@ -376,6 +383,20 @@ module Xsuportal
         )
       end
 
+      def clarification_pb(clar, team)
+        Proto::Resources::Clarification.new(
+          id: clar[:id],
+          team_id: clar[:team_id],
+          answered: !!clar[:answered_at],
+          disclosed: clar[:disclosed],
+          question: clar[:question],
+          answer: clar[:answer],
+          created_at: clar[:created_at],
+          answered_at: clar[:answered_at],
+          team: team_pb(team),
+        )
+      end
+
       def decode_request_pb
         cls = PB_TABLE.fetch(request.env.fetch('sinatra.route'))[0]
         cls.decode(request.body.read)
@@ -470,6 +491,93 @@ module Xsuportal
         )
       end
       encode_response_pb
+    end
+
+    get '/api/admin/clarifications' do
+      login_required(team: false)
+      unless current_contestant[:staff]
+        halt_pb 403, '管理者権限が必要です'
+      end
+
+      clars = db.xquery(
+        'SELECT * FROM `clarifications` ORDER BY `updated_at` DESC',
+      )
+
+      clar_pbs = clars.map do |clar|
+        team = db.xquery(
+          'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+          clar[:team_id],
+        ).first
+        clarification_pb(clar, team)
+      end
+
+      encode_response_pb(
+        clarifications: clar_pbs,
+      )
+    end
+
+    get '/api/admin/clarifications/:id' do
+      login_required(team: false)
+      unless current_contestant[:staff]
+        halt_pb 403, '管理者権限が必要です'
+      end
+
+      clar = db.xquery(
+        'SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1',
+        params[:id],
+      ).first
+
+      team = db.xquery(
+        'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+        clar[:team_id],
+      ).first
+
+      encode_response_pb(
+        clarification: clarification_pb(clar, team)
+      )
+    end
+
+    put '/api/admin/clarifications/:id' do
+      login_required(team: false)
+      unless current_contestant[:staff]
+        halt_pb 403, '管理者権限が必要です'
+      end
+
+      req = decode_request_pb
+
+      clar_pb = nil
+      Database.transaction do
+        db.xquery(
+          <<~SQL,
+            UPDATE `clarifications` SET
+              `disclosed` = ?,
+              `answer` = ?,
+              `updated_at` = NOW(6),
+              `answered_at` = NOW(6)
+            WHERE `id` = ?
+            LIMIT 1
+          SQL
+          req.disclose,
+          req.answer,
+          params[:id],
+        )
+
+        clar = db.xquery(
+          'SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1',
+          params[:id],
+        ).first
+
+        team = db.xquery(
+          'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+          clar[:team_id],
+        ).first
+
+        clar_pb = clarification_pb(clar, team)
+      end
+
+      encode_response_pb(
+        clarification: clar_pb
+      )
     end
 
     get '/api/contest' do
@@ -756,6 +864,47 @@ module Xsuportal
 
       encode_response_pb(
         job: benchmark_job_pb(job),
+      )
+    end
+
+    get '/api/contestant/clarifications' do
+      login_required
+
+      clars = db.xquery(
+        'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `updated_at` DESC',
+        current_team[:id],
+      )
+
+      clar_pbs = clars.map do |clar|
+        team = db.xquery(
+          'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+          clar[:team_id],
+        ).first
+        clarification_pb(clar, team)
+      end
+
+      encode_response_pb(
+        clarifications: clar_pbs,
+      )
+    end
+
+    post '/api/contestant/clarifications' do
+      login_required
+
+      req = decode_request_pb
+
+      clar = nil
+      Database.transaction do
+        db.xquery(
+          'INSERT INTO `clarifications` (`team_id`, `question`, `created_at`, `updated_at`) VALUES (?, ?, NOW(6), NOW(6))',
+          current_team[:id],
+          req.question,
+        )
+        clar = db.query('SELECT * FROM `clarifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1').first
+      end
+
+      encode_response_pb(
+        clarification: clarification_pb(clar, current_team)
       )
     end
 

@@ -14,7 +14,6 @@ message Clarification {
   string answer = 6;
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp answered_at = 8;
-  string original_question = 9;
 
   Team team = 16;
 }

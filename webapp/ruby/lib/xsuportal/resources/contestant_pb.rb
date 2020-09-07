@@ -10,6 +10,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :team_id, :int64, 2
       optional :name, :string, 3
       optional :is_student, :bool, 4
+      optional :is_staff, :bool, 5
     end
   end
 end

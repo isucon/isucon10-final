@@ -12,6 +12,7 @@ import { Registration } from "./Registration";
 import { BenchmarkJobDetail } from "./BenchmarkJobDetail";
 import { BenchmarkJobList } from "./BenchmarkJobList";
 import { AudienceDashboard } from "./AudienceDashboard";
+import { ContestantClarificationList } from "./ContestantClarificationList";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
@@ -117,6 +118,13 @@ export class Index extends React.Component<Props, State> {
                   );
                 }}
               />
+              <Route path="/contestant/clarifications" exact={true}>
+                <ContestantClarificationList
+                  session={this.props.session}
+                  client={this.props.client}
+                  root={this}
+                />
+              </Route>
               <Route path="/contestant/benchmark_jobs" exact={true}>
                 <BenchmarkJobList
                   session={this.props.session}
@@ -153,6 +161,9 @@ export class Index extends React.Component<Props, State> {
           </Link>
           <Link className="navbar-item" to="/contestant/benchmark_jobs">
             ジョブ一覧
+          </Link>
+          <Link className="navbar-item" to="/contestant/clarifications">
+            質問/サポート
           </Link>
           <a className="navbar-item" href="/terms">
             規約

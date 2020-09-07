@@ -28,9 +28,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :clarification, :message, 1, "xsuportal.proto.resources.Clarification"
     end
     add_message "xsuportal.proto.services.admin.CreateClarificationRequest" do
-      optional :id, :int64, 1
       optional :answer, :string, 2
       optional :question, :string, 3
+      optional :team_id, :int64, 4
     end
     add_message "xsuportal.proto.services.admin.CreateClarificationResponse" do
       optional :clarification, :message, 1, "xsuportal.proto.resources.Clarification"

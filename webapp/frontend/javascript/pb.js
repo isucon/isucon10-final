@@ -3191,6 +3191,7 @@ $root.xsuportal = (function() {
                  * @property {number|Long|null} [teamId] Contestant teamId
                  * @property {string|null} [name] Contestant name
                  * @property {boolean|null} [isStudent] Contestant isStudent
+                 * @property {boolean|null} [isStaff] Contestant isStaff
                  */
 
                 /**
@@ -3241,6 +3242,14 @@ $root.xsuportal = (function() {
                 Contestant.prototype.isStudent = false;
 
                 /**
+                 * Contestant isStaff.
+                 * @member {boolean} isStaff
+                 * @memberof xsuportal.proto.resources.Contestant
+                 * @instance
+                 */
+                Contestant.prototype.isStaff = false;
+
+                /**
                  * Creates a new Contestant instance using the specified properties.
                  * @function create
                  * @memberof xsuportal.proto.resources.Contestant
@@ -3272,6 +3281,8 @@ $root.xsuportal = (function() {
                         writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
                     if (message.isStudent != null && Object.hasOwnProperty.call(message, "isStudent"))
                         writer.uint32(/* id 4, wireType 0 =*/32).bool(message.isStudent);
+                    if (message.isStaff != null && Object.hasOwnProperty.call(message, "isStaff"))
+                        writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isStaff);
                     return writer;
                 };
 
@@ -3317,6 +3328,9 @@ $root.xsuportal = (function() {
                             break;
                         case 4:
                             message.isStudent = reader.bool();
+                            break;
+                        case 5:
+                            message.isStaff = reader.bool();
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -3365,6 +3379,9 @@ $root.xsuportal = (function() {
                     if (message.isStudent != null && message.hasOwnProperty("isStudent"))
                         if (typeof message.isStudent !== "boolean")
                             return "isStudent: boolean expected";
+                    if (message.isStaff != null && message.hasOwnProperty("isStaff"))
+                        if (typeof message.isStaff !== "boolean")
+                            return "isStaff: boolean expected";
                     return null;
                 };
 
@@ -3395,6 +3412,8 @@ $root.xsuportal = (function() {
                         message.name = String(object.name);
                     if (object.isStudent != null)
                         message.isStudent = Boolean(object.isStudent);
+                    if (object.isStaff != null)
+                        message.isStaff = Boolean(object.isStaff);
                     return message;
                 };
 
@@ -3420,6 +3439,7 @@ $root.xsuportal = (function() {
                             object.teamId = options.longs === String ? "0" : 0;
                         object.name = "";
                         object.isStudent = false;
+                        object.isStaff = false;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
                         object.id = message.id;
@@ -3432,6 +3452,8 @@ $root.xsuportal = (function() {
                         object.name = message.name;
                     if (message.isStudent != null && message.hasOwnProperty("isStudent"))
                         object.isStudent = message.isStudent;
+                    if (message.isStaff != null && message.hasOwnProperty("isStaff"))
+                        object.isStaff = message.isStaff;
                     return object;
                 };
 
@@ -3463,7 +3485,6 @@ $root.xsuportal = (function() {
                  * @property {string|null} [answer] Clarification answer
                  * @property {google.protobuf.ITimestamp|null} [createdAt] Clarification createdAt
                  * @property {google.protobuf.ITimestamp|null} [answeredAt] Clarification answeredAt
-                 * @property {string|null} [originalQuestion] Clarification originalQuestion
                  * @property {xsuportal.proto.resources.ITeam|null} [team] Clarification team
                  */
 
@@ -3547,14 +3568,6 @@ $root.xsuportal = (function() {
                 Clarification.prototype.answeredAt = null;
 
                 /**
-                 * Clarification originalQuestion.
-                 * @member {string} originalQuestion
-                 * @memberof xsuportal.proto.resources.Clarification
-                 * @instance
-                 */
-                Clarification.prototype.originalQuestion = "";
-
-                /**
                  * Clarification team.
                  * @member {xsuportal.proto.resources.ITeam|null|undefined} team
                  * @memberof xsuportal.proto.resources.Clarification
@@ -3602,8 +3615,6 @@ $root.xsuportal = (function() {
                         $root.google.protobuf.Timestamp.encode(message.createdAt, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
                     if (message.answeredAt != null && Object.hasOwnProperty.call(message, "answeredAt"))
                         $root.google.protobuf.Timestamp.encode(message.answeredAt, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-                    if (message.originalQuestion != null && Object.hasOwnProperty.call(message, "originalQuestion"))
-                        writer.uint32(/* id 9, wireType 2 =*/74).string(message.originalQuestion);
                     if (message.team != null && Object.hasOwnProperty.call(message, "team"))
                         $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
                     return writer;
@@ -3663,9 +3674,6 @@ $root.xsuportal = (function() {
                             break;
                         case 8:
                             message.answeredAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                            break;
-                        case 9:
-                            message.originalQuestion = reader.string();
                             break;
                         case 16:
                             message.team = $root.xsuportal.proto.resources.Team.decode(reader, reader.uint32());
@@ -3733,9 +3741,6 @@ $root.xsuportal = (function() {
                         if (error)
                             return "answeredAt." + error;
                     }
-                    if (message.originalQuestion != null && message.hasOwnProperty("originalQuestion"))
-                        if (!$util.isString(message.originalQuestion))
-                            return "originalQuestion: string expected";
                     if (message.team != null && message.hasOwnProperty("team")) {
                         var error = $root.xsuportal.proto.resources.Team.verify(message.team);
                         if (error)
@@ -3792,8 +3797,6 @@ $root.xsuportal = (function() {
                             throw TypeError(".xsuportal.proto.resources.Clarification.answeredAt: object expected");
                         message.answeredAt = $root.google.protobuf.Timestamp.fromObject(object.answeredAt);
                     }
-                    if (object.originalQuestion != null)
-                        message.originalQuestion = String(object.originalQuestion);
                     if (object.team != null) {
                         if (typeof object.team !== "object")
                             throw TypeError(".xsuportal.proto.resources.Clarification.team: object expected");
@@ -3832,7 +3835,6 @@ $root.xsuportal = (function() {
                         object.answer = "";
                         object.createdAt = null;
                         object.answeredAt = null;
-                        object.originalQuestion = "";
                         object.team = null;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -3857,8 +3859,6 @@ $root.xsuportal = (function() {
                         object.createdAt = $root.google.protobuf.Timestamp.toObject(message.createdAt, options);
                     if (message.answeredAt != null && message.hasOwnProperty("answeredAt"))
                         object.answeredAt = $root.google.protobuf.Timestamp.toObject(message.answeredAt, options);
-                    if (message.originalQuestion != null && message.hasOwnProperty("originalQuestion"))
-                        object.originalQuestion = message.originalQuestion;
                     if (message.team != null && message.hasOwnProperty("team"))
                         object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                     return object;
@@ -8347,9 +8347,9 @@ $root.xsuportal = (function() {
                      * Properties of a CreateClarificationRequest.
                      * @memberof xsuportal.proto.services.admin
                      * @interface ICreateClarificationRequest
-                     * @property {number|Long|null} [id] CreateClarificationRequest id
                      * @property {string|null} [answer] CreateClarificationRequest answer
                      * @property {string|null} [question] CreateClarificationRequest question
+                     * @property {number|Long|null} [teamId] CreateClarificationRequest teamId
                      */
 
                     /**
@@ -8368,14 +8368,6 @@ $root.xsuportal = (function() {
                     }
 
                     /**
-                     * CreateClarificationRequest id.
-                     * @member {number|Long} id
-                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
-                     * @instance
-                     */
-                    CreateClarificationRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                    /**
                      * CreateClarificationRequest answer.
                      * @member {string} answer
                      * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
@@ -8390,6 +8382,14 @@ $root.xsuportal = (function() {
                      * @instance
                      */
                     CreateClarificationRequest.prototype.question = "";
+
+                    /**
+                     * CreateClarificationRequest teamId.
+                     * @member {number|Long} teamId
+                     * @memberof xsuportal.proto.services.admin.CreateClarificationRequest
+                     * @instance
+                     */
+                    CreateClarificationRequest.prototype.teamId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
                      * Creates a new CreateClarificationRequest instance using the specified properties.
@@ -8415,12 +8415,12 @@ $root.xsuportal = (function() {
                     CreateClarificationRequest.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
                         if (message.answer != null && Object.hasOwnProperty.call(message, "answer"))
                             writer.uint32(/* id 2, wireType 2 =*/18).string(message.answer);
                         if (message.question != null && Object.hasOwnProperty.call(message, "question"))
                             writer.uint32(/* id 3, wireType 2 =*/26).string(message.question);
+                        if (message.teamId != null && Object.hasOwnProperty.call(message, "teamId"))
+                            writer.uint32(/* id 4, wireType 0 =*/32).int64(message.teamId);
                         return writer;
                     };
 
@@ -8455,14 +8455,14 @@ $root.xsuportal = (function() {
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
-                            case 1:
-                                message.id = reader.int64();
-                                break;
                             case 2:
                                 message.answer = reader.string();
                                 break;
                             case 3:
                                 message.question = reader.string();
+                                break;
+                            case 4:
+                                message.teamId = reader.int64();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -8499,15 +8499,15 @@ $root.xsuportal = (function() {
                     CreateClarificationRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.id != null && message.hasOwnProperty("id"))
-                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                                return "id: integer|Long expected";
                         if (message.answer != null && message.hasOwnProperty("answer"))
                             if (!$util.isString(message.answer))
                                 return "answer: string expected";
                         if (message.question != null && message.hasOwnProperty("question"))
                             if (!$util.isString(message.question))
                                 return "question: string expected";
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (!$util.isInteger(message.teamId) && !(message.teamId && $util.isInteger(message.teamId.low) && $util.isInteger(message.teamId.high)))
+                                return "teamId: integer|Long expected";
                         return null;
                     };
 
@@ -8523,19 +8523,19 @@ $root.xsuportal = (function() {
                         if (object instanceof $root.xsuportal.proto.services.admin.CreateClarificationRequest)
                             return object;
                         var message = new $root.xsuportal.proto.services.admin.CreateClarificationRequest();
-                        if (object.id != null)
-                            if ($util.Long)
-                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
-                            else if (typeof object.id === "string")
-                                message.id = parseInt(object.id, 10);
-                            else if (typeof object.id === "number")
-                                message.id = object.id;
-                            else if (typeof object.id === "object")
-                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
                         if (object.answer != null)
                             message.answer = String(object.answer);
                         if (object.question != null)
                             message.question = String(object.question);
+                        if (object.teamId != null)
+                            if ($util.Long)
+                                (message.teamId = $util.Long.fromValue(object.teamId)).unsigned = false;
+                            else if (typeof object.teamId === "string")
+                                message.teamId = parseInt(object.teamId, 10);
+                            else if (typeof object.teamId === "number")
+                                message.teamId = object.teamId;
+                            else if (typeof object.teamId === "object")
+                                message.teamId = new $util.LongBits(object.teamId.low >>> 0, object.teamId.high >>> 0).toNumber();
                         return message;
                     };
 
@@ -8553,23 +8553,23 @@ $root.xsuportal = (function() {
                             options = {};
                         var object = {};
                         if (options.defaults) {
-                            if ($util.Long) {
-                                var long = new $util.Long(0, 0, false);
-                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                            } else
-                                object.id = options.longs === String ? "0" : 0;
                             object.answer = "";
                             object.question = "";
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.teamId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.teamId = options.longs === String ? "0" : 0;
                         }
-                        if (message.id != null && message.hasOwnProperty("id"))
-                            if (typeof message.id === "number")
-                                object.id = options.longs === String ? String(message.id) : message.id;
-                            else
-                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
                         if (message.answer != null && message.hasOwnProperty("answer"))
                             object.answer = message.answer;
                         if (message.question != null && message.hasOwnProperty("question"))
                             object.question = message.question;
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (typeof message.teamId === "number")
+                                object.teamId = options.longs === String ? String(message.teamId) : message.teamId;
+                            else
+                                object.teamId = options.longs === String ? $util.Long.prototype.toString.call(message.teamId) : options.longs === Number ? new $util.LongBits(message.teamId.low >>> 0, message.teamId.high >>> 0).toNumber() : message.teamId;
                         return object;
                     };
 

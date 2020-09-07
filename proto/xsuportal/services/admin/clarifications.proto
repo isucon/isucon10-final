@@ -34,9 +34,9 @@ message RespondClarificationResponse {
 }
 
 message CreateClarificationRequest {
-  int64 id = 1;
   string answer = 2;
   string question = 3;
+  int64 team_id = 4;
 }
 
 message CreateClarificationResponse {
