@@ -28,11 +28,11 @@ export class AdminNavbar extends React.Component<Props, State> {
       >
         <div className="container">
           <div className="navbar-brand">
-            <Link className="navbar-item" to="/contestant">
+            <Link className="navbar-item" to="/admin/">
               XSUCON Admin
             </Link>
           </div>
-          <div className="navbar-menu is-active">
+          {/* <div className="navbar-menu is-active">
             <div className="navbar-start">
               <a className="navbar-item" href="/teams">
                 チーム一覧
@@ -52,7 +52,7 @@ export class AdminNavbar extends React.Component<Props, State> {
                 <div className="buttons"></div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </nav>
     );

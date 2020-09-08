@@ -165,12 +165,12 @@ export class Index extends React.Component<Props, State> {
           <Link className="navbar-item" to="/contestant/clarifications">
             質問/サポート
           </Link>
-          <a className="navbar-item" href="/terms">
+          {/* <a className="navbar-item" href="/terms">
             規約
           </a>
           <a className="navbar-item" href="/rules">
             レギュレーション
-          </a>
+          </a> */}
         </>
       );
     } else {
@@ -182,12 +182,12 @@ export class Index extends React.Component<Props, State> {
           <Link className="navbar-item" to="/audience/dashboard">
             ダッシュボード
           </Link>
-          <a className="navbar-item" href="/terms">
+          {/* <a className="navbar-item" href="/terms">
             規約
           </a>
           <a className="navbar-item" href="/rules">
             レギュレーション
-          </a>
+          </a> */}
         </>
       );
     }
