@@ -21,7 +21,7 @@ module Xsuportal
 
       def ensure_transaction_close(name=:default)
         Thread.current[:db_transaction] ||= {}
-        if transaction?
+        if transaction?(name)
           puts "Warning: transaction closed implicitly (#{$$},#{Thread.current.object_id}): #{name}"
           puts Thread.current[:db_transaction]["#{name}_caller"].select {|l| l =~ %r!/webapp/ruby/! }
           transaction_rollback(name)
