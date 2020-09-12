@@ -3,30 +3,31 @@ package model
 import (
 	"fmt"
 	"sync"
+	"sync/atomic"
 
-	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"github.com/isucon/isucon10-final/benchmarker/random"
 )
 
 type Team struct {
+	mu           sync.RWMutex
 	ID           int64
 	TeamName     string
 	EmailAddress string
-
-	Hosts []*Host
 
 	IsStudent bool
 	Leader    *Contestant
 	Developer *Contestant
 	Operator  *Contestant
 
-	Lock                       *sync.Mutex
 	ScoreGenerator             *random.ScoreGenerator
-	Scores                     []*bench.ReportBenchmarkResultRequest
+	scoreCounter               int64
 	LatestScore                int64
 	BestScore                  int64
-	LatestEnqueuedBenchmarkJob *contestant.EnqueueBenchmarkJobResponse
+	FrozenLatestScore          int64
+	FroezenBestScore           int64
+	benchmarkResults           []*BenchmarkResult
+	latestEnqueuedBenchmarkJob *contestant.EnqueueBenchmarkJobResponse
 }
 
 func NewTeam() (*Team, error) {
@@ -56,23 +57,23 @@ func NewTeam() (*Team, error) {
 		leader.IsStudent = false
 	}
 
-	hosts := []*Host{{}, {}, {}}
-
 	return &Team{
+		mu:           sync.RWMutex{},
 		TeamName:     random.TeamName(),
 		EmailAddress: random.Alphabet(16) + "@example.com",
-		Hosts:        hosts,
 		IsStudent:    isStudent,
 		Leader:       leader,
 		Developer:    developer,
 		Operator:     operator,
 
-		Lock:                       &sync.Mutex{},
 		ScoreGenerator:             random.NewScoreGenerator(),
-		Scores:                     make([]*bench.ReportBenchmarkResultRequest, 0, 10),
+		scoreCounter:               0,
 		LatestScore:                0,
 		BestScore:                  0,
-		LatestEnqueuedBenchmarkJob: nil,
+		FrozenLatestScore:          0,
+		FroezenBestScore:           0,
+		benchmarkResults:           []*BenchmarkResult{},
+		latestEnqueuedBenchmarkJob: nil,
 	}, nil
 }
 
@@ -81,18 +82,52 @@ func (t *Team) TargetHost() string {
 		return fmt.Sprintf("xsu-contestant-%05d", t.ID)
 	}
 
-	return t.Hosts[0].Name
+	return ""
 }
 
-func (t *Team) AddScore(score *bench.ReportBenchmarkResultRequest) {
-	t.Lock.Lock()
-	defer t.Lock.Unlock()
+func (t *Team) NewResult() *BenchmarkResult {
+	atomic.AddInt64(&t.scoreCounter, 1)
+	score := t.ScoreGenerator.Generate(atomic.LoadInt64(&t.scoreCounter))
 
-	t.Scores = append(t.Scores, score)
-	num := score.GetResult().GetScore()
-	t.LatestScore = num
-	if t.BestScore < num {
-		t.BestScore = num
+	return &BenchmarkResult{
+		Passed:         !(score.FastFail || score.SlowFail),
+		Score:          score.Int(),
+		ScoreRaw:       score.BaseInt(),
+		ScoreDeduction: score.DeductionInt(),
 	}
-	t.LatestEnqueuedBenchmarkJob = nil
+}
+
+func (t *Team) AddResult(result *BenchmarkResult) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+
+	t.benchmarkResults = append(t.benchmarkResults, result)
+	t.FrozenLatestScore = result.Score
+	if t.FroezenBestScore < result.Score {
+		t.FroezenBestScore = result.Score
+	}
+}
+
+func (t *Team) SetScore(result *BenchmarkResult) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+
+	t.LatestScore = result.Score
+	if t.BestScore < result.Score {
+		t.BestScore = result.Score
+	}
+}
+
+func (t *Team) Enqueued(job *contestant.EnqueueBenchmarkJobResponse) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+
+	t.latestEnqueuedBenchmarkJob = job
+}
+
+func (t *Team) GetLatestEnqueuedBenchmarkJob() *contestant.EnqueueBenchmarkJobResponse {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+
+	return t.latestEnqueuedBenchmarkJob
 }

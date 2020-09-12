@@ -1,3 +1,7 @@
+GOTIMEOUT?=20s
+GOARGS?=-race
+GOMAXPROCS?=$(shell nproc)
+
 GOFILES=$(shell find . -name *.go)
 PROTOFILES=$(shell find proto -name *.proto)
 GOPROTOFILES=$(addprefix benchmarker/,$(PROTOFILES:%.proto=%.pb.go))
@@ -12,8 +16,20 @@ setup: go.sum ## Setup dependency modules
 build: bin/benchmarker ## Build benchmarker
 
 .PHONY: test
-test: go.mod $(GOPROTOFILES) $(GOFILES)
-	go test -count=1 -v github.com/isucon/isucon10-final/benchmarker/story
+test:
+	@mkdir -p tmp
+	@echo "mode: atomic" > tmp/cover.out
+	@for d in $(shell go list ./... | grep -v vendor | grep -v proto); do \
+		GOMAXPROCS=$(GOMAXPROCS) \
+			go test \
+			$(GOARGS) \
+			-timeout $(GOTIMEOUT) \
+			-coverprofile=tmp/pkg.out -covermode=atomic \
+			"$$d" || exit 1; \
+		tail -n +2 tmp/pkg.out >> tmp/cover.out && \
+		rm tmp/pkg.out; \
+	done
+	@go tool cover -html=tmp/cover.out -o tmp/coverage.html
 
 .PHONY: clean
 clean: ## Cleanup working directory

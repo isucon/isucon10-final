@@ -2,34 +2,41 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
-	"github.com/isucon/isucon10-final/benchmarker/story"
-)
+	"time"
 
-var (
-	host = flag.String("host", "localhost:9292", "Target host")
+	"github.com/isucon/isucon10-final/benchmarker/scenario"
+
+	"github.com/rosylilly/isucandar"
 )
 
 func main() {
-	flag.Parse()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-	s, err := story.NewStory(*host)
+	s, err := scenario.NewScenario()
+	s.BaseURL = "http://localhost:9292/"
+
+	b, err := isucandar.NewBenchmark(isucandar.WithPrepareTimeout(10*time.Second), isucandar.WithLoadTimeout(60*time.Second))
 	if err != nil {
-		fmt.Println(err.Error())
-		return
+		panic(err)
 	}
 
-	err = s.Run(context.TODO())
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
+	b.AddScenario(s)
 
-	for _, msg := range s.ErrorMessages() {
-		fmt.Println(msg)
+	result := b.Start(ctx)
+	errorMsgs := map[string]int{}
+	for _, err := range result.Errors.All() {
+		msg := fmt.Sprintf("%v", err)
+		if _, ok := errorMsgs[msg]; ok {
+			errorMsgs[msg]++
+		} else {
+			errorMsgs[msg] = 1
+			fmt.Printf("%+v\n", err)
+		}
 	}
-	fmt.Printf("Score: %d\n", s.GetTotalScore())
-	fmt.Printf("Score: %d / %d\n", s.SumScore(), s.ScoreDeduction())
-	fmt.Printf("Score: %s\n", s.Scores.String())
+	for msg, count := range errorMsgs {
+		fmt.Printf("%d: %s\n", count, msg)
+	}
+	fmt.Println(result.Score.Breakdown())
 }
