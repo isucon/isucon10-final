@@ -2,7 +2,9 @@ syntax = "proto3";
 package xsuportal.proto.services.admin;
 option go_package = "github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/admin";
 
-message InitializeRequest {}
+import "xsuportal/resources/contest.proto";
+
+message InitializeRequest { xsuportal.proto.resources.Contest contest = 1; }
 
 message InitializeResponse {
   message BenchmarkServer {
@@ -13,5 +15,4 @@ message InitializeResponse {
   string language = 1;
   // 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報
   BenchmarkServer benchmark_server = 2;
-
 }

@@ -3,9 +3,11 @@
 
 require 'google/protobuf'
 
+require 'xsuportal/resources/contest_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/services/admin/initialize.proto", :syntax => :proto3) do
     add_message "xsuportal.proto.services.admin.InitializeRequest" do
+      optional :contest, :message, 1, "xsuportal.proto.resources.Contest"
     end
     add_message "xsuportal.proto.services.admin.InitializeResponse" do
       optional :language, :string, 1

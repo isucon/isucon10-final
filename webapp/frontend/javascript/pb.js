@@ -9898,6 +9898,7 @@ $root.xsuportal = (function() {
                      * Properties of an InitializeRequest.
                      * @memberof xsuportal.proto.services.admin
                      * @interface IInitializeRequest
+                     * @property {xsuportal.proto.resources.IContest|null} [contest] InitializeRequest contest
                      */
 
                     /**
@@ -9914,6 +9915,14 @@ $root.xsuportal = (function() {
                                 if (properties[keys[i]] != null)
                                     this[keys[i]] = properties[keys[i]];
                     }
+
+                    /**
+                     * InitializeRequest contest.
+                     * @member {xsuportal.proto.resources.IContest|null|undefined} contest
+                     * @memberof xsuportal.proto.services.admin.InitializeRequest
+                     * @instance
+                     */
+                    InitializeRequest.prototype.contest = null;
 
                     /**
                      * Creates a new InitializeRequest instance using the specified properties.
@@ -9939,6 +9948,8 @@ $root.xsuportal = (function() {
                     InitializeRequest.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
+                        if (message.contest != null && Object.hasOwnProperty.call(message, "contest"))
+                            $root.xsuportal.proto.resources.Contest.encode(message.contest, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                         return writer;
                     };
 
@@ -9973,6 +9984,9 @@ $root.xsuportal = (function() {
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
+                            case 1:
+                                message.contest = $root.xsuportal.proto.resources.Contest.decode(reader, reader.uint32());
+                                break;
                             default:
                                 reader.skipType(tag & 7);
                                 break;
@@ -10008,6 +10022,11 @@ $root.xsuportal = (function() {
                     InitializeRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
+                        if (message.contest != null && message.hasOwnProperty("contest")) {
+                            var error = $root.xsuportal.proto.resources.Contest.verify(message.contest);
+                            if (error)
+                                return "contest." + error;
+                        }
                         return null;
                     };
 
@@ -10022,7 +10041,13 @@ $root.xsuportal = (function() {
                     InitializeRequest.fromObject = function fromObject(object) {
                         if (object instanceof $root.xsuportal.proto.services.admin.InitializeRequest)
                             return object;
-                        return new $root.xsuportal.proto.services.admin.InitializeRequest();
+                        var message = new $root.xsuportal.proto.services.admin.InitializeRequest();
+                        if (object.contest != null) {
+                            if (typeof object.contest !== "object")
+                                throw TypeError(".xsuportal.proto.services.admin.InitializeRequest.contest: object expected");
+                            message.contest = $root.xsuportal.proto.resources.Contest.fromObject(object.contest);
+                        }
+                        return message;
                     };
 
                     /**
@@ -10034,8 +10059,15 @@ $root.xsuportal = (function() {
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    InitializeRequest.toObject = function toObject() {
-                        return {};
+                    InitializeRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.contest = null;
+                        if (message.contest != null && message.hasOwnProperty("contest"))
+                            object.contest = $root.xsuportal.proto.resources.Contest.toObject(message.contest, options);
+                        return object;
                     };
 
                     /**

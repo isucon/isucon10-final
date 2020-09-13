@@ -4013,6 +4013,9 @@ export namespace xsuportal {
 
                 /** Properties of an InitializeRequest. */
                 interface IInitializeRequest {
+
+                    /** InitializeRequest contest */
+                    contest?: (xsuportal.proto.resources.IContest|null);
                 }
 
                 /** Represents an InitializeRequest. */
@@ -4023,6 +4026,9 @@ export namespace xsuportal {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: xsuportal.proto.services.admin.IInitializeRequest);
+
+                    /** InitializeRequest contest. */
+                    public contest?: (xsuportal.proto.resources.IContest|null);
 
                     /**
                      * Creates a new InitializeRequest instance using the specified properties.

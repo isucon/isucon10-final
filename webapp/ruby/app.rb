@@ -427,6 +427,8 @@ module Xsuportal
     end
 
     post '/initialize' do
+      req = decode_request_pb
+
       db.query('TRUNCATE `teams`')
       db.query('TRUNCATE `contestants`')
       db.query('TRUNCATE `benchmark_jobs`')
@@ -438,21 +440,38 @@ module Xsuportal
         Digest::SHA256.hexdigest(ADMIN_PASSWORD),
       )
 
-      db.query(
-        <<~SQL,
-        INSERT `contest_config` (
-          `registration_open_at`,
-          `contest_starts_at`,
-          `contest_freezes_at`,
-          `contest_ends_at`
-        ) VALUES (
-          TIMESTAMPADD(SECOND, 0, NOW(6)),
-          TIMESTAMPADD(SECOND, 5, NOW(6)),
-          TIMESTAMPADD(SECOND, 40, NOW(6)),
-          TIMESTAMPADD(SECOND, 50, NOW(6))
+      if req.contest
+        db.xquery(
+          <<~SQL,
+          INSERT `contest_config` (
+            `registration_open_at`,
+            `contest_starts_at`,
+            `contest_freezes_at`,
+            `contest_ends_at`
+          ) VALUES (?, ?, ?, ?)
+          SQL
+          Time.at(req.contest.registration_open_at.seconds),
+          Time.at(req.contest.contest_starts_at.seconds),
+          Time.at(req.contest.contest_freezes_at.seconds),
+          Time.at(req.contest.contest_ends_at.seconds),
         )
-        SQL
-      )
+      else
+        db.query(
+          <<~SQL,
+          INSERT `contest_config` (
+            `registration_open_at`,
+            `contest_starts_at`,
+            `contest_freezes_at`,
+            `contest_ends_at`
+          ) VALUES (
+            TIMESTAMPADD(SECOND, 0, NOW(6)),
+            TIMESTAMPADD(SECOND, 5, NOW(6)),
+            TIMESTAMPADD(SECOND, 40, NOW(6)),
+            TIMESTAMPADD(SECOND, 50, NOW(6))
+          )
+          SQL
+        )
+      end
 
       encode_response_pb(
         # TODO: 負荷レベルの指定
