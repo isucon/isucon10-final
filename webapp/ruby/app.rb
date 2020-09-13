@@ -450,10 +450,10 @@ module Xsuportal
             `contest_ends_at`
           ) VALUES (?, ?, ?, ?)
           SQL
-          Time.at(req.contest.registration_open_at.seconds),
-          Time.at(req.contest.contest_starts_at.seconds),
-          Time.at(req.contest.contest_freezes_at.seconds),
-          Time.at(req.contest.contest_ends_at.seconds),
+          Time.at(req.contest.registration_open_at.seconds).utc,
+          Time.at(req.contest.contest_starts_at.seconds).utc,
+          Time.at(req.contest.contest_freezes_at.seconds).utc,
+          Time.at(req.contest.contest_ends_at.seconds).utc,
         )
       else
         db.query(
@@ -503,10 +503,10 @@ module Xsuportal
             `contest_ends_at`
           ) VALUES (?, ?, ?, ?)
           SQL
-          Time.at(req.contest.registration_open_at.seconds),
-          Time.at(req.contest.contest_starts_at.seconds),
-          Time.at(req.contest.contest_freezes_at.seconds),
-          Time.at(req.contest.contest_ends_at.seconds),
+          Time.at(req.contest.registration_open_at.seconds).utc,
+          Time.at(req.contest.contest_starts_at.seconds).utc,
+          Time.at(req.contest.contest_freezes_at.seconds).utc,
+          Time.at(req.contest.contest_ends_at.seconds).utc,
         )
       end
       encode_response_pb
