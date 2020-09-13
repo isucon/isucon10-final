@@ -2,10 +2,11 @@ package model
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"github.com/isucon/isucon10-final/benchmarker/random"
-	"sync"
 )
 
 type Team struct {
@@ -58,7 +59,7 @@ func NewTeam() (*Team, error) {
 	hosts := []*Host{{}, {}, {}}
 
 	return &Team{
-		TeamName:     random.Alphabet(20),
+		TeamName:     random.TeamName(),
 		EmailAddress: random.Alphabet(16) + "@example.com",
 		Hosts:        hosts,
 		IsStudent:    isStudent,
