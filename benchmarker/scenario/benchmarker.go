@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
+	"strconv"
 
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
@@ -77,10 +78,14 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				return
 			}
 
-			teamID := b.Scenario.getTeamIDByJobID(ctx, jobHandle.GetJobId())
-			team := b.Scenario.Contest.GetTeam(teamID)
+			host := jobHandle.GetTargetHostname()
+			teamID := 0
+			if len(host) > 16 {
+				teamID, _ = strconv.Atoi(host[15:])
+			}
+			team := b.Scenario.Contest.GetTeam(int64(teamID))
 			if team == nil {
-				step.AddError(failure.NewError(ErrBenchmarkerReceive, fmt.Errorf("Unknown team")))
+				step.AddError(failure.NewError(ErrBenchmarkerReceive, fmt.Errorf("Unknown team: %d", jobHandle.GetJobId())))
 				return
 			}
 

@@ -1,7 +1,6 @@
 package scenario
 
 import (
-	"context"
 	"sync"
 
 	"github.com/isucon/isucon10-final/benchmarker/model"
@@ -21,20 +20,18 @@ type Scenario struct {
 	Contest      *model.Contest
 	TeamCapacity int32
 
-	bpubsub        *pubsub.PubSub
-	rpubsub        *pubsub.PubSub
-	teamIDsByJobID map[int64]int64
+	bpubsub *pubsub.PubSub
+	rpubsub *pubsub.PubSub
 }
 
 func NewScenario() (*Scenario, error) {
 	contest := model.NewContest()
 	return &Scenario{
-		mu:             sync.RWMutex{},
-		Contest:        contest,
-		TeamCapacity:   -1,
-		bpubsub:        pubsub.NewPubSub(),
-		rpubsub:        pubsub.NewPubSub(),
-		teamIDsByJobID: map[int64]int64{},
+		mu:           sync.RWMutex{},
+		Contest:      contest,
+		TeamCapacity: -1,
+		bpubsub:      pubsub.NewPubSub(),
+		rpubsub:      pubsub.NewPubSub(),
 	}, nil
 }
 
@@ -51,17 +48,4 @@ func (s *Scenario) AddAudience(count int) {
 	for i := 0; i < count; i++ {
 		s.rpubsub.Publish(true)
 	}
-}
-
-func (s *Scenario) getTeamIDByJobID(ctx context.Context, jid int64) int64 {
-	for ctx.Err() == nil {
-		s.mu.RLock()
-		tid, ok := s.teamIDsByJobID[jid]
-		s.mu.RUnlock()
-		if ok {
-			return tid
-		}
-	}
-
-	return 0
 }

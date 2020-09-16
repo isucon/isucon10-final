@@ -48,6 +48,10 @@ func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) erro
 		return err
 	}
 
+	if len(s.Contest.Teams) == 0 {
+		return nil
+	}
+
 	<-time.After(s.Contest.ContestStartsAt.Sub(time.Now()))
 
 	wg.Add(1)
@@ -170,7 +174,7 @@ func (s *Scenario) loadSignup(ctx context.Context, step *isucandar.BenchmarkStep
 		}
 		// TODO: Check signup
 
-		_, err = CreateTeamAction(ctx, team, lead)
+		createTeam, err := CreateTeamAction(ctx, team, lead)
 		if err != nil {
 			if failure.IsCode(err, ErrX403) {
 				atomic.StoreUint32(&stopSignup, 1)
@@ -180,6 +184,7 @@ func (s *Scenario) loadSignup(ctx context.Context, step *isucandar.BenchmarkStep
 			return
 		}
 
+		team.ID = createTeam.GetTeamId()
 		s.Contest.AddTeam(team)
 		s.AddBenchmarker(team.ID)
 
@@ -284,16 +289,13 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 
 			job, err := EnqueueBenchmarkJobAction(ctx, team)
 			if err != nil {
-				if failure.IsCode(err, failure.TimeoutErrorCode) || failure.IsCode(err, failure.TemporaryErrorCode) {
+				if failure.Is(err, context.Canceled) || failure.Is(err, context.DeadlineExceeded) {
 					return
 				}
 				step.AddError(fmt.Errorf("%v: Team: %d", err, team.ID))
 				continue
 			}
 
-			s.mu.Lock()
-			s.teamIDsByJobID[job.GetJob().GetId()] = team.ID
-			s.mu.Unlock()
 			team.Enqueued(job)
 			step.AddScore("enqueue-benchmark")
 

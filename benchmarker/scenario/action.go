@@ -128,9 +128,6 @@ func CreateTeamAction(ctx context.Context, team *model.Team, c *model.Contestant
 
 	_, err := ProtobufRequest(ctx, c.Agent, http.MethodPost, "/api/registration/team", req, res)
 
-	if res.GetTeamId() != 0 {
-		team.ID = res.GetTeamId()
-	}
 	return res, err
 }
 
