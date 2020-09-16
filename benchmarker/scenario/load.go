@@ -278,8 +278,15 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 			go GetDashboardAction(ctx, team, team.Developer)
 			go GetBenchmarkJobs(ctx, team, team.Developer)
 
+			if ctx.Err() != nil {
+				return
+			}
+
 			job, err := EnqueueBenchmarkJobAction(ctx, team)
 			if err != nil {
+				if failure.Is(err, context.Canceled) || failure.Is(err, context.DeadlineExceeded) {
+					return
+				}
 				step.AddError(fmt.Errorf("%v: Team: %d", err, team.ID))
 				continue
 			}
