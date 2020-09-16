@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/isucon/isucon10-final/benchmarker/random"
-	"net/http/cookiejar"
+	"github.com/rosylilly/isucandar/agent"
 )
 
 const (
@@ -16,11 +16,11 @@ type Contestant struct {
 	Name      string
 	IsStudent bool
 
-	CookieJar *cookiejar.Jar
+	Agent *agent.Agent
 }
 
 func NewContestant() (*Contestant, error) {
-	jar, err := cookiejar.New(&cookiejar.Options{})
+	a, err := agent.NewAgent()
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func NewContestant() (*Contestant, error) {
 		Password:  id, // random.Alphabet(CONTESTANT_PASSWORD_LENGTH),
 		Name:      random.Alphabet(20),
 		IsStudent: random.Pecentage(1, 10),
-		CookieJar: jar,
+		Agent:     a,
 	}, nil
 }
 
