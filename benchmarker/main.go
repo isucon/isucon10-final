@@ -5,11 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rosylilly/isucandar/failure"
-
 	"github.com/isucon/isucon10-final/benchmarker/scenario"
-
 	"github.com/rosylilly/isucandar"
+	"github.com/rosylilly/isucandar/failure"
 )
 
 func main() {

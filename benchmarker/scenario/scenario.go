@@ -1,6 +1,7 @@
 package scenario
 
 import (
+	"context"
 	"sync"
 
 	"github.com/isucon/isucon10-final/benchmarker/model"
@@ -52,8 +53,8 @@ func (s *Scenario) AddAudience(count int) {
 	}
 }
 
-func (s *Scenario) getTeamIDByJobID(jid int64) int64 {
-	for {
+func (s *Scenario) getTeamIDByJobID(ctx context.Context, jid int64) int64 {
+	for ctx.Err() == nil {
 		s.mu.RLock()
 		tid, ok := s.teamIDsByJobID[jid]
 		s.mu.RUnlock()
@@ -61,4 +62,6 @@ func (s *Scenario) getTeamIDByJobID(jid int64) int64 {
 			return tid
 		}
 	}
+
+	return 0
 }
