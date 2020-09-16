@@ -1,6 +1,7 @@
 GOTIMEOUT?=20s
 GOARGS?=-race
 GOMAXPROCS?=$(shell nproc)
+GOPRIVATE="github.com/rosylilly"
 
 GOFILES=$(shell find . -name *.go)
 PROTOFILES=$(shell find proto -name *.proto)
@@ -20,7 +21,7 @@ test:
 	@mkdir -p tmp
 	@echo "mode: atomic" > tmp/cover.out
 	@for d in $(shell go list ./... | grep -v vendor | grep -v proto); do \
-		GOMAXPROCS=$(GOMAXPROCS) \
+		GOPRIVATE=$(GOPRIVATE) GOMAXPROCS=$(GOMAXPROCS) \
 			go test \
 			$(GOARGS) \
 			-timeout $(GOTIMEOUT) \
@@ -41,10 +42,10 @@ help: ## Display this help screen
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 go.sum: go.mod
-	go mod download
+	GOPRIVATE=$(GOPRIVATE) go mod download
 
 bin/benchmarker: go.mod $(GOFILES) $(GOPROTOFILES)
-	go build -o bin/benchmarker -v ./benchmarker
+	GOPRIVATE=$(GOPRIVATE) go build -o bin/benchmarker -v ./benchmarker
 
 $(GOPROTOFILES): $(PROTOFILES)
 	protoc  --go_out=plugins=grpc:./benchmarker/proto --go_opt=paths=source_relative -I ./proto $(PROTOFILES)
