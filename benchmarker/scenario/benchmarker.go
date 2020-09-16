@@ -17,6 +17,7 @@ import (
 var (
 	ErrBenchmarkerReceive failure.StringCode = "benchmarker-receive"
 	ErrBenchmarkerReport  failure.StringCode = "benchmarker-report"
+	ErrBenchmarkerPanic   failure.StringCode = "benchmarker-panic"
 )
 
 type Benchmarker struct {
@@ -48,89 +49,97 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 	report := bench.NewBenchmarkReportClient(conn)
 
 	for ctx.Err() == nil {
-		job, err := b.receiveBenchmarkJob(ctx, queue)
-		if err != nil {
-			errCode := grpc.Code(err)
-			if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
+		func() {
+			defer func() {
+				err := recover()
+				if perr, ok := err.(error); ok {
+					step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
+				}
+			}()
+			job, err := b.receiveBenchmarkJob(ctx, queue)
+			if err != nil {
+				errCode := grpc.Code(err)
+				if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
+					step.AddError(failure.NewError(ErrBenchmarkerReceive, err))
+				}
+				return
+			}
+
+			jobHandle := job.GetJobHandle()
+			if jobHandle == nil {
+				return
+			}
+
+			teamID := b.Scenario.getTeamIDByJobID(ctx, jobHandle.GetJobId())
+			team := b.Scenario.Contest.GetTeam(teamID)
+			if team == nil {
+				step.AddError(failure.NewError(ErrBenchmarkerReceive, fmt.Errorf("Unknown team")))
+				return
+			}
+
+			bResult := team.NewResult()
+
+			reporter, err := report.ReportBenchmarkResult(ctx)
+			if err != nil {
+				errCode := grpc.Code(err)
+				if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
+					step.AddError(failure.NewError(ErrBenchmarkerReceive, err))
+				}
+				return
+			}
+
+			result := b.generateFirstReport(jobHandle)
+			err = reporter.Send(result)
+			if err != nil {
+				errCode := grpc.Code(err)
+				if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
+					step.AddError(failure.NewError(ErrBenchmarkerReceive, err))
+				}
+				return
+			}
+			res, err := reporter.Recv()
+			if err != nil {
+				errCode := grpc.Code(err)
+				if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
+					step.AddError(failure.NewError(ErrBenchmarkerReceive, err))
+				}
+				return
+			}
+
+			if res.AckedNonce != result.GetNonce() {
+				step.AddError(failure.NewError(ErrBenchmarkerReport, fmt.Errorf("Invalid benchmark result nonce")))
+				return
+			}
+
+			result = b.generateLastReport(jobHandle, bResult)
+			err = reporter.Send(result)
+			if err != nil {
+				errCode := grpc.Code(err)
+				if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
+					step.AddError(failure.NewError(ErrBenchmarkerReport, err))
+				}
+				return
+			}
+			res, err = reporter.Recv()
+			if err != nil {
+				errCode := grpc.Code(err)
+				if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
+					step.AddError(failure.NewError(ErrBenchmarkerReport, err))
+				}
+				return
+			}
+
+			if res.AckedNonce != result.GetNonce() {
+				step.AddError(failure.NewError(ErrBenchmarkerReport, fmt.Errorf("Invalid nonce: got %d, expected %d", res.AckedNonce, result.GetNonce())))
+				return
+			}
+
+			err = reporter.CloseSend()
+			if err != nil {
 				step.AddError(failure.NewError(ErrBenchmarkerReceive, err))
+				return
 			}
-			continue
-		}
-
-		jobHandle := job.GetJobHandle()
-		if jobHandle == nil {
-			continue
-		}
-
-		teamID := b.Scenario.getTeamIDByJobID(ctx, jobHandle.GetJobId())
-		team := b.Scenario.Contest.GetTeam(teamID)
-		if team == nil {
-			step.AddError(failure.NewError(ErrBenchmarkerReceive, fmt.Errorf("Unknown team")))
-			continue
-		}
-
-		bResult := team.NewResult()
-
-		reporter, err := report.ReportBenchmarkResult(ctx)
-		if err != nil {
-			errCode := grpc.Code(err)
-			if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
-				step.AddError(failure.NewError(ErrBenchmarkerReceive, err))
-			}
-			continue
-		}
-
-		result := b.generateFirstReport(jobHandle)
-		err = reporter.Send(result)
-		if err != nil {
-			errCode := grpc.Code(err)
-			if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
-				step.AddError(failure.NewError(ErrBenchmarkerReceive, err))
-			}
-			continue
-		}
-		res, err := reporter.Recv()
-		if err != nil {
-			errCode := grpc.Code(err)
-			if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
-				step.AddError(failure.NewError(ErrBenchmarkerReceive, err))
-			}
-			continue
-		}
-
-		if res.AckedNonce != result.GetNonce() {
-			step.AddError(failure.NewError(ErrBenchmarkerReport, fmt.Errorf("Invalid benchmark result nonce")))
-			continue
-		}
-
-		result = b.generateLastReport(jobHandle, bResult)
-		err = reporter.Send(result)
-		if err != nil {
-			errCode := grpc.Code(err)
-			if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
-				step.AddError(failure.NewError(ErrBenchmarkerReport, err))
-			}
-			continue
-		}
-		res, err = reporter.Recv()
-		if err != nil {
-			errCode := grpc.Code(err)
-			if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
-				step.AddError(failure.NewError(ErrBenchmarkerReport, err))
-			}
-			continue
-		}
-
-		if res.AckedNonce != result.GetNonce() {
-			step.AddError(failure.NewError(ErrBenchmarkerReport, fmt.Errorf("Invalid nonce: got %d, expected %d", res.AckedNonce, result.GetNonce())))
-			continue
-		}
-
-		err = reporter.CloseSend()
-		if err != nil {
-			step.AddError(failure.NewError(ErrBenchmarkerReceive, err))
-			continue
-		}
+		}()
 	}
 
 	return nil
