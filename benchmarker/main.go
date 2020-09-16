@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/rosylilly/isucandar/failure"
+
 	"github.com/isucon/isucon10-final/benchmarker/scenario"
 
 	"github.com/rosylilly/isucandar"
@@ -27,6 +29,10 @@ func main() {
 	result := b.Start(ctx)
 	errorMsgs := map[string]int{}
 	for _, err := range result.Errors.All() {
+		if failure.IsCode(err, failure.TimeoutErrorCode) || failure.IsCode(err, failure.TemporaryErrorCode) {
+			continue
+		}
+
 		msg := fmt.Sprintf("%v", err)
 		if _, ok := errorMsgs[msg]; ok {
 			errorMsgs[msg]++

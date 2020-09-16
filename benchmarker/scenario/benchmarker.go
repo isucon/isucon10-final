@@ -62,9 +62,9 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 			continue
 		}
 
-		b.Scenario.mu.RLock()
+		// b.Scenario.mu.RLock()
 		teamID, ok := b.Scenario.teamIDsByJobID[jobHandle.GetJobId()]
-		b.Scenario.mu.RUnlock()
+		// b.Scenario.mu.RUnlock()
 		if !ok {
 			step.AddError(failure.NewError(ErrBenchmarkerReceive, fmt.Errorf("Unknown team id")))
 			continue
