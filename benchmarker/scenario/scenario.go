@@ -51,3 +51,14 @@ func (s *Scenario) AddAudience(count int) {
 		s.rpubsub.Publish(true)
 	}
 }
+
+func (s *Scenario) getTeamIDByJobID(jid int64) int64 {
+	for {
+		s.mu.RLock()
+		tid, ok := s.teamIDsByJobID[jid]
+		s.mu.RUnlock()
+		if ok {
+			return tid
+		}
+	}
+}
