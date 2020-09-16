@@ -229,7 +229,6 @@ module Xsuportal
 
       def leaderboard_pb(team_id:0)
         contest = current_contest_status[:contest]
-        contest_frozen = contest[:status] == :FROZEN
         contest_finished = contest[:status] == :FINISHED
         contest_freezes_at = contest[:contest_freezes_at]
 
@@ -835,7 +834,7 @@ module Xsuportal
 
       Database.transaction do
         login_required
-        contest_status_restricted([:STARTED, :FROZEN], '競技時間外はベンチマークを実行できません')
+        contest_status_restricted([:STARTED], '競技時間外はベンチマークを実行できません')
 
         job_count = db.xquery(
           'SELECT COUNT(*) AS `cnt` FROM `benchmark_jobs` WHERE `team_id` = ? AND `finished_at` IS NULL',
