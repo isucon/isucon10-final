@@ -2,6 +2,7 @@ package scenario
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"sync"
 	"sync/atomic"
@@ -88,8 +89,13 @@ func (s *Scenario) loadBenchmarker(ctx context.Context, step *isucandar.Benchmar
 		tid := teamID.(int64)
 		benchmarker := s.NewBenchmarker(tid)
 		benchmarkers.Do(ctx, func(ctx context.Context) {
+		P:
 			if err := benchmarker.Process(ctx, step); err != nil {
 				step.AddError(err)
+			}
+
+			if ctx.Err() == nil {
+				goto P
 			}
 		})
 	})
@@ -274,7 +280,7 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 
 			job, err := EnqueueBenchmarkJobAction(ctx, team)
 			if err != nil {
-				step.AddError(err)
+				step.AddError(fmt.Errorf("%v: Team: %d", err, team.ID))
 				continue
 			}
 

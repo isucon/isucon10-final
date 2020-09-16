@@ -37,6 +37,13 @@ func (s *Scenario) NewBenchmarker(id int64) *Benchmarker {
 }
 
 func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep) error {
+	defer func() {
+		err := recover()
+		if perr, ok := err.(error); ok {
+			step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
+		}
+	}()
+
 	host := fmt.Sprintf("%s:%d", b.GRPCHost, b.GRPCPort)
 
 	conn, err := grpc.Dial(host, grpc.WithInsecure(), grpc.WithUserAgent("xsucon-benchmarker"))
