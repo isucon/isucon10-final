@@ -45,7 +45,7 @@ go.sum: go.mod
 	GOPRIVATE=$(GOPRIVATE) go mod download
 
 bin/benchmarker: go.mod $(GOFILES) $(GOPROTOFILES)
-	GOPRIVATE=$(GOPRIVATE) go build -o bin/benchmarker -v ./benchmarker
+	GOPRIVATE=$(GOPRIVATE) go build -race -o bin/benchmarker -v ./benchmarker
 
 $(GOPROTOFILES): $(PROTOFILES)
 	protoc  --go_out=plugins=grpc:./benchmarker/proto --go_opt=paths=source_relative -I ./proto $(PROTOFILES)
