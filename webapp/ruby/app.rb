@@ -27,7 +27,7 @@ module Xsuportal
 
     end
 
-    %w[/ /registration /signup /login /logout /audience/dashboard /contestant/dashboard /contestant/benchmark_jobs /contestant/benchmark_jobs/:id /contestant/clarifications].each do |path|
+    %w[/ /registration /signup /login /logout /contestant /contestant/benchmark_jobs /contestant/benchmark_jobs/:id /contestant/clarifications].each do |path|
       get path do
         File.read(File.join('public', 'index.html'))
       end

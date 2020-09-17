@@ -1,14 +1,14 @@
-import { xsuportal } from "./pb";
+import { xsuportal } from "../pb";
 
 import React, { useEffect, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { Timestamp } from "./common/Timestamp";
-import { ApiClient } from "./common/ApiClient";
-import { Index } from "./Index";
-import { LoginRequired } from "./common/LoginRequired";
-import { ErrorMessage } from "./common/ErrorMessage";
-import { BenchmarkJobStatus } from "./dashboard/BenchmarkJobStatus";
+import { Timestamp } from "../common/Timestamp";
+import { ApiClient } from "../common/ApiClient";
+import { Index } from "../Index";
+import { LoginRequired } from "../common/LoginRequired";
+import { ErrorMessage } from "../common/ErrorMessage";
+import { BenchmarkJobStatus } from "../dashboard/BenchmarkJobStatus";
 
 export interface Props {
   client: ApiClient;
@@ -120,7 +120,11 @@ const renderError = (error: any) => {
   }
 };
 
-export const BenchmarkJobDetail: React.FC<Props> = ({ client, id, root }) => {
+export const ContestantBenchmarkJobDetail: React.FC<Props> = ({
+  client,
+  id,
+  root,
+}) => {
   const [
     job,
     setJob,

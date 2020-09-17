@@ -3,16 +3,16 @@ import { ApiError, ApiClient } from "./common/ApiClient";
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import { ContestantDashboard } from "./ContestantDashboard";
+import { ContestantDashboard } from "./contestant/ContestantDashboard";
 import { TeamList } from "./TeamList";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
 import { Logout } from "./Logout";
 import { Registration } from "./Registration";
-import { BenchmarkJobDetail } from "./BenchmarkJobDetail";
-import { BenchmarkJobList } from "./BenchmarkJobList";
-import { AudienceDashboard } from "./AudienceDashboard";
-import { ContestantClarificationList } from "./ContestantClarificationList";
+import { ContestantBenchmarkJobDetail } from "./contestant/ContestantBenchmarkJobDetail";
+import { ContestantBenchmarkJobList } from "./contestant/ContestantBenchmarkJobList";
+import { AudienceDashboard } from "./audience/AudienceDashboard";
+import { ContestantClarificationList } from "./contestant/ContestantClarificationList";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
@@ -98,7 +98,7 @@ export class Index extends React.Component<Props, State> {
               <Route path="/signup" exact={true}>
                 <Signup client={this.props.client} root={this} />
               </Route>
-              <Route path="/contestant/dashboard" exact={true}>
+              <Route path="/contestant" exact={true}>
                 <ContestantDashboard
                   session={this.props.session}
                   client={this.props.client}
@@ -110,7 +110,7 @@ export class Index extends React.Component<Props, State> {
                 exact={true}
                 render={({ match }) => {
                   return (
-                    <BenchmarkJobDetail
+                    <ContestantBenchmarkJobDetail
                       client={this.props.client}
                       id={match.params.id}
                       root={this}
@@ -126,17 +126,17 @@ export class Index extends React.Component<Props, State> {
                 />
               </Route>
               <Route path="/contestant/benchmark_jobs" exact={true}>
-                <BenchmarkJobList
+                <ContestantBenchmarkJobList
                   session={this.props.session}
                   client={this.props.client}
                   incompleteOnly={false}
                   root={this}
                 />
               </Route>
-              <Route path="/audience/dashboard" exact={true}>
+              <Route path="/" exact={true}>
                 <AudienceDashboard client={this.props.client} />
               </Route>
-              <Route path="/" exact={true}>
+              <Route path="/teams" exact={true}>
                 <TeamList
                   session={this.props.session}
                   client={this.props.client}
@@ -153,10 +153,10 @@ export class Index extends React.Component<Props, State> {
     if (this.state.loggedin) {
       return (
         <>
-          <Link className="navbar-item" to="/">
+          <Link className="navbar-item" to="/teams">
             チーム一覧
           </Link>
-          <Link className="navbar-item" to="/contestant/dashboard">
+          <Link className="navbar-item" to="/contestant">
             ダッシュボード
           </Link>
           <Link className="navbar-item" to="/contestant/benchmark_jobs">
@@ -165,29 +165,14 @@ export class Index extends React.Component<Props, State> {
           <Link className="navbar-item" to="/contestant/clarifications">
             質問/サポート
           </Link>
-          {/* <a className="navbar-item" href="/terms">
-            規約
-          </a>
-          <a className="navbar-item" href="/rules">
-            レギュレーション
-          </a> */}
         </>
       );
     } else {
       return (
         <>
-          <Link className="navbar-item" to="/">
+          <Link className="navbar-item" to="/teams">
             チーム一覧
           </Link>
-          <Link className="navbar-item" to="/audience/dashboard">
-            ダッシュボード
-          </Link>
-          {/* <a className="navbar-item" href="/terms">
-            規約
-          </a>
-          <a className="navbar-item" href="/rules">
-            レギュレーション
-          </a> */}
         </>
       );
     }

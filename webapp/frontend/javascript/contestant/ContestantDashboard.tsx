@@ -2,17 +2,17 @@ import React, { useEffect, useCallback, useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import useInterval from "use-interval";
 
-import { ScoreGraph } from "./dashboard/ScoreGraph";
-import { Leaderboard } from "./dashboard/Leaderboard";
-import { JobEnqueueForm } from "./dashboard/JobEnqueueForm";
-import { JobList } from "./dashboard/JobList";
-import { ApiClient } from "./common/ApiClient";
-import { xsuportal } from "./pb";
+import { ScoreGraph } from "../dashboard/ScoreGraph";
+import { Leaderboard } from "../dashboard/Leaderboard";
+import { JobEnqueueForm } from "../dashboard/JobEnqueueForm";
+import { JobList } from "../dashboard/JobList";
+import { ApiClient } from "../common/ApiClient";
+import { xsuportal } from "../pb";
 
-import { BenchmarkJobList } from "./BenchmarkJobList";
-import { LoginRequired } from "./common/LoginRequired";
-import { Index } from "./Index";
-import { BenchmarkJobDetail } from "./BenchmarkJobDetail";
+import { ContestantBenchmarkJobList } from "./ContestantBenchmarkJobList";
+import { LoginRequired } from "../common/LoginRequired";
+import { Index } from "../Index";
+import { ContestantBenchmarkJobDetail } from "./ContestantBenchmarkJobDetail";
 
 interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;

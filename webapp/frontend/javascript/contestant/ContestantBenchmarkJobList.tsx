@@ -1,17 +1,17 @@
-import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./common/ApiClient";
+import { xsuportal } from "../pb";
+import { ApiError, ApiClient } from "../common/ApiClient";
 
 import React from "react";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { ErrorMessage } from "./common/ErrorMessage";
-import { TimeDuration } from "./common/TimeDuration";
-import { Index } from "./Index";
-import { LoginRequired } from "./common/LoginRequired";
-import { Timestamp } from "./common/Timestamp";
-import { BenchmarkJobStatus } from "./dashboard/BenchmarkJobStatus";
+import { ErrorMessage } from "../common/ErrorMessage";
+import { TimeDuration } from "../common/TimeDuration";
+import { Index } from "../Index";
+import { LoginRequired } from "../common/LoginRequired";
+import { Timestamp } from "../common/Timestamp";
+import { BenchmarkJobStatus } from "../dashboard/BenchmarkJobStatus";
 
 type ListFilterProps = {
   teamId: number | null;
@@ -95,7 +95,7 @@ export interface State {
   error: Error | null;
 }
 
-export class BenchmarkJobList extends React.Component<Props, State> {
+export class ContestantBenchmarkJobList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {

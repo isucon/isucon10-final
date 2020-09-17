@@ -2,12 +2,12 @@ import React, { useEffect, useCallback, useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import useInterval from "use-interval";
 
-import { ScoreGraph } from "./dashboard/ScoreGraph";
-import { Leaderboard } from "./dashboard/Leaderboard";
-import { ApiClient } from "./common/ApiClient";
-import { xsuportal } from "./pb";
+import { ScoreGraph } from "../dashboard/ScoreGraph";
+import { Leaderboard } from "../dashboard/Leaderboard";
+import { ApiClient } from "../common/ApiClient";
+import { xsuportal } from "../pb";
 
-import { Index } from "./Index";
+import { Index } from "../Index";
 
 interface Props {
   client: ApiClient;
