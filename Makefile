@@ -1,7 +1,7 @@
 GOTIMEOUT?=20s
 GOARGS?=-race
 GOMAXPROCS?=$(shell nproc)
-GOPRIVATE="github.com/rosylilly"
+GOPRIVATE="github.com/isucon"
 
 GOFILES=$(shell find . -name *.go)
 PROTOFILES=$(shell find proto -name *.proto)

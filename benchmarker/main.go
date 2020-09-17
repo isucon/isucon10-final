@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/isucon/isucon10-final/benchmarker/scenario"
-	"github.com/rosylilly/isucandar"
-	"github.com/rosylilly/isucandar/failure"
+	"github.com/isucon/isucandar"
+	"github.com/isucon/isucandar/failure"
 )
 
 func main() {

@@ -3,8 +3,8 @@ package scenario
 import (
 	"context"
 
-	"github.com/rosylilly/isucandar"
-	"github.com/rosylilly/isucandar/agent"
+	"github.com/isucon/isucandar"
+	"github.com/isucon/isucandar/agent"
 )
 
 func (s *Scenario) Prepare(ctx context.Context, step *isucandar.BenchmarkStep) error {

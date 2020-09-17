@@ -3,7 +3,7 @@ package scenario
 import (
 	"context"
 
-	"github.com/rosylilly/isucandar"
+	"github.com/isucon/isucandar"
 )
 
 func (s *Scenario) Validation(ctx context.Context, step *isucandar.BenchmarkStep) error {

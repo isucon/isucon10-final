@@ -10,8 +10,8 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal"
-	"github.com/rosylilly/isucandar/agent"
-	"github.com/rosylilly/isucandar/failure"
+	"github.com/isucon/isucandar/agent"
+	"github.com/isucon/isucandar/failure"
 )
 
 var (

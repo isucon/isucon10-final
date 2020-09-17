@@ -13,7 +13,7 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/common"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/registration"
-	"github.com/rosylilly/isucandar/agent"
+	"github.com/isucon/isucandar/agent"
 )
 
 func BrowserAccess(ctx context.Context, member *model.Contestant, rpath string) (*http.Response, agent.Resources, error) {

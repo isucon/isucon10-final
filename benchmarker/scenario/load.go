@@ -13,10 +13,10 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"github.com/isucon/isucon10-final/benchmarker/random"
-	"github.com/rosylilly/isucandar"
-	"github.com/rosylilly/isucandar/failure"
-	"github.com/rosylilly/isucandar/parallel"
-	"github.com/rosylilly/isucandar/worker"
+	"github.com/isucon/isucandar"
+	"github.com/isucon/isucandar/failure"
+	"github.com/isucon/isucandar/parallel"
+	"github.com/isucon/isucandar/worker"
 )
 
 func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) error {

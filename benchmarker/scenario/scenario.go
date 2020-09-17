@@ -4,9 +4,9 @@ import (
 	"sync"
 
 	"github.com/isucon/isucon10-final/benchmarker/model"
-	"github.com/rosylilly/isucandar/agent"
-	"github.com/rosylilly/isucandar/failure"
-	"github.com/rosylilly/isucandar/pubsub"
+	"github.com/isucon/isucandar/agent"
+	"github.com/isucon/isucandar/failure"
+	"github.com/isucon/isucandar/pubsub"
 )
 
 var (

@@ -7,8 +7,8 @@ require (
 	github.com/PuerkitoBio/goquery v1.5.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/protobuf v1.4.2
+	github.com/isucon/isucandar v0.0.0-20200917145450-6383075b318b
 	github.com/kr/pretty v0.1.0 // indirect
-	github.com/rosylilly/isucandar v0.0.0-20200911094935-cb98bde6e6bd
 	golang.org/x/sys v0.0.0-20200602225109-6fdc65e7d980 // indirect
 	golang.org/x/text v0.3.3 // indirect
 	google.golang.org/genproto v0.0.0-20200806141610-86f49bd18e98 // indirect

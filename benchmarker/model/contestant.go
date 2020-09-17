@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/isucon/isucon10-final/benchmarker/random"
-	"github.com/rosylilly/isucandar/agent"
+	"github.com/isucon/isucandar/agent"
 )
 
 const (
