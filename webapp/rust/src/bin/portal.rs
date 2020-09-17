@@ -4,7 +4,6 @@ use actix_web::{middleware, web, App, HttpServer};
 use futures::future::FutureExt;
 use listenfd::ListenFd;
 use std::env;
-use std::sync::Arc;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -16,7 +15,7 @@ async fn main() -> std::io::Result<()> {
     }
     env_logger::init();
 
-    let mysql_connection_env = Arc::new(xsuportal::MySQLConnectionEnv::default());
+    let mysql_connection_env = xsuportal::MySQLConnectionEnv::default();
 
     let manager = r2d2_mysql::MysqlConnectionManager::new(
         mysql::OptsBuilder::new()

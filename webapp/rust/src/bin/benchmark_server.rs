@@ -5,7 +5,7 @@ use std::sync::Arc;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     env_logger::init();
 
-    let mysql_connection_env = Arc::new(xsuportal::MySQLConnectionEnv::default());
+    let mysql_connection_env = xsuportal::MySQLConnectionEnv::default();
     let manager = r2d2_mysql::MysqlConnectionManager::new(
         mysql::OptsBuilder::new()
             .ip_or_hostname(Some(&mysql_connection_env.host))
