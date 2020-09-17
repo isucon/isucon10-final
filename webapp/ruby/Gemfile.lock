@@ -1,6 +1,6 @@
 GIT
   remote: https://isucon10-public.s3.dualstack.ap-northeast-1.amazonaws.com/git/6MGgQp9lDmsK6G0CNa0DCOWHkOXID9-1davWxzKzI28/grpc_kit.git
-  revision: b1d7a24f5194f5956cd69f48825c414608b494ee
+  revision: 3e8a5601dda83d9c1f6d6ece1504689fa9e526b0
   ref: blocking-recv-buffer
   specs:
     grpc_kit (0.3.9)
