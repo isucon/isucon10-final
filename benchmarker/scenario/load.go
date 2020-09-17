@@ -8,15 +8,15 @@ import (
 	"sync/atomic"
 	"time"
 
-	browser "github.com/EDDYCJY/fake-useragent"
+	"github.com/isucon/isucandar"
+	"github.com/isucon/isucandar/failure"
+	"github.com/isucon/isucandar/parallel"
+	"github.com/isucon/isucandar/random/useragent"
+	"github.com/isucon/isucandar/worker"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"github.com/isucon/isucon10-final/benchmarker/random"
-	"github.com/isucon/isucandar"
-	"github.com/isucon/isucandar/failure"
-	"github.com/isucon/isucandar/parallel"
-	"github.com/isucon/isucandar/worker"
 )
 
 func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) error {
@@ -140,11 +140,11 @@ func (s *Scenario) loadSignup(ctx context.Context, step *isucandar.BenchmarkStep
 		}
 
 		team.Leader.Agent.BaseURL = baseURL
-		team.Leader.Agent.Name = browser.Chrome()
+		team.Leader.Agent.Name = useragent.Chrome()
 		team.Operator.Agent.BaseURL = baseURL
-		team.Operator.Agent.Name = browser.Firefox()
+		team.Operator.Agent.Name = useragent.Firefox()
 		team.Developer.Agent.BaseURL = baseURL
-		team.Developer.Agent.Name = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.74 Safari/537.36 Edg/79.0.309.43"
+		team.Developer.Agent.Name = useragent.Edge()
 
 		lead := team.Leader
 		ops := team.Operator
@@ -456,7 +456,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 		return err
 	}
 	admin.Agent.BaseURL, _ = url.Parse(s.BaseURL)
-	admin.Agent.Name = browser.Chrome()
+	admin.Agent.Name = useragent.Chrome()
 
 	_, err = LoginAction(ctx, admin)
 	if err != nil {
@@ -532,7 +532,7 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 			return
 		}
 
-		viewer.Name = browser.Chrome()
+		viewer.Name = useragent.Chrome()
 
 		_, _, err = BrowserAccessGuest(ctx, viewer, "/")
 		if err != nil {
