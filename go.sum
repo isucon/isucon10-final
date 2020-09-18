@@ -48,6 +48,16 @@ github.com/isucon/isucandar v0.0.0-20200917154844-b278be69c6b1 h1:C/ES1aEdQmno1n
 github.com/isucon/isucandar v0.0.0-20200917154844-b278be69c6b1/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
 github.com/isucon/isucandar v0.0.0-20200918051332-61edc99968b6 h1:f+jlHfIzX/DYnwCBFHeUiRm4/Q8jtFvhkp6jj1vCHOk=
 github.com/isucon/isucandar v0.0.0-20200918051332-61edc99968b6/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
+github.com/isucon/isucandar v0.0.0-20200918142356-d752460a351e h1:UoZ/fedYtX6cL574TgKmhf7lNN8WiQX0D4WVFVw2E9w=
+github.com/isucon/isucandar v0.0.0-20200918142356-d752460a351e/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
+github.com/isucon/isucandar v0.0.0-20200918143447-b6178b48432a h1:1/KgDSH2DRJ48XGEoPBxd/SfKTU5J3pMK6nHJJMgqRM=
+github.com/isucon/isucandar v0.0.0-20200918143447-b6178b48432a/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
+github.com/isucon/isucandar v0.0.0-20200918145628-143425b62836 h1:3sCbWDXRHZ73Um9ucUU0jUgVZyUafFQBHbugJZgPcbk=
+github.com/isucon/isucandar v0.0.0-20200918145628-143425b62836/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
+github.com/isucon/isucandar v0.0.0-20200918145905-3059a26833ab h1:uSZKH3S1AEDtHxL2QNbR0P0x3YoLankyQwIiYizZqTo=
+github.com/isucon/isucandar v0.0.0-20200918145905-3059a26833ab/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
+github.com/isucon/isucandar v0.0.0-20200918153240-02c581ebe357 h1:XQeTdrIwX/uCwdK9ecun8i1gqfQedCP8/qPBCOg8Xo8=
+github.com/isucon/isucandar v0.0.0-20200918153240-02c581ebe357/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
 github.com/isucon/isucon10-portal v0.0.0-20200917214541-7e143562573b h1:kb3lFCEjjfYPf2uSdFJP5afuB9DtddIge1ApFju4N4s=
 github.com/isucon/isucon10-portal v0.0.0-20200917214541-7e143562573b/go.mod h1:4hdJ/uFyj4jMNPfKq8KkrsrPyw5nV7B/5JRcAu1sgQM=
 github.com/julienschmidt/httprouter v1.3.0 h1:U0609e9tgbseu3rBINet9P48AI/D3oJs4dN7jwJOQ1U=

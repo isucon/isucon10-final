@@ -4,6 +4,8 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"os"
+	"runtime/pprof"
 	"time"
 
 	"github.com/isucon/isucandar"
@@ -15,15 +17,25 @@ import (
 
 var (
 	targetAddress string = ""
+	profileFile   string = ""
 )
 
 func init() {
 	flag.StringVar(&targetAddress, "target", benchrun.GetTargetAddress(), "ex: localhost:9292")
+	flag.StringVar(&profileFile, "profile", "", "ex: cpu.out")
 
 	flag.Parse()
 }
 
 func main() {
+	if profileFile != "" {
+		fs, err := os.Create(profileFile)
+		if err != nil {
+			panic(err)
+		}
+		pprof.StartCPUProfile(fs)
+		defer pprof.StopCPUProfile()
+	}
 	if targetAddress == "" {
 		targetAddress = "localhost:9292"
 	}
