@@ -132,9 +132,7 @@ export class RegistrationStatus extends React.Component<Props, State> {
         <div className="card-content">
           <div className="media">
             <div className="media-left">
-              <figure className="image is-48x48">
-                <img src="" />
-              </figure>
+              <i className="material-icons">person</i>
             </div>
             <div className="media-content">
               <p className="title is-5">{member.name}</p>

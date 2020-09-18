@@ -92,9 +92,7 @@ export class ContestantNavbar extends React.Component<Props, State> {
               <div className="navbar-item">
                 <div className="media xsu-navbar-contestant">
                   <div className="media-left">
-                    <p className="image">
-                      <img src="" height={32} width={32} />
-                    </p>
+                    <i className="material-icons">person</i>
                   </div>
                   <div className="media-content">
                     <p className="">{this.props.session.contestant!.name}</p>
