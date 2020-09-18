@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/golang/protobuf/ptypes"
+	"github.com/isucon/isucandar/agent"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/admin"
@@ -13,7 +14,6 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/common"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/registration"
-	"github.com/isucon/isucandar/agent"
 )
 
 func BrowserAccess(ctx context.Context, member *model.Contestant, rpath string) (*http.Response, agent.Resources, error) {

@@ -6,11 +6,11 @@ import (
 	"math/rand"
 	"strconv"
 
+	"github.com/isucon/isucandar"
+	"github.com/isucon/isucandar/failure"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench"
-	"github.com/isucon/isucandar"
-	"github.com/isucon/isucandar/failure"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 )

@@ -3,10 +3,10 @@ package scenario
 import (
 	"sync"
 
-	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucandar/agent"
 	"github.com/isucon/isucandar/failure"
 	"github.com/isucon/isucandar/pubsub"
+	"github.com/isucon/isucon10-final/benchmarker/model"
 )
 
 var (
