@@ -27,9 +27,15 @@ module Xsuportal
 
     end
 
-    %w[/ /registration /signup /login /logout /contestant /contestant/benchmark_jobs /contestant/benchmark_jobs/:id /contestant/clarifications].each do |path|
+    %w[/ /registration /signup /login /logout].each do |path|
       get path do
-        File.read(File.join('public', 'index.html'))
+        File.read(File.join('public', 'audience.html'))
+      end
+    end
+
+    %w[/contestant /contestant/benchmark_jobs /contestant/benchmark_jobs/:id /contestant/clarifications].each do |path|
+      get path do
+        File.read(File.join('public', 'contestant.html'))
       end
     end
 
@@ -600,6 +606,7 @@ module Xsuportal
       )
     end
 
+    # nainaru
     get '/api/contest' do
       contest_status = current_contest_status
       contest = contest_status[:contest]
@@ -611,9 +618,13 @@ module Xsuportal
     end
 
     get '/api/session' do
+      contest_status = current_contest_status
+      contest = contest_status[:contest]
+
       encode_response_pb(
         contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
         team: current_team ? team_pb(current_team) : nil,
+        contest: contest_pb,
       )
     end
 
@@ -933,6 +944,17 @@ module Xsuportal
 
       encode_response_pb(
         leaderboard: leaderboard_pb(team_id: current_team[:id]),
+      )
+    end
+
+    get '/api/contestant/notifications' do
+      # login_required
+
+      after = params[:after]
+
+      encode_response_pb(
+        last_answered_clarification_id: nil,
+        notifications: [],
       )
     end
 

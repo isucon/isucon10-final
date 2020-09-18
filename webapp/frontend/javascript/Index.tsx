@@ -1,5 +1,5 @@
 import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./common/ApiClient";
+import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
@@ -8,15 +8,17 @@ import { TeamList } from "./TeamList";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
 import { Logout } from "./Logout";
-import { Registration } from "./Registration";
+import { Registration } from "./Registration_";
 import { ContestantBenchmarkJobDetail } from "./contestant/ContestantBenchmarkJobDetail";
 import { ContestantBenchmarkJobList } from "./contestant/ContestantBenchmarkJobList";
-import { AudienceDashboard } from "./audience/AudienceDashboard";
+import { AudienceDashboard } from "./AudienceDashboard";
 import { ContestantClarificationList } from "./contestant/ContestantClarificationList";
+import { ContestantNotificationsObserver } from "./contestant/ContestantNotificationsObserver";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
+  release?: string;
 }
 
 export interface State {
@@ -24,17 +26,86 @@ export interface State {
   error: Error | null;
   loggedin: boolean | null;
   registered: boolean | null;
+  notificationObserver: ContestantNotificationsObserver;
+  lastAnsweredClarificationIdObserved: boolean;
+  lastAnsweredClarificationId?: number;
+  lastClarificationIdSeen?: number;
+  localNotificationEnabled: boolean;
+
+  serviceWorker: ServiceWorkerRegistration | null;
 }
 
 export class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    const notificationObserver = new ContestantNotificationsObserver(
+      this.props.client
+    );
+    notificationObserver.onLastAnsweredClarificationIdChange = this.onLastAnsweredClarificationIdChange.bind(
+      this
+    );
+    notificationObserver.onNewNotifications = this.onNewNotifications.bind(
+      this
+    );
+
     this.state = {
       session: this.props.session,
       error: null,
       loggedin: null,
       registered: null,
+      notificationObserver,
+      lastAnsweredClarificationIdObserved: false,
+      lastClarificationIdSeen: this.getLastClarificationIdSeen(),
+      localNotificationEnabled: this.getLocalNotificationEnabled(),
+      serviceWorker: null,
     };
+  }
+
+  getLastClarificationIdSeen() {
+    const str = window.localStorage.getItem(
+      "xsuportal-contestantLastClarificationIdSeen"
+    );
+    if (!str) return undefined;
+    return parseInt(str, 10);
+  }
+
+  getLocalNotificationEnabled() {
+    if (!("Notification" in window)) {
+      console.warn("getLocalNotificationEnabled: No notification support");
+      this.setLocalNotificationEnabled(false);
+      return false;
+    }
+    if (window.Notification.permission === "denied") {
+      console.warn(
+        "getLocalNotificationEnabled: Notification permission denied"
+      );
+      this.setLocalNotificationEnabled(false);
+      return false;
+    }
+    return (
+      window.localStorage.getItem(
+        "xsuportal-contestantLocalNotificationEnabled"
+      ) === "1"
+    );
+  }
+
+  setLocalNotificationEnabled(flag: boolean) {
+    console.log("setLocalNotificationEnabled:", flag);
+    try {
+      if (flag) {
+        window.localStorage.setItem(
+          "xsuportal-contestantLocalNotificationEnabled",
+          "1"
+        );
+      } else {
+        window.localStorage.removeItem(
+          "xsuportal-contestantLocalNotificationEnabled"
+        );
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+    this.setState({ localNotificationEnabled: flag });
   }
 
   public async componentDidMount() {
@@ -42,6 +113,96 @@ export class Index extends React.Component<Props, State> {
     this.setState({
       loggedin: !!session.contestant,
       registered: !!session.team,
+    });
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((reg) => {
+          console.log("SW:", reg);
+
+          const lastServiceWorkerRelease = window.localStorage.getItem(
+            "xsuportal-swRelease"
+          );
+          if (
+            lastServiceWorkerRelease !== undefined &&
+            this.props.release !== lastServiceWorkerRelease
+          ) {
+            console.log("Attempt to update sw");
+            reg.update();
+          }
+
+          try {
+            window.localStorage.setItem(
+              "xsuportal-swRelease",
+              this.props.release || ""
+            );
+          } catch (e) {
+            console.warn(e);
+          }
+
+          this.setState({ serviceWorker: reg });
+
+          reg.pushManager.getSubscription().then((s) => {
+            if (!s) {
+              console.log(
+                "disabling local notification due to lack of push subscription"
+              );
+              this.setLocalNotificationEnabled(false);
+            }
+          });
+
+          this.state.notificationObserver.start();
+        })
+        .catch((e) => {
+          console.warn("Cannot register SW: ", e);
+          this.state.notificationObserver.start();
+        });
+    } else {
+      this.state.notificationObserver.start();
+    }
+  }
+
+  componentWillUnmount() {
+    this.state.notificationObserver.shutdown();
+  }
+
+  onLastAnsweredClarificationIdChange(id?: number) {
+    this.setState({
+      lastAnsweredClarificationIdObserved: true,
+      lastAnsweredClarificationId: id,
+      lastClarificationIdSeen: this.getLastClarificationIdSeen(),
+    });
+  }
+
+  onLastClarificationIdSeenChange(id?: number) {
+    try {
+      if (id) {
+        window.localStorage.setItem(
+          "xsuportal-contestantLastClarificationIdSeen",
+          id.toString()
+        );
+      } else {
+        window.localStorage.removeItem(
+          "xsuportal-contestantLastClarificationIdSeen"
+        );
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+    this.setState({ lastClarificationIdSeen: id });
+  }
+
+  onNewNotifications(notifications: xsuportal.proto.resources.INotification[]) {
+    console.log({
+      localNotificationEnabled: this.state.localNotificationEnabled,
+    });
+    if (!this.state.localNotificationEnabled) return;
+    const worker = this.state.serviceWorker?.active;
+    console.log({ worker: worker });
+    if (!worker) return;
+    worker.postMessage({
+      kind: "localNotification",
+      notifications: notifications,
     });
   }
 
@@ -98,14 +259,26 @@ export class Index extends React.Component<Props, State> {
               <Route path="/signup" exact={true}>
                 <Signup client={this.props.client} root={this} />
               </Route>
-              <Route path="/contestant" exact={true}>
-                <ContestantDashboard
-                  session={this.props.session}
-                  client={this.props.client}
-                  root={this}
-                />
-              </Route>
               <Route
+                exact
+                path="/contestant"
+                render={({ match }) => {
+                  return (
+                    <ContestantDashboard
+                      session={this.props.session}
+                      client={this.props.client}
+                      serviceWorker={this.state.serviceWorker}
+                      localNotificationEnabled={
+                        this.state.localNotificationEnabled
+                      }
+                      setLocalNotificationEnabled={this.setLocalNotificationEnabled.bind(
+                        this
+                      )}
+                    />
+                  );
+                }}
+              />
+              {/* <Route
                 path="/contestant/benchmark_jobs/:id"
                 exact={true}
                 render={({ match }) => {
@@ -124,17 +297,20 @@ export class Index extends React.Component<Props, State> {
                   client={this.props.client}
                   root={this}
                 />
-              </Route>
+              </Route> */}
               <Route path="/contestant/benchmark_jobs" exact={true}>
                 <ContestantBenchmarkJobList
                   session={this.props.session}
                   client={this.props.client}
-                  incompleteOnly={false}
-                  root={this}
+                  // incompleteOnly={false}
+                  // root={this}
                 />
               </Route>
               <Route path="/" exact={true}>
-                <AudienceDashboard client={this.props.client} />
+                <AudienceDashboard
+                  session={this.props.session}
+                  client={this.props.client}
+                />
               </Route>
               <Route path="/teams" exact={true}>
                 <TeamList

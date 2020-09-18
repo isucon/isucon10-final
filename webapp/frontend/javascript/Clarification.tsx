@@ -1,11 +1,11 @@
-import type { xsuportal } from "../pb";
-import { ApiError, ApiClient } from "../common/ApiClient";
+import type { xsuportal } from "./pb";
+import { ApiError, ApiClient } from "./ApiClient";
 
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { Timestamp } from "../common/Timestamp";
-import { TimeDuration } from "../common/TimeDuration";
+import { Timestamp } from "./Timestamp";
+import { TimeDuration } from "./TimeDuration";
 
 export interface Props {
   clarification: xsuportal.proto.resources.IClarification;
@@ -14,6 +14,12 @@ export interface Props {
 
 export const Clarification: React.FC<Props> = (props: Props) => {
   const clar = props.clarification;
+
+  const onQuestionTabClick = (flag: boolean) => {
+    return (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+    };
+  };
 
   return (
     <article className="message mt-5">
@@ -48,12 +54,6 @@ export const Clarification: React.FC<Props> = (props: Props) => {
                   回答: <Timestamp timestamp={clar.answeredAt} />
                 </span>
               ) : null}
-              {props.admin ? (
-                <span>
-                  経過時間:{" "}
-                  <TimeDuration a={clar.createdAt!} b={clar.answeredAt} />
-                </span>
-              ) : null}
             </p>
           </div>
           <div className="level-right">
@@ -61,7 +61,19 @@ export const Clarification: React.FC<Props> = (props: Props) => {
               {clar.team ? (
                 <>
                   チーム:
-                  {clar.team.name} (#{clar.team.id!.toString()})
+                  {props.admin ? (
+                    <Link
+                      to={`/admin/teams/${encodeURIComponent(
+                        clar.team!.id!.toString()
+                      )}`}
+                    >
+                      {clar.team.name} (#{clar.team.id!.toString()})
+                    </Link>
+                  ) : (
+                    <>
+                      {clar.team.name} (#{clar.team.id!.toString()})
+                    </>
+                  )}
                 </>
               ) : null}
             </div>
@@ -71,13 +83,17 @@ export const Clarification: React.FC<Props> = (props: Props) => {
           <div className="column is-6">
             <h5 className="is-5">質問/要求</h5>
             <section>
-              <pre>{clar.question}</pre>
+              <pre className="isux-clarification-pre">{clar.question}</pre>
             </section>
           </div>
           <div className="column is-6">
             <h5 className="is-5">回答</h5>
             <section>
-              {clar.answered ? <pre>{clar.answer}</pre> : <p>N/A</p>}
+              {clar.answered ? (
+                <pre className="isux-clarification-pre">{clar.answer}</pre>
+              ) : (
+                <p>N/A</p>
+              )}
             </section>
           </div>
         </div>

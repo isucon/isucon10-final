@@ -1,4 +1,4 @@
-import { google } from "../pb";
+import { google } from "./pb";
 import moment from "moment";
 
 import React from "react";

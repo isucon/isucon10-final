@@ -1,19 +1,18 @@
 import { xsuportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
-
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
 
-import { Navbar } from "./Navbar";
-import { RegistrationLogin } from "./RegistrationLogin";
-import { RegistrationForm } from "./RegistrationForm";
-import { RegistrationStatus } from "./RegistrationStatus";
+import { RegistrationForm } from "./registration/RegistrationForm";
+import { RegistrationStatus } from "./registration/RegistrationStatus";
+import { Index } from "./Index";
+import { LoginRequired } from "./LoginRequired";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
+  root: Index;
 }
 
 export interface State {
@@ -69,6 +68,7 @@ export class Registration extends React.Component<Props, State> {
   public render() {
     return (
       <>
+        <LoginRequired root={this.props.root} />
         <header>
           <h1 className="title is-1">参加登録</h1>
         </header>
@@ -87,20 +87,20 @@ export class Registration extends React.Component<Props, State> {
 
   public renderPhase() {
     if (this.state.registrationSession) {
-      const login = (
-        <>
-          {this.renderTeam()}
-          <RegistrationLogin
-            client={this.props.client}
-            session={this.state.session}
-            registrationSession={this.state.registrationSession}
-          />
-        </>
-      );
+      const login = this.renderTeam();
       switch (this.state.registrationSession.status) {
         case xsuportal.proto.services.registration
           .GetRegistrationSessionResponse.Status.NOT_LOGGED_IN:
-          return login;
+          return (
+            <>
+              <div className="message is-danger">
+                <div className="message-body">
+                  参加登録をするにはログインしてください
+                </div>
+              </div>
+              {login}
+            </>
+          );
           break;
         case xsuportal.proto.services.registration
           .GetRegistrationSessionResponse.Status.CLOSED:
@@ -139,6 +139,7 @@ export class Registration extends React.Component<Props, State> {
               <RegistrationForm
                 client={this.props.client}
                 session={this.state.session}
+                root={this.props.root}
                 inviteToken={this.state.inviteToken}
                 registrationSession={this.state.registrationSession}
                 updateRegistrationSession={this.updateRegistrationSession.bind(
@@ -155,6 +156,7 @@ export class Registration extends React.Component<Props, State> {
               <RegistrationForm
                 client={this.props.client}
                 session={this.state.session}
+                root={this.props.root}
                 inviteToken={null}
                 registrationSession={this.state.registrationSession}
                 updateRegistrationSession={this.updateRegistrationSession.bind(

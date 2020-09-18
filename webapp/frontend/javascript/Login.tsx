@@ -1,10 +1,10 @@
 import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./common/ApiClient";
+import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 import { Redirect } from "react-router-dom";
 import querystring from "querystring";
 
-import { ErrorMessage } from "./common/ErrorMessage";
+import { ErrorMessage } from "./ErrorMessage";
 import { Index } from "./Index";
 
 export interface Props {

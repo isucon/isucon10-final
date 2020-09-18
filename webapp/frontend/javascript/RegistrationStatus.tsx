@@ -1,8 +1,8 @@
-import { xsuportal } from "../pb";
-import { ApiClient } from "../ApiClient";
+import { xsuportal } from "./pb";
+import { ApiClient } from "./ApiClient";
 import React from "react";
 
-import { ErrorMessage } from "../ErrorMessage";
+import { ErrorMessage } from "./ErrorMessage";
 
 export interface Props {
   client: ApiClient;
@@ -51,11 +51,18 @@ export class RegistrationStatus extends React.Component<Props, State> {
       <>
         <section className="mt-2">
           <h3 className="title is-3">登録完了</h3>
-          <p>
-            必要に応じ、下記より招待 URL をコピー &
-            チームメンバーへ共有し、チームメンバーの参加登録を行ってください
-            (代表者を含め 3 人まで)。
-          </p>
+          <ol>
+            <li>
+              必要に応じ、下記より招待 URL をコピー &
+              チームメンバーへ共有し、チームメンバーの参加登録を行ってください
+              (代表者を含め 3 人まで)。
+            </li>
+            <li>
+              代表者・メンバー問わず、Discord サーバーへ <b>必ず</b>{" "}
+              参加してください。各種アナウンスは原則 Discord もしくは本サイト
+              (ポータル) において行われます。
+            </li>
+          </ol>
         </section>
 
         <div className="mt-3">

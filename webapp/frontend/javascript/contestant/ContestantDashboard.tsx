@@ -1,30 +1,33 @@
-import React, { useEffect, useCallback, useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import useInterval from "use-interval";
-
-import { ScoreGraph } from "../dashboard/ScoreGraph";
-import { Leaderboard } from "../dashboard/Leaderboard";
-import { JobEnqueueForm } from "../dashboard/JobEnqueueForm";
-import { JobList } from "../dashboard/JobList";
-import { ApiClient } from "../common/ApiClient";
 import { xsuportal } from "../pb";
+import { ApiError, ApiClient } from "../ApiClient";
+import { TeamPinsMap, TeamPins } from "../TeamPins";
 
-import { ContestantBenchmarkJobList } from "./ContestantBenchmarkJobList";
-import { LoginRequired } from "../common/LoginRequired";
-import { Index } from "../Index";
-import { ContestantBenchmarkJobDetail } from "./ContestantBenchmarkJobDetail";
+import React from "react";
+import { Link } from "react-router-dom";
 
-interface Props {
+import { ErrorMessage } from "../ErrorMessage";
+import { ReloadButton } from "../ReloadButton";
+
+import { ContestClock } from "../ContestClock";
+import { ScoreGraph } from "../ScoreGraph";
+import { BenchmarkJobList } from "../BenchmarkJobList";
+import { ContestantBenchmarkJobForm } from "./ContestantBenchmarkJobForm";
+import { Leaderboard } from "../Leaderboard";
+import { ContestantNotificationSubscriptionPanel } from "./ContestantNotificationSubscriptionPanel";
+
+export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
-  root: Index;
+
+  serviceWorker: ServiceWorkerRegistration | null;
+  localNotificationEnabled: boolean;
+  setLocalNotificationEnabled: (flag: boolean) => any;
 }
 
-export const ContestantDashboard: React.FC<Props> = ({
-  session,
-  client,
-  root,
-}) => {
+export const ContestantDashboard: React.FC<Props> = (props: Props) => {
+  const { session, client } = props;
+  const [requestingDashboard, setRequestingDashboard] = React.useState(false);
+  const [requestingJobs, setRequestingJobs] = React.useState(false);
   const [
     dashboard,
     setDashboard,
@@ -34,53 +37,125 @@ export const ContestantDashboard: React.FC<Props> = ({
   const [jobs, setJobs] = React.useState<
     xsuportal.proto.resources.IBenchmarkJob[] | null
   >(null);
+  const [error, setError] = React.useState<Error | null>(null);
 
-  const updateDashboard = async () => {
-    setDashboard(await client.getContestantDashboard());
-    setJobs((await client.listBenchmarkJobs())?.jobs);
+  const [teamPins, setTeamPins] = React.useState(new TeamPins());
+  const [teamPinsMap, setTeamPinsMap] = React.useState(teamPins.all());
+  teamPins.onChange = setTeamPinsMap;
+
+  const refreshDashboard = () => {
+    if (requestingDashboard) return;
+    setRequestingDashboard(true);
+    return client
+      .getContestantDashboard()
+      .then((db) => {
+        setDashboard(db);
+        setError(null);
+        setRequestingDashboard(false);
+      })
+      .catch((e) => {
+        setError(e);
+        setRequestingDashboard(false);
+      });
+  };
+  const refreshJobs = () => {
+    if (requestingJobs) return;
+    setRequestingJobs(true);
+    return client
+      .listBenchmarkJobs()
+      .then((r) => {
+        setJobs(r.jobs.slice(0, 5));
+        setError(null);
+        setRequestingJobs(false);
+      })
+      .catch((e) => {
+        setError(e);
+        setRequestingJobs(false);
+      });
+  };
+  const refreshAll = () => {
+    refreshDashboard();
+    refreshJobs();
   };
 
-  useEffect(() => {
-    if (!dashboard) {
-      (async () => {
-        updateDashboard();
-      })();
-    }
-  }, [dashboard, jobs]);
+  React.useEffect(() => {
+    if (!dashboard) refreshDashboard();
+  }, [dashboard]);
+  React.useEffect(() => {
+    if (!jobs) refreshJobs();
+  }, [jobs]);
 
-  useInterval(() => {
-    (async () => {
-      updateDashboard();
-    })();
-  }, 5000);
+  React.useEffect(() => {
+    // TODO: Retry with backoff
+    const timer = setInterval(() => refreshAll(), 10000);
+    return () => clearInterval(timer);
+  }, []);
+
+  if (!dashboard || !jobs)
+    return (
+      <>
+        {error ? <ErrorMessage error={error} /> : null}
+        <p>Loading...</p>
+      </>
+    );
 
   return (
     <>
-      <LoginRequired root={root} />
-      <div className="container">
-        <section className="is-fullwidth px-5 py-5">
-          <ScoreGraph teams={dashboard?.leaderboard?.teams} />
-        </section>
-        <div className="columns">
-          <div className="column is-7 px-5">
-            <section className="py-5">
-              <p className="title"> Leader Board </p>
-              <Leaderboard leaderboard={dashboard?.leaderboard} />
-            </section>
+      {error ? <ErrorMessage error={error} /> : null}
+      <section className="">
+        <div className="level">
+          <div className="level-left">
+            <ContestClock contest={session.contest!} />
           </div>
-          <div className="column is-5 px-5">
-            <section className="py-5">
-              <p className="title"> Job Enqueue Form </p>
-              <JobEnqueueForm client={client} />
-            </section>
-            <section className="py-5">
-              <p className="title"> Job List </p>
-              <p>
-                <Link to="/contestant/benchmark_jobs">Show All</Link>
-              </p>
-              <JobList jobs={jobs} />
-            </section>
+          <div className="level-right has-text-right">
+            <div className="mr-1">
+              <ContestantNotificationSubscriptionPanel
+                session={session}
+                client={client}
+                serviceWorker={props.serviceWorker}
+                localNotificationEnabled={props.localNotificationEnabled}
+                setLocalNotificationEnabled={props.setLocalNotificationEnabled}
+              />
+            </div>
+            <ReloadButton
+              requesting={requestingDashboard || requestingJobs}
+              onClick={refreshAll}
+            />
           </div>
+        </div>
+      </section>
+      <section className="is-fullwidth py-5 is-hidden-touch">
+        <ScoreGraph
+          teams={dashboard?.leaderboard?.teams!}
+          contest={session.contest!}
+          teamId={session.team!.id!}
+          teamPins={teamPinsMap}
+        />
+      </section>
+      <div className="columns">
+        <div className="column is-7 px-5">
+          <section className="py-5">
+            <p className="title"> Leaderboard </p>
+            <Leaderboard
+              leaderboard={dashboard?.leaderboard!}
+              teamId={session.team!.id!}
+              teamPins={teamPinsMap}
+              onPin={teamPins.set}
+            />
+          </section>
+        </div>
+        <div className="column is-5 px-5">
+          <section className="py-5">
+            <p className="title"> Job Enqueue Form </p>
+            <ContestantBenchmarkJobForm session={session} client={client} />
+          </section>
+          <section className="py-5">
+            <p className="title"> Job List </p>
+            <p>
+              <Link to="/contestant/benchmark_jobs">Show All</Link>
+            </p>
+            <BenchmarkJobList list={jobs} />
+          </section>
         </div>
       </div>
     </>

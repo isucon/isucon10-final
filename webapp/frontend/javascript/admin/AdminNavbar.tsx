@@ -4,7 +4,7 @@ import { AdminApiClient } from "./AdminApiClient";
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { ErrorMessage } from "../common/ErrorMessage";
+import { ErrorMessage } from "../ErrorMessage";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
