@@ -118,7 +118,7 @@ export class Navbar extends React.Component<Props, State> {
 
   loginPath() {
     return (document.querySelector(
-      'meta[name="isux:github-auth-path"]'
+      'meta[name="xsu:github-auth-path"]'
     )! as HTMLMetaElement).content;
   }
 

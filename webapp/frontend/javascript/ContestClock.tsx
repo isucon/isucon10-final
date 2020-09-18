@@ -36,7 +36,7 @@ export const ContestClock: React.FC<Props> = ({ contest }) => {
     n < 10 ? `0${Math.floor(n)}` : `${Math.floor(n)}`;
 
   return (
-    <div className="isux-contest-clock">
+    <div className="xsu-contest-clock">
       <div className="columns is-vcentered">
         <div className="column is-narrow">
           <p>

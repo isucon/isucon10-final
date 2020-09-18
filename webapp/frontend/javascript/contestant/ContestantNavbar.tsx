@@ -102,7 +102,7 @@ export class ContestantNavbar extends React.Component<Props, State> {
             </div>
             <div className="navbar-end">
               <div className="navbar-item">
-                <div className="media isux-navbar-contestant">
+                <div className="media xsu-navbar-contestant">
                   <div className="media-left">
                     <p className="image">
                       <img src="" height={32} width={32} />

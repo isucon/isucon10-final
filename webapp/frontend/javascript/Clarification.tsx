@@ -83,14 +83,14 @@ export const Clarification: React.FC<Props> = (props: Props) => {
           <div className="column is-6">
             <h5 className="is-5">質問/要求</h5>
             <section>
-              <pre className="isux-clarification-pre">{clar.question}</pre>
+              <pre className="xsu-clarification-pre">{clar.question}</pre>
             </section>
           </div>
           <div className="column is-6">
             <h5 className="is-5">回答</h5>
             <section>
               {clar.answered ? (
-                <pre className="isux-clarification-pre">{clar.answer}</pre>
+                <pre className="xsu-clarification-pre">{clar.answer}</pre>
               ) : (
                 <p>N/A</p>
               )}

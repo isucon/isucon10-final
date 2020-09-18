@@ -8,7 +8,7 @@ import ReactDOM from "react-dom";
   const client = new ApiClient();
   const session = await client.getCurrentSession();
   const release = document.querySelector<HTMLMetaElement>(
-    'meta[name="isux:release"]'
+    'meta[name="xsu:release"]'
   )?.content;
   updateNavBarSession(session);
   const elem = document.getElementById("app");

@@ -38,8 +38,8 @@ const TeamItem: React.FC<TeamItemProps> = ({
   );
   const classNames = [];
   if (pinned && itemType == "pinned")
-    classNames.push("isux-leaderboard-pinned");
-  if (me) classNames.push("isux-leaderboard-me");
+    classNames.push("xsu-leaderboard-pinned");
+  if (me) classNames.push("xsu-leaderboard-me");
   if (animationClassName) classNames.push(animationClassName);
 
   React.useEffect(() => {
@@ -47,9 +47,9 @@ const TeamItem: React.FC<TeamItemProps> = ({
     if (!changed) return;
     const set = lastPosition && lastPosition != position;
     if (lastPosition > position) {
-      setAnimationClassName("isux-leaderboard-change-up");
+      setAnimationClassName("xsu-leaderboard-change-up");
     } else if (lastPosition < position) {
-      setAnimationClassName("isux-leaderboard-change-down");
+      setAnimationClassName("xsu-leaderboard-change-down");
     }
     if (!set) return;
     setAnimationEpoch(animationEpoch + 1);
@@ -69,7 +69,7 @@ const TeamItem: React.FC<TeamItemProps> = ({
       <th className="has-text-centered">
         {me ? null : (
           <i
-            className={`isux-pin-button is-small ${
+            className={`xsu-pin-button is-small ${
               pinned
                 ? "material-icons has-text-danger"
                 : "material-icons-outlined has-text-grey-light"
@@ -209,7 +209,7 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
           </li>
         </ul>
       </div>
-      <table className="table is-hoverable is-fullwidth isux-leaderboard">
+      <table className="table is-hoverable is-fullwidth xsu-leaderboard">
         <thead>
           <tr className="has-background-light">
             <th></th>

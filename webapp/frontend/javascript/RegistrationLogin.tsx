@@ -32,13 +32,13 @@ export class RegistrationLogin extends React.Component<Props, State> {
 
   githubLoginUrl() {
     return (document.querySelector(
-      'meta[name="isux:github-auth-path"]'
+      'meta[name="xsu:github-auth-path"]'
     ) as HTMLMetaElement).content;
   }
 
   discordLoginUrl() {
     return (document.querySelector(
-      'meta[name="isux:discord-auth-path"]'
+      'meta[name="xsu:discord-auth-path"]'
     ) as HTMLMetaElement).content;
   }
 
