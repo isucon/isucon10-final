@@ -62,6 +62,8 @@ github.com/isucon/isucandar v0.0.0-20200918155905-0c87e3b612d5 h1:PWLhi0+vOCPoH5
 github.com/isucon/isucandar v0.0.0-20200918155905-0c87e3b612d5/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
 github.com/isucon/isucandar v0.0.0-20200918160715-69a59e1d24f8 h1:IMcY/vflICcBsZc4Kv8SolGLqFDg4RTH7sygrZoy4Eg=
 github.com/isucon/isucandar v0.0.0-20200918160715-69a59e1d24f8/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
+github.com/isucon/isucandar v0.0.0-20200918161941-d592aededc9c h1:t1HeenFckn6pAGm5VTTR/YEqttr03vQUOGv9TQQU/r4=
+github.com/isucon/isucandar v0.0.0-20200918161941-d592aededc9c/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
 github.com/isucon/isucon10-portal v0.0.0-20200917214541-7e143562573b h1:kb3lFCEjjfYPf2uSdFJP5afuB9DtddIge1ApFju4N4s=
 github.com/isucon/isucon10-portal v0.0.0-20200917214541-7e143562573b/go.mod h1:4hdJ/uFyj4jMNPfKq8KkrsrPyw5nV7B/5JRcAu1sgQM=
 github.com/julienschmidt/httprouter v1.3.0 h1:U0609e9tgbseu3rBINet9P48AI/D3oJs4dN7jwJOQ1U=
