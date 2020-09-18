@@ -48,6 +48,8 @@ github.com/isucon/isucandar v0.0.0-20200917154844-b278be69c6b1 h1:C/ES1aEdQmno1n
 github.com/isucon/isucandar v0.0.0-20200917154844-b278be69c6b1/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
 github.com/isucon/isucandar v0.0.0-20200918051332-61edc99968b6 h1:f+jlHfIzX/DYnwCBFHeUiRm4/Q8jtFvhkp6jj1vCHOk=
 github.com/isucon/isucandar v0.0.0-20200918051332-61edc99968b6/go.mod h1:DabLo2y0QISfvcK5/KF3VWCGeJUOC8t0DptYVi6lUYw=
+github.com/isucon/isucon10-portal v0.0.0-20200917214541-7e143562573b h1:kb3lFCEjjfYPf2uSdFJP5afuB9DtddIge1ApFju4N4s=
+github.com/isucon/isucon10-portal v0.0.0-20200917214541-7e143562573b/go.mod h1:4hdJ/uFyj4jMNPfKq8KkrsrPyw5nV7B/5JRcAu1sgQM=
 github.com/julienschmidt/httprouter v1.3.0 h1:U0609e9tgbseu3rBINet9P48AI/D3oJs4dN7jwJOQ1U=
 github.com/julienschmidt/httprouter v1.3.0/go.mod h1:JR6WtHb+2LUe8TCKY3cZOxFyyO8IZAc4RVcycCCAKdM=
 github.com/klauspost/compress v1.4.1/go.mod h1:RyIbtBH6LamlWaDj8nUwkbUhJ87Yi3uG0guNDohfE1A=
@@ -124,6 +126,7 @@ google.golang.org/grpc v1.25.1/go.mod h1:c3i+UQWmh7LiEpx4sFZnkU36qjEYZ0imhYfXVyQ
 google.golang.org/grpc v1.27.0/go.mod h1:qbnxyOmOxrQa7FizSgH+ReBfzJrCY1pSN7KXBS8abTk=
 google.golang.org/grpc v1.31.0 h1:T7P4R73V3SSDPhH7WW7ATbfViLtmamH0DKrP3f9AuDI=
 google.golang.org/grpc v1.31.0/go.mod h1:N36X2cJ7JwdamYAgDz+s+rVMFjt3numwzf/HckM8pak=
+google.golang.org/grpc/cmd/protoc-gen-go-grpc v0.0.0-20200902210233-8630cac324bf/go.mod h1:6Kw0yEErY5E/yWrBtf03jp27GLLJujG4z/JK95pnjjw=
 google.golang.org/protobuf v0.0.0-20200109180630-ec00e32a8dfd/go.mod h1:DFci5gLYBciE7Vtevhsrf46CRTquxDuWsQurQQe4oz8=
 google.golang.org/protobuf v0.0.0-20200221191635-4d8936d0db64/go.mod h1:kwYJMbMJ01Woi6D6+Kah6886xMZcty6N08ah7+eCXa0=
 google.golang.org/protobuf v0.0.0-20200228230310-ab0ca4ff8a60/go.mod h1:cfTl7dwQJ+fmap5saPgwCLgHXTUD7jkjRqWcaiX5VyM=
