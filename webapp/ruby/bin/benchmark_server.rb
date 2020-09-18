@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 $: << File.expand_path('../lib', __dir__)
+require 'etc'
 require 'logger'
 require 'griffin'
 require 'grpc'
@@ -24,8 +25,8 @@ Griffin::Server.configure do |c|
   ]
 
   c.workers 2
-  c.pool_size 100,100
-  c.connection_size 100,100
+  c.pool_size 5,5
+  c.connection_size 5,5
 
   c.logger Logger.new($stdout)
 end
