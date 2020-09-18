@@ -88,11 +88,11 @@ func (s *Scenario) loadBenchmarker(ctx context.Context, step *isucandar.Benchmar
 	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
 	defer cancel()
 
-	benchmarkers := parallel.NewParallel(-1)
+	benchmarkers := parallel.NewParallel(ctx, -1)
 	s.bpubsub.Subscribe(ctx, func(teamID interface{}) {
 		tid := teamID.(int64)
 		benchmarker := s.NewBenchmarker(tid)
-		benchmarkers.Do(ctx, func(ctx context.Context) {
+		benchmarkers.Do(func(ctx context.Context) {
 		P:
 			if err := benchmarker.Process(ctx, step); err != nil {
 				step.AddError(err)
@@ -104,7 +104,7 @@ func (s *Scenario) loadBenchmarker(ctx context.Context, step *isucandar.Benchmar
 		})
 	})
 
-	benchmarkers.Do(ctx, func(ctx context.Context) {
+	benchmarkers.Do(func(ctx context.Context) {
 		<-ctx.Done()
 	})
 
@@ -246,10 +246,10 @@ func (s *Scenario) loadSignup(ctx context.Context, step *isucandar.BenchmarkStep
 			}
 		}
 
-		para := parallel.NewParallel(2)
+		para := parallel.NewParallel(ctx, 2)
 
-		para.Do(ctx, signupMember(dev, "dev"))
-		para.Do(ctx, signupMember(ops, "ops"))
+		para.Do(signupMember(dev, "dev"))
+		para.Do(signupMember(ops, "ops"))
 
 		para.Wait()
 	}, worker.WithInfinityLoop())
@@ -527,7 +527,7 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
 	defer cancel()
 
-	audience := parallel.NewParallel(-1)
+	audience := parallel.NewParallel(ctx, -1)
 	audienceLoad := func(ctx context.Context) {
 		viewer, err := s.NewAgent()
 		if err != nil {
@@ -558,10 +558,10 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 	}
 
 	s.rpubsub.Subscribe(ctx, func(_ interface{}) {
-		audience.Do(ctx, audienceLoad)
+		audience.Do(audienceLoad)
 	})
 
-	audience.Do(ctx, func(ctx context.Context) {
+	audience.Do(func(ctx context.Context) {
 		<-ctx.Done()
 	})
 

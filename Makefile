@@ -44,7 +44,7 @@ help: ## Display this help screen
 go.sum: go.mod
 	GOPRIVATE=$(GOPRIVATE) go mod download
 
-bin/benchmarker: go.mod $(GOFILES) $(GOPROTOFILES)
+bin/benchmarker: Makefile go.mod $(GOFILES) $(GOPROTOFILES)
 	GOPRIVATE=$(GOPRIVATE) go build -race -o bin/benchmarker -v ./benchmarker
 
 $(GOPROTOFILES): $(PROTOFILES)
