@@ -5,7 +5,7 @@ go 1.14
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/protobuf v1.4.2
-	github.com/isucon/isucandar v0.0.0-20200918153240-02c581ebe357
+	github.com/isucon/isucandar v0.0.0-20200918160715-69a59e1d24f8
 	github.com/isucon/isucon10-portal v0.0.0-20200917214541-7e143562573b
 	github.com/kr/pretty v0.1.0 // indirect
 	golang.org/x/sys v0.0.0-20200602225109-6fdc65e7d980 // indirect
