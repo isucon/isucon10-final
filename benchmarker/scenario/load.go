@@ -196,6 +196,9 @@ func (s *Scenario) loadSignup(ctx context.Context, step *isucandar.BenchmarkStep
 			return
 		}
 
+		memberInviteURL := registration.GetMemberInviteUrl()
+		inviteToken := registration.GetInviteToken()
+
 		signupMember := func(member *model.Contestant, role string) func(context.Context) {
 			return func(ctx context.Context) {
 				_, _, err = BrowserAccess(ctx, member, "/signup")
@@ -220,13 +223,13 @@ func (s *Scenario) loadSignup(ctx context.Context, step *isucandar.BenchmarkStep
 				}
 				// TODO: Check signup
 
-				_, _, err = BrowserAccess(ctx, member, registration.GetMemberInviteUrl())
+				_, _, err = BrowserAccess(ctx, member, memberInviteURL)
 				if err != nil {
 					step.AddError(err)
 					return
 				}
 
-				_, err = JoinTeamAction(ctx, team, member, registration.GetInviteToken())
+				_, err = JoinTeamAction(ctx, team, member, inviteToken)
 				if err != nil {
 					step.AddError(err)
 					return
