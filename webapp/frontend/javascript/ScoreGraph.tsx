@@ -49,7 +49,7 @@ export const ScoreGraph: React.FC<Props> = ({
   const [chart, setChart] = React.useState<uPlot | null>(null);
 
   const cacheKey = JSON.stringify(calculateGraphCacheKey(teams));
-  //console.log("render", cacheKey);
+  console.log("render", cacheKey);
 
   const targetTeams = showPinnedOnly
     ? teams.filter(
@@ -148,7 +148,7 @@ export const ScoreGraph: React.FC<Props> = ({
         },
       ],
     };
-    //console.log(data);
+    console.log(data);
 
     const newChart = new uPlot(opts, data, elem.current);
     setChart(newChart);
@@ -161,8 +161,8 @@ export const ScoreGraph: React.FC<Props> = ({
     chart.setData(data);
   }, [chart, cacheKey]);
 
-  const classNames = ["isux-scoregraph"];
-  if (showPinnedOnly) classNames.push("isux-scoregraph-pinnedonly");
+  const classNames = ["xsu-scoregraph"];
+  if (showPinnedOnly) classNames.push("xsu-scoregraph-pinnedonly");
 
   return (
     <section>

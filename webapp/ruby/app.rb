@@ -27,7 +27,7 @@ module Xsuportal
 
     end
 
-    %w[/ /registration /signup /login /logout].each do |path|
+    %w[/ /registration /signup /login /logout /teams].each do |path|
       get path do
         File.read(File.join('public', 'audience.html'))
       end
@@ -606,7 +606,7 @@ module Xsuportal
       )
     end
 
-    # nainaru
+    # TODO: けす
     get '/api/contest' do
       contest_status = current_contest_status
       contest = contest_status[:contest]
