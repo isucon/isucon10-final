@@ -201,7 +201,7 @@ func (s *Scenario) loadSignup(ctx context.Context, step *isucandar.BenchmarkStep
 
 		signupMember := func(member *model.Contestant, role string) func(context.Context) {
 			return func(ctx context.Context) {
-				_, _, err = BrowserAccess(ctx, member, "/signup")
+				_, _, err := BrowserAccess(ctx, member, "/signup")
 				if err != nil {
 					step.AddError(err)
 					return
