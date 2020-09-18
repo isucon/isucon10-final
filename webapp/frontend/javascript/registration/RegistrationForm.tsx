@@ -3,7 +3,6 @@ import { ApiClient } from "../ApiClient";
 import React from "react";
 
 import { ErrorMessage } from "../ErrorMessage";
-import { Index } from "../Index";
 
 export interface Props {
   client: ApiClient;

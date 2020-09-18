@@ -4,7 +4,6 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
-import { Index } from "./Index";
 
 export interface Props {
   client: ApiClient;

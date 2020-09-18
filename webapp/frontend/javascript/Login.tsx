@@ -5,20 +5,18 @@ import { Redirect } from "react-router-dom";
 import querystring from "querystring";
 
 import { ErrorMessage } from "./ErrorMessage";
-import { Index } from "./Index";
 
 export interface Props {
   client: ApiClient;
-  root: Index;
 }
 
 export interface State {
   error: Error | null;
+  session: xsuportal.proto.services.common.GetCurrentSessionResponse | null;
   contestantId: string;
   password: string;
-  isStaff: boolean | null | undefined;
   requesting: boolean;
-  loginSucceeded: boolean;
+  registrationSession: xsuportal.proto.services.registration.IGetRegistrationSessionResponse | null;
 }
 
 export class Login extends React.Component<Props, State> {
@@ -26,26 +24,36 @@ export class Login extends React.Component<Props, State> {
     super(props);
     this.state = {
       error: null,
+      session: null,
       contestantId: "",
       password: "",
-      isStaff: null,
       requesting: false,
-      loginSucceeded: false,
+      registrationSession: null,
     };
   }
 
-  public componentDidMount() {}
+  public async componentDidMount() {
+    this.setState({
+      registrationSession: await this.props.client.getRegistrationSession(),
+    });
+  }
 
   public render() {
-    if (this.state.loginSucceeded) {
+    const currentContestant = this.state.session?.contestant;
+
+    if (currentContestant) {
       const params = querystring.parse(window.location.search.slice(1));
       if (params.redirect) {
         console.log("redirect: ", params.redirect.toString());
         return <Redirect to={params.redirect.toString()}></Redirect>;
       } else {
-        if (this.state.isStaff) {
+        if (currentContestant.isStaff) {
           return <a href="/admin/">管理画面へ</a>;
-        } else if (this.props.root.state.registered) {
+        } else if (
+          this.state.registrationSession?.status ==
+          xsuportal.proto.services.registration.GetRegistrationSessionResponse
+            .Status.JOINED
+        ) {
           return <Redirect to="/"></Redirect>;
         } else {
           return (
@@ -162,17 +170,15 @@ export class Login extends React.Component<Props, State> {
         password: this.state.password,
       });
       const session = await this.props.client.getCurrentSession();
-      this.props.root.setState({
-        loggedin: true,
-        registered: !!session.team,
-        session: session,
-      });
+      const registrationSession = await this.props.client.getRegistrationSession();
+
       this.setState({
-        loginSucceeded: true,
         error: null,
         requesting: false,
-        isStaff: session.contestant?.isStaff,
+        session: session,
+        registrationSession: registrationSession,
       });
+      location.reload();
     } catch (err) {
       this.setState({ error: err, requesting: false });
     }

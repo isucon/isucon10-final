@@ -10,6 +10,8 @@ import { Navbar } from "./Navbar";
 import { TeamList } from "./TeamList";
 import { AudienceDashboard } from "./AudienceDashboard";
 import { Registration } from "./Registration";
+import { Logout } from "./Logout";
+import { Login } from "./Login";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
@@ -76,6 +78,31 @@ export class AudienceApp extends React.Component<Props, State> {
                 return (
                   <>
                     <Registration
+                      session={this.props.session}
+                      client={this.props.client}
+                    />
+                  </>
+                );
+              }}
+            />
+            <Route
+              exact
+              path="/login"
+              render={() => {
+                return (
+                  <>
+                    <Login client={this.props.client} />
+                  </>
+                );
+              }}
+            />
+            <Route
+              exact
+              path="/logout"
+              render={() => {
+                return (
+                  <>
+                    <Logout
                       session={this.props.session}
                       client={this.props.client}
                     />

@@ -95,47 +95,16 @@ export class Navbar extends React.Component<Props, State> {
   public renderNavbarLoginButtons() {
     if (this.props.session.contestant) {
       return (
-        <>
-          <a
-            className="button is-light"
-            href="/session"
-            onClick={this.onLogout.bind(this)}
-          >
-            ログアウト
-          </a>
-        </>
+        <Link className="button is-light" to="/logout">
+          ログアウト
+        </Link>
       );
     } else {
       return (
-        <>
-          <a className="button is-light" href={this.loginPath()}>
-            ログイン
-          </a>
-        </>
+        <Link className="button is-light" to="/login">
+          ログイン
+        </Link>
       );
     }
-  }
-
-  loginPath() {
-    return (document.querySelector(
-      'meta[name="xsu:github-auth-path"]'
-    )! as HTMLMetaElement).content;
-  }
-
-  onLogout(e: React.MouseEvent<HTMLAnchorElement>) {
-    e.preventDefault();
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = "/session";
-    document.body.appendChild(form);
-
-    const method = document.createElement("input");
-    method.type = "hidden";
-    method.name = "_method";
-    method.value = "delete";
-    form.appendChild(method);
-
-    form.submit();
   }
 }
