@@ -1,5 +1,5 @@
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    tonic_build::configure().compile(
+    tonic_build::configure().build_client(false).compile(
         &[
             "../../proto/xsuportal/error.proto",
             "../../proto/xsuportal/resources/benchmark_job.proto",
