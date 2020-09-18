@@ -3,6 +3,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         &[
             "../../proto/xsuportal/error.proto",
             "../../proto/xsuportal/resources/benchmark_job.proto",
+            "../../proto/xsuportal/resources/benchmark_result.proto",
+            "../../proto/xsuportal/resources/clarification.proto",
             "../../proto/xsuportal/resources/contest.proto",
             "../../proto/xsuportal/resources/contestant.proto",
             "../../proto/xsuportal/resources/leaderboard.proto",
