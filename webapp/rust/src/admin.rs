@@ -22,7 +22,7 @@ pub async fn initialize(
     const ADMIN_PASSWORD: &str = "admin";
     let message = message.0;
 
-    web::block::<_, _, mysql::Error>(move || {
+    web::block::<_, _, crate::Error>(move || {
         let mut conn = db.get().expect("Failed to checkout database connection");
         conn.query_drop("TRUNCATE `teams`")?;
         conn.query_drop("TRUNCATE `contestants`")?;
@@ -44,7 +44,7 @@ pub async fn initialize(
                   `contest_freezes_at`,
                   `contest_ends_at`
                 ) VALUES (?, ?, ?, ?)
-            "#, (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at))
+            "#, (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at))?;
         } else {
             conn.query_drop(r#"
                 INSERT `contest_config` (
@@ -58,10 +58,11 @@ pub async fn initialize(
                   TIMESTAMPADD(SECOND, 40, NOW(6)),
                   TIMESTAMPADD(SECOND, 50, NOW(6))
                 )
-            "#)
+            "#)?;
         }
+        Ok(())
     })
-    .await?;
+    .await.map_err(crate::unwrap_blocking_error)?;
     HttpResponse::Ok().protobuf(InitializeResponse {
         // 実装言語
         language: "rust".to_owned(),

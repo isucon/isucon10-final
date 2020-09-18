@@ -9,7 +9,7 @@ pub async fn get_current_session(
     db: web::Data<crate::Pool>,
 ) -> Result<HttpResponse, AWError> {
     let contestant_id: Option<String> = session.get("contestant_id")?;
-    let resp = web::block::<_, _, mysql::Error>(move || {
+    let resp = web::block::<_, _, crate::Error>(move || {
         let mut conn = db.get().expect("Failed to checkout database connection");
         let current_contestant =
             crate::get_current_contestant(conn.deref_mut(), &contestant_id, false)?;
@@ -34,6 +34,7 @@ pub async fn get_current_session(
             team,
         })
     })
-    .await?;
+    .await
+    .map_err(crate::unwrap_blocking_error)?;
     HttpResponse::Ok().protobuf(resp)
 }

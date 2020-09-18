@@ -18,14 +18,15 @@ pub async fn login(
     let message = message.0;
     let contestant_id = message.contestant_id.clone();
 
-    let result: Option<(String,)> = web::block(move || {
+    let result: Option<(String,)> = web::block::<_, _, crate::Error>(move || {
         let mut conn = db.get().expect("Failed to checkout database connection");
-        conn.exec_first(
+        Ok(conn.exec_first(
             "SELECT `password` FROM `contestants` WHERE `id` = ? LIMIT 1",
             (contestant_id,),
-        )
+        )?)
     })
-    .await?;
+    .await
+    .map_err(crate::unwrap_blocking_error)?;
 
     if let Some((password,)) = result {
         if ring::constant_time::verify_slices_are_equal(
@@ -103,11 +104,15 @@ pub async fn signup(
 ) -> Result<HttpResponse, AWError> {
     let contestant_id = message.0.contestant_id.clone();
     let hashed_password = crate::sha256_hexdigest(&message.0.password);
-    let result = web::block(move||{
+    let result = web::block::<_, _, crate::Error>(move||{
         let mut conn = db.get().expect("Failed to checkout database connection");
-        conn.exec_drop("INSERT INTO `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, FALSE, NOW(6))", (contestant_id, hashed_password))
+        conn.exec_drop("INSERT INTO `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, FALSE, NOW(6))", (contestant_id, hashed_password))?;
+        Ok(())
     }).await;
-    if let Err(actix_web::error::BlockingError::Error(mysql::Error::MySqlError(ref e))) = result {
+    if let Err(actix_web::error::BlockingError::Error(crate::Error::DatabaseError(
+        mysql::Error::MySqlError(ref e),
+    ))) = result
+    {
         if e.code == mysql::ServerError::ER_DUP_ENTRY as u16 {
             return Err(crate::Error::UserError(
                 StatusCode::BAD_REQUEST,
@@ -116,7 +121,7 @@ pub async fn signup(
             .into());
         }
     }
-    result?;
+    result.map_err(crate::unwrap_blocking_error)?;
     session.set("contestant_id", message.0.contestant_id)?;
     HttpResponse::Ok().protobuf(SignupResponse {})
 }
