@@ -2,7 +2,6 @@ package scenario
 
 import (
 	"context"
-	"fmt"
 	"net/url"
 	"sync"
 	"sync/atomic"
@@ -80,12 +79,14 @@ func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) erro
 
 	wg.Wait()
 
+	<-time.After(s.Contest.ContestEndsAt.Add(1 * time.Second).Sub(time.Now()))
+
 	return nil
 }
 
 // 競技者用ベンチマーカーの起動。1チームにつき1ベンチマーカー起動する。
 func (s *Scenario) loadBenchmarker(ctx context.Context, step *isucandar.BenchmarkStep) {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(-1*time.Second))
 	defer cancel()
 
 	benchmarkers := parallel.NewParallel(ctx, -1)
@@ -93,13 +94,16 @@ func (s *Scenario) loadBenchmarker(ctx context.Context, step *isucandar.Benchmar
 		tid := teamID.(int64)
 		benchmarker := s.NewBenchmarker(tid)
 		benchmarkers.Do(func(ctx context.Context) {
-		P:
-			if err := benchmarker.Process(ctx, step); err != nil {
-				step.AddError(err)
-			}
+			for {
+				if err := benchmarker.Process(ctx, step); err != nil {
+					step.AddError(err)
+				}
 
-			if ctx.Err() == nil {
-				goto P
+				select {
+				case <-ctx.Done():
+					return
+				default:
+				}
 			}
 		})
 	})
@@ -270,13 +274,19 @@ func (s *Scenario) loadSignup(ctx context.Context, step *isucandar.BenchmarkStep
 
 // 競技者によるベンチマークの開始。
 func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(-1*time.Second))
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
 	defer cancel()
 
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
 		team := s.Contest.Teams[index]
 
-		for ctx.Err() == nil {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case team.EnqueueLock <- struct{}{}:
+			}
+
 			if job := team.GetLatestEnqueuedBenchmarkJob(); job != nil {
 				continue
 			}
@@ -286,23 +296,19 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 			go GetDashboardAction(ctx, team, team.Developer)
 			go GetBenchmarkJobs(ctx, team, team.Developer)
 
-			if ctx.Err() != nil {
-				return
-			}
-
 			job, err := EnqueueBenchmarkJobAction(ctx, team)
 			if err != nil {
-				if failure.Is(err, context.Canceled) || failure.Is(err, context.DeadlineExceeded) {
+				if failure.IsCode(err, ErrScenarioCancel) {
 					return
 				}
-				step.AddError(fmt.Errorf("%v: Team: %d", err, team.ID))
+				step.AddError(err)
 				continue
 			}
 
 			team.Enqueued(job)
 			step.AddScore("enqueue-benchmark")
 
-			s.loadWaitBenchmark(ctx, step, team, job)
+			go s.loadWaitBenchmark(ctx, step, team, job)
 		}
 	}, worker.WithLoopCount(int32(len(s.Contest.Teams))))
 	if err != nil {
@@ -317,7 +323,9 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 // 競技者によるベンチマーク実行待ちの処理。自動更新1秒間隔。
 // 結果出力後に詳細を見る。
 func (s *Scenario) loadWaitBenchmark(ctx context.Context, step *isucandar.BenchmarkStep, team *model.Team, job *contestant.EnqueueBenchmarkJobResponse) {
-	for ctx.Err() == nil {
+	defer func() { <-team.EnqueueLock }()
+
+	for {
 		timer := time.After(1 * time.Second)
 		res, err := GetBenchmarkJobs(ctx, team, team.Developer)
 		if err != nil {
@@ -339,7 +347,12 @@ func (s *Scenario) loadWaitBenchmark(ctx context.Context, step *isucandar.Benchm
 				break
 			}
 		}
-		<-timer
+
+		select {
+		case <-ctx.Done():
+			return
+		case <-timer:
+		}
 	}
 }
 

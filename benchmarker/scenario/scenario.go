@@ -11,6 +11,7 @@ import (
 
 var (
 	ErrScenarioCretical failure.StringCode = "scenario-critical"
+	ErrScenarioCancel   failure.StringCode = "scenario-cancel"
 )
 
 type Scenario struct {
@@ -25,10 +26,8 @@ type Scenario struct {
 }
 
 func NewScenario() (*Scenario, error) {
-	contest := model.NewContest()
 	return &Scenario{
 		mu:           sync.RWMutex{},
-		Contest:      contest,
 		TeamCapacity: -1,
 		bpubsub:      pubsub.NewPubSub(),
 		rpubsub:      pubsub.NewPubSub(),

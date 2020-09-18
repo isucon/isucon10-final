@@ -28,6 +28,7 @@ type Team struct {
 	FroezenBestScore           int64
 	benchmarkResults           []*BenchmarkResult
 	latestEnqueuedBenchmarkJob *contestant.EnqueueBenchmarkJobResponse
+	EnqueueLock                chan struct{}
 }
 
 func NewTeam() (*Team, error) {
@@ -74,6 +75,7 @@ func NewTeam() (*Team, error) {
 		FroezenBestScore:           0,
 		benchmarkResults:           []*BenchmarkResult{},
 		latestEnqueuedBenchmarkJob: nil,
+		EnqueueLock:                make(chan struct{}, 1),
 	}, nil
 }
 

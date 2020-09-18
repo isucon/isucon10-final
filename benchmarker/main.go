@@ -46,7 +46,7 @@ func main() {
 	s, err := scenario.NewScenario()
 	s.BaseURL = fmt.Sprintf("http://%s/", targetAddress)
 
-	b, err := isucandar.NewBenchmark(isucandar.WithPrepareTimeout(10*time.Second), isucandar.WithLoadTimeout(60*time.Second))
+	b, err := isucandar.NewBenchmark(isucandar.WithPrepareTimeout(5*time.Second), isucandar.WithLoadTimeout(60*time.Second))
 	if err != nil {
 		panic(err)
 	}
@@ -54,6 +54,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	b.IgnoreErrorCode(scenario.ErrScenarioCancel)
 
 	b.AddScenario(s)
 

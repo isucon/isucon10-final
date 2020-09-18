@@ -17,8 +17,8 @@ type Contest struct {
 	teamsByID          map[int64]*Team
 }
 
-func NewContest() *Contest {
-	now := time.Now().Truncate(time.Second)
+func NewContest(now time.Time) *Contest {
+	now = now.Truncate(time.Second)
 
 	return &Contest{
 		mu:                 sync.RWMutex{},

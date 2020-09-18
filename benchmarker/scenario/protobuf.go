@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/isucon/isucandar/agent"
@@ -27,7 +28,7 @@ func (p *ProtobufError) ErrorCode() string {
 }
 
 func (p *ProtobufError) Error() string {
-	return p.XError.GetHumanMessage()
+	return fmt.Sprintf("%s: %s", p.ErrorCode(), p.XError.GetHumanMessage())
 }
 
 func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpath string, req proto.Message, res proto.Message) (*http.Response, error) {
@@ -49,6 +50,9 @@ func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpa
 
 	httpres, err := agent.Do(ctx, httpreq)
 	if err != nil {
+		if failure.Is(err, context.DeadlineExceeded) || failure.Is(err, context.Canceled) || strings.Contains(err.Error(), "context deadline exceeded") {
+			return nil, failure.NewError(ErrScenarioCancel, err)
+		}
 		return nil, err
 	}
 

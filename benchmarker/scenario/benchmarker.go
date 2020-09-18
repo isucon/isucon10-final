@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
+	"sync/atomic"
+	"time"
 
 	"github.com/isucon/isucandar"
 	"github.com/isucon/isucandar/failure"
@@ -44,6 +46,8 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 			step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
 		}
 	}()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
 
 	host := fmt.Sprintf("%s:%d", b.GRPCHost, b.GRPCPort)
 
@@ -56,6 +60,7 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 	queue := bench.NewBenchmarkQueueClient(conn)
 	report := bench.NewBenchmarkReportClient(conn)
 
+	retry := int32(10)
 	for ctx.Err() == nil {
 		func() {
 			defer func() {
@@ -67,6 +72,15 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 			job, err := b.receiveBenchmarkJob(ctx, queue)
 			if err != nil {
 				errCode := grpc.Code(err)
+				if errCode == codes.Unavailable {
+					if atomic.LoadInt32(&retry) > 0 {
+						atomic.AddInt32(&retry, -1)
+						<-time.After(1 * time.Second)
+						return
+					} else {
+						cancel()
+					}
+				}
 				if errCode != codes.DeadlineExceeded && errCode != codes.Canceled {
 					step.AddError(failure.NewError(ErrBenchmarkerReceive, err))
 				}
