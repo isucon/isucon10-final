@@ -7,7 +7,6 @@ import { ErrorMessage } from "./ErrorMessage";
 
 export interface Props {
   client: ApiClient;
-  root: Index;
 }
 
 export interface State {
@@ -163,7 +162,9 @@ export class Signup extends React.Component<Props, State> {
         error: null,
         requesting: false,
       });
-      this.props.root.setState({ loggedin: true });
+      // this.props.root.setState({ loggedin: true });
+      // location.reload();
+      location.href = "/";
     } catch (err) {
       this.setState({ error: err });
     }

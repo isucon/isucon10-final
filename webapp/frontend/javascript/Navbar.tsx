@@ -37,12 +37,6 @@ export class Navbar extends React.Component<Props, State> {
               <Link className="navbar-item" to="/teams">
                 チーム一覧
               </Link>
-              <a className="navbar-item" href="/terms">
-                規約
-              </a>
-              <a className="navbar-item" href="/rules">
-                レギュレーション
-              </a>
             </div>
             <div className="navbar-end">
               <div className="navbar-item">
@@ -101,9 +95,14 @@ export class Navbar extends React.Component<Props, State> {
       );
     } else {
       return (
-        <Link className="button is-light" to="/login">
-          ログイン
-        </Link>
+        <>
+          <Link className="button is-light" to="/signup">
+            アカウント作成
+          </Link>
+          <Link className="button is-light" to="/login">
+            ログイン
+          </Link>
+        </>
       );
     }
   }

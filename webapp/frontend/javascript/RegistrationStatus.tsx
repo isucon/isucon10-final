@@ -57,11 +57,6 @@ export class RegistrationStatus extends React.Component<Props, State> {
               チームメンバーへ共有し、チームメンバーの参加登録を行ってください
               (代表者を含め 3 人まで)。
             </li>
-            <li>
-              代表者・メンバー問わず、Discord サーバーへ <b>必ず</b>{" "}
-              参加してください。各種アナウンスは原則 Discord もしくは本サイト
-              (ポータル) において行われます。
-            </li>
           </ol>
         </section>
 

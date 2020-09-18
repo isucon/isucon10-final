@@ -1,6 +1,7 @@
 import { xsuportal } from "./pb";
 import { ApiClient } from "./ApiClient";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export interface Props {
   client: ApiClient;
@@ -21,25 +22,11 @@ export class RegistrationLogin extends React.Component<Props, State> {
       <section className="mt-2">
         <h3 className="title is-3">ログイン</h3>
         <p>
-          ISUCON10 の参加登録には、<a href="https://github.com">GitHub</a> と{" "}
-          <a href="https://discord.com">Discord</a> のアカウントが必要です。
-          <a href="/terms">参加規約</a>{" "}
-          に同意の上、それぞれのアカウントでログインをお願いします。
+          XSUCON の参加登録には、<Link to="/signup">アカウント作成</Link>
+          が必要です。
         </p>
       </section>
     );
-  }
-
-  githubLoginUrl() {
-    return (document.querySelector(
-      'meta[name="xsu:github-auth-path"]'
-    ) as HTMLMetaElement).content;
-  }
-
-  discordLoginUrl() {
-    return (document.querySelector(
-      'meta[name="xsu:discord-auth-path"]'
-    ) as HTMLMetaElement).content;
   }
 
   public renderLogin(

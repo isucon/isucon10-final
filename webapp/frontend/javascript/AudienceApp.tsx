@@ -12,6 +12,7 @@ import { AudienceDashboard } from "./AudienceDashboard";
 import { Registration } from "./Registration";
 import { Logout } from "./Logout";
 import { Login } from "./Login";
+import { Signup } from "./Signup";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
@@ -106,6 +107,17 @@ export class AudienceApp extends React.Component<Props, State> {
                       session={this.props.session}
                       client={this.props.client}
                     />
+                  </>
+                );
+              }}
+            />
+            <Route
+              exact
+              path="/signup"
+              render={() => {
+                return (
+                  <>
+                    <Signup client={this.props.client} />
                   </>
                 );
               }}

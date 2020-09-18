@@ -1,13 +1,9 @@
 import { xsuportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
-
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
 
-import { Navbar } from "./Navbar";
-import { RegistrationLogin } from "./RegistrationLogin";
 import { RegistrationForm } from "./RegistrationForm";
 import { RegistrationStatus } from "./RegistrationStatus";
 
@@ -87,20 +83,20 @@ export class Registration extends React.Component<Props, State> {
 
   public renderPhase() {
     if (this.state.registrationSession) {
-      const login = (
-        <>
-          {this.renderTeam()}
-          <RegistrationLogin
-            client={this.props.client}
-            session={this.state.session}
-            registrationSession={this.state.registrationSession}
-          />
-        </>
-      );
+      const login = this.renderTeam();
       switch (this.state.registrationSession.status) {
         case xsuportal.proto.services.registration
           .GetRegistrationSessionResponse.Status.NOT_LOGGED_IN:
-          return login;
+          return (
+            <>
+              <div className="message is-danger">
+                <div className="message-body">
+                  参加登録をするにはログインしてください
+                </div>
+              </div>
+              {login}
+            </>
+          );
           break;
         case xsuportal.proto.services.registration
           .GetRegistrationSessionResponse.Status.CLOSED:

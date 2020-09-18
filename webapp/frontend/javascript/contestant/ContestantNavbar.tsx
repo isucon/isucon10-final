@@ -31,7 +31,7 @@ export class ContestantNavbar extends React.Component<Props, State> {
         <div className="container">
           <div className="navbar-brand">
             <Link className="navbar-item" to="/contestant">
-              ISUCON10 Contest
+              XSUCON Contestant
             </Link>
           </div>
           <div className="navbar-menu is-active">
@@ -82,21 +82,9 @@ export class ContestantNavbar extends React.Component<Props, State> {
                   <a className="navbar-item" href="/teams">
                     チーム一覧
                   </a>
-                  <a className="navbar-item" href="/terms">
-                    規約
-                  </a>
-                  <a className="navbar-item" href="/rules">
-                    レギュレーション
-                  </a>
-                  <a className="navbar-item" href="/docs">
-                    当日マニュアル
-                  </a>
                   <a className="navbar-item" href="/">
                     パブリックダッシュボード
                   </a>
-                  <Link className="navbar-item" to="/contestant/discord">
-                    Discord
-                  </Link>
                 </div>
               </div>
             </div>
