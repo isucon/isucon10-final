@@ -1,8 +1,8 @@
-import { xsuportal } from "../pb";
-import { ApiClient } from "../common/ApiClient";
+import { xsuportal } from "./pb";
+import { ApiClient } from "./ApiClient";
 import React from "react";
 
-import { ErrorMessage } from "../common/ErrorMessage";
+import { ErrorMessage } from "./ErrorMessage";
 
 export interface Props {
   client: ApiClient;
@@ -51,11 +51,13 @@ export class RegistrationStatus extends React.Component<Props, State> {
       <>
         <section className="mt-2">
           <h3 className="title is-3">登録完了</h3>
-          <p>
-            必要に応じ、下記より招待 URL をコピー &
-            チームメンバーへ共有し、チームメンバーの参加登録を行ってください
-            (代表者を含め 3 人まで)。
-          </p>
+          <ol>
+            <li>
+              必要に応じ、下記より招待 URL をコピー &
+              チームメンバーへ共有し、チームメンバーの参加登録を行ってください
+              (代表者を含め 3 人まで)。
+            </li>
+          </ol>
         </section>
 
         <div className="mt-3">
@@ -130,9 +132,7 @@ export class RegistrationStatus extends React.Component<Props, State> {
         <div className="card-content">
           <div className="media">
             <div className="media-left">
-              <figure className="image is-48x48">
-                <img src="" />
-              </figure>
+              <i className="material-icons">person</i>
             </div>
             <div className="media-content">
               <p className="title is-5">{member.name}</p>

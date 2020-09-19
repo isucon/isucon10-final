@@ -1,15 +1,13 @@
 import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./common/ApiClient";
+import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 import { Redirect } from "react-router-dom";
 
-import { ErrorMessage } from "./common/ErrorMessage";
-import { Index } from "./Index";
+import { ErrorMessage } from "./ErrorMessage";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
-  root: Index;
 }
 
 export interface State {
@@ -33,21 +31,23 @@ export class Logout extends React.Component<Props, State> {
   public async componentDidMount() {
     if (this.state.requesting) return;
     try {
-      await this.logout();
       this.setState({ requesting: true });
-      this.props.root.setState({ loggedin: false, registered: false });
+      await this.logout();
+      const session = await this.props.client.getCurrentSession();
       this.setState({
-        logoutSucceeded: true,
+        session: session,
         error: null,
         requesting: false,
       });
+      location.reload();
     } catch (err) {
       this.setState({ error: err, requesting: false });
     }
   }
 
   public render() {
-    if (this.state.logoutSucceeded) {
+    const currentContestant = this.state.session.contestant;
+    if (!currentContestant) {
       return (
         <>
           <Redirect to="/"></Redirect>

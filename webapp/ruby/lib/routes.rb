@@ -85,6 +85,10 @@ module Xsuportal
         Proto::Services::Contestant::RequestClarificationRequest,
         Proto::Services::Contestant::RequestClarificationResponse,
       ],
+      'GET /api/contestant/notifications' => [
+        nil,
+        Proto::Services::Contestant::ListNotificationsResponse,
+      ],
       'POST /api/signup' => [
         Proto::Services::Contestant::SignupRequest,
         Proto::Services::Contestant::SignupResponse,

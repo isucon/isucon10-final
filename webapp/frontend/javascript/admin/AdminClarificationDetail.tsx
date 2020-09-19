@@ -1,13 +1,13 @@
 import type { xsuportal } from "../pb";
-import { ApiError, ApiClient } from "../common/ApiClient";
+import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { Clarification } from "../clarification/Clarification";
-import { ErrorMessage } from "../common/ErrorMessage";
+import { Clarification } from "../Clarification";
+import { ErrorMessage } from "../ErrorMessage";
 
 interface FormProps {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;

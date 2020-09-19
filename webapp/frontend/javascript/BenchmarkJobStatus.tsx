@@ -1,4 +1,4 @@
-import { xsuportal } from "../pb";
+import { xsuportal } from "./pb";
 
 import React from "react";
 

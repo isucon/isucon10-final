@@ -4,7 +4,7 @@ import { AdminApiClient } from "./AdminApiClient";
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { ErrorMessage } from "../common/ErrorMessage";
+import { ErrorMessage } from "../ErrorMessage";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
@@ -32,27 +32,6 @@ export class AdminNavbar extends React.Component<Props, State> {
               XSUCON Admin
             </Link>
           </div>
-          {/* <div className="navbar-menu is-active">
-            <div className="navbar-start">
-              <a className="navbar-item" href="/teams">
-                チーム一覧
-              </a>
-              <a className="navbar-item" href="/terms">
-                規約
-              </a>
-              <a className="navbar-item" href="/rules">
-                レギュレーション
-              </a>
-              <a className="navbar-item" href="/">
-                パブリックダッシュボード
-              </a>
-            </div>
-            <div className="navbar-end">
-              <div className="navbar-item">
-                <div className="buttons"></div>
-              </div>
-            </div>
-          </div> */}
         </div>
       </nav>
     );

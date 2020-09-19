@@ -1,18 +1,15 @@
 import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./common/ApiClient";
+import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 
-import { ErrorMessage } from "./common/ErrorMessage";
+import { ErrorMessage } from "./ErrorMessage";
 
-import { RegistrationForm } from "./registration/RegistrationForm";
-import { RegistrationStatus } from "./registration/RegistrationStatus";
-import { Index } from "./Index";
-import { LoginRequired } from "./common/LoginRequired";
+import { RegistrationForm } from "./RegistrationForm";
+import { RegistrationStatus } from "./RegistrationStatus";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
-  root: Index;
 }
 
 export interface State {
@@ -68,7 +65,6 @@ export class Registration extends React.Component<Props, State> {
   public render() {
     return (
       <>
-        <LoginRequired root={this.props.root} />
         <header>
           <h1 className="title is-1">参加登録</h1>
         </header>
@@ -139,7 +135,6 @@ export class Registration extends React.Component<Props, State> {
               <RegistrationForm
                 client={this.props.client}
                 session={this.state.session}
-                root={this.props.root}
                 inviteToken={this.state.inviteToken}
                 registrationSession={this.state.registrationSession}
                 updateRegistrationSession={this.updateRegistrationSession.bind(
@@ -156,7 +151,6 @@ export class Registration extends React.Component<Props, State> {
               <RegistrationForm
                 client={this.props.client}
                 session={this.state.session}
-                root={this.props.root}
                 inviteToken={null}
                 registrationSession={this.state.registrationSession}
                 updateRegistrationSession={this.updateRegistrationSession.bind(

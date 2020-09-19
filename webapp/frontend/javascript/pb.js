@@ -5186,6 +5186,1020 @@ $root.xsuportal = (function() {
                 return Leaderboard;
             })();
 
+            resources.Notification = (function() {
+
+                /**
+                 * Properties of a Notification.
+                 * @memberof xsuportal.proto.resources
+                 * @interface INotification
+                 * @property {number|Long|null} [id] Notification id
+                 * @property {google.protobuf.ITimestamp|null} [createdAt] Notification createdAt
+                 * @property {xsuportal.proto.resources.Notification.IBenchmarkJobMessage|null} [contentBenchmarkJob] Notification contentBenchmarkJob
+                 * @property {xsuportal.proto.resources.Notification.IClarificationMessage|null} [contentClarification] Notification contentClarification
+                 * @property {xsuportal.proto.resources.Notification.ITestMessage|null} [contentTest] Notification contentTest
+                 */
+
+                /**
+                 * Constructs a new Notification.
+                 * @memberof xsuportal.proto.resources
+                 * @classdesc Represents a Notification.
+                 * @implements INotification
+                 * @constructor
+                 * @param {xsuportal.proto.resources.INotification=} [properties] Properties to set
+                 */
+                function Notification(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Notification id.
+                 * @member {number|Long} id
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @instance
+                 */
+                Notification.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * Notification createdAt.
+                 * @member {google.protobuf.ITimestamp|null|undefined} createdAt
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @instance
+                 */
+                Notification.prototype.createdAt = null;
+
+                /**
+                 * Notification contentBenchmarkJob.
+                 * @member {xsuportal.proto.resources.Notification.IBenchmarkJobMessage|null|undefined} contentBenchmarkJob
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @instance
+                 */
+                Notification.prototype.contentBenchmarkJob = null;
+
+                /**
+                 * Notification contentClarification.
+                 * @member {xsuportal.proto.resources.Notification.IClarificationMessage|null|undefined} contentClarification
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @instance
+                 */
+                Notification.prototype.contentClarification = null;
+
+                /**
+                 * Notification contentTest.
+                 * @member {xsuportal.proto.resources.Notification.ITestMessage|null|undefined} contentTest
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @instance
+                 */
+                Notification.prototype.contentTest = null;
+
+                // OneOf field names bound to virtual getters and setters
+                var $oneOfFields;
+
+                /**
+                 * Notification content.
+                 * @member {"contentBenchmarkJob"|"contentClarification"|"contentTest"|undefined} content
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @instance
+                 */
+                Object.defineProperty(Notification.prototype, "content", {
+                    get: $util.oneOfGetter($oneOfFields = ["contentBenchmarkJob", "contentClarification", "contentTest"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Creates a new Notification instance using the specified properties.
+                 * @function create
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @static
+                 * @param {xsuportal.proto.resources.INotification=} [properties] Properties to set
+                 * @returns {xsuportal.proto.resources.Notification} Notification instance
+                 */
+                Notification.create = function create(properties) {
+                    return new Notification(properties);
+                };
+
+                /**
+                 * Encodes the specified Notification message. Does not implicitly {@link xsuportal.proto.resources.Notification.verify|verify} messages.
+                 * @function encode
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @static
+                 * @param {xsuportal.proto.resources.INotification} message Notification message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Notification.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).int64(message.id);
+                    if (message.createdAt != null && Object.hasOwnProperty.call(message, "createdAt"))
+                        $root.google.protobuf.Timestamp.encode(message.createdAt, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                    if (message.contentBenchmarkJob != null && Object.hasOwnProperty.call(message, "contentBenchmarkJob"))
+                        $root.xsuportal.proto.resources.Notification.BenchmarkJobMessage.encode(message.contentBenchmarkJob, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                    if (message.contentClarification != null && Object.hasOwnProperty.call(message, "contentClarification"))
+                        $root.xsuportal.proto.resources.Notification.ClarificationMessage.encode(message.contentClarification, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                    if (message.contentTest != null && Object.hasOwnProperty.call(message, "contentTest"))
+                        $root.xsuportal.proto.resources.Notification.TestMessage.encode(message.contentTest, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified Notification message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Notification.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @static
+                 * @param {xsuportal.proto.resources.INotification} message Notification message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Notification.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a Notification message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {xsuportal.proto.resources.Notification} Notification
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Notification.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Notification();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.id = reader.int64();
+                            break;
+                        case 2:
+                            message.createdAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                            break;
+                        case 3:
+                            message.contentBenchmarkJob = $root.xsuportal.proto.resources.Notification.BenchmarkJobMessage.decode(reader, reader.uint32());
+                            break;
+                        case 4:
+                            message.contentClarification = $root.xsuportal.proto.resources.Notification.ClarificationMessage.decode(reader, reader.uint32());
+                            break;
+                        case 5:
+                            message.contentTest = $root.xsuportal.proto.resources.Notification.TestMessage.decode(reader, reader.uint32());
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a Notification message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {xsuportal.proto.resources.Notification} Notification
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Notification.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a Notification message.
+                 * @function verify
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Notification.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    var properties = {};
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                            return "id: integer|Long expected";
+                    if (message.createdAt != null && message.hasOwnProperty("createdAt")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.createdAt);
+                        if (error)
+                            return "createdAt." + error;
+                    }
+                    if (message.contentBenchmarkJob != null && message.hasOwnProperty("contentBenchmarkJob")) {
+                        properties.content = 1;
+                        {
+                            var error = $root.xsuportal.proto.resources.Notification.BenchmarkJobMessage.verify(message.contentBenchmarkJob);
+                            if (error)
+                                return "contentBenchmarkJob." + error;
+                        }
+                    }
+                    if (message.contentClarification != null && message.hasOwnProperty("contentClarification")) {
+                        if (properties.content === 1)
+                            return "content: multiple values";
+                        properties.content = 1;
+                        {
+                            var error = $root.xsuportal.proto.resources.Notification.ClarificationMessage.verify(message.contentClarification);
+                            if (error)
+                                return "contentClarification." + error;
+                        }
+                    }
+                    if (message.contentTest != null && message.hasOwnProperty("contentTest")) {
+                        if (properties.content === 1)
+                            return "content: multiple values";
+                        properties.content = 1;
+                        {
+                            var error = $root.xsuportal.proto.resources.Notification.TestMessage.verify(message.contentTest);
+                            if (error)
+                                return "contentTest." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Notification message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {xsuportal.proto.resources.Notification} Notification
+                 */
+                Notification.fromObject = function fromObject(object) {
+                    if (object instanceof $root.xsuportal.proto.resources.Notification)
+                        return object;
+                    var message = new $root.xsuportal.proto.resources.Notification();
+                    if (object.id != null)
+                        if ($util.Long)
+                            (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                        else if (typeof object.id === "string")
+                            message.id = parseInt(object.id, 10);
+                        else if (typeof object.id === "number")
+                            message.id = object.id;
+                        else if (typeof object.id === "object")
+                            message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                    if (object.createdAt != null) {
+                        if (typeof object.createdAt !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Notification.createdAt: object expected");
+                        message.createdAt = $root.google.protobuf.Timestamp.fromObject(object.createdAt);
+                    }
+                    if (object.contentBenchmarkJob != null) {
+                        if (typeof object.contentBenchmarkJob !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Notification.contentBenchmarkJob: object expected");
+                        message.contentBenchmarkJob = $root.xsuportal.proto.resources.Notification.BenchmarkJobMessage.fromObject(object.contentBenchmarkJob);
+                    }
+                    if (object.contentClarification != null) {
+                        if (typeof object.contentClarification !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Notification.contentClarification: object expected");
+                        message.contentClarification = $root.xsuportal.proto.resources.Notification.ClarificationMessage.fromObject(object.contentClarification);
+                    }
+                    if (object.contentTest != null) {
+                        if (typeof object.contentTest !== "object")
+                            throw TypeError(".xsuportal.proto.resources.Notification.contentTest: object expected");
+                        message.contentTest = $root.xsuportal.proto.resources.Notification.TestMessage.fromObject(object.contentTest);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Notification message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @static
+                 * @param {xsuportal.proto.resources.Notification} message Notification
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Notification.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults) {
+                        if ($util.Long) {
+                            var long = new $util.Long(0, 0, false);
+                            object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.id = options.longs === String ? "0" : 0;
+                        object.createdAt = null;
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (typeof message.id === "number")
+                            object.id = options.longs === String ? String(message.id) : message.id;
+                        else
+                            object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                    if (message.createdAt != null && message.hasOwnProperty("createdAt"))
+                        object.createdAt = $root.google.protobuf.Timestamp.toObject(message.createdAt, options);
+                    if (message.contentBenchmarkJob != null && message.hasOwnProperty("contentBenchmarkJob")) {
+                        object.contentBenchmarkJob = $root.xsuportal.proto.resources.Notification.BenchmarkJobMessage.toObject(message.contentBenchmarkJob, options);
+                        if (options.oneofs)
+                            object.content = "contentBenchmarkJob";
+                    }
+                    if (message.contentClarification != null && message.hasOwnProperty("contentClarification")) {
+                        object.contentClarification = $root.xsuportal.proto.resources.Notification.ClarificationMessage.toObject(message.contentClarification, options);
+                        if (options.oneofs)
+                            object.content = "contentClarification";
+                    }
+                    if (message.contentTest != null && message.hasOwnProperty("contentTest")) {
+                        object.contentTest = $root.xsuportal.proto.resources.Notification.TestMessage.toObject(message.contentTest, options);
+                        if (options.oneofs)
+                            object.content = "contentTest";
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Notification to JSON.
+                 * @function toJSON
+                 * @memberof xsuportal.proto.resources.Notification
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Notification.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                Notification.BenchmarkJobMessage = (function() {
+
+                    /**
+                     * Properties of a BenchmarkJobMessage.
+                     * @memberof xsuportal.proto.resources.Notification
+                     * @interface IBenchmarkJobMessage
+                     * @property {number|Long|null} [benchmarkJobId] BenchmarkJobMessage benchmarkJobId
+                     */
+
+                    /**
+                     * Constructs a new BenchmarkJobMessage.
+                     * @memberof xsuportal.proto.resources.Notification
+                     * @classdesc Represents a BenchmarkJobMessage.
+                     * @implements IBenchmarkJobMessage
+                     * @constructor
+                     * @param {xsuportal.proto.resources.Notification.IBenchmarkJobMessage=} [properties] Properties to set
+                     */
+                    function BenchmarkJobMessage(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * BenchmarkJobMessage benchmarkJobId.
+                     * @member {number|Long} benchmarkJobId
+                     * @memberof xsuportal.proto.resources.Notification.BenchmarkJobMessage
+                     * @instance
+                     */
+                    BenchmarkJobMessage.prototype.benchmarkJobId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new BenchmarkJobMessage instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.resources.Notification.BenchmarkJobMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.IBenchmarkJobMessage=} [properties] Properties to set
+                     * @returns {xsuportal.proto.resources.Notification.BenchmarkJobMessage} BenchmarkJobMessage instance
+                     */
+                    BenchmarkJobMessage.create = function create(properties) {
+                        return new BenchmarkJobMessage(properties);
+                    };
+
+                    /**
+                     * Encodes the specified BenchmarkJobMessage message. Does not implicitly {@link xsuportal.proto.resources.Notification.BenchmarkJobMessage.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.resources.Notification.BenchmarkJobMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.IBenchmarkJobMessage} message BenchmarkJobMessage message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    BenchmarkJobMessage.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.benchmarkJobId != null && Object.hasOwnProperty.call(message, "benchmarkJobId"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.benchmarkJobId);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified BenchmarkJobMessage message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Notification.BenchmarkJobMessage.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.resources.Notification.BenchmarkJobMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.IBenchmarkJobMessage} message BenchmarkJobMessage message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    BenchmarkJobMessage.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a BenchmarkJobMessage message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.resources.Notification.BenchmarkJobMessage
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.resources.Notification.BenchmarkJobMessage} BenchmarkJobMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    BenchmarkJobMessage.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Notification.BenchmarkJobMessage();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.benchmarkJobId = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a BenchmarkJobMessage message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.resources.Notification.BenchmarkJobMessage
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.resources.Notification.BenchmarkJobMessage} BenchmarkJobMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    BenchmarkJobMessage.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a BenchmarkJobMessage message.
+                     * @function verify
+                     * @memberof xsuportal.proto.resources.Notification.BenchmarkJobMessage
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    BenchmarkJobMessage.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.benchmarkJobId != null && message.hasOwnProperty("benchmarkJobId"))
+                            if (!$util.isInteger(message.benchmarkJobId) && !(message.benchmarkJobId && $util.isInteger(message.benchmarkJobId.low) && $util.isInteger(message.benchmarkJobId.high)))
+                                return "benchmarkJobId: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a BenchmarkJobMessage message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.resources.Notification.BenchmarkJobMessage
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.resources.Notification.BenchmarkJobMessage} BenchmarkJobMessage
+                     */
+                    BenchmarkJobMessage.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.resources.Notification.BenchmarkJobMessage)
+                            return object;
+                        var message = new $root.xsuportal.proto.resources.Notification.BenchmarkJobMessage();
+                        if (object.benchmarkJobId != null)
+                            if ($util.Long)
+                                (message.benchmarkJobId = $util.Long.fromValue(object.benchmarkJobId)).unsigned = false;
+                            else if (typeof object.benchmarkJobId === "string")
+                                message.benchmarkJobId = parseInt(object.benchmarkJobId, 10);
+                            else if (typeof object.benchmarkJobId === "number")
+                                message.benchmarkJobId = object.benchmarkJobId;
+                            else if (typeof object.benchmarkJobId === "object")
+                                message.benchmarkJobId = new $util.LongBits(object.benchmarkJobId.low >>> 0, object.benchmarkJobId.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a BenchmarkJobMessage message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.resources.Notification.BenchmarkJobMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.BenchmarkJobMessage} message BenchmarkJobMessage
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    BenchmarkJobMessage.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.benchmarkJobId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.benchmarkJobId = options.longs === String ? "0" : 0;
+                        if (message.benchmarkJobId != null && message.hasOwnProperty("benchmarkJobId"))
+                            if (typeof message.benchmarkJobId === "number")
+                                object.benchmarkJobId = options.longs === String ? String(message.benchmarkJobId) : message.benchmarkJobId;
+                            else
+                                object.benchmarkJobId = options.longs === String ? $util.Long.prototype.toString.call(message.benchmarkJobId) : options.longs === Number ? new $util.LongBits(message.benchmarkJobId.low >>> 0, message.benchmarkJobId.high >>> 0).toNumber() : message.benchmarkJobId;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this BenchmarkJobMessage to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.resources.Notification.BenchmarkJobMessage
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    BenchmarkJobMessage.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return BenchmarkJobMessage;
+                })();
+
+                Notification.ClarificationMessage = (function() {
+
+                    /**
+                     * Properties of a ClarificationMessage.
+                     * @memberof xsuportal.proto.resources.Notification
+                     * @interface IClarificationMessage
+                     * @property {number|Long|null} [clarificationId] ClarificationMessage clarificationId
+                     * @property {boolean|null} [owned] ClarificationMessage owned
+                     * @property {boolean|null} [updated] ClarificationMessage updated
+                     * @property {boolean|null} [admin] ClarificationMessage admin
+                     */
+
+                    /**
+                     * Constructs a new ClarificationMessage.
+                     * @memberof xsuportal.proto.resources.Notification
+                     * @classdesc Represents a ClarificationMessage.
+                     * @implements IClarificationMessage
+                     * @constructor
+                     * @param {xsuportal.proto.resources.Notification.IClarificationMessage=} [properties] Properties to set
+                     */
+                    function ClarificationMessage(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ClarificationMessage clarificationId.
+                     * @member {number|Long} clarificationId
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @instance
+                     */
+                    ClarificationMessage.prototype.clarificationId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * ClarificationMessage owned.
+                     * @member {boolean} owned
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @instance
+                     */
+                    ClarificationMessage.prototype.owned = false;
+
+                    /**
+                     * ClarificationMessage updated.
+                     * @member {boolean} updated
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @instance
+                     */
+                    ClarificationMessage.prototype.updated = false;
+
+                    /**
+                     * ClarificationMessage admin.
+                     * @member {boolean} admin
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @instance
+                     */
+                    ClarificationMessage.prototype.admin = false;
+
+                    /**
+                     * Creates a new ClarificationMessage instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.IClarificationMessage=} [properties] Properties to set
+                     * @returns {xsuportal.proto.resources.Notification.ClarificationMessage} ClarificationMessage instance
+                     */
+                    ClarificationMessage.create = function create(properties) {
+                        return new ClarificationMessage(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ClarificationMessage message. Does not implicitly {@link xsuportal.proto.resources.Notification.ClarificationMessage.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.IClarificationMessage} message ClarificationMessage message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ClarificationMessage.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.clarificationId != null && Object.hasOwnProperty.call(message, "clarificationId"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.clarificationId);
+                        if (message.owned != null && Object.hasOwnProperty.call(message, "owned"))
+                            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.owned);
+                        if (message.updated != null && Object.hasOwnProperty.call(message, "updated"))
+                            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.updated);
+                        if (message.admin != null && Object.hasOwnProperty.call(message, "admin"))
+                            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.admin);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ClarificationMessage message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Notification.ClarificationMessage.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.IClarificationMessage} message ClarificationMessage message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ClarificationMessage.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ClarificationMessage message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.resources.Notification.ClarificationMessage} ClarificationMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ClarificationMessage.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Notification.ClarificationMessage();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.clarificationId = reader.int64();
+                                break;
+                            case 2:
+                                message.owned = reader.bool();
+                                break;
+                            case 3:
+                                message.updated = reader.bool();
+                                break;
+                            case 4:
+                                message.admin = reader.bool();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ClarificationMessage message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.resources.Notification.ClarificationMessage} ClarificationMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ClarificationMessage.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ClarificationMessage message.
+                     * @function verify
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ClarificationMessage.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.clarificationId != null && message.hasOwnProperty("clarificationId"))
+                            if (!$util.isInteger(message.clarificationId) && !(message.clarificationId && $util.isInteger(message.clarificationId.low) && $util.isInteger(message.clarificationId.high)))
+                                return "clarificationId: integer|Long expected";
+                        if (message.owned != null && message.hasOwnProperty("owned"))
+                            if (typeof message.owned !== "boolean")
+                                return "owned: boolean expected";
+                        if (message.updated != null && message.hasOwnProperty("updated"))
+                            if (typeof message.updated !== "boolean")
+                                return "updated: boolean expected";
+                        if (message.admin != null && message.hasOwnProperty("admin"))
+                            if (typeof message.admin !== "boolean")
+                                return "admin: boolean expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ClarificationMessage message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.resources.Notification.ClarificationMessage} ClarificationMessage
+                     */
+                    ClarificationMessage.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.resources.Notification.ClarificationMessage)
+                            return object;
+                        var message = new $root.xsuportal.proto.resources.Notification.ClarificationMessage();
+                        if (object.clarificationId != null)
+                            if ($util.Long)
+                                (message.clarificationId = $util.Long.fromValue(object.clarificationId)).unsigned = false;
+                            else if (typeof object.clarificationId === "string")
+                                message.clarificationId = parseInt(object.clarificationId, 10);
+                            else if (typeof object.clarificationId === "number")
+                                message.clarificationId = object.clarificationId;
+                            else if (typeof object.clarificationId === "object")
+                                message.clarificationId = new $util.LongBits(object.clarificationId.low >>> 0, object.clarificationId.high >>> 0).toNumber();
+                        if (object.owned != null)
+                            message.owned = Boolean(object.owned);
+                        if (object.updated != null)
+                            message.updated = Boolean(object.updated);
+                        if (object.admin != null)
+                            message.admin = Boolean(object.admin);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ClarificationMessage message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.ClarificationMessage} message ClarificationMessage
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ClarificationMessage.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.clarificationId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.clarificationId = options.longs === String ? "0" : 0;
+                            object.owned = false;
+                            object.updated = false;
+                            object.admin = false;
+                        }
+                        if (message.clarificationId != null && message.hasOwnProperty("clarificationId"))
+                            if (typeof message.clarificationId === "number")
+                                object.clarificationId = options.longs === String ? String(message.clarificationId) : message.clarificationId;
+                            else
+                                object.clarificationId = options.longs === String ? $util.Long.prototype.toString.call(message.clarificationId) : options.longs === Number ? new $util.LongBits(message.clarificationId.low >>> 0, message.clarificationId.high >>> 0).toNumber() : message.clarificationId;
+                        if (message.owned != null && message.hasOwnProperty("owned"))
+                            object.owned = message.owned;
+                        if (message.updated != null && message.hasOwnProperty("updated"))
+                            object.updated = message.updated;
+                        if (message.admin != null && message.hasOwnProperty("admin"))
+                            object.admin = message.admin;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ClarificationMessage to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.resources.Notification.ClarificationMessage
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ClarificationMessage.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ClarificationMessage;
+                })();
+
+                Notification.TestMessage = (function() {
+
+                    /**
+                     * Properties of a TestMessage.
+                     * @memberof xsuportal.proto.resources.Notification
+                     * @interface ITestMessage
+                     * @property {number|Long|null} [something] TestMessage something
+                     */
+
+                    /**
+                     * Constructs a new TestMessage.
+                     * @memberof xsuportal.proto.resources.Notification
+                     * @classdesc Represents a TestMessage.
+                     * @implements ITestMessage
+                     * @constructor
+                     * @param {xsuportal.proto.resources.Notification.ITestMessage=} [properties] Properties to set
+                     */
+                    function TestMessage(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * TestMessage something.
+                     * @member {number|Long} something
+                     * @memberof xsuportal.proto.resources.Notification.TestMessage
+                     * @instance
+                     */
+                    TestMessage.prototype.something = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new TestMessage instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.resources.Notification.TestMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.ITestMessage=} [properties] Properties to set
+                     * @returns {xsuportal.proto.resources.Notification.TestMessage} TestMessage instance
+                     */
+                    TestMessage.create = function create(properties) {
+                        return new TestMessage(properties);
+                    };
+
+                    /**
+                     * Encodes the specified TestMessage message. Does not implicitly {@link xsuportal.proto.resources.Notification.TestMessage.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.resources.Notification.TestMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.ITestMessage} message TestMessage message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    TestMessage.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.something != null && Object.hasOwnProperty.call(message, "something"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.something);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified TestMessage message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Notification.TestMessage.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.resources.Notification.TestMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.ITestMessage} message TestMessage message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    TestMessage.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a TestMessage message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.resources.Notification.TestMessage
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.resources.Notification.TestMessage} TestMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    TestMessage.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.resources.Notification.TestMessage();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.something = reader.int64();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a TestMessage message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.resources.Notification.TestMessage
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.resources.Notification.TestMessage} TestMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    TestMessage.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a TestMessage message.
+                     * @function verify
+                     * @memberof xsuportal.proto.resources.Notification.TestMessage
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    TestMessage.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.something != null && message.hasOwnProperty("something"))
+                            if (!$util.isInteger(message.something) && !(message.something && $util.isInteger(message.something.low) && $util.isInteger(message.something.high)))
+                                return "something: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a TestMessage message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.resources.Notification.TestMessage
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.resources.Notification.TestMessage} TestMessage
+                     */
+                    TestMessage.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.resources.Notification.TestMessage)
+                            return object;
+                        var message = new $root.xsuportal.proto.resources.Notification.TestMessage();
+                        if (object.something != null)
+                            if ($util.Long)
+                                (message.something = $util.Long.fromValue(object.something)).unsigned = false;
+                            else if (typeof object.something === "string")
+                                message.something = parseInt(object.something, 10);
+                            else if (typeof object.something === "number")
+                                message.something = object.something;
+                            else if (typeof object.something === "object")
+                                message.something = new $util.LongBits(object.something.low >>> 0, object.something.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a TestMessage message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.resources.Notification.TestMessage
+                     * @static
+                     * @param {xsuportal.proto.resources.Notification.TestMessage} message TestMessage
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    TestMessage.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.something = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.something = options.longs === String ? "0" : 0;
+                        if (message.something != null && message.hasOwnProperty("something"))
+                            if (typeof message.something === "number")
+                                object.something = options.longs === String ? String(message.something) : message.something;
+                            else
+                                object.something = options.longs === String ? $util.Long.prototype.toString.call(message.something) : options.longs === Number ? new $util.LongBits(message.something.low >>> 0, message.something.high >>> 0).toNumber() : message.something;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this TestMessage to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.resources.Notification.TestMessage
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    TestMessage.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return TestMessage;
+                })();
+
+                return Notification;
+            })();
+
             resources.Staff = (function() {
 
                 /**
@@ -14458,6 +15472,8 @@ $root.xsuportal = (function() {
                      * @interface IGetCurrentSessionResponse
                      * @property {xsuportal.proto.resources.ITeam|null} [team] GetCurrentSessionResponse team
                      * @property {xsuportal.proto.resources.IContestant|null} [contestant] GetCurrentSessionResponse contestant
+                     * @property {xsuportal.proto.resources.IContest|null} [contest] GetCurrentSessionResponse contest
+                     * @property {string|null} [pushVapidKey] GetCurrentSessionResponse pushVapidKey
                      */
 
                     /**
@@ -14492,6 +15508,22 @@ $root.xsuportal = (function() {
                     GetCurrentSessionResponse.prototype.contestant = null;
 
                     /**
+                     * GetCurrentSessionResponse contest.
+                     * @member {xsuportal.proto.resources.IContest|null|undefined} contest
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @instance
+                     */
+                    GetCurrentSessionResponse.prototype.contest = null;
+
+                    /**
+                     * GetCurrentSessionResponse pushVapidKey.
+                     * @member {string} pushVapidKey
+                     * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
+                     * @instance
+                     */
+                    GetCurrentSessionResponse.prototype.pushVapidKey = "";
+
+                    /**
                      * Creates a new GetCurrentSessionResponse instance using the specified properties.
                      * @function create
                      * @memberof xsuportal.proto.services.common.GetCurrentSessionResponse
@@ -14519,6 +15551,10 @@ $root.xsuportal = (function() {
                             $root.xsuportal.proto.resources.Team.encode(message.team, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                         if (message.contestant != null && Object.hasOwnProperty.call(message, "contestant"))
                             $root.xsuportal.proto.resources.Contestant.encode(message.contestant, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                        if (message.contest != null && Object.hasOwnProperty.call(message, "contest"))
+                            $root.xsuportal.proto.resources.Contest.encode(message.contest, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                        if (message.pushVapidKey != null && Object.hasOwnProperty.call(message, "pushVapidKey"))
+                            writer.uint32(/* id 6, wireType 2 =*/50).string(message.pushVapidKey);
                         return writer;
                     };
 
@@ -14558,6 +15594,12 @@ $root.xsuportal = (function() {
                                 break;
                             case 2:
                                 message.contestant = $root.xsuportal.proto.resources.Contestant.decode(reader, reader.uint32());
+                                break;
+                            case 4:
+                                message.contest = $root.xsuportal.proto.resources.Contest.decode(reader, reader.uint32());
+                                break;
+                            case 6:
+                                message.pushVapidKey = reader.string();
                                 break;
                             default:
                                 reader.skipType(tag & 7);
@@ -14604,6 +15646,14 @@ $root.xsuportal = (function() {
                             if (error)
                                 return "contestant." + error;
                         }
+                        if (message.contest != null && message.hasOwnProperty("contest")) {
+                            var error = $root.xsuportal.proto.resources.Contest.verify(message.contest);
+                            if (error)
+                                return "contest." + error;
+                        }
+                        if (message.pushVapidKey != null && message.hasOwnProperty("pushVapidKey"))
+                            if (!$util.isString(message.pushVapidKey))
+                                return "pushVapidKey: string expected";
                         return null;
                     };
 
@@ -14629,6 +15679,13 @@ $root.xsuportal = (function() {
                                 throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.contestant: object expected");
                             message.contestant = $root.xsuportal.proto.resources.Contestant.fromObject(object.contestant);
                         }
+                        if (object.contest != null) {
+                            if (typeof object.contest !== "object")
+                                throw TypeError(".xsuportal.proto.services.common.GetCurrentSessionResponse.contest: object expected");
+                            message.contest = $root.xsuportal.proto.resources.Contest.fromObject(object.contest);
+                        }
+                        if (object.pushVapidKey != null)
+                            message.pushVapidKey = String(object.pushVapidKey);
                         return message;
                     };
 
@@ -14648,11 +15705,17 @@ $root.xsuportal = (function() {
                         if (options.defaults) {
                             object.team = null;
                             object.contestant = null;
+                            object.contest = null;
+                            object.pushVapidKey = "";
                         }
                         if (message.team != null && message.hasOwnProperty("team"))
                             object.team = $root.xsuportal.proto.resources.Team.toObject(message.team, options);
                         if (message.contestant != null && message.hasOwnProperty("contestant"))
                             object.contestant = $root.xsuportal.proto.resources.Contestant.toObject(message.contestant, options);
+                        if (message.contest != null && message.hasOwnProperty("contest"))
+                            object.contest = $root.xsuportal.proto.resources.Contest.toObject(message.contest, options);
+                        if (message.pushVapidKey != null && message.hasOwnProperty("pushVapidKey"))
+                            object.pushVapidKey = message.pushVapidKey;
                         return object;
                     };
 
@@ -17979,23 +19042,24 @@ $root.xsuportal = (function() {
                     return LogoutResponse;
                 })();
 
-                contestant.GetNotificationsRequest = (function() {
+                contestant.ListNotificationsQuery = (function() {
 
                     /**
-                     * Properties of a GetNotificationsRequest.
+                     * Properties of a ListNotificationsQuery.
                      * @memberof xsuportal.proto.services.contestant
-                     * @interface IGetNotificationsRequest
+                     * @interface IListNotificationsQuery
+                     * @property {number|Long|null} [after] ListNotificationsQuery after
                      */
 
                     /**
-                     * Constructs a new GetNotificationsRequest.
+                     * Constructs a new ListNotificationsQuery.
                      * @memberof xsuportal.proto.services.contestant
-                     * @classdesc Represents a GetNotificationsRequest.
-                     * @implements IGetNotificationsRequest
+                     * @classdesc Represents a ListNotificationsQuery.
+                     * @implements IListNotificationsQuery
                      * @constructor
-                     * @param {xsuportal.proto.services.contestant.IGetNotificationsRequest=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.contestant.IListNotificationsQuery=} [properties] Properties to set
                      */
-                    function GetNotificationsRequest(properties) {
+                    function ListNotificationsQuery(properties) {
                         if (properties)
                             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -18003,63 +19067,76 @@ $root.xsuportal = (function() {
                     }
 
                     /**
-                     * Creates a new GetNotificationsRequest instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
-                     * @static
-                     * @param {xsuportal.proto.services.contestant.IGetNotificationsRequest=} [properties] Properties to set
-                     * @returns {xsuportal.proto.services.contestant.GetNotificationsRequest} GetNotificationsRequest instance
+                     * ListNotificationsQuery after.
+                     * @member {number|Long} after
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsQuery
+                     * @instance
                      */
-                    GetNotificationsRequest.create = function create(properties) {
-                        return new GetNotificationsRequest(properties);
+                    ListNotificationsQuery.prototype.after = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Creates a new ListNotificationsQuery instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsQuery
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListNotificationsQuery=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.ListNotificationsQuery} ListNotificationsQuery instance
+                     */
+                    ListNotificationsQuery.create = function create(properties) {
+                        return new ListNotificationsQuery(properties);
                     };
 
                     /**
-                     * Encodes the specified GetNotificationsRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsRequest.verify|verify} messages.
+                     * Encodes the specified ListNotificationsQuery message. Does not implicitly {@link xsuportal.proto.services.contestant.ListNotificationsQuery.verify|verify} messages.
                      * @function encode
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsQuery
                      * @static
-                     * @param {xsuportal.proto.services.contestant.IGetNotificationsRequest} message GetNotificationsRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.contestant.IListNotificationsQuery} message ListNotificationsQuery message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
-                    GetNotificationsRequest.encode = function encode(message, writer) {
+                    ListNotificationsQuery.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
+                        if (message.after != null && Object.hasOwnProperty.call(message, "after"))
+                            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.after);
                         return writer;
                     };
 
                     /**
-                     * Encodes the specified GetNotificationsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsRequest.verify|verify} messages.
+                     * Encodes the specified ListNotificationsQuery message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListNotificationsQuery.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsQuery
                      * @static
-                     * @param {xsuportal.proto.services.contestant.IGetNotificationsRequest} message GetNotificationsRequest message or plain object to encode
+                     * @param {xsuportal.proto.services.contestant.IListNotificationsQuery} message ListNotificationsQuery message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
-                    GetNotificationsRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                    ListNotificationsQuery.encodeDelimited = function encodeDelimited(message, writer) {
                         return this.encode(message, writer).ldelim();
                     };
 
                     /**
-                     * Decodes a GetNotificationsRequest message from the specified reader or buffer.
+                     * Decodes a ListNotificationsQuery message from the specified reader or buffer.
                      * @function decode
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsQuery
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.services.contestant.GetNotificationsRequest} GetNotificationsRequest
+                     * @returns {xsuportal.proto.services.contestant.ListNotificationsQuery} ListNotificationsQuery
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    GetNotificationsRequest.decode = function decode(reader, length) {
+                    ListNotificationsQuery.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.GetNotificationsRequest();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.ListNotificationsQuery();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
+                            case 1:
+                                message.after = reader.int64();
+                                break;
                             default:
                                 reader.skipType(tag & 7);
                                 break;
@@ -18069,94 +19146,123 @@ $root.xsuportal = (function() {
                     };
 
                     /**
-                     * Decodes a GetNotificationsRequest message from the specified reader or buffer, length delimited.
+                     * Decodes a ListNotificationsQuery message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsQuery
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.services.contestant.GetNotificationsRequest} GetNotificationsRequest
+                     * @returns {xsuportal.proto.services.contestant.ListNotificationsQuery} ListNotificationsQuery
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    GetNotificationsRequest.decodeDelimited = function decodeDelimited(reader) {
+                    ListNotificationsQuery.decodeDelimited = function decodeDelimited(reader) {
                         if (!(reader instanceof $Reader))
                             reader = new $Reader(reader);
                         return this.decode(reader, reader.uint32());
                     };
 
                     /**
-                     * Verifies a GetNotificationsRequest message.
+                     * Verifies a ListNotificationsQuery message.
                      * @function verify
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsQuery
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    GetNotificationsRequest.verify = function verify(message) {
+                    ListNotificationsQuery.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
+                        if (message.after != null && message.hasOwnProperty("after"))
+                            if (!$util.isInteger(message.after) && !(message.after && $util.isInteger(message.after.low) && $util.isInteger(message.after.high)))
+                                return "after: integer|Long expected";
                         return null;
                     };
 
                     /**
-                     * Creates a GetNotificationsRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a ListNotificationsQuery message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsQuery
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.services.contestant.GetNotificationsRequest} GetNotificationsRequest
+                     * @returns {xsuportal.proto.services.contestant.ListNotificationsQuery} ListNotificationsQuery
                      */
-                    GetNotificationsRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.services.contestant.GetNotificationsRequest)
+                    ListNotificationsQuery.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.ListNotificationsQuery)
                             return object;
-                        return new $root.xsuportal.proto.services.contestant.GetNotificationsRequest();
+                        var message = new $root.xsuportal.proto.services.contestant.ListNotificationsQuery();
+                        if (object.after != null)
+                            if ($util.Long)
+                                (message.after = $util.Long.fromValue(object.after)).unsigned = false;
+                            else if (typeof object.after === "string")
+                                message.after = parseInt(object.after, 10);
+                            else if (typeof object.after === "number")
+                                message.after = object.after;
+                            else if (typeof object.after === "object")
+                                message.after = new $util.LongBits(object.after.low >>> 0, object.after.high >>> 0).toNumber();
+                        return message;
                     };
 
                     /**
-                     * Creates a plain object from a GetNotificationsRequest message. Also converts values to other types if specified.
+                     * Creates a plain object from a ListNotificationsQuery message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsQuery
                      * @static
-                     * @param {xsuportal.proto.services.contestant.GetNotificationsRequest} message GetNotificationsRequest
+                     * @param {xsuportal.proto.services.contestant.ListNotificationsQuery} message ListNotificationsQuery
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    GetNotificationsRequest.toObject = function toObject() {
-                        return {};
+                    ListNotificationsQuery.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                var long = new $util.Long(0, 0, false);
+                                object.after = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.after = options.longs === String ? "0" : 0;
+                        if (message.after != null && message.hasOwnProperty("after"))
+                            if (typeof message.after === "number")
+                                object.after = options.longs === String ? String(message.after) : message.after;
+                            else
+                                object.after = options.longs === String ? $util.Long.prototype.toString.call(message.after) : options.longs === Number ? new $util.LongBits(message.after.low >>> 0, message.after.high >>> 0).toNumber() : message.after;
+                        return object;
                     };
 
                     /**
-                     * Converts this GetNotificationsRequest to JSON.
+                     * Converts this ListNotificationsQuery to JSON.
                      * @function toJSON
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsRequest
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsQuery
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    GetNotificationsRequest.prototype.toJSON = function toJSON() {
+                    ListNotificationsQuery.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return GetNotificationsRequest;
+                    return ListNotificationsQuery;
                 })();
 
-                contestant.GetNotificationsResponse = (function() {
+                contestant.ListNotificationsResponse = (function() {
 
                     /**
-                     * Properties of a GetNotificationsResponse.
+                     * Properties of a ListNotificationsResponse.
                      * @memberof xsuportal.proto.services.contestant
-                     * @interface IGetNotificationsResponse
-                     * @property {number|Long|null} [lastAnsweredClarificationId] GetNotificationsResponse lastAnsweredClarificationId
+                     * @interface IListNotificationsResponse
+                     * @property {number|Long|null} [lastAnsweredClarificationId] ListNotificationsResponse lastAnsweredClarificationId
+                     * @property {Array.<xsuportal.proto.resources.INotification>|null} [notifications] ListNotificationsResponse notifications
                      */
 
                     /**
-                     * Constructs a new GetNotificationsResponse.
+                     * Constructs a new ListNotificationsResponse.
                      * @memberof xsuportal.proto.services.contestant
-                     * @classdesc Represents a GetNotificationsResponse.
-                     * @implements IGetNotificationsResponse
+                     * @classdesc Represents a ListNotificationsResponse.
+                     * @implements IListNotificationsResponse
                      * @constructor
-                     * @param {xsuportal.proto.services.contestant.IGetNotificationsResponse=} [properties] Properties to set
+                     * @param {xsuportal.proto.services.contestant.IListNotificationsResponse=} [properties] Properties to set
                      */
-                    function GetNotificationsResponse(properties) {
+                    function ListNotificationsResponse(properties) {
+                        this.notifications = [];
                         if (properties)
                             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -18164,76 +19270,92 @@ $root.xsuportal = (function() {
                     }
 
                     /**
-                     * GetNotificationsResponse lastAnsweredClarificationId.
+                     * ListNotificationsResponse lastAnsweredClarificationId.
                      * @member {number|Long} lastAnsweredClarificationId
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
                      * @instance
                      */
-                    GetNotificationsResponse.prototype.lastAnsweredClarificationId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                    ListNotificationsResponse.prototype.lastAnsweredClarificationId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
-                     * Creates a new GetNotificationsResponse instance using the specified properties.
-                     * @function create
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
-                     * @static
-                     * @param {xsuportal.proto.services.contestant.IGetNotificationsResponse=} [properties] Properties to set
-                     * @returns {xsuportal.proto.services.contestant.GetNotificationsResponse} GetNotificationsResponse instance
+                     * ListNotificationsResponse notifications.
+                     * @member {Array.<xsuportal.proto.resources.INotification>} notifications
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
+                     * @instance
                      */
-                    GetNotificationsResponse.create = function create(properties) {
-                        return new GetNotificationsResponse(properties);
+                    ListNotificationsResponse.prototype.notifications = $util.emptyArray;
+
+                    /**
+                     * Creates a new ListNotificationsResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IListNotificationsResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.ListNotificationsResponse} ListNotificationsResponse instance
+                     */
+                    ListNotificationsResponse.create = function create(properties) {
+                        return new ListNotificationsResponse(properties);
                     };
 
                     /**
-                     * Encodes the specified GetNotificationsResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsResponse.verify|verify} messages.
+                     * Encodes the specified ListNotificationsResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.ListNotificationsResponse.verify|verify} messages.
                      * @function encode
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
                      * @static
-                     * @param {xsuportal.proto.services.contestant.IGetNotificationsResponse} message GetNotificationsResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.contestant.IListNotificationsResponse} message ListNotificationsResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
-                    GetNotificationsResponse.encode = function encode(message, writer) {
+                    ListNotificationsResponse.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
                         if (message.lastAnsweredClarificationId != null && Object.hasOwnProperty.call(message, "lastAnsweredClarificationId"))
                             writer.uint32(/* id 1, wireType 0 =*/8).int64(message.lastAnsweredClarificationId);
+                        if (message.notifications != null && message.notifications.length)
+                            for (var i = 0; i < message.notifications.length; ++i)
+                                $root.xsuportal.proto.resources.Notification.encode(message.notifications[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
                         return writer;
                     };
 
                     /**
-                     * Encodes the specified GetNotificationsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsResponse.verify|verify} messages.
+                     * Encodes the specified ListNotificationsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListNotificationsResponse.verify|verify} messages.
                      * @function encodeDelimited
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
                      * @static
-                     * @param {xsuportal.proto.services.contestant.IGetNotificationsResponse} message GetNotificationsResponse message or plain object to encode
+                     * @param {xsuportal.proto.services.contestant.IListNotificationsResponse} message ListNotificationsResponse message or plain object to encode
                      * @param {$protobuf.Writer} [writer] Writer to encode to
                      * @returns {$protobuf.Writer} Writer
                      */
-                    GetNotificationsResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                    ListNotificationsResponse.encodeDelimited = function encodeDelimited(message, writer) {
                         return this.encode(message, writer).ldelim();
                     };
 
                     /**
-                     * Decodes a GetNotificationsResponse message from the specified reader or buffer.
+                     * Decodes a ListNotificationsResponse message from the specified reader or buffer.
                      * @function decode
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                      * @param {number} [length] Message length if known beforehand
-                     * @returns {xsuportal.proto.services.contestant.GetNotificationsResponse} GetNotificationsResponse
+                     * @returns {xsuportal.proto.services.contestant.ListNotificationsResponse} ListNotificationsResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    GetNotificationsResponse.decode = function decode(reader, length) {
+                    ListNotificationsResponse.decode = function decode(reader, length) {
                         if (!(reader instanceof $Reader))
                             reader = $Reader.create(reader);
-                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.GetNotificationsResponse();
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.ListNotificationsResponse();
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
                             case 1:
                                 message.lastAnsweredClarificationId = reader.int64();
                                 break;
+                            case 2:
+                                if (!(message.notifications && message.notifications.length))
+                                    message.notifications = [];
+                                message.notifications.push($root.xsuportal.proto.resources.Notification.decode(reader, reader.uint32()));
+                                break;
                             default:
                                 reader.skipType(tag & 7);
                                 break;
@@ -18243,50 +19365,59 @@ $root.xsuportal = (function() {
                     };
 
                     /**
-                     * Decodes a GetNotificationsResponse message from the specified reader or buffer, length delimited.
+                     * Decodes a ListNotificationsResponse message from the specified reader or buffer, length delimited.
                      * @function decodeDelimited
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
                      * @static
                      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                     * @returns {xsuportal.proto.services.contestant.GetNotificationsResponse} GetNotificationsResponse
+                     * @returns {xsuportal.proto.services.contestant.ListNotificationsResponse} ListNotificationsResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    GetNotificationsResponse.decodeDelimited = function decodeDelimited(reader) {
+                    ListNotificationsResponse.decodeDelimited = function decodeDelimited(reader) {
                         if (!(reader instanceof $Reader))
                             reader = new $Reader(reader);
                         return this.decode(reader, reader.uint32());
                     };
 
                     /**
-                     * Verifies a GetNotificationsResponse message.
+                     * Verifies a ListNotificationsResponse message.
                      * @function verify
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    GetNotificationsResponse.verify = function verify(message) {
+                    ListNotificationsResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.lastAnsweredClarificationId != null && message.hasOwnProperty("lastAnsweredClarificationId"))
                             if (!$util.isInteger(message.lastAnsweredClarificationId) && !(message.lastAnsweredClarificationId && $util.isInteger(message.lastAnsweredClarificationId.low) && $util.isInteger(message.lastAnsweredClarificationId.high)))
                                 return "lastAnsweredClarificationId: integer|Long expected";
+                        if (message.notifications != null && message.hasOwnProperty("notifications")) {
+                            if (!Array.isArray(message.notifications))
+                                return "notifications: array expected";
+                            for (var i = 0; i < message.notifications.length; ++i) {
+                                var error = $root.xsuportal.proto.resources.Notification.verify(message.notifications[i]);
+                                if (error)
+                                    return "notifications." + error;
+                            }
+                        }
                         return null;
                     };
 
                     /**
-                     * Creates a GetNotificationsResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a ListNotificationsResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {xsuportal.proto.services.contestant.GetNotificationsResponse} GetNotificationsResponse
+                     * @returns {xsuportal.proto.services.contestant.ListNotificationsResponse} ListNotificationsResponse
                      */
-                    GetNotificationsResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.xsuportal.proto.services.contestant.GetNotificationsResponse)
+                    ListNotificationsResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.ListNotificationsResponse)
                             return object;
-                        var message = new $root.xsuportal.proto.services.contestant.GetNotificationsResponse();
+                        var message = new $root.xsuportal.proto.services.contestant.ListNotificationsResponse();
                         if (object.lastAnsweredClarificationId != null)
                             if ($util.Long)
                                 (message.lastAnsweredClarificationId = $util.Long.fromValue(object.lastAnsweredClarificationId)).unsigned = false;
@@ -18296,22 +19427,34 @@ $root.xsuportal = (function() {
                                 message.lastAnsweredClarificationId = object.lastAnsweredClarificationId;
                             else if (typeof object.lastAnsweredClarificationId === "object")
                                 message.lastAnsweredClarificationId = new $util.LongBits(object.lastAnsweredClarificationId.low >>> 0, object.lastAnsweredClarificationId.high >>> 0).toNumber();
+                        if (object.notifications) {
+                            if (!Array.isArray(object.notifications))
+                                throw TypeError(".xsuportal.proto.services.contestant.ListNotificationsResponse.notifications: array expected");
+                            message.notifications = [];
+                            for (var i = 0; i < object.notifications.length; ++i) {
+                                if (typeof object.notifications[i] !== "object")
+                                    throw TypeError(".xsuportal.proto.services.contestant.ListNotificationsResponse.notifications: object expected");
+                                message.notifications[i] = $root.xsuportal.proto.resources.Notification.fromObject(object.notifications[i]);
+                            }
+                        }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a GetNotificationsResponse message. Also converts values to other types if specified.
+                     * Creates a plain object from a ListNotificationsResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
                      * @static
-                     * @param {xsuportal.proto.services.contestant.GetNotificationsResponse} message GetNotificationsResponse
+                     * @param {xsuportal.proto.services.contestant.ListNotificationsResponse} message ListNotificationsResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    GetNotificationsResponse.toObject = function toObject(message, options) {
+                    ListNotificationsResponse.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         var object = {};
+                        if (options.arrays || options.defaults)
+                            object.notifications = [];
                         if (options.defaults)
                             if ($util.Long) {
                                 var long = new $util.Long(0, 0, false);
@@ -18323,21 +19466,765 @@ $root.xsuportal = (function() {
                                 object.lastAnsweredClarificationId = options.longs === String ? String(message.lastAnsweredClarificationId) : message.lastAnsweredClarificationId;
                             else
                                 object.lastAnsweredClarificationId = options.longs === String ? $util.Long.prototype.toString.call(message.lastAnsweredClarificationId) : options.longs === Number ? new $util.LongBits(message.lastAnsweredClarificationId.low >>> 0, message.lastAnsweredClarificationId.high >>> 0).toNumber() : message.lastAnsweredClarificationId;
+                        if (message.notifications && message.notifications.length) {
+                            object.notifications = [];
+                            for (var j = 0; j < message.notifications.length; ++j)
+                                object.notifications[j] = $root.xsuportal.proto.resources.Notification.toObject(message.notifications[j], options);
+                        }
                         return object;
                     };
 
                     /**
-                     * Converts this GetNotificationsResponse to JSON.
+                     * Converts this ListNotificationsResponse to JSON.
                      * @function toJSON
-                     * @memberof xsuportal.proto.services.contestant.GetNotificationsResponse
+                     * @memberof xsuportal.proto.services.contestant.ListNotificationsResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    GetNotificationsResponse.prototype.toJSON = function toJSON() {
+                    ListNotificationsResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return GetNotificationsResponse;
+                    return ListNotificationsResponse;
+                })();
+
+                contestant.SubscribeNotificationRequest = (function() {
+
+                    /**
+                     * Properties of a SubscribeNotificationRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface ISubscribeNotificationRequest
+                     * @property {string|null} [endpoint] SubscribeNotificationRequest endpoint
+                     * @property {string|null} [p256dh] SubscribeNotificationRequest p256dh
+                     * @property {string|null} [auth] SubscribeNotificationRequest auth
+                     */
+
+                    /**
+                     * Constructs a new SubscribeNotificationRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a SubscribeNotificationRequest.
+                     * @implements ISubscribeNotificationRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.ISubscribeNotificationRequest=} [properties] Properties to set
+                     */
+                    function SubscribeNotificationRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * SubscribeNotificationRequest endpoint.
+                     * @member {string} endpoint
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @instance
+                     */
+                    SubscribeNotificationRequest.prototype.endpoint = "";
+
+                    /**
+                     * SubscribeNotificationRequest p256dh.
+                     * @member {string} p256dh
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @instance
+                     */
+                    SubscribeNotificationRequest.prototype.p256dh = "";
+
+                    /**
+                     * SubscribeNotificationRequest auth.
+                     * @member {string} auth
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @instance
+                     */
+                    SubscribeNotificationRequest.prototype.auth = "";
+
+                    /**
+                     * Creates a new SubscribeNotificationRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISubscribeNotificationRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.SubscribeNotificationRequest} SubscribeNotificationRequest instance
+                     */
+                    SubscribeNotificationRequest.create = function create(properties) {
+                        return new SubscribeNotificationRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified SubscribeNotificationRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.SubscribeNotificationRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISubscribeNotificationRequest} message SubscribeNotificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    SubscribeNotificationRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.endpoint != null && Object.hasOwnProperty.call(message, "endpoint"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.endpoint);
+                        if (message.p256dh != null && Object.hasOwnProperty.call(message, "p256dh"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.p256dh);
+                        if (message.auth != null && Object.hasOwnProperty.call(message, "auth"))
+                            writer.uint32(/* id 3, wireType 2 =*/26).string(message.auth);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified SubscribeNotificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.SubscribeNotificationRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISubscribeNotificationRequest} message SubscribeNotificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    SubscribeNotificationRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a SubscribeNotificationRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.SubscribeNotificationRequest} SubscribeNotificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    SubscribeNotificationRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.SubscribeNotificationRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.endpoint = reader.string();
+                                break;
+                            case 2:
+                                message.p256dh = reader.string();
+                                break;
+                            case 3:
+                                message.auth = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a SubscribeNotificationRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.SubscribeNotificationRequest} SubscribeNotificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    SubscribeNotificationRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a SubscribeNotificationRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    SubscribeNotificationRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.endpoint != null && message.hasOwnProperty("endpoint"))
+                            if (!$util.isString(message.endpoint))
+                                return "endpoint: string expected";
+                        if (message.p256dh != null && message.hasOwnProperty("p256dh"))
+                            if (!$util.isString(message.p256dh))
+                                return "p256dh: string expected";
+                        if (message.auth != null && message.hasOwnProperty("auth"))
+                            if (!$util.isString(message.auth))
+                                return "auth: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a SubscribeNotificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.SubscribeNotificationRequest} SubscribeNotificationRequest
+                     */
+                    SubscribeNotificationRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.SubscribeNotificationRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.SubscribeNotificationRequest();
+                        if (object.endpoint != null)
+                            message.endpoint = String(object.endpoint);
+                        if (object.p256dh != null)
+                            message.p256dh = String(object.p256dh);
+                        if (object.auth != null)
+                            message.auth = String(object.auth);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a SubscribeNotificationRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.SubscribeNotificationRequest} message SubscribeNotificationRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    SubscribeNotificationRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.endpoint = "";
+                            object.p256dh = "";
+                            object.auth = "";
+                        }
+                        if (message.endpoint != null && message.hasOwnProperty("endpoint"))
+                            object.endpoint = message.endpoint;
+                        if (message.p256dh != null && message.hasOwnProperty("p256dh"))
+                            object.p256dh = message.p256dh;
+                        if (message.auth != null && message.hasOwnProperty("auth"))
+                            object.auth = message.auth;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this SubscribeNotificationRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    SubscribeNotificationRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return SubscribeNotificationRequest;
+                })();
+
+                contestant.SubscribeNotificationResponse = (function() {
+
+                    /**
+                     * Properties of a SubscribeNotificationResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface ISubscribeNotificationResponse
+                     */
+
+                    /**
+                     * Constructs a new SubscribeNotificationResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents a SubscribeNotificationResponse.
+                     * @implements ISubscribeNotificationResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.ISubscribeNotificationResponse=} [properties] Properties to set
+                     */
+                    function SubscribeNotificationResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new SubscribeNotificationResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISubscribeNotificationResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.SubscribeNotificationResponse} SubscribeNotificationResponse instance
+                     */
+                    SubscribeNotificationResponse.create = function create(properties) {
+                        return new SubscribeNotificationResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified SubscribeNotificationResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.SubscribeNotificationResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISubscribeNotificationResponse} message SubscribeNotificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    SubscribeNotificationResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified SubscribeNotificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.SubscribeNotificationResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.ISubscribeNotificationResponse} message SubscribeNotificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    SubscribeNotificationResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a SubscribeNotificationResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.SubscribeNotificationResponse} SubscribeNotificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    SubscribeNotificationResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.SubscribeNotificationResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a SubscribeNotificationResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.SubscribeNotificationResponse} SubscribeNotificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    SubscribeNotificationResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a SubscribeNotificationResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    SubscribeNotificationResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a SubscribeNotificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.SubscribeNotificationResponse} SubscribeNotificationResponse
+                     */
+                    SubscribeNotificationResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.SubscribeNotificationResponse)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.SubscribeNotificationResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from a SubscribeNotificationResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.SubscribeNotificationResponse} message SubscribeNotificationResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    SubscribeNotificationResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this SubscribeNotificationResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.SubscribeNotificationResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    SubscribeNotificationResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return SubscribeNotificationResponse;
+                })();
+
+                contestant.UnsubscribeNotificationRequest = (function() {
+
+                    /**
+                     * Properties of an UnsubscribeNotificationRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IUnsubscribeNotificationRequest
+                     * @property {string|null} [endpoint] UnsubscribeNotificationRequest endpoint
+                     */
+
+                    /**
+                     * Constructs a new UnsubscribeNotificationRequest.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents an UnsubscribeNotificationRequest.
+                     * @implements IUnsubscribeNotificationRequest
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IUnsubscribeNotificationRequest=} [properties] Properties to set
+                     */
+                    function UnsubscribeNotificationRequest(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * UnsubscribeNotificationRequest endpoint.
+                     * @member {string} endpoint
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
+                     * @instance
+                     */
+                    UnsubscribeNotificationRequest.prototype.endpoint = "";
+
+                    /**
+                     * Creates a new UnsubscribeNotificationRequest instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IUnsubscribeNotificationRequest=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.UnsubscribeNotificationRequest} UnsubscribeNotificationRequest instance
+                     */
+                    UnsubscribeNotificationRequest.create = function create(properties) {
+                        return new UnsubscribeNotificationRequest(properties);
+                    };
+
+                    /**
+                     * Encodes the specified UnsubscribeNotificationRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.UnsubscribeNotificationRequest.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IUnsubscribeNotificationRequest} message UnsubscribeNotificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UnsubscribeNotificationRequest.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.endpoint != null && Object.hasOwnProperty.call(message, "endpoint"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.endpoint);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified UnsubscribeNotificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.UnsubscribeNotificationRequest.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IUnsubscribeNotificationRequest} message UnsubscribeNotificationRequest message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UnsubscribeNotificationRequest.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an UnsubscribeNotificationRequest message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.UnsubscribeNotificationRequest} UnsubscribeNotificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UnsubscribeNotificationRequest.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.UnsubscribeNotificationRequest();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.endpoint = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an UnsubscribeNotificationRequest message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.UnsubscribeNotificationRequest} UnsubscribeNotificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UnsubscribeNotificationRequest.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an UnsubscribeNotificationRequest message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UnsubscribeNotificationRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.endpoint != null && message.hasOwnProperty("endpoint"))
+                            if (!$util.isString(message.endpoint))
+                                return "endpoint: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UnsubscribeNotificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.UnsubscribeNotificationRequest} UnsubscribeNotificationRequest
+                     */
+                    UnsubscribeNotificationRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.UnsubscribeNotificationRequest)
+                            return object;
+                        var message = new $root.xsuportal.proto.services.contestant.UnsubscribeNotificationRequest();
+                        if (object.endpoint != null)
+                            message.endpoint = String(object.endpoint);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an UnsubscribeNotificationRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.UnsubscribeNotificationRequest} message UnsubscribeNotificationRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UnsubscribeNotificationRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults)
+                            object.endpoint = "";
+                        if (message.endpoint != null && message.hasOwnProperty("endpoint"))
+                            object.endpoint = message.endpoint;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this UnsubscribeNotificationRequest to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UnsubscribeNotificationRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UnsubscribeNotificationRequest;
+                })();
+
+                contestant.UnsubscribeNotificationResponse = (function() {
+
+                    /**
+                     * Properties of an UnsubscribeNotificationResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @interface IUnsubscribeNotificationResponse
+                     */
+
+                    /**
+                     * Constructs a new UnsubscribeNotificationResponse.
+                     * @memberof xsuportal.proto.services.contestant
+                     * @classdesc Represents an UnsubscribeNotificationResponse.
+                     * @implements IUnsubscribeNotificationResponse
+                     * @constructor
+                     * @param {xsuportal.proto.services.contestant.IUnsubscribeNotificationResponse=} [properties] Properties to set
+                     */
+                    function UnsubscribeNotificationResponse(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Creates a new UnsubscribeNotificationResponse instance using the specified properties.
+                     * @function create
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IUnsubscribeNotificationResponse=} [properties] Properties to set
+                     * @returns {xsuportal.proto.services.contestant.UnsubscribeNotificationResponse} UnsubscribeNotificationResponse instance
+                     */
+                    UnsubscribeNotificationResponse.create = function create(properties) {
+                        return new UnsubscribeNotificationResponse(properties);
+                    };
+
+                    /**
+                     * Encodes the specified UnsubscribeNotificationResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.UnsubscribeNotificationResponse.verify|verify} messages.
+                     * @function encode
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IUnsubscribeNotificationResponse} message UnsubscribeNotificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UnsubscribeNotificationResponse.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified UnsubscribeNotificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.UnsubscribeNotificationResponse.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.IUnsubscribeNotificationResponse} message UnsubscribeNotificationResponse message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    UnsubscribeNotificationResponse.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an UnsubscribeNotificationResponse message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {xsuportal.proto.services.contestant.UnsubscribeNotificationResponse} UnsubscribeNotificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UnsubscribeNotificationResponse.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.xsuportal.proto.services.contestant.UnsubscribeNotificationResponse();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an UnsubscribeNotificationResponse message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationResponse
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {xsuportal.proto.services.contestant.UnsubscribeNotificationResponse} UnsubscribeNotificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    UnsubscribeNotificationResponse.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an UnsubscribeNotificationResponse message.
+                     * @function verify
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UnsubscribeNotificationResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UnsubscribeNotificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {xsuportal.proto.services.contestant.UnsubscribeNotificationResponse} UnsubscribeNotificationResponse
+                     */
+                    UnsubscribeNotificationResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.xsuportal.proto.services.contestant.UnsubscribeNotificationResponse)
+                            return object;
+                        return new $root.xsuportal.proto.services.contestant.UnsubscribeNotificationResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from an UnsubscribeNotificationResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationResponse
+                     * @static
+                     * @param {xsuportal.proto.services.contestant.UnsubscribeNotificationResponse} message UnsubscribeNotificationResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UnsubscribeNotificationResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this UnsubscribeNotificationResponse to JSON.
+                     * @function toJSON
+                     * @memberof xsuportal.proto.services.contestant.UnsubscribeNotificationResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UnsubscribeNotificationResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UnsubscribeNotificationResponse;
                 })();
 
                 contestant.SignupRequest = (function() {

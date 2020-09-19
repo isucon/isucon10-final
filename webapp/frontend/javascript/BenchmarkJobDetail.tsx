@@ -1,22 +1,20 @@
 import { xsuportal } from "./pb";
 
-import React, { useEffect, useCallback, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
-import { Timestamp } from "./common/Timestamp";
-import { ApiClient } from "./common/ApiClient";
-import { Index } from "./Index";
-import { LoginRequired } from "./common/LoginRequired";
-import { ErrorMessage } from "./common/ErrorMessage";
-import { BenchmarkJobStatus } from "./dashboard/BenchmarkJobStatus";
+import { BenchmarkJobStatus } from "./BenchmarkJobStatus";
+import { Timestamp } from "./Timestamp";
 
 export interface Props {
-  client: ApiClient;
-  id: number;
-  root: Index;
+  job: xsuportal.proto.resources.IBenchmarkJob;
+  admin?: boolean;
 }
 
-const renderJobSummary = (job: xsuportal.proto.resources.IBenchmarkJob) => {
+const renderJobSummary = (
+  job: xsuportal.proto.resources.IBenchmarkJob,
+  admin: boolean
+) => {
   return (
     <div className="card mt-5">
       <header className="card-header">
@@ -27,24 +25,41 @@ const renderJobSummary = (job: xsuportal.proto.resources.IBenchmarkJob) => {
           <b>ID:</b> {job.id}
         </p>
         <p>
-          <b>Status:</b>
-          <BenchmarkJobStatus status={job.status!} />
+          <b>Target:</b> {job.targetHostname}
         </p>
         <p>
-          <b>Enqueued At:</b>
-          {job.createdAt ? <Timestamp timestamp={job.createdAt} /> : "N/A"}
+          <b>Status:</b> <BenchmarkJobStatus status={job.status!} />
         </p>
         <p>
-          <b>Updated At:</b>
-          {job.updatedAt ? <Timestamp timestamp={job.updatedAt} /> : "N/A"}
+          <b>Enqueued At:</b> <Timestamp timestamp={job.createdAt!} />
         </p>
         <p>
-          <b>Started At:</b>
+          <b>Updated At:</b> <Timestamp timestamp={job.updatedAt!} />
+        </p>
+        <p>
+          <b>Started At:</b>{" "}
           {job.startedAt ? <Timestamp timestamp={job.startedAt} /> : "N/A"}
         </p>
         <p>
-          <b>Finished At:</b>
+          <b>Finished At:</b>{" "}
           {job.finishedAt ? <Timestamp timestamp={job.finishedAt} /> : "N/A"}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const renderTeam = (team: xsuportal.proto.resources.ITeam) => {
+  return (
+    <div className="card mt-5">
+      <header className="card-header">
+        <h4 className="is-4 card-header-title">Team</h4>
+      </header>
+      <div className="card-content">
+        <p>
+          <Link to={`/admin/teams/${encodeURIComponent(team.id!.toString())}`}>
+            {team.name} (#{team.id!.toString()})
+          </Link>
         </p>
       </div>
     </div>
@@ -62,32 +77,28 @@ const renderJobResult = (job: xsuportal.proto.resources.IBenchmarkJob) => {
       <div className="card-content">
         <p>
           {result.finished ? (
-            <span className="tag is-success">Finished</span>
+            <span className="tag is-info">Finished</span>
           ) : (
             <span className="tag is-warning">In progress</span>
           )}
           {result.finished ? (
             result.passed ? (
-              <span className="tag is-success">Passed</span>
+              <span className="tag is-success ml-2">Passed</span>
             ) : (
-              <span className="tag is-danger">Failed</span>
+              <span className="tag is-danger ml-2">Failed</span>
             )
           ) : null}
         </p>
         <p>
-          <b>Marked At:</b>
-          {job.result.markedAt ? (
-            <Timestamp timestamp={job.result.markedAt} />
-          ) : (
-            "N/A"
-          )}
+          <b>Marked At:</b> <Timestamp timestamp={result.markedAt!} />
         </p>
         <p>
           <b>Score:</b> {result.score}
         </p>
         {result.scoreBreakdown ? (
           <p>
-            + {result.scoreBreakdown.raw} - {result.scoreBreakdown.deduction}
+            <b>Score Breakdown:</b> base={result.scoreBreakdown.raw}, deduction=
+            {result.scoreBreakdown.deduction}
           </p>
         ) : null}
       </div>
@@ -95,8 +106,12 @@ const renderJobResult = (job: xsuportal.proto.resources.IBenchmarkJob) => {
   );
 };
 
-const renderJobExecution = (job: xsuportal.proto.resources.IBenchmarkJob) => {
+const renderJobExecution = (
+  job: xsuportal.proto.resources.IBenchmarkJob,
+  admin: boolean
+) => {
   if (!job.result) return;
+  const execution = job.result;
   return (
     <div className="card mt-5">
       <header className="card-header">
@@ -104,58 +119,23 @@ const renderJobExecution = (job: xsuportal.proto.resources.IBenchmarkJob) => {
       </header>
       <div className="card-content">
         <p>
-          <b>Reason:</b> {job.result.reason}
+          <b>Reason:</b> {execution.reason}
         </p>
       </div>
     </div>
   );
 };
 
-const renderError = (error: any) => {
-  if (error != null) {
-    return;
-    <ErrorMessage error={error}></ErrorMessage>;
-  } else {
-    return <></>;
-  }
-};
-
-export const BenchmarkJobDetail: React.FC<Props> = ({ client, id, root }) => {
-  const [
-    job,
-    setJob,
-  ] = React.useState<xsuportal.proto.resources.IBenchmarkJob | null>(null);
-  const [error, setError] = React.useState<any>(null);
-  useEffect(() => {
-    if (!job) {
-      (async () => {
-        try {
-          const getBenchmarkJobResponse = await client.getBenchmarkJob(id);
-          setJob(getBenchmarkJobResponse.job!);
-        } catch (err) {
-          setError(err);
-        }
-      })();
-    }
-  }, [job]);
-  if (job) {
-    return (
-      <>
-        <LoginRequired root={root} />
-        <section>
-          {renderError(error)}
-          {renderJobSummary(job)}
-          {renderJobResult(job)}
-          {renderJobExecution(job)}
-        </section>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <LoginRequired root={root} />
-        {renderError(error)}
-      </>
-    );
-  }
+export const BenchmarkJobDetail: React.FC<Props> = (props: Props) => {
+  const { job } = props;
+  return (
+    <>
+      <section>
+        {renderJobSummary(job, !!props.admin)}
+        {props.admin ? renderTeam(job.team!) : null}
+        {renderJobResult(job)}
+        {renderJobExecution(job, !!props.admin)}
+      </section>
+    </>
+  );
 };

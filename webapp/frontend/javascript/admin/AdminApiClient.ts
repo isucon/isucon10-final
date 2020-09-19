@@ -1,5 +1,5 @@
 import { xsuportal } from "../pb";
-import { ApiClient } from "../common/ApiClient";
+import { ApiClient } from "../ApiClient";
 
 export class AdminApiClient {
   public apiClient: ApiClient;

@@ -1,14 +1,12 @@
-import type { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./common/ApiClient";
+import type { xsuportal } from "../pb";
+import { ApiError, ApiClient } from "../ApiClient";
 
 import React from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { Clarification } from "./clarification/Clarification";
-import { ErrorMessage } from "./common/ErrorMessage";
-import { LoginRequired } from "./common/LoginRequired";
-import { Index } from "./Index";
+import { Clarification } from "../Clarification";
+import { ErrorMessage } from "../ErrorMessage";
 
 interface FormProps {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
@@ -91,7 +89,7 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
   client: ApiClient;
-  root: Index;
+  onLastClarificationIdSeenChange: (id?: number) => any;
 }
 
 export const ContestantClarificationList: React.FC<Props> = (props: Props) => {
@@ -110,6 +108,12 @@ export const ContestantClarificationList: React.FC<Props> = (props: Props) => {
     setList(list ? [clar, ...list] : [clar]);
   };
 
+  React.useEffect(() => {
+    if (!list) return;
+    const clar = list.find((clar) => clar.answered);
+    props.onLastClarificationIdSeenChange((clar?.id! as number) ?? undefined);
+  }, [list]);
+
   const renderList = () => {
     if (!list) return null;
     return list.map((clar) => {
@@ -125,7 +129,6 @@ export const ContestantClarificationList: React.FC<Props> = (props: Props) => {
 
   return (
     <>
-      <LoginRequired root={props.root} />
       <ClarForm
         session={props.session}
         client={props.client}

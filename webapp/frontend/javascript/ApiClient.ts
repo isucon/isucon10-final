@@ -1,4 +1,4 @@
-import { xsuportal } from "../pb";
+import { xsuportal } from "./pb";
 // import * as Rails from "@rails/ujs";
 
 export class ApiError extends Error {
@@ -293,6 +293,65 @@ export class ApiClient {
     const resp = await this.request(
       `${this.baseUrl}/api/contestant/clarifications`,
       "POST",
+      null,
+      payloadMessage
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async listNotifications(after?: number) {
+    const klass = xsuportal.proto.services.contestant.ListNotificationsResponse;
+    const resp = await this.request(
+      `${this.baseUrl}/api/contestant/notifications?after=${
+        after ? encodeURIComponent(after.toString()) : ""
+      }`,
+      "GET",
+      null,
+      null
+    );
+    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async subscribeNotification(subscription: PushSubscription) {
+    const responseClass =
+      xsuportal.proto.services.contestant.SubscribeNotificationResponse;
+    const payloadClass =
+      xsuportal.proto.services.contestant.SubscribeNotificationRequest;
+    const b64 = (buf: ArrayBuffer | null) =>
+      buf ? btoa(String.fromCharCode(...new Uint8Array(buf))) : null;
+    const payloadMessage = payloadClass
+      .encode(
+        payloadClass.fromObject({
+          endpoint: subscription.endpoint,
+          p256dh: b64(subscription.getKey("p256dh")),
+          auth: b64(subscription.getKey("auth")),
+        })
+      )
+      .finish();
+    const resp = await this.request(
+      `${this.baseUrl}/api/contestant/push_subscriptions`,
+      "POST",
+      null,
+      payloadMessage
+    );
+    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async unsubscribeNotification(subscription: PushSubscription) {
+    const responseClass =
+      xsuportal.proto.services.contestant.UnsubscribeNotificationResponse;
+    const payloadClass =
+      xsuportal.proto.services.contestant.UnsubscribeNotificationRequest;
+    const payloadMessage = payloadClass
+      .encode(
+        payloadClass.fromObject({
+          endpoint: subscription.endpoint,
+        })
+      )
+      .finish();
+    const resp = await this.request(
+      `${this.baseUrl}/api/contestant/push_subscriptions`,
+      "DELETE",
       null,
       payloadMessage
     );

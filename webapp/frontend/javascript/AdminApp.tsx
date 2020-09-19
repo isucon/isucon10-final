@@ -1,11 +1,11 @@
 import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./common/ApiClient";
+import { ApiError, ApiClient } from "./ApiClient";
 import { AdminApiClient } from "./admin/AdminApiClient";
 
 import React from "react";
 import { BrowserRouter, Switch, Route, Link, NavLink } from "react-router-dom";
 
-import { ErrorMessage } from "./common/ErrorMessage";
+import { ErrorMessage } from "./ErrorMessage";
 import { AdminNavbar } from "./admin/AdminNavbar";
 
 import { AdminClarificationList } from "./admin/AdminClarificationList";

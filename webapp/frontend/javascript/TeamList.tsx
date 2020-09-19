@@ -1,8 +1,8 @@
 import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./common/ApiClient";
+import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 
-import { ErrorMessage } from "./common/ErrorMessage";
+import { ErrorMessage } from "./ErrorMessage";
 
 export interface Props {
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;

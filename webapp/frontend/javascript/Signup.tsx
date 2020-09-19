@@ -1,14 +1,12 @@
 import { xsuportal } from "./pb";
-import { ApiError, ApiClient } from "./common/ApiClient";
+import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 import { Redirect } from "react-router-dom";
 
-import { ErrorMessage } from "./common/ErrorMessage";
-import { Index } from "./Index";
+import { ErrorMessage } from "./ErrorMessage";
 
 export interface Props {
   client: ApiClient;
-  root: Index;
 }
 
 export interface State {
@@ -164,7 +162,9 @@ export class Signup extends React.Component<Props, State> {
         error: null,
         requesting: false,
       });
-      this.props.root.setState({ loggedin: true });
+      // this.props.root.setState({ loggedin: true });
+      // location.reload();
+      location.href = "/";
     } catch (err) {
       this.setState({ error: err });
     }

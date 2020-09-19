@@ -1898,6 +1898,414 @@ export namespace xsuportal {
                 }
             }
 
+            /** Properties of a Notification. */
+            interface INotification {
+
+                /** Notification id */
+                id?: (number|Long|null);
+
+                /** Notification createdAt */
+                createdAt?: (google.protobuf.ITimestamp|null);
+
+                /** Notification contentBenchmarkJob */
+                contentBenchmarkJob?: (xsuportal.proto.resources.Notification.IBenchmarkJobMessage|null);
+
+                /** Notification contentClarification */
+                contentClarification?: (xsuportal.proto.resources.Notification.IClarificationMessage|null);
+
+                /** Notification contentTest */
+                contentTest?: (xsuportal.proto.resources.Notification.ITestMessage|null);
+            }
+
+            /** Represents a Notification. */
+            class Notification implements INotification {
+
+                /**
+                 * Constructs a new Notification.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: xsuportal.proto.resources.INotification);
+
+                /** Notification id. */
+                public id: (number|Long);
+
+                /** Notification createdAt. */
+                public createdAt?: (google.protobuf.ITimestamp|null);
+
+                /** Notification contentBenchmarkJob. */
+                public contentBenchmarkJob?: (xsuportal.proto.resources.Notification.IBenchmarkJobMessage|null);
+
+                /** Notification contentClarification. */
+                public contentClarification?: (xsuportal.proto.resources.Notification.IClarificationMessage|null);
+
+                /** Notification contentTest. */
+                public contentTest?: (xsuportal.proto.resources.Notification.ITestMessage|null);
+
+                /** Notification content. */
+                public content?: ("contentBenchmarkJob"|"contentClarification"|"contentTest");
+
+                /**
+                 * Creates a new Notification instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns Notification instance
+                 */
+                public static create(properties?: xsuportal.proto.resources.INotification): xsuportal.proto.resources.Notification;
+
+                /**
+                 * Encodes the specified Notification message. Does not implicitly {@link xsuportal.proto.resources.Notification.verify|verify} messages.
+                 * @param message Notification message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: xsuportal.proto.resources.INotification, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified Notification message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Notification.verify|verify} messages.
+                 * @param message Notification message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: xsuportal.proto.resources.INotification, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a Notification message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns Notification
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Notification;
+
+                /**
+                 * Decodes a Notification message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns Notification
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Notification;
+
+                /**
+                 * Verifies a Notification message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Notification message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Notification
+                 */
+                public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Notification;
+
+                /**
+                 * Creates a plain object from a Notification message. Also converts values to other types if specified.
+                 * @param message Notification
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: xsuportal.proto.resources.Notification, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Notification to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace Notification {
+
+                /** Properties of a BenchmarkJobMessage. */
+                interface IBenchmarkJobMessage {
+
+                    /** BenchmarkJobMessage benchmarkJobId */
+                    benchmarkJobId?: (number|Long|null);
+                }
+
+                /** Represents a BenchmarkJobMessage. */
+                class BenchmarkJobMessage implements IBenchmarkJobMessage {
+
+                    /**
+                     * Constructs a new BenchmarkJobMessage.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.resources.Notification.IBenchmarkJobMessage);
+
+                    /** BenchmarkJobMessage benchmarkJobId. */
+                    public benchmarkJobId: (number|Long);
+
+                    /**
+                     * Creates a new BenchmarkJobMessage instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns BenchmarkJobMessage instance
+                     */
+                    public static create(properties?: xsuportal.proto.resources.Notification.IBenchmarkJobMessage): xsuportal.proto.resources.Notification.BenchmarkJobMessage;
+
+                    /**
+                     * Encodes the specified BenchmarkJobMessage message. Does not implicitly {@link xsuportal.proto.resources.Notification.BenchmarkJobMessage.verify|verify} messages.
+                     * @param message BenchmarkJobMessage message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.resources.Notification.IBenchmarkJobMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified BenchmarkJobMessage message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Notification.BenchmarkJobMessage.verify|verify} messages.
+                     * @param message BenchmarkJobMessage message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.resources.Notification.IBenchmarkJobMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a BenchmarkJobMessage message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns BenchmarkJobMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Notification.BenchmarkJobMessage;
+
+                    /**
+                     * Decodes a BenchmarkJobMessage message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns BenchmarkJobMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Notification.BenchmarkJobMessage;
+
+                    /**
+                     * Verifies a BenchmarkJobMessage message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a BenchmarkJobMessage message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns BenchmarkJobMessage
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Notification.BenchmarkJobMessage;
+
+                    /**
+                     * Creates a plain object from a BenchmarkJobMessage message. Also converts values to other types if specified.
+                     * @param message BenchmarkJobMessage
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.resources.Notification.BenchmarkJobMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this BenchmarkJobMessage to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ClarificationMessage. */
+                interface IClarificationMessage {
+
+                    /** ClarificationMessage clarificationId */
+                    clarificationId?: (number|Long|null);
+
+                    /** ClarificationMessage owned */
+                    owned?: (boolean|null);
+
+                    /** ClarificationMessage updated */
+                    updated?: (boolean|null);
+
+                    /** ClarificationMessage admin */
+                    admin?: (boolean|null);
+                }
+
+                /** Represents a ClarificationMessage. */
+                class ClarificationMessage implements IClarificationMessage {
+
+                    /**
+                     * Constructs a new ClarificationMessage.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.resources.Notification.IClarificationMessage);
+
+                    /** ClarificationMessage clarificationId. */
+                    public clarificationId: (number|Long);
+
+                    /** ClarificationMessage owned. */
+                    public owned: boolean;
+
+                    /** ClarificationMessage updated. */
+                    public updated: boolean;
+
+                    /** ClarificationMessage admin. */
+                    public admin: boolean;
+
+                    /**
+                     * Creates a new ClarificationMessage instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns ClarificationMessage instance
+                     */
+                    public static create(properties?: xsuportal.proto.resources.Notification.IClarificationMessage): xsuportal.proto.resources.Notification.ClarificationMessage;
+
+                    /**
+                     * Encodes the specified ClarificationMessage message. Does not implicitly {@link xsuportal.proto.resources.Notification.ClarificationMessage.verify|verify} messages.
+                     * @param message ClarificationMessage message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.resources.Notification.IClarificationMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified ClarificationMessage message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Notification.ClarificationMessage.verify|verify} messages.
+                     * @param message ClarificationMessage message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.resources.Notification.IClarificationMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a ClarificationMessage message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns ClarificationMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Notification.ClarificationMessage;
+
+                    /**
+                     * Decodes a ClarificationMessage message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns ClarificationMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Notification.ClarificationMessage;
+
+                    /**
+                     * Verifies a ClarificationMessage message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ClarificationMessage message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ClarificationMessage
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Notification.ClarificationMessage;
+
+                    /**
+                     * Creates a plain object from a ClarificationMessage message. Also converts values to other types if specified.
+                     * @param message ClarificationMessage
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.resources.Notification.ClarificationMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ClarificationMessage to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a TestMessage. */
+                interface ITestMessage {
+
+                    /** TestMessage something */
+                    something?: (number|Long|null);
+                }
+
+                /** Represents a TestMessage. */
+                class TestMessage implements ITestMessage {
+
+                    /**
+                     * Constructs a new TestMessage.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.resources.Notification.ITestMessage);
+
+                    /** TestMessage something. */
+                    public something: (number|Long);
+
+                    /**
+                     * Creates a new TestMessage instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns TestMessage instance
+                     */
+                    public static create(properties?: xsuportal.proto.resources.Notification.ITestMessage): xsuportal.proto.resources.Notification.TestMessage;
+
+                    /**
+                     * Encodes the specified TestMessage message. Does not implicitly {@link xsuportal.proto.resources.Notification.TestMessage.verify|verify} messages.
+                     * @param message TestMessage message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.resources.Notification.ITestMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified TestMessage message, length delimited. Does not implicitly {@link xsuportal.proto.resources.Notification.TestMessage.verify|verify} messages.
+                     * @param message TestMessage message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.resources.Notification.ITestMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a TestMessage message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns TestMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.resources.Notification.TestMessage;
+
+                    /**
+                     * Decodes a TestMessage message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns TestMessage
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.resources.Notification.TestMessage;
+
+                    /**
+                     * Verifies a TestMessage message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a TestMessage message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns TestMessage
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.resources.Notification.TestMessage;
+
+                    /**
+                     * Creates a plain object from a TestMessage message. Also converts values to other types if specified.
+                     * @param message TestMessage
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.resources.Notification.TestMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this TestMessage to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+
             /** Properties of a Staff. */
             interface IStaff {
 
@@ -6029,6 +6437,12 @@ export namespace xsuportal {
 
                     /** GetCurrentSessionResponse contestant */
                     contestant?: (xsuportal.proto.resources.IContestant|null);
+
+                    /** GetCurrentSessionResponse contest */
+                    contest?: (xsuportal.proto.resources.IContest|null);
+
+                    /** GetCurrentSessionResponse pushVapidKey */
+                    pushVapidKey?: (string|null);
                 }
 
                 /** Represents a GetCurrentSessionResponse. */
@@ -6045,6 +6459,12 @@ export namespace xsuportal {
 
                     /** GetCurrentSessionResponse contestant. */
                     public contestant?: (xsuportal.proto.resources.IContestant|null);
+
+                    /** GetCurrentSessionResponse contest. */
+                    public contest?: (xsuportal.proto.resources.IContest|null);
+
+                    /** GetCurrentSessionResponse pushVapidKey. */
+                    public pushVapidKey: string;
 
                     /**
                      * Creates a new GetCurrentSessionResponse instance using the specified properties.
@@ -7705,175 +8125,547 @@ export namespace xsuportal {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a GetNotificationsRequest. */
-                interface IGetNotificationsRequest {
+                /** Properties of a ListNotificationsQuery. */
+                interface IListNotificationsQuery {
+
+                    /** ListNotificationsQuery after */
+                    after?: (number|Long|null);
                 }
 
-                /** Represents a GetNotificationsRequest. */
-                class GetNotificationsRequest implements IGetNotificationsRequest {
+                /** Represents a ListNotificationsQuery. */
+                class ListNotificationsQuery implements IListNotificationsQuery {
 
                     /**
-                     * Constructs a new GetNotificationsRequest.
+                     * Constructs a new ListNotificationsQuery.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: xsuportal.proto.services.contestant.IGetNotificationsRequest);
+                    constructor(properties?: xsuportal.proto.services.contestant.IListNotificationsQuery);
+
+                    /** ListNotificationsQuery after. */
+                    public after: (number|Long);
 
                     /**
-                     * Creates a new GetNotificationsRequest instance using the specified properties.
+                     * Creates a new ListNotificationsQuery instance using the specified properties.
                      * @param [properties] Properties to set
-                     * @returns GetNotificationsRequest instance
+                     * @returns ListNotificationsQuery instance
                      */
-                    public static create(properties?: xsuportal.proto.services.contestant.IGetNotificationsRequest): xsuportal.proto.services.contestant.GetNotificationsRequest;
+                    public static create(properties?: xsuportal.proto.services.contestant.IListNotificationsQuery): xsuportal.proto.services.contestant.ListNotificationsQuery;
 
                     /**
-                     * Encodes the specified GetNotificationsRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsRequest.verify|verify} messages.
-                     * @param message GetNotificationsRequest message or plain object to encode
+                     * Encodes the specified ListNotificationsQuery message. Does not implicitly {@link xsuportal.proto.services.contestant.ListNotificationsQuery.verify|verify} messages.
+                     * @param message ListNotificationsQuery message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: xsuportal.proto.services.contestant.IGetNotificationsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.contestant.IListNotificationsQuery, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified GetNotificationsRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsRequest.verify|verify} messages.
-                     * @param message GetNotificationsRequest message or plain object to encode
+                     * Encodes the specified ListNotificationsQuery message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListNotificationsQuery.verify|verify} messages.
+                     * @param message ListNotificationsQuery message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IGetNotificationsRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IListNotificationsQuery, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Decodes a GetNotificationsRequest message from the specified reader or buffer.
+                     * Decodes a ListNotificationsQuery message from the specified reader or buffer.
                      * @param reader Reader or buffer to decode from
                      * @param [length] Message length if known beforehand
-                     * @returns GetNotificationsRequest
+                     * @returns ListNotificationsQuery
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.GetNotificationsRequest;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.ListNotificationsQuery;
 
                     /**
-                     * Decodes a GetNotificationsRequest message from the specified reader or buffer, length delimited.
+                     * Decodes a ListNotificationsQuery message from the specified reader or buffer, length delimited.
                      * @param reader Reader or buffer to decode from
-                     * @returns GetNotificationsRequest
+                     * @returns ListNotificationsQuery
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.GetNotificationsRequest;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.ListNotificationsQuery;
 
                     /**
-                     * Verifies a GetNotificationsRequest message.
+                     * Verifies a ListNotificationsQuery message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a GetNotificationsRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a ListNotificationsQuery message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns GetNotificationsRequest
+                     * @returns ListNotificationsQuery
                      */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.GetNotificationsRequest;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.ListNotificationsQuery;
 
                     /**
-                     * Creates a plain object from a GetNotificationsRequest message. Also converts values to other types if specified.
-                     * @param message GetNotificationsRequest
+                     * Creates a plain object from a ListNotificationsQuery message. Also converts values to other types if specified.
+                     * @param message ListNotificationsQuery
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: xsuportal.proto.services.contestant.GetNotificationsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.contestant.ListNotificationsQuery, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this GetNotificationsRequest to JSON.
+                     * Converts this ListNotificationsQuery to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a GetNotificationsResponse. */
-                interface IGetNotificationsResponse {
+                /** Properties of a ListNotificationsResponse. */
+                interface IListNotificationsResponse {
 
-                    /** GetNotificationsResponse lastAnsweredClarificationId */
+                    /** ListNotificationsResponse lastAnsweredClarificationId */
                     lastAnsweredClarificationId?: (number|Long|null);
+
+                    /** ListNotificationsResponse notifications */
+                    notifications?: (xsuportal.proto.resources.INotification[]|null);
                 }
 
-                /** Represents a GetNotificationsResponse. */
-                class GetNotificationsResponse implements IGetNotificationsResponse {
+                /** Represents a ListNotificationsResponse. */
+                class ListNotificationsResponse implements IListNotificationsResponse {
 
                     /**
-                     * Constructs a new GetNotificationsResponse.
+                     * Constructs a new ListNotificationsResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: xsuportal.proto.services.contestant.IGetNotificationsResponse);
+                    constructor(properties?: xsuportal.proto.services.contestant.IListNotificationsResponse);
 
-                    /** GetNotificationsResponse lastAnsweredClarificationId. */
+                    /** ListNotificationsResponse lastAnsweredClarificationId. */
                     public lastAnsweredClarificationId: (number|Long);
 
+                    /** ListNotificationsResponse notifications. */
+                    public notifications: xsuportal.proto.resources.INotification[];
+
                     /**
-                     * Creates a new GetNotificationsResponse instance using the specified properties.
+                     * Creates a new ListNotificationsResponse instance using the specified properties.
                      * @param [properties] Properties to set
-                     * @returns GetNotificationsResponse instance
+                     * @returns ListNotificationsResponse instance
                      */
-                    public static create(properties?: xsuportal.proto.services.contestant.IGetNotificationsResponse): xsuportal.proto.services.contestant.GetNotificationsResponse;
+                    public static create(properties?: xsuportal.proto.services.contestant.IListNotificationsResponse): xsuportal.proto.services.contestant.ListNotificationsResponse;
 
                     /**
-                     * Encodes the specified GetNotificationsResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsResponse.verify|verify} messages.
-                     * @param message GetNotificationsResponse message or plain object to encode
+                     * Encodes the specified ListNotificationsResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.ListNotificationsResponse.verify|verify} messages.
+                     * @param message ListNotificationsResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encode(message: xsuportal.proto.services.contestant.IGetNotificationsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encode(message: xsuportal.proto.services.contestant.IListNotificationsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Encodes the specified GetNotificationsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.GetNotificationsResponse.verify|verify} messages.
-                     * @param message GetNotificationsResponse message or plain object to encode
+                     * Encodes the specified ListNotificationsResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.ListNotificationsResponse.verify|verify} messages.
+                     * @param message ListNotificationsResponse message or plain object to encode
                      * @param [writer] Writer to encode to
                      * @returns Writer
                      */
-                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IGetNotificationsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IListNotificationsResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
                     /**
-                     * Decodes a GetNotificationsResponse message from the specified reader or buffer.
+                     * Decodes a ListNotificationsResponse message from the specified reader or buffer.
                      * @param reader Reader or buffer to decode from
                      * @param [length] Message length if known beforehand
-                     * @returns GetNotificationsResponse
+                     * @returns ListNotificationsResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.GetNotificationsResponse;
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.ListNotificationsResponse;
 
                     /**
-                     * Decodes a GetNotificationsResponse message from the specified reader or buffer, length delimited.
+                     * Decodes a ListNotificationsResponse message from the specified reader or buffer, length delimited.
                      * @param reader Reader or buffer to decode from
-                     * @returns GetNotificationsResponse
+                     * @returns ListNotificationsResponse
                      * @throws {Error} If the payload is not a reader or valid buffer
                      * @throws {$protobuf.util.ProtocolError} If required fields are missing
                      */
-                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.GetNotificationsResponse;
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.ListNotificationsResponse;
 
                     /**
-                     * Verifies a GetNotificationsResponse message.
+                     * Verifies a ListNotificationsResponse message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a GetNotificationsResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a ListNotificationsResponse message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns GetNotificationsResponse
+                     * @returns ListNotificationsResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.GetNotificationsResponse;
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.ListNotificationsResponse;
 
                     /**
-                     * Creates a plain object from a GetNotificationsResponse message. Also converts values to other types if specified.
-                     * @param message GetNotificationsResponse
+                     * Creates a plain object from a ListNotificationsResponse message. Also converts values to other types if specified.
+                     * @param message ListNotificationsResponse
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: xsuportal.proto.services.contestant.GetNotificationsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: xsuportal.proto.services.contestant.ListNotificationsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this GetNotificationsResponse to JSON.
+                     * Converts this ListNotificationsResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a SubscribeNotificationRequest. */
+                interface ISubscribeNotificationRequest {
+
+                    /** SubscribeNotificationRequest endpoint */
+                    endpoint?: (string|null);
+
+                    /** SubscribeNotificationRequest p256dh */
+                    p256dh?: (string|null);
+
+                    /** SubscribeNotificationRequest auth */
+                    auth?: (string|null);
+                }
+
+                /** Represents a SubscribeNotificationRequest. */
+                class SubscribeNotificationRequest implements ISubscribeNotificationRequest {
+
+                    /**
+                     * Constructs a new SubscribeNotificationRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.ISubscribeNotificationRequest);
+
+                    /** SubscribeNotificationRequest endpoint. */
+                    public endpoint: string;
+
+                    /** SubscribeNotificationRequest p256dh. */
+                    public p256dh: string;
+
+                    /** SubscribeNotificationRequest auth. */
+                    public auth: string;
+
+                    /**
+                     * Creates a new SubscribeNotificationRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns SubscribeNotificationRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.ISubscribeNotificationRequest): xsuportal.proto.services.contestant.SubscribeNotificationRequest;
+
+                    /**
+                     * Encodes the specified SubscribeNotificationRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.SubscribeNotificationRequest.verify|verify} messages.
+                     * @param message SubscribeNotificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.ISubscribeNotificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified SubscribeNotificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.SubscribeNotificationRequest.verify|verify} messages.
+                     * @param message SubscribeNotificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.ISubscribeNotificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a SubscribeNotificationRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns SubscribeNotificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.SubscribeNotificationRequest;
+
+                    /**
+                     * Decodes a SubscribeNotificationRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns SubscribeNotificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.SubscribeNotificationRequest;
+
+                    /**
+                     * Verifies a SubscribeNotificationRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a SubscribeNotificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns SubscribeNotificationRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.SubscribeNotificationRequest;
+
+                    /**
+                     * Creates a plain object from a SubscribeNotificationRequest message. Also converts values to other types if specified.
+                     * @param message SubscribeNotificationRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.SubscribeNotificationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this SubscribeNotificationRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a SubscribeNotificationResponse. */
+                interface ISubscribeNotificationResponse {
+                }
+
+                /** Represents a SubscribeNotificationResponse. */
+                class SubscribeNotificationResponse implements ISubscribeNotificationResponse {
+
+                    /**
+                     * Constructs a new SubscribeNotificationResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.ISubscribeNotificationResponse);
+
+                    /**
+                     * Creates a new SubscribeNotificationResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns SubscribeNotificationResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.ISubscribeNotificationResponse): xsuportal.proto.services.contestant.SubscribeNotificationResponse;
+
+                    /**
+                     * Encodes the specified SubscribeNotificationResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.SubscribeNotificationResponse.verify|verify} messages.
+                     * @param message SubscribeNotificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.ISubscribeNotificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified SubscribeNotificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.SubscribeNotificationResponse.verify|verify} messages.
+                     * @param message SubscribeNotificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.ISubscribeNotificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes a SubscribeNotificationResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns SubscribeNotificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.SubscribeNotificationResponse;
+
+                    /**
+                     * Decodes a SubscribeNotificationResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns SubscribeNotificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.SubscribeNotificationResponse;
+
+                    /**
+                     * Verifies a SubscribeNotificationResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a SubscribeNotificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns SubscribeNotificationResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.SubscribeNotificationResponse;
+
+                    /**
+                     * Creates a plain object from a SubscribeNotificationResponse message. Also converts values to other types if specified.
+                     * @param message SubscribeNotificationResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.SubscribeNotificationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this SubscribeNotificationResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an UnsubscribeNotificationRequest. */
+                interface IUnsubscribeNotificationRequest {
+
+                    /** UnsubscribeNotificationRequest endpoint */
+                    endpoint?: (string|null);
+                }
+
+                /** Represents an UnsubscribeNotificationRequest. */
+                class UnsubscribeNotificationRequest implements IUnsubscribeNotificationRequest {
+
+                    /**
+                     * Constructs a new UnsubscribeNotificationRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IUnsubscribeNotificationRequest);
+
+                    /** UnsubscribeNotificationRequest endpoint. */
+                    public endpoint: string;
+
+                    /**
+                     * Creates a new UnsubscribeNotificationRequest instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns UnsubscribeNotificationRequest instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IUnsubscribeNotificationRequest): xsuportal.proto.services.contestant.UnsubscribeNotificationRequest;
+
+                    /**
+                     * Encodes the specified UnsubscribeNotificationRequest message. Does not implicitly {@link xsuportal.proto.services.contestant.UnsubscribeNotificationRequest.verify|verify} messages.
+                     * @param message UnsubscribeNotificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IUnsubscribeNotificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified UnsubscribeNotificationRequest message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.UnsubscribeNotificationRequest.verify|verify} messages.
+                     * @param message UnsubscribeNotificationRequest message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IUnsubscribeNotificationRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an UnsubscribeNotificationRequest message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns UnsubscribeNotificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.UnsubscribeNotificationRequest;
+
+                    /**
+                     * Decodes an UnsubscribeNotificationRequest message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns UnsubscribeNotificationRequest
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.UnsubscribeNotificationRequest;
+
+                    /**
+                     * Verifies an UnsubscribeNotificationRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an UnsubscribeNotificationRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns UnsubscribeNotificationRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.UnsubscribeNotificationRequest;
+
+                    /**
+                     * Creates a plain object from an UnsubscribeNotificationRequest message. Also converts values to other types if specified.
+                     * @param message UnsubscribeNotificationRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.UnsubscribeNotificationRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this UnsubscribeNotificationRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an UnsubscribeNotificationResponse. */
+                interface IUnsubscribeNotificationResponse {
+                }
+
+                /** Represents an UnsubscribeNotificationResponse. */
+                class UnsubscribeNotificationResponse implements IUnsubscribeNotificationResponse {
+
+                    /**
+                     * Constructs a new UnsubscribeNotificationResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: xsuportal.proto.services.contestant.IUnsubscribeNotificationResponse);
+
+                    /**
+                     * Creates a new UnsubscribeNotificationResponse instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns UnsubscribeNotificationResponse instance
+                     */
+                    public static create(properties?: xsuportal.proto.services.contestant.IUnsubscribeNotificationResponse): xsuportal.proto.services.contestant.UnsubscribeNotificationResponse;
+
+                    /**
+                     * Encodes the specified UnsubscribeNotificationResponse message. Does not implicitly {@link xsuportal.proto.services.contestant.UnsubscribeNotificationResponse.verify|verify} messages.
+                     * @param message UnsubscribeNotificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: xsuportal.proto.services.contestant.IUnsubscribeNotificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Encodes the specified UnsubscribeNotificationResponse message, length delimited. Does not implicitly {@link xsuportal.proto.services.contestant.UnsubscribeNotificationResponse.verify|verify} messages.
+                     * @param message UnsubscribeNotificationResponse message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: xsuportal.proto.services.contestant.IUnsubscribeNotificationResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                    /**
+                     * Decodes an UnsubscribeNotificationResponse message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns UnsubscribeNotificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): xsuportal.proto.services.contestant.UnsubscribeNotificationResponse;
+
+                    /**
+                     * Decodes an UnsubscribeNotificationResponse message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns UnsubscribeNotificationResponse
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): xsuportal.proto.services.contestant.UnsubscribeNotificationResponse;
+
+                    /**
+                     * Verifies an UnsubscribeNotificationResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an UnsubscribeNotificationResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns UnsubscribeNotificationResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): xsuportal.proto.services.contestant.UnsubscribeNotificationResponse;
+
+                    /**
+                     * Creates a plain object from an UnsubscribeNotificationResponse message. Also converts values to other types if specified.
+                     * @param message UnsubscribeNotificationResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: xsuportal.proto.services.contestant.UnsubscribeNotificationResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this UnsubscribeNotificationResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

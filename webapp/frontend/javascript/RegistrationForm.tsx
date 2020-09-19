@@ -1,14 +1,12 @@
-import { xsuportal } from "../pb";
-import { ApiClient } from "../common/ApiClient";
+import { xsuportal } from "./pb";
+import { ApiClient } from "./ApiClient";
 import React from "react";
 
-import { ErrorMessage } from "../common/ErrorMessage";
-import { Index } from "../Index";
+import { ErrorMessage } from "./ErrorMessage";
 
 export interface Props {
   client: ApiClient;
   session: xsuportal.proto.services.common.GetCurrentSessionResponse;
-  root: Index;
   inviteToken: string | null;
   registrationSession: xsuportal.proto.services.registration.GetRegistrationSessionResponse;
   updateRegistrationSession: () => void;
@@ -52,7 +50,6 @@ export class RegistrationForm extends React.Component<Props, State> {
         }
       }
       this.setState({ requestError: null, requesting: false });
-      this.props.root.setState({ registered: true });
       this.props.updateRegistrationSession();
     } catch (err) {
       this.setState({ requestError: err, requesting: false });
@@ -110,13 +107,7 @@ export class RegistrationForm extends React.Component<Props, State> {
         <section className="mt-2">
           <h3 className="title is-3">注意事項</h3>
           <ul>
-            <li>
-              XSUCON への参加には
-              <a href="/terms" target="_blank">
-                参加規約
-              </a>
-              への同意が必要です。
-            </li>
+            <li>XSUCON への参加には参加規約への同意が必要です。</li>
             <li>
               参加登録が完了すると、他のチームへの参加はできなくなります。
             </li>
@@ -125,16 +116,22 @@ export class RegistrationForm extends React.Component<Props, State> {
               を確認することができます。招待 URL
               を共有し、チームメンバー全員の登録をしてください。
             </li>
+            <li>
+              チーム名・代表者名に公序良俗に反する名前は使わないでください。
+            </li>
+            <li>
+              チーム名・代表者名に機種依存文字・絵文字・HTMLタグなどが入っていた場合、サイトへの表示時に表現を変えさせていただく場合があります。
+            </li>
           </ul>
         </section>
         <section className="mt-2">
           <h3 className="title is-3">
             {this.isEditing() ? "編集" : "詳細の入力"}
           </h3>
-          {this.renderError()}
           <form onSubmit={this.onSubmit.bind(this)}>
             {this.renderTeamFormFields()}
             {this.renderContestantFormFields()}
+
             <div className="field">
               <div className="control">
                 <button
@@ -144,12 +141,9 @@ export class RegistrationForm extends React.Component<Props, State> {
                   {this.isEditing() ? "保存" : "参加規約に同意して登録"}
                 </button>
               </div>
-              <p className="help">
-                <a href="/terms" target="_blank">
-                  参加規約を確認する
-                </a>
-              </p>
             </div>
+
+            {this.renderError()}
           </form>
         </section>
       </>
