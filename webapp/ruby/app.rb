@@ -940,7 +940,7 @@ module Xsuportal
       login_required
 
       clars = db.xquery(
-        'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `updated_at` DESC',
+        'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `id` DESC',
         current_team[:id],
       )
 
@@ -1012,13 +1012,12 @@ module Xsuportal
       end
 
       last_answered_clar = db.xquery(
-        'SELECT `id` FROM `clarifications` WHERE `team_id` = ? AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1',
+        'SELECT `id` FROM `clarifications` WHERE (`team_id` = ? OR `disclosed` = TRUE) AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1',
         current_team[:id]
       ).first
 
       last_answered_clar_id = last_answered_clar ? last_answered_clar[:id] : nil
 
-      puts "DEBUG!! last_answered_clar_id=#{last_answered_clar_id} notifications=#{notifications.map{|_|_[:id]}.inspect}" if current_contestant[:id] == 'user2'
       encode_response_pb(
         last_answered_clarification_id: last_answered_clar_id,
         notifications: notifications_pb(notifications),
