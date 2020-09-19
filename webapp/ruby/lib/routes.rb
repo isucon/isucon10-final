@@ -89,6 +89,14 @@ module Xsuportal
         nil,
         Proto::Services::Contestant::ListNotificationsResponse,
       ],
+      'POST /api/contestant/push_subscriptions' => [
+        Proto::Services::Contestant::SubscribeNotificationRequest,
+        Proto::Services::Contestant::SubscribeNotificationResponse,
+      ],
+      'DELETE /api/contestant/push_subscriptions' => [
+        Proto::Services::Contestant::UnsubscribeNotificationRequest,
+        Proto::Services::Contestant::UnsubscribeNotificationResponse,
+      ],
       'POST /api/signup' => [
         Proto::Services::Contestant::SignupRequest,
         Proto::Services::Contestant::SignupResponse,

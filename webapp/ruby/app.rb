@@ -402,6 +402,43 @@ module Xsuportal
         )
       end
 
+      def notifications_pb(notifications)
+        notifications.map do |notification|
+          message = Proto::Resources::Notification.decode(notification[:encoded_message].unpack1('m0'))
+          message.id = notification[:id]
+          message.created_at = notification[:created_at]
+          message
+        end
+      end
+
+      def notify_clarification_answered(clar, team)
+        contestants = nil
+        if clar[:disclosed]
+          contestants = db.query('SELECT `id`, `team_id` FROM `contestants`')
+        else
+          contestants = db.xquery(
+            'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?',
+             clar[:team_id],
+          )
+        end
+
+        contestants.each do |contestant|
+          notification = Proto::Resources::Notification.new(
+            content_clarification: Proto::Resources::Notification::ClarificationMessage.new(
+              clarification_id: clar[:id],
+              owned: clar[:team_id] == contestant[:team_id],
+              admin: false, # TODO: remove
+            )
+          )
+          encoded_message = [Proto::Resources::Notification.encode(notification)].pack('m0')
+          db.xquery(
+            'INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))',
+            contestant[:id],
+            encoded_message,
+          )
+        end
+      end
+
       def decode_request_pb
         cls = PB_TABLE.fetch(request.env.fetch('sinatra.route'))[0]
         cls.decode(request.body.read)
@@ -596,6 +633,8 @@ module Xsuportal
           'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
           clar[:team_id],
         ).first
+
+        notify_clarification_answered(clar, team)
 
         clar_pb = clarification_pb(clar, team)
       end
@@ -947,13 +986,66 @@ module Xsuportal
     end
 
     get '/api/contestant/notifications' do
-      # login_required
+      login_required
 
       after = params[:after]
+      notifications = nil
+
+      Database.transaction do
+        if after
+          notifications = db.xquery(
+            'SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `id` > ? ORDER BY `id`',
+            current_contestant[:id],
+            after,
+          )
+        else
+          notifications = db.xquery(
+            'SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `read` = FALSE ORDER BY `id`',
+            current_contestant[:id],
+          )
+        end
+
+        db.xquery(
+          'UPDATE `notifications` SET `read` = TRUE WHERE `contestant_id` = ? AND `read` = FALSE',
+          current_contestant[:id],
+        )
+      end
+
+      last_answered_clar = db.xquery(
+        'SELECT `id` FROM `clarifications` WHERE `team_id` = ? AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1',
+        current_team[:id]
+      ).first
+
+      last_answered_clar_id = last_answered_clar ? last_answered_clar[:id] : nil
+
+      puts "DEBUG!! last_answered_clar_id=#{last_answered_clar_id} notifications=#{notifications.map{|_|_[:id]}.inspect}" if current_contestant[:id] == 'user2'
+      encode_response_pb(
+        last_answered_clarification_id: last_answered_clar_id,
+        notifications: notifications_pb(notifications),
+      )
+    end
+
+    post '/api/contestant/push_subscriptions' do
+      login_required
+
+      req = decode_request_pb
+
+      p req
+      req.endpont # string
+      req.p256dh # string
+      req.auth # string
 
       encode_response_pb(
-        last_answered_clarification_id: nil,
-        notifications: [],
+      )
+    end
+
+    delete '/api/contestant/push_subscriptions' do
+      login_required
+
+      req = decode_request_pb
+
+      encode_response_pb(
+        endpont: '',
       )
     end
 
