@@ -49,6 +49,6 @@ go.sum: go.mod
 $(EXE): Makefile go.mod $(GOFILES) $(GOPROTOFILES)
 	GOPRIVATE=$(GOPRIVATE) go build -race -o $(EXE) -v github.com/isucon/isucon10-final/benchmarker
 
-$(GOPROTOFILES): $(PROTOFILES)
-	@mkdir -p benchmarker/proto
-	@protoc --go_out=plugins=grpc:./proto --go_opt=paths=source_relative -I ../proto $(PROTOFILES)
+$(GOPROTOFILES): Makefile $(PROTOFILES)
+	@protoc --go_out=plugins=grpc:./benchmarker/proto --go_opt=paths=source_relative -I ./proto $(PROTOFILES)
+	@find ./benchmarker/proto -name *.go | xargs sed -i '' -e 's|webapp/golang|benchmarker|g'

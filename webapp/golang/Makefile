@@ -1,27 +1,33 @@
-GOPRIVATE=github.com/isucon
 PREFIX=.
 BINDIR=$(PREFIX)/bin
 WEBEXE=$(BINDIR)/webapp
 BENCHEXE=$(BINDIR)/benchmark_server
 
 COMPILER=go
-GOFLAGS=
+GOFLAGS=-v
 
 GOFILES=$(wildcard ./*.go ./**/*.go)
 
+.PHONY: all
+all: clean build ## Cleanup and Build
+
 .PHONY: build
-build: $(WEBEXE) $(BENCHEXE)
+build: $(WEBEXE) $(BENCHEXE) ## Build executable files
 
-$(WEBEXE): $(GOFILES) go.mod go.sum
-	GOPRIVATE=$(GOPRIVATE) $(COMPILER) $(GOFLAGS) build -o $(WEBEXE) ./webapp
+$(WEBEXE): Makefile $(GOFILES) go.mod go.sum
+	@$(COMPILER) build $(GOFLAGS) -o $(WEBEXE) ./webapp
 
-$(BENCHEXE): $(GOFILES) go.mod go.sum
-	GOPRIVATE=$(GOPRIVATE) $(COMPILER) $(GOFLAGS) build -o $(BENCHEXE) ./benchmark_server
+$(BENCHEXE): Makefile $(GOFILES) go.mod go.sum
+	@$(COMPILER) build $(GOFLAGS) -o $(BENCHEXE) ./benchmark_server
+
+.PHONY: run
+run: build ## Build and launch webapp and benchmark server (Stop with Ctrl-C)
+	@(trap 'kill 0' SIGINT; $(WEBEXE) & $(BENCHEXE))
 
 .PHONY: clean
-clean:
+clean: ## Cleanup files
 	@$(RM) $(WEBEXE) $(BENCHEXE)
 
 .PHONY: help
-help:
+help: ## Show help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

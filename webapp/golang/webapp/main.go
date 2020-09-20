@@ -2,27 +2,25 @@ package main
 
 import (
 	"fmt"
-	"os"
 
+	"github.com/isucon/isucon10-final/webapp/golang/util"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
-func getEnv(key, val string) string {
-	if v := os.Getenv(key); v == "" {
-		return val
-	} else {
-		return v
-	}
-}
-
 func main() {
 	srv := echo.New()
-	srv.Debug = getEnv("DEBUG", "") != ""
+	srv.Debug = util.GetEnv("DEBUG", "") != ""
 
 	srv.Use(middleware.Logger())
 	srv.Use(middleware.Recover())
 
-	address := fmt.Sprintf(":%v", getEnv("PORT", "1323"))
+	srv.POST("/initialize", initialize)
+
+	address := fmt.Sprintf(":%v", util.GetEnv("PORT", "9292"))
 	srv.Logger.Error(srv.Start(address))
+}
+
+func initialize(c echo.Context) error {
+	return nil
 }
