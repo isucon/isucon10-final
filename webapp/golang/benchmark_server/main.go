@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/isucon/isucon10-final-go/webapp/golang/proto/xsuportal/services/bench"
+	"github.com/isucon/isucon10-final/webapp/golang/proto/xsuportal/services/bench"
 )
 
 type BenchmarkServer struct {

@@ -4,10 +4,11 @@
 // 	protoc        v3.13.0
 // source: xsuportal/services/contestant/notifications.proto
 
-package resources
+package contestant
 
 import (
 	proto "github.com/golang/protobuf/proto"
+	resources "github.com/isucon/isucon10-final/webapp/golang/proto/xsuportal/resources"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -80,8 +81,8 @@ type ListNotificationsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LastAnsweredClarificationId int64           `protobuf:"varint,1,opt,name=last_answered_clarification_id,json=lastAnsweredClarificationId,proto3" json:"last_answered_clarification_id,omitempty"`
-	Notifications               []*Notification `protobuf:"bytes,2,rep,name=notifications,proto3" json:"notifications,omitempty"`
+	LastAnsweredClarificationId int64                     `protobuf:"varint,1,opt,name=last_answered_clarification_id,json=lastAnsweredClarificationId,proto3" json:"last_answered_clarification_id,omitempty"`
+	Notifications               []*resources.Notification `protobuf:"bytes,2,rep,name=notifications,proto3" json:"notifications,omitempty"`
 }
 
 func (x *ListNotificationsResponse) Reset() {
@@ -123,7 +124,7 @@ func (x *ListNotificationsResponse) GetLastAnsweredClarificationId() int64 {
 	return 0
 }
 
-func (x *ListNotificationsResponse) GetNotifications() []*Notification {
+func (x *ListNotificationsResponse) GetNotifications() []*resources.Notification {
 	if x != nil {
 		return x.Notifications
 	}
@@ -355,12 +356,13 @@ var file_xsuportal_services_contestant_notifications_proto_rawDesc = []byte{
 	0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
 	0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x22, 0x21, 0x0a, 0x1f, 0x55, 0x6e, 0x73,
 	0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x4e, 0x6f, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x48, 0x5a, 0x46,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x52, 0x5a, 0x50,
 	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x69, 0x73, 0x75, 0x63, 0x6f,
 	0x6e, 0x2f, 0x69, 0x73, 0x75, 0x63, 0x6f, 0x6e, 0x31, 0x30, 0x2d, 0x66, 0x69, 0x6e, 0x61, 0x6c,
 	0x2f, 0x62, 0x65, 0x6e, 0x63, 0x68, 0x6d, 0x61, 0x72, 0x6b, 0x65, 0x72, 0x2f, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x2f, 0x78, 0x73, 0x75, 0x70, 0x6f, 0x72, 0x74, 0x61, 0x6c, 0x2f, 0x72, 0x65, 0x73,
-	0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x6f, 0x2f, 0x78, 0x73, 0x75, 0x70, 0x6f, 0x72, 0x74, 0x61, 0x6c, 0x2f, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x73, 0x74, 0x61, 0x6e, 0x74,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -383,7 +385,7 @@ var file_xsuportal_services_contestant_notifications_proto_goTypes = []interface
 	(*SubscribeNotificationResponse)(nil),   // 3: xsuportal.proto.services.contestant.SubscribeNotificationResponse
 	(*UnsubscribeNotificationRequest)(nil),  // 4: xsuportal.proto.services.contestant.UnsubscribeNotificationRequest
 	(*UnsubscribeNotificationResponse)(nil), // 5: xsuportal.proto.services.contestant.UnsubscribeNotificationResponse
-	(*Notification)(nil),                    // 6: xsuportal.proto.resources.Notification
+	(*resources.Notification)(nil),          // 6: xsuportal.proto.resources.Notification
 }
 var file_xsuportal_services_contestant_notifications_proto_depIdxs = []int32{
 	6, // 0: xsuportal.proto.services.contestant.ListNotificationsResponse.notifications:type_name -> xsuportal.proto.resources.Notification
@@ -399,7 +401,6 @@ func file_xsuportal_services_contestant_notifications_proto_init() {
 	if File_xsuportal_services_contestant_notifications_proto != nil {
 		return
 	}
-	file_xsuportal_resources_notification_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_xsuportal_services_contestant_notifications_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListNotificationsQuery); i {

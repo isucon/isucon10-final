@@ -1,3 +1,4 @@
+GOPRIVATE=github.com/isucon
 PREFIX=.
 BINDIR=$(PREFIX)/bin
 WEBEXE=$(BINDIR)/webapp
@@ -12,10 +13,10 @@ GOFILES=$(wildcard ./*.go ./**/*.go)
 build: $(WEBEXE) $(BENCHEXE)
 
 $(WEBEXE): $(GOFILES) go.mod go.sum
-	$(COMPILER) $(GOFLAGS) build -o $(WEBEXE) ./webapp
+	GOPRIVATE=$(GOPRIVATE) $(COMPILER) $(GOFLAGS) build -o $(WEBEXE) ./webapp
 
 $(BENCHEXE): $(GOFILES) go.mod go.sum
-	$(COMPILER) $(GOFLAGS) build -o $(BENCHEXE) ./benchmark_server
+	GOPRIVATE=$(GOPRIVATE) $(COMPILER) $(GOFLAGS) build -o $(BENCHEXE) ./benchmark_server
 
 .PHONY: clean
 clean:

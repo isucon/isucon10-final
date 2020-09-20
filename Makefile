@@ -7,6 +7,8 @@ GOFILES=$(shell find . -name *.go)
 PROTOFILES=$(shell find proto -name *.proto)
 GOPROTOFILES=$(addprefix benchmarker/,$(PROTOFILES:%.proto=%.pb.go))
 
+EXE=./bin/benchmarker
+
 .PHONY: all
 all: setup build ## Execute all tasks
 
@@ -14,7 +16,7 @@ all: setup build ## Execute all tasks
 setup: go.sum ## Setup dependency modules
 
 .PHONY: build
-build: bin/benchmarker ## Build benchmarker
+build: $(EXE) ## Build benchmarker
 
 .PHONY: test
 test:
@@ -34,7 +36,7 @@ test:
 
 .PHONY: clean
 clean: ## Cleanup working directory
-	$(RM) bin/benchmarker $(GOPROTOFILES)
+	$(RM) $(EXE) $(GOPROTOFILES)
 	go clean
 
 .PHONY: help
@@ -44,8 +46,9 @@ help: ## Display this help screen
 go.sum: go.mod
 	GOPRIVATE=$(GOPRIVATE) go mod download
 
-bin/benchmarker: Makefile go.mod $(GOFILES) $(GOPROTOFILES)
-	GOPRIVATE=$(GOPRIVATE) go build -race -o bin/benchmarker -v ./benchmarker
+$(EXE): Makefile go.mod $(GOFILES) $(GOPROTOFILES)
+	GOPRIVATE=$(GOPRIVATE) go build -race -o $(EXE) -v github.com/isucon/isucon10-final/benchmarker
 
 $(GOPROTOFILES): $(PROTOFILES)
-	protoc --go_out=plugins=grpc:./benchmarker/proto --go_opt=paths=source_relative -I ./proto $(PROTOFILES)
+	@mkdir -p benchmarker/proto
+	@protoc --go_out=plugins=grpc:./proto --go_opt=paths=source_relative -I ../proto $(PROTOFILES)

@@ -1,4 +1,4 @@
-module github.com/isucon/isucon10-final-go/webapp/golang
+module github.com/isucon/isucon10-final/webapp/golang
 
 go 1.15
 
