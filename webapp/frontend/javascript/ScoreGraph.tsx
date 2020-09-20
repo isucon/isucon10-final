@@ -120,7 +120,7 @@ export const ScoreGraph: React.FC<Props> = ({
           auto: false,
           range: (min, max) => [
             contest.contestStartsAt!.seconds! as number,
-            (contest.contestEndsAt!.seconds! as number) + 3600,
+            contest.contestEndsAt!.seconds! as number,
           ],
         },
         pt: {
