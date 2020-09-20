@@ -4,7 +4,7 @@ require 'optparse'
 require 'database'
 
 team_id = nil
-status = 0
+status = 1
 hostname = 'xsu-001'
 option_parser = OptionParser.new do |opt|
   opt.banner = "Usage: #{__FILE__} -t team_id -h hostname -s status"
