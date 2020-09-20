@@ -611,7 +611,7 @@ module Xsuportal
           clar[:team_id],
         ).first
 
-        notifier.notify_clarification_answered(clar, team)
+        notifier.notify_clarification_answered(clar)
 
         clar_pb = clarification_pb(clar, team)
       end

@@ -2,6 +2,7 @@ require 'securerandom'
 require 'xsuportal/resources/benchmark_job_pb'
 require 'xsuportal/services/bench/receiving_pb'
 require 'xsuportal/services/bench/receiving_services_pb'
+require 'database'
 
 class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue::Service
   def receive_benchmark_job(request, _call)

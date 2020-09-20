@@ -1,10 +1,13 @@
 require 'xsuportal/resources/benchmark_job_pb'
 require 'xsuportal/services/bench/reporting_pb'
 require 'xsuportal/services/bench/reporting_services_pb'
+require 'database'
+require 'notifier'
 
 class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkReport::Service
   def report_benchmark_result(call)
     db = Xsuportal::Database.connection
+    notifier = Xsuportal::Notifier.new(db)
     call.each do |request|
       Xsuportal::Database.transaction_begin('report_benchmark_result')
       job = db.xquery(
@@ -26,6 +29,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
         call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
           acked_nonce: request.nonce,
         )
+        notifier.notify_benchmark_job_finished(job)
         # TODO: これわざわざストリームこっちから切る理由はない気がする (本番では複数ジョブ跨いで受け付けてます) これやるなら1ストリームで複数ジョブ流してくるのは Bad Request であるということにしたい ~sorah
         break
       else
