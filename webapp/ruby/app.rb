@@ -453,6 +453,8 @@ module Xsuportal
       db.query('TRUNCATE `contestants`')
       db.query('TRUNCATE `benchmark_jobs`')
       db.query('TRUNCATE `clarifications`')
+      db.query('TRUNCATE `notifications`')
+      db.query('TRUNCATE `push_subscriptions`')
       db.query('TRUNCATE `contest_config`')
 
       db.xquery(
