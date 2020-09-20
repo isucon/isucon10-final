@@ -30,8 +30,6 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           acked_nonce: request.nonce,
         )
         notifier.notify_benchmark_job_finished(job)
-        # TODO: これわざわざストリームこっちから切る理由はない気がする (本番では複数ジョブ跨いで受け付けてます) これやるなら1ストリームで複数ジョブ流してくるのは Bad Request であるということにしたい ~sorah
-        break
       else
         GRPC.logger.debug "#{request.job_id}: save as running"
         save_as_running(job, request)
