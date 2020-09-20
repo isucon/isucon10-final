@@ -48,13 +48,13 @@ export class Login extends React.Component<Props, State> {
         return <Redirect to={params.redirect.toString()}></Redirect>;
       } else {
         if (currentContestant.isStaff) {
-          return <a href="/admin/">管理画面へ</a>;
+          return <Redirect to="/admin" />;
         } else if (
           this.state.registrationSession?.status ==
           xsuportal.proto.services.registration.GetRegistrationSessionResponse
             .Status.JOINED
         ) {
-          return <Redirect to="/"></Redirect>;
+          return <Redirect to="/contestant" />;
         } else {
           return (
             <>
