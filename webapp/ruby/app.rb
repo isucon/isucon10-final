@@ -6,6 +6,7 @@ require 'securerandom'
 $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
 require 'routes'
 require 'database'
+require 'notifier'
 
 # TODO: 競技時は消す
 TEAM_CAPACITY = 10
@@ -52,6 +53,10 @@ module Xsuportal
     helpers do
       def db
         Xsuportal::Database.connection
+      end
+
+      def notifier
+        Thread.current[:notifier] ||= Notifier.new(db)
       end
 
       def current_contestant(lock: false)
@@ -411,34 +416,6 @@ module Xsuportal
         end
       end
 
-      def notify_clarification_answered(clar, team)
-        contestants = nil
-        if clar[:disclosed]
-          contestants = db.query('SELECT `id`, `team_id` FROM `contestants`')
-        else
-          contestants = db.xquery(
-            'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?',
-             clar[:team_id],
-          )
-        end
-
-        contestants.each do |contestant|
-          notification = Proto::Resources::Notification.new(
-            content_clarification: Proto::Resources::Notification::ClarificationMessage.new(
-              clarification_id: clar[:id],
-              owned: clar[:team_id] == contestant[:team_id],
-              admin: false, # TODO: remove
-            )
-          )
-          encoded_message = [Proto::Resources::Notification.encode(notification)].pack('m0')
-          db.xquery(
-            'INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))',
-            contestant[:id],
-            encoded_message,
-          )
-        end
-      end
-
       def decode_request_pb
         cls = PB_TABLE.fetch(request.env.fetch('sinatra.route'))[0]
         cls.decode(request.body.read)
@@ -634,7 +611,7 @@ module Xsuportal
           clar[:team_id],
         ).first
 
-        notify_clarification_answered(clar, team)
+        notifier.notify_clarification_answered(clar, team)
 
         clar_pb = clarification_pb(clar, team)
       end
