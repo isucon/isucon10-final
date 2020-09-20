@@ -98,6 +98,8 @@ option_parser = OptionParser.new do |opt|
 end
 option_parser.parse!
 
+abort option_parser.banner unless team_id
+
 puts "Receiving queued job: team_id=#{team_id}"
 job = receive_benchmark_job(team_id).job_handle
 
