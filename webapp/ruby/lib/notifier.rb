@@ -87,7 +87,6 @@ module Xsuportal
       )
       subs.each do |sub|
         begin
-          puts "SENDING WEBPUSH: #{sub.inspect}"
           Webpush.payload_send(
             message: message,
             endpoint: sub[:endpoint],
@@ -96,7 +95,6 @@ module Xsuportal
             vapid: vapid,
           )
         rescue Webpush::ExpiredSubscription, Webpush::InvalidSubscription => e
-          puts "Unsubscribing id=#{subs[:id]} automatically: #{e}"
           db.xquery(
             'DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1',
             sub[:id],
