@@ -1,9 +1,24 @@
+require 'webpush'
 require 'xsuportal/resources/notification_pb'
 
 module Xsuportal
   class Notifier
+    WEBPUSH_VAPID_PRIVATE_KEY_PATH = '../vapid_private.pem'
+    WEBPUSH_SUBJECT = 'xsuportal@example.com'
+
     def initialize(db)
       @db = db
+    end
+
+    def vapid_key
+      @vapid_key ||= begin
+        if File.exist?(WEBPUSH_VAPID_PRIVATE_KEY_PATH)
+          private_key = File.read(WEBPUSH_VAPID_PRIVATE_KEY_PATH)
+          Webpush::VapidKey.from_pem(private_key)
+        else
+          nil
+        end
+      end
     end
 
     def notify_clarification_answered(clar)
@@ -26,6 +41,7 @@ module Xsuportal
           )
         )
         notify(notification, contestant[:id])
+        notify_webpush(notification, contestant[:id]) if vapid_key
       end
     end
 
@@ -42,6 +58,7 @@ module Xsuportal
           )
         )
         notify(notification, contestant[:id])
+        notify_webpush(notification, contestant[:id]) if vapid_key
       end
     end
 
@@ -57,6 +74,35 @@ module Xsuportal
         contestant_id,
         encoded_message,
       )
+    end
+
+    def notify_webpush(notification, contestant_id)
+      message = [Proto::Resources::Notification.encode(notification)].pack("m0")
+      vapid = vapid_key.to_h
+      vapid[:subject] = WEBPUSH_SUBJECT
+
+      subs = db.xquery(
+        'SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?',
+        contestant_id,
+      )
+      subs.each do |sub|
+        begin
+          puts "SENDING WEBPUSH: #{sub.inspect}"
+          Webpush.payload_send(
+            message: message,
+            endpoint: sub[:endpoint],
+            p256dh: sub[:p256dh],
+            auth: sub[:auth],
+            vapid: vapid,
+          )
+        rescue Webpush::ExpiredSubscription, Webpush::InvalidSubscription => e
+          puts "Unsubscribing id=#{subs[:id]} automatically: #{e}"
+          db.xquery(
+            'DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1',
+            sub[:id],
+          )
+        end
+      end
     end
   end
 end
