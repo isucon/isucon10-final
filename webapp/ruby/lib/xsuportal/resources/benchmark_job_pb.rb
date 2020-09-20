@@ -4,7 +4,6 @@
 require 'google/protobuf'
 
 require 'xsuportal/resources/benchmark_result_pb'
-require 'xsuportal/resources/contestant_instance_pb'
 require 'xsuportal/resources/team_pb'
 require 'google/protobuf/timestamp_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do

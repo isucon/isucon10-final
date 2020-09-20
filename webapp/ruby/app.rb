@@ -506,33 +506,6 @@ module Xsuportal
       )
     end
 
-    put '/api/admin/contest' do
-      req = decode_request_pb
-      login_required(team: false)
-      unless current_contestant[:staff]
-        halt_pb 403, '管理者権限が必要です'
-      end
-
-      Database.transaction do
-        db.query('TRUNCATE `contest_config`')
-        db.xquery(
-          <<~SQL,
-          INSERT `contest_config` (
-            `registration_open_at`,
-            `contest_starts_at`,
-            `contest_freezes_at`,
-            `contest_ends_at`
-          ) VALUES (?, ?, ?, ?)
-          SQL
-          Time.at(req.contest.registration_open_at.seconds).utc,
-          Time.at(req.contest.contest_starts_at.seconds).utc,
-          Time.at(req.contest.contest_freezes_at.seconds).utc,
-          Time.at(req.contest.contest_ends_at.seconds).utc,
-        )
-      end
-      encode_response_pb
-    end
-
     get '/api/admin/clarifications' do
       login_required(team: false)
       unless current_contestant[:staff]
@@ -619,17 +592,6 @@ module Xsuportal
 
       encode_response_pb(
         clarification: clar_pb
-      )
-    end
-
-    # TODO: けす
-    get '/api/contest' do
-      contest_status = current_contest_status
-      contest = contest_status[:contest]
-
-      encode_response_pb(
-        contest: contest_pb,
-        current_time: contest_status[:current_time],
       )
     end
 
