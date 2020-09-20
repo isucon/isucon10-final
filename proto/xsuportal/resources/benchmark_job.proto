@@ -3,7 +3,6 @@ package xsuportal.proto.resources;
 option go_package = "github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources";
 
 import "xsuportal/resources/benchmark_result.proto";
-import "xsuportal/resources/contestant_instance.proto";
 import "xsuportal/resources/team.proto";
 
 import "google/protobuf/timestamp.proto";
