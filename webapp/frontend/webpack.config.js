@@ -3,6 +3,8 @@ const glob = require("glob");
 const WebpackAssetsManifest = require("webpack-assets-manifest");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 // const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const { NODE_ENV } = process.env;
@@ -66,6 +68,33 @@ module.exports = [
       new WebpackAssetsManifest({ publicPath: true }),
       new MiniCssExtractPlugin({
         filename: isProd ? "[name]-[hash].css" : "[name].css",
+      }),
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        filename: 'audience.html',
+        chunks: ['audience'],
+        hash: isProd,
+        inject: false,
+        alwaysWriteToDisk: true,
+      }),
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        filename: 'admin.html',
+        chunks: ['admin'],
+        hash: isProd,
+        inject: false,
+        alwaysWriteToDisk: true,
+      }),
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        filename: 'contestant.html',
+        chunks: ['contestant'],
+        hash: isProd,
+        inject: false,
+        alwaysWriteToDisk: true,
+      }),
+      new HtmlWebpackHarddiskPlugin({
+        outputPath: './public',
       }),
     ],
   },
