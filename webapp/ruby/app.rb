@@ -723,7 +723,7 @@ module Xsuportal
       req = decode_request_pb
       result = {}
 
-      login_required(team: false, lock: true)
+      login_required(team: false)
       contest_status_restricted(:REGISTRATION, 'チーム登録期間ではありません')
 
       begin
