@@ -1,5 +1,5 @@
 #!/bin/sh -e
-DST_PATH=vapid_private.pem
+DST_PATH="$(cd $(dirname $0); pwd)/vapid_private.pem"
 if [ -f $DST_PATH ]; then
   echo "${DST_PATH} already exists"
   exit 1
