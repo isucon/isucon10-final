@@ -37,7 +37,7 @@ module Xsuportal
 
       contestants.each do |contestant|
         notification = Proto::Resources::Notification.new(
-          content_clarification: Proto::Resources::Notification::BenchmarkJobMessage.new(
+          content_benchmark_job: Proto::Resources::Notification::BenchmarkJobMessage.new(
             benchmark_job_id: job[:id],
           )
         )
