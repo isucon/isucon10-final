@@ -2,6 +2,11 @@
 cd "$(dirname $0)/.."
 BASE_DIR=$(pwd)
 
+cd ${BASE_DIR}/webapp/golang
+rm -rf ./proto || true
+mkdir -p ./proto
+protoc --go_out=plugins=grpc:./proto --go_opt=paths=source_relative -I ../../proto ../../proto/**/*.proto
+
 cd ${BASE_DIR}/webapp/frontend
 rm -rf javascript/pb*.js javascript/pb*.d.ts || true
 npx pbjs -p ../../proto -t static-module -w commonjs -o javascript/pb.js ../../proto/**/*.proto
