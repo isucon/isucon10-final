@@ -9,6 +9,10 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
     db = Xsuportal::Database.connection
     notifier = Xsuportal::Notifier.new(db)
     call.each do |request|
+      unless request.result
+        raise GRPC::InvalidArgument.new("result required")
+      end
+
       Xsuportal::Database.transaction_begin('report_benchmark_result')
       job = db.xquery(
         'SELECT * FROM `benchmark_jobs` WHERE `id` = ? AND `handle` = ? LIMIT 1 FOR UPDATE',
