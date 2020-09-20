@@ -7,5 +7,6 @@
     "jsx": "react",
     "typeRoots": ["./node_modules/@types", "./types"],
     "allowSyntheticDefaultImports": true
-  }
+  },
+  "exclude": ["sw/**/*"]
 }
