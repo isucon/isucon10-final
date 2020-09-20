@@ -10,6 +10,7 @@
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
+    "@types/workbox-core": "^4.3.0",
     "css-loader": "^3.6.0",
     "eslint": "^7.4.0",
     "eslint-config-prettier": "^6.11.0",
@@ -23,11 +24,13 @@
     "typescript": "^3.9.6",
     "webpack": "^4.43.0",
     "webpack-assets-manifest": "^3.1.1",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "workbox-webpack-plugin": "^5.1.4"
   },
   "dependencies": {
     "bulma": "^0.9.0",
     "dayjs": "^1.8.33",
+    "idb": "^5.0.6",
     "moment": "^2.27.0",
     "protobufjs": "~6.9.0",
     "querystring": "^0.2.0",
@@ -36,6 +39,8 @@
     "react-hook-form": "^6.4.0",
     "react-router-dom": "^5.2.0",
     "uplot": "~1.1.2",
-    "use-interval": "^1.2.1"
+    "use-interval": "^1.2.1",
+    "workbox-core": "^5.1.4",
+    "workbox-precaching": "^5.1.4"
   }
 }

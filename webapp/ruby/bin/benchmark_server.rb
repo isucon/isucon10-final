@@ -8,7 +8,6 @@ require 'grpc'
 require 'griffin/interceptors/server/logging_interceptor'
 require_relative '../grpc/benchmark_queue_service'
 require_relative '../grpc/benchmark_report_service'
-require 'database'
 
 Xsuportal::Database.connection
 

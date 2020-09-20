@@ -2,10 +2,12 @@ require 'sinatra/base'
 require 'google/protobuf'
 require 'digest/sha2'
 require 'securerandom'
+require 'webpush'
 
 $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
 require 'routes'
 require 'database'
+require 'notifier'
 
 # TODO: 競技時は消す
 TEAM_CAPACITY = 10
@@ -52,6 +54,10 @@ module Xsuportal
     helpers do
       def db
         Xsuportal::Database.connection
+      end
+
+      def notifier
+        Thread.current[:notifier] ||= Notifier.new(db)
       end
 
       def current_contestant(lock: false)
@@ -402,6 +408,15 @@ module Xsuportal
         )
       end
 
+      def notifications_pb(notifications)
+        notifications.map do |notification|
+          message = Proto::Resources::Notification.decode(notification[:encoded_message].unpack1('m0'))
+          message.id = notification[:id]
+          message.created_at = notification[:created_at]
+          message
+        end
+      end
+
       def decode_request_pb
         cls = PB_TABLE.fetch(request.env.fetch('sinatra.route'))[0]
         cls.decode(request.body.read)
@@ -597,6 +612,8 @@ module Xsuportal
           clar[:team_id],
         ).first
 
+        notifier.notify_clarification_answered(clar)
+
         clar_pb = clarification_pb(clar, team)
       end
 
@@ -624,6 +641,7 @@ module Xsuportal
         contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
         team: current_team ? team_pb(current_team) : nil,
         contest: contest_pb,
+        push_vapid_key: notifier.vapid_key&.public_key_for_push_header,
       )
     end
 
@@ -901,7 +919,7 @@ module Xsuportal
       login_required
 
       clars = db.xquery(
-        'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `updated_at` DESC',
+        'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `id` DESC',
         current_team[:id],
       )
 
@@ -947,14 +965,72 @@ module Xsuportal
     end
 
     get '/api/contestant/notifications' do
-      # login_required
+      login_required
 
       after = params[:after]
+      notifications = nil
+
+      Database.transaction do
+        if after
+          notifications = db.xquery(
+            'SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `id` > ? ORDER BY `id`',
+            current_contestant[:id],
+            after,
+          )
+        else
+          notifications = db.xquery(
+            'SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `read` = FALSE ORDER BY `id`',
+            current_contestant[:id],
+          )
+        end
+
+        db.xquery(
+          'UPDATE `notifications` SET `read` = TRUE WHERE `contestant_id` = ? AND `read` = FALSE',
+          current_contestant[:id],
+        )
+      end
+
+      last_answered_clar = db.xquery(
+        'SELECT `id` FROM `clarifications` WHERE (`team_id` = ? OR `disclosed` = TRUE) AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1',
+        current_team[:id]
+      ).first
+
+      last_answered_clar_id = last_answered_clar ? last_answered_clar[:id] : nil
 
       encode_response_pb(
-        last_answered_clarification_id: nil,
-        notifications: [],
+        last_answered_clarification_id: last_answered_clar_id,
+        notifications: notifications_pb(notifications),
       )
+    end
+
+    post '/api/contestant/push_subscriptions' do
+      login_required
+
+      req = decode_request_pb
+
+      db.xquery(
+        'INSERT INTO `push_subscriptions` (`contestant_id`, `endpoint`, `p256dh`, `auth`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, NOW(6), NOW(6))',
+        current_contestant[:id],
+        req.endpoint,
+        req.p256dh,
+        req.auth,
+      )
+
+      encode_response_pb
+    end
+
+    delete '/api/contestant/push_subscriptions' do
+      login_required
+
+      req = decode_request_pb
+
+      db.xquery(
+        'DELETE FROM `push_subscriptions` WHERE `contestant_id` = ? AND `endpoint` = ? LIMIT 1',
+        current_contestant[:id],
+        req.endpoint,
+      )
+
+      encode_response_pb
     end
 
     post '/api/signup' do

@@ -50,6 +50,28 @@ CREATE TABLE `clarifications` (
   `updated_at` DATETIME(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE `notifications` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `contestant_id` VARCHAR(255) NOT NULL,
+  `read` TINYINT(1) NOT NULL DEFAULT FALSE,
+  `encoded_message` TEXT NOT NULL,
+  `created_at` DATETIME(6) NOT NULL,
+  `updated_at` DATETIME(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
+DROP TABLE IF EXISTS `push_subscriptions`;
+CREATE TABLE `push_subscriptions` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `contestant_id` VARCHAR(255) NOT NULL,
+  `endpoint` VARCHAR(255) NOT NULL,
+  `p256dh` VARCHAR(255) NOT NULL,
+  `auth` VARCHAR(255) NOT NULL,
+  `created_at` DATETIME(6) NOT NULL,
+  `updated_at` DATETIME(6) NOT NULL,
+  UNIQUE KEY (`contestant_id`, `endpoint`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
 DROP TABLE IF EXISTS `contest_config`;
 CREATE TABLE `contest_config` (
   `registration_open_at` DATETIME(6) NOT NULL,
