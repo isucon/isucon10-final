@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'google/protobuf'
 require 'digest/sha2'
 require 'securerandom'
+require 'webpush'
 
 $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
 require 'routes'
@@ -19,6 +20,7 @@ module Xsuportal
     ADMIN_ID = 'admin'
     ADMIN_PASSWORD = 'admin'
     DEBUG_CONTEST_STATUS_FILE_PATH = '/tmp/XSUPORTAL_CONTEST_STATUS'
+    VAPID_PRIVATE_KEY_PATH = '../vapid_private.pem'
 
     configure :development do
       require 'sinatra/reloader'
@@ -437,6 +439,17 @@ module Xsuportal
           human_descriptions: human_message ? [human_message] : exception&.full_message(highlight: false, order: :top)&.split("\n") || [],
         ))
       end
+
+      def push_vapid_key
+        Thread.current[:push_vapid_key] ||= begin
+          if File.exist?(VAPID_PRIVATE_KEY_PATH)
+            private_key = File.read(VAPID_PRIVATE_KEY_PATH)
+            Webpush::VapidKey.from_pem(private_key)
+          else
+            nil
+          end
+        end
+      end
     end
 
     error do
@@ -640,6 +653,7 @@ module Xsuportal
         contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
         team: current_team ? team_pb(current_team) : nil,
         contest: contest_pb,
+        push_vapid_key: push_vapid_key&.public_key_for_push_header,
       )
     end
 
@@ -1006,13 +1020,15 @@ module Xsuportal
 
       req = decode_request_pb
 
-      p req
-      req.endpont # string
-      req.p256dh # string
-      req.auth # string
-
-      encode_response_pb(
+      db.xquery(
+        'INSERT INTO `push_subscriptions` (`contestant_id`, `endpoint`, `p256h`, `auth`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, NOW(6), NOW(6))',
+        current_contestant[:id],
+        req.endpont,
+        req.p256dh,
+        req.auth,
       )
+
+      encode_response_pb
     end
 
     delete '/api/contestant/push_subscriptions' do
@@ -1020,9 +1036,13 @@ module Xsuportal
 
       req = decode_request_pb
 
-      encode_response_pb(
-        endpont: '',
+      db.xquery(
+        'DELETE FROM `push_subscriptions` WHERE `contestant_id` = ? AND `endpoint` = ? LIMIT 1',
+        current_contestant[:id],
+        req.endpoint,
       )
+
+      encode_response_pb
     end
 
     post '/api/signup' do
