@@ -17,20 +17,24 @@ export const ContestantBenchmarkJobForm: React.FC<Props> = (props: Props) => {
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null>(null);
   const { register, handleSubmit, watch, setValue, errors } = useForm<{
-    targetId: string;
+    targetHostname: string;
   }>({
     defaultValues: {
-      targetId: window.localStorage.getItem("xsuportal-last-target-id") || "",
+      targetHostname:
+        window.localStorage.getItem("xsuportal-last-target-hostname") || "",
     },
   });
   const onSubmit = handleSubmit(async (data) => {
     try {
       setRequesting(true);
       const resp = await props.client.enqueueBenchmarkJob({
-        targetHostname: "target hostname (仮)",
+        targetHostname: data.targetHostname,
       });
       try {
-        window.localStorage.setItem("xsuportal-last-target-id", data.targetId);
+        window.localStorage.setItem(
+          "xsuportal-last-target-hostname",
+          data.targetHostname
+        );
       } catch (e) {
         console.warn(e);
       }
@@ -57,20 +61,13 @@ export const ContestantBenchmarkJobForm: React.FC<Props> = (props: Props) => {
         <form onSubmit={onSubmit}>
           <div className="field has-addons">
             <div className="control is-expanded">
-              <div className="select is-fullwidth">
-                <select name="targetId" ref={register}>
-                  <option key="1" value="1">
-                    1: host1
-                  </option>
-                  {/* {(props.session.contestantInstances || []).map((ci) => {
-                    return (
-                      <option key={ci.id!.toString()} value={ci.id!.toString()}>
-                        {ci.number}: {ci.publicIpv4Address}
-                      </option>
-                    );
-                  })} */}
-                </select>
-              </div>
+              <input
+                className="input is-fullwidth"
+                type="text"
+                name="targetHostname"
+                placeholder="target hostname"
+                ref={register}
+              />
             </div>
             <div className="control">
               <button

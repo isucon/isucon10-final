@@ -1,4 +1,0 @@
-syntax = "proto3";
-package xsuportal.proto.services.bench;
-option go_package = "github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench";
-

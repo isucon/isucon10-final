@@ -42,15 +42,6 @@ export class ContestantNavbar extends React.Component<Props, State> {
                 </span>
                 ダッシュボード
               </Link>
-              <Link
-                className="navbar-item"
-                to="/contestant/contestant_instances"
-              >
-                <span className="material-icons" aria-hidden={true}>
-                  memory
-                </span>
-                サーバーリスト
-              </Link>
               <Link className="navbar-item" to="/contestant/benchmark_jobs">
                 <span className="material-icons" aria-hidden={true}>
                   local_fire_department
