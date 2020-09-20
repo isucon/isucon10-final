@@ -1,3 +1,4 @@
+import './application.scss';
 import { ApiClient } from "../ApiClient";
 import { AdminApp } from "../AdminApp";
 import React from "react";

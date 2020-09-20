@@ -1,3 +1,4 @@
+import './application.scss';
 import { ApiClient } from "../ApiClient";
 import { updateNavBarSession } from "../NavbarSession";
 import { AudienceApp } from "../AudienceApp";
