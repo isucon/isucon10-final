@@ -970,6 +970,10 @@ module Xsuportal
     post '/api/contestant/push_subscriptions' do
       login_required
 
+      unless notifier.vapid_key
+        halt_pb 403, 'WebPush は未対応です'
+      end
+
       req = decode_request_pb
 
       db.xquery(
@@ -985,6 +989,10 @@ module Xsuportal
 
     delete '/api/contestant/push_subscriptions' do
       login_required
+
+      unless notifier.vapid_key
+        halt_pb 403, 'WebPush は未対応です'
+      end
 
       req = decode_request_pb
 
