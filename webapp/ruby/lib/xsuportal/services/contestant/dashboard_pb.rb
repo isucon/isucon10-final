@@ -4,7 +4,6 @@
 require 'google/protobuf'
 
 require 'xsuportal/resources/leaderboard_pb'
-require 'xsuportal/resources/contestant_instance_pb'
 require 'xsuportal/resources/benchmark_job_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("xsuportal/services/contestant/dashboard.proto", :syntax => :proto3) do
