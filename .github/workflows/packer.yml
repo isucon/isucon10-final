@@ -1,0 +1,62 @@
+name: packer
+on: 
+  push:
+    branches:
+      - master
+      - pakapaka
+
+env:
+  PACKER_CACHE_DIR: /home/octo/packer_cache
+
+jobs:
+  build:
+    name: packer-build
+    runs-on: [self-hosted, linux, kvm]
+    defaults:
+      run:
+        working-directory: packer
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 14400
+          role-session-name: isucon10-final-${{ github.run_id }}-${{ github.run_number }}
+          aws-region: ap-northeast-1
+
+      - uses: actions/checkout@v2
+
+      - run: make clean
+      - run: make clean-output
+
+      - name: Use cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            packer/files-cached
+          key: ${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}
+
+      - run: make generate
+      #- run: make build
+      - run: make build-contestant
+      - run: make cache
+      - run: make build-benchmarker
+      - run: make upload
+      - run: make build-full
+      - run: make upload-full
+      - run: make prune
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: manifest-amd64-contestant.json
+          path: packer/output/manifest-amd64-contestant.json
+      - uses: actions/upload-artifact@v2
+        with:
+          name: manifest-amd64-benchmarker.json
+          path: packer/output/manifest-amd64-benchmarker.json
+      - uses: actions/upload-artifact@v2
+        with:
+          name: manifest-amd64-full.json
+          path: packer/output/manifest-amd64-full.json
