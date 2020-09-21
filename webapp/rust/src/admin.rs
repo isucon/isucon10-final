@@ -1,7 +1,7 @@
 use crate::proto::services::admin::{
     initialize_response::BenchmarkServer, GetClarificationResponse, InitializeRequest,
     InitializeResponse, ListClarificationsResponse, RespondClarificationRequest,
-    RespondClarificationResponse, UpdateContestRequest, UpdateContestResponse,
+    RespondClarificationResponse,
 };
 use actix_protobuf::{ProtoBuf, ProtoBufResponseBuilder};
 use actix_session::Session;
@@ -72,58 +72,6 @@ pub async fn initialize(
             port: 50051,
         }),
     })
-}
-
-pub async fn update_contest(
-    session: Session,
-    db: web::Data<crate::Pool>,
-    message: ProtoBuf<UpdateContestRequest>,
-) -> Result<HttpResponse, AWError> {
-    let contestant_id = session.get("contestant_id")?;
-
-    let contest = message.0.contest.unwrap_or_default();
-    let registration_open_at =
-        protobuf_timestamp_to_chrono(contest.registration_open_at.unwrap_or_default());
-    let contest_starts_at =
-        protobuf_timestamp_to_chrono(contest.contest_starts_at.unwrap_or_default());
-    let contest_freezes_at =
-        protobuf_timestamp_to_chrono(contest.contest_freezes_at.unwrap_or_default());
-    let contest_ends_at = protobuf_timestamp_to_chrono(contest.contest_ends_at.unwrap_or_default());
-
-    web::block(move || {
-        let mut conn = db.get().expect("Failed to checkout database connection");
-        let current_contestant =
-            crate::require_current_contestant(conn.deref_mut(), &contestant_id, false)?;
-        if !current_contestant.staff {
-            return Err(crate::Error::UserError(
-                StatusCode::FORBIDDEN,
-                "管理者権限が必要です",
-            ));
-        }
-        let mut tx = conn.start_transaction(mysql::TxOpts::default())?;
-        tx.query_drop("TRUNCATE `contest_config`")?;
-        tx.exec_drop(
-            r#"
-          INSERT `contest_config` (
-            `registration_open_at`,
-            `contest_starts_at`,
-            `contest_freezes_at`,
-            `contest_ends_at`
-          ) VALUES (?, ?, ?, ?)
-        "#,
-            (
-                registration_open_at,
-                contest_starts_at,
-                contest_freezes_at,
-                contest_ends_at,
-            ),
-        )?;
-        tx.commit()?;
-        Ok(())
-    })
-    .await
-    .map_err(crate::unwrap_blocking_error)?;
-    HttpResponse::Ok().protobuf(UpdateContestResponse {})
 }
 
 pub async fn list_clarifications(

@@ -10,7 +10,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             "../../proto/xsuportal/resources/leaderboard.proto",
             "../../proto/xsuportal/resources/team.proto",
             "../../proto/xsuportal/services/admin/clarifications.proto",
-            "../../proto/xsuportal/services/admin/contest.proto",
             "../../proto/xsuportal/services/admin/initialize.proto",
             "../../proto/xsuportal/services/audience/dashboard.proto",
             "../../proto/xsuportal/services/audience/team_list.proto",

@@ -76,7 +76,6 @@ async fn main() -> std::io::Result<()> {
                     .max_age(3600),
             )
             .route("/initialize", web::post().to(xsuportal::admin::initialize))
-            .route("/api/admin/contest", web::put().to(xsuportal::admin::update_contest))
             .route("/api/admin/clarifications", web::get().to(xsuportal::admin::list_clarifications))
             .route("/api/admin/clarifications/{id}", web::get().to(xsuportal::admin::get_clarification))
             .route("/api/admin/clarifications/{id}", web::put().to(xsuportal::admin::respond_clarification))
