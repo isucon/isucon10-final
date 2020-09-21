@@ -332,9 +332,6 @@ export namespace xsuportal {
 
                     /** ClarificationMessage updated */
                     updated?: (boolean|null);
-
-                    /** ClarificationMessage admin */
-                    admin?: (boolean|null);
                 }
 
                 /** Represents a ClarificationMessage. */
@@ -354,9 +351,6 @@ export namespace xsuportal {
 
                     /** ClarificationMessage updated. */
                     public updated: boolean;
-
-                    /** ClarificationMessage admin. */
-                    public admin: boolean;
 
                     /**
                      * Creates a new ClarificationMessage instance using the specified properties.

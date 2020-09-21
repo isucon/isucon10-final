@@ -14,7 +14,6 @@ message Notification {
     bool owned = 2;   // True when a clarification is sent from a team of
                       // notification recipient
     bool updated = 3; // True when a clarification was answered and have updated
-    bool admin = 4;   // True when a clarification was opened by admin
   }
   message TestMessage { int64 something = 1; }
   oneof content {

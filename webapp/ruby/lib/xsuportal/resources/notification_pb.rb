@@ -22,7 +22,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :clarification_id, :int64, 1
       optional :owned, :bool, 2
       optional :updated, :bool, 3
-      optional :admin, :bool, 4
     end
     add_message "xsuportal.proto.resources.Notification.TestMessage" do
       optional :something, :int64, 1

@@ -37,7 +37,6 @@ module Xsuportal
           content_clarification: Proto::Resources::Notification::ClarificationMessage.new(
             clarification_id: clar[:id],
             owned: clar[:team_id] == contestant[:team_id],
-            admin: false, # TODO: remove
           )
         )
         notify(notification, contestant[:id])
