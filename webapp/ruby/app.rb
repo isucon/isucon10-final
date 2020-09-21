@@ -9,13 +9,11 @@ require 'routes'
 require 'database'
 require 'notifier'
 
-# TODO: 競技時は消す
-TEAM_CAPACITY = 10
-
 module Xsuportal
   class App < Sinatra::Base
     include Xsuportal::Routes
 
+    TEAM_CAPACITY = 10
     MYSQL_ER_DUP_ENTRY = 1062
     ADMIN_ID = 'admin'
     ADMIN_PASSWORD = 'admin'
@@ -360,9 +358,6 @@ module Xsuportal
         general_teams = []
         student_teams = []
         leaderboard.each do |team|
-          # if team_graph_scores[team[:id]]
-          #   binding.pry if team_graph_scores[team[:id]].map{|_|_.score}.max != team[:best_score]
-          # end
           item = Proto::Resources::Leaderboard::LeaderboardItem.new(
             scores: team_graph_scores[team[:id]],
             best_score: Proto::Resources::Leaderboard::LeaderboardItem::LeaderboardScore.new(
