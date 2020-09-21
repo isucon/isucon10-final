@@ -4,10 +4,10 @@ GOMAXPROCS?=$(shell nproc)
 GOPRIVATE="github.com/isucon"
 
 GOFILES=$(shell find . -name *.go)
-PROTOFILES=$(shell find proto -name *.proto)
-GOPROTOFILES=$(addprefix benchmarker/,$(PROTOFILES:%.proto=%.pb.go))
+PROTOFILES=$(shell find ../proto -name *.proto)
+GOPROTOFILES=$(addprefix proto/,$(PROTOFILES:%.proto=%.pb.go))
 
-EXE=./bin/benchmarker
+EXE=../bin/benchmarker
 
 .PHONY: all
 all: setup build ## Execute all tasks
@@ -36,19 +36,17 @@ test:
 
 .PHONY: clean
 clean: ## Cleanup working directory
-	$(RM) $(EXE) $(GOPROTOFILES)
-	go clean
+	@$(RM) $(EXE) $(GOPROTOFILES)
+	@go clean
 
 .PHONY: help
 help: ## Display this help screen
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-go.sum: go.mod
-	GOPRIVATE=$(GOPRIVATE) go mod download
-
 $(EXE): Makefile go.mod $(GOFILES) $(GOPROTOFILES)
 	GOPRIVATE=$(GOPRIVATE) go build -race -o $(EXE) -v github.com/isucon/isucon10-final/benchmarker
 
 $(GOPROTOFILES): Makefile $(PROTOFILES)
-	@protoc --go_out=plugins=grpc:./benchmarker/proto --go_opt=paths=source_relative -I ./proto $(PROTOFILES)
-	@find ./benchmarker/proto -name *.go | xargs sed -i '' -e 's|webapp/golang|benchmarker|g'
+	echo $(GOPROTOFILES)
+	@protoc --go_out=plugins=grpc:./proto --go_opt=paths=source_relative -I ../proto $(PROTOFILES)
+	@find ./proto -name '*.go' | xargs sed -i '' -e 's|webapp/golang|benchmarker|g'
