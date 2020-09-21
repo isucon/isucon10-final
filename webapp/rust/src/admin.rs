@@ -28,6 +28,8 @@ pub async fn initialize(
         conn.query_drop("TRUNCATE `contestants`")?;
         conn.query_drop("TRUNCATE `benchmark_jobs`")?;
         conn.query_drop("TRUNCATE `clarifications`")?;
+        conn.query_drop("TRUNCATE `notifications`")?;
+        conn.query_drop("TRUNCATE `push_subscriptions`")?;
         conn.query_drop("TRUNCATE `contest_config`")?;
 
         conn.exec_drop("INSERT `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, TRUE, NOW(6))", (ADMIN_ID, crate::sha256_hexdigest(ADMIN_PASSWORD)))?;
@@ -196,8 +198,12 @@ pub async fn respond_clarification(
     let id = info.into_inner().0;
     let message = message.0;
 
-    let clarification = web::block(move || {
-        let mut conn = db.get().expect("Failed to checkout database connection");
+    let db_block = db.clone();
+    let (clarification, notifiers) = web::block(move || {
+        let mut conn = db_block
+            .clone()
+            .get()
+            .expect("Failed to checkout database connection");
         let current_contestant =
             crate::require_current_contestant(conn.deref_mut(), &contestant_id, false)?;
         if !current_contestant.staff {
@@ -232,22 +238,31 @@ pub async fn respond_clarification(
                 (clar.team_id,),
             )?
             .expect("team is not found");
+        let notifiers = crate::notifier::notify_clarification_answered(&mut tx, &clar)?;
         let team_pb = crate::team_pb(&mut tx, team, false, true, false, None)?;
         tx.commit()?;
-        Ok(crate::proto::resources::Clarification {
-            id: clar.id,
-            team_id: clar.team_id,
-            answered: clar.answered_at.is_some(),
-            disclosed: clar.disclosed.unwrap_or_default(),
-            question: clar.question.unwrap_or_default(),
-            answer: clar.answer.unwrap_or_default(),
-            created_at: Some(crate::chrono_timestamp_to_protobuf(clar.created_at)),
-            answered_at: clar.answered_at.map(crate::chrono_timestamp_to_protobuf),
-            team: Some(team_pb),
-        })
+        Ok((
+            crate::proto::resources::Clarification {
+                id: clar.id,
+                team_id: clar.team_id,
+                answered: clar.answered_at.is_some(),
+                disclosed: clar.disclosed.unwrap_or_default(),
+                question: clar.question.unwrap_or_default(),
+                answer: clar.answer.unwrap_or_default(),
+                created_at: Some(crate::chrono_timestamp_to_protobuf(clar.created_at)),
+                answered_at: clar.answered_at.map(crate::chrono_timestamp_to_protobuf),
+                team: Some(team_pb),
+            },
+            notifiers,
+        ))
     })
     .await
     .map_err(crate::unwrap_blocking_error)?;
+
+    for notifier in notifiers {
+        // TODO: Delete push_subscription when Webpush::ExpiredSubscription or Webpush::InvalidSubscription
+        let _ = notifier.send().await;
+    }
 
     HttpResponse::Ok().protobuf(RespondClarificationResponse {
         clarification: Some(clarification),

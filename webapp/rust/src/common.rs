@@ -29,9 +29,27 @@ pub async fn get_current_session(
         } else {
             None
         };
+        let contest_status = crate::get_current_contest_status(conn.deref_mut())?;
         Ok(GetCurrentSessionResponse {
             contestant: current_contestant.map(|c| c.into_message()),
             team,
+            contest: Some(crate::proto::resources::Contest {
+                registration_open_at: Some(crate::chrono_timestamp_to_protobuf(
+                    contest_status.contest.registration_open_at,
+                )),
+                contest_starts_at: Some(crate::chrono_timestamp_to_protobuf(
+                    contest_status.contest.contest_starts_at,
+                )),
+                contest_ends_at: Some(crate::chrono_timestamp_to_protobuf(
+                    contest_status.contest.contest_ends_at,
+                )),
+                contest_freezes_at: Some(crate::chrono_timestamp_to_protobuf(
+                    contest_status.contest.contest_freezes_at,
+                )),
+                frozen: contest_status.contest.frozen,
+                status: contest_status.contest.status as i32,
+            }),
+            push_vapid_key: crate::notifier::get_public_key_for_push_header().unwrap_or_default(),
         })
     })
     .await

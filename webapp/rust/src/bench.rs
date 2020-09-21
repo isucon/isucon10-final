@@ -9,6 +9,7 @@ use crate::proto::services::bench::{
 use chrono::NaiveDateTime;
 use futures::Stream;
 use mysql::prelude::*;
+use std::ops::DerefMut;
 use std::pin::Pin;
 use std::sync::Arc;
 use tonic::{Request, Response, Status as TonicStatus, Streaming};
@@ -110,12 +111,16 @@ impl BenchmarkReport for ReportService {
             .expect("Failed to checkout database connection");
         let mut stream = request.into_inner();
 
+        // TODO: Delete push_subscription when Webpush::ExpiredSubscription or Webpush::InvalidSubscription
         let output = async_stream::try_stream! {
             while let Some(message) = stream.message().await? {
                 let job_id = message.job_id;
                 let finished = message.result.as_ref().expect("result is missing").finished;
-                if let Some(response) = tokio::task::block_in_place(|| handle_report(&mut conn, message)).map_err(mysql_error_to_tonic_status)? {
-                    yield response;
+                if let Some((job, notifiers)) = tokio::task::block_in_place(|| handle_report(&mut conn, &message)).map_err(mysql_error_to_tonic_status)? {
+                    for notifier in notifiers {
+                        let _ = notifier.send().await;
+                    }
+                    yield ReportBenchmarkResultResponse { acked_nonce: message.nonce };
                     // TODO: これわざわざストリームこっちから切る理由はない気がする (本番では複数ジョブ跨いで受け付けてます) これやるなら1ストリームで複数ジョブ流してくるのは Bad Request であるということにしたい ~sorah
                     if finished {
                         break;
@@ -133,8 +138,8 @@ impl BenchmarkReport for ReportService {
 
 fn handle_report(
     conn: &mut crate::PooledConnection,
-    message: ReportBenchmarkResultRequest,
-) -> Result<Option<ReportBenchmarkResultResponse>, mysql::Error> {
+    message: &ReportBenchmarkResultRequest,
+) -> Result<Option<(crate::BenchmarkJob, Vec<crate::notifier::WebPushNotifier>)>, mysql::Error> {
     let mut tx = conn.start_transaction(mysql::TxOpts::default())?;
     let job: Option<crate::BenchmarkJob> = tx.exec_first(
         "SELECT * FROM `benchmark_jobs` WHERE `id` = ? AND `handle` = ? LIMIT 1 FOR UPDATE",
@@ -150,24 +155,23 @@ fn handle_report(
     }
     let job = job.unwrap();
 
-    let result = message.result.expect("result is missing");
+    let result = message.result.as_ref().expect("result is missing");
     if result.finished {
         log::debug!("{}: save as finished", message.job_id);
-        save_as_finished(&mut tx, job, result)?;
+        save_as_finished(&mut tx, &job, result)?;
     } else {
         log::debug!("{}: save as running", message.job_id);
-        save_as_running(&mut tx, job)?;
+        save_as_running(&mut tx, &job)?;
     }
     tx.commit()?;
-    Ok(Some(ReportBenchmarkResultResponse {
-        acked_nonce: message.nonce,
-    }))
+    let notifiers = crate::notifier::notify_benchmark_job_finished(conn.deref_mut(), &job)?;
+    Ok(Some((job, notifiers)))
 }
 
 fn save_as_finished(
     tx: &mut mysql::Transaction,
-    job: crate::BenchmarkJob,
-    result: BenchmarkResult,
+    job: &crate::BenchmarkJob,
+    result: &BenchmarkResult,
 ) -> Result<(), mysql::Error> {
     if job.started_at.is_none() || job.finished_at.is_some() {
         return Err(mysql::Error::from(std::io::Error::new(
@@ -194,9 +198,12 @@ fn save_as_finished(
                 .score_breakdown
                 .as_ref()
                 .map(|breakdown| breakdown.raw),
-            result.score_breakdown.map(|breakdown| breakdown.deduction),
+            result
+                .score_breakdown
+                .as_ref()
+                .map(|breakdown| breakdown.deduction),
             result.passed,
-            result.reason,
+            &result.reason,
             job.id,
         ),
     )
@@ -204,7 +211,7 @@ fn save_as_finished(
 
 fn save_as_running(
     tx: &mut mysql::Transaction,
-    job: crate::BenchmarkJob,
+    job: &crate::BenchmarkJob,
 ) -> Result<(), mysql::Error> {
     if job.started_at.is_some() {
         return Err(mysql::Error::from(std::io::Error::new(

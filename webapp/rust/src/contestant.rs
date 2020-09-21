@@ -1,12 +1,15 @@
 use crate::proto::services::contestant::{
     DashboardResponse, EnqueueBenchmarkJobRequest, EnqueueBenchmarkJobResponse,
-    GetBenchmarkJobResponse, ListBenchmarkJobsResponse, ListClarificationsResponse, LoginRequest,
-    LoginResponse, LogoutRequest, LogoutResponse, RequestClarificationRequest,
-    RequestClarificationResponse, SignupRequest, SignupResponse,
+    GetBenchmarkJobResponse, ListBenchmarkJobsResponse, ListClarificationsResponse,
+    ListNotificationsResponse, LoginRequest, LoginResponse, LogoutRequest, LogoutResponse,
+    RequestClarificationRequest, RequestClarificationResponse, SignupRequest, SignupResponse,
+    SubscribeNotificationRequest, SubscribeNotificationResponse, UnsubscribeNotificationRequest,
+    UnsubscribeNotificationResponse,
 };
 use actix_protobuf::{ProtoBuf, ProtoBufResponseBuilder};
 use actix_session::Session;
 use actix_web::{http::StatusCode, web, Error as AWError, HttpResponse};
+use chrono::NaiveDateTime;
 use mysql::prelude::*;
 use std::ops::DerefMut;
 
@@ -322,4 +325,129 @@ pub async fn request_clarification(
     HttpResponse::Ok().protobuf(RequestClarificationResponse {
         clarification: Some(clarification),
     })
+}
+
+#[derive(serde::Deserialize)]
+pub struct ListNotificationsQuery {
+    after: Option<String>,
+}
+
+pub struct Notification {
+    pub id: i64,
+    pub contestant_id: String,
+    pub read: bool,
+    pub encoded_message: String,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+}
+impl FromRow for Notification {
+    fn from_row_opt(row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+        Ok(Self {
+            id: row.get("id").expect("id column is missing"),
+            contestant_id: row
+                .get("contestant_id")
+                .expect("contestant_id column is missing"),
+            read: row.get("read").expect("read column is missing"),
+            encoded_message: row
+                .get("encoded_message")
+                .expect("encoded_message column is missing"),
+            created_at: row.get("created_at").expect("created_at column is missing"),
+            updated_at: row.get("updated_at").expect("updated_at column is missing"),
+        })
+    }
+}
+
+pub async fn list_notifications(
+    session: Session,
+    db: web::Data<crate::Pool>,
+    query: web::Query<ListNotificationsQuery>,
+) -> Result<HttpResponse, AWError> {
+    let contestant_id = session.get("contestant_id")?;
+    let after: Option<i64> = query.into_inner().after.and_then(|s| s.parse().ok());
+
+    let resp = web::block::<_, _, crate::Error>(move || {
+        let mut conn = db.get().expect("Failed to checkout database connection");
+        let (current_contestant, current_team) =
+            crate::require_current_contestant_and_team(conn.deref_mut(), &contestant_id, false)?;
+
+        let mut tx = conn.start_transaction(mysql::TxOpts::default())?;
+        let notifications: Vec<Notification> = if let Some(after) = after {
+            tx.exec("SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `id` > ? ORDER BY `id`", (&current_contestant.id, after))?
+        } else {
+            tx.exec("SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `read` = FALSE ORDER BY `id`", (&current_contestant.id,))?
+        };
+        tx.exec_drop("UPDATE `notifications` SET `read` = TRUE WHERE `contestant_id` = ? AND `read` = FALSE", (&current_contestant.id,))?;
+        tx.commit()?;
+
+        let last_answered_clar: Option<(i64,)> = conn.exec_first("SELECT `id` FROM `clarifications` WHERE (`team_id` = ? OR `disclosed` = TRUE) AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1", (current_team.id,))?;
+        Ok(ListNotificationsResponse {
+            last_answered_clarification_id: last_answered_clar.map(|clar| clar.0).unwrap_or(0),
+            notifications: notifications.into_iter().map(|n| {
+                use prost::Message;
+                let proto_message = data_encoding::BASE64.decode(n.encoded_message.as_bytes()).expect("Failed to decode notifications.encoded_message as base64");
+                let mut notification = crate::proto::resources::Notification::decode(proto_message.as_slice()).expect("Failed to decode notifications.message as protobuf");
+                notification.id = n.id;
+                notification.created_at = Some(crate::chrono_timestamp_to_protobuf(n.created_at));
+                notification
+            }).collect(),
+        })
+    })
+    .await?;
+
+    HttpResponse::Ok().protobuf(resp)
+}
+
+pub async fn subscribe_notification(
+    session: Session,
+    db: web::Data<crate::Pool>,
+    message: ProtoBuf<SubscribeNotificationRequest>,
+) -> Result<HttpResponse, AWError> {
+    let contestant_id = session.get("contestant_id")?;
+    let message = message.0;
+
+    if !crate::notifier::is_webpush_available() {
+        return Err(crate::Error::UserError(StatusCode::FORBIDDEN, "WebPush は未対応です").into());
+    }
+
+    web::block::<_, _, crate::Error>(move || {
+        let mut conn = db.get().expect("Failed to checkout database connection");
+        let (current_contestant, _) =
+            crate::require_current_contestant_and_team(conn.deref_mut(), &contestant_id, false)?;
+
+        conn.exec_drop("INSERT INTO `push_subscriptions` (`contestant_id`, `endpoint`, `p256dh`, `auth`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, NOW(6), NOW(6))", (current_contestant.id, message.endpoint, message.p256dh, message.auth))?;
+
+        Ok(())
+    })
+    .await?;
+
+    HttpResponse::Ok().protobuf(SubscribeNotificationResponse {})
+}
+
+pub async fn unsubscribe_notification(
+    session: Session,
+    db: web::Data<crate::Pool>,
+    message: ProtoBuf<UnsubscribeNotificationRequest>,
+) -> Result<HttpResponse, AWError> {
+    let contestant_id = session.get("contestant_id")?;
+    let message = message.0;
+
+    if !crate::notifier::is_webpush_available() {
+        return Err(crate::Error::UserError(StatusCode::FORBIDDEN, "WebPush は未対応です").into());
+    }
+
+    web::block::<_, _, crate::Error>(move || {
+        let mut conn = db.get().expect("Failed to checkout database connection");
+        let (current_contestant, _) =
+            crate::require_current_contestant_and_team(conn.deref_mut(), &contestant_id, false)?;
+
+        conn.exec_drop(
+            "DELETE FROM `push_subscriptions` WHERE `contestant_id` = ? AND `endpoint` = ? LIMIT 1",
+            (current_contestant.id, message.endpoint),
+        )?;
+
+        Ok(())
+    })
+    .await?;
+
+    HttpResponse::Ok().protobuf(UnsubscribeNotificationResponse {})
 }

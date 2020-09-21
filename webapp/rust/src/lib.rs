@@ -225,6 +225,7 @@ pub mod bench;
 pub mod common;
 pub mod contestant;
 pub mod leaderboard;
+pub mod notifier;
 pub mod proto;
 pub mod registration;
 

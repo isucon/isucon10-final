@@ -93,6 +93,9 @@ async fn main() -> std::io::Result<()> {
             .route("/api/contestant/clarifications", web::get().to(xsuportal::contestant::list_clarifications))
             .route("/api/contestant/clarifications", web::post().to(xsuportal::contestant::request_clarification))
             .route("/api/contestant/dashboard", web::get().to(xsuportal::contestant::dashboard))
+            .route("/api/contestant/notifications", web::get().to(xsuportal::contestant::list_notifications))
+            .route("/api/contestant/push_subscriptions", web::post().to(xsuportal::contestant::subscribe_notification))
+            .route("/api/contestant/push_subscriptions", web::delete().to(xsuportal::contestant::unsubscribe_notification))
             .route("/api/signup", web::post().to(xsuportal::contestant::signup))
             .route("/api/login", web::post().to(xsuportal::contestant::login))
             .route("/api/logout", web::post().to(xsuportal::contestant::logout))
@@ -103,13 +106,17 @@ async fn main() -> std::io::Result<()> {
             "/signup",
             "/login",
             "/logout",
-            "/audience/dashboard",
-            "/contestant/dashboard",
+            "/teams",
+        ] {
+            app = app.route(path, web::get().to(audience_html));
+        }
+        for path in &[
+            "/contestant",
             "/contestant/benchmark_jobs",
             "/contestant/benchmark_jobs/{id}",
             "/contestant/clarifications",
         ] {
-            app = app.route(path, web::get().to(index_html));
+            app = app.route(path, web::get().to(contestant_html));
         }
         for path in &[
             "/admin",
@@ -165,8 +172,15 @@ async fn main() -> std::io::Result<()> {
     server.run().await
 }
 
-async fn index_html() -> Result<actix_files::NamedFile, std::io::Error> {
-    actix_files::NamedFile::open("public/index.html").map(|f| {
+async fn audience_html() -> Result<actix_files::NamedFile, std::io::Error> {
+    actix_files::NamedFile::open("public/audience.html").map(|f| {
+        f.disable_content_disposition()
+            .set_content_type(mime::TEXT_HTML_UTF_8)
+    })
+}
+
+async fn contestant_html() -> Result<actix_files::NamedFile, std::io::Error> {
+    actix_files::NamedFile::open("public/contestant.html").map(|f| {
         f.disable_content_disposition()
             .set_content_type(mime::TEXT_HTML_UTF_8)
     })

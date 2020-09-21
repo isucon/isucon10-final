@@ -31,3 +31,6 @@ ring = "0.16"
 serde = "1.0"
 tokio = { version = "0.2", features = ["full"] }
 tonic = "0.3"
+web-push = "0.7"
+lazy_static = "1.4"
+openssl = "0.10"

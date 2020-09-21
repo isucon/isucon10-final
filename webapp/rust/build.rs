@@ -21,6 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             "../../proto/xsuportal/services/contestant/dashboard.proto",
             "../../proto/xsuportal/services/contestant/login.proto",
             "../../proto/xsuportal/services/contestant/logout.proto",
+            "../../proto/xsuportal/services/contestant/notifications.proto",
             "../../proto/xsuportal/services/contestant/signup.proto",
             "../../proto/xsuportal/services/registration/create_team.proto",
             "../../proto/xsuportal/services/registration/join.proto",
