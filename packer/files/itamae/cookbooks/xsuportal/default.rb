@@ -1,3 +1,9 @@
+node.reverse_merge!(
+  xsuportal: {
+    slice: nil,
+  },
+)
+
 include_cookbook 'xsuportal::files'
 
 include_cookbook 'xsuportal::db'
