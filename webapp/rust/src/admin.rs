@@ -214,6 +214,20 @@ pub async fn respond_clarification(
         }
 
         let mut tx = conn.start_transaction(mysql::TxOpts::default())?;
+        let clar_before: Option<crate::Clarification> = tx.exec_first(
+            "SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1 FOR UPDATE",
+            (id,),
+        )?;
+        if clar_before.is_none() {
+            return Err(crate::Error::UserError(
+                StatusCode::NOT_FOUND,
+                "質問が見つかりません",
+            ));
+        }
+        let clar_before = clar_before.unwrap();
+        let was_answered = clar_before.answered_at.is_some();
+        let was_disclosed = clar_before.disclosed;
+
         tx.exec_drop(
             r#"
             UPDATE `clarifications` SET
@@ -238,7 +252,11 @@ pub async fn respond_clarification(
                 (clar.team_id,),
             )?
             .expect("team is not found");
-        let notifiers = crate::notifier::notify_clarification_answered(&mut tx, &clar)?;
+        let notifiers = crate::notifier::notify_clarification_answered(
+            &mut tx,
+            &clar,
+            was_answered && was_disclosed == clar.disclosed,
+        )?;
         let team_pb = crate::team_pb(&mut tx, team, false, true, false, None)?;
         tx.commit()?;
         Ok((

@@ -57,6 +57,7 @@ impl WebPushNotifier {
 pub fn notify_clarification_answered<Q>(
     conn: &mut Q,
     clar: &crate::Clarification,
+    updated: bool,
 ) -> Result<Vec<WebPushNotifier>, mysql::Error>
 where
     Q: Queryable,
@@ -79,7 +80,7 @@ where
                     crate::proto::resources::notification::ClarificationMessage {
                         clarification_id: clar.id,
                         owned: clar.team_id == contestant.1,
-                        updated: false,
+                        updated,
                     },
                 ),
             ),
