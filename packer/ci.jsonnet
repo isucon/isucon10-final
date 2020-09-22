@@ -9,14 +9,10 @@ base {
       filters: {
         'virtualization-type': 'hvm',
         'root-device-type': 'ebs',
-        name: 'isucon10f-' + $.arg_arch + '-contestant-*-{{user "revision"}}',
+        name: 'isucon10f-' + $.arg_arch + '-contestant-*',
       },
       owners: ['516315029474'],
       most_recent: true,
     },
   },
-  provisioners_plus:: [
-    $.common_provisioners.generate_cache,
-    $.common_provisioners.download_cache,
-  ],
 }

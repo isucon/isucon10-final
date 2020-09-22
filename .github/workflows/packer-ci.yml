@@ -68,13 +68,6 @@ jobs:
       - run: make clean
       - run: make clean-output
 
-      - name: Use cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            packer/files-cached
-          key: ${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}
-
       - name: Save TLS Certificate
         run: |
           echo "${{ secrets.TLS_CERT }}" > files/tls-cert.pem
@@ -85,7 +78,6 @@ jobs:
       - run: make generate
       #- run: make build
       - run: make build-ci
-      - run: make cache
 
       - uses: ruby/setup-ruby@v1
         with:
