@@ -21,7 +21,7 @@ module Xsuportal
       end
     end
 
-    def notify_clarification_answered(clar)
+    def notify_clarification_answered(clar, updated: false)
       contestants = nil
       if clar[:disclosed]
         contestants = db.query('SELECT `id`, `team_id` FROM `contestants`')
@@ -37,6 +37,7 @@ module Xsuportal
           content_clarification: Proto::Resources::Notification::ClarificationMessage.new(
             clarification_id: clar[:id],
             owned: clar[:team_id] == contestant[:team_id],
+            updated: updated,
           )
         )
         notify(notification, contestant[:id])

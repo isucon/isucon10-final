@@ -557,6 +557,17 @@ module Xsuportal
 
       clar_pb = nil
       Database.transaction do
+        clar_before = db.xquery(
+          'SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1 FOR UPDATE',
+          params[:id],
+        ).first
+
+        unless clar_before
+          halt_pb 404, '質問が見つかりません'
+        end
+        was_answered = !!clar_before[:answered_at]
+        was_disclosed = clar_before[:disclosed]
+
         db.xquery(
           <<~SQL,
             UPDATE `clarifications` SET
@@ -582,7 +593,7 @@ module Xsuportal
           clar[:team_id],
         ).first
 
-        notifier.notify_clarification_answered(clar)
+        notifier.notify_clarification_answered(clar, updated: was_answered && was_disclosed == clar[:disclosed])
 
         clar_pb = clarification_pb(clar, team)
       end
