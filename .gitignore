@@ -3,4 +3,5 @@
 /bin/benchmarker
 log/
 tmp/
-*.pem
+vapid_private.pem
+*.log
