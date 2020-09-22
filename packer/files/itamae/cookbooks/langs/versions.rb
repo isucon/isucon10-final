@@ -1,5 +1,5 @@
 # This file is used for build caching. Improper cache key will reduce build efficiency (cache will not be updated while xbuild re-run).
-# cache-epoch: 0
+# cache-epoch: 1
 
 node.reverse_merge!(
   langs: {
