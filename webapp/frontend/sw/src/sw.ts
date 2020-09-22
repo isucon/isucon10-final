@@ -89,22 +89,14 @@ const showNotification = async (n: xsuportal.proto.resources.INotification) => {
   } else if (n.contentClarification) {
     const c = n.contentClarification;
     let title = "Clarification updated";
-    if (!c.owned && !c.admin && !c.updated) {
-      title = "新しい質問と回答が公開されました";
-    } else if (!c.owned && !c.admin && c.updated) {
-      title = "質問と回答が更新されました";
-    } else if (!c.owned && c.admin && !c.updated) {
-      title = "アナウンスが追加されました";
-    } else if (!c.owned && c.admin && c.updated) {
-      title = "アナウンスが更新されました";
-    } else if (c.owned && !c.admin && !c.updated) {
+    if (!c.owned && !c.updated) {
+      title = "新しい質問/回答が公開されました";
+    } else if (!c.owned && c.updated) {
+      title = "質問/回答が更新されました";
+    } else if (c.owned && !c.updated) {
       title = "質問/サポート依頼が回答されました";
-    } else if (c.owned && !c.admin && c.updated) {
+    } else if (c.owned && c.updated) {
       title = "質問/サポート依頼の回答が更新されました";
-    } else if (c.owned && c.admin && !c.updated) {
-      title = "運営よりメッセージが届いています";
-    } else if (c.owned && c.admin && c.updated) {
-      title = "運営からのメッセージが更新されました";
     }
 
     promise = self.registration.showNotification(title, {
