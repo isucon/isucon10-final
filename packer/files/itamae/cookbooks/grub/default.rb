@@ -1,7 +1,7 @@
 node.reverse_merge!(
   cmdline: {
-    maxcpus: '2',
-    mem: '1G',
+    maxcpus: nil,
+    mem: nil,
   },
 )
 
