@@ -8,4 +8,8 @@ execute "rm -rf ~isucon/proto; tar xf /dev/shm/files-generated/archive.tar -C ~i
   not_if "test -e ~isucon/proto"
 end
 
-
+template "/home/isucon/env" do
+  owner 'isucon'
+  group 'root'
+  mode  '0640'
+end
