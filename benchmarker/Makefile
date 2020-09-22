@@ -40,7 +40,7 @@ clean: ## Cleanup working directory
 	@go clean
 
 .PHONY: vendor
-vendor:
+vendor: $(GOPROTOFILES)
 	GOPRIVATE=$(GOPRIVATE) go mod vendor
 
 .PHONY: help
