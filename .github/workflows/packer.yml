@@ -45,6 +45,11 @@ jobs:
             packer/files-cached
           key: ${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}
 
+      - name: Save TLS Certificate
+        run: |
+          echo "${{ secrets.TLS_CERT }}" > files/tls-cert.pem
+          echo "${{ secrets.TLS_KEY }}" > files/tls-key.pem
+
       - run: make generate
       #- run: make build
       - run: make build-contestant
