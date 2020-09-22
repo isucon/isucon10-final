@@ -115,7 +115,7 @@ impl BenchmarkReport for ReportService {
         let output = async_stream::try_stream! {
             while let Some(message) = stream.message().await? {
                 let job_id = message.job_id;
-                if let Some((job, notifiers)) = tokio::task::block_in_place(|| handle_report(&mut conn, &message)).map_err(mysql_error_to_tonic_status)? {
+                if let Some((job, notifiers)) = tokio::task::block_in_place(|| handle_report(&mut conn, &message))? {
                     for notifier in notifiers {
                         let _ = notifier.send().await;
                     }
@@ -134,12 +134,16 @@ impl BenchmarkReport for ReportService {
 fn handle_report(
     conn: &mut crate::PooledConnection,
     message: &ReportBenchmarkResultRequest,
-) -> Result<Option<(crate::BenchmarkJob, Vec<crate::notifier::WebPushNotifier>)>, mysql::Error> {
-    let mut tx = conn.start_transaction(mysql::TxOpts::default())?;
-    let job: Option<crate::BenchmarkJob> = tx.exec_first(
-        "SELECT * FROM `benchmark_jobs` WHERE `id` = ? AND `handle` = ? LIMIT 1 FOR UPDATE",
-        (message.job_id, &message.handle),
-    )?;
+) -> Result<Option<(crate::BenchmarkJob, Vec<crate::notifier::WebPushNotifier>)>, TonicStatus> {
+    let mut tx = conn
+        .start_transaction(mysql::TxOpts::default())
+        .map_err(mysql_error_to_tonic_status)?;
+    let job: Option<crate::BenchmarkJob> = tx
+        .exec_first(
+            "SELECT * FROM `benchmark_jobs` WHERE `id` = ? AND `handle` = ? LIMIT 1 FOR UPDATE",
+            (message.job_id, &message.handle),
+        )
+        .map_err(mysql_error_to_tonic_status)?;
     if job.is_none() {
         log::error!(
             "Job not found: job_id={}, handle={}",
@@ -150,16 +154,21 @@ fn handle_report(
     }
     let job = job.unwrap();
 
-    let result = message.result.as_ref().expect("result is missing");
+    let result = message.result.as_ref();
+    if result.is_none() {
+        return Err(TonicStatus::invalid_argument("result required"));
+    }
+    let result = result.unwrap();
     if result.finished {
         log::debug!("{}: save as finished", message.job_id);
-        save_as_finished(&mut tx, &job, result)?;
+        save_as_finished(&mut tx, &job, result).map_err(mysql_error_to_tonic_status)?;
     } else {
         log::debug!("{}: save as running", message.job_id);
-        save_as_running(&mut tx, &job)?;
+        save_as_running(&mut tx, &job).map_err(mysql_error_to_tonic_status)?;
     }
-    tx.commit()?;
-    let notifiers = crate::notifier::notify_benchmark_job_finished(conn.deref_mut(), &job)?;
+    tx.commit().map_err(mysql_error_to_tonic_status)?;
+    let notifiers = crate::notifier::notify_benchmark_job_finished(conn.deref_mut(), &job)
+        .map_err(mysql_error_to_tonic_status)?;
     Ok(Some((job, notifiers)))
 }
 
