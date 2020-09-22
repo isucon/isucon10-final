@@ -1,0 +1,8 @@
+*_pb.rb linguist-generated=true
+
+/webapp/golang/proto/**/*.go  linguist-generated=true
+
+/webapp/frontend/javascript/pb.*  linguist-generated=true
+/webapp/frontend/javascript/pb_admin.*  linguist-generated=true
+/webapp/frontend/sw/src/pb.*  linguist-generated=true
+/webapp/frontend/javascript/ScoreGraphColors.tsx linguist-generated=true
