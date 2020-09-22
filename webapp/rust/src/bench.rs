@@ -115,16 +115,11 @@ impl BenchmarkReport for ReportService {
         let output = async_stream::try_stream! {
             while let Some(message) = stream.message().await? {
                 let job_id = message.job_id;
-                let finished = message.result.as_ref().expect("result is missing").finished;
                 if let Some((job, notifiers)) = tokio::task::block_in_place(|| handle_report(&mut conn, &message)).map_err(mysql_error_to_tonic_status)? {
                     for notifier in notifiers {
                         let _ = notifier.send().await;
                     }
                     yield ReportBenchmarkResultResponse { acked_nonce: message.nonce };
-                    // TODO: これわざわざストリームこっちから切る理由はない気がする (本番では複数ジョブ跨いで受け付けてます) これやるなら1ストリームで複数ジョブ流してくるのは Bad Request であるということにしたい ~sorah
-                    if finished {
-                        break;
-                    }
                 } else {
                     Err(TonicStatus::not_found(format!(
                             "Job {} not found or handle is wrong",
