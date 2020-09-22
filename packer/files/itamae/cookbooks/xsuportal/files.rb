@@ -13,3 +13,9 @@ template "/home/isucon/env" do
   group 'root'
   mode  '0640'
 end
+
+if node[:xsuportal][:ci_cache]
+  execute "cd /opt/ci-cache && rm /opt/ci-cache/.do && for x in *; do mv -v ${x}/* -t ~isucon/${x}/; done" do
+    only_if 'test -e /opt/ci-cache/.do'
+  end
+end

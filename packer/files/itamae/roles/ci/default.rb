@@ -4,7 +4,9 @@ node.reverse_merge!(
   },
   xsuportal: {
     enable: nil,
+    disable_default: true,
     slice: 'contestant.slice',
+    ci_cache: true,
   },
   envoy: {
     slice: 'contestant.slice',
@@ -14,6 +16,27 @@ node.reverse_merge!(
     mem: nil,
   },
 )
+
+define :ci_cache, directories: [] do
+  name = params[:name]
+  params[:directories].each do |dir|
+    execute "mkdir -p /opt/ci-cache/#{name} && mv ~isucon/webapp/#{name}/#{dir} /opt/ci-cache/#{name}/#{dir} && touch /opt/ci-cache/.do" do
+      only_if "test -e ~isucon/webapp/#{name}/#{dir}"
+    end
+  end
+end
+
+ci_cache 'ruby' do
+  directories %w(.bundle vendor)
+end
+
+ci_cache 'rust' do
+  directories %w(target)
+end
+
+execute 'rm -rf ~isucon/proto ~isucon/benchmarker ~isucon/webapp'
+
+######
 
 include_role 'contestant'
 include_role 'benchmarker'

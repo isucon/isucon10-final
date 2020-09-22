@@ -1,6 +1,9 @@
+default_enable = nil
+
 node.reverse_merge!(
   xsuportal: {
-    enable: nil,
+    enable: default_enable,
+    disable_default: false,
   },
 )
 include_cookbook 'grub' if node[:is_ec2]
@@ -15,6 +18,17 @@ if node[:xsuportal][:enable]
     action :enable
   end
 end
+
+if node[:xsuportal][:disable_default] # for ci role
+  service "xsuportal-web-#{default_enable}.service" do
+    action :disable
+  end
+
+  service "xsuportal-api-#{default_enable}.service" do
+    action :disable
+  end
+end
+
 
 service "envoy.service" do
   #TODO:action [:enable, :start]
