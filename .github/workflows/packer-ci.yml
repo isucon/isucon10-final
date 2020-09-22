@@ -32,10 +32,22 @@ jobs:
 
       - run: sudo apt-get install -y --no-install-recommends jq jsonnet make
 
-      # for isucon/isucandar
-      - name: Save deploy key
-        run: 'mkdir -p ~/.ssh && touch ~/.ssh/id_ed25519 && chmod 600 ~/.ssh/id_ed25519 && echo "${{ secrets.GH_DEPLOY_KEY }}" > ~/.ssh/id_ed25519'
-      - run: git config --global 'url.git@github.com:isucon/isucandar.insteadof' https://github.com/isucon/isucandar
+      # for isucon/isucandar, isucon10-portal
+      - name: Save deploy key (A)
+        run: 'mkdir -p ~/.ssh && touch ~/.ssh/id_ed25519.a && chmod 600 ~/.ssh/id_ed25519.a && echo "${{ secrets.GH_DEPLOY_KEY }}" > ~/.ssh/id_ed25519.a'
+      - name: Save deploy key (B)
+        run: 'mkdir -p ~/.ssh && touch ~/.ssh/id_ed25519.b && chmod 600 ~/.ssh/id_ed25519.b && echo "${{ secrets.GH_DEPLOY_KEY2 }}" > ~/.ssh/id_ed25519.b'
+      - name: Configure SSH and Git for Deploy Key
+        run: |
+          echo "Host github-a" >> ~/.ssh/config
+          echo "  HostName github.com" >> ~/.ssh/config
+          echo "  IdentityFile ~/.ssh/id_ed25519.a" >> ~/.ssh/config
+          echo "Host github-b" >> ~/.ssh/config
+          echo "  HostName github.com" >> ~/.ssh/config
+          echo "  IdentityFile ~/.ssh/id_ed25519.b" >> ~/.ssh/config
+          git config --global 'url.git@github-a:isucon/isucandar.insteadof' https://github.com/isucon/isucandar
+          git config --global 'url.git@github-b:isucon/isucon10-portal.insteadof' https://github.com/isucon/isucon10-portal
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/isucon/isucon10-final".insteadOf "https://github.com/isucon/isucon10-final"
 
       - uses: actions/setup-go@v2
         with:
