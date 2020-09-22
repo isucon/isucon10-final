@@ -1,5 +1,6 @@
 # include_cookbook 'isucon-admin-user'
 include_cookbook 'isucon-user'
+include_cookbook 'langs::exec'
 
 %w(
   build-essential

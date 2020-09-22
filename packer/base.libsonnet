@@ -215,6 +215,7 @@
         "sudo sh -c 'echo > /home/ubuntu/.ssh/authorized_keys'",
         "sudo mv /etc/sudoers.d/*-cloud-init-users /root/ || :",
         "sudo rm -rf /var/lib/cloud /var/lib/dbus/machine-id",
+        "sudo rm -rf /root/go",
         "sudo rm -rf /var/tmp/files-cached",
         "sudo rm -rf /dev/shm/files",
         "sudo rm -rf /dev/shm/files-generated",
