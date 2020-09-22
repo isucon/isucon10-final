@@ -8,4 +8,14 @@ execute "rm -rf ~isucon/proto; tar xf /dev/shm/files-generated/archive.tar -C ~i
   not_if "test -e ~isucon/proto"
 end
 
+template "/home/isucon/env" do
+  owner 'isucon'
+  group 'root'
+  mode  '0640'
+end
 
+if node[:xsuportal][:ci_cache]
+  execute "cd /opt/ci-cache && rm /opt/ci-cache/.do && for x in *; do mv -v ${x}/* -t ~isucon/${x}/; done" do
+    only_if 'test -e /opt/ci-cache/.do'
+  end
+end

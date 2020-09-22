@@ -1,0 +1,20 @@
+# vim: ft=systemd
+[Unit]
+Description=contestant slice
+Before=slices.target
+
+[Slice]
+Slice=isucon.slice
+MemoryAccounting=yes
+IOAccounting=yes
+CPUAccounting=yes
+
+MemoryHigh=1024M
+MemoryMax=1200M
+
+CPUWeight=50
+
+IOReadIOPSMax=/ 400
+IOWriteIOPSMax=/ 400
+IOReadBandwidthMax=/ 15M
+IOWriteBandwidthMax=/ 15M

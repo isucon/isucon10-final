@@ -1,0 +1,14 @@
+# vim: ft=systemd
+[Unit]
+Description=benchmarker slice
+Before=slices.target
+
+[Slice]
+Slice=isucon.slice
+MemoryAccounting=yes
+IOAccounting=yes
+CPUAccounting=yes
+
+MemoryHigh=2048M
+
+CPUWeight=50

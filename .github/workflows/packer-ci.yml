@@ -1,17 +1,14 @@
-name: packer
+name: packer-ci
 on: 
   push:
     branches:
       - master
-      - pakapaka
-
-env:
-  PACKER_CACHE_DIR: /home/octo/packer_cache
+  pull_request: {}
 
 jobs:
   build:
-    name: packer-build
-    runs-on: [self-hosted, linux, kvm]
+    name: build
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: packer
@@ -26,6 +23,14 @@ jobs:
           role-duration-seconds: 14400
           role-session-name: isucon10-final-${{ github.run_id }}-${{ github.run_number }}
           aws-region: ap-northeast-1
+
+      - name: install packer
+        run: |
+          curl -Ssfo ~/packer.zip 'https://releases.hashicorp.com/packer/1.6.2/packer_1.6.2_linux_amd64.zip'
+          ( cd ~/; echo 'ae2393171325ad49488e1373a817c62d66b57cc6acc220329e1331c422b5dc3b288bd05dc60f3c592fe6444717640a2c packer.zip' | sha384sum -c --strict )
+          ( cd ~/; unzip packer.zip; sudo install -Dm755 ~/packer /usr/local/bin/packer )
+
+      - run: sudo apt-get install -y --no-install-recommends jq jsonnet make
 
       # for isucon/isucandar, isucon10-portal
       - name: Save deploy key (A)
@@ -63,13 +68,6 @@ jobs:
       - run: make clean
       - run: make clean-output
 
-      - name: Use cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            packer/files-cached
-          key: ${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}
-
       - name: Save TLS Certificate
         run: |
           echo "${{ secrets.TLS_CERT }}" > files/tls-cert.pem
@@ -79,23 +77,19 @@ jobs:
 
       - run: make generate
       #- run: make build
-      - run: make build-contestant
-      - run: make cache
-      - run: make build-benchmarker
+      - run: make build-ci
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - run: gem i aws-sdk-s3 --no-doc
+      - run: gem i aws-sdk-ec2 --no-doc
+
       - run: make upload
-      - run: make build-full
-      - run: make upload-full
       - run: make prune
 
       - uses: actions/upload-artifact@v2
         with:
-          name: manifest-amd64-contestant.json
-          path: packer/output/manifest-amd64-contestant.json
-      - uses: actions/upload-artifact@v2
-        with:
-          name: manifest-amd64-benchmarker.json
-          path: packer/output/manifest-amd64-benchmarker.json
-      - uses: actions/upload-artifact@v2
-        with:
-          name: manifest-amd64-full.json
-          path: packer/output/manifest-amd64-full.json
+          name: manifest-amd64-ci.json
+          path: packer/output/manifest-amd64-ci.json
+
