@@ -19,4 +19,4 @@ bundle exec grpc_tools_ruby_protoc -I../../proto --ruby_out=./lib --grpc_out=./l
 cd ${BASE_DIR}/webapp/golang
 rm -rf ./proto || true
 mkdir -p ./proto
-protoc --go_out=./proto --go-grpc_out=./proto --go_opt=paths=source_relative -I ../../proto ../../proto/**/*.proto
+protoc --go_out=./proto --go-grpc_out=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative -I ../../proto ../../proto/**/*.proto
