@@ -39,6 +39,10 @@ clean: ## Cleanup working directory
 	@$(RM) $(EXE) $(GOPROTOFILES)
 	@go clean
 
+.PHONY: vendor
+vendor:
+	GOPRIVATE=$(GOPRIVATE) go mod vendor
+
 .PHONY: help
 help: ## Display this help screen
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -48,5 +52,5 @@ $(EXE): Makefile go.mod $(GOFILES) $(GOPROTOFILES)
 
 $(GOPROTOFILES): Makefile $(PROTOFILES)
 	echo $(GOPROTOFILES)
-	@protoc --go_out=plugins=grpc:./proto --go_opt=paths=source_relative -I ../proto $(PROTOFILES)
-	@find ./proto -name '*.go' | xargs sed -i '' -e 's|webapp/golang|benchmarker|g'
+	@protoc --go_out=./proto --go-grpc_out=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative -I ../proto $(PROTOFILES)
+	@find ./proto -name '*.go' | xargs sed -i -e 's|webapp/golang|benchmarker|g'

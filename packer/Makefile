@@ -1,6 +1,6 @@
 default: generate
 
-files-generated:  files-generated/REVISION files-generated/archive.tar
+files-generated:  files-generated/REVISION files-generated/archive.tar files-generated/isuxportal-supervisor files-generated/benchmarker-vendor.tar
 	mkdir -p files-cached/
 
 files-generated/REVISION: 
@@ -13,6 +13,13 @@ files-generated/archive.tar: files-generated/REVISION
 	mkdir -p files-generated/
 	git -C "$(shell git rev-parse --show-toplevel)" archive "$(shell cat files-generated/REVISION)" > files-generated/archive.tar
 
+files-generated/benchmarker-vendor.tar: files-generated/REVISION
+	( cd ../benchmarker && make vendor )
+	tar cf files-generated/benchmarker-vendor.tar -C ../benchmarker vendor
+
+files-generated/isuxportal-supervisor: 
+	mkdir -p files-generated/
+	aws s3 cp s3://isucon10-machine-images/supervisor/isuxportal-supervisor-ubuntu2004-amd64 files-generated/isuxportal-supervisor
 
 generate: target/contestant.json target/benchmarker.json target/full.json
 

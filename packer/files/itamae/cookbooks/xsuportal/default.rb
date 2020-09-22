@@ -2,6 +2,7 @@ include_cookbook 'xsuportal::files'
 
 include_cookbook 'xsuportal::db'
 
+include_cookbook 'protoc'
 include_cookbook 'xsuportal::golang'
 include_cookbook 'xsuportal::nodejs'
 include_cookbook 'xsuportal::perl'

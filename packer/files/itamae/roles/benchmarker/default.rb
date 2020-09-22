@@ -5,3 +5,9 @@ node.reverse_merge!(
 )
 
 include_cookbook 'benchmarker'
+
+if node[:benchmarker][:enable]
+  service 'isuxportal-supervisor.service' do
+    action :enable
+  end
+end

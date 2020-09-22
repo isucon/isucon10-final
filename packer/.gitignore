@@ -1,5 +1,6 @@
 files-generated/
 files-cached/
+tmp/
 target/
 output/
 packer_cache/
