@@ -75,7 +75,7 @@ pub async fn create_team(
 
     let team_id = web::block(move || {
         let mut conn = db.get().expect("Failed to checkout database connection");
-        let current_contestant = crate::require_current_contestant(conn.deref_mut(), &contestant_id, true)?;
+        let current_contestant = crate::require_current_contestant(conn.deref_mut(), &contestant_id, false)?;
 
         let contest_status = crate::get_current_contest_status(conn.deref_mut())?;
         if contest_status.contest.status != crate::proto::resources::contest::Status::Registration {
