@@ -48,5 +48,5 @@ $(EXE): Makefile go.mod $(GOFILES) $(GOPROTOFILES)
 
 $(GOPROTOFILES): Makefile $(PROTOFILES)
 	echo $(GOPROTOFILES)
-	@protoc --go_out=plugins=grpc:./proto --go_opt=paths=source_relative -I ../proto $(PROTOFILES)
-	@find ./proto -name '*.go' | xargs sed -i '' -e 's|webapp/golang|benchmarker|g'
+	@protoc --go_out=./proto --go-grpc_out=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative -I ../proto $(PROTOFILES)
+	@find ./proto -name '*.go' | xargs sed -i -e 's|webapp/golang|benchmarker|g'
