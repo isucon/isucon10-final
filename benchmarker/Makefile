@@ -39,6 +39,10 @@ clean: ## Cleanup working directory
 	@$(RM) $(EXE) $(GOPROTOFILES)
 	@go clean
 
+.PHONY: vendor
+vendor:
+	GOPRIVATE=$(GOPRIVATE) go mod vendor
+
 .PHONY: help
 help: ## Display this help screen
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
