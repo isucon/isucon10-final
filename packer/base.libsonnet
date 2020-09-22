@@ -125,6 +125,10 @@
       destination: '/var/tmp/files-cached',
       generated: true,
     },
+    wait_cloud_init: {
+      type: 'shell',
+      inline: ['cloud-init status --wait'],
+    },
 
     apt_source_ec2: {
       type: 'shell',
@@ -139,7 +143,6 @@
         'sudo install -o root -g root -m 0644 /dev/shm/files/sources-generic.list /etc/apt/sources.list',
         'sudo apt-get update',
       ],
-      except: ['amazon-ebs'],
     },
     apt_upgrade: {
       type: 'shell',
@@ -233,13 +236,13 @@
     $.common_provisioners.copy_files_generated,
     $.common_provisioners.copy_files_cached,
 
-    $.common_provisioners.apt_source_ec2,
+    $.common_provisioners.wait_cloud_init,
+    $.common_provisioners.apt_source_generic,
     $.common_provisioners.apt_upgrade,
     // $.common_provisioners.remove_netplan,
     $.common_provisioners.install_itamae,
     $.common_provisioners.run_itamae,
   ] + $.provisioners_plus + [
-    $.common_provisioners.apt_source_generic,
     $.common_provisioners.sysprep,
     $.common_provisioners.fstrim,
   ],
