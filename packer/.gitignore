@@ -4,3 +4,4 @@ tmp/
 target/
 output/
 packer_cache/
+files/tls-*.pem

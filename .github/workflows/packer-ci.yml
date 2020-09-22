@@ -1,0 +1,68 @@
+name: packer-ci
+on: 
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: packer
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 14400
+          role-session-name: isucon10-final-${{ github.run_id }}-${{ github.run_number }}
+          aws-region: ap-northeast-1
+
+      - name: install packer
+        run: |
+          curl -Ssfo ~/packer.zip 'https://releases.hashicorp.com/packer/1.6.2/packer_1.6.2_linux_amd64.zip'
+          ( cd ~/; echo 'ae2393171325ad49488e1373a817c62d66b57cc6acc220329e1331c422b5dc3b288bd05dc60f3c592fe6444717640a2c packer.zip' | sha384sum -c --strict )
+          ( cd ~/; unzip packer.zip; sudo install -Dm755 ~/packer /usr/local/bin/packer )
+
+      - run: sudo apt-get install -y --no-install-recommends jq jsonnet make
+
+      # for isucon/isucandar
+      - name: Save deploy key
+        run: 'mkdir -p ~/.ssh && touch ~/.ssh/id_ed25519 && chmod 600 ~/.ssh/id_ed25519 && echo "${{ secrets.GH_DEPLOY_KEY }}" > ~/.ssh/id_ed25519'
+
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.15.0'
+
+      - run: make clean
+      - run: make clean-output
+
+      - name: Use cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            packer/files-cached
+          key: ${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}
+
+      - name: Save TLS Certificate
+        run: |
+          echo "${{ secrets.TLS_CERT }}" > files/tls-cert.pem
+          echo "${{ secrets.TLS_KEY }}" > files/tls-key.pem
+
+      - run: make generate
+      #- run: make build
+      - run: make build-ci
+      - run: make upload
+      - run: make prune
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: manifest-amd64-ci.json
+          path: packer/output/manifest-amd64-ci.json
+

@@ -192,14 +192,12 @@
         'sudo rm -f /var/tmp/files-cached/local.tar.gz',
         'if [ ! -e ~isucon/local/.cache ]; then sudo -u isucon touch ~isucon/local/.cache && sudo tar czf /var/tmp/files-cached/local.tar.gz -C ~isucon/local --xattrs .; fi',
       ],
-      only: ['qemu'],
     },
     download_cache: {
       type: 'file',
       direction: 'download',
       source: '/var/tmp/files-cached/',
       destination: './output/cache-' + $.arg_arch + '-' + $.arg_variant + '-{{build_type}}/',
-      only: ['qemu'],
     },
 
     sysprep: {
@@ -253,7 +251,10 @@
       type: "manifest",
       output: 'output/manifest-' + $.arg_arch + '-' + $.arg_variant + '.json',
       strip_path: true,
-      custom_data: {"family": 'isucon10f-' + $.arg_arch + '-' + $.arg_variant},
+      custom_data: {
+        family: 'isucon10f-' + $.arg_arch + '-' + $.arg_variant,
+        name: '{{user "name"}}',
+      },
     }
   ],
 }

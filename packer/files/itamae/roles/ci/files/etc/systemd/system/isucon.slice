@@ -1,0 +1,9 @@
+# vim: ft=systemd
+[Unit]
+Description=isucon slice
+Before=slices.target
+
+[Slice]
+MemoryAccounting=yes
+IOAccounting=yes
+CPUAccounting=yes

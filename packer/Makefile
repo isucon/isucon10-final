@@ -21,7 +21,7 @@ files-generated/isuxportal-supervisor:
 	mkdir -p files-generated/
 	aws s3 cp s3://isucon10-machine-images/supervisor/isuxportal-supervisor-ubuntu2004-amd64 files-generated/isuxportal-supervisor
 
-generate: target/contestant.json target/benchmarker.json target/full.json
+generate: target/contestant.json target/benchmarker.json target/full.json target/ci.json
 
 target/contestant.json: files-generated *.libsonnet contestant.jsonnet
 	mkdir -p target/
@@ -38,6 +38,11 @@ target/full.json: files-generated *.libsonnet full.jsonnet
 	jsonnet --jpath . full.jsonnet > target/full.json
 	packer validate target/full.json
 
+target/ci.json: files-generated *.libsonnet ci.jsonnet
+	mkdir -p target/
+	jsonnet --jpath . ci.jsonnet > target/ci.json
+	packer validate target/ci.json
+
 build: build-contestant build-benchmarker
 
 build-contestant: files-generated target/contestant.json
@@ -47,10 +52,15 @@ build-benchmarker: files-generated target/benchmarker.json
 build-full: files-generated target/full.json
 	packer build -var "revision=$(shell cat files-generated/REVISION)" -var "full_source_img=$(shell jq -r '"output/" + .name + "/" + .name' < output/manifest-amd64-contestant.json)" -var  "full_source_checksum=$(shell jq -r '.qcow2_sha256' < output/manifest-amd64-contestant.json)" target/full.json
 
+build-ci: files-generated target/ci.json
+	packer build -var "revision=$(CI_REVISION_PREFIX)$(shell cat files-generated/REVISION)" -only amazon-ebs target/ci.json
+
 clean:
 	rm -rf files-generated/
-	rm -rf files-cached/
 	rm -rf target/
+
+clean-cache:
+	rm -rf files-cached/
 
 clean-output:
 	rm -rf output/
@@ -62,11 +72,19 @@ upload:
 upload-full:
 	if [ -e output/manifest-amd64-full.json ]; then ruby scripts/upload.rb output/manifest-amd64-full.json; fi
 
+upload-ci:
+	if [ -e output/manifest-amd64-ci.json ]; then ruby scripts/upload.rb output/manifest-amd64-ci.json; fi
+
 prune:
 	if [ -e output/manifest-amd64-contestant.json ]; then ruby scripts/prune.rb output/manifest-amd64-contestant.json; fi
 	if [ -e output/manifest-amd64-benchmarker.json ]; then ruby scripts/prune.rb output/manifest-amd64-benchmarker.json; fi
 	if [ -e output/manifest-amd64-full.json ]; then ruby scripts/prune.rb output/manifest-amd64-full.json; fi
+	if [ -e output/manifest-amd64-ci.json ]; then ruby scripts/prune.rb output/manifest-amd64-ci.json; fi
 
 cache:
 	mkdir -p files-cached/
 	if [ -e output/cache-amd64-contestant-qemu/files-cached/local.tar.gz ]; then mv output/cache-amd64-contestant-qemu/files-cached/local.tar.gz files-cached/local.tar.gz; fi
+
+cache-ci:
+	mkdir -p files-cached/
+	if [ -e output/cache-amd64-ci-amazon-ebs/files-cached/local.tar.gz ]; then mv output/cache-amd64-ci-amazon-ebs/files-cached/local.tar.gz files-cached/local.tar.gz; fi
