@@ -119,22 +119,33 @@ jobs:
           override: true
           components: rustfmt, clippy
 
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            webapp/rust/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('webapp/rust/Cargo.lock') }}
+
+      # https://github.com/actions-rs/cargo/issues/6
+
       - name: Run cargo fmt
         uses: actions-rs/cargo@v1
         # continue-on-error: true  # WARNING: only for this example, remove it!
         with:
           command: fmt
-          args: --all -- --check
+          args: --manifest-path webapp/rust/Cargo.toml --all -- --check
 
       - name: Run cargo clippy
         uses: actions-rs/cargo@v1
         continue-on-error: true  # WARNING: only for this example, remove it!
         with:
           command: clippy
-          args: -- -D warnings
+          args: --manifest-path webapp/rust/Cargo.toml -- -D warnings
 
       - name: Run cargo test
         uses: actions-rs/cargo@v1
         continue-on-error: true
         with:
           command: test
+          args: --manifest-path webapp/rust/Cargo.toml
