@@ -96,8 +96,8 @@
     headless: true,
     http_directory: "./qemu-http",
     qemuargs: [
-      [ "-m", "4096M" ],
-      [ "-smp", "6" ],
+      [ "-m", "4596M" ],
+      [ "-smp", "8" ],
       [ "-smbios", "type=1,serial=ds=nocloud-net;instance-id=packer;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/" ],
       [ "-serial", "mon:stdio" ]
     ],
