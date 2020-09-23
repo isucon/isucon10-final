@@ -34,6 +34,7 @@ jobs:
         run: 'mkdir -p ~/.ssh && touch ~/.ssh/id_ed25519.b && chmod 600 ~/.ssh/id_ed25519.b && echo "${{ secrets.GH_DEPLOY_KEY2 }}" > ~/.ssh/id_ed25519.b'
       - name: Configure SSH and Git for Deploy Key
         run: |
+          rm -f ~/.ssh/config || :
           echo "Host github-a" >> ~/.ssh/config
           echo "  HostName github.com" >> ~/.ssh/config
           echo "  IdentityFile ~/.ssh/id_ed25519.a" >> ~/.ssh/config
