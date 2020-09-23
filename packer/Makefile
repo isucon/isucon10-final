@@ -61,6 +61,7 @@ CI_LATEST_LAST_PATH ?= tmp/ci-latest-last.json
 PACKER_CACHE_DIR ?= packer_cache/
 .PHONY: tmp/ci-latest.json
 tmp/ci-latest.json:
+	mkdir -p tmp/
 	ruby scripts/latest.rb --presign isucon10f-amd64-contestant > tmp/ci-latest.json
 	if [ -e $(CI_LATEST_LAST_PATH) -a "_$$(jq .sum < tmp/ci-latest.json)" != "_$$(jq .sum < ${CI_LATEST_LAST_PATH})" ]; then rm -fv $(PACKER_CACHE_DIR)/$$(jq .sum < ~/tmp/ci-latest-last.json).iso; fi
 	cp tmp/ci-latest.json $(CI_LATEST_LAST_PATH)
@@ -73,6 +74,7 @@ build-ci: files-generated target/ci.json tmp/ci-latest.json
 clean:
 	rm -rf files-generated/
 	rm -rf target/
+	rm -rf tmp/
 
 clean-cache:
 	rm -rf files-cached/
