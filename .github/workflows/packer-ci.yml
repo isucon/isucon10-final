@@ -9,6 +9,9 @@ jobs:
   build:
     name: build
     runs-on: [self-hosted, linux, kvm]
+    env:
+      PACKER_QEMU_MEM: "4G"
+      PACKER_QEMU_SMP: "8"
     defaults:
       run:
         working-directory: packer
