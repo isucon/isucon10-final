@@ -85,7 +85,7 @@ jobs:
       - run: gem i aws-sdk-s3 --no-doc
       - run: gem i aws-sdk-ec2 --no-doc
 
-      - run: make upload
+      - run: make upload-ci
       - run: make prune
 
       - uses: actions/upload-artifact@v2
