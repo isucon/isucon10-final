@@ -53,6 +53,7 @@ build-full: files-generated target/full.json
 	packer build -var "revision=$(shell cat files-generated/REVISION)" -var "full_source_img=$(shell jq -r '"output/" + .name + "/" + .name' < output/manifest-amd64-contestant.json)" -var  "full_source_checksum=$(shell jq -r '.qcow2_sha256' < output/manifest-amd64-contestant.json)" target/full.json
 
 build-ci: files-generated target/ci.json
+	mkdir -p output/
 	packer build -var "revision=$(CI_REVISION_PREFIX)$(shell cat files-generated/REVISION)" -only amazon-ebs target/ci.json
 
 clean:
