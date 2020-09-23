@@ -233,38 +233,29 @@ pub(crate) fn team_pb<Q>(
     conn: &mut Q,
     team: Team,
     detail: bool,
-    enable_members: bool,
-    is_student: Option<bool>,
 ) -> Result<crate::proto::resources::Team, mysql::Error>
 where
     Q: Queryable,
 {
-    let mut leader: Option<Contestant> = None;
-    let members: Vec<Contestant> = if enable_members {
-        let leader_id = team.leader_id.clone();
-        let team_id = team.id;
-        leader = if let Some(ref leader_id) = leader_id {
-            conn.exec_first(
-                "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1",
-                (leader_id,),
-            )?
-        } else {
-            None
-        };
-        conn.exec(
-            "SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`",
-            (team_id,),
+    let leader: Option<Contestant> = if let Some(ref leader_id) = team.leader_id {
+        conn.exec_first(
+            "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1",
+            (leader_id,),
         )?
     } else {
-        vec![]
+        None
     };
+    let members: Vec<Contestant> = conn.exec(
+        "SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`",
+        (team.id,),
+    )?;
     Ok(crate::proto::resources::Team {
         id: team.id,
         name: team.name,
         leader_id: team.leader_id.unwrap_or_else(|| "".to_owned()),
         member_ids: members.iter().map(|c| c.id.to_owned()).collect(),
         withdrawn: team.withdrawn,
-        student: is_student.map(|status| crate::proto::resources::team::StudentStatus { status }),
+        student: None,
         detail: if detail {
             Some(crate::proto::resources::team::TeamDetail {
                 email_address: team.email_address,
