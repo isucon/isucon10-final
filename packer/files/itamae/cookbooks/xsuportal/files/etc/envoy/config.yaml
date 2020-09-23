@@ -72,17 +72,16 @@ static_resources:
                 tls_params:
                   tls_minimum_protocol_version: "TLSv1_2"
                   tls_maximum_protocol_version: "TLSv1_2"
-                  tls_certificates: 
-                    - certificate_chain: {"filename": "/etc/ssl/private/tls-cert.pem"}
-                      private_key: {"filename": "/etc/ssl/private/tls-key.pem"}
+                tls_certificates: 
+                  - certificate_chain: {"filename": "/etc/ssl/private/tls-cert.pem"}
+                    private_key: {"filename": "/etc/ssl/private/tls-key.pem"}
   clusters:
-    - name: isuxportal_web
+    - name: xsuportal_web
       type: STATIC
       connect_timeout: 0.25s
       lb_policy: ROUND_ROBIN
-      http2_protocol_options: {}
       load_assignment:
-        cluster_name: isuxportal_web
+        cluster_name: xsuportal_web
         endpoints:
           - lb_endpoints:
               - endpoint:
@@ -90,13 +89,13 @@ static_resources:
                     socket_address:
                       address: "127.0.0.1"
                       port_value: 3000
-    - name: isuxportal_api
+    - name: xsuportal_api
       type: STATIC
       connect_timeout: 0.25s
       lb_policy: ROUND_ROBIN
       http2_protocol_options: {}
       load_assignment:
-        cluster_name: isuxportal_api
+        cluster_name: xsuportal_api
         endpoints:
           - lb_endpoints:
               - endpoint:
