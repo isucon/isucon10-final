@@ -1,6 +1,8 @@
 include_cookbook 'langs::rust'
 
-execute 'cd ~isucon/webapp/rust && /home/isucon/.x cargo build --release --locked'
+execute 'cd ~isucon/webapp/rust && /home/isucon/.x cargo build --release --locked' do
+  user 'isucon'
+end
 
 template '/etc/systemd/system/xsuportal-web-rust.service' do
   owner 'root'
