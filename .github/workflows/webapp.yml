@@ -56,7 +56,7 @@ jobs:
 
   frontend:
     name: frontend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: webapp/frontend
@@ -87,3 +87,54 @@ jobs:
           name: frontend-production
           path: webapp/frontend/public/
 
+  ruby:
+    name: ruby
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: webapp/ruby
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+          working-directory: webapp/ruby
+          bundler-cache: true
+
+      - run: "find -name '*.rb' -exec ruby -c '{}' ';' > /dev/null"
+
+  rust:
+    name: rust
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: webapp/rust
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: '1.46.0'
+          override: true
+          components: rustfmt, clippy
+
+      - name: Run cargo fmt
+        uses: actions-rs/cargo@v1
+        # continue-on-error: true  # WARNING: only for this example, remove it!
+        with:
+          command: fmt
+          args: --all -- --check
+
+      - name: Run cargo clippy
+        uses: actions-rs/cargo@v1
+        continue-on-error: true  # WARNING: only for this example, remove it!
+        with:
+          command: clippy
+          args: -- -D warnings
+
+      - name: Run cargo test
+        uses: actions-rs/cargo@v1
+        continue-on-error: true
+        with:
+          command: test
