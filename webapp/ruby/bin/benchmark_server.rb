@@ -30,4 +30,4 @@ Griffin::Server.configure do |c|
   c.logger Logger.new($stdout)
 end
 
-Griffin::Server.run
+Griffin::Server.run(port: ENV.fetch('PORT', '50051')&.to_i) # TODO: port 4000 to default
