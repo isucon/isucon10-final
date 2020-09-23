@@ -7,6 +7,7 @@ on:
 
 env:
   PACKER_CACHE_DIR: /home/octo/packer_cache
+  CI_LATEST_LAST_PATH: /home/octo/ci-latest-last.json
 
 jobs:
   build:

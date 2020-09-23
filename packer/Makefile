@@ -57,12 +57,18 @@ build-benchmarker: files-generated target/benchmarker.json
 build-full: files-generated target/full.json
 	packer build -var "revision=$(shell cat files-generated/REVISION)" -var "full_source_img=$(shell jq -r '"output/" + .name + "/" + .name' < output/manifest-amd64-contestant.json)" -var  "full_source_checksum=$(shell jq -r '.qcow2_sha256' < output/manifest-amd64-contestant.json)" target/full.json
 
-build-ci: files-generated target/ci.json
+CI_LATEST_LAST_PATH ?= tmp/ci-latest-last.json
+PACKER_CACHE_DIR ?= packer_cache/
+.PHONY: tmp/ci-latest.json
+tmp/ci-latest.json:
+	ruby scripts/latest.rb --presign isucon10f-amd64-contestant > tmp/ci-latest.json
+	if [ -e $(CI_LATEST_LAST_PATH) -a "_$$(jq .sum < tmp/ci-latest.json)" != "_$$(jq .sum < ${CI_LATEST_LAST_PATH})" ]; then rm -fv $(PACKER_CACHE_DIR)/$$(jq .sum < ~/tmp/ci-latest-last.json).iso; fi
+	cp tmp/ci-latest.json $(CI_LATEST_LAST_PATH)
+
+build-ci: files-generated target/ci.json tmp/ci-latest.json
 	mkdir -p output/ tmp/ ~/tmp
-	ruby scripts/latest.rb --presign ci > tmp/ci-latest.json
 	packer build -var "revision=$(CI_REVISION_PREFIX)$(shell cat files-generated/REVISION)" -var "full_source_img=$(shell jq .url < tmp/ci-latest.json)" -var "full_source_checksum=$(shell jq .sum < tmp/ci-latest.json)" target/ci.json
-	if [ -e ~/tmp/ci-latest-last.json -a "_$(shell jq .sum < tmp/ci-latest.json)" != "_$(shell jq .sum < ~/tmp/ci-latest-last.json)" ]; then rm -fv ~/packer_cache/$(shell jq .sum < ~/tmp/ci-latest-last.json).iso; fi
-	cp tmp/ci-latest.json ~/tmp/ci-latest-last.json
+
 
 clean:
 	rm -rf files-generated/
