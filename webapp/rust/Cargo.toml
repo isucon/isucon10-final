@@ -1,0 +1,36 @@
+[package]
+name = "xsuportal"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tonic-build = "0.3"
+
+[dependencies]
+actix-files = "0.3"
+actix-protobuf = "0.6"
+actix-session = "0.4"
+actix-web = "3.0"
+async-stream = "0.2"
+bytes = "0.5"
+chrono = "0.4"
+data-encoding = "2.3"
+env_logger = "0.7"
+futures = "0.3"
+lazy_static = "1.4"
+listenfd = "0.3"
+log = "0.4"
+mime = "0.3"
+mysql = "18.2"
+openssl = "0.10"
+prost = "0.6"
+prost-types = "0.6"
+r2d2 = "0.8"
+r2d2_mysql = "18.0"
+ring = "0.16"
+serde = "1.0"
+tokio = { version = "0.2", features = ["full"] }
+tonic = "0.3"
+web-push = "0.7"
