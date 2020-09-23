@@ -16,4 +16,6 @@ include_cookbook 'xsuportal::php'
 include_cookbook 'xsuportal::ruby'
 include_cookbook 'xsuportal::rust'
 
+include_cookbook 'xsuportal::frontend'
+
 include_cookbook 'xsuportal::web'

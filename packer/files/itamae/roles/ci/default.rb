@@ -34,6 +34,11 @@ ci_cache 'rust' do
   directories %w(target)
 end
 
+ci_cache 'frontend' do
+  directories %w(node_modules)
+end
+
+
 execute 'rm -rf ~isucon/proto ~isucon/benchmarker ~isucon/webapp'
 
 ######
