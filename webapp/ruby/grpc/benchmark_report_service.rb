@@ -29,16 +29,12 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       if request.result.finished
         GRPC.logger.debug "#{request.job_id}: save as finished"
         save_as_finished(job, request)
-        Xsuportal::Database.transaction_commit('report_benchmark_result')
-        call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
-          acked_nonce: request.nonce,
-        )
         notifier.notify_benchmark_job_finished(job)
       else
         GRPC.logger.debug "#{request.job_id}: save as running"
         save_as_running(job, request)
-        Xsuportal::Database.transaction_commit('report_benchmark_result')
       end
+      Xsuportal::Database.transaction_commit('report_benchmark_result')
       call.send_msg Xsuportal::Proto::Services::Bench::ReportBenchmarkResultResponse.new(
         acked_nonce: request.nonce,
       )
