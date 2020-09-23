@@ -7,7 +7,6 @@ User=isucon
 ExecStart=/home/isucon/.x bundle exec ruby bin/benchmark_server.rb
 WorkingDirectory=/home/isucon/webapp/ruby
 EnvironmentFile=/home/isucon/env
-Environment=PORT=4000
 
 <%- if node[:xsuportal][:slice] -%>
 Slice=<%= node[:xsuportal][:slice] %>

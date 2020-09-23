@@ -102,4 +102,4 @@ static_resources:
                   address:
                     socket_address:
                       address: "127.0.0.1"
-                      port_value: 4000
+                      port_value: 50051
