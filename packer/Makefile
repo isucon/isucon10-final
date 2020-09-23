@@ -63,12 +63,12 @@ PACKER_CACHE_DIR ?= packer_cache/
 tmp/ci-latest.json:
 	mkdir -p tmp/
 	ruby scripts/latest.rb --presign isucon10f-amd64-contestant > tmp/ci-latest.json
-	if [ -e $(CI_LATEST_LAST_PATH) -a "_$$(jq .sum < tmp/ci-latest.json)" != "_$$(jq .sum < ${CI_LATEST_LAST_PATH})" ]; then rm -fv $(PACKER_CACHE_DIR)/$$(jq .sum < ~/tmp/ci-latest-last.json).iso; fi
+	if [ -e $(CI_LATEST_LAST_PATH) -a "_$$(jq -r .sum < tmp/ci-latest.json)" != "_$$(jq -r .sum < ${CI_LATEST_LAST_PATH})" ]; then rm -fv $(PACKER_CACHE_DIR)/$$(jq -r .sum < ~/tmp/ci-latest-last.json).iso; fi
 	cp tmp/ci-latest.json $(CI_LATEST_LAST_PATH)
 
 build-ci: files-generated target/ci.json tmp/ci-latest.json
 	mkdir -p output/ tmp/ ~/tmp
-	packer build -var "revision=$(CI_REVISION_PREFIX)$(shell cat files-generated/REVISION)" -var "full_source_img=$(shell jq .url < tmp/ci-latest.json)" -var "full_source_checksum=$(shell jq .sum < tmp/ci-latest.json)" target/ci.json
+	packer build -var "revision=$(CI_REVISION_PREFIX)$(shell cat files-generated/REVISION)" -var "full_source_img=$(shell jq -r .url < tmp/ci-latest.json)" -var "full_source_checksum=$(shell jq -r .sum < tmp/ci-latest.json)" target/ci.json
 
 
 clean:
