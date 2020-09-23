@@ -15,7 +15,7 @@ template "/home/isucon/env" do
 end
 
 if node.dig(:xsuportal, :ci_cache)
-  execute "cd /opt/ci-cache && rm /opt/ci-cache/.do && for x in *; do mv -v ${x}/* -t ~isucon/${x}/; done" do
+  execute "cd /opt/ci-cache && rm /opt/ci-cache/.do && for x in *; do mkdir -p ~isucon/webapp/${x}; mv -v ${x}/* -t ~isucon/webapp/${x}/; done" do
     only_if 'test -e /opt/ci-cache/.do'
   end
 end
