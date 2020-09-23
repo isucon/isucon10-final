@@ -11,7 +11,10 @@ env:
 jobs:
   build:
     name: packer-build
-    runs-on: [self-hosted, linux, kvm]
+    runs-on: [self-hosted, linux, kvm-large]
+    env:
+      PACKER_QEMU_MEM: "30G"
+      PACKER_QEMU_SMP: "30"
     defaults:
       run:
         working-directory: packer

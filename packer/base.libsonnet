@@ -8,6 +8,8 @@
   variables: {
     revision: "unknown",
     name: 'isucon10f-' + $.arg_arch + '-' + $.arg_variant + '-{{isotime "20060102-1504"}}-{{user "revision"}}',
+    qemu_mem: "{{env `PACKER_QEMU_MEM`}}",//, "4096M",
+    qemu_smp: "{{env `PACKER_QEMU_SMP`}}",//, "4",
   },
 
   builder_ec2:: {
@@ -96,8 +98,8 @@
     headless: true,
     http_directory: "./qemu-http",
     qemuargs: [
-      [ "-m", "4596M" ],
-      [ "-smp", "8" ],
+      [ "-m", '{{user "qemu_mem"}}' ],
+      [ "-smp", '{{user "qemu_smp"}}' ],
       [ "-smbios", "type=1,serial=ds=nocloud-net;instance-id=packer;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/" ],
       [ "-serial", "mon:stdio" ]
     ],

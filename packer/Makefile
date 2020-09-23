@@ -1,3 +1,8 @@
+PACKER_QEMU_MEM ?= 4096M
+PACKER_QEMU_SMP ?= 4
+export PACKER_QEMU_MEM
+export PACKER_QEMU_SMP
+
 default: generate
 
 files-generated:  files-generated/REVISION files-generated/archive.tar files-generated/isuxportal-supervisor files-generated/benchmarker-vendor.tar
