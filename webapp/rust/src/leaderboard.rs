@@ -236,7 +236,6 @@ pub fn get_leaderboard(
                 },
                 false,
                 false,
-                false,
                 Some(row.student == 1),
             )?),
         };

@@ -234,7 +234,6 @@ pub(crate) fn team_pb<Q>(
     team: Team,
     detail: bool,
     enable_members: bool,
-    _member_detail: bool,
     is_student: Option<bool>,
 ) -> Result<crate::proto::resources::Team, mysql::Error>
 where

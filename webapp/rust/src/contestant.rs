@@ -279,7 +279,7 @@ pub async fn list_clarifications(
                 answer: clar.answer.unwrap_or_default(),
                 created_at: Some(crate::chrono_timestamp_to_protobuf(clar.created_at)),
                 answered_at: clar.answered_at.map(crate::chrono_timestamp_to_protobuf),
-                team: Some(crate::team_pb(conn.deref_mut(), team, false, true, false, None)?),
+                team: Some(crate::team_pb(conn.deref_mut(), team, false, true, None)?),
             });
         }
         Ok(clar_pbs)
@@ -316,7 +316,7 @@ pub async fn request_clarification(
             answer: clar.answer.unwrap_or_default(),
             created_at: Some(crate::chrono_timestamp_to_protobuf(clar.created_at)),
             answered_at: clar.answered_at.map(crate::chrono_timestamp_to_protobuf),
-            team: Some(crate::team_pb(conn.deref_mut(), current_team, false, true, false, None)?),
+            team: Some(crate::team_pb(conn.deref_mut(), current_team, false, true, None)?),
         })
     })
     .await
