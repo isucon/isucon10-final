@@ -1012,7 +1012,6 @@ module Xsuportal
 
     post '/api/signup' do
       req = decode_request_pb
-      result = nil
 
       begin
         db.xquery(
