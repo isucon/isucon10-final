@@ -555,6 +555,8 @@ module Xsuportal
 
       req = decode_request_pb
 
+      clar = nil
+      updated = nil
       clar_pb = nil
       Database.transaction do
         clar_before = db.xquery(
@@ -593,10 +595,10 @@ module Xsuportal
           clar[:team_id],
         ).first
 
-        notifier.notify_clarification_answered(clar, updated: was_answered && was_disclosed == clar[:disclosed])
-
         clar_pb = clarification_pb(clar, team)
+        updated = was_answered && was_disclosed == clar[:disclosed]
       end
+      notifier.notify_clarification_answered(clar, updated: updated)
 
       encode_response_pb(
         clarification: clar_pb
