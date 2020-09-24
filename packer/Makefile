@@ -50,7 +50,7 @@ target/ci.json: files-generated *.libsonnet ci.jsonnet
 
 target/ci-run.json: *.libsonnet ci-run.jsonnet
 	mkdir -p target/
-	jsonnet --jpath . ci.jsonnet > target/ci-run.json
+	jsonnet --jpath . ci-run.jsonnet > target/ci-run.json
 	packer validate target/ci-run.json
 
 
