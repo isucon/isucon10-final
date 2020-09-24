@@ -1,2 +1,4 @@
 vendor/
 proto/**/*.go
+checksum
+bin

@@ -13,7 +13,7 @@ module Xsuportal
             database: ENV['MYSQL_DATABASE'] || 'xsuportal',
             password: ENV['MYSQL_PASS'] || 'isucon',
             charset: 'utf8mb4',
-            database_timezone: :local,
+            database_timezone: :utc,
             cast_booleans: true,
             symbolize_keys: true,
             reconnect: true,
