@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Scenario) Prepare(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	a, err := s.NewAgent(agent.WithNoCache(), agent.WithNoCookie())
+	a, err := s.NewAgent(agent.WithNoCache(), agent.WithNoCookie(), agent.WithTimeout(20*time.Second))
 	if err != nil {
 		return err
 	}

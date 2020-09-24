@@ -7,7 +7,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"strings"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/isucon/isucandar/agent"
@@ -16,7 +15,9 @@ import (
 )
 
 var (
-	ErrX403 failure.StringCode = "XSUPORTAL[403]"
+	ErrX5XX     failure.StringCode = "http-server-error"
+	ErrX403     failure.StringCode = "XSUPORTAL[403]"
+	ErrProtobuf failure.StringCode = "protobuf-decode"
 )
 
 type ProtobufError struct {
@@ -50,23 +51,31 @@ func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpa
 
 	httpres, err := agent.Do(ctx, httpreq)
 	if err != nil {
-		if failure.Is(err, context.DeadlineExceeded) || failure.Is(err, context.Canceled) || strings.Contains(err.Error(), "context deadline exceeded") {
-			return nil, failure.NewError(ErrScenarioCancel, err)
-		}
 		return nil, err
+	}
+	defer httpres.Body.Close()
+
+	if httpres.StatusCode >= 500 && httpres.StatusCode <= 599 {
+		return nil, failure.NewError(ErrX5XX, fmt.Errorf("不正な HTTP ステータスコード: %d (%s: %s)", httpres.StatusCode, httpreq.Method, httpreq.URL.Path))
 	}
 
 	respb, err := ioutil.ReadAll(httpres.Body)
-	defer httpres.Body.Close()
+	if err != nil {
+		return nil, err
+	}
 
 	if httpres.Header.Get("Content-Type") == "application/vnd.google.protobuf; proto=xsuportal.proto.Error" {
 		xError := &xsuportal.Error{}
 		err := proto.Unmarshal(respb, xError)
 		if err != nil {
-			return nil, err
+			return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のパースに失敗しました: %#v", string(respb)))
 		}
 		return httpres, &ProtobufError{XError: xError}
 	}
 
-	return httpres, proto.Unmarshal(respb, res)
+	if err := proto.Unmarshal(respb, res); err != nil {
+		return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のパースに失敗しました: %#v", string(respb)))
+	}
+
+	return httpres, nil
 }
