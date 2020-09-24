@@ -8,8 +8,8 @@ if [ -e /home/isucon/builderror-$lang ]; then
   exit 1
 fi
 
-systemctl start xsuportal-web-${lang}.service
-systemctl start xsuportal-api-${lang}.service
+sudo systemctl start xsuportal-web-${lang}.service
+sudo systemctl start xsuportal-api-${lang}.service
 
 sleep 5
 
