@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  frontend:
+    build: ./frontend
+    volumes:
+      - .:/isucon10/isucon10-final/webapp
+
+  golang:
+    build: ./golang
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/isucon10/isucon10-final/webapp
+    ports:
+      - 9291:9291
+
+  ruby:
+    build: ./ruby
+    volumes:
+      - .:/isucon10/isucon10-final/webapp
+    ports:
+      - 50051:50051
+
