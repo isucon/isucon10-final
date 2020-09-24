@@ -177,7 +177,7 @@ pub async fn get_session(
 
         let team_pb = if let Some(ref team) = team {
             let detail = current_contestant.as_ref().map(|c| &c.id) == current_team.as_ref().and_then(|t| t.leader_id.as_ref());
-            Some(crate::team_pb(conn.deref_mut(), team.clone(), detail)?)
+            Some(crate::build_team_pb(conn.deref_mut(), team.clone(), detail)?)
         } else {
             None
         };

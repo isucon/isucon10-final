@@ -229,7 +229,7 @@ pub mod notifier;
 pub mod proto;
 pub mod registration;
 
-pub(crate) fn team_pb<Q>(
+pub(crate) fn build_team_pb<Q>(
     conn: &mut Q,
     team: Team,
     detail: bool,
