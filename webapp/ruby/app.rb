@@ -497,8 +497,8 @@ module Xsuportal
         language: 'ruby',
         # 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報
         benchmark_server: {
-          host: 'localhost',
-          port: 50051,
+          host: ENV.fetch('BENCHMARK_SERVER_HOST', 'localhost'),
+          port: ENV.fetch('BENCHMARK_SERVER_PORT', '50051').to_i,
         },
       )
     end
