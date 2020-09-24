@@ -10,7 +10,7 @@ remote_file '/home/isucon/.x' do
   mode  '0755'
 end
 
-execute 'echo "source /home/isucon/.local.env" >> /home/isucon/.bash_profile' do
+execute 'echo "source /home/isucon/.local.env" >> /home/isucon/.bashrc' do
   user 'isucon'
-  not_if 'grep -q "isucon/.local.env" /home/isucon/.bash_profile'
+  not_if 'grep -q "isucon/.local.env" /home/isucon/.bashrc'
 end
