@@ -16,13 +16,17 @@ import (
 )
 
 var (
-	targetAddress string = ""
-	profileFile   string = ""
+	targetAddress string
+	profileFile   string
+	hostAdvertise string
+	useTLS        bool
 )
 
 func init() {
 	flag.StringVar(&targetAddress, "target", benchrun.GetTargetAddress(), "ex: localhost:9292")
 	flag.StringVar(&profileFile, "profile", "", "ex: cpu.out")
+	flag.StringVar(&hostAdvertise, "host-advertise", "localhost", "hostname to advertise against target")
+	flag.BoolVar(&useTLS, "tls", false, "server is a tls (HTTPS & gRPC over h2)")
 
 	flag.Parse()
 }
@@ -44,7 +48,13 @@ func main() {
 	defer cancel()
 
 	s, err := scenario.NewScenario()
-	s.BaseURL = fmt.Sprintf("http://%s/", targetAddress)
+	scheme := "http"
+	if useTLS {
+		scheme = "https"
+	}
+	s.BaseURL = fmt.Sprintf("%s://%s/", scheme, targetAddress)
+	s.UseTLS = useTLS
+	s.HostAdvertise = hostAdvertise
 
 	b, err := isucandar.NewBenchmark(isucandar.WithPrepareTimeout(5*time.Second), isucandar.WithLoadTimeout(60*time.Second))
 	if err != nil {
