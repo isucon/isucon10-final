@@ -46,8 +46,8 @@ func (auth *authentication) authenticate() error {
 	return nil
 }
 
-// ErrUnexpectedToken is an error returned when given JWK doesn't comply RFC8292 or doesn't match to the known expected public key.
-var ErrUnexpectedToken = errors.New(`JWK validation failure`)
+// ErrUnexpectedToken is an error returned when given pubilc key doesn't comply RFC8292 or doesn't match to the known expected public key.
+var ErrUnexpectedToken = errors.New(`VAPID key validation failure`)
 
 func (auth *authentication) verifyKey() error {
 	key, err := unmarshalEncodedEcPublicKey(auth.k)
