@@ -16,8 +16,23 @@ services:
 
   ruby:
     build: ./ruby
+    environment:
+      - MYSQL_HOSTNAME=mysql
+      - MYSQL_PORT=3306
     volumes:
       - .:/isucon10/isucon10-final/webapp
     ports:
       - 50051:50051
 
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - mysqldata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: xsuportal
+      MYSQL_USER: isucon
+      MYSQL_PASSWORD: isucon
+
+volumes:
+  mysqldata:
