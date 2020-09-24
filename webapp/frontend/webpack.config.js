@@ -50,7 +50,7 @@ module.exports = [
       rules: [
         {
           test: /\.scss$/,
-          use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+          use: [MiniCssExtractPlugin.loader, "css-loader", "resolve-url-loader", "sass-loader"],
         },
         {
           test: /\.tsx?$/,
@@ -60,6 +60,12 @@ module.exports = [
             options: {
               instance: "main",
             },
+          },
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|svg|otf)$/,
+          use: {
+            loader: 'file-loader',
           },
         },
       ],
