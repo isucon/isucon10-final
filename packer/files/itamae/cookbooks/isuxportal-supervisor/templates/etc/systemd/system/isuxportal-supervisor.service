@@ -11,6 +11,8 @@ ExecStart=/usr/bin/isuxportal-supervisor /home/isucon/bin/benchmarker \
           -host-advertise isubench.t.isucon.dev
 LogsDirectory=isuxportal-supervisor
 
+LimitNOFILE=2000000
+
 #Environment=ISUXPORTAL_SUPERVISOR_ENDPOINT_URL=https://portal-grpc-dev.x.isucon.dev
 #Environment=ISUXPORTAL_SUPERVISOR_ENDPOINT_URL=https://portal-grpc-prd.x.isucon.dev
 #Environment=ISUXPORTAL_SUPERVISOR_TOKEN=himitsu
