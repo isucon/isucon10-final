@@ -234,13 +234,13 @@ pub async fn respond_clarification(
                 (clar.team_id,),
             )?
             .expect("team is not found");
+        let team_pb = crate::build_team_pb(&mut tx, team, false)?;
+        tx.commit()?;
         let notifiers = crate::notifier::notify_clarification_answered(
-            &mut tx,
+            conn.deref_mut(),
             &clar,
             was_answered && was_disclosed == clar.disclosed,
         )?;
-        let team_pb = crate::build_team_pb(&mut tx, team, false)?;
-        tx.commit()?;
         Ok((
             crate::proto::resources::Clarification {
                 id: clar.id,
