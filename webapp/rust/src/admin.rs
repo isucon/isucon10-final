@@ -112,14 +112,7 @@ pub async fn list_clarifications(
                 answer: clar.answer.unwrap_or_default(),
                 created_at: Some(crate::chrono_timestamp_to_protobuf(clar.created_at)),
                 answered_at: clar.answered_at.map(crate::chrono_timestamp_to_protobuf),
-                team: Some(crate::team_pb(
-                    conn.deref_mut(),
-                    team,
-                    false,
-                    true,
-                    false,
-                    None,
-                )?),
+                team: Some(crate::build_team_pb(conn.deref_mut(), team, false)?),
             });
         }
         Ok(clar_pbs)
@@ -170,14 +163,7 @@ pub async fn get_clarification(
             answer: clar.answer.unwrap_or_default(),
             created_at: Some(crate::chrono_timestamp_to_protobuf(clar.created_at)),
             answered_at: clar.answered_at.map(crate::chrono_timestamp_to_protobuf),
-            team: Some(crate::team_pb(
-                conn.deref_mut(),
-                team,
-                false,
-                true,
-                false,
-                None,
-            )?),
+            team: Some(crate::build_team_pb(conn.deref_mut(), team, false)?),
         })
     })
     .await
@@ -257,7 +243,7 @@ pub async fn respond_clarification(
             &clar,
             was_answered && was_disclosed == clar.disclosed,
         )?;
-        let team_pb = crate::team_pb(&mut tx, team, false, true, false, None)?;
+        let team_pb = crate::build_team_pb(&mut tx, team, false)?;
         tx.commit()?;
         Ok((
             crate::proto::resources::Clarification {

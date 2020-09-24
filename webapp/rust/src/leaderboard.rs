@@ -223,22 +223,19 @@ pub fn get_leaderboard(
                 },
             ),
             finish_count: row.finish_count.unwrap_or_default(),
-            team: Some(crate::team_pb(
-                conn.deref_mut(),
-                crate::Team {
-                    id: row.id,
-                    name: row.name,
-                    leader_id: row.leader_id,
-                    email_address: "".to_owned(), // dummy value
-                    invite_token: "".to_owned(),  // dummy value
-                    withdrawn: row.withdrawn,
-                    created_at: unsafe { std::mem::MaybeUninit::uninit().assume_init() },
-                },
-                false,
-                false,
-                false,
-                Some(row.student == 1),
-            )?),
+            team: Some(crate::proto::resources::Team {
+                id: row.id,
+                name: row.name,
+                leader_id: row.leader_id.unwrap_or_else(|| "".to_owned()),
+                member_ids: Vec::new(),
+                withdrawn: row.withdrawn,
+                student: Some(crate::proto::resources::team::StudentStatus {
+                    status: row.student == 1,
+                }),
+                detail: None,
+                leader: None,
+                members: Vec::new(),
+            }),
         };
 
         teams.push(item.clone());

@@ -15,14 +15,7 @@ pub async fn get_current_session(
             crate::get_current_contestant(conn.deref_mut(), &contestant_id, false)?;
         let team = if let Some(ref c) = current_contestant {
             if let Some(team) = crate::get_current_team(conn.deref_mut(), c, false)? {
-                Some(crate::team_pb(
-                    conn.deref_mut(),
-                    team,
-                    true,
-                    true,
-                    false,
-                    None,
-                )?)
+                Some(crate::build_team_pb(conn.deref_mut(), team, true)?)
             } else {
                 None
             }
