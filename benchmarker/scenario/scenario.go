@@ -15,12 +15,13 @@ var (
 )
 
 type Scenario struct {
-	mu           sync.RWMutex
-	BaseURL      string
-	UseTLS       bool
-	Language     string
-	Contest      *model.Contest
-	TeamCapacity int32
+	mu            sync.RWMutex
+	BaseURL       string
+	UseTLS        bool
+	HostAdvertise string
+	Language      string
+	Contest       *model.Contest
+	TeamCapacity  int32
 
 	bpubsub *pubsub.PubSub
 	rpubsub *pubsub.PubSub
