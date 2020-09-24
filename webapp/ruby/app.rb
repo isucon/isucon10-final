@@ -153,7 +153,7 @@ module Xsuportal
         end
       end
 
-      def contestant_pb(contestant, detail: false)
+      def contestant_pb(contestant)
         Proto::Resources::Contestant.new(
           id: contestant[:id],
           team_id: contestant[:team_id],
@@ -163,7 +163,7 @@ module Xsuportal
         )
       end
 
-      def team_pb(team, detail: false, enable_members: true, member_detail: false)
+      def team_pb(team, detail: false, enable_members: true)
         members = nil
 
         leader_pb, members_pb = nil
@@ -178,9 +178,9 @@ module Xsuportal
             'SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`',
             team[:id],
           )
-          leader_pb = leader ? contestant_pb(leader, detail: member_detail) : nil
+          leader_pb = leader ? contestant_pb(leader) : nil
           members_pb = members ?
-            members.map { |_| contestant_pb(_, detail: member_detail) } : nil
+            members.map { |_| contestant_pb(_) } : nil
         end
 
         Proto::Resources::Team.new(
@@ -608,7 +608,7 @@ module Xsuportal
       contest = contest_status[:contest]
 
       encode_response_pb(
-        contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
+        contestant: current_contestant ? contestant_pb(current_contestant) : nil,
         team: current_team ? team_pb(current_team) : nil,
         contest: contest_pb,
         push_vapid_key: notifier.vapid_key&.public_key_for_push_header,
@@ -682,7 +682,7 @@ module Xsuportal
       end
 
       encode_response_pb(
-        team: team ? team_pb(team, detail: current_contestant&.fetch(:id) == current_team&.fetch(:leader_id), member_detail: true, enable_members: true) : nil,
+        team: team ? team_pb(team, detail: current_contestant&.fetch(:id) == current_team&.fetch(:leader_id), enable_members: true) : nil,
         status: status,
         member_invite_url: team ? "/registration?team_id=#{team[:id]}&invite_token=#{team[:invite_token]}" : nil,
         invite_token: team ? team[:invite_token] : nil,
