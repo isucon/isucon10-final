@@ -164,8 +164,8 @@ async fn main() -> std::io::Result<()> {
     } else {
         server.bind((
             "0.0.0.0",
-            std::env::var("SERVER_PORT")
-                .map(|port_str| port_str.parse().expect("Failed to parse SERVER_PORT"))
+            std::env::var("PORT")
+                .map(|port_str| port_str.parse().expect("Failed to parse $PORT"))
                 .unwrap_or(9292),
         ))?
     };
