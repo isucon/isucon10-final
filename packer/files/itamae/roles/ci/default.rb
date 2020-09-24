@@ -1,6 +1,7 @@
 node.reverse_merge!(
   benchmarker: {
     enable: false,
+    slice: 'benchmarker.slice',
   },
   xsuportal: {
     enable: nil,
