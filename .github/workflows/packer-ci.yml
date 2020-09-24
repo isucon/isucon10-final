@@ -89,11 +89,11 @@ jobs:
       #- run: make build
       - run: make build-ci
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.7'
-      - run: gem i aws-sdk-s3 --no-doc
-      - run: gem i aws-sdk-ec2 --no-doc
+      #- uses: ruby/setup-ruby@v1
+      #  with:
+      #    ruby-version: '2.7'
+      #- run: gem i aws-sdk-s3 --no-doc
+      #- run: gem i aws-sdk-ec2 --no-doc
 
       - run: make upload-ci
       - run: make prune
