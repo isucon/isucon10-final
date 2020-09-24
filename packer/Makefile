@@ -48,6 +48,12 @@ target/ci.json: files-generated *.libsonnet ci.jsonnet
 	jsonnet --jpath . ci.jsonnet > target/ci.json
 	packer validate target/ci.json
 
+target/ci-run.json: *.libsonnet ci-run.jsonnet
+	mkdir -p target/
+	jsonnet --jpath . ci.jsonnet > target/ci-run.json
+	packer validate target/ci-run.json
+
+
 build: build-contestant build-benchmarker
 
 build-contestant: files-generated target/contestant.json
@@ -64,11 +70,29 @@ tmp/ci-latest.json:
 	mkdir -p tmp/
 	ruby scripts/latest.rb --presign isucon10f-amd64-contestant > tmp/ci-latest.json
 	if [ -e $(CI_LATEST_LAST_PATH) -a "_$$(jq -r .sum < tmp/ci-latest.json)" != "_$$(jq -r .sum < ${CI_LATEST_LAST_PATH})" ]; then rm -fv $(PACKER_CACHE_DIR)/$$(jq -r .sum < ~/tmp/ci-latest-last.json).iso; fi
+	sum="$$(jq -r .sum < tmp/ci-latest.json)"; if [ -n "$(CI_PACKER_CACHE_HOST)" -a ! -e "$(PACKER_CACHE_DIR)/$${sum}.iso" ]; \
+			then ( curl -fo "$(PACKER_CACHE_DIR)/$${sum}.iso.new" "http://$(CI_PACKER_CACHE_HOST)/packer_cache/$${sum}.iso" \
+			&& mv "$(PACKER_CACHE_DIR)/$${sum}.iso.new" "$(PACKER_CACHE_DIR)/$${sum}.iso" ) || true ; \
+		fi
 	cp tmp/ci-latest.json $(CI_LATEST_LAST_PATH)
 
 build-ci: files-generated target/ci.json tmp/ci-latest.json
 	mkdir -p output/ tmp/ ~/tmp
 	packer build -var "revision=$(CI_REVISION_PREFIX)$(shell cat files-generated/REVISION)" -var "full_source_img=$(shell jq -r .url < tmp/ci-latest.json)" -var "full_source_checksum=$(shell jq -r .sum < tmp/ci-latest.json)" target/ci.json
+
+CI_IMAGE_LAST_PATH ?= tmp/ci-image-last.txt
+.PHONY: test-ci
+test-ci: files-generated target/ci-run.json
+	mkdir -p tmp/ output/
+	test -e output/manifest-amd64-ci.json
+	if [ -e $(CI_IMAGE_LAST_PATH) -a "_$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json )" != "_$$(cat $(CI_IMAGE_LAST_PATH))" ]; then rm -fv $(PACKER_CACHE_DIR)/$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json ).iso; fi
+	sum="$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json )"; if [ -n "$(CI_PACKER_CACHE_HOST)" -a ! -e "$(PACKER_CACHE_DIR)/$${sum}.iso" ]; \
+			then ( curl -fo "$(PACKER_CACHE_DIR)/$${sum}.iso.new" "http://$(CI_PACKER_CACHE_HOST)/packer_cache/$${sum}.iso" \
+			&& mv "$(PACKER_CACHE_DIR)/$${sum}.iso.new" "$(PACKER_CACHE_DIR)/$${sum}.iso" ) || true ; \
+		fi; \
+		echo "$${sum}" > $(CI_IMAGE_LAST_PATH)
+
+	sum="$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json )"; packer build -only qemu -var "revision=$(CI_REVISION_PREFIX)$(shell cat files-generated/REVISION)" -var "source_img=$$(aws s3 presign s3://isucon10-machine-images/$$(jq -r .qcow2_key < output/manifest-amd64-ci.json))" -var "source_checksum=$${sum}" -var "lang=$(CI_LANG)" target/ci-run.json
 
 
 clean:
@@ -89,8 +113,19 @@ upload:
 upload-full:
 	if [ -e output/manifest-amd64-full.json ]; then ruby scripts/upload.rb output/manifest-amd64-full.json; fi
 
+cache-contestant-local:
+	cp ./output/$$(jq -r .name < output/manifest-amd64-contestant.json)/$$(jq -r .name < output/manifest-amd64-contestant.json) $(PACKER_CACHE_DIR)/$$(jq -r .qcow2_sha256 < output/manifest-amd64-contestant.json).iso
+	if [ -e ~/contestant-last-sha.txt ]; then rm -fv $(PACKER_CACHE_DIR)/$$(cat ~/contestant-last-sha.txt).iso; fi
+	echo $$(jq -r .qcow2_sha256 < output/manifest-amd64-contestant.json) > ~/contestant-last-sha.txt
+
 upload-ci:
 	if [ -e output/manifest-amd64-ci.json ]; then ruby scripts/upload.rb output/manifest-amd64-ci.json; fi
+	if [ -e output/manifest-amd64-ci.json -a -n "$(CI_PACKER_CACHE_HOST)" ]; \
+		then scp ./output/$$(jq -r .name < output/manifest-amd64-ci.json)/$$(jq -r .name < output/manifest-amd64-ci.json) $(CI_PACKER_CACHE_HOST):packer_cache/$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json).iso \
+		&& ( echo $$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json) | ssh $(CI_PACKER_CACHE_HOST) 'tee -a ~/ci-images.txt') \
+		&& ssh $(CI_PACKER_CACHE_HOST) 'cat ~/ci-images.txt | head -n -3 | xargs -I XXX rm -f packer_cache/XXX.iso' \
+		; fi
+
 
 prune:
 	if [ -e output/manifest-amd64-contestant.json ]; then ruby scripts/prune.rb output/manifest-amd64-contestant.json; fi

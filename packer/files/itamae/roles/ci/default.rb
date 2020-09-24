@@ -80,3 +80,11 @@ remote_file '/etc/systemd/system/mysql.service.d/slice.conf' do
   mode  '0644'
   notifies :run, 'execute[systemctl daemon-reload]'
 end
+
+######
+
+remote_file '/home/isucon/ci.sh' do
+  owner 'root'
+  group 'root'
+  mode  '0755'
+end
