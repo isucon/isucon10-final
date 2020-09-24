@@ -606,9 +606,6 @@ module Xsuportal
     end
 
     get '/api/session' do
-      contest_status = current_contest_status
-      contest = contest_status[:contest]
-
       encode_response_pb(
         contestant: current_contestant ? contestant_pb(current_contestant) : nil,
         team: current_team ? team_pb(current_team) : nil,
