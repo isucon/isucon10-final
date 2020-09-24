@@ -7,7 +7,7 @@ User=isucon
 ExecStart=/home/isucon/.x /home/isucon/webapp/rust/target/release/portal
 WorkingDirectory=/home/isucon/webapp/rust
 EnvironmentFile=/home/isucon/env
-Environment=SERVER_PORT=3000
+Environment=PORT=3000
 
 <%- if node[:xsuportal][:slice] -%>
 Slice=<%= node[:xsuportal][:slice] %>
