@@ -17,6 +17,7 @@ var (
 type Scenario struct {
 	mu           sync.RWMutex
 	BaseURL      string
+	UseTLS       bool
 	Language     string
 	Contest      *model.Contest
 	TeamCapacity int32

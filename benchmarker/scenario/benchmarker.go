@@ -15,6 +15,7 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 )
 
 var (
@@ -27,6 +28,7 @@ type Benchmarker struct {
 	Scenario *Scenario
 	GRPCHost string
 	GRPCPort int64
+	UseTLS   bool
 	TeamID   int64
 }
 
@@ -35,6 +37,7 @@ func (s *Scenario) NewBenchmarker(id int64) *Benchmarker {
 		Scenario: s,
 		GRPCHost: s.Contest.GRPCHost,
 		GRPCPort: s.Contest.GRPCPort,
+		UseTLS:   s.UseTLS,
 		TeamID:   id,
 	}
 }
@@ -49,9 +52,7 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	host := fmt.Sprintf("%s:%d", b.GRPCHost, b.GRPCPort)
-
-	conn, err := grpc.Dial(host, grpc.WithInsecure(), grpc.WithUserAgent("xsucon-benchmarker"))
+	conn, err := b.dial()
 	if err != nil {
 		return failure.NewError(ErrScenarioCretical, err)
 	}
@@ -212,4 +213,19 @@ func (b *Benchmarker) generateLastReport(job *bench.ReceiveBenchmarkJobResponse_
 		},
 		Nonce: rand.Int63n(300000),
 	}
+}
+
+func (b *Benchmarker) dial() (*grpc.ClientConn, error) {
+	host := fmt.Sprintf("%s:%d", b.GRPCHost, b.GRPCPort)
+
+	tlsConfig := grpc.WithInsecure()
+	if b.UseTLS {
+		tlsConfig = grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, ""))
+	}
+	return grpc.Dial(
+		host,
+		tlsConfig,
+		grpc.WithAuthority(b.GRPCHost),
+		grpc.WithUserAgent("xsucon-benchmarker"),
+	)
 }
