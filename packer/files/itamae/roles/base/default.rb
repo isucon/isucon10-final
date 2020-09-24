@@ -1,5 +1,6 @@
 # include_cookbook 'isucon-admin-user'
 include_cookbook 'isucon-user'
+include_cookbook 'systemd-timesyncd'
 include_cookbook 'langs::exec'
 
 %w(

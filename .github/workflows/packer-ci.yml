@@ -5,6 +5,12 @@ on:
       - master
   pull_request: {}
 
+env: 
+  CI_PACKER_CACHE_HOST: pakache.t.isucon.dev
+  PACKER_CACHE_DIR: /home/octo/packer_cache
+  PACKER_QEMU_MEM: "2G"
+  PACKER_QEMU_SMP: "2"
+
 jobs:
   build:
     name: build
@@ -12,6 +18,8 @@ jobs:
     env:
       PACKER_QEMU_MEM: "4G"
       PACKER_QEMU_SMP: "8"
+    outputs:
+      manifest: ${{ steps.manifest.outputs.content }}
     defaults:
       run:
         working-directory: packer
@@ -83,11 +91,11 @@ jobs:
       #- run: make build
       - run: make build-ci
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.7'
-      - run: gem i aws-sdk-s3 --no-doc
-      - run: gem i aws-sdk-ec2 --no-doc
+      #- uses: ruby/setup-ruby@v1
+      #  with:
+      #    ruby-version: '2.7'
+      #- run: gem i aws-sdk-s3 --no-doc
+      #- run: gem i aws-sdk-ec2 --no-doc
 
       - run: make upload-ci
       - run: make prune
@@ -96,4 +104,42 @@ jobs:
         with:
           name: manifest-amd64-ci.json
           path: packer/output/manifest-amd64-ci.json
+      - name: 'Save manifest to output'
+        id: manifest
+        run: 'echo "::set-output name=content::$(jq -c . < output/manifest-amd64-ci.json)"'
+
+  benchmark:
+    name: benchmark
+    runs-on: [self-hosted, linux, kvm]
+    strategy:
+      matrix:
+        lang:
+          - ruby
+          - rust
+    needs: build
+    env:
+      CI_LANG: ${{ matrix.lang }}
+    defaults:
+      run:
+        working-directory: packer
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 14400
+          role-session-name: isucon10-final-${{ github.run_id }}-${{ github.run_number }}
+          aws-region: ap-northeast-1
+
+      - run: mkdir -p output/ && echo '${{ needs.build.outputs.manifest }}' > output/manifest-amd64-ci.json
+      - run: make test-ci
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ci.log
+          path: packer/output/ci-${{ matrix.lang }}.log
+
 

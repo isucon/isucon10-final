@@ -4,6 +4,12 @@ node.reverse_merge!(
   },
 )
 
+if node[:xsuportal][:ignore_failed_build]
+  node[:xsuportal][:ignore_failed_build] = proc { |l| ">/home/isucon/build.#{l}.log 2>&1 || touch /home/isucon/builderror-#{l}" } 
+else
+  node[:xsuportal][:ignore_failed_build] = proc {  }
+end
+
 include_cookbook 'xsuportal::files'
 
 include_cookbook 'xsuportal::db'

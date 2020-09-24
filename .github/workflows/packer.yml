@@ -8,6 +8,7 @@ on:
 env:
   PACKER_CACHE_DIR: /home/octo/packer_cache
   CI_LATEST_LAST_PATH: /home/octo/ci-latest-last.json
+  CI_IMAGE_LAST_PATH: /home/octo/ci-image-last.txt
 
 jobs:
   build:
@@ -88,6 +89,7 @@ jobs:
       - run: make cache
       - run: make build-benchmarker
       - run: make upload
+      - run: make cache-contestant-local
       #- run: make build-full
       #- run: make upload-full
       - run: make prune

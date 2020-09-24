@@ -1,13 +1,13 @@
 [Unit]
-Description=xsuportal-web-rust
+Description=xsuportal-web-golang
 After=network.target
 
 [Service]
 User=isucon
-ExecStart=/home/isucon/.x /home/isucon/webapp/rust/target/release/portal
-WorkingDirectory=/home/isucon/webapp/rust
+ExecStart=/home/isucon/.x /home/isucon/webapp/golang/bin/webapp
+WorkingDirectory=/home/isucon/webapp/golang
 EnvironmentFile=/home/isucon/env
-Environment=SERVER_PORT=3000
+Environment=PORT=3000
 
 <%- if node[:xsuportal][:slice] -%>
 Slice=<%= node[:xsuportal][:slice] %>
