@@ -85,12 +85,12 @@ CI_IMAGE_LAST_PATH ?= tmp/ci-image-last.txt
 test-ci: files-generated/REVISION target/ci-run.json
 	mkdir -p tmp/ output/
 	test -e output/manifest-amd64-ci.json
-	if [ -e $(CI_IMAGE_LAST_PATH) -a "_$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json )" != "_$$(cat $(CI_IMAGE_LAST_PATH))" ]; then rm -fv $(PACKER_CACHE_DIR)/$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json ).iso; fi
-	sum="$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json )"; if [ -n "$(CI_PACKER_CACHE_HOST)" -a ! -e "$(PACKER_CACHE_DIR)/$${sum}.iso" ]; \
-			then ( curl -fo "$(PACKER_CACHE_DIR)/$${sum}.iso.new" "http://$(CI_PACKER_CACHE_HOST)/packer_cache/$${sum}.iso" \
-			&& mv "$(PACKER_CACHE_DIR)/$${sum}.iso.new" "$(PACKER_CACHE_DIR)/$${sum}.iso" ) || true ; \
-		fi; \
-		echo "$${sum}" > $(CI_IMAGE_LAST_PATH)
+	#if [ -e $(CI_IMAGE_LAST_PATH) -a "_$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json )" != "_$$(cat $(CI_IMAGE_LAST_PATH))" ]; then rm -fv $(PACKER_CACHE_DIR)/$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json ).iso; fi
+	#sum="$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json )"; if [ -n "$(CI_PACKER_CACHE_HOST)" -a ! -e "$(PACKER_CACHE_DIR)/$${sum}.iso" ]; \
+	#		then ( curl -fo "$(PACKER_CACHE_DIR)/$${sum}.iso.new" "http://$(CI_PACKER_CACHE_HOST)/packer_cache/$${sum}.iso" \
+	#		&& mv "$(PACKER_CACHE_DIR)/$${sum}.iso.new" "$(PACKER_CACHE_DIR)/$${sum}.iso" ) || true ; \
+	#	fi; \
+	#	echo "$${sum}" > $(CI_IMAGE_LAST_PATH)
 
 	sum="$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json )"; packer build -only qemu -var "revision=$(CI_REVISION_PREFIX)$(shell cat files-generated/REVISION)" -var "source_img=$$(aws s3 presign s3://isucon10-machine-images/$$(jq -r .qcow2_key < output/manifest-amd64-ci.json))" -var "source_checksum=$${sum}" -var "lang=$(CI_LANG)" target/ci-run.json
 

@@ -79,6 +79,7 @@ jobs:
 
       - run: make clean
       - run: make clean-output
+      - run: 'rm -rf $PACKER_CACHE_DIR'
 
       - name: Save TLS Certificate
         run: |
