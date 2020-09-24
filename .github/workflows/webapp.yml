@@ -101,7 +101,7 @@ jobs:
           working-directory: webapp/ruby
           bundler-cache: true
 
-      - run: "find -name '*.rb' -exec ruby -c '{}' ';' > /dev/null"
+      - run: "find -name '*.rb' -exec ruby -w -c '{}' ';' > /dev/null"
 
   rust:
     name: rust
