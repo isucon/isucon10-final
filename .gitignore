@@ -5,3 +5,4 @@ log/
 tmp/
 vapid_private.pem
 *.log
+/secrets/
