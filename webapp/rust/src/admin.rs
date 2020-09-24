@@ -184,12 +184,8 @@ pub async fn respond_clarification(
     let id = info.into_inner().0;
     let message = message.0;
 
-    let db_block = db.clone();
     let (clarification, notifiers) = web::block(move || {
-        let mut conn = db_block
-            .clone()
-            .get()
-            .expect("Failed to checkout database connection");
+        let mut conn = db.get().expect("Failed to checkout database connection");
         let current_contestant =
             crate::require_current_contestant(conn.deref_mut(), &contestant_id, false)?;
         if !current_contestant.staff {
