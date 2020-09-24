@@ -8,6 +8,7 @@ node.reverse_merge!(
     disable_default: true,
     slice: 'contestant.slice',
     ci_cache: true,
+    ignore_failed_build: true,
   },
   envoy: {
     slice: 'contestant.slice',

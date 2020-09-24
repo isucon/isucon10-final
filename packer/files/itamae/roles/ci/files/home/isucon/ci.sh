@@ -2,6 +2,12 @@
 
 lang=$1
 
+if [ -e /home/isucon/builderror-$lang ]; then
+  echo "build is failing..."
+  cat /home/isucon/build.$lang.log || :
+  exit 1
+fi
+
 systemctl start xsuportal-web-${lang}.service
 systemctl start xsuportal-api-${lang}.service
 

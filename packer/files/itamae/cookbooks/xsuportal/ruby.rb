@@ -1,6 +1,6 @@
 include_cookbook 'langs::ruby'
 
-execute 'cd ~isucon/webapp/ruby && /home/isucon/.x bundle config set deployment "true" && /home/isucon/.x bundle config set path "vendor/bundle" && /home/isucon/.x bundle install --jobs 20' do
+execute "( cd ~isucon/webapp/ruby && /home/isucon/.x bundle config set deployment true && /home/isucon/.x bundle config set path vendor/bundle && /home/isucon/.x bundle install --jobs 20 ) #{node[:xsuportal][:ignore_failed_build]['ruby']}" do
   user 'isucon'
   not_if 'cd ~isucon/webapp/ruby && test -e .bundle && /home/isucon/.x bundle check'
 end

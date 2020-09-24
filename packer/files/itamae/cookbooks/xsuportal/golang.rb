@@ -1,6 +1,6 @@
 include_cookbook 'langs::golang'
 
-execute 'cd ~isucon/webapp/golang && /home/isucon/.x make' do
+execute "cd ~isucon/webapp/golang && /home/isucon/.x make #{node[:xsuportal][:ignore_failed_build]['golang']}" do
   user 'isucon'
 end
 
