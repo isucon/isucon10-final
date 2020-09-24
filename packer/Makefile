@@ -114,17 +114,18 @@ upload-full:
 	if [ -e output/manifest-amd64-full.json ]; then ruby scripts/upload.rb output/manifest-amd64-full.json; fi
 
 cache-contestant-local:
-	cp ./output/$$(jq -r .name < output/manifest-amd64-contestant.json)/$$(jq -r .name < output/manifest-amd64-contestant.json) $(PACKER_CACHE_DIR)/$$(jq -r .qcow2_sha256 < output/manifest-amd64-contestant.json).iso
-	if [ -e ~/contestant-last-sha.txt ]; then rm -fv $(PACKER_CACHE_DIR)/$$(cat ~/contestant-last-sha.txt).iso; fi
-	echo $$(jq -r .qcow2_sha256 < output/manifest-amd64-contestant.json) > ~/contestant-last-sha.txt
+	true
+	#cp ./output/$$(jq -r .name < output/manifest-amd64-contestant.json)/$$(jq -r .name < output/manifest-amd64-contestant.json) $(PACKER_CACHE_DIR)/$$(jq -r .qcow2_sha256 < output/manifest-amd64-contestant.json).iso
+	#if [ -e ~/contestant-last-sha.txt ]; then rm -fv $(PACKER_CACHE_DIR)/$$(cat ~/contestant-last-sha.txt).iso; fi
+	#echo $$(jq -r .qcow2_sha256 < output/manifest-amd64-contestant.json) > ~/contestant-last-sha.txt
 
 upload-ci:
 	if [ -e output/manifest-amd64-ci.json ]; then ruby scripts/upload.rb output/manifest-amd64-ci.json; fi
-	if [ -e output/manifest-amd64-ci.json -a -n "$(CI_PACKER_CACHE_HOST)" ]; \
-		then scp ./output/$$(jq -r .name < output/manifest-amd64-ci.json)/$$(jq -r .name < output/manifest-amd64-ci.json) $(CI_PACKER_CACHE_HOST):packer_cache/$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json).iso \
-		&& ( echo $$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json) | ssh $(CI_PACKER_CACHE_HOST) 'tee -a ~/ci-images.txt') \
-		&& ssh $(CI_PACKER_CACHE_HOST) 'cat ~/ci-images.txt | head -n -1 | xargs -I XXX rm -f packer_cache/XXX.iso' \
-		; fi
+	#if [ -e output/manifest-amd64-ci.json -a -n "$(CI_PACKER_CACHE_HOST)" ]; \
+	#	then scp ./output/$$(jq -r .name < output/manifest-amd64-ci.json)/$$(jq -r .name < output/manifest-amd64-ci.json) $(CI_PACKER_CACHE_HOST):packer_cache/$$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json).iso \
+	#	&& ( echo $$(jq -r .qcow2_sha256 < output/manifest-amd64-ci.json) | ssh $(CI_PACKER_CACHE_HOST) 'tee -a ~/ci-images.txt') \
+	#	&& ssh $(CI_PACKER_CACHE_HOST) 'cat ~/ci-images.txt | head -n -1 | xargs -I XXX rm -f packer_cache/XXX.iso' \
+	#	; fi
 
 
 prune:
