@@ -88,7 +88,7 @@ static_resources:
                   address:
                     socket_address:
                       address: "127.0.0.1"
-                      port_value: 3000
+                      port_value: 9292
     - name: xsuportal_api
       type: STATIC
       connect_timeout: 0.25s
