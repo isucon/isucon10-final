@@ -1049,8 +1049,6 @@ module Xsuportal
     end
 
     post '/api/logout' do
-      req = decode_request_pb
-
       if session[:contestant_id]
         session.delete(:contestant_id)
       else
