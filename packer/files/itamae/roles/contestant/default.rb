@@ -1,4 +1,4 @@
-default_enable = nil
+default_enable = 'ruby'
 
 node.reverse_merge!(
   xsuportal: {
