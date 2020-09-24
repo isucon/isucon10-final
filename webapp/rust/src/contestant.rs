@@ -49,10 +49,7 @@ pub async fn login(
     .into())
 }
 
-pub async fn logout(
-    session: Session,
-    _message: ProtoBuf<LogoutRequest>,
-) -> Result<HttpResponse, AWError> {
+pub async fn logout(session: Session) -> Result<HttpResponse, AWError> {
     if session.get::<String>("contestant_id")?.is_some() {
         session.remove("contestant_id");
         HttpResponse::Ok().protobuf(LogoutResponse {})
