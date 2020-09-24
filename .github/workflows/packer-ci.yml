@@ -18,6 +18,8 @@ jobs:
     env:
       PACKER_QEMU_MEM: "4G"
       PACKER_QEMU_SMP: "8"
+    outputs:
+      manifest: ${{ steps.manifest.outputs.content }}
     defaults:
       run:
         working-directory: packer
@@ -102,7 +104,9 @@ jobs:
         with:
           name: manifest-amd64-ci.json
           path: packer/output/manifest-amd64-ci.json
-      - run: 'echo "::set-output name=manifest::$(jq -c . < output/manifest-amd64-ci.json)"'
+      - name: 'Save manifest to output'
+        id: manifest
+        run: 'echo "::set-output name=content::$(jq -c . < output/manifest-amd64-ci.json)"'
 
   benchmark:
     name: benchmark
