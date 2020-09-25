@@ -77,6 +77,7 @@ jobs:
       - name: Use cache
         run: |
           mkdir -p tmp/
+          test -z "${{ steps.cacher.output.key }}"
           if aws s3 cp ${{ steps.cacher.output.key }} tmp/actions_cache.tar; then
             tar xf tmp/actions_cache.tar
             rm -f  tmp/actions_cache.tar
