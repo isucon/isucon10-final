@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
 import {Error as PbError} from "./proto/xsuportal/error_pb";
 import { Clarification } from "./proto/xsuportal/resources/clarification_pb";
-import { ListClarificationsResponse } from "./proto/xsuportal/services/admin/clarifications_pb";
+import { ListClarificationsResponse, GetClarificationResponse } from "./proto/xsuportal/services/admin/clarifications_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -179,6 +179,22 @@ app.get("/api/admin/clarifications", async (req, res, next) => {
   
   const response = new ListClarificationsResponse();
   response.setClarificationsList(clarPbs);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.get("/api/admin/clarifications/:id", async (req, res, next) => {
+  const db = await connection;
+  // TODO login required
+  const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1', [req.params.id]);
+
+  
+  const team = await db.query('SELECT * FROM `teams` WHERE `id` = ? LIMIT 1', [clar.team_id]);
+  const clarPb = new Clarification();
+  clarPb.setTeam(team);
+  
+  const response = new GetClarificationResponse();
+  response.setClarification(clarPb);
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
