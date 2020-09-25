@@ -6,7 +6,7 @@ StartLimitIntervalSec=0
 
 [Service]
 User=isucon
-ExecStart=/usr/bin/isuxportal-supervisor /home/isucon/benchmarker/bin/benchmarker \
+ExecStart=/usr/local/bin/isuxportal-supervisor /home/isucon/benchmarker/bin/benchmarker \
           -tls \
           -host-advertise isubench.t.isucon.dev
 WorkingDirectory=/home/isucon/benchmarker
