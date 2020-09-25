@@ -17,8 +17,8 @@ module Xsuportal
             cast_booleans: true,
             symbolize_keys: true,
             reconnect: true,
+            init_command: "SET time_zone='+00:00';",
           )
-          conn.query("SET time_zone='+00:00'")
           conn
         end
       end
