@@ -13,4 +13,4 @@ openssl req -x509 -nodes -days 3650 -newkey ec:<(openssl ecparam -name prime256v
 
 mkdir -p certs/
 cp https_crt.pem certs/
-/usr/local/opt/openssl/bin/openssl rehash certs
+openssl rehash certs || /usr/local/opt/openssl/bin/openssl rehash certs
