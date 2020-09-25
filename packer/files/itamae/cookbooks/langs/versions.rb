@@ -6,8 +6,8 @@ node.reverse_merge!(
     versions: {
       golang: '1.15.2',
       nodejs: 'v12.18.4', # 'v' prefix is important.
-      perl: '5.32.0',
-      php: '7.4.10',
+      # perl: '5.32.0',
+      # php: '7.4.10',
       ruby: '2.7.1',
       rust: '1.46.0',
     },

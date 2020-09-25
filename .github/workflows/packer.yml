@@ -69,12 +69,16 @@ jobs:
       - run: make clean
       - run: make clean-output
 
+      - name: Generate cache key
+        id: cacher
+        run: echo "::set-output name=key::s3://isucon10-misc/actions_cache/final/packer_${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}.tar"
       - name: Use cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            packer/files-cached
-          key: ${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}
+        run:
+          mkdir -p tmp/
+          if aws s3 cp ${{ steps.cacher.output.key }} tmp/actions_cache.tar; then
+            tar xf tmp/actions_cache.tar
+            rm -f  tmp/actions_cache.tar
+          fi
 
       - name: Save TLS Certificate
         run: |
@@ -94,6 +98,11 @@ jobs:
       #- run: make upload-full
       - run: make prune
 
+      - name: Upload cache
+        run:
+          mkdir -p tmp/
+          tar cf tmp/actions_cache.tar files-cached/
+          aws s3 cp tmp/actions_cache.tar ${{ steps.cacher.output.key }}
       - uses: actions/upload-artifact@v2
         with:
           name: manifest-amd64-contestant.json

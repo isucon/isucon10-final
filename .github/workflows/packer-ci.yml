@@ -140,7 +140,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: ci.log
-          path: packer/output/ci-${{ matrix.lang }}.log
+          name: ci-${{ matrix.lang }}.log
+          path: packer/output/ci.log
 
 
