@@ -253,7 +253,7 @@ func verifyLeaderboard(at time.Time, leaderboard *resources.Leaderboard, hres *h
 
 		if ls > prevLatestScore || (!lm.Equal(zero) && ls == prevLatestScore && prevLatestMarkedAt.After(lm)) {
 			fmt.Printf("now(%d, %s) / prev(%d, %s)", ls, lm, prevLatestScore, prevLatestMarkedAt)
-			return errorInvalidResponse("チーム並び順が間違っています")
+			return errorInvalidResponse("チームの並び順が間違っています")
 		}
 		prevLatestScore = ls
 		prevLatestMarkedAt = item.GetLatestScore().GetMarkedAt().AsTime()
