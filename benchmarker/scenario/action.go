@@ -27,6 +27,10 @@ func BrowserAccess(ctx context.Context, member *model.Contestant, rpath string) 
 		return nil, nil, err
 	}
 
+	if ctx.Err() != nil {
+		return res, nil, nil
+	}
+
 	resources, err := member.Agent.ProcessHTML(ctx, res, res.Body)
 	if err != nil {
 		return res, resources, err
@@ -162,12 +166,12 @@ func EnqueueBenchmarkJobAction(ctx context.Context, team *model.Team) (*contesta
 	return res, err
 }
 
-func GetDashboardAction(ctx context.Context, team *model.Team, member *model.Contestant) (*contestant.DashboardResponse, error) {
+func GetDashboardAction(ctx context.Context, team *model.Team, member *model.Contestant) (*http.Response, *contestant.DashboardResponse, error) {
 	req := &contestant.DashboardRequest{}
 	res := &contestant.DashboardResponse{}
 
-	_, err := ProtobufRequest(ctx, member.Agent, http.MethodGet, "/api/contestant/dashboard", req, res)
-	return res, err
+	hres, err := ProtobufRequest(ctx, member.Agent, http.MethodGet, "/api/contestant/dashboard", req, res)
+	return hres, res, err
 }
 
 func GetBenchmarkJobs(ctx context.Context, team *model.Team, member *model.Contestant) (*contestant.ListBenchmarkJobsResponse, error) {
@@ -192,9 +196,9 @@ func GetClarificationsAction(ctx context.Context, member *model.Contestant) (*co
 	return res, err
 }
 
-func PostClarificationAction(ctx context.Context, member *model.Contestant, question string) (*contestant.RequestClarificationResponse, error) {
+func PostClarificationAction(ctx context.Context, member *model.Contestant, clar *model.Clarification) (*contestant.RequestClarificationResponse, error) {
 	req := &contestant.RequestClarificationRequest{
-		Question: question,
+		Question: clar.Question,
 	}
 	res := &contestant.RequestClarificationResponse{}
 
@@ -218,22 +222,28 @@ func AdminGetClarificationAction(ctx context.Context, id int64, member *model.Co
 	return res, err
 }
 
-func AdminPostClarificationAction(ctx context.Context, id int64, member *model.Contestant, answer string) (*admin.RespondClarificationResponse, error) {
+func AdminPostClarificationAction(ctx context.Context, member *model.Contestant, clar *model.Clarification) (*admin.RespondClarificationResponse, error) {
 	req := &admin.RespondClarificationRequest{
-		Id:       id,
-		Disclose: false,
-		Answer:   answer,
+		Id:       clar.ID(),
+		Disclose: clar.Disclose,
+		Answer:   clar.Answer,
 	}
 	res := &admin.RespondClarificationResponse{}
 
-	_, err := ProtobufRequest(ctx, member.Agent, http.MethodPut, fmt.Sprintf("/api/admin/clarifications/%d", id), req, res)
+	_, err := ProtobufRequest(ctx, member.Agent, http.MethodPut, fmt.Sprintf("/api/admin/clarifications/%d", clar.ID()), req, res)
 	return res, err
 }
 
-func AudienceGetDashboardAction(ctx context.Context, agent *agent.Agent) (*audience.DashboardResponse, error) {
+func AudienceGetDashboardAction(ctx context.Context, agent *agent.Agent) (*http.Response, *audience.DashboardResponse, error) {
 	req := &audience.DashboardRequest{}
 	res := &audience.DashboardResponse{}
 
-	_, err := ProtobufRequest(ctx, agent, http.MethodGet, "/api/audience/dashboard", req, res)
+	hres, err := ProtobufRequest(ctx, agent, http.MethodGet, "/api/audience/dashboard", req, res)
+	return hres, res, err
+}
+
+func GetNotifications(ctx context.Context, member *model.Contestant) (*contestant.ListNotificationsResponse, error) {
+	res := &contestant.ListNotificationsResponse{}
+	_, err := ProtobufRequest(ctx, member.Agent, http.MethodGet, fmt.Sprintf("/api/contestant/notifications?after=%d", member.LatestNotificationID()), nil, res)
 	return res, err
 }

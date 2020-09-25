@@ -6,7 +6,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/protobuf v1.4.2
 	github.com/gorilla/mux v1.8.0
-	github.com/isucon/isucandar v0.0.0-20200918161941-d592aededc9c
+	github.com/isucon/isucandar v0.0.0-20200925082145-f94706c592fc
 	github.com/isucon/isucon10-portal v0.0.0-20200917214541-7e143562573b
 	github.com/kr/pretty v0.1.0 // indirect
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a

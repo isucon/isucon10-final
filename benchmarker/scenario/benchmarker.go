@@ -70,6 +70,7 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 					step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
 				}
 			}()
+
 			job, err := b.receiveBenchmarkJob(ctx, queue)
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -104,8 +105,6 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				return
 			}
 
-			bResult := team.NewResult()
-
 			reporter, err := report.ReportBenchmarkResult(ctx)
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -114,6 +113,8 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				}
 				return
 			}
+
+			bResult := team.GetQueuedBenckmarkResult()
 
 			result := b.generateFirstReport(jobHandle)
 			err = reporter.Send(result)
@@ -137,8 +138,13 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				step.AddError(failure.NewError(ErrBenchmarkerReport, fmt.Errorf("Invalid benchmark result nonce")))
 				return
 			}
+			bResult.SentFirstResult()
 
 			result = b.generateLastReport(jobHandle, bResult)
+
+			// 送信前にスコア時間を記録
+			bResult.Mark(time.Now().UTC())
+
 			err = reporter.Send(result)
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -160,6 +166,7 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				step.AddError(failure.NewError(ErrBenchmarkerReport, fmt.Errorf("Invalid nonce: got %d, expected %d", res.AckedNonce, result.GetNonce())))
 				return
 			}
+			bResult.SentLastResult()
 
 			err = reporter.CloseSend()
 			if err != nil {
@@ -177,6 +184,24 @@ func (b *Benchmarker) receiveBenchmarkJob(ctx context.Context, client bench.Benc
 		TeamId: b.TeamID,
 	}
 	return client.ReceiveBenchmarkJob(ctx, req)
+}
+
+func (b *Benchmarker) generateCrashReport(job *bench.ReceiveBenchmarkJobResponse_JobHandle) *bench.ReportBenchmarkResultRequest {
+	return &bench.ReportBenchmarkResultRequest{
+		JobId:  job.GetJobId(),
+		Handle: job.GetHandle(),
+		Result: &resources.BenchmarkResult{
+			Passed:   false,
+			Finished: true,
+			Score:    0,
+			ScoreBreakdown: &resources.BenchmarkResult_ScoreBreakdown{
+				Raw:       0,
+				Deduction: 0,
+			},
+			Reason: "CRASH",
+		},
+		Nonce: rand.Int63n(300000),
+	}
 }
 
 func (b *Benchmarker) generateFirstReport(job *bench.ReceiveBenchmarkJobResponse_JobHandle) *bench.ReportBenchmarkResultRequest {
