@@ -23,7 +23,11 @@ base {
     $.common_provisioners.wait_cloud_init,
     {
       type: 'shell',
-      inline: ['sudo -u isucon -H /home/isucon/ci.sh {{user "lang"}}'],
+      inline: [
+        'set +e'
+        'sudo -u isucon -H /home/isucon/ci.sh {{user "lang"}}',
+        'echo $? | sudo -u isucon tee -a /home/isucon/ci.log',
+      ],
     },
     $.download_log_provisioner,
   ],
