@@ -57,5 +57,4 @@ $(GOPROTOFILES): Makefile $(PROTOFILES)
 $(PUBLIC_FILES_CHECKSUM): $(PUBLIC_FILES)
 	@mkdir -p $(shell dirname $@)
 	@SRC=$(patsubst checksum/%,../webapp/frontend/public/%,$@) && \
-		CHECKSUM=($$(sha384sum $$SRC)) && \
-		echo "$$CHECKSUM" > $@
+		echo "$$(sha384sum "$$SRC" | cut -d' ' -f1)" > $@
