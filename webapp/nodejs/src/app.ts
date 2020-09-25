@@ -96,8 +96,8 @@ app.post("/initialize", async (req, res, next) => {
   benchmarkServer.setPort(50051);
   response.setBenchmarkServer(benchmarkServer);
 
-  res.contentType(`application/vnd.google.protobuf; proto=xsuportal.services.admin.initialize`);
-  res.end(response.serializeBinary());
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.listen(9292, () => {
