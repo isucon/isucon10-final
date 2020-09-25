@@ -18,6 +18,8 @@ jobs:
     env:
       PACKER_QEMU_MEM: "4G"
       PACKER_QEMU_SMP: "8"
+      PACKER_LOG: '1'
+      PACKER_LOG_PATH: '/home/octo/packer.log'
     outputs:
       manifest: ${{ steps.manifest.outputs.content }}
     defaults:
