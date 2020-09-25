@@ -559,7 +559,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 					resClar := gRes.GetClarification()
 
 					if resClar.GetTeamId() != clar.TeamID {
-						step.AddError(errorInvalidResponse("Clar のチーム ID が一致しません"))
+						step.AddError(errorInvalidResponse("Clarification のチーム ID が一致しません"))
 						return
 					}
 
