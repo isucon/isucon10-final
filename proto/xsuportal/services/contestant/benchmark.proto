@@ -3,7 +3,6 @@ syntax = "proto3";
 package xsuportal.proto.services.contestant;
 option go_package = "github.com/isucon/isucon10-final/webapp/golang/proto/xsuportal/services/contestant";
 
-import "xsuportal/resources/benchmark_result.proto";
 import "xsuportal/resources/benchmark_job.proto";
 
 message ListBenchmarkJobsRequest {}
