@@ -73,7 +73,7 @@ jobs:
         id: cacher
         run: echo "::set-output name=key::s3://isucon10-misc/actions_cache/final/packer_${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}.tar"
       - name: Use cache
-        run:
+        run: |
           mkdir -p tmp/
           if aws s3 cp ${{ steps.cacher.output.key }} tmp/actions_cache.tar; then
             tar xf tmp/actions_cache.tar
@@ -99,7 +99,7 @@ jobs:
       - run: make prune
 
       - name: Upload cache
-        run:
+        run: |
           mkdir -p tmp/
           tar cf tmp/actions_cache.tar files-cached/
           aws s3 cp tmp/actions_cache.tar ${{ steps.cacher.output.key }}
