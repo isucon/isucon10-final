@@ -380,7 +380,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 			go func() {
 				defer wg.Done()
 
-				at := time.Now().UTC()
+				requestedAt := time.Now().UTC()
 				hres, res, err := GetDashboardAction(ctx, team, team.Operator)
 				if err != nil {
 					step.AddError(err)
@@ -388,7 +388,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 					return
 				}
 
-				if err := verifyLeaderboard(at, res.GetLeaderboard(), hres, s.Contest, team); err != nil {
+				if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, team); err != nil {
 					step.AddError(err)
 				}
 			}()
@@ -617,7 +617,7 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 		for ctx.Err() == nil {
 			timer := time.After(1 * time.Second)
 
-			at := time.Now().UTC()
+			requestedAt := time.Now().UTC()
 			hres, res, err := AudienceGetDashboardAction(ctx, viewer)
 			if err != nil {
 				// オーディエンスはエラーを記録しない
@@ -625,7 +625,7 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 				return
 			}
 
-			if err := verifyLeaderboard(at, res.GetLeaderboard(), hres, s.Contest, nil); err != nil {
+			if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, nil); err != nil {
 				// オーディエンスによる計測失敗は考慮しない
 				step.AddError(err)
 				return
