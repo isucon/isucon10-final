@@ -171,6 +171,7 @@ func verifyResources(page string, res *http.Response, resources agent.Resources)
 }
 
 func verifyLeaderboard(at time.Time, leaderboard *resources.Leaderboard, hres *http.Response, contest *model.Contest, vTeam *model.Team) error {
+	// TODO: 時間詐欺が出来るので直す
 	if t, err := http.ParseTime(hres.Header.Get("Last-Modified")); err != nil && hres.Header.Get("Last-Modified") != "" {
 		at = t
 	}
