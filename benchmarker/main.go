@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
 	"runtime/pprof"
 	"time"
@@ -11,17 +12,21 @@ import (
 	"github.com/isucon/isucandar"
 	"github.com/isucon/isucandar/agent"
 	"github.com/isucon/isucandar/failure"
+	"github.com/isucon/isucon10-final/benchmarker/pushserver"
 	"github.com/isucon/isucon10-final/benchmarker/scenario"
 	"github.com/isucon/isucon10-portal/bench-tool.go/benchrun"
 	isuxportalResources "github.com/isucon/isucon10-portal/proto.go/isuxportal/resources"
 )
 
 var (
-	targetAddress    string
-	profileFile      string
-	hostAdvertise    string
-	useTLS           bool
-	exitStatusOnFail bool
+	targetAddress      string
+	profileFile        string
+	hostAdvertise      string
+	pushServerPort     int
+	tlsCertificatePath string
+	tlsKeyPath         string
+	useTLS             bool
+	exitStatusOnFail   bool
 
 	reporter benchrun.Reporter
 )
@@ -33,6 +38,9 @@ func init() {
 	flag.StringVar(&targetAddress, "target", benchrun.GetTargetAddress(), "ex: localhost:9292")
 	flag.StringVar(&profileFile, "profile", "", "ex: cpu.out")
 	flag.StringVar(&hostAdvertise, "host-advertise", "localhost", "hostname to advertise against target")
+	flag.IntVar(&pushServerPort, "push-service-port", 11001, "port number to listen a push service")
+	flag.StringVar(&tlsCertificatePath, "tls-cert", "../secrets/cert.pem", "path to TLS certificate for a push service")
+	flag.StringVar(&tlsKeyPath, "tls-key", "../secrets/key.pem", "path to private key of TLS certificate for a push service")
 	flag.BoolVar(&useTLS, "tls", false, "server is a tls (HTTPS & gRPC over h2)")
 	flag.BoolVar(&exitStatusOnFail, "exit-status", false, "set exit status non-zero when a benchmark result is failing")
 
@@ -140,6 +148,13 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	pushServiceOrigin := fmt.Sprintf("https://%s", hostAdvertise)
+	if pushServerPort != 443 {
+		pushServiceOrigin = fmt.Sprintf("https://%s:%d", hostAdvertise, pushServerPort)
+	}
+	pushService := pushserver.NewService(pushServiceOrigin, 1000)
+	go http.ListenAndServeTLS(fmt.Sprintf("0.0.0.0:%d", pushServerPort), tlsCertificatePath, tlsKeyPath, pushService.HTTP())
+
 	s, err := scenario.NewScenario()
 	scheme := "http"
 	if useTLS {
@@ -147,7 +162,7 @@ func main() {
 	}
 	s.BaseURL = fmt.Sprintf("%s://%s/", scheme, targetAddress)
 	s.UseTLS = useTLS
-	s.HostAdvertise = hostAdvertise
+	s.PushService = pushService
 
 	b, err := isucandar.NewBenchmark(isucandar.WithPrepareTimeout(20*time.Second), isucandar.WithLoadTimeout(65*time.Second))
 	if err != nil {

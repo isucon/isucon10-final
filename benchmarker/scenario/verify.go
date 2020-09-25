@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/isucon/isucandar"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 
@@ -261,4 +262,8 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 	}
 
 	return nil
+}
+
+func (s *Scenario) handleInvalidPush(id string, err error, step *isucandar.BenchmarkStep) {
+	step.AddError(fmt.Errorf("不正な Web Push メッセージの送信がありました (/push/%s): %w", id, err))
 }

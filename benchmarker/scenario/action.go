@@ -14,31 +14,33 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/common"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/registration"
+	"github.com/isucon/isucon10-final/benchmarker/pushserver"
 )
 
-func BrowserAccess(ctx context.Context, member *model.Contestant, rpath string) (*http.Response, agent.Resources, error) {
+func BrowserAccess(ctx context.Context, member *model.Contestant, rpath string) (*http.Response, agent.Resources, *common.GetCurrentSessionResponse, error) {
 	req, err := member.Agent.GET(rpath)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
 	res, err := member.Agent.Do(ctx, req)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
 	if ctx.Err() != nil {
-		return res, nil, nil
+		return res, nil, nil, nil
 	}
 
 	resources, err := member.Agent.ProcessHTML(ctx, res, res.Body)
 	if err != nil {
-		return res, resources, err
+		return res, resources, nil, err
 	}
 
-	_, err = GetCurrentSession(ctx, member)
+	// TODO: 検証してない。
+	session, err := GetCurrentSession(ctx, member)
 
-	return res, resources, err
+	return res, resources, session, err
 }
 
 func BrowserAccessGuest(ctx context.Context, agent *agent.Agent, rpath string) (*http.Response, agent.Resources, error) {
@@ -240,6 +242,17 @@ func AudienceGetDashboardAction(ctx context.Context, agent *agent.Agent) (*http.
 
 	hres, err := ProtobufRequest(ctx, agent, http.MethodGet, "/api/audience/dashboard", req, res)
 	return hres, res, err
+}
+
+func SubscribeNotification(ctx context.Context, member *model.Contestant, pushSubscription *pushserver.Subscription) (*contestant.SubscribeNotificationResponse, error) {
+	req := &contestant.SubscribeNotificationRequest{
+		Endpoint: pushSubscription.GetURL(),
+		P256Dh:   pushSubscription.GetP256DH(),
+		Auth:     pushSubscription.GetAuth(),
+	}
+	res := &contestant.SubscribeNotificationResponse{}
+	_, err := ProtobufRequest(ctx, member.Agent, http.MethodPost, "/api/contestant/push_subscriptions", req, res)
+	return res, err
 }
 
 func GetNotifications(ctx context.Context, member *model.Contestant) (*contestant.ListNotificationsResponse, error) {

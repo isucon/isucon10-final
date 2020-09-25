@@ -2,11 +2,14 @@ package scenario
 
 import (
 	"context"
+	"encoding/base64"
 	"net/url"
 	"sync"
 	"sync/atomic"
 	"time"
 
+	"github.com/golang/protobuf/proto"
+	"github.com/hashicorp/golang-lru/simplelru"
 	"github.com/isucon/isucandar"
 	"github.com/isucon/isucandar/failure"
 	"github.com/isucon/isucandar/parallel"
@@ -14,6 +17,8 @@ import (
 	"github.com/isucon/isucandar/worker"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/common"
+	"github.com/isucon/isucon10-final/benchmarker/pushserver"
 )
 
 func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) error {
@@ -154,7 +159,7 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 		team.Operator = team.Leader
 		team.Developer = team.Leader
 
-		res, resources, err := BrowserAccess(ctx, lead, "/signup")
+		res, resources, session, err := BrowserAccess(ctx, lead, "/signup")
 		if err != nil {
 			step.AddError(err)
 			return
@@ -209,11 +214,12 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 		memberInviteURL := registration.GetMemberInviteUrl()
 		inviteToken := registration.GetInviteToken()
 
-		go s.loadListNotifications(parent, step, team, team.Leader)
+		// TODO: 本来であれば dashboard に到達してから subscribe ボタンを押下して実施される流れなので、dashboard の時にとった session を利用したい ~sorah
+		go s.watchNotifications(parent, step, team, team.Leader, session)
 
 		signupMember := func(member *model.Contestant, role string) func(context.Context) {
 			return func(ctx context.Context) {
-				res, resources, err := BrowserAccess(ctx, member, "/signup")
+				res, resources, session, err := BrowserAccess(ctx, member, "/signup")
 				if err != nil {
 					step.AddError(err)
 					return
@@ -242,7 +248,7 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 				}
 				// TODO: Check signup
 
-				_, _, err = BrowserAccess(ctx, member, memberInviteURL)
+				_, _, _, err = BrowserAccess(ctx, member, memberInviteURL)
 				if err != nil {
 					step.AddError(err)
 					return
@@ -263,7 +269,8 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 					team.Operator = member
 				}
 
-				go s.loadListNotifications(parent, step, team, member)
+				// TODO: 本来であれば dashboard に到達してから subscribe ボタンを押下して実施される流れなので、dashboard の時にとった session を利用したい ~sorah
+				go s.watchNotifications(parent, step, team, member, session)
 			}
 		}
 
@@ -308,7 +315,7 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 			<-team.WaitAllClarResolve(ctx)
 
 			// ダッシュボード開いてキューを積むのでブラウザアクセスとダッシュボード的 API 呼び出しを含む
-			res, resources, err := BrowserAccess(ctx, team.Developer, "/contestant")
+			res, resources, _, err := BrowserAccess(ctx, team.Developer, "/contestant")
 			if err != nil {
 				go func() { <-team.EnqueueLock }()
 				step.AddError(err)
@@ -357,7 +364,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
 		team := s.Contest.Teams[index]
 
-		res, resources, err := BrowserAccess(ctx, team.Operator, "/contestant")
+		res, resources, _, err := BrowserAccess(ctx, team.Operator, "/contestant")
 		if err != nil {
 			step.AddError(err)
 			return
@@ -435,7 +442,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 
 		for ctx.Err() == nil {
 			timer := time.After(1 * time.Second)
-			res, resources, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
+			res, resources, _, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
 			if err != nil {
 				step.AddError(err)
 				continue
@@ -506,7 +513,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 		for ctx.Err() == nil {
 			timer := time.After(200 * time.Millisecond)
 
-			cres, cresources, err := BrowserAccess(ctx, admin, "/admin/clarifications")
+			cres, cresources, _, err := BrowserAccess(ctx, admin, "/admin/clarifications")
 			if err != nil {
 				step.AddError(err)
 				continue
@@ -650,7 +657,109 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 	return nil
 }
 
-func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar.BenchmarkStep, team *model.Team, member *model.Contestant) {
+func (s *Scenario) watchNotifications(parent context.Context, step *isucandar.BenchmarkStep, team *model.Team, member *model.Contestant, session *common.GetCurrentSessionResponse) {
+	ctx, cancel := context.WithDeadline(parent, s.Contest.ContestEndsAt)
+	defer cancel()
+
+	notificationChan := make(chan []*resources.Notification, 32)
+
+	go s.subscribeToPushNotification(parent, step, member, session, notificationChan)
+	go s.loadListNotifications(parent, step, member, notificationChan)
+
+	idBucket, err := simplelru.NewLRU(256, func(k interface{}, v interface{}) {})
+	if err != nil {
+		panic(err) // NewLRU errors when passed capacity is negative
+	}
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case notifications := <-notificationChan:
+			maxID := member.LatestNotificationID()
+			clars := []*resources.Notification_ClarificationMessage{}
+
+			for _, notification := range notifications {
+				id := notification.GetId()
+				if idBucket.Contains(id) {
+					continue
+				}
+				if id > maxID {
+					member.UpdateLatestNotificationID(id)
+				}
+
+				if job := notification.GetContentBenchmarkJob(); job != nil {
+					if team.Developer == member {
+						// TODO: ここは go するんじゃないんだなあ (job の数だけ go は治安わるいのはわかるが) ~sorah
+						// TODO: まあでもこの方式 (通知の処理と受信が別goroutine) ならgo しなくていいのかも ~sorah
+						s.loadBenchmarkDetails(ctx, step, team, job)
+					}
+				}
+
+				if clar := notification.GetContentClarification(); clar != nil {
+					if team.Leader == member {
+						clars = append(clars, clar)
+					}
+				}
+				idBucket.Add(id, true)
+			}
+			if len(clars) > 0 {
+				// TODO: まあでもこの方式 (通知の処理と受信が別goroutine) ならgo しなくていいのかも ~sorah
+				go s.loadCheckClarification(ctx, step, team, clars)
+			}
+		}
+	}
+}
+
+func (s *Scenario) subscribeToPushNotification(parent context.Context, step *isucandar.BenchmarkStep, member *model.Contestant, session *common.GetCurrentSessionResponse, channel chan<- []*resources.Notification) {
+	ctx, cancel := context.WithDeadline(parent, s.Contest.ContestEndsAt)
+	defer cancel()
+
+	vapidKey := session.GetPushVapidKey()
+	if len(vapidKey) < 1 {
+		return
+	}
+
+	sub, err := s.PushService.Subscribe(&pushserver.SubscriptionOption{
+		Vapid: vapidKey,
+	}, true, true)
+	if err != nil {
+		// TODO: 403 か 503 をかえすように初期実装ではそうなってるのでいい感じに配慮されているようにする ~sorah
+		step.AddError(err)
+		return
+	}
+	defer sub.Expire()
+
+	_, err = SubscribeNotification(ctx, member, sub)
+	if err != nil {
+		step.AddError(err)
+	}
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case message := <-sub.GetChannel():
+			b64encodedBody := message.Body
+			body := make([]byte, base64.StdEncoding.DecodedLen(len(b64encodedBody)))
+			n, err := base64.StdEncoding.Decode(body, b64encodedBody)
+			if err != nil {
+				s.handleInvalidPush(sub.ID, err, step)
+				continue
+			}
+			notification := &resources.Notification{}
+			if err := proto.Unmarshal(body[0:n], notification); err != nil {
+				s.handleInvalidPush(sub.ID, err, step)
+				continue
+			}
+			step.AddScore("push-notifications")
+			channel <- []*resources.Notification{notification}
+
+		}
+	}
+}
+
+func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar.BenchmarkStep, member *model.Contestant, channel chan<- []*resources.Notification) {
 	ctx, cancel := context.WithDeadline(parent, s.Contest.ContestEndsAt)
 	defer cancel()
 
@@ -658,36 +767,12 @@ func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar
 		timer := time.After(300 * time.Millisecond)
 
 		notifications, err := GetNotifications(ctx, member)
-		if err != nil {
+		if err == nil {
+			// TODO: last_answered_clarification_id の検証をやっていない
+			step.AddScore("list-notifications")
+			channel <- notifications.GetNotifications()
+		} else {
 			step.AddError(err)
-			continue
-		}
-
-		maxID := member.LatestNotificationID()
-		clars := []*resources.Notification_ClarificationMessage{}
-		for _, notification := range notifications.GetNotifications() {
-			id := notification.GetId()
-			if id > maxID {
-				member.UpdateLatestNotificationID(id)
-			}
-
-			if job := notification.GetContentBenchmarkJob(); job != nil {
-				if team.Developer == member {
-					s.loadBenchmarkDetails(ctx, step, team, job)
-				}
-			}
-
-			if clar := notification.GetContentClarification(); clar != nil {
-				if team.Leader == member {
-					clars = append(clars, clar)
-				}
-			}
-		}
-
-		step.AddScore("list-notifications")
-
-		if len(clars) > 0 {
-			go s.loadCheckClarification(ctx, step, team, clars)
 		}
 
 		select {
@@ -715,7 +800,7 @@ func (s *Scenario) loadBenchmarkDetails(ctx context.Context, step *isucandar.Ben
 func (s *Scenario) loadCheckClarification(ctx context.Context, step *isucandar.BenchmarkStep, team *model.Team, clars []*resources.Notification_ClarificationMessage) {
 	leader := team.Leader
 
-	bres, resources, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
+	bres, resources, _, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
 	if err != nil {
 		step.AddError(err)
 		return
