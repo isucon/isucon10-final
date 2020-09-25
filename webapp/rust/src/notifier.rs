@@ -156,17 +156,36 @@ pub struct PushSubscription {
     pub updated_at: NaiveDateTime,
 }
 impl FromRow for PushSubscription {
-    fn from_row_opt(row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
         Ok(Self {
-            id: row.get("id").expect("id column is missing"),
+            id: row
+                .take_opt("id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
             contestant_id: row
-                .get("contestant_id")
-                .expect("contestant_id column is missing"),
-            endpoint: row.get("endpoint").expect("endpoint column is missing"),
-            p256dh: row.get("p256dh").expect("p256dh column is missing"),
-            auth: row.get("auth").expect("auth column is missing"),
-            created_at: row.get("created_at").expect("created_at column is missing"),
-            updated_at: row.get("updated_at").expect("updated_at column is missing"),
+                .take_opt("contestant_id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            endpoint: row
+                .take_opt("endpoint")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            p256dh: row
+                .take_opt("p256dh")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            auth: row
+                .take_opt("auth")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            created_at: row
+                .take_opt("created_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            updated_at: row
+                .take_opt("updated_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
         })
     }
 }

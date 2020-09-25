@@ -17,42 +17,57 @@ struct LeaderboardRow {
     finish_count: Option<i64>,
 }
 impl FromRow for LeaderboardRow {
-    fn from_row_opt(row: mysql::Row) -> Result<Self, mysql::FromRowError> {
-        fn convert(row: &mysql::Row) -> Result<LeaderboardRow, mysql::FromValueError> {
-            Ok(LeaderboardRow {
-                id: row.get_opt("id").expect("id column is missing")?,
-                name: row.get_opt("name").expect("name column is missing")?,
-                leader_id: row
-                    .get_opt("leader_id")
-                    .expect("leader_id column is missing")?,
-                withdrawn: row
-                    .get_opt("withdrawn")
-                    .expect("withdrawn column is missing")?,
-                student: row.get_opt("student").expect("student column is missing")?,
-                best_score: row
-                    .get_opt("best_score")
-                    .expect("best_score column is missing")?,
-                best_score_started_at: row
-                    .get_opt("best_score_started_at")
-                    .expect("best_score_started_at column is missing")?,
-                best_score_marked_at: row
-                    .get_opt("best_score_marked_at")
-                    .expect("best_score_marked_at column is missing")?,
-                latest_score: row
-                    .get_opt("latest_score")
-                    .expect("latest_score column is missing")?,
-                latest_score_started_at: row
-                    .get_opt("latest_score_started_at")
-                    .expect("latest_score_started_at column is missing")?,
-                latest_score_marked_at: row
-                    .get_opt("latest_score_marked_at")
-                    .expect("latest_score_marked_at column is missing")?,
-                finish_count: row
-                    .get_opt("finish_count")
-                    .expect("finish_count column is missing")?,
-            })
-        }
-        convert(&row).map_err(|_| mysql::FromRowError(row))
+    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+        Ok(Self {
+            id: row
+                .take_opt("id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            name: row
+                .take_opt("name")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            leader_id: row
+                .take_opt("leader_id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            withdrawn: row
+                .take_opt("withdrawn")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            student: row
+                .get_opt("student")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            best_score: row
+                .take_opt("best_score")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            best_score_started_at: row
+                .take_opt("best_score_started_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            best_score_marked_at: row
+                .take_opt("best_score_marked_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            latest_score: row
+                .take_opt("latest_score")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            latest_score_started_at: row
+                .take_opt("latest_score_started_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            latest_score_marked_at: row
+                .take_opt("latest_score_marked_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            finish_count: row
+                .take_opt("finish_count")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+        })
     }
 }
 
