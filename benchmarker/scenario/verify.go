@@ -247,7 +247,7 @@ func verifyLeaderboard(at time.Time, leaderboard *resources.Leaderboard, hres *h
 		if ls != els {
 			// TODO: あとで標準エラーに
 			fmt.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, elt, team.GetId(), ls, els, cls)
-			return errorInvalidResponse("直近スコアの検証に失敗しました")
+			return errorInvalidResponse("最新スコアの検証に失敗しました")
 		}
 
 		if ls > prevLatestScore || (!lm.Equal(zero) && ls == prevLatestScore && prevLatestMarkedAt.After(lm)) {
