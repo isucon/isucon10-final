@@ -72,13 +72,13 @@ jobs:
       - run: make clean-output
 
       - name: Generate cache key
-        id: cacher
-        run: echo "::set-output name=key::s3://isucon10-misc/actions_cache/final/packer_${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}.tar"
+        id: cache_key
+        run: echo "::set-output name=content::s3://isucon10-misc/actions_cache/final/packer_${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}.tar"
       - name: Use cache
         run: |
           mkdir -p tmp/
-          test -z "${{ steps.cacher.output.key }}"
-          if aws s3 cp ${{ steps.cacher.output.key }} tmp/actions_cache.tar; then
+          test -z "${{ steps.cache_key.output.content }}"
+          if aws s3 cp ${{ steps.cache_key.output.content }} tmp/actions_cache.tar; then
             tar xf tmp/actions_cache.tar
             rm -f  tmp/actions_cache.tar
           fi
@@ -105,7 +105,7 @@ jobs:
         run: |
           mkdir -p tmp/
           tar cf tmp/actions_cache.tar files-cached/
-          aws s3 cp tmp/actions_cache.tar ${{ steps.cacher.output.key }}
+          aws s3 cp tmp/actions_cache.tar ${{ steps.cache_key.output.content }}
       - uses: actions/upload-artifact@v2
         with:
           name: manifest-amd64-contestant.json
