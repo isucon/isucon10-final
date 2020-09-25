@@ -1,3 +1,4 @@
+include_cookbook 'tls-certificate'
 include_cookbook 'xsuportal::files'
 include_cookbook 'xsuportal::frontend'
 include_cookbook 'langs::golang'

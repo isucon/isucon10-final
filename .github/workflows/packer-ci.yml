@@ -27,7 +27,7 @@ jobs:
         working-directory: packer
     steps:
       - name: Cancel Previous Runs (for pull requests)
-        if: "${{ github.event == 'pull_request' }}"
+        if: "${{ github.event_name == 'pull_request' }}"
         uses: styfle/cancel-workflow-action@0.5.0
         with:
           access_token: ${{ github.token }}
@@ -97,7 +97,7 @@ jobs:
       ################
 
       - name: Disable EC2 build for pull request
-        if: "${{ github.event == 'pull_request' }}"
+        if: "${{ github.event_name == 'pull_request' }}"
         run: echo "::set-env name=CI_PACKER_ARGS::-only qemu"
 
       - run: make generate
@@ -149,10 +149,11 @@ jobs:
 
       - run: mkdir -p output/ && echo '${{ needs.build.outputs.manifest }}' > output/manifest-amd64-ci.json
       - run: make test-ci
-
+      - run: tail -n25 packer/output/ci.log 
       - uses: actions/upload-artifact@v2
         with:
           name: ci-${{ matrix.lang }}.log
           path: packer/output/ci.log
+      - run: tail -n1 packer/output/ci.log | grep '^0$'
 
 

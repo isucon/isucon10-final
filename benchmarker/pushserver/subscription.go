@@ -122,9 +122,14 @@ func (sub *Subscription) GetAuth() string {
 	return encodeBase64(sub.sharedSecret)
 }
 
-// IsActive returns true when a subscription is still active and not expired. Turns false once it unsubscribed at a Service.
+// IsActive returns true when a subscription is still active and not expired. See also Expire()
 func (sub *Subscription) IsActive() bool {
 	return sub.active
+}
+
+// Expire invalidates a subscription and lets it inactive. Inactive push resource will return 404 at Service.
+func (sub *Subscription) Expire() {
+	sub.active = false
 }
 
 // IsRestricted returns true when a subscription is restricted to a specific application server with VAPID

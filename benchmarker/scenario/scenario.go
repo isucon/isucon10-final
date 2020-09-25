@@ -7,6 +7,7 @@ import (
 	"github.com/isucon/isucandar/failure"
 	"github.com/isucon/isucandar/pubsub"
 	"github.com/isucon/isucon10-final/benchmarker/model"
+	"github.com/isucon/isucon10-final/benchmarker/pushserver"
 )
 
 var (
@@ -15,13 +16,13 @@ var (
 )
 
 type Scenario struct {
-	mu            sync.RWMutex
-	BaseURL       string
-	UseTLS        bool
-	HostAdvertise string
-	Language      string
-	Contest       *model.Contest
-	TeamCapacity  int32
+	mu           sync.RWMutex
+	BaseURL      string
+	UseTLS       bool
+	PushService  *pushserver.Service
+	Language     string
+	Contest      *model.Contest
+	TeamCapacity int32
 
 	bpubsub *pubsub.PubSub
 	rpubsub *pubsub.PubSub
