@@ -87,19 +87,37 @@ pub struct Team {
     pub created_at: NaiveDateTime,
 }
 impl FromRow for Team {
-    fn from_row_opt(row: mysql::Row) -> Result<Self, mysql::FromRowError> {
-        fn convert(row: &mysql::Row) -> Result<Team, ()> {
-            Ok(Team {
-                id: row.get("id").ok_or(())?,
-                name: row.get("name").ok_or(())?,
-                leader_id: row.get("leader_id").ok_or(())?,
-                email_address: row.get("email_address").ok_or(())?,
-                invite_token: row.get("invite_token").ok_or(())?,
-                withdrawn: row.get("withdrawn").ok_or(())?,
-                created_at: row.get("created_at").ok_or(())?,
-            })
-        }
-        convert(&row).map_err(|_| mysql::FromRowError(row))
+    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+        Ok(Self {
+            id: row
+                .take_opt("id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            name: row
+                .take_opt("name")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            leader_id: row
+                .take_opt("leader_id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            email_address: row
+                .take_opt("email_address")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            invite_token: row
+                .take_opt("invite_token")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            withdrawn: row
+                .take_opt("withdrawn")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            created_at: row
+                .take_opt("created_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+        })
     }
 }
 
@@ -124,19 +142,37 @@ impl Contestant {
     }
 }
 impl FromRow for Contestant {
-    fn from_row_opt(row: mysql::Row) -> Result<Self, mysql::FromRowError> {
-        fn convert(row: &mysql::Row) -> Result<Contestant, ()> {
-            Ok(Contestant {
-                id: row.get("id").ok_or(())?,
-                password: row.get("password").ok_or(())?,
-                team_id: row.get("team_id").ok_or(())?,
-                name: row.get("name").ok_or(())?,
-                student: row.get("student").ok_or(())?,
-                staff: row.get("staff").ok_or(())?,
-                created_at: row.get("created_at").ok_or(())?,
-            })
-        }
-        convert(&row).map_err(|_| mysql::FromRowError(row))
+    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+        Ok(Self {
+            id: row
+                .take_opt("id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            password: row
+                .take_opt("password")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            team_id: row
+                .take_opt("team_id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            name: row
+                .take_opt("name")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            student: row
+                .take_opt("student")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            staff: row
+                .take_opt("staff")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            created_at: row
+                .take_opt("created_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+        })
     }
 }
 
@@ -152,30 +188,41 @@ pub struct Clarification {
     pub updated_at: NaiveDateTime,
 }
 impl FromRow for Clarification {
-    fn from_row_opt(row: mysql::Row) -> Result<Self, mysql::FromRowError> {
-        fn convert(row: &mysql::Row) -> Result<Clarification, mysql::FromValueError> {
-            Ok(Clarification {
-                id: row.get_opt("id").expect("id column is missing")?,
-                team_id: row.get_opt("team_id").expect("team_id column is missing")?,
-                disclosed: row
-                    .get_opt("disclosed")
-                    .expect("disclosed column is missing")?,
-                question: row
-                    .get_opt("question")
-                    .expect("question column is missing")?,
-                answer: row.get_opt("answer").expect("answer column is missing")?,
-                answered_at: row
-                    .get_opt("answered_at")
-                    .expect("answered_at column is missing")?,
-                created_at: row
-                    .get_opt("created_at")
-                    .expect("created_at column is missing")?,
-                updated_at: row
-                    .get_opt("updated_at")
-                    .expect("updated_at column is missing")?,
-            })
-        }
-        convert(&row).map_err(|_| mysql::FromRowError(row))
+    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+        Ok(Self {
+            id: row
+                .take_opt("id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            team_id: row
+                .take_opt("team_id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            disclosed: row
+                .take_opt("disclosed")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            question: row
+                .take_opt("question")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            answer: row
+                .take_opt("answer")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            answered_at: row
+                .take_opt("answered_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            created_at: row
+                .take_opt("created_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            updated_at: row
+                .take_opt("updated_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+        })
     }
 }
 
@@ -195,26 +242,56 @@ pub struct BenchmarkJob {
     pub updated_at: NaiveDateTime,
 }
 impl FromRow for BenchmarkJob {
-    fn from_row_opt(row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
         Ok(Self {
-            id: row.get("id").expect("id column is missing"),
-            team_id: row.get("team_id").expect("team_id column is missing"),
-            status: row.get("status").expect("status column is missing"),
+            id: row
+                .take_opt("id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            team_id: row
+                .take_opt("team_id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            status: row
+                .take_opt("status")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
             target_hostname: row
-                .get("target_hostname")
-                .expect("target_hostname column is missing"),
-            score_raw: row.get("score_raw").expect("score_raw column is missing"),
+                .take_opt("target_hostname")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            score_raw: row
+                .take_opt("score_raw")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
             score_deduction: row
-                .get("score_deduction")
-                .expect("score_deduction column is missing"),
-            reason: row.get("reason").expect("reason column is missing"),
-            passed: row.get("passed").expect("passed column is missing"),
-            started_at: row.get("started_at").expect("started_at column is missing"),
+                .take_opt("score_deduction")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            reason: row
+                .take_opt("reason")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            passed: row
+                .take_opt("passed")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            started_at: row
+                .take_opt("started_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
             finished_at: row
-                .get("finished_at")
-                .expect("finished_at column is missing"),
-            created_at: row.get("created_at").expect("created_at column is missing"),
-            updated_at: row.get("updated_at").expect("updated_at column is missing"),
+                .take_opt("finished_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            created_at: row
+                .take_opt("created_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            updated_at: row
+                .take_opt("updated_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
         })
     }
 }
