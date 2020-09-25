@@ -37,7 +37,7 @@ func init() {
 
 	flag.StringVar(&targetAddress, "target", benchrun.GetTargetAddress(), "ex: localhost:9292")
 	flag.StringVar(&profileFile, "profile", "", "ex: cpu.out")
-	flag.StringVar(&hostAdvertise, "host-advertise", "localhost", "hostname to advertise against target")
+	flag.StringVar(&hostAdvertise, "host-advertise", "local.t.isucon.dev", "hostname to advertise against target")
 	flag.IntVar(&pushServerPort, "push-service-port", 11001, "port number to listen a push service")
 	flag.StringVar(&tlsCertificatePath, "tls-cert", "../secrets/cert.pem", "path to TLS certificate for a push service")
 	flag.StringVar(&tlsKeyPath, "tls-key", "../secrets/key.pem", "path to private key of TLS certificate for a push service")
