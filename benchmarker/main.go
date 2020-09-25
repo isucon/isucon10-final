@@ -113,7 +113,7 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	fmt.Printf("(%d * %d) + %d - %d(err: %d, timeout: %d)\n", contestantScore, bonusMag, audienceScore, scoreDeduction, deduction, timeoutCount)
 	fmt.Printf("Pass: %v / score: %d (%d - %d)\n", passed, scoreTotal, scoreRaw, scoreDeduction)
 
-	reporter.Report(&isuxportalResources.BenchmarkResult{
+	err := reporter.Report(&isuxportalResources.BenchmarkResult{
 		SurveyResponse: &isuxportalResources.SurveyResponse{
 			Language: s.Language,
 		},
@@ -128,6 +128,9 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 			Reason: fmt.Sprintf("%+v", result.Score.Breakdown()),
 		},
 	})
+	if err != nil {
+		panic(err)
+	}
 
 	return passed
 }
