@@ -58,6 +58,54 @@ app.use(function(req, res, next) {
   });
 });
 
+const getCurrentContestant = function() {
+  let currentContestant = null
+  return async ({ lock = false } = {}) => {
+    const db = await connection;
+    const id = '1'/* session['contestant_id'] */;
+    if (!id) return null;
+    const result = db.query(
+      lock
+        ? "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1 FOR UPDATE"
+        : "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1",
+      id
+    )
+    currentContestant ??= result?.[0]
+    return currentContestant
+  }
+}()
+
+const getCurrentTeam = function() {
+  let currentTeam = null
+  return async ({ lock = false }) => {
+    const db = await connection;
+    const currentContestant = await getCurrentContestant()
+    if (!currentContestant) return null
+    const result = db.query(
+      lock
+        ? "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1 FOR UPDATE"
+        : "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1",
+      currentContestant['team_id']
+    )
+    currentTeam ??= result?.[0]
+    return currentTeam
+  }
+}()
+
+const loginRequired: (opts: { team?: boolean, lock?: boolean }) => express.RequestHandler = ({ team = true, lock = false }) => {
+  return (req, res, next) => {
+    if (!getCurrentContestant({ lock })) {
+      res.status(401).send("ログインが必要です")
+      return
+    }
+    if (!getCurrentTeam({ lock })) {
+      res.status(403).send("参加登録が必要です")
+      return
+    }
+    next()
+  }
+}
+
 app.post("/initialize", async (req, res, next) => {
   const db = await connection;
   const request = InitializeRequest.deserializeBinary(Buffer.from(req.body));
