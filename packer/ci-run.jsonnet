@@ -24,7 +24,7 @@ base {
     {
       type: 'shell',
       inline: [
-        'set +e'
+        'set +e',
         'sudo -u isucon -H /home/isucon/ci.sh {{user "lang"}}',
         'echo $? | sudo -u isucon tee -a /home/isucon/ci.log',
       ],
