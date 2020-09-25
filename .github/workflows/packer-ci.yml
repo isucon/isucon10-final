@@ -149,11 +149,11 @@ jobs:
 
       - run: mkdir -p output/ && echo '${{ needs.build.outputs.manifest }}' > output/manifest-amd64-ci.json
       - run: make test-ci
-      - run: tail -n25 packer/output/ci.log 
+      - run: tail -n25 output/ci.log 
       - uses: actions/upload-artifact@v2
         with:
           name: ci-${{ matrix.lang }}.log
           path: packer/output/ci.log
-      - run: tail -n1 packer/output/ci.log | grep '^0$'
+      - run: tail -n1 output/ci.log | grep '^0$'
 
 
