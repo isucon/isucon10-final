@@ -14,16 +14,6 @@ services:
     ports:
       - 9291:9291
 
-  ruby:
-    build: ./ruby
-    environment:
-      - MYSQL_HOSTNAME=mysql
-      - MYSQL_PORT=3306
-    volumes:
-      - .:/isucon10/isucon10-final/webapp
-    ports:
-      - 50051:50051
-
   mysql:
     image: mysql:5.7
     volumes:
