@@ -5,7 +5,9 @@ import crypto from 'crypto';
 import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
 import {Error as PbError} from "./proto/xsuportal/error_pb";
 import { Clarification } from "./proto/xsuportal/resources/clarification_pb";
-import { ListClarificationsResponse, GetClarificationResponse } from "./proto/xsuportal/services/admin/clarifications_pb";
+import { ListClarificationsResponse, GetClarificationResponse, CreateClarificationRequest, RespondClarificationRequest, RespondClarificationResponse } from "./proto/xsuportal/services/admin/clarifications_pb";
+import { Team } from "./proto/xsuportal/resources/team_pb";
+import { Contestant } from "./proto/xsuportal/resources/contestant_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -104,6 +106,77 @@ const loginRequired: (opts: { team?: boolean, lock?: boolean }) => (res: express
     }
     return true;
   }
+}
+
+function getContestantResource(contestant: any, detail: boolean = false) {
+  const contestantResource = new Contestant();
+  contestantResource.setId(contestant.id);
+  contestantResource.setTeamId(contestant.team_id);
+  contestantResource.setName(contestant.name);
+  contestantResource.setIsStudent(contestant.student);
+  contestantResource.setIsStaff(contestant.staff);
+  return contestantResource;
+}
+
+async function getTeamResource(team: any, detail: boolean = false, enableMembers: boolean = true, memberDetail: boolean = false) {
+  const db = await connection;
+  const teamResource = new Team();
+  
+  let members = null;
+  let leader = null;
+
+  let leader_pb = null;
+  let members_pb = null;
+  if (enableMembers) {
+    if (team.leader_id != null) {
+      [leader] = await db.query(
+        'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1',
+        [team.leader_id]
+      )
+    }
+    members = await db.query(
+      'SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`',
+      [team.id]
+    );
+    leader_pb = leader ? getContestantResource(leader, memberDetail) : null;
+    members_pb = members ? members.map((m: any) => getContestantResource(m, memberDetail)) : null;
+  }
+
+  teamResource.setId(team.id);
+  teamResource.setName(team.name);
+  teamResource.setLeaderId(team.leader_id);
+  teamResource.setMemberIdsList(members ? members.map((m: any) => m.id) : null);
+  teamResource.setWithdrawn(team.withdrawn);
+  if (detail) {
+    const teamDetail = new Team.TeamDetail();
+    teamDetail.setEmailAddress(team.email_address);
+    teamDetail.setInviteToken(team.invite_token);
+    teamResource.setDetail(teamDetail);
+  }
+  if (leader_pb) {
+    teamResource.setLeader(leader_pb);
+  }
+  teamResource.setMembersList(members_pb);
+  if (team.student) {
+    const studentStatus = new Team.StudentStatus();
+    studentStatus.setStatus(team.student != 0 && !!team.student);
+    teamResource.setStudent(studentStatus);
+  }
+  return teamResource;
+}
+
+
+async function getClarificationResource(clar: any, team: any) {
+  const clarificationResource = new Clarification();
+  clarificationResource.setId(clar.id);
+  clarificationResource.setTeamId(clar.team_id);
+  clarificationResource.setAnswer(clar.answer);
+  clarificationResource.setAnswered(!!clar.answered_at);
+  clarificationResource.setDisclosed(clar.disclosed);
+  clarificationResource.setCreatedAt(clar.created_at);
+  const t = await getTeamResource(team);
+  clarificationResource.setTeam(t);
+  return clarificationResource;
 }
 
 app.post("/initialize", async (req, res, next) => {
@@ -212,6 +285,57 @@ app.get("/api/admin/clarifications/:id", async (req, res, next) => {
   clarPb.setTeam(team);
   
   const response = new GetClarificationResponse();
+  response.setClarification(clarPb);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.put("/api/admin/clarifications/:id", async (req, res, next) => {
+  const db = await connection;
+  const loginSuccess = loginRequired({ team: false })(res);
+  if (!loginSuccess) {
+    return;
+  }
+  const request = RespondClarificationRequest.deserializeBinary(Buffer.from(req.body));
+  let clarPb = null;
+  await db.beginTransaction();
+  const [clarBefore] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1 FOR UPDATE', [req.params.id]);
+
+  if (clarBefore == null) {
+    await db.rollback();
+    haltPb(res, 404, '質問が見つかりません');
+    return; 
+  }
+  const wasAnswered = !!clarBefore.answered_at;
+  const wasDisclosed = clarBefore.disclosed;
+
+  await db.query(`UPDATE clarifications SET
+        disclosed = ?,
+        answer = ?,
+        updated_at = NOW(6),
+        answered_at = NOW(6)
+      WHERE id = ?
+      LIMIT 1`,
+    [request.getDisclose(),
+    request.getAnswer(),
+    req.params.id]
+  )
+
+  const [c] = await db.query(
+    'SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1',
+    [req.params.id],
+  );
+
+  const [team] = await db.query(
+    'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+    c.team_id,
+  );
+
+  // TODO Notifier
+  //notifier.notify_clarification_answered(clar, updated: was_answered && was_disclosed == clar[:disclosed])
+  clarPb = await getClarificationResource(c, team);
+  
+  const response = new RespondClarificationResponse();
   response.setClarification(clarPb);
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
