@@ -1,4 +1,5 @@
 include_cookbook 'xsuportal::files'
+include_cookbook 'xsuportal::frontend'
 include_cookbook 'langs::golang'
 include_cookbook 'protoc'
 
