@@ -52,7 +52,8 @@ $(EXE): Makefile go.mod $(GOFILES) $(GOPROTOFILES) $(PUBLIC_FILES_CHECKSUM)
 
 $(GOPROTOFILES): Makefile $(PROTOFILES)
 	@protoc --go_out=./proto --go-grpc_out=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative -I ../proto $(PROTOFILES)
-	@find ./proto -name '*.go' | xargs sed -i -e 's|webapp/golang|benchmarker|g'
+	@find ./proto -name '*.go' | xargs sed -i.bak -e 's|webapp/golang|benchmarker|g'
+	@find ./proto -name '*.go.bak' -delete
 
 $(PUBLIC_FILES_CHECKSUM): $(PUBLIC_FILES)
 	@mkdir -p $(shell dirname $@)
