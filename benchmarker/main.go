@@ -16,17 +16,19 @@ import (
 )
 
 var (
-	targetAddress string
-	profileFile   string
-	hostAdvertise string
-	useTLS        bool
+	targetAddress    string
+	profileFile      string
+	hostAdvertise    string
+	useTLS           bool
+	exitStatusOnFail bool
 )
 
 func init() {
 	flag.StringVar(&targetAddress, "target", benchrun.GetTargetAddress(), "ex: localhost:9292")
 	flag.StringVar(&profileFile, "profile", "", "ex: cpu.out")
 	flag.StringVar(&hostAdvertise, "host-advertise", "localhost", "hostname to advertise against target")
-	flag.BoolVar(&useTLS, "tls", false, "server is a tls (HTTPS & gRPC over h2)")
+	flag.BoolVar(&useTLS, "tls", false, "indicate target serves TLS (HTTPS & gRPC over h2)")
+	flag.BoolVar(&exitStatusOnFail, "exit-status", false, "set exit status non-zero when a benchmark result is failing")
 
 	flag.Parse()
 }
@@ -91,7 +93,7 @@ func main() {
 	scoreRaw := result.Score.Sum()
 	scoreDeduction := int64(0)
 	scoreTotal := scoreRaw - scoreDeduction
-	if scoreTotal < 0 {
+	if scoreTotal <= 0 {
 		scoreTotal = 0
 		passed = false
 	}
@@ -111,4 +113,8 @@ func main() {
 			Reason: fmt.Sprintf("%+v", result.Score.Breakdown()),
 		},
 	})
+
+	if !passed && exitStatusOnFail {
+		os.Exit(1)
+	}
 }
