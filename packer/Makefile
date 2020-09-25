@@ -78,7 +78,9 @@ tmp/ci-latest.json:
 
 build-ci: files-generated target/ci.json tmp/ci-latest.json
 	mkdir -p output/ tmp/ ~/tmp
-	packer build -var "revision=$(CI_REVISION_PREFIX)$(shell cat files-generated/REVISION)" -var "full_source_img=$(shell jq -r .url < tmp/ci-latest.json)" -var "full_source_checksum=$(shell jq -r .sum < tmp/ci-latest.json)" target/ci.json
+
+	packer build -var "revision=$(CI_REVISION_PREFIX)$(shell cat files-generated/REVISION)" -var "full_source_img=$(shell jq -r .url < tmp/ci-latest.json)" -var "full_source_checksum=$(shell jq -r .sum < tmp/ci-latest.json)" $(CI_PACKER_ARGS) target/ci.json
+
 
 CI_IMAGE_LAST_PATH ?= tmp/ci-image-last.txt
 .PHONY: test-ci
