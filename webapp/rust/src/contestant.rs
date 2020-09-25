@@ -1,7 +1,7 @@
 use crate::proto::services::contestant::{
     DashboardResponse, EnqueueBenchmarkJobRequest, EnqueueBenchmarkJobResponse,
     GetBenchmarkJobResponse, ListBenchmarkJobsResponse, ListClarificationsResponse,
-    ListNotificationsResponse, LoginRequest, LoginResponse, LogoutRequest, LogoutResponse,
+    ListNotificationsResponse, LoginRequest, LoginResponse, LogoutResponse,
     RequestClarificationRequest, RequestClarificationResponse, SignupRequest, SignupResponse,
     SubscribeNotificationRequest, SubscribeNotificationResponse, UnsubscribeNotificationRequest,
     UnsubscribeNotificationResponse,
