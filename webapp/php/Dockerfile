@@ -10,10 +10,16 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         libzip-dev \
+        libcurl4-openssl-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure zip && \
+RUN pecl install grpc
+
+RUN pecl install grpc && \
+    docker-php-ext-configure zip && \
     docker-php-ext-install zip && \
-    docker-php-ext-install pdo_mysql
+    docker-php-ext-install curl && \
+    docker-php-ext-install pdo_mysql && \
+    docker-php-ext-enable grpc
