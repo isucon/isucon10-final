@@ -14,7 +14,7 @@ sudo systemctl start xsuportal-api-${lang}.service
 sleep 5
 
 sudo systemd-run \
-  --same-dir \
+  --working-directory=/home/isucon/benchmarker \
   --pipe \
   --wait \
   --collect \
