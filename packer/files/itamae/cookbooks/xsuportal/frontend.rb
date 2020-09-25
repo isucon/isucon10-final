@@ -1,3 +1,5 @@
+include_cookbook 'langs::nodejs'
+
 execute 'cd ~isucon/webapp/frontend && /home/isucon/.x yarn' do
   user 'isucon'
 end
