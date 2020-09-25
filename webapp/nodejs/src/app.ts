@@ -116,7 +116,7 @@ app.post("/initialize", async (req, res, next) => {
   res.end(Buffer.from(response.serializeBinary()));
 });
 
-app.get("/api/admin/clarification", async (req, res, next) => {
+app.get("/api/admin/clarifications", async (req, res, next) => {
   const db = await connection;
   // TODO login required
   const clars = await db.query('SELECT * FROM `clarifications` ORDER BY `updated_at` DESC');
