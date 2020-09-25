@@ -16,9 +16,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pecl install grpc
+RUN pecl install protobuf
 
-RUN pecl install grpc && \
-    docker-php-ext-configure zip && \
+RUN docker-php-ext-configure zip && \
     docker-php-ext-install zip && \
     docker-php-ext-install curl && \
     docker-php-ext-install pdo_mysql && \
