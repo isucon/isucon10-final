@@ -114,6 +114,12 @@ HTTP リクエスト: `GET /api/contestant/notifications`
 
 仮想選手のブラウザは定期的に通知リスト（`GET /api/contestant/notifications`）をポーリングしています。仮想ポータルは、仮想選手のチームが実行した仮想負荷走行が完了していた場合、ベンチマーク完了通知（`xsuportal.proto.resources.Notification.BenchmarkJobMessage`）を通知リストに加えます。仮想選手はこの通知を受け取ったとき、仮想ベンチマークジョブリスト（`GET /api/contestant/benchmark_jobs`）にアクセスし、仮想負荷走行の結果を確認します。実ベンチマーカーはこれを「仮想負荷走行が 1 回成功した」としてカウントします。
 
+## 仮想オーディエンスの増加について
+
+仮想オーディエンスは、XSUCON を盛り上げるために欠かせない存在です。仮想オーディエンスは、仮想オーディエンス用ダッシュボード（`GET /api/audience/dashboard`）を一定間隔で閲覧し、大会の動向を見守っています。
+
+仮想オーディエンスは、仮想コンテスト開始直後は 0 人の状態から始まります。いずれかの仮想チームが仮想負荷走行を 1 回成功させるたびに、仮想オーディエンスは 1 人増えます。また、ダッシュボードの取得がエラーになった場合、1 回のエラーにつき仮想オーディエンスは 1 人減ります。
+
 ## 仮想ポータルの質問機能について
 
 仮想選手は、一定の頻度で質問を投稿（`POST /api/contestant/clarifications`）します。仮想主催者は質問が投稿されたら即時に回答を書き込みます（`PUT /api/admin/clarifications`）。仮想選手は、本人かあるいはチームメイトが質問を投稿したら、仮想主催者によって回答されるまで、以下の行動を停止します。
@@ -136,9 +142,20 @@ HTTP リクエスト: `GET /api/contestant/notifications`
 
 ## 仮想ポータルの通知機能について
 
----
+![image](https://user-images.githubusercontent.com/20384/94283593-2df8b600-ff8c-11ea-9637-a9502a4ba8b9.png)
 
-# メモ/したがき
+仮想ポータルの通知機能は、ブラウザの [Push API](https://www.w3.org/TR/push-api/) を用いて実装されています。上図の「通知を有効にする」ボタンを押すと、ブラウザの Push API を通じて通知を受け取ることができます。ブラウザで動作確認する際には、[お使いのブラウザが Push API に対応しているかどうかを確認してください（Safari は対応していません）](https://caniuse.com/push-api)。
+
+アプリケーションの参考実装（仮想ポータルおよび仮想ベンチマークサーバ）において、新着通知の取得は前述の通り `GET /api/contestant/notifications` へのポーリングで実装されています。
+
+参考実装のサーバサイドでは未実装ですが、クライアントサイドは Web Push service が実装されています。
+
+以下の 2 つの API は、参考実装ではステータスコード 503 を返すようになっています。これらを正しく実装し、200 を返すようにすることで、クライアントサイドはポーリングするのをやめ、Web Push によって通知を受け取るようになります。
+
+- Push 通知の購読: `POST /api/contestant/push_subscriptions`
+- Push 通知の購読解除: `DELETE /api/contestant/push_subscriptions`
+
+実ベンチマーカーもブラウザと同様に、Web Push service が実装されているため、上記 API が実装されていればポーリングをしなくなります。
 
 ## 実ベンチマーカーが実装する Web Push service について
 
@@ -177,13 +194,17 @@ push subscription 情報については、push resource の URL に加え、[W3C
 
   - user agent へは即座に送信され、user agent は即座に push message に対応した動作を取ります。
 
+---
+
+# メモ
+
 - 許可されている挙動変更
   - [x] Cache
   - [x] Conditional GET
   - [x] 仮想チーム参加制限
-  - [ ] WebPush
+  - [x] WebPush
 - [ ] 動作確認方法
-- [ ] audience が増える条件について
+- [x] audience が増える条件について
 - [x] 各コンポーネント説明
   - 実ベンチマーカー
   - 仮想ポータル（アプリケーション）
@@ -192,9 +213,8 @@ push subscription 情報については、push resource の URL に加え、[W3C
 - [ ] リカバリ方法
 - 仮想負荷走行の仕様
   - [x] 瞬時に完了する点
-  - [ ] 競技者がベンチ完了と Clar 返答を待つ点
-  - [ ] 通知を見て行動をするという点
-
-```
-map[admin-answer-clarification:29 admin-get-clarification:30 admin-get-clarifications:118 audience-get-dashboard:1853 create-team:10 enqueue-benchmark:144 finish-benchmark:141 get-clarification:291 get-dashboard:391 join-member:20 post-clarification:94]
-```
+  - [x] 競技者がベンチ完了と Clar 返答を待つ点
+  - [x] 通知を見て行動をするという点
+- デバッグ用スクリプトについて
+  - [ ] 動作確認用
+  - [ ] WebPush
