@@ -8,7 +8,7 @@ ipv4_address = IO.popen(%w(ip r get 8.8.8.8), 'r', &:read).match(/src\s+(.+?)\s/
 isuname = nil
 File.open('/etc/hosts', 'r') do |io|
   io.each do |l|
-    m = l.match?(/^#{Regexp.escape(ipv4_address)} (.+\.t\.isucon\.dev)/)
+    m = l.match(/^#{Regexp.escape(ipv4_address)} (.+\.t\.isucon\.dev)/)
     if m
       isuname = m[1]
     end
