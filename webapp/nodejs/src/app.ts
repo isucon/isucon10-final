@@ -92,17 +92,17 @@ const getCurrentTeam = function() {
   }
 }()
 
-const loginRequired: (opts: { team?: boolean, lock?: boolean }) => express.RequestHandler = ({ team = true, lock = false }) => {
-  return (req, res, next) => {
+const loginRequired: (opts: { team?: boolean, lock?: boolean }) => (res: express.Response) => boolean = ({ team = true, lock = false }) => {
+  return (res) => {
     if (!getCurrentContestant({ lock })) {
-      res.status(401).send("ログインが必要です")
-      return
+      haltPb(res, 401, "ログインが必要です")
+      return false;
     }
     if (!getCurrentTeam({ lock })) {
-      res.status(403).send("参加登録が必要です")
-      return
+      haltPb(res, 403, "参加登録が必要です")
+      return false;
     }
-    next()
+    return true;
   }
 }
 
@@ -166,7 +166,17 @@ app.post("/initialize", async (req, res, next) => {
 
 app.get("/api/admin/clarifications", async (req, res, next) => {
   const db = await connection;
-  // TODO login required
+  const loginSuccess = loginRequired({ team: false })(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  const contestatnt = await getCurrentContestant();
+  if (contestatnt?.staff == null) {
+    haltPb(res, 403, '管理者権限が必要です');
+    return;
+  }
+
   const clars = await db.query('SELECT * FROM `clarifications` ORDER BY `updated_at` DESC');
 
   const clarPbs = [];
@@ -185,8 +195,16 @@ app.get("/api/admin/clarifications", async (req, res, next) => {
 
 app.get("/api/admin/clarifications/:id", async (req, res, next) => {
   const db = await connection;
-  // TODO login required
-  const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1', [req.params.id]);
+  const loginSuccess = loginRequired({ team: false })(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  const contestatnt = await getCurrentContestant();
+  if (contestatnt?.staff == null) {
+    haltPb(res, 403, '管理者権限が必要です');
+    return;
+  }  const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1', [req.params.id]);
 
   
   const team = await db.query('SELECT * FROM `teams` WHERE `id` = ? LIMIT 1', [clar.team_id]);
