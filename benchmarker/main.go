@@ -49,6 +49,7 @@ func init() {
 
 func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish bool) bool {
 	passed := true
+	failReason := ""
 	breakdown := result.Score.Breakdown()
 
 	// 仮想競技者スコア
@@ -88,6 +89,7 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	for _, err := range result.Errors.All() {
 		if failure.IsCode(err, scenario.ErrCritical) {
 			passed = false
+			failReason = "Critical error"
 			continue
 		}
 
@@ -105,8 +107,9 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 		}
 	}
 
-	if deduction > 100 {
+	if passed && deduction > 100 {
 		passed = false
+		failReason = "Error count over 100"
 	}
 
 	scoreRaw := (contestantScore * bonusMag / 10) + audienceScore
@@ -114,11 +117,17 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	scoreTotal := scoreRaw - scoreDeduction
 	if scoreTotal <= 0 {
 		scoreTotal = 0
-		passed = false
+		if passed {
+			passed = false
+			failReason = "Score"
+		}
 	}
 
 	fmt.Printf("(%d * %d) + %d - %d(err: %d, timeout: %d)\n", contestantScore, bonusMag, audienceScore, scoreDeduction, deduction, timeoutCount)
 	fmt.Printf("Pass: %v / score: %d (%d - %d)\n", passed, scoreTotal, scoreRaw, scoreDeduction)
+	if !passed {
+		fmt.Printf("Fail reason: %s\n", failReason)
+	}
 
 	err := reporter.Report(&isuxportalResources.BenchmarkResult{
 		SurveyResponse: &isuxportalResources.SurveyResponse{
