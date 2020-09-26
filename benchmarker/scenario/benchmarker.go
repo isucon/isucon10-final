@@ -8,6 +8,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/golang/protobuf/ptypes"
+
 	"github.com/isucon/isucandar"
 	"github.com/isucon/isucandar/failure"
 	"github.com/isucon/isucon10-final/benchmarker/model"
@@ -15,6 +17,7 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 )
 
 var (
@@ -27,6 +30,7 @@ type Benchmarker struct {
 	Scenario *Scenario
 	GRPCHost string
 	GRPCPort int64
+	UseTLS   bool
 	TeamID   int64
 }
 
@@ -35,23 +39,23 @@ func (s *Scenario) NewBenchmarker(id int64) *Benchmarker {
 		Scenario: s,
 		GRPCHost: s.Contest.GRPCHost,
 		GRPCPort: s.Contest.GRPCPort,
+		UseTLS:   s.UseTLS,
 		TeamID:   id,
 	}
 }
 
 func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	defer func() {
-		err := recover()
-		if perr, ok := err.(error); ok {
-			step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
-		}
-	}()
+	// recover は邪悪な文明
+	// defer func() {
+	// 	err := recover()
+	// 	if perr, ok := err.(error); ok {
+	// 		step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
+	// 	}
+	// }()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	host := fmt.Sprintf("%s:%d", b.GRPCHost, b.GRPCPort)
-
-	conn, err := grpc.Dial(host, grpc.WithInsecure(), grpc.WithUserAgent("xsucon-benchmarker"))
+	conn, err := b.dial()
 	if err != nil {
 		return failure.NewError(ErrScenarioCretical, err)
 	}
@@ -63,12 +67,14 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 	retry := int32(10)
 	for ctx.Err() == nil {
 		func() {
-			defer func() {
-				err := recover()
-				if perr, ok := err.(error); ok {
-					step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
-				}
-			}()
+			// recover は邪悪な文明
+			// defer func() {
+			// 	err := recover()
+			// 	if perr, ok := err.(error); ok {
+			// 		step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
+			// 	}
+			// }()
+
 			job, err := b.receiveBenchmarkJob(ctx, queue)
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -103,8 +109,6 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				return
 			}
 
-			bResult := team.NewResult()
-
 			reporter, err := report.ReportBenchmarkResult(ctx)
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -114,7 +118,15 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				return
 			}
 
-			result := b.generateFirstReport(jobHandle)
+			bResult := team.GetQueuedBenckmarkResult()
+			// たまに状態更新し終わる前にここに来てしまうので取れるまで待つ
+			for bResult == nil {
+				<-time.After(10 * time.Millisecond)
+				bResult = team.GetQueuedBenckmarkResult()
+			}
+
+			bResult.Mark(time.Now().UTC())
+			result := b.generateFirstReport(jobHandle, bResult)
 			err = reporter.Send(result)
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -136,8 +148,13 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				step.AddError(failure.NewError(ErrBenchmarkerReport, fmt.Errorf("Invalid benchmark result nonce")))
 				return
 			}
+			bResult.SentFirstResult()
 
+			now := time.Now().UTC()
+			bResult.Mark(now)
 			result = b.generateLastReport(jobHandle, bResult)
+			b.Scenario.Mark(now)
+
 			err = reporter.Send(result)
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -146,6 +163,8 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				}
 				return
 			}
+			bResult.SentLastResult()
+
 			res, err = reporter.Recv()
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -178,7 +197,30 @@ func (b *Benchmarker) receiveBenchmarkJob(ctx context.Context, client bench.Benc
 	return client.ReceiveBenchmarkJob(ctx, req)
 }
 
-func (b *Benchmarker) generateFirstReport(job *bench.ReceiveBenchmarkJobResponse_JobHandle) *bench.ReportBenchmarkResultRequest {
+func (b *Benchmarker) generateCrashReport(job *bench.ReceiveBenchmarkJobResponse_JobHandle) *bench.ReportBenchmarkResultRequest {
+	return &bench.ReportBenchmarkResultRequest{
+		JobId:  job.GetJobId(),
+		Handle: job.GetHandle(),
+		Result: &resources.BenchmarkResult{
+			Passed:   false,
+			Finished: true,
+			Score:    0,
+			ScoreBreakdown: &resources.BenchmarkResult_ScoreBreakdown{
+				Raw:       0,
+				Deduction: 0,
+			},
+			Reason: "CRASH",
+		},
+		Nonce: rand.Int63n(300000),
+	}
+}
+
+func (b *Benchmarker) generateFirstReport(job *bench.ReceiveBenchmarkJobResponse_JobHandle, result *model.BenchmarkResult) *bench.ReportBenchmarkResultRequest {
+	markedAt, err := ptypes.TimestampProto(result.MarkedAt())
+	if err != nil {
+		panic(err)
+	}
+
 	return &bench.ReportBenchmarkResultRequest{
 		JobId:  job.GetJobId(),
 		Handle: job.GetHandle(),
@@ -190,13 +232,19 @@ func (b *Benchmarker) generateFirstReport(job *bench.ReceiveBenchmarkJobResponse
 				Raw:       0,
 				Deduction: 0,
 			},
-			Reason: "",
+			Reason:   "",
+			MarkedAt: markedAt,
 		},
 		Nonce: rand.Int63n(300000),
 	}
 }
 
 func (b *Benchmarker) generateLastReport(job *bench.ReceiveBenchmarkJobResponse_JobHandle, result *model.BenchmarkResult) *bench.ReportBenchmarkResultRequest {
+	markedAt, err := ptypes.TimestampProto(result.MarkedAt())
+	if err != nil {
+		panic(err)
+	}
+
 	return &bench.ReportBenchmarkResultRequest{
 		JobId:  job.GetJobId(),
 		Handle: job.GetHandle(),
@@ -208,8 +256,24 @@ func (b *Benchmarker) generateLastReport(job *bench.ReceiveBenchmarkJobResponse_
 				Raw:       result.ScoreRaw,
 				Deduction: result.ScoreDeduction,
 			},
-			Reason: "",
+			Reason:   "",
+			MarkedAt: markedAt,
 		},
 		Nonce: rand.Int63n(300000),
 	}
+}
+
+func (b *Benchmarker) dial() (*grpc.ClientConn, error) {
+	host := fmt.Sprintf("%s:%d", b.GRPCHost, b.GRPCPort)
+
+	tlsConfig := grpc.WithInsecure()
+	if b.UseTLS {
+		tlsConfig = grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, ""))
+	}
+	return grpc.Dial(
+		host,
+		tlsConfig,
+		grpc.WithAuthority(b.GRPCHost),
+		grpc.WithUserAgent("xsucon-benchmarker"),
+	)
 }

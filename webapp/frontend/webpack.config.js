@@ -3,7 +3,7 @@ const glob = require("glob");
 const WebpackAssetsManifest = require("webpack-assets-manifest");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 // const WorkboxPlugin = require('workbox-webpack-plugin');
 
@@ -24,7 +24,7 @@ module.exports = [
     output: {
       path: path.resolve(__dirname, "public/packs"),
       publicPath: "/packs/",
-      filename: isProd ? "[name]-[hash].js" : "[name].js",
+      filename: "[name].js",
     },
     optimization: {
       splitChunks: {
@@ -50,7 +50,12 @@ module.exports = [
       rules: [
         {
           test: /\.scss$/,
-          use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+          use: [
+            MiniCssExtractPlugin.loader,
+            "css-loader",
+            "resolve-url-loader",
+            "sass-loader",
+          ],
         },
         {
           test: /\.tsx?$/,
@@ -62,39 +67,45 @@ module.exports = [
             },
           },
         },
+        {
+          test: /\.(woff|woff2|eot|ttf|svg|otf)$/,
+          use: {
+            loader: "file-loader",
+          },
+        },
       ],
     },
     plugins: [
       new WebpackAssetsManifest({ publicPath: true }),
       new MiniCssExtractPlugin({
-        filename: isProd ? "[name]-[hash].css" : "[name].css",
+        filename: "[name].css",
       }),
       new HtmlWebpackPlugin({
-        template: './index.html',
-        filename: 'audience.html',
-        chunks: ['audience'],
-        hash: isProd,
+        template: "./index.html",
+        filename: "audience.html",
+        chunks: ["audience"],
+        hash: false,
         inject: false,
         alwaysWriteToDisk: true,
       }),
       new HtmlWebpackPlugin({
-        template: './index.html',
-        filename: 'admin.html',
-        chunks: ['admin'],
-        hash: isProd,
+        template: "./index.html",
+        filename: "admin.html",
+        chunks: ["admin"],
+        hash: false,
         inject: false,
         alwaysWriteToDisk: true,
       }),
       new HtmlWebpackPlugin({
-        template: './index.html',
-        filename: 'contestant.html',
-        chunks: ['contestant'],
-        hash: isProd,
+        template: "./index.html",
+        filename: "contestant.html",
+        chunks: ["contestant"],
+        hash: false,
         inject: false,
         alwaysWriteToDisk: true,
       }),
       new HtmlWebpackHarddiskPlugin({
-        outputPath: './public',
+        outputPath: "./public",
       }),
     ],
   },

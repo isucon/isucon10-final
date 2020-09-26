@@ -1,0 +1,13 @@
+[Unit]
+Description=set environment variable for xsuportal
+After=cloud-init.service network.target network-online.target
+Before=isuxportal-web-ruby.service isuxportal-web-rust.service isuxportal-web-php.service isuxportal-web-perl.service isuxportal-web-nodejs.service isuxportal-web-golang.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=isucon
+ExecStart=/home/isucon/.x /opt/isucon-env-ensure-benchmark-server
+
+[Install]
+WantedBy=multi-user.target

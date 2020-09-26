@@ -1,0 +1,33 @@
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    tonic_build::configure().build_client(false).compile(
+        &[
+            "../../proto/xsuportal/error.proto",
+            "../../proto/xsuportal/resources/benchmark_job.proto",
+            "../../proto/xsuportal/resources/benchmark_result.proto",
+            "../../proto/xsuportal/resources/clarification.proto",
+            "../../proto/xsuportal/resources/contest.proto",
+            "../../proto/xsuportal/resources/contestant.proto",
+            "../../proto/xsuportal/resources/leaderboard.proto",
+            "../../proto/xsuportal/resources/team.proto",
+            "../../proto/xsuportal/services/admin/clarifications.proto",
+            "../../proto/xsuportal/services/admin/initialize.proto",
+            "../../proto/xsuportal/services/audience/dashboard.proto",
+            "../../proto/xsuportal/services/audience/team_list.proto",
+            "../../proto/xsuportal/services/bench/receiving.proto",
+            "../../proto/xsuportal/services/bench/reporting.proto",
+            "../../proto/xsuportal/services/common/me.proto",
+            "../../proto/xsuportal/services/contestant/benchmark.proto",
+            "../../proto/xsuportal/services/contestant/clarifications.proto",
+            "../../proto/xsuportal/services/contestant/dashboard.proto",
+            "../../proto/xsuportal/services/contestant/login.proto",
+            "../../proto/xsuportal/services/contestant/logout.proto",
+            "../../proto/xsuportal/services/contestant/notifications.proto",
+            "../../proto/xsuportal/services/contestant/signup.proto",
+            "../../proto/xsuportal/services/registration/create_team.proto",
+            "../../proto/xsuportal/services/registration/join.proto",
+            "../../proto/xsuportal/services/registration/session.proto",
+        ],
+        &["../../proto"],
+    )?;
+    Ok(())
+}

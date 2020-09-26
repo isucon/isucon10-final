@@ -7,11 +7,18 @@ on:
 
 env:
   PACKER_CACHE_DIR: /home/octo/packer_cache
+  CI_LATEST_LAST_PATH: /home/octo/ci-latest-last.json
+  CI_IMAGE_LAST_PATH: /home/octo/ci-image-last.txt
 
 jobs:
   build:
     name: packer-build
-    runs-on: [self-hosted, linux, kvm]
+    runs-on: [self-hosted, linux, kvm-large]
+    env:
+      PACKER_QEMU_MEM: "30G"
+      PACKER_QEMU_SMP: "30"
+      PACKER_LOG: '1'
+      PACKER_LOG_PATH: '/home/octo/packer.log'
     defaults:
       run:
         working-directory: packer
@@ -34,6 +41,7 @@ jobs:
         run: 'mkdir -p ~/.ssh && touch ~/.ssh/id_ed25519.b && chmod 600 ~/.ssh/id_ed25519.b && echo "${{ secrets.GH_DEPLOY_KEY2 }}" > ~/.ssh/id_ed25519.b'
       - name: Configure SSH and Git for Deploy Key
         run: |
+          rm -f ~/.ssh/config || :
           echo "Host github-a" >> ~/.ssh/config
           echo "  HostName github.com" >> ~/.ssh/config
           echo "  IdentityFile ~/.ssh/id_ed25519.a" >> ~/.ssh/config
@@ -57,18 +65,24 @@ jobs:
 
       - uses: arduino/setup-protoc@v1
         with:
-          version: ${{ steps.protoc-ver.output.ver }}
+          version: ${{ steps.protoc-ver.outputs.ver }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: make clean
       - run: make clean-output
 
+      - name: Generate cache key
+        id: cache_key
+        run: echo "::set-output name=content::s3://isucon10-misc/actions_cache/final/packer_${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}.tar"
+
       - name: Use cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            packer/files-cached
-          key: ${{ hashFiles('packer/files/itamae/cookbooks/langs/versions.rb') }}
+        run: |
+          mkdir -p tmp/
+          test -n "${{ steps.cache_key.outputs.content }}"
+          if aws s3 cp ${{ steps.cache_key.outputs.content }} tmp/actions_cache.tar; then
+            tar xf tmp/actions_cache.tar
+            rm -f  tmp/actions_cache.tar
+          fi
 
       - name: Save TLS Certificate
         run: |
@@ -83,10 +97,16 @@ jobs:
       - run: make cache
       - run: make build-benchmarker
       - run: make upload
+      - run: make cache-contestant-local
       #- run: make build-full
       #- run: make upload-full
       - run: make prune
 
+      - name: Upload cache
+        run: |
+          mkdir -p tmp/
+          tar cf tmp/actions_cache.tar files-cached/
+          aws s3 cp tmp/actions_cache.tar ${{ steps.cache_key.outputs.content }}
       - uses: actions/upload-artifact@v2
         with:
           name: manifest-amd64-contestant.json

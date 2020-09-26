@@ -30,8 +30,13 @@ if qemu
   puts "  * Destination: s3://#{BUCKET}/#{qcow2_key}"
   checksum = manifest['qcow2_sha256'] = Digest::SHA256.file(qcow2_path)
   puts "  * Checksum: #{checksum}"
-  File.open(qcow2_path, 'rb') do |io|
-    s3.put_object(bucket: BUCKET, key: qcow2_key, body: io)
+  begin
+    File.open(qcow2_path, 'rb') do |io|
+      s3.put_object(bucket: BUCKET, key: qcow2_key, body: io)
+    end
+  rescue Aws::S3::Errors::EntityTooLarge => e
+    puts "  > using aws-cli (#{e.inspect})"
+    system("aws", "s3", "cp", "--quiet", qcow2_path, "s3://#{BUCKET}/#{qcow2_key}", exception: true)
   end
 end
 

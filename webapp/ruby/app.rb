@@ -2,7 +2,6 @@ require 'sinatra/base'
 require 'google/protobuf'
 require 'digest/sha2'
 require 'securerandom'
-require 'webpush'
 
 $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
 require 'routes'
@@ -153,7 +152,7 @@ module Xsuportal
         end
       end
 
-      def contestant_pb(contestant, detail: false)
+      def contestant_pb(contestant)
         Proto::Resources::Contestant.new(
           id: contestant[:id],
           team_id: contestant[:team_id],
@@ -163,7 +162,7 @@ module Xsuportal
         )
       end
 
-      def team_pb(team, detail: false, enable_members: true, member_detail: false)
+      def team_pb(team, detail: false, enable_members: true)
         members = nil
 
         leader_pb, members_pb = nil
@@ -178,9 +177,9 @@ module Xsuportal
             'SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`',
             team[:id],
           )
-          leader_pb = leader ? contestant_pb(leader, detail: member_detail) : nil
+          leader_pb = leader ? contestant_pb(leader) : nil
           members_pb = members ?
-            members.map { |_| contestant_pb(_, detail: member_detail) } : nil
+            members.map { |_| contestant_pb(_) } : nil
         end
 
         Proto::Resources::Team.new(
@@ -497,8 +496,8 @@ module Xsuportal
         language: 'ruby',
         # 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報
         benchmark_server: {
-          host: 'localhost',
-          port: 50051,
+          host: ENV.fetch('BENCHMARK_SERVER_HOST', 'localhost'),
+          port: ENV.fetch('BENCHMARK_SERVER_PORT', '50051').to_i,
         },
       )
     end
@@ -555,6 +554,8 @@ module Xsuportal
 
       req = decode_request_pb
 
+      clar = nil
+      updated = nil
       clar_pb = nil
       Database.transaction do
         clar_before = db.xquery(
@@ -593,10 +594,10 @@ module Xsuportal
           clar[:team_id],
         ).first
 
-        notifier.notify_clarification_answered(clar, updated: was_answered && was_disclosed == clar[:disclosed])
-
         clar_pb = clarification_pb(clar, team)
+        updated = was_answered && was_disclosed == clar[:disclosed]
       end
+      notifier.notify_clarification_answered(clar, updated: updated)
 
       encode_response_pb(
         clarification: clar_pb
@@ -604,11 +605,8 @@ module Xsuportal
     end
 
     get '/api/session' do
-      contest_status = current_contest_status
-      contest = contest_status[:contest]
-
       encode_response_pb(
-        contestant: current_contestant ? contestant_pb(current_contestant, detail: true) : nil,
+        contestant: current_contestant ? contestant_pb(current_contestant) : nil,
         team: current_team ? team_pb(current_team) : nil,
         contest: contest_pb,
         push_vapid_key: notifier.vapid_key&.public_key_for_push_header,
@@ -682,7 +680,7 @@ module Xsuportal
       end
 
       encode_response_pb(
-        team: team ? team_pb(team, detail: current_contestant&.fetch(:id) == current_team&.fetch(:leader_id), member_detail: true, enable_members: true) : nil,
+        team: team ? team_pb(team, detail: current_contestant&.fetch(:id) == current_team&.fetch(:leader_id), enable_members: true) : nil,
         status: status,
         member_invite_url: team ? "/registration?team_id=#{team[:id]}&invite_token=#{team[:invite_token]}" : nil,
         invite_token: team ? team[:invite_token] : nil,
@@ -977,7 +975,7 @@ module Xsuportal
       login_required
 
       unless notifier.vapid_key
-        halt_pb 403, 'WebPush は未対応です'
+        halt_pb 503, 'Web Push は未対応です'
       end
 
       req = decode_request_pb
@@ -997,7 +995,7 @@ module Xsuportal
       login_required
 
       unless notifier.vapid_key
-        halt_pb 403, 'WebPush は未対応です'
+        halt_pb 503, 'Web Push は未対応です'
       end
 
       req = decode_request_pb
@@ -1013,7 +1011,6 @@ module Xsuportal
 
     post '/api/signup' do
       req = decode_request_pb
-      result = nil
 
       begin
         db.xquery(
@@ -1051,8 +1048,6 @@ module Xsuportal
     end
 
     post '/api/logout' do
-      req = decode_request_pb
-
       if session[:contestant_id]
         session.delete(:contestant_id)
       else

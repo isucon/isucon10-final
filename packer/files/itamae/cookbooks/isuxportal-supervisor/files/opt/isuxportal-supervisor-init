@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+require 'open-uri'
+
+ENDPOINT_METADATA_URL = 'http://169.254.169.254/s/endpoint/398c4de5b9e71ef42b7dca9e4d0d1b661ae85c4996f8d73fb015e3ae6b08a978222784bf348baf6c8e7c96a6d1a2886d'
+TOKEN_METADATA_URL = 'http://169.254.169.254/s/token/398c4de5b9e71ef42b7dca9e4d0d1b661ae85c4996f8d73fb015e3ae6b08a978222784bf348baf6c8e7c96a6d1a2886d'
+TEAM_ID_METADATA_URL = 'http://169.254.169.254/teamid'
+
+team_id = URI.open(TEAM_ID_METADATA_URL, 'r', &:read).chomp
+token = URI.open(TOKEN_METADATA_URL, 'r', &:read).chomp
+endpoint = URI.open(ENDPOINT_METADATA_URL, 'r', &:read).chomp
+
+content = <<-EOF
+ISUXPORTAL_SUPERVISOR_ENDPOINT_URL=#{endpoint}
+ISUXPORTAL_SUPERVISOR_TOKEN=#{token}
+ISUXPORTAL_SUPERVISOR_TEAM_ID=#{team_id}
+
+EOF
+
+File.write "/run/isuxportal-supervisor.env", content
+File.write "/etc/isuxportal-supervisor.env-backup", content

@@ -32,6 +32,7 @@
   "dependencies": {
     "bulma": "^0.9.0",
     "dayjs": "^1.8.33",
+    "file-loader": "^6.1.0",
     "idb": "^5.0.6",
     "moment": "^2.27.0",
     "protobufjs": "~6.9.0",
@@ -40,6 +41,7 @@
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.4.0",
     "react-router-dom": "^5.2.0",
+    "resolve-url-loader": "^3.1.1",
     "uplot": "~1.1.2",
     "use-interval": "^1.2.1",
     "workbox-core": "^5.1.4",

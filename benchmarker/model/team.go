@@ -1,9 +1,13 @@
 package model
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"sync/atomic"
+	"time"
+
+	"github.com/isucon/isucandar/pubsub"
 
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"github.com/isucon/isucon10-final/benchmarker/random"
@@ -20,15 +24,14 @@ type Team struct {
 	Developer *Contestant
 	Operator  *Contestant
 
-	ScoreGenerator             *random.ScoreGenerator
-	scoreCounter               int64
-	LatestScore                int64
-	BestScore                  int64
-	FrozenLatestScore          int64
-	FroezenBestScore           int64
-	benchmarkResults           []*BenchmarkResult
-	latestEnqueuedBenchmarkJob *contestant.EnqueueBenchmarkJobResponse
-	EnqueueLock                chan struct{}
+	ScoreGenerator   *random.ScoreGenerator
+	scoreCounter     int64
+	benchmarkResults []*BenchmarkResult
+	EnqueueLock      chan struct{}
+
+	cmu            sync.RWMutex
+	clarifications []*Clarification
+	cPubSub        *pubsub.PubSub
 }
 
 func NewTeam() (*Team, error) {
@@ -67,15 +70,14 @@ func NewTeam() (*Team, error) {
 		Developer:    developer,
 		Operator:     operator,
 
-		ScoreGenerator:             random.NewScoreGenerator(),
-		scoreCounter:               0,
-		LatestScore:                0,
-		BestScore:                  0,
-		FrozenLatestScore:          0,
-		FroezenBestScore:           0,
-		benchmarkResults:           []*BenchmarkResult{},
-		latestEnqueuedBenchmarkJob: nil,
-		EnqueueLock:                make(chan struct{}, 1),
+		ScoreGenerator:   random.NewScoreGenerator(),
+		scoreCounter:     0,
+		benchmarkResults: []*BenchmarkResult{},
+		EnqueueLock:      make(chan struct{}, 1),
+
+		cmu:            sync.RWMutex{},
+		clarifications: []*Clarification{},
+		cPubSub:        pubsub.NewPubSub(),
 	}, nil
 }
 
@@ -87,49 +89,158 @@ func (t *Team) TargetHost() string {
 	return ""
 }
 
-func (t *Team) NewResult() *BenchmarkResult {
+func (t *Team) newResult(id int64) *BenchmarkResult {
 	atomic.AddInt64(&t.scoreCounter, 1)
 	score := t.ScoreGenerator.Generate(atomic.LoadInt64(&t.scoreCounter))
 
 	return &BenchmarkResult{
+		id:             id,
 		Passed:         !(score.FastFail || score.SlowFail),
 		Score:          score.Int(),
 		ScoreRaw:       score.BaseInt(),
 		ScoreDeduction: score.DeductionInt(),
+		markedAt:       time.Unix(0, 0).UTC(),
 	}
 }
 
-func (t *Team) AddResult(result *BenchmarkResult) {
-	t.mu.Lock()
-	defer t.mu.Unlock()
+func (t *Team) GetQueuedBenckmarkResult() *BenchmarkResult {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
 
-	t.benchmarkResults = append(t.benchmarkResults, result)
-	t.FrozenLatestScore = result.Score
-	if t.FroezenBestScore < result.Score {
-		t.FroezenBestScore = result.Score
+	for _, b := range t.benchmarkResults {
+		if !b.IsSentFirstResult() {
+			return b
+		}
 	}
+
+	return nil
 }
 
-func (t *Team) SetScore(result *BenchmarkResult) {
-	t.mu.Lock()
-	defer t.mu.Unlock()
+func (t *Team) GetWaitingBenchmarkResult() *BenchmarkResult {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
 
-	t.LatestScore = result.Score
-	if t.BestScore < result.Score {
-		t.BestScore = result.Score
+	for _, b := range t.benchmarkResults {
+		if !b.IsSeen() {
+			return b
+		}
 	}
+
+	return nil
+}
+
+func (t *Team) BenchmarkResults(at time.Time) []*BenchmarkResult {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+
+	results := []*BenchmarkResult{}
+	for _, b := range t.benchmarkResults {
+		if b.In(at) {
+			results = append(results, b)
+		}
+	}
+	return results
+}
+
+func (t *Team) AllBenchmarkResults() []*BenchmarkResult {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+
+	results := []*BenchmarkResult{}
+	for _, b := range t.benchmarkResults {
+		results = append(results, b)
+	}
+	return results
+}
+
+func (t *Team) LatestScore(at time.Time) (int64, time.Time) {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+
+	latest := int64(0)
+	marked := time.Time{}
+	for _, b := range t.benchmarkResults {
+		if b.In(at) {
+			if b.Passed {
+				latest = b.Score
+			} else {
+				latest = 0
+			}
+			marked = b.MarkedAt()
+		}
+	}
+	return latest, marked
+}
+
+func (t *Team) BestScore(at time.Time) (int64, time.Time) {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+
+	best := int64(0)
+	marked := time.Time{}
+	for _, b := range t.benchmarkResults {
+		if b.Passed && b.Score > best && b.In(at) {
+			best = b.Score
+			marked = b.MarkedAt()
+		}
+	}
+	return best, marked
 }
 
 func (t *Team) Enqueued(job *contestant.EnqueueBenchmarkJobResponse) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	t.latestEnqueuedBenchmarkJob = job
+	result := t.newResult(job.GetJob().GetId())
+	t.benchmarkResults = append(t.benchmarkResults, result)
 }
 
-func (t *Team) GetLatestEnqueuedBenchmarkJob() *contestant.EnqueueBenchmarkJobResponse {
-	t.mu.RLock()
-	defer t.mu.RUnlock()
+func (t *Team) AddClar(clar *Clarification) {
+	t.cmu.Lock()
+	defer t.cmu.Unlock()
 
-	return t.latestEnqueuedBenchmarkJob
+	t.clarifications = append(t.clarifications, clar)
+
+	t.cPubSub.Publish(nil)
+}
+
+func (t *Team) Clarifications() []*Clarification {
+	t.cmu.RLock()
+	defer t.cmu.RUnlock()
+
+	clars := make([]*Clarification, len(t.clarifications))
+	copy(clars, t.clarifications[:])
+
+	return clars
+}
+
+func (t *Team) HasUnresolvedClar() bool {
+	t.cmu.RLock()
+	defer t.cmu.RUnlock()
+
+	for _, clar := range t.clarifications {
+		if !clar.IsAnswered() {
+			return true
+		}
+	}
+	return false
+}
+
+func (t *Team) WaitAllClarResolve(ctx context.Context) <-chan struct{} {
+	ch := make(chan struct{})
+
+	if t.HasUnresolvedClar() {
+		ctx, cancel := context.WithCancel(ctx)
+
+		t.cPubSub.Subscribe(ctx, func(_ interface{}) {
+			if !t.HasUnresolvedClar() {
+				cancel()
+				close(ch)
+			}
+		})
+	} else {
+		close(ch)
+	}
+
+	return ch
 }

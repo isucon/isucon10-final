@@ -1,0 +1,4 @@
+vapid_*
+sub_*.json
+https_*.pem
+certs/

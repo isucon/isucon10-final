@@ -5,14 +5,33 @@ on:
       - master
   pull_request: {}
 
+env: 
+  CI_PACKER_CACHE_HOST: pakache.t.isucon.dev
+  PACKER_CACHE_DIR: /home/octo/packer_cache
+  PACKER_QEMU_MEM: "2G"
+  PACKER_QEMU_SMP: "2"
+
 jobs:
   build:
     name: build
-    runs-on: ubuntu-20.04
+    runs-on: [self-hosted, linux, kvm]
+    env:
+      PACKER_QEMU_MEM: "4G"
+      PACKER_QEMU_SMP: "8"
+      PACKER_LOG: '1'
+      PACKER_LOG_PATH: '/home/octo/packer.log'
+    outputs:
+      manifest: ${{ steps.manifest.outputs.content }}
     defaults:
       run:
         working-directory: packer
     steps:
+      - name: Cancel Previous Runs (for pull requests)
+        if: "${{ github.event_name == 'pull_request' }}"
+        uses: styfle/cancel-workflow-action@0.5.0
+        with:
+          access_token: ${{ github.token }}
+
       - uses: actions/checkout@v2
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -24,13 +43,13 @@ jobs:
           role-session-name: isucon10-final-${{ github.run_id }}-${{ github.run_number }}
           aws-region: ap-northeast-1
 
-      - name: install packer
-        run: |
-          curl -Ssfo ~/packer.zip 'https://releases.hashicorp.com/packer/1.6.2/packer_1.6.2_linux_amd64.zip'
-          ( cd ~/; echo 'ae2393171325ad49488e1373a817c62d66b57cc6acc220329e1331c422b5dc3b288bd05dc60f3c592fe6444717640a2c packer.zip' | sha384sum -c --strict )
-          ( cd ~/; unzip packer.zip; sudo install -Dm755 ~/packer /usr/local/bin/packer )
+          #- name: install packer
+          #  run: |
+          #    curl -Ssfo ~/packer.zip 'https://releases.hashicorp.com/packer/1.6.2/packer_1.6.2_linux_amd64.zip'
+          #    ( cd ~/; echo 'ae2393171325ad49488e1373a817c62d66b57cc6acc220329e1331c422b5dc3b288bd05dc60f3c592fe6444717640a2c packer.zip' | sha384sum -c --strict )
+          #    ( cd ~/; unzip packer.zip; sudo install -Dm755 ~/packer /usr/local/bin/packer )
 
-      - run: sudo apt-get install -y --no-install-recommends jq jsonnet make
+          #- run: sudo apt-get install -y --no-install-recommends jq jsonnet make
 
       # for isucon/isucandar, isucon10-portal
       - name: Save deploy key (A)
@@ -39,6 +58,7 @@ jobs:
         run: 'mkdir -p ~/.ssh && touch ~/.ssh/id_ed25519.b && chmod 600 ~/.ssh/id_ed25519.b && echo "${{ secrets.GH_DEPLOY_KEY2 }}" > ~/.ssh/id_ed25519.b'
       - name: Configure SSH and Git for Deploy Key
         run: |
+          rm -f ~/.ssh/config || :
           echo "Host github-a" >> ~/.ssh/config
           echo "  HostName github.com" >> ~/.ssh/config
           echo "  IdentityFile ~/.ssh/id_ed25519.a" >> ~/.ssh/config
@@ -67,6 +87,7 @@ jobs:
 
       - run: make clean
       - run: make clean-output
+      - run: 'rm -rf $PACKER_CACHE_DIR'
 
       - name: Save TLS Certificate
         run: |
@@ -75,15 +96,19 @@ jobs:
 
       ################
 
+      - name: Disable EC2 build for pull request
+        if: "${{ github.event_name == 'pull_request' }}"
+        run: echo "::set-env name=CI_PACKER_ARGS::-only qemu"
+
       - run: make generate
       #- run: make build
       - run: make build-ci
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.7'
-      - run: gem i aws-sdk-s3 --no-doc
-      - run: gem i aws-sdk-ec2 --no-doc
+      #- uses: ruby/setup-ruby@v1
+      #  with:
+      #    ruby-version: '2.7'
+      #- run: gem i aws-sdk-s3 --no-doc
+      #- run: gem i aws-sdk-ec2 --no-doc
 
       - run: make upload-ci
       - run: make prune
@@ -92,4 +117,43 @@ jobs:
         with:
           name: manifest-amd64-ci.json
           path: packer/output/manifest-amd64-ci.json
+      - name: 'Save manifest to output'
+        id: manifest
+        run: 'echo "::set-output name=content::$(jq -c . < output/manifest-amd64-ci.json)"'
+
+  benchmark:
+    name: benchmark
+    runs-on: [self-hosted, linux, kvm]
+    strategy:
+      matrix:
+        lang:
+          - ruby
+          - rust
+    needs: build
+    env:
+      CI_LANG: ${{ matrix.lang }}
+    defaults:
+      run:
+        working-directory: packer
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 14400
+          role-session-name: isucon10-final-${{ github.run_id }}-${{ github.run_number }}
+          aws-region: ap-northeast-1
+
+      - run: mkdir -p output/ && echo '${{ needs.build.outputs.manifest }}' > output/manifest-amd64-ci.json
+      - run: make test-ci
+      - run: tail -n25 output/ci.log 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ci-${{ matrix.lang }}.log
+          path: packer/output/ci.log
+      - run: tail -n1 output/ci.log | grep '^0$'
+
 

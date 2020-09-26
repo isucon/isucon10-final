@@ -11,14 +11,29 @@ import (
 	"github.com/isucon/isucon10-final/webapp/golang/proto/xsuportal/services/bench"
 )
 
-type BenchmarkService struct {
+type benchmarkQueueService struct {
 }
 
-func (b *BenchmarkService) ReceiveBenchmarkJob(ctx context.Context, req *bench.ReceiveBenchmarkJobRequest) (*bench.ReceiveBenchmarkJobResponse, error) {
+func (b *benchmarkQueueService) Svc() *bench.BenchmarkQueueService {
+	return &bench.BenchmarkQueueService{
+		ReceiveBenchmarkJob: b.ReceiveBenchmarkJob,
+	}
+}
+
+func (b *benchmarkQueueService) ReceiveBenchmarkJob(ctx context.Context, req *bench.ReceiveBenchmarkJobRequest) (*bench.ReceiveBenchmarkJobResponse, error) {
 	return nil, nil
 }
 
-func (b *BenchmarkService) ReportBenchmarkResult(srv bench.BenchmarkReport_ReportBenchmarkResultServer) error {
+type benchmarkReportService struct {
+}
+
+func (b *benchmarkReportService) Svc() *bench.BenchmarkReportService {
+	return &bench.BenchmarkReportService{
+		ReportBenchmarkResult: b.ReportBenchmarkResult,
+	}
+}
+
+func (b *benchmarkReportService) ReportBenchmarkResult(srv bench.BenchmarkReport_ReportBenchmarkResultServer) error {
 	for {
 		req, err := srv.Recv()
 		if err != nil {
@@ -40,10 +55,12 @@ func main() {
 	}
 
 	server := grpc.NewServer()
-	service := &BenchmarkService{}
 
-	bench.RegisterBenchmarkQueueServer(server, service)
-	bench.RegisterBenchmarkReportServer(server, service)
+	queue := &benchmarkQueueService{}
+	report := &benchmarkReportService{}
+
+	bench.RegisterBenchmarkQueueService(server, queue.Svc())
+	bench.RegisterBenchmarkReportService(server, report.Svc())
 
 	if err := server.Serve(listener); err != nil {
 		panic(err)

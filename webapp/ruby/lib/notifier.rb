@@ -94,7 +94,7 @@ module Xsuportal
             auth: sub[:auth],
             vapid: vapid,
           )
-        rescue Webpush::ExpiredSubscription, Webpush::InvalidSubscription => e
+        rescue Webpush::ExpiredSubscription, Webpush::InvalidSubscription
           db.xquery(
             'DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1',
             sub[:id],

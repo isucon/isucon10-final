@@ -1,12 +1,14 @@
 node.reverse_merge!(
   benchmarker: {
     enable: false,
+    slice: 'benchmarker.slice',
   },
   xsuportal: {
     enable: nil,
     disable_default: true,
     slice: 'contestant.slice',
     ci_cache: true,
+    ignore_failed_build: true,
   },
   envoy: {
     slice: 'contestant.slice',
@@ -33,6 +35,11 @@ end
 ci_cache 'rust' do
   directories %w(target)
 end
+
+ci_cache 'frontend' do
+  directories %w(node_modules)
+end
+
 
 execute 'rm -rf ~isucon/proto ~isucon/benchmarker ~isucon/webapp'
 
@@ -74,4 +81,12 @@ remote_file '/etc/systemd/system/mysql.service.d/slice.conf' do
   group 'root'
   mode  '0644'
   notifies :run, 'execute[systemctl daemon-reload]'
+end
+
+######
+
+remote_file '/home/isucon/ci.sh' do
+  owner 'root'
+  group 'root'
+  mode  '0755'
 end

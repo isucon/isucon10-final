@@ -1,0 +1,13 @@
+[Unit]
+Description=isuxportal-supervisor-init
+After=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/home/isucon/.x ruby /opt/isuxportal-supervisor-init
+TimeoutStartSec=10s
+
+[Install]
+WantedBy=multi-user.target
+
