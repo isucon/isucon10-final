@@ -290,6 +290,19 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 	}
 	// TODO: 並列数は要検討
 	w.SetParallelism(20)
+	go func(ctx context.Context, w *worker.Worker) {
+		for {
+			timer := time.After(1 * time.Second)
+
+			w.AddParallelism(10)
+
+			select {
+			case <-ctx.Done():
+				return
+			case <-timer:
+			}
+		}
+	}(signupContext, w)
 
 	w.Process(signupContext)
 
