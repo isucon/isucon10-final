@@ -86,6 +86,11 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	timeoutCount := int64(0)
 
 	for _, err := range result.Errors.All() {
+		if failure.IsCode(err, scenario.ErrCritical) {
+			passed = false
+			continue
+		}
+
 		if failure.IsCode(err, isucandar.ErrLoad) {
 			if failure.IsCode(err, scenario.ErrInvalidResponse) ||
 				failure.IsCode(err, scenario.ErrChecksum) ||
@@ -177,9 +182,13 @@ func main() {
 		panic(err)
 	}
 
-	b.OnError(func(err error, _ *isucandar.BenchmarkStep) {
+	b.OnError(func(err error, step *isucandar.BenchmarkStep) {
 		if failure.IsCode(err, failure.TimeoutErrorCode) {
 			return
+		}
+
+		if failure.IsCode(err, scenario.ErrCritical) {
+			step.Cancel()
 		}
 
 		fmt.Printf("%v\n", err)

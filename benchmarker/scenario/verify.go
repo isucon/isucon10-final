@@ -22,6 +22,7 @@ import (
 )
 
 var (
+	ErrCritical        failure.StringCode = "critical"
 	ErrInvalidResponse failure.StringCode = "invalid-response"
 	ErrChecksum        failure.StringCode = "checksum"
 
@@ -185,7 +186,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		team := item.GetTeam()
 		cTeam := contest.GetTeam(team.GetId())
 		if cTeam == nil {
-			return errorInvalidResponse("登録されていないチームがリーダーボード上に存在します: %d", team.GetId())
+			return failure.NewError(ErrCritical, errorInvalidResponse("登録されていないチームがリーダーボード上に存在します: ID %d", team.GetId()))
 		}
 
 		if team.GetStudent().GetStatus() != cTeam.IsStudent {
