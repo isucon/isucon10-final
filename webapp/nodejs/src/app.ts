@@ -412,7 +412,9 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
   // TODO Notifier
   //notifier.notify_clarification_answered(clar, updated: was_answered && was_disclosed == clar[:disclosed])
   clarPb = await getClarificationResource(c, team);
-  
+
+  await db.commit();
+
   const response = new RespondClarificationResponse();
   response.setClarification(clarPb);
   res.contentType(`application/vnd.google.protobuf`);
