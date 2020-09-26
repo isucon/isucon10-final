@@ -1073,11 +1073,13 @@ func initialize(e echo.Context) error {
 		}
 	}
 
+	host := util.GetEnv("BENCHMARKER_SERVER_HOST", "localhost")
+	port, _ := strconv.Atoi(util.GetEnv("BENCHMARKER_SERVER_PORT", "50051"))
 	res := &admin.InitializeResponse{
 		Language: "go",
 		BenchmarkServer: &admin.InitializeResponse_BenchmarkServer{
-			Host: "localhost",
-			Port: 50051,
+			Host: host,
+			Port: int64(port),
 		},
 	}
 	return writeProto(e, http.StatusOK, res)
