@@ -12,6 +12,8 @@ import { Contestant } from "./proto/xsuportal/resources/contestant_pb";
 import { Contest } from "./proto/xsuportal/resources/contest_pb";
 import { GetCurrentSessionResponse } from "./proto/xsuportal/services/common/me_pb";
 import { fstat } from "fs";
+import { BenchmarkJob } from "./proto/xsuportal/resources/benchmark_job_pb";
+import { EnqueueBenchmarkJobResponse } from "./proto/xsuportal/services/admin/benchmark_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -83,7 +85,7 @@ const getCurrentContestant = function() {
 
 const getCurrentTeam = function() {
   let currentTeam = null
-  return async ({ lock = false }) => {
+  return async ({ lock = false } = {}) => {
     const db = await connection;
     const currentContestant = await getCurrentContestant()
     if (!currentContestant) return null
@@ -98,9 +100,7 @@ const getCurrentTeam = function() {
   }
 }()
 
-const getCurrentContest = function() {
-  let currentContest = null;
-  return async () => {
+const getCurrentContestStatus = async () => {
     const db = await connection;
     const [contest] = await db.query(`
       SELECT
@@ -116,13 +116,13 @@ const getCurrentContest = function() {
         IF(contest_starts_at <= NOW(6) AND NOW(6) < contest_freezes_at, 1, 0) AS frozen
       FROM contest_config
     `);
-    
+
     let contestStatusStr = contest.status;
     if (process.env['APP_ENV'] != "production" && fs.existsSync(DEBUG_CONTEST_STATUS_FILE_PATH)) {
       contestStatusStr = fs.readFileSync(DEBUG_CONTEST_STATUS_FILE_PATH).toString();
     }
 
-    let status = null;
+    let status: Contest.Status;
     switch(contestStatusStr) {
       case "standby":
         status = Contest.Status.STANDBY;
@@ -139,7 +139,7 @@ const getCurrentContest = function() {
       default:
         throw new Error(`Unexpected contest status: ${contestStatusStr}`);
     }
-    
+
     return ({
       contest: {
         registration_open_at: contest.registration_open_at,
@@ -151,8 +151,7 @@ const getCurrentContest = function() {
       },
       current_time: contest.current_time,
     });
-  };
-}();
+};
 
 const loginRequired: (res: express.Response, opts?: { team?: boolean, lock?: boolean }) => boolean = (res, { team = true, lock = false } = {}) => {
   if (!getCurrentContestant({ lock })) {
@@ -161,6 +160,15 @@ const loginRequired: (res: express.Response, opts?: { team?: boolean, lock?: boo
   }
   if (!getCurrentTeam({ lock })) {
     haltPb(res, 403, "参加登録が必要です")
+    return false;
+  }
+  return true;
+}
+
+async function contestStatusRestricted(res: express.Response, statuses: Array<Contest.Status>, msg: string): Promise<boolean> {
+  const currentContest = await getCurrentContestStatus();
+  if (statuses.includes(currentContest.contest.status)) {
+    haltPb(res, 403, msg)
     return false;
   }
   return true;
@@ -418,7 +426,7 @@ app.get("/api/session", async (req, res, next) => {
   const team = await getCurrentTeam({ lock: false });
   const teamResource = await getTeamResource(team);
   response.setTeam(teamResource);
-  const contest = await getCurrentContest();
+  const contest = await getCurrentContestStatus();
   const contestResource = getContestResource(contest.contest);
   response.setContest(contestResource);
   // TODO set notifier
@@ -427,6 +435,40 @@ app.get("/api/session", async (req, res, next) => {
   res.end(Buffer.from(response.serializeBinary()));
 });
 
+
+app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
+  const db = await connection;
+  const request = InitializeRequest.deserializeBinary(Buffer.from(req.body));
+
+  await db.beginTransaction();
+  const loginSuccess = loginRequired(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  const passRestricted = await contestStatusRestricted(res, [Contest.Status.STARTED], "競技時間外はベンチマークを実行できません");
+  if (!passRestricted) {
+    return;
+  }
+
+  const currentTeam = await getCurrentTeam();
+  const [jobCount] = await db.query(
+    'SELECT COUNT(*) AS `cnt` FROM `benchmark_jobs` WHERE `team_id` = ? AND `finished_at` IS NULL',
+    currentTeam.id
+  );
+  await db.query(
+    'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
+    [currentTeam.id, req.hostname, BenchmarkJob.Status.PENDING]
+  )
+
+  const [job] = await db.query('SELECT * FROM `benchmark_jobs` WHERE `id` = (SELECT LAST_INSERT_ID()) LIMIT 1')
+  await db.commit();
+
+  const response = new EnqueueBenchmarkJobResponse();
+  response.setJob(job);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
 
 app.listen(process.env.PORT ?? 9292, () => {
   console.log("Listening on 9292");
