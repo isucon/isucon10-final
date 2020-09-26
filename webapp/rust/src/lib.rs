@@ -305,6 +305,7 @@ pub mod leaderboard;
 pub mod notifier;
 pub mod proto;
 pub mod registration;
+mod webpush;
 
 pub(crate) fn build_team_pb<Q>(
     conn: &mut Q,
