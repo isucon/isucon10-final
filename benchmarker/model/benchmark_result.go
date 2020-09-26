@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -17,6 +18,7 @@ type BenchmarkResult struct {
 	mu              sync.RWMutex
 	sentFirstResult uint32
 	sentLastResult  uint32
+	seen            uint32
 	markedAt        time.Time
 }
 
@@ -36,15 +38,20 @@ func (b *BenchmarkResult) IsSentLastResult() bool {
 	return atomic.LoadUint32(&b.sentLastResult) != 0
 }
 
+func (b *BenchmarkResult) IsSeen() bool {
+	return atomic.LoadUint32(&b.seen) != 0
+}
+
 func (b *BenchmarkResult) SentFirstResult() {
 	atomic.StoreUint32(&b.sentFirstResult, 1)
 }
 
 func (b *BenchmarkResult) SentLastResult() {
-	b.mu.Lock()
-	defer b.mu.Unlock()
-
 	atomic.StoreUint32(&b.sentLastResult, 1)
+}
+
+func (b *BenchmarkResult) Seen() {
+	atomic.StoreUint32(&b.seen, 1)
 }
 
 func (b *BenchmarkResult) MarkedAt() time.Time {
@@ -65,4 +72,12 @@ func (b *BenchmarkResult) In(at time.Time) bool {
 	b.mu.RLock()
 	defer b.mu.RUnlock()
 	return b.IsSentLastResult() && (at.After(b.markedAt) || at.Equal(b.markedAt))
+}
+
+func (b *BenchmarkResult) String() string {
+	return fmt.Sprintf("<Passed: %v / %d (%d - %d) sent(%v,%v) at %s>", b.Passed, b.Score, b.ScoreRaw, b.ScoreDeduction, b.IsSentFirstResult(), b.IsSentLastResult(), b.MarkedAt())
+}
+
+func (b *BenchmarkResult) GoString() string {
+	return fmt.Sprintf("<Passed: %v / %d (%d - %d) sent(%v,%v) at %s>", b.Passed, b.Score, b.ScoreRaw, b.ScoreDeduction, b.IsSentFirstResult(), b.IsSentLastResult(), b.MarkedAt())
 }

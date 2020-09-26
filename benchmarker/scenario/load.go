@@ -784,6 +784,11 @@ func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar
 }
 
 func (s *Scenario) loadBenchmarkDetails(ctx context.Context, step *isucandar.BenchmarkStep, team *model.Team, job *resources.Notification_BenchmarkJobMessage) {
+	result := team.GetWaitingBenchmarkResult()
+	if result == nil {
+		return
+	}
+
 	defer func() { <-team.EnqueueLock }()
 
 	_, err := GetBenchmarkJobAction(ctx, job.GetBenchmarkJobId(), team.Developer)
@@ -792,7 +797,7 @@ func (s *Scenario) loadBenchmarkDetails(ctx context.Context, step *isucandar.Ben
 		return
 	}
 
-	team.Enqueued(nil)
+	result.Seen()
 	step.AddScore("finish-benchmark")
 	s.AddAudience(1)
 }

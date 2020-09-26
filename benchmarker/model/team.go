@@ -116,6 +116,19 @@ func (t *Team) GetQueuedBenckmarkResult() *BenchmarkResult {
 	return nil
 }
 
+func (t *Team) GetWaitingBenchmarkResult() *BenchmarkResult {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+
+	for _, b := range t.benchmarkResults {
+		if !b.IsSeen() {
+			return b
+		}
+	}
+
+	return nil
+}
+
 func (t *Team) BenchmarkResults(at time.Time) []*BenchmarkResult {
 	t.mu.RLock()
 	defer t.mu.RUnlock()
@@ -125,6 +138,17 @@ func (t *Team) BenchmarkResults(at time.Time) []*BenchmarkResult {
 		if b.In(at) {
 			results = append(results, b)
 		}
+	}
+	return results
+}
+
+func (t *Team) AllBenchmarkResults() []*BenchmarkResult {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+
+	results := []*BenchmarkResult{}
+	for _, b := range t.benchmarkResults {
+		results = append(results, b)
 	}
 	return results
 }

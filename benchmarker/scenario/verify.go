@@ -172,14 +172,14 @@ func verifyResources(page string, res *http.Response, resources agent.Resources)
 }
 
 func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard, hres *http.Response, contest *model.Contest, vTeam *model.Team) error {
-	at := requestedAt
+	at := requestedAt.UTC()
 	// TODO: 時間詐欺が出来るので直す
 	if t, err := http.ParseTime(hres.Header.Get("Last-Modified")); err != nil && hres.Header.Get("Last-Modified") != "" {
 		at = t
 	}
 
 	prevLatestScore := int64(math.MaxInt64)
-	prevLatestMarkedAt := time.Now().Add(1 * time.Hour)
+	prevLatestMarkedAt := time.Now().UTC().Add(1 * time.Hour)
 	zero := time.Unix(0, 0)
 	for _, item := range leaderboard.GetTeams() {
 		team := item.GetTeam()
@@ -193,25 +193,30 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		}
 
 		targetAt := at
-		if vTeam == nil || (cTeam.ID != vTeam.ID && (at.After(contest.ContestFreezesAt) || at.Equal(contest.ContestFreezesAt))) {
-			targetAt = contest.ContestFreezesAt
+		if !(vTeam != nil && vTeam.ID == cTeam.ID) && (at.After(contest.ContestFreezesAt) || at.Equal(contest.ContestFreezesAt)) {
+			targetAt = contest.ContestFreezesAt.UTC()
 		}
 
 		results := cTeam.BenchmarkResults(targetAt)
 
-		if len(results) != len(item.GetScores()) {
+		if len(results) > len(item.GetScores()) {
+			fmt.Printf("at %s team %d / got(%d) expect(%d)\n", targetAt, team.GetId(), len(item.GetScores()), len(results))
 			now := time.Now().UTC()
 			results = cTeam.BenchmarkResults(now)
-			fmt.Printf("at %s team %d / got(%d) expect(%d)\n", targetAt, team.GetId(), len(item.GetScores()), len(results))
 			if len(results) != len(item.GetScores()) {
 				fmt.Printf("at %s team %d / got(%d) expect(%d)\n", now, team.GetId(), len(item.GetScores()), len(results))
+				fmt.Printf("%v\n", cTeam.AllBenchmarkResults())
+				os.Exit(1)
 				return errorInvalidResponse("グラフ上と記録されたスコアの数が一致しませんでした")
 			}
 			targetAt = now
 		}
 
+		results = cTeam.AllBenchmarkResults()
+
 		cbs := int64(0) // チャートから計算したベストスコア
 		cls := int64(0) // チャートから計算した直近スコア
+		latestMarkedAt := targetAt
 		for idx, score := range item.GetScores() {
 			if len(results) <= idx {
 				// TODO: あとで標準エラーに
@@ -234,10 +239,11 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 				cbs = result.Score
 			}
 			cls = result.Score
+			latestMarkedAt = markedAt
 		}
 
 		bs := item.GetBestScore().GetScore()
-		ebs, ebt := cTeam.BestScore(targetAt)
+		ebs, ebt := cTeam.BestScore(latestMarkedAt)
 		if bs != ebs {
 			// TODO: あとで標準エラーに
 			fmt.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, ebt, team.GetId(), bs, ebs, cbs)
@@ -246,7 +252,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 
 		ls := item.GetLatestScore().GetScore()
 		lm := item.GetLatestScore().GetMarkedAt().AsTime()
-		els, elt := cTeam.LatestScore(targetAt)
+		els, elt := cTeam.LatestScore(latestMarkedAt)
 		if ls != els {
 			// TODO: あとで標準エラーに
 			fmt.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, elt, team.GetId(), ls, els, cls)

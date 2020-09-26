@@ -43,12 +43,13 @@ func (s *Scenario) NewBenchmarker(id int64) *Benchmarker {
 }
 
 func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	defer func() {
-		err := recover()
-		if perr, ok := err.(error); ok {
-			step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
-		}
-	}()
+	// recover は邪悪な文明
+	// defer func() {
+	// 	err := recover()
+	// 	if perr, ok := err.(error); ok {
+	// 		step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
+	// 	}
+	// }()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -64,12 +65,13 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 	retry := int32(10)
 	for ctx.Err() == nil {
 		func() {
-			defer func() {
-				err := recover()
-				if perr, ok := err.(error); ok {
-					step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
-				}
-			}()
+			// recover は邪悪な文明
+			// defer func() {
+			// 	err := recover()
+			// 	if perr, ok := err.(error); ok {
+			// 		step.AddError(failure.NewError(ErrBenchmarkerPanic, perr))
+			// 	}
+			// }()
 
 			job, err := b.receiveBenchmarkJob(ctx, queue)
 			if err != nil {
@@ -115,6 +117,11 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 			}
 
 			bResult := team.GetQueuedBenckmarkResult()
+			// たまに状態更新し終わる前にここに来てしまうので取れるまで待つ
+			for bResult == nil {
+				<-time.After(10 * time.Millisecond)
+				bResult = team.GetQueuedBenckmarkResult()
+			}
 
 			result := b.generateFirstReport(jobHandle)
 			err = reporter.Send(result)
@@ -142,9 +149,6 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 
 			result = b.generateLastReport(jobHandle, bResult)
 
-			// 送信前にスコア時間を記録
-			bResult.Mark(time.Now().UTC())
-
 			err = reporter.Send(result)
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -153,6 +157,9 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				}
 				return
 			}
+			bResult.Mark(time.Now().UTC())
+			bResult.SentLastResult()
+
 			res, err = reporter.Recv()
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -166,7 +173,6 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				step.AddError(failure.NewError(ErrBenchmarkerReport, fmt.Errorf("Invalid nonce: got %d, expected %d", res.AckedNonce, result.GetNonce())))
 				return
 			}
-			bResult.SentLastResult()
 
 			err = reporter.CloseSend()
 			if err != nil {
