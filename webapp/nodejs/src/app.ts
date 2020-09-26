@@ -12,6 +12,10 @@ import { Contestant } from "./proto/xsuportal/resources/contestant_pb";
 import { Contest } from "./proto/xsuportal/resources/contest_pb";
 import { GetCurrentSessionResponse } from "./proto/xsuportal/services/common/me_pb";
 import { fstat } from "fs";
+import { ListTeamsResponse as AdminListTeamsResponse } from "./proto/xsuportal/services/admin/teams_pb";
+import { ListTeamsResponse as AudienceListTeamsResponse } from "./proto/xsuportal/services/audience/team_list_pb";
+import { DashboardResponse as AudienceDashboardResponse } from "./proto/xsuportal/services/audience/dashboard_pb";
+import { Leaderboard } from "./proto/xsuportal/resources/leaderboard_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -250,6 +254,154 @@ function getContestResource(contest: any) {
   return contestResource;
 }
 
+async function getLeaderboardResource(teamId: number = 0) {
+  const db = await connection;
+  const contest = (await getCurrentContest()).contest;
+  const contestFinished = contest.status === Contest.Status.FINISHED;
+  const contestFreezesAt = contest.contest_freezes_at;
+
+  let leaderboard = null;
+  let jobResults = null;
+  let teamGraphScores: any = {};
+  await db.beginTransaction();
+  leaderboard = await db.query(`
+    SELECT
+      teams.id AS id,
+      teams.name AS name,
+      teams.leader_id AS leader_id,
+      teams.withdrawn AS withdrawn,
+      team_student_flags.student AS student,
+      (best_score_jobs.score_raw - best_score_jobs.score_deduction) AS best_score,
+      best_score_jobs.started_at AS best_score_started_at,
+      best_score_jobs.finished_at AS best_score_marked_at,
+      (latest_score_jobs.score_raw - latest_score_jobs.score_deduction) AS latest_score,
+      latest_score_jobs.started_at AS latest_score_started_at,
+      latest_score_jobs.finished_at AS latest_score_marked_at,
+      latest_score_job_ids.finish_count AS finish_count
+    FROM
+      teams
+    -- latest scores
+    LEFT JOIN (
+      SELECT
+        MAX(id) AS id,
+        team_id,
+        COUNT(*) AS finish_count
+      FROM
+        benchmark_jobs
+      WHERE
+        finished_at IS NOT NULL
+    -- score freeze
+      AND (team_id = ? OR (team_id != ? AND (? = TRUE OR finished_at < ?)))
+      GROUP BY
+        team_id
+    ) latest_score_job_ids ON latest_score_job_ids.team_id = teams.id
+    LEFT JOIN benchmark_jobs latest_score_jobs ON latest_score_job_ids.id = latest_score_jobs.id
+    -- best scores
+    LEFT JOIN (
+      SELECT
+        MAX(j.id) AS id,
+        j.team_id AS team_id
+      FROM
+        (
+          SELECT
+            team_id,
+            MAX(score_raw - score_deduction) AS score
+          FROM
+            benchmark_jobs
+          WHERE
+            finished_at IS NOT NULL
+    -- score freeze
+            AND (team_id = ? OR (team_id != ? AND (? = TRUE OR finished_at < ?)))
+          GROUP BY
+            team_id
+      ) best_scores
+      LEFT JOIN benchmark_jobs j ON (j.score_raw - j.score_deduction) = best_scores.score
+        AND j.team_id = best_scores.team_id
+      GROUP BY
+        j.team_id
+    ) best_score_job_ids ON best_score_job_ids.team_id = teams.id
+    LEFT JOIN benchmark_jobs best_score_jobs ON best_score_jobs.id = best_score_job_ids.id
+  -- check student teams
+    LEFT JOIN (
+      SELECT
+        team_id,
+        (SUM(student) = COUNT(*)) AS student
+      FROM
+        contestants
+      GROUP BY
+        contestants.team_id
+      ) team_student_flags ON team_student_flags.team_id = teams.id
+    ORDER BY
+      latest_score DESC,
+      latest_score_marked_at ASC
+  `, [teamId, teamId, contestFinished, contestFinished, teamId, teamId, contestFinished, contestFinished]);
+   
+  jobResults = await db.query(`
+    SELECT
+      team_id AS team_id,
+      (score_raw - score_deduction) AS score,
+      started_at AS started_at,
+      finished_at AS finished_at
+    FROM
+      benchmark_jobs
+    WHERE
+      started_at IS NOT NULL
+    AND (
+      finished_at IS NOT NULL
+      -- score freeze
+      AND (team_id = ? OR (team_id != ? AND (? = TRUE OR finished_at < ?)))
+    )
+    ORDER BY finished_at,
+  `, [ teamId, teamId, contestFinished, contestFreezesAt ]);
+
+
+  for (const result of jobResults) {
+    teamGraphScores[result.team_id] = teamGraphScores[result.team_id] ?? [];
+    const lbs = new Leaderboard.LeaderboardItem.LeaderboardScore();
+    lbs.setScore(result.score);
+    lbs.setStartedAt(result.started_at);
+    lbs.setMarkedAt(result.finished_at);
+    teamGraphScores[result.team_id].push(lbs);
+  }
+    
+  const teams = []
+  const generalTeams = []
+  const studentTeams = []
+  
+  for (const team of leaderboard) {
+    const item = new Leaderboard.LeaderboardItem();
+    item.setScoresList(teamGraphScores[team.id]);
+    const bs = new Leaderboard.LeaderboardItem.LeaderboardScore();
+    bs.setScore(team.best_score);
+    bs.setStartedAt(team.best_score_started_at);
+    bs.setMarkedAt(team.best_score_marked_at);
+    item.setBestScore(bs);
+    const ls = new Leaderboard.LeaderboardItem.LeaderboardScore();
+    ls.setScore(team.latest_score);
+    ls.setStartedAt(team.latest_score_started_at);
+    ls.setMarkedAt(team.latest_score_marked_at);
+    item.setLatestScore(ls);
+    const teamResource = await getTeamResource(team, false, false, false);
+    item.setTeam(teamResource);
+    item.setFinishCount(team.finish_count);
+
+    if (team.student === 1) {
+      studentTeams.push(team);
+    } else {
+      generalTeams.push(team);
+    }
+    teams.push(item);
+  }
+
+  const leaderboardResource = new Leaderboard();
+  leaderboardResource.setTeamsList(teams);
+  leaderboardResource.setGeneralTeamsList(generalTeams);
+  leaderboardResource.setStudentTeamsList(studentTeams);
+  const contestResource = getContestResource(contest);
+  leaderboardResource.setContest(contestResource);
+  return leaderboardResource;
+}
+
 
 app.post("/initialize", async (req, res, next) => {
   const db = await connection;
@@ -429,6 +581,48 @@ app.get("/api/session", async (req, res, next) => {
   res.end(Buffer.from(response.serializeBinary()));
 });
 
+app.get("/api/session", async (req, res, next) => {
+  const response = new GetCurrentSessionResponse();
+  const contestant = await getCurrentContestant();
+  response.setContestant(getContestantResource(contestant));
+  const team = await getCurrentTeam({ lock: false });
+  const teamResource = await getTeamResource(team);
+  response.setTeam(teamResource);
+  const contest = await getCurrentContest();
+  const contestResource = getContestResource(contest.contest);
+  response.setContest(contestResource);
+  // TODO set notifier
+
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.get("/api/audience/teams", async (req, res, next) => {
+  const db = await connection;
+  const teams = await db.query('SELECT * FROM `teams` WHERE `withdrawn` = FALSE ORDER BY `created_at` DESC');
+  const items = [];
+  for (const team of teams) {
+    const members = await db.query('SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`', [team.id]);
+    const teamListItem = new AudienceListTeamsResponse.TeamListItem();
+    teamListItem.setTeamId(team.id);
+    teamListItem.setName(team.name);
+    teamListItem.setIsStudent(members.every((member: any) => !!member.student));
+    teamListItem.setMemberNamesList(members.map((member: any) => member.name));
+    items.push(teamListItem);
+  }
+  const response = new AudienceListTeamsResponse();
+  response.setTeamsList(items);
+
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.get("/api/audience/dashboard", async (req, res, next) => {
+  const response = new AudienceDashboardResponse();
+  const leaderboard = await getLeaderboardResource();
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
 
 app.listen(process.env.PORT ?? 9292, () => {
   console.log("Listening on 9292");
