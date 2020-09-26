@@ -1,6 +1,7 @@
 import express from "express";
 import mysql from "promise-mysql";
 import crypto from 'crypto';
+import fs from "fs";
 
 import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
 import {Error as PbError} from "./proto/xsuportal/error_pb";
@@ -8,6 +9,9 @@ import { Clarification } from "./proto/xsuportal/resources/clarification_pb";
 import { ListClarificationsResponse, GetClarificationResponse, CreateClarificationRequest, RespondClarificationRequest, RespondClarificationResponse } from "./proto/xsuportal/services/admin/clarifications_pb";
 import { Team } from "./proto/xsuportal/resources/team_pb";
 import { Contestant } from "./proto/xsuportal/resources/contestant_pb";
+import { Contest } from "./proto/xsuportal/resources/contest_pb";
+import { GetCurrentSessionResponse } from "./proto/xsuportal/services/common/me_pb";
+import { fstat } from "fs";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -94,6 +98,62 @@ const getCurrentTeam = function() {
   }
 }()
 
+const getCurrentContest = function() {
+  let currentContest = null;
+  return async () => {
+    const db = await connection;
+    const [contest] = await db.query(`
+      SELECT
+        *,
+        NOW(6) AS current_time,
+        CASE
+          WHEN NOW(6) < registration_open_at THEN 'standby'
+          WHEN registration_open_at <= NOW(6) AND NOW(6) < contest_starts_at THEN 'registration'
+          WHEN contest_starts_at <= NOW(6) AND NOW(6) < contest_ends_at THEN 'started'
+          WHEN contest_ends_at <= NOW(6) THEN 'finished'
+          ELSE 'unknown'
+        END AS status,
+        IF(contest_starts_at <= NOW(6) AND NOW(6) < contest_freezes_at, 1, 0) AS frozen
+      FROM contest_config
+    `);
+    
+    let contestStatusStr = contest.status;
+    if (process.env['APP_ENV'] != "production" && fs.existsSync(DEBUG_CONTEST_STATUS_FILE_PATH)) {
+      contestStatusStr = fs.readFileSync(DEBUG_CONTEST_STATUS_FILE_PATH).toString();
+    }
+
+    let status = null;
+    switch(contestStatusStr) {
+      case "standby":
+        status = Contest.Status.STANDBY;
+        break;
+      case "registration":
+        status = Contest.Status.REGISTRATION;
+        break;
+      case "started":
+        status = Contest.Status.STARTED;
+        break;
+      case "finished":
+        status = Contest.Status.FINISHED;
+        break;
+      default:
+        throw new Error(`Unexpected contest status: ${contestStatusStr}`);
+    }
+    
+    return ({
+      contest: {
+        registration_open_at: contest.registration_open_at,
+        contest_starts_at: contest.contest_starts_at,
+        contest_freezes_at: contest.contest_freezes_at,
+        contest_ends_at: contest.contest_ends_at,
+        frozen: contest.frozen === 1,
+        status: status,
+      },
+      current_time: contest.current_time,
+    });
+  };
+}();
+
 const loginRequired: (opts: { team?: boolean, lock?: boolean }) => (res: express.Response) => boolean = ({ team = true, lock = false }) => {
   return (res) => {
     if (!getCurrentContestant({ lock })) {
@@ -178,6 +238,18 @@ async function getClarificationResource(clar: any, team: any) {
   clarificationResource.setTeam(t);
   return clarificationResource;
 }
+
+function getContestResource(contest: any) {
+  const contestResource = new Contest();
+  contestResource.setStatus(contest.status);
+  contestResource.setContestStartsAt(contest.contest_starts_at);
+  contestResource.setContestEndsAt(contest.contest_ends_at);
+  contestResource.setContestFreezesAt(contest.contest_freezes_at);
+  contestResource.setRegistrationOpenAt(contest.registration_open_at);
+  contestResource.setFrozen(contest.frozen);
+  return contestResource;
+}
+
 
 app.post("/initialize", async (req, res, next) => {
   const db = await connection;
@@ -337,6 +409,22 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
   
   const response = new RespondClarificationResponse();
   response.setClarification(clarPb);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.get("/api/session", async (req, res, next) => {
+  const response = new GetCurrentSessionResponse();
+  const contestant = await getCurrentContestant();
+  response.setContestant(getContestantResource(contestant));
+  const team = await getCurrentTeam({ lock: false });
+  const teamResource = await getTeamResource(team);
+  response.setTeam(teamResource);
+  const contest = await getCurrentContest();
+  const contestResource = getContestResource(contest.contest);
+  response.setContest(contestResource);
+  // TODO set notifier
+
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
