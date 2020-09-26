@@ -205,8 +205,8 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 			results = cTeam.BenchmarkResults(now)
 			if len(results) != len(item.GetScores()) {
 				fmt.Printf("at %s team %d / got(%d) expect(%d)\n", now, team.GetId(), len(item.GetScores()), len(results))
-				fmt.Printf("%v\n", cTeam.AllBenchmarkResults())
-				os.Exit(1)
+				// fmt.Printf("%v\n", cTeam.AllBenchmarkResults())
+				// os.Exit(1)
 				return errorInvalidResponse("グラフ上と記録されたスコアの数が一致しませんでした")
 			}
 			targetAt = now
