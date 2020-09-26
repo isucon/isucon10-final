@@ -150,8 +150,10 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 			}
 			bResult.SentFirstResult()
 
-			bResult.Mark(time.Now().UTC())
+			now := time.Now().UTC()
+			bResult.Mark(now)
 			result = b.generateLastReport(jobHandle, bResult)
+			b.Scenario.Mark(now)
 
 			err = reporter.Send(result)
 			if err != nil {

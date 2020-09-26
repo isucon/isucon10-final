@@ -174,16 +174,13 @@ func verifyResources(page string, res *http.Response, resources agent.Resources)
 	return errs
 }
 
-func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard, hres *http.Response, contest *model.Contest, vTeam *model.Team) error {
+func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard, hres *http.Response, contest *model.Contest, vTeam *model.Team, sLatestMarkedAt time.Time) error {
 	at := requestedAt.UTC()
-	// TODO: 時間詐欺が出来るので直す
-	if t, err := http.ParseTime(hres.Header.Get("Last-Modified")); err != nil && hres.Header.Get("Last-Modified") != "" {
-		at = t
-	}
 
 	prevLatestScore := int64(math.MaxInt64)
 	prevLatestMarkedAt := time.Now().UTC().Add(1 * time.Hour)
 	zero := time.Unix(0, 0)
+	maxMarkedAt := zero
 	for _, item := range leaderboard.GetTeams() {
 		team := item.GetTeam()
 		cTeam := contest.GetTeam(team.GetId())
@@ -202,11 +199,10 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 
 		results := cTeam.BenchmarkResults(targetAt)
 
-		if len(results) > len(item.GetScores()) {
-			fmt.Printf("at %s team %d / got(%d) expect(%d)\n", targetAt, team.GetId(), len(item.GetScores()), len(results))
+		if len(results) < len(item.GetScores()) {
 			now := time.Now().UTC()
 			results = cTeam.BenchmarkResults(now)
-			if len(results) != len(item.GetScores()) {
+			if len(results) < len(item.GetScores()) {
 				fmt.Printf("at %s team %d / got(%d) expect(%d)\n", now, team.GetId(), len(item.GetScores()), len(results))
 				// fmt.Printf("%v\n", cTeam.AllBenchmarkResults())
 				// os.Exit(1)
@@ -243,6 +239,9 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 			}
 			cls = result.Score
 			latestMarkedAt = markedAt
+			if markedAt.After(maxMarkedAt) {
+				maxMarkedAt = markedAt
+			}
 		}
 
 		bs := item.GetBestScore().GetScore()
@@ -268,6 +267,11 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		}
 		prevLatestScore = ls
 		prevLatestMarkedAt = item.GetLatestScore().GetMarkedAt().AsTime()
+	}
+
+	if !maxMarkedAt.Equal(zero) && sLatestMarkedAt.Add(-1*time.Second).After(maxMarkedAt) {
+		fmt.Printf("%s / %s\n", sLatestMarkedAt.Add(-1*time.Second), maxMarkedAt)
+		return errorInvalidResponse("規定秒数を超えてスコアがキャッシュされています")
 	}
 
 	return nil

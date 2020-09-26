@@ -55,6 +55,7 @@ func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) erro
 	}
 
 	<-time.After(s.Contest.ContestStartsAt.Sub(time.Now()))
+	s.Mark(time.Now().UTC())
 
 	wg.Add(1)
 	go func() {
@@ -401,6 +402,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 				defer wg.Done()
 
 				requestedAt := time.Now().UTC()
+				latestMarkedAt := s.LatestMarkedAt()
 				hres, res, err := GetDashboardAction(ctx, team, team.Operator)
 				if err != nil {
 					step.AddError(err)
@@ -408,7 +410,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 					return
 				}
 
-				if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, team); err != nil {
+				if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, team, latestMarkedAt); err != nil {
 					step.AddError(err)
 				}
 			}()
@@ -638,6 +640,7 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 			timer := time.After(1 * time.Second)
 
 			requestedAt := time.Now().UTC()
+			latestMarkedAt := s.LatestMarkedAt()
 			hres, res, err := AudienceGetDashboardAction(ctx, viewer)
 			if err != nil {
 				// オーディエンスはエラーを記録しない
@@ -645,9 +648,9 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 				return
 			}
 
-			if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, nil); err != nil {
+			if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, nil, latestMarkedAt); err != nil {
 				// オーディエンスによる計測失敗は考慮しない
-				// step.AddError(err)
+				step.AddError(err)
 				return
 			}
 
@@ -703,8 +706,6 @@ func (s *Scenario) watchNotifications(parent context.Context, step *isucandar.Be
 
 				if job := notification.GetContentBenchmarkJob(); job != nil {
 					if team.Developer == member {
-						// TODO: ここは go するんじゃないんだなあ (job の数だけ go は治安わるいのはわかるが) ~sorah
-						// TODO: まあでもこの方式 (通知の処理と受信が別goroutine) ならgo しなくていいのかも ~sorah
 						s.loadBenchmarkDetails(ctx, step, team, job)
 					}
 				}
@@ -717,8 +718,7 @@ func (s *Scenario) watchNotifications(parent context.Context, step *isucandar.Be
 				idBucket.Add(id, true)
 			}
 			if len(clars) > 0 {
-				// TODO: まあでもこの方式 (通知の処理と受信が別goroutine) ならgo しなくていいのかも ~sorah
-				go s.loadCheckClarification(ctx, step, team, clars)
+				s.loadCheckClarification(ctx, step, team, clars)
 			}
 		}
 	}
