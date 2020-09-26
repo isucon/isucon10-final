@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"runtime/pprof"
+	"strings"
+	"sync"
 	"time"
 
 	"github.com/isucon/isucandar"
@@ -49,7 +51,8 @@ func init() {
 
 func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish bool) bool {
 	passed := true
-	failReason := ""
+	reason := ""
+	errors := result.Errors.All()
 	breakdown := result.Score.Breakdown()
 
 	// 仮想競技者スコア
@@ -86,10 +89,10 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	deduction := int64(0)
 	timeoutCount := int64(0)
 
-	for _, err := range result.Errors.All() {
+	for _, err := range errors {
 		if failure.IsCode(err, scenario.ErrCritical) {
 			passed = false
-			failReason = "Critical error"
+			reason = "Critical error"
 			continue
 		}
 
@@ -101,6 +104,8 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 				failure.IsCode(err, scenario.ErrProtobuf) ||
 				failure.IsCode(err, scenario.ErrWebPush) ||
 				failure.IsCode(err, scenario.ErrHTTP) ||
+				failure.IsCode(err, scenario.ErrBenchmarkerReceive) ||
+				failure.IsCode(err, scenario.ErrBenchmarkerReport) ||
 				failure.IsCode(err, scenario.ErrX5XX) {
 				deduction++
 			}
@@ -109,7 +114,7 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 
 	if passed && deduction > 100 {
 		passed = false
-		failReason = "Error count over 100"
+		reason = "Error count over 100"
 	}
 
 	scoreRaw := (contestantScore * bonusMag / 10) + audienceScore
@@ -119,15 +124,25 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 		scoreTotal = 0
 		if passed {
 			passed = false
-			failReason = "Score"
+			reason = "Score"
 		}
 	}
 
-	fmt.Printf("(%d * %d) + %d - %d(err: %d, timeout: %d)\n", contestantScore, bonusMag, audienceScore, scoreDeduction, deduction, timeoutCount)
-	fmt.Printf("Pass: %v / score: %d (%d - %d)\n", passed, scoreTotal, scoreRaw, scoreDeduction)
-	if !passed {
-		fmt.Printf("Fail reason: %s\n", failReason)
+	tags := []string{}
+	for k, v := range breakdown {
+		tags = append(tags, fmt.Sprintf("%s: %d", k, v))
 	}
+	scoreTags := strings.Join(tags, ", ")
+
+	if finish {
+		fmt.Printf("Count: %s\n", scoreTags)
+		fmt.Printf("(%d * %d) + %d - %d(err: %d, timeout: %d)\n", contestantScore, bonusMag, audienceScore, scoreDeduction, deduction, timeoutCount)
+		fmt.Printf("Pass: %v / score: %d (%d - %d)\n", passed, scoreTotal, scoreRaw, scoreDeduction)
+		if !passed {
+			fmt.Printf("Fail reason: %s\n", reason)
+		}
+	}
+	reason = scoreTags
 
 	err := reporter.Report(&isuxportalResources.BenchmarkResult{
 		SurveyResponse: &isuxportalResources.SurveyResponse{
@@ -141,7 +156,7 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 			Deduction: scoreDeduction,
 		},
 		Execution: &isuxportalResources.BenchmarkResult_Execution{
-			Reason: fmt.Sprintf("%+v", result.Score.Breakdown()),
+			Reason: reason,
 		},
 	})
 	if err != nil {
@@ -207,12 +222,26 @@ func main() {
 
 	b.AddScenario(s)
 
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	b.Load(func(ctx context.Context, step *isucandar.BenchmarkStep) error {
+		defer wg.Done()
+
+		for {
+			timer := time.After(3 * time.Second)
+			sendResult(s, step.Result(), false)
+
+			select {
+			case <-timer:
+			case <-ctx.Done():
+				return nil
+			}
+		}
+	})
+
 	result := b.Start(ctx)
-	errorMsgs := map[string]int{}
-	for msg, count := range errorMsgs {
-		fmt.Printf("%d: %s\n", count, msg)
-	}
-	fmt.Printf("%+v\n", result.Score.Breakdown())
+
+	wg.Wait()
 
 	if !sendResult(s, result, true) && exitStatusOnFail {
 		os.Exit(1)
