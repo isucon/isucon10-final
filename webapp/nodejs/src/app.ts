@@ -13,7 +13,7 @@ import { Contest } from "./proto/xsuportal/resources/contest_pb";
 import { GetCurrentSessionResponse } from "./proto/xsuportal/services/common/me_pb";
 import { fstat } from "fs";
 import { BenchmarkJob } from "./proto/xsuportal/resources/benchmark_job_pb";
-import { EnqueueBenchmarkJobResponse } from "./proto/xsuportal/services/admin/benchmark_pb";
+import { EnqueueBenchmarkJobResponse, GetBenchmarkJobResponse } from "./proto/xsuportal/services/admin/benchmark_pb";
 import { ListBenchmarkJobsResponse } from "./proto/xsuportal/services/contestant/benchmark_pb";
 import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb";
 
@@ -523,6 +523,29 @@ app.get("/api/contestant/benchmark_jobs", async (req, res, next) => {
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
+
+app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
+  const db = await connection;
+  const loginSuccess = loginRequired(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  const currentTeam = await getCurrentTeam();
+  const [job] = await db.query(
+    'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `id` = ? LIMIT 1',
+    [currentTeam.id, req.params.id]
+  );
+
+  if (!job) {
+    haltPb(res, 404, "ベンチマークジョブが見つかりません")
+  }
+
+  const response = new GetBenchmarkJobResponse();
+  response.setJob(job);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+})
 
 app.listen(process.env.PORT ?? 9292, () => {
   console.log("Listening on 9292");
