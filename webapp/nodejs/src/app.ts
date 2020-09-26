@@ -154,18 +154,16 @@ const getCurrentContest = function() {
   };
 }();
 
-const loginRequired: (opts: { team?: boolean, lock?: boolean }) => (res: express.Response) => boolean = ({ team = true, lock = false }) => {
-  return (res) => {
-    if (!getCurrentContestant({ lock })) {
-      haltPb(res, 401, "ログインが必要です")
-      return false;
-    }
-    if (!getCurrentTeam({ lock })) {
-      haltPb(res, 403, "参加登録が必要です")
-      return false;
-    }
-    return true;
+const loginRequired: (res: express.Response, opts?: { team?: boolean, lock?: boolean }) => boolean = (res, { team = true, lock = false } = {}) => {
+  if (!getCurrentContestant({ lock })) {
+    haltPb(res, 401, "ログインが必要です")
+    return false;
   }
+  if (!getCurrentTeam({ lock })) {
+    haltPb(res, 403, "参加登録が必要です")
+    return false;
+  }
+  return true;
 }
 
 function getContestantResource(contestant: any, detail: boolean = false) {
@@ -311,7 +309,7 @@ app.post("/initialize", async (req, res, next) => {
 
 app.get("/api/admin/clarifications", async (req, res, next) => {
   const db = await connection;
-  const loginSuccess = loginRequired({ team: false })(res);
+  const loginSuccess = loginRequired(res, { team: false });
   if (!loginSuccess) {
     return;
   }
@@ -340,7 +338,7 @@ app.get("/api/admin/clarifications", async (req, res, next) => {
 
 app.get("/api/admin/clarifications/:id", async (req, res, next) => {
   const db = await connection;
-  const loginSuccess = loginRequired({ team: false })(res);
+  const loginSuccess = loginRequired(res, { team: false });
   if (!loginSuccess) {
     return;
   }
@@ -364,7 +362,7 @@ app.get("/api/admin/clarifications/:id", async (req, res, next) => {
 
 app.put("/api/admin/clarifications/:id", async (req, res, next) => {
   const db = await connection;
-  const loginSuccess = loginRequired({ team: false })(res);
+  const loginSuccess = loginRequired(res, { team: false });
   if (!loginSuccess) {
     return;
   }
