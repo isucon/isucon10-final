@@ -647,7 +647,7 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 
 			if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, nil); err != nil {
 				// オーディエンスによる計測失敗は考慮しない
-				step.AddError(err)
+				// step.AddError(err)
 				return
 			}
 
