@@ -976,7 +976,7 @@ module Xsuportal
       login_required
 
       unless notifier.vapid_key
-        halt_pb 403, 'WebPush は未対応です'
+        halt_pb 503, 'Web Push は未対応です'
       end
 
       req = decode_request_pb
@@ -996,7 +996,7 @@ module Xsuportal
       login_required
 
       unless notifier.vapid_key
-        halt_pb 403, 'WebPush は未対応です'
+        halt_pb 503, 'Web Push は未対応です'
       end
 
       req = decode_request_pb
