@@ -48,6 +48,7 @@ func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpa
 		return nil, err
 	}
 
+	httpreq.Header.Set("Accept", "application/vnd.google.protobuf, text/plain")
 	httpreq.Header.Set("Content-Type", "application/vnd.google.protobuf")
 
 	httpres, err := agent.Do(ctx, httpreq)
