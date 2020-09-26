@@ -92,13 +92,15 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 		}
 
 		if failure.IsCode(err, isucandar.ErrLoad) {
-			if failure.IsCode(err, scenario.ErrInvalidResponse) ||
+			if failure.IsCode(err, failure.TimeoutErrorCode) {
+				timeoutCount++
+			} else if failure.IsCode(err, scenario.ErrInvalidResponse) ||
 				failure.IsCode(err, scenario.ErrChecksum) ||
 				failure.IsCode(err, scenario.ErrProtobuf) ||
+				failure.IsCode(err, scenario.ErrWebPush) ||
+				failure.IsCode(err, scenario.ErrHTTP) ||
 				failure.IsCode(err, scenario.ErrX5XX) {
 				deduction++
-			} else if failure.IsCode(err, failure.TimeoutErrorCode) {
-				timeoutCount++
 			}
 		}
 	}

@@ -38,14 +38,14 @@ func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpa
 	if req != nil {
 		pw, err := proto.Marshal(req)
 		if err != nil {
-			return nil, err
+			return nil, failure.NewError(ErrHTTP, err)
 		}
 		body = bytes.NewReader(pw)
 	}
 
 	httpreq, err := agent.NewRequest(method, rpath, body)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewError(ErrHTTP, err)
 	}
 
 	httpreq.Header.Set("Accept", "application/vnd.google.protobuf, text/plain")
@@ -53,7 +53,7 @@ func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpa
 
 	httpres, err := agent.Do(ctx, httpreq)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewError(ErrHTTP, err)
 	}
 	defer httpres.Body.Close()
 
@@ -63,7 +63,7 @@ func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpa
 
 	respb, err := ioutil.ReadAll(httpres.Body)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewError(ErrHTTP, err)
 	}
 
 	if httpres.Header.Get("Content-Type") == "application/vnd.google.protobuf; proto=xsuportal.proto.Error" {

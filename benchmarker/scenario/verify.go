@@ -25,6 +25,8 @@ var (
 	ErrCritical        failure.StringCode = "critical"
 	ErrInvalidResponse failure.StringCode = "invalid-response"
 	ErrChecksum        failure.StringCode = "checksum"
+	ErrWebPush         failure.StringCode = "webpush"
+	ErrHTTP            failure.StringCode = "http"
 
 	checksums = map[string]string{}
 )
@@ -272,5 +274,5 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 }
 
 func (s *Scenario) handleInvalidPush(id string, err error, step *isucandar.BenchmarkStep) {
-	step.AddError(fmt.Errorf("不正な Web Push メッセージの送信がありました (/push/%s): %w", id, err))
+	step.AddError(failure.NewError(ErrWebPush, fmt.Errorf("不正な Web Push メッセージの送信がありました (/push/%s): %w", id, err)))
 }

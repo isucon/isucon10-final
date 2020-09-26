@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/isucon/isucandar/agent"
+	"github.com/isucon/isucandar/failure"
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/admin"
@@ -20,12 +21,12 @@ import (
 func BrowserAccess(ctx context.Context, member *model.Contestant, rpath string) (*http.Response, agent.Resources, *common.GetCurrentSessionResponse, error) {
 	req, err := member.Agent.GET(rpath)
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, failure.NewError(ErrHTTP, err)
 	}
 
 	res, err := member.Agent.Do(ctx, req)
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, failure.NewError(ErrHTTP, err)
 	}
 
 	if ctx.Err() != nil {
@@ -34,7 +35,7 @@ func BrowserAccess(ctx context.Context, member *model.Contestant, rpath string) 
 
 	resources, err := member.Agent.ProcessHTML(ctx, res, res.Body)
 	if err != nil {
-		return res, resources, nil, err
+		return res, resources, nil, failure.NewError(ErrHTTP, err)
 	}
 
 	// TODO: 検証してない。
@@ -46,17 +47,17 @@ func BrowserAccess(ctx context.Context, member *model.Contestant, rpath string) 
 func BrowserAccessGuest(ctx context.Context, agent *agent.Agent, rpath string) (*http.Response, agent.Resources, error) {
 	req, err := agent.GET(rpath)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, failure.NewError(ErrHTTP, err)
 	}
 
 	res, err := agent.Do(ctx, req)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, failure.NewError(ErrHTTP, err)
 	}
 
 	resources, err := agent.ProcessHTML(ctx, res, res.Body)
 	if err != nil {
-		return res, resources, err
+		return res, resources, failure.NewError(ErrHTTP, err)
 	}
 
 	return res, resources, err
