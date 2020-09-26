@@ -13,6 +13,9 @@ static_resources:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 codec_type: AUTO
                 stat_prefix: 'router'
+                http_filters:
+                  - name: envoy.router
+                    typed_config: {}
                 route_config:
                   name: http
                   virtual_hosts:
@@ -36,6 +39,9 @@ static_resources:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 codec_type: AUTO
                 stat_prefix: 'router'
+                http_filters:
+                  - name: envoy.router
+                    typed_config: {}
                 route_config:
                   name: https
                   virtual_hosts:
@@ -54,9 +60,6 @@ static_resources:
                             prefix: "/"
                           route:
                             cluster: xsuportal_web
-                http_filters:
-                  - name: envoy.router
-                    typed_config: {}
                 use_remote_address: true
                 access_log:
                   - name: envoy.file_access_log
