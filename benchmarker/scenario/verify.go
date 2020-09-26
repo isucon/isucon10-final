@@ -232,10 +232,10 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 				return errorInvalidResponse("スコアグラフ内のスコアが不正です")
 			}
 
-			// mark 時間を補正する(ここでサーバー上の正しい時刻が判明する)
 			markedAt := score.GetMarkedAt().AsTime()
-			if markedAt.After(result.MarkedAt()) {
-				result.Mark(markedAt)
+			if !result.MarkedAt().Equal(markedAt) {
+				fmt.Printf("expect: %s / got: %s;", result.MarkedAt(), markedAt)
+				return errorInvalidResponse("スコアグラフ内のスコアの終了時刻が不正です")
 			}
 
 			if cbs < result.Score {
