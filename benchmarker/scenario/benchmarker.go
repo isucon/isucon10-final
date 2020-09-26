@@ -8,6 +8,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/golang/protobuf/ptypes"
+
 	"github.com/isucon/isucandar"
 	"github.com/isucon/isucandar/failure"
 	"github.com/isucon/isucon10-final/benchmarker/model"
@@ -123,7 +125,8 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				bResult = team.GetQueuedBenckmarkResult()
 			}
 
-			result := b.generateFirstReport(jobHandle)
+			bResult.Mark(time.Now().UTC())
+			result := b.generateFirstReport(jobHandle, bResult)
 			err = reporter.Send(result)
 			if err != nil {
 				errCode := grpc.Code(err)
@@ -147,6 +150,7 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 			}
 			bResult.SentFirstResult()
 
+			bResult.Mark(time.Now().UTC())
 			result = b.generateLastReport(jobHandle, bResult)
 
 			err = reporter.Send(result)
@@ -157,7 +161,6 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				}
 				return
 			}
-			bResult.Mark(time.Now().UTC())
 			bResult.SentLastResult()
 
 			res, err = reporter.Recv()
@@ -210,7 +213,12 @@ func (b *Benchmarker) generateCrashReport(job *bench.ReceiveBenchmarkJobResponse
 	}
 }
 
-func (b *Benchmarker) generateFirstReport(job *bench.ReceiveBenchmarkJobResponse_JobHandle) *bench.ReportBenchmarkResultRequest {
+func (b *Benchmarker) generateFirstReport(job *bench.ReceiveBenchmarkJobResponse_JobHandle, result *model.BenchmarkResult) *bench.ReportBenchmarkResultRequest {
+	markedAt, err := ptypes.TimestampProto(result.MarkedAt())
+	if err != nil {
+		panic(err)
+	}
+
 	return &bench.ReportBenchmarkResultRequest{
 		JobId:  job.GetJobId(),
 		Handle: job.GetHandle(),
@@ -222,13 +230,19 @@ func (b *Benchmarker) generateFirstReport(job *bench.ReceiveBenchmarkJobResponse
 				Raw:       0,
 				Deduction: 0,
 			},
-			Reason: "",
+			Reason:   "",
+			MarkedAt: markedAt,
 		},
 		Nonce: rand.Int63n(300000),
 	}
 }
 
 func (b *Benchmarker) generateLastReport(job *bench.ReceiveBenchmarkJobResponse_JobHandle, result *model.BenchmarkResult) *bench.ReportBenchmarkResultRequest {
+	markedAt, err := ptypes.TimestampProto(result.MarkedAt())
+	if err != nil {
+		panic(err)
+	}
+
 	return &bench.ReportBenchmarkResultRequest{
 		JobId:  job.GetJobId(),
 		Handle: job.GetHandle(),
@@ -240,7 +254,8 @@ func (b *Benchmarker) generateLastReport(job *bench.ReceiveBenchmarkJobResponse_
 				Raw:       result.ScoreRaw,
 				Deduction: result.ScoreDeduction,
 			},
-			Reason: "",
+			Reason:   "",
+			MarkedAt: markedAt,
 		},
 		Nonce: rand.Int63n(300000),
 	}

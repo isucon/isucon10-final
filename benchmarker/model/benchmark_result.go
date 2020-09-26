@@ -19,6 +19,7 @@ type BenchmarkResult struct {
 	sentFirstResult uint32
 	sentLastResult  uint32
 	seen            uint32
+	startedAt       time.Time
 	markedAt        time.Time
 }
 
@@ -62,6 +63,20 @@ func (b *BenchmarkResult) MarkedAt() time.Time {
 }
 
 func (b *BenchmarkResult) Mark(t time.Time) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+
+	b.markedAt = t
+}
+
+func (b *BenchmarkResult) StartedAt() time.Time {
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+
+	return b.markedAt
+}
+
+func (b *BenchmarkResult) Start(t time.Time) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
