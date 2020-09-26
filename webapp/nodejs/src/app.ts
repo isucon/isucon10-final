@@ -14,6 +14,8 @@ import { GetCurrentSessionResponse } from "./proto/xsuportal/services/common/me_
 import { fstat } from "fs";
 import { BenchmarkJob } from "./proto/xsuportal/resources/benchmark_job_pb";
 import { EnqueueBenchmarkJobResponse } from "./proto/xsuportal/services/admin/benchmark_pb";
+import { ListBenchmarkJobsResponse } from "./proto/xsuportal/services/contestant/benchmark_pb";
+import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -231,6 +233,44 @@ async function getTeamResource(team: any, detail: boolean = false, enableMembers
   return teamResource;
 }
 
+async function getBenchmarkJobResource(job) {
+  const benchmarkJob = new BenchmarkJob();
+  benchmarkJob.setId(job.id);
+  benchmarkJob.setTeamId(job.team_id);
+  benchmarkJob.setStatus(job.status);
+  benchmarkJob.setTargetHostname(job.target_hostname);
+  benchmarkJob.setCreatedAt(job.created_at);
+  benchmarkJob.setUpdatedAt(job.updated_at);
+  benchmarkJob.setStartedAt(job.started_at);
+  benchmarkJob.setFinishedAt(job.finished_at);
+  benchmarkJob.setResult(job.finished_at ? await getBenchmarkResultResource(job) : null);
+}
+
+async function getBenchmarkJobsResource(limit?: number) {
+  const db = await connection;
+  const currentTeam = await getCurrentTeam();
+  const jobs = await db.query(
+    `SELECT * FROM benchmark_jobs WHERE team_id = ? ORDER BY created_at DESC ${limit ? `LIMIT ${limit}` : ''}`,
+    [currentTeam.id]
+  )
+  return jobs.map(job => getBenchmarkJobResource(job))
+}
+
+async function getBenchmarkResultResource(job) {
+  const hasScore = job.score_raw && job.score_deducation
+  const result = new BenchmarkResult();
+  result.setFinished(!!job.finished_at);
+  result.setPassed(job.passed);
+  if (hasScore) {
+    result.setScore(job.score_raw - job.score_deducation);
+    const scoreBreakdown = new BenchmarkResult.ScoreBreakdown();
+    scoreBreakdown.setRaw(job.score_raw);
+    scoreBreakdown.setDeduction(job.score_deducation);
+    result.setScoreBreakdown(scoreBreakdown);
+  }
+  result.setReason(job.reason);
+  return result;
+}
 
 async function getClarificationResource(clar: any, team: any) {
   const clarificationResource = new Clarification();
@@ -468,6 +508,18 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
 
   const response = new EnqueueBenchmarkJobResponse();
   response.setJob(job);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.get("/api/contestant/benchmark_jobs", async (req, res, next) => {
+  const loginSuccess = loginRequired(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  const response = new ListBenchmarkJobsResponse();
+  response.setJobsList(await getBenchmarkJobsResource());
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
