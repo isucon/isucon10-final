@@ -244,7 +244,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 
 		bs := item.GetBestScore().GetScore()
 		ebs, ebt := cTeam.BestScore(latestMarkedAt)
-		if bs != ebs {
+		if bs != ebs && bs != cbs {
 			// TODO: あとで標準エラーに
 			fmt.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, ebt, team.GetId(), bs, ebs, cbs)
 			return errorInvalidResponse("ベストスコアの検証に失敗しました")
@@ -253,7 +253,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		ls := item.GetLatestScore().GetScore()
 		lm := item.GetLatestScore().GetMarkedAt().AsTime()
 		els, elt := cTeam.LatestScore(latestMarkedAt)
-		if ls != els {
+		if ls != els && ls != cls {
 			// TODO: あとで標準エラーに
 			fmt.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, elt, team.GetId(), ls, els, cls)
 			return errorInvalidResponse("最新スコアの検証に失敗しました")
