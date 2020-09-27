@@ -22,6 +22,13 @@ RUN docker-php-ext-configure zip && \
     docker-php-ext-install pdo_mysql && \
     docker-php-ext-enable grpc
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        protobuf-compiler \
+        && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 CMD ["make", "install", "run"]
 
 WORKDIR /isucon10/isucon10-final/webapp/php/web
