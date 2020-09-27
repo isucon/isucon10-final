@@ -29,7 +29,14 @@ run:
 	php -S 0.0.0.0:80 -t public public/index.php
 
 public/%: ../../frontend
-	[[ -L "$@" ]] || ln -s $</$@ $@
+	[[ -f "$@" ]] || cp -r $</$@ $@
 
 clean:
-	rm rf vendor
+	rm -rf vendor
+	rm -rf \
+		public/admin.html \
+		public/audience.html \
+		public/contestant.html \
+		public/packs \
+		public/sw.js \
+		public/sw.js.map
