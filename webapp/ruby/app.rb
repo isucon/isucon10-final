@@ -467,10 +467,10 @@ module Xsuportal
             `contest_ends_at`
           ) VALUES (?, ?, ?, ?)
           SQL
-          Time.at(req.contest.registration_open_at.seconds).utc,
-          Time.at(req.contest.contest_starts_at.seconds).utc,
-          Time.at(req.contest.contest_freezes_at.seconds).utc,
-          Time.at(req.contest.contest_ends_at.seconds).utc,
+          Time.at(req.contest.registration_open_at.seconds, req.contest.registration_open_at.nanos / 1000, in: 'UTC'),
+          Time.at(req.contest.contest_starts_at.seconds, req.contest.contest_starts_at.nanos / 1000, in: 'UTC'),
+          Time.at(req.contest.contest_freezes_at.seconds, req.contest.contest_freezes_at.nanos / 1000, in: 'UTC'),
+          Time.at(req.contest.contest_ends_at.seconds, req.contest.contest_ends_at.nanos / 1000, in: 'UTC'),
         )
       else
         db.query(
