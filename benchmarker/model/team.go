@@ -92,10 +92,11 @@ func (t *Team) TargetHost() string {
 func (t *Team) newResult(id int64) *BenchmarkResult {
 	atomic.AddInt64(&t.scoreCounter, 1)
 	score := t.ScoreGenerator.Generate(atomic.LoadInt64(&t.scoreCounter))
+	passed := !(score.FastFail || score.SlowFail)
 
 	return &BenchmarkResult{
 		id:             id,
-		Passed:         !(score.FastFail || score.SlowFail),
+		Passed:         passed,
 		Score:          score.Int(),
 		ScoreRaw:       score.BaseInt(),
 		ScoreDeduction: score.DeductionInt(),
@@ -185,6 +186,19 @@ func (t *Team) BestScore(at time.Time) (int64, time.Time) {
 		}
 	}
 	return best, marked
+}
+
+func (t *Team) MaximumMarkedAt() time.Time {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+
+	m := time.Unix(0, 0).UTC()
+	for _, b := range t.benchmarkResults {
+		if b.IsSeen() && b.MarkedAt().After(m) {
+			m = b.MarkedAt()
+		}
+	}
+	return m
 }
 
 func (t *Team) Enqueued(job *contestant.EnqueueBenchmarkJobResponse) {

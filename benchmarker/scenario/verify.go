@@ -278,18 +278,30 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		prevLatestMarkedAt = item.GetLatestScore().GetMarkedAt().AsTime()
 	}
 
+	allowedMaxTime := requestedAt
+	if requestedAt.After(sLatestMarkedAt) {
+		allowedMaxTime = sLatestMarkedAt
+	}
+
+	if vTeam != nil {
+		vMax := vTeam.MaximumMarkedAt()
+		if allowedMaxTime.After(contest.ContestFreezesAt) && sLatestMarkedAt.After(vMax) {
+			allowedMaxTime = vMax
+		}
+	}
+
+	cacheTime := 200 * time.Millisecond
 	if allowCache {
-		// audience でキャッシュを許す
-		if !maxMarkedAt.Equal(zero) && sLatestMarkedAt.Add(-1*time.Second).After(maxMarkedAt) {
-			fmt.Printf("%s / %s\n", sLatestMarkedAt.Add(-1*time.Second), maxMarkedAt)
-			return errorInvalidResponse("規定秒数を超えてスコアがキャッシュされています")
+		cacheTime = 1 * time.Second
+
+		if allowedMaxTime.After(contest.ContestFreezesAt) {
+			return nil
 		}
-	} else {
-		// contestant でキャッシュを許さない
-		if !maxMarkedAt.Equal(zero) && sLatestMarkedAt.Add(-200*time.Millisecond).After(maxMarkedAt) {
-			fmt.Printf("%s / %s\n", sLatestMarkedAt.Add(-200*time.Millisecond), maxMarkedAt)
-			return errorInvalidResponse("古い内容のリーダーボードが返却されています")
-		}
+	}
+
+	if !maxMarkedAt.Equal(zero) && allowedMaxTime.Add(-cacheTime).After(maxMarkedAt) {
+		fmt.Printf("OLDER LEADERBOARD: \n  %s requested at\n   %s latest finish\n  %s allowed cache time\n  %s leadeboard max time\n  %s frozen time\n", requestedAt, sLatestMarkedAt, allowedMaxTime.Add(-cacheTime), maxMarkedAt, time.Now().UTC())
+		return errorInvalidResponse("規定より古い内容のリーダーボードが返却されています")
 	}
 
 	return nil

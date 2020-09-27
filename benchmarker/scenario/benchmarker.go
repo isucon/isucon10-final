@@ -15,6 +15,7 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/model"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/bench"
+	"github.com/isucon/isucon10-final/benchmarker/random"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
@@ -233,7 +234,7 @@ func (b *Benchmarker) generateFirstReport(job *bench.ReceiveBenchmarkJobResponse
 				Raw:       0,
 				Deduction: 0,
 			},
-			Reason:   "",
+			Reason:   random.Reason(result.Passed),
 			MarkedAt: markedAt,
 		},
 		Nonce: rand.Int63n(300000),
@@ -257,7 +258,7 @@ func (b *Benchmarker) generateLastReport(job *bench.ReceiveBenchmarkJobResponse_
 				Raw:       result.ScoreRaw,
 				Deduction: result.ScoreDeduction,
 			},
-			Reason:   "",
+			Reason:   random.Reason(result.Passed),
 			MarkedAt: markedAt,
 		},
 		Nonce: rand.Int63n(300000),
