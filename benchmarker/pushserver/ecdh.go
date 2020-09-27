@@ -43,7 +43,7 @@ func (p *ecKey) ecdhSecret(publicKey *ecPublicKey) []byte {
 	//       Section 2.3.7. Integer-to-Octet-String Conversion
 	mlen := curve.Params().BitSize / 8
 	buf := make([]byte, mlen)
-	x.FillBytes(mlen)
+	x.FillBytes(buf)
 	return buf
 }
 
