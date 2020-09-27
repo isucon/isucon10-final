@@ -8,6 +8,6 @@ services:
       - 8081:80
 
   php:
-    build: ./php
+    build: ./php/web
     volumes:
       - .:/isucon10/isucon10-final/webapp
