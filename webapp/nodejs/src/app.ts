@@ -28,7 +28,7 @@ import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contes
 import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
 import { LogoutResponse } from "./proto/xsuportal/services/contestant/logout_pb";
 <<<<<<< HEAD
-import { GetRegistrationSessionResponse, GetRegistrationSessionQuery, UpdateRegistrationRequest, UpdateRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
+import { GetRegistrationSessionResponse, GetRegistrationSessionQuery, UpdateRegistrationRequest, UpdateRegistrationResponse, DeleteRegistrationRequest, DeleteRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
 =======
 import { GetRegistrationSessionResponse, GetRegistrationSessionQuery, DeleteRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
 >>>>>>> 287db6d8ad2fb23f5099ec5620c2290b20ceb8ac
@@ -888,53 +888,52 @@ app.put("/api/registration", async (req, res, next) => {
   }
 });
 
-<<<<<<< HEAD
 
+app.delete("/api/registration", async (req, res, next) => {
+  const db = await connection;
+  const request = DeleteRegistrationRequest.deserializeBinary(Buffer.from(req.body));
+  const currentContestant = await getCurrentContestant(req);
+  const currentTeam = await getCurrentTeam(req);
+  try {
+    await db.beginTransaction();
+    const loginSuccess = loginRequired(req, res, { team: false, lock: true});
+    if (!loginSuccess) {
+      await db.rollback();
+      return;
+    }
+    const currentContestStatus = await getCurrentContestStatus();
+    if (currentContestStatus.contest.status !== Contest.Status.REGISTRATION) {
+      haltPb(res, 403, "チーム登録期間外は辞退できません");
+      return;
+    }
+    if (currentTeam.leader_id == currentTeam.id) {
+      await db.query(
+        'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL WHERE `id` = ? LIMIT 1',
+        [currentTeam.id],
+      )
+      await db.query(
+        'UPDATE `contestants` SET `team_id` = NULL WHERE `team_id` = ?',
+        [currentTeam.id],
+      )
+    } else {
+      await db.query(
+        'UPDATE `contestants` SET `team_id` = NULL WHERE `id` = ? LIMIT 1',
+        [currentContestant.id],
+      )
+    }
+    const response = new DeleteRegistrationResponse();
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    await db.rollback();
+  } finally {
+    await db.end();
+  }
+});
 
 app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const db = await connection;
   const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Buffer.from(req.body));
-=======
-app.delete("/api/registration", async (req, res, next) => {
-  const db = await connection;
-  await db.beginTransaction();
-  const loginSuccess = loginRequired(req, res, {lock: true});
-  if (!loginSuccess) {
-    return;
-  }
-
-  const passRestricted = await contestStatusRestricted(res, [Contest.Status.REGISTRATION], "チーム登録期間外は辞退できません");
-  if (!passRestricted) {
-    return;
-  }
-
-  const currentTeam = await getCurrentTeam(req);
-  const currentContestant = await getCurrentContestant(req);
-  if (currentTeam.leader_id === currentContestant.id) {
-    await db.query(
-      'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL WHERE `id` = ? LIMIT 1',
-      [currentTeam.id]
-    );
-    await db.query(
-      'UPDATE `contestants` SET `team_id` = NULL WHERE `team_id` = ?',
-      [currentTeam.id]
-    );
-  } else {
-    await db.query(
-      'UPDATE `contestants` SET `team_id` = NULL WHERE `id` = ? LIMIT 1',
-      [currentContestant.id]
-    );
-  }
-  await db.commit();
-
-  const response = new DeleteRegistrationResponse();
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
-})
-
-app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
-  const db = await connection;
->>>>>>> 287db6d8ad2fb23f5099ec5620c2290b20ceb8ac
 
   await db.beginTransaction();
   const loginSuccess = loginRequired(req, res);
