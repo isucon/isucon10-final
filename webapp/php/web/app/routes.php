@@ -14,10 +14,13 @@ return function (App $app) {
         return $response;
     });
 
-    $app->get('/', function (Request $request, Response $response) {
-        $response->getBody()->write('Hello world!');
-        return $response;
-    });
+    foreach (['/', '/registration', '/signup', '/login', '/logout', '/teams'] as $path) {
+        $app->get($path, function(Request $request, Response $response) {
+            $content = file_get_contents(realpath(__DIR__ . '/../public/audience.html'));
+            $response->getBody()->write($content);
+            return $response;
+        });
+    }
 
     $app->group('/users', function (Group $group) {
         $group->get('', ListUsersAction::class);

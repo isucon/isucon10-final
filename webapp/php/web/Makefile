@@ -26,17 +26,11 @@ setup: \
 	public/sw.js.map
 
 run:
-	php -S 0.0.0.0:80 -t public public/index.php
+	php -S 0.0.0.0:80 -t public app.php
 
-public/%: ../../frontend
-	[[ -f "$@" ]] || cp -r $</$@ $@
+public: ../../frontend/public
+	ln -s $< $@
 
 clean:
 	rm -rf vendor
-	rm -rf \
-		public/admin.html \
-		public/audience.html \
-		public/contestant.html \
-		public/packs \
-		public/sw.js \
-		public/sw.js.map
+	rm -f public

@@ -5,9 +5,4 @@
 /logs/*
 !/logs/README.md
 .phpunit.result.cache
-/public/admin.html
-/public/audience.html
-/public/contestant.html
-/public/packs
-/public/sw.js
-/public/sw.js.map
+/public
