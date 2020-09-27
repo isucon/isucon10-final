@@ -25,6 +25,10 @@ def report_benchmark_result(job_handle)
   score_raw = rand(30000)
   score_deduction = [rand(2000) - 1800, 0].max
   marked_at = Time.now
+  marked_at_pb = Google::Protobuf::Timestamp.new(
+    seconds: marked_at.to_i,
+    nanos: ((marked_at.to_f - marked_at.to_i) * (1000 ** 3)).to_i
+  )
 
   benchmark_result = Xsuportal::Proto::Resources::BenchmarkResult.new(
     finished: true,
@@ -35,10 +39,7 @@ def report_benchmark_result(job_handle)
       deduction: score_deduction,
     ),
     reason: 'OK',
-    marked_at: Google::Protobuf::Timestamp.new(
-      seconds: marked_at.to_i,
-      nanos: ((marked_at.to_f - marked_at.to_i) * (1000 ** 3)).to_i
-    ),
+    marked_at: marked_at_pb,
   )
 
   call.send_msg(
@@ -48,6 +49,7 @@ def report_benchmark_result(job_handle)
       nonce: nonce,
       result: Xsuportal::Proto::Resources::BenchmarkResult.new(
         finished: false,
+        marked_at: marked_at_pb,
       )
     )
   )
@@ -74,10 +76,7 @@ def report_benchmark_result(job_handle)
           deduction: score_deduction,
         ),
         reason: 'OK',
-        marked_at: Google::Protobuf::Timestamp.new(
-          seconds: marked_at.to_i,
-          nanos: ((marked_at.to_f - marked_at.to_i) * (1000 ** 3)).to_i
-        ),
+        marked_at: marked_at_pb,
       )
     )
   )
