@@ -26,6 +26,7 @@ import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotif
 import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contestant/signup_pb";
 import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
 import { LogoutResponse } from "./proto/xsuportal/services/contestant/logout_pb";
+import { GetRegistrationSessionResponse, GetRegistrationSessionQuery } from "./proto/xsuportal/services/registration/session_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -680,6 +681,51 @@ app.get("/api/audience/teams", async (req, res, next) => {
 app.get("/api/audience/dashboard", async (req, res, next) => {
   const response = new AudienceDashboardResponse();
   const leaderboard = await getLeaderboardResource();
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.get("/api/registration/session", async (req, res, next) => {
+  let team = null;
+  const db = await connection;
+  const currentTeam = await getCurrentTeam(req);
+
+  if (currentTeam) {
+    team = currentTeam;
+  } else if (req.query && req.query.team_id && req.query.invite_token) {
+    let [t] = await db.query('SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE LIMIT 1', [req.query.team_id, req.query.invite_token]);
+    if (t == null) {
+      haltPb(res, 404, "招待URLが無効です");
+      return;
+    }
+    team = t;
+  }
+  
+  const members = await db.query('SELECT * FROM `contestants` WHERE `team_id` = ?', [team.id]);
+  const currentContestant = await getCurrentContestant(req);
+  let status = null;
+  if (currentContestant[team.id] != null) {
+    status = GetRegistrationSessionResponse.Status.JOINED;
+  } else if (team != null && members.count >= 3) {
+    status = GetRegistrationSessionResponse.Status.NOT_JOINABLE;
+  } else if (currentContestant == null) {
+    status = GetRegistrationSessionResponse.Status.NOT_LOGGED_IN;
+  } else if (team != null) {
+    status = GetRegistrationSessionResponse.Status.JOINABLE;
+  } else if (team == null) {
+    status = GetRegistrationSessionResponse.Status.CREATABLE;
+  } else {
+    throw new Error("undeteminable status");
+  }
+
+  const response = new GetRegistrationSessionResponse();
+  if (team) {
+    const teamResource = await getTeamResource(team, currentContestant.id == currentTeam.leader_id, true, false);
+    response.setTeam(teamResource);
+    response.setMemberInviteUrl(`/registration?team_id=${team.id}&invite_token=${team.invite_token}`);
+    response.setInviteToken(team.invite_token);
+  }
+  response.setStatus(status);
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
