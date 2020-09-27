@@ -307,7 +307,7 @@ function getContestResource(contest: any) {
 
 async function getLeaderboardResource(teamId: number = 0) {
   const db = await connection;
-  const contest = (await getCurrentContest()).contest;
+  const contest = (await getCurrentContestStatus()).contest;
   const contestFinished = contest.status === Contest.Status.FINISHED;
   const contestFreezesAt = contest.contest_freezes_at;
 
