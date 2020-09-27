@@ -26,6 +26,8 @@ jobs:
       run:
         working-directory: packer
     steps:
+      - name: Kill other qemu-system
+        run: pkill -f -9 qemu-system || :
       - name: Cancel Previous Runs (for pull requests)
         if: "${{ github.event_name == 'pull_request' }}"
         uses: styfle/cancel-workflow-action@0.5.0
