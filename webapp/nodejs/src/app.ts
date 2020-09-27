@@ -823,7 +823,6 @@ app.delete("/api/registration", async (req, res, next) => {
 
 app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const db = await connection;
-  const request = InitializeRequest.deserializeBinary(Buffer.from(req.body));
 
   await db.beginTransaction();
   const loginSuccess = loginRequired(req, res);
@@ -841,6 +840,11 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
     'SELECT COUNT(*) AS `cnt` FROM `benchmark_jobs` WHERE `team_id` = ? AND `finished_at` IS NULL',
     currentTeam.id
   );
+  if (jobCount && jobCount.cnt > 0) {
+    haltPb(res, 403, "既にベンチマークを実行中です");
+    return;
+  }
+
   await db.query(
     'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
     [currentTeam.id, req.hostname, BenchmarkJob.Status.PENDING]
