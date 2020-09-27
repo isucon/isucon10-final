@@ -742,6 +742,30 @@ app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
   res.end(Buffer.from(response.serializeBinary()));
 })
 
+app.post("/api/contestant/clarifications", async (req, res, next) => {
+  const loginSuccess = loginRequired(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  const request = RespondClarificationRequest.deserializeBinary(Buffer.from(req.body));
+  const currentTeam = await getCurrentTeam();
+  const db = await connection;
+  await db.beginTransaction();
+
+  await db.query(
+    'INSERT INTO `clarifications` (`team_id`, `question`, `created_at`, `updated_at`) VALUES (?, ?, NOW(6), NOW(6))',
+    [currentTeam.id, request.getQuestion()]
+  )
+
+  const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1')
+
+  const response = new RespondClarificationResponse();
+  response.setClarification(clar);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+})
+
 app.listen(process.env.PORT ?? 9292, () => {
   console.log("Listening on 9292");
 });
