@@ -40,8 +40,8 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "Xsuportal\\Proto": "lib/Xsuportal/Proto",
-            "GPBMetadata": "lib/GPBMetadata"
+            "Xsuportal\\Proto\\": "lib/Xsuportal/Proto",
+            "GPBMetadata\\": "lib/GPBMetadata"
         }
     },
     "autoload-dev": {
