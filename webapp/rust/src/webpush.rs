@@ -23,47 +23,25 @@ struct JWTClaims {
     sub: String,
 }
 
-#[derive(Debug)]
-pub enum WebPushError {
-    OpensslError(openssl::error::ErrorStack),
-    JWTError(jsonwebtoken::errors::Error),
+pub struct WebPushSigner<'a> {
+    encoding_key: &'a jsonwebtoken::EncodingKey,
+    public_key_for_push_header: &'a str,
 }
-impl From<openssl::error::ErrorStack> for WebPushError {
-    fn from(e: openssl::error::ErrorStack) -> Self {
-        Self::OpensslError(e)
-    }
-}
-impl From<jsonwebtoken::errors::Error> for WebPushError {
-    fn from(e: jsonwebtoken::errors::Error) -> Self {
-        Self::JWTError(e)
-    }
-}
-impl std::fmt::Display for WebPushError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
-        match self {
-            Self::OpensslError(e) => write!(f, "OpenSSL error: {}", e),
-            Self::JWTError(e) => write!(f, "JWT error: {}", e),
+impl<'a> WebPushSigner<'a> {
+    pub fn new(
+        encoding_key: &'a jsonwebtoken::EncodingKey,
+        public_key_for_push_header: &'a str,
+    ) -> Self {
+        Self {
+            encoding_key,
+            public_key_for_push_header,
         }
-    }
-}
-impl std::error::Error for WebPushError {}
-
-pub struct WebPushSigner {
-    ec_key: openssl::ec::EcKey<openssl::pkey::Private>,
-}
-impl WebPushSigner {
-    pub fn new(pem: &[u8]) -> Result<Self, WebPushError> {
-        Ok(Self {
-            ec_key: openssl::ec::EcKey::private_key_from_pem(&pem)?,
-        })
     }
     pub fn sign(
         &self,
         endpoint: &url::Url,
         subject: &str,
-    ) -> Result<reqwest::header::HeaderMap, WebPushError> {
-        let pkey = openssl::pkey::PKey::from_ec_key(self.ec_key.clone())?;
-        let vapid_key = jsonwebtoken::EncodingKey::from_ec_pem(&pkey.private_key_to_pem_pkcs8()?)?;
+    ) -> Result<reqwest::header::HeaderMap, jsonwebtoken::errors::Error> {
         let jwt_header = jsonwebtoken::Header::new(jsonwebtoken::Algorithm::ES256);
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -74,16 +52,7 @@ impl WebPushSigner {
             sub: subject.to_owned(),
             exp: now + 24 * 60 * 60,
         };
-        let jwt = jsonwebtoken::encode(&jwt_header, &claims, &vapid_key)?;
-        let public_key = self.ec_key.public_key();
-        let mut ctx = openssl::bn::BigNumContext::new()?;
-        let public_key_bytes = public_key.to_bytes(
-            self.ec_key.group(),
-            openssl::ec::PointConversionForm::UNCOMPRESSED,
-            &mut ctx,
-        )?;
-        let public_key_for_push_header =
-            base64::encode_config(public_key_bytes, base64::URL_SAFE_NO_PAD);
+        let jwt = jsonwebtoken::encode(&jwt_header, &claims, &self.encoding_key)?;
 
         let mut headers = reqwest::header::HeaderMap::new();
         headers.insert(
@@ -106,7 +75,7 @@ impl WebPushSigner {
             reqwest::header::AUTHORIZATION,
             reqwest::header::HeaderValue::from_str(&format!(
                 "vapid t={},k={}",
-                jwt, public_key_for_push_header
+                jwt, self.public_key_for_push_header
             ))
             .unwrap(),
         );

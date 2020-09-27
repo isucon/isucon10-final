@@ -22,8 +22,13 @@ impl WebPushNotifier {
                 Url::parse(&self.push_subscription.endpoint).expect("Failed to parse endpoint");
             let payload = crate::webpush::build_payload(&auth, &p256dh, &self.encoded_message)
                 .expect("Failed to build WebPush payload");
-            let signer = WebPushSigner::new(&WEBPUSH_VAPID_PRIVATE_KEY)
-                .expect("Failed to create WebPushSigner");
+            let vapid_key = WEBPUSH_VAPID_KEY
+                .as_ref()
+                .expect("VapidKey is not available");
+            let signer = WebPushSigner::new(
+                &vapid_key.encoding_key,
+                &vapid_key.public_key_for_push_header,
+            );
             const WEBPUSH_SUBJECT: &str = "xsuportal@example.com";
             let headers = signer
                 .sign(&endpoint, WEBPUSH_SUBJECT)
@@ -77,7 +82,7 @@ where
             ),
         };
         notify(conn, &notification, &contestant.0)?;
-        if !WEBPUSH_VAPID_PRIVATE_KEY.is_empty() {
+        if WEBPUSH_VAPID_KEY.is_some() {
             notifiers.extend(build_webpush_notifier(conn, &notification, &contestant.0)?);
         }
     }
@@ -109,7 +114,7 @@ where
             ),
         };
         notify(conn, &notification, &contestant.0)?;
-        if !WEBPUSH_VAPID_PRIVATE_KEY.is_empty() {
+        if WEBPUSH_VAPID_KEY.is_some() {
             notifiers.extend(build_webpush_notifier(conn, &notification, &contestant.0)?);
         }
     }
@@ -181,14 +186,18 @@ impl FromRow for PushSubscription {
     }
 }
 
-lazy_static::lazy_static! {
-    static ref WEBPUSH_VAPID_PRIVATE_KEY: Vec<u8> = load_webpush_vapid_private_key();
-    static ref EC_GROUP: openssl::ec::EcGroup = openssl::ec::EcGroup::from_curve_name(openssl::nid::Nid::X9_62_PRIME256V1).expect("EC Prime256v1 is not supported");
+struct VapidKey {
+    encoding_key: jsonwebtoken::EncodingKey,
+    public_key_for_push_header: String,
 }
 
-fn load_webpush_vapid_private_key() -> Vec<u8> {
-    const WEBPUSH_VAPID_PRIVATE_KEY_PATH: &str = "../vapid_private.pem";
-    match std::fs::File::open(WEBPUSH_VAPID_PRIVATE_KEY_PATH) {
+lazy_static::lazy_static! {
+    static ref WEBPUSH_VAPID_KEY: Option<VapidKey> = load_webpush_vapid_private_key();
+}
+const WEBPUSH_VAPID_PRIVATE_KEY_PATH: &str = "../vapid_private.pem";
+
+fn load_webpush_vapid_private_key() -> Option<VapidKey> {
+    let pem_content = match std::fs::File::open(WEBPUSH_VAPID_PRIVATE_KEY_PATH) {
         Ok(mut file) => {
             use std::io::Read;
             let mut buf = Vec::new();
@@ -202,38 +211,53 @@ fn load_webpush_vapid_private_key() -> Vec<u8> {
                 WEBPUSH_VAPID_PRIVATE_KEY_PATH,
                 e
             );
-            Vec::new()
+            return None;
         }
+    };
+    let ec_key = openssl::ec::EcKey::private_key_from_pem(&pem_content);
+    if let Err(e) = ec_key {
+        log::warn!(
+            "Failed to parse WebPush VAPID private key {}: {:?}",
+            WEBPUSH_VAPID_PRIVATE_KEY_PATH,
+            e
+        );
+        return None;
     }
+    let ec_key = ec_key.unwrap();
+
+    let mut ctx = openssl::bn::BigNumContext::new().unwrap();
+    let public_key = ec_key.public_key();
+    let key_bytes = public_key
+        .to_bytes(
+            ec_key.group(),
+            openssl::ec::PointConversionForm::UNCOMPRESSED,
+            &mut ctx,
+        )
+        .unwrap();
+    let public_key_for_push_header = data_encoding::BASE64URL_NOPAD.encode(&key_bytes);
+
+    let pkey =
+        openssl::pkey::PKey::from_ec_key(ec_key).expect("Failed to construct PKey from EcKey");
+    let pkcs8 = pkey
+        .private_key_to_pem_pkcs8()
+        .expect("Failed to get private key from PKey");
+    let encoding_key = jsonwebtoken::EncodingKey::from_ec_pem(&pkcs8)
+        .expect("Failed to construct EncodingKey from PKey");
+
+    Some(VapidKey {
+        encoding_key,
+        public_key_for_push_header,
+    })
 }
 
 pub fn get_public_key_for_push_header() -> Option<String> {
-    if WEBPUSH_VAPID_PRIVATE_KEY.is_empty() {
-        None
-    } else {
-        openssl::ec::EcKey::private_key_from_pem(&WEBPUSH_VAPID_PRIVATE_KEY)
-            .map_err(|e| {
-                log::warn!("Failed to parse WebPush VAPID private key: {:?}", e);
-                e
-            })
-            .ok()
-            .map(|ec_key| {
-                let mut ctx = openssl::bn::BigNumContext::new().unwrap();
-                let key = ec_key.public_key();
-                let key_bytes = key
-                    .to_bytes(
-                        &*EC_GROUP,
-                        openssl::ec::PointConversionForm::UNCOMPRESSED,
-                        &mut ctx,
-                    )
-                    .unwrap();
-                data_encoding::BASE64URL_NOPAD.encode(&key_bytes)
-            })
-    }
+    WEBPUSH_VAPID_KEY
+        .as_ref()
+        .map(|key| key.public_key_for_push_header.clone())
 }
 
 pub fn is_webpush_available() -> bool {
-    !WEBPUSH_VAPID_PRIVATE_KEY.is_empty()
+    WEBPUSH_VAPID_KEY.is_some()
 }
 
 fn build_webpush_notifier<Q>(
@@ -263,9 +287,4 @@ where
             encoded_message: encoded_message.clone(),
         })
         .collect())
-    /*
-    for sub in subs {
-    }
-    Ok(())
-        */
 }
