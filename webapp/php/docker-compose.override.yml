@@ -1,8 +1,13 @@
 version: "3.7"
 services:
-  php:
-    build: ./php
+  nginx:
+    build: ./php/nginx
     volumes:
       - .:/isucon10/isucon10-final/webapp
     ports:
       - 8081:80
+
+  php:
+    build: ./php
+    volumes:
+      - .:/isucon10/isucon10-final/webapp
