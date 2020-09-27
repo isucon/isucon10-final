@@ -1,12 +1,30 @@
 #!/usr/bin/env ruby
-$: << File.expand_path('../lib', __dir__)
 require 'optparse'
 require 'json'
 require 'webpush'
-require 'database'
+require 'mysql2'
+require 'mysql2-cs-bind'
+
+$: << File.expand_path('../../../webapp/ruby/lib', __dir__)
 require 'xsuportal/resources/notification_pb'
 
 WEBPUSH_SUBJECT = 'xsuportal-debug@example.com'
+
+def db
+  @db ||= Mysql2::Client.new(
+    host: ENV['MYSQL_HOSTNAME'] || '127.0.0.1',
+    port: ENV['MYSQL_PORT'] || '3306',
+    username: ENV['MYSQL_USER'] || 'isucon',
+    database: ENV['MYSQL_DATABASE'] || 'xsuportal',
+    password: ENV['MYSQL_PASS'] || 'isucon',
+    charset: 'utf8mb4',
+    database_timezone: :utc,
+    cast_booleans: true,
+    symbolize_keys: true,
+    reconnect: true,
+    init_command: "SET time_zone='+00:00';",
+  )
+end
 
 def get_vapid_key(path)
   @vapid_key ||= begin
@@ -28,7 +46,7 @@ def make_test_notification_pb
   )
 end
 
-def insert_notification(db, notification_pb, contestant_id)
+def insert_notification(notification_pb, contestant_id)
   encoded_message = [Xsuportal::Proto::Resources::Notification.encode(notification_pb)].pack('m0')
   db.xquery(
     'INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))',
@@ -38,7 +56,7 @@ def insert_notification(db, notification_pb, contestant_id)
   db.query('SELECT * FROM `notifications` WHERE `id` = LAST_INSERT_ID()').first
 end
 
-def get_push_subscriptions(db, contestant_id)
+def get_push_subscriptions(contestant_id)
   subs = db.xquery(
     'SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?',
     contestant_id,
@@ -77,12 +95,11 @@ option_parser.parse!
 abort option_parser.banner if !contestant_id || !vapid_private_key_path
 
 vapid_key = get_vapid_key(vapid_private_key_path)
-db = Xsuportal::Database.connection
 
-subs = get_push_subscriptions(db, contestant_id)
+subs = get_push_subscriptions(contestant_id)
 
 notification_pb = make_test_notification_pb
-notification = insert_notification(db, notification_pb, contestant_id)
+notification = insert_notification(notification_pb, contestant_id)
 notification_pb.id = notification[:id]
 notification_pb.created_at = notification[:created_at]
 

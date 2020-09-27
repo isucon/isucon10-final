@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'mysql2'
+gem 'mysql2-cs-bind'
+gem 'grpc_kit', git: 'https://isucon10-public.s3.dualstack.ap-northeast-1.amazonaws.com/git/6MGgQp9lDmsK6G0CNa0DCOWHkOXID9-1davWxzKzI28/grpc_kit.git', ref: 'blocking-recv-buffer'
+gem 'webpush'

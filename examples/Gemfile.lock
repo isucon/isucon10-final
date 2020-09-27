@@ -1,0 +1,39 @@
+GIT
+  remote: https://isucon10-public.s3.dualstack.ap-northeast-1.amazonaws.com/git/6MGgQp9lDmsK6G0CNa0DCOWHkOXID9-1davWxzKzI28/grpc_kit.git
+  revision: 371fccb1ae4dd4568dc3788155d93078bf95186c
+  ref: blocking-recv-buffer
+  specs:
+    grpc_kit (0.3.9)
+      ds9 (>= 1.4.0)
+      google-protobuf (>= 3.7.0)
+      googleapis-common-protos-types (>= 1.0.2)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ds9 (1.4.1)
+      mini_portile2 (>= 2.2.0)
+    google-protobuf (3.13.0)
+    googleapis-common-protos-types (1.0.5)
+      google-protobuf (~> 3.11)
+    hkdf (0.3.0)
+    jwt (2.2.2)
+    mini_portile2 (2.5.0)
+    mysql2 (0.5.3)
+    mysql2-cs-bind (0.1.0)
+      mysql2
+    webpush (1.0.0)
+      hkdf (~> 0.2)
+      jwt (~> 2.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  grpc_kit!
+  mysql2
+  mysql2-cs-bind
+  webpush
+
+BUNDLED WITH
+   2.1.4
