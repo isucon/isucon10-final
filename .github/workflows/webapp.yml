@@ -8,7 +8,7 @@ on:
 jobs:
   protoc-check-diff:
     name: protoc-check-diff
-    runs-on: ubuntu-20.04
+    runs-on: [self-hosted, linux, small]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -47,8 +47,8 @@ jobs:
         with:
           version: ${{ steps.protoc-ver.output.ver }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - run: sudo apt-get install -y --no-install-recommends zsh
+
+      #- run: sudo apt-get install -y --no-install-recommends zsh
 
       - run: ./bin/xsuportal-protoc.sh
       - run: git add .
@@ -56,7 +56,7 @@ jobs:
 
   frontend:
     name: frontend
-    runs-on: ubuntu-20.04
+    runs-on: [self-hosted, linux, small]
     defaults:
       run:
         working-directory: webapp/frontend
@@ -89,7 +89,7 @@ jobs:
 
   ruby:
     name: ruby
-    runs-on: ubuntu-20.04
+    runs-on: [self-hosted, linux, small]
     defaults:
       run:
         working-directory: webapp/ruby
@@ -105,7 +105,7 @@ jobs:
 
   rust:
     name: rust
-    runs-on: ubuntu-20.04
+    runs-on: [self-hosted, linux, small]
     defaults:
       run:
         working-directory: webapp/rust
@@ -149,3 +149,16 @@ jobs:
         with:
           command: test
           args: --manifest-path webapp/rust/Cargo.toml
+
+  golang:
+    name: golang
+    runs-on: [self-hosted, linux, small]
+    defaults:
+      run:
+        working-directory: webapp/golang
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.15.0'
+      - run: make
