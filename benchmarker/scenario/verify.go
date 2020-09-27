@@ -293,7 +293,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 
 	cacheTime := 2 * time.Second
 	if allowCache {
-		cacheTime = 2 * time.Second
+		cacheTime = 3 * time.Second
 
 		if allowedMaxTime.After(contest.ContestFreezesAt) {
 			return nil
