@@ -5,7 +5,23 @@ services:
     environment:
       - MYSQL_HOSTNAME=mysql
       - MYSQL_PORT=3306
+      - BENCHMARK_SERVER_HOST=grpc
+      - BENCHMARK_SERVER_PORT=50051
     volumes:
       - .:/isucon10/isucon10-final/webapp
     ports:
       - 50051:50051
+    depends_on:
+      - mysql
+
+  grpc:
+    build:
+      context: ./ruby
+      dockerfile: grpc.dockerfile
+    environment:
+      - MYSQL_HOSTNAME=mysql
+      - MYSQL_PORT=3306
+    volumes:
+      - .:/isucon10/isucon10-final/webapp
+    depends_on:
+      - mysql
