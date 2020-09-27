@@ -2,7 +2,7 @@ import fs from 'fs';
 import webpush from 'web-push';
 import sshpk from 'sshpk';
 
-import type { Pool, Connection } from 'promise-mysql';
+import type { Pool } from 'promise-mysql';
 import { Notification } from './proto/xsuportal/resources/notification_pb';
 
 export class Notifier {

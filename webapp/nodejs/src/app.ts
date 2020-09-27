@@ -9,18 +9,16 @@ import { Notifier } from "./notifier";
 import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
 import {Error as PbError} from "./proto/xsuportal/error_pb";
 import { Clarification } from "./proto/xsuportal/resources/clarification_pb";
-import { ListClarificationsResponse, GetClarificationResponse, CreateClarificationRequest, RespondClarificationRequest, RespondClarificationResponse } from "./proto/xsuportal/services/admin/clarifications_pb";
+import { ListClarificationsResponse, GetClarificationResponse, RespondClarificationRequest, RespondClarificationResponse } from "./proto/xsuportal/services/admin/clarifications_pb";
 import { Team } from "./proto/xsuportal/resources/team_pb";
 import { Contestant } from "./proto/xsuportal/resources/contestant_pb";
 import { Contest } from "./proto/xsuportal/resources/contest_pb";
 import { GetCurrentSessionResponse } from "./proto/xsuportal/services/common/me_pb";
-import { fstat } from "fs";
-import { ListTeamsResponse as AdminListTeamsResponse } from "./proto/xsuportal/services/admin/teams_pb";
 import { ListTeamsResponse as AudienceListTeamsResponse } from "./proto/xsuportal/services/audience/team_list_pb";
 import { DashboardResponse as AudienceDashboardResponse } from "./proto/xsuportal/services/audience/dashboard_pb";
 import { Leaderboard } from "./proto/xsuportal/resources/leaderboard_pb";
 import { BenchmarkJob } from "./proto/xsuportal/resources/benchmark_job_pb";
-import { EnqueueBenchmarkJobResponse, GetBenchmarkJobResponse } from "./proto/xsuportal/services/admin/benchmark_pb";
+import { GetBenchmarkJobResponse } from "./proto/xsuportal/services/admin/benchmark_pb";
 import { ListBenchmarkJobsResponse, EnqueueBenchmarkJobRequest as ContestantEnqueueBenchmarkJobRequest, EnqueueBenchmarkJobResponse as ContestantEnqueueBenchmarkJobResponse } from "./proto/xsuportal/services/contestant/benchmark_pb";
 import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb";
 import { DashboardResponse } from "./proto/xsuportal/services/admin/dashboard_pb";
@@ -28,7 +26,7 @@ import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotif
 import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contestant/signup_pb";
 import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
 import { LogoutResponse } from "./proto/xsuportal/services/contestant/logout_pb";
-import { GetRegistrationSessionResponse, GetRegistrationSessionQuery, UpdateRegistrationRequest, UpdateRegistrationResponse, DeleteRegistrationRequest, DeleteRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
+import { GetRegistrationSessionResponse, UpdateRegistrationRequest, UpdateRegistrationResponse, DeleteRegistrationRequest, DeleteRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
 import { CreateTeamRequest, CreateTeamResponse } from "./proto/xsuportal/services/registration/create_team_pb";
 import { JoinTeamRequest, JoinTeamResponse } from "./proto/xsuportal/services/registration/join_pb";
 
@@ -57,16 +55,6 @@ const haltPb = (res: express.Response, code: number, humanMessage: string) => {
   const error = new PbError();
   error.setCode(code);
   error.setHumanMessage(humanMessage);
-  res.end(Buffer.from(error.serializeBinary()));
-};
-
-const haltPbWithError = (res: express.Response, code: number, humanMessage: string, err: Error) => {
-  res.contentType('application/vnd.google.protobuf; proto=xsuportal.proto.Error');
-  res.status(code);
-  const error = new PbError();
-  error.setCode(code);
-  error.setHumanMessage(humanMessage);
-  error.setHumanDescriptionsList([err.stack ?? err.message]);
   res.end(Buffer.from(error.serializeBinary()));
 };
 
@@ -661,10 +649,10 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
       [req.params.id],
     )[0];
 
-    const [team] = await db.query(
+    team = await db.query(
       'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
       clar.team_id,
-    );
+    )[0];
   } catch (e) {
     await db.rollback();
   } finally {
@@ -721,6 +709,7 @@ app.get("/api/audience/teams", async (req, res, next) => {
 app.get("/api/audience/dashboard", async (req, res, next) => {
   const response = new AudienceDashboardResponse();
   const leaderboard = await getLeaderboardResource();
+  response.setLeaderboard(leaderboard);
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
@@ -933,10 +922,8 @@ app.put("/api/registration", async (req, res, next) => {
   }
 });
 
-
 app.delete("/api/registration", async (req, res, next) => {
   const db = await getDB();
-  const request = DeleteRegistrationRequest.deserializeBinary(Buffer.from(req.body));
   const currentContestant = await getCurrentContestant(req);
   const currentTeam = await getCurrentTeam(req);
   try {
