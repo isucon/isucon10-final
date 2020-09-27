@@ -3,14 +3,14 @@ services:
   frontend:
     build: ./frontend
     volumes:
-      - .:/isucon10/isucon10-final/webapp
+      - ..:/isucon10/isucon10-final
 
   golang:
     build: ./golang
     environment:
       - NODE_ENV=development
     volumes:
-      - .:/isucon10/isucon10-final/webapp
+      - ..:/isucon10/isucon10-final
     ports:
       - 9291:9291
 
