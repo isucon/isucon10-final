@@ -1,4 +1,4 @@
-.PHONY: help install dependencies setup public/% run clean
+.PHONY: help install dependencies setup run clean
 
 SHELL := bash
 
@@ -14,9 +14,6 @@ dependencies:
 	type php > /dev/null
 	type composer > /dev/null
 
-vendor:
-	composer install
-
 setup: \
 	public/admin.html \
 	public/audience.html \
@@ -26,7 +23,10 @@ setup: \
 	public/sw.js.map
 
 run:
-	php -S 0.0.0.0:80 -t public app.php
+	php-fpm
+
+vendor:
+	composer install
 
 public: ../../frontend/public
 	ln -s $< $@
