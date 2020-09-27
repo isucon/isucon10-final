@@ -183,7 +183,7 @@ func verifyResources(page string, res *http.Response, resources agent.Resources)
 	return errs
 }
 
-func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard, hres *http.Response, contest *model.Contest, vTeam *model.Team, sLatestMarkedAt time.Time) error {
+func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard, hres *http.Response, contest *model.Contest, vTeam *model.Team, sLatestMarkedAt time.Time, allowCache bool) error {
 	at := requestedAt.UTC()
 
 	prevLatestScore := int64(math.MaxInt64)
@@ -278,9 +278,18 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		prevLatestMarkedAt = item.GetLatestScore().GetMarkedAt().AsTime()
 	}
 
-	if !maxMarkedAt.Equal(zero) && sLatestMarkedAt.Add(-1*time.Second).After(maxMarkedAt) {
-		fmt.Printf("%s / %s\n", sLatestMarkedAt.Add(-1*time.Second), maxMarkedAt)
-		return errorInvalidResponse("規定秒数を超えてスコアがキャッシュされています")
+	if allowCache {
+		// audience でキャッシュを許す
+		if !maxMarkedAt.Equal(zero) && sLatestMarkedAt.Add(-1*time.Second).After(maxMarkedAt) {
+			fmt.Printf("%s / %s\n", sLatestMarkedAt.Add(-1*time.Second), maxMarkedAt)
+			return errorInvalidResponse("規定秒数を超えてスコアがキャッシュされています")
+		}
+	} else {
+		// contestant でキャッシュを許さない
+		if !maxMarkedAt.Equal(zero) && sLatestMarkedAt.Add(-200*time.Millisecond).After(maxMarkedAt) {
+			fmt.Printf("%s / %s\n", sLatestMarkedAt.Add(-200*time.Millisecond), maxMarkedAt)
+			return errorInvalidResponse("古い内容のリーダーボードが返却されています")
+		}
 	}
 
 	return nil
