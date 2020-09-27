@@ -185,7 +185,7 @@ pub async fn respond_clarification(
     let id = info.into_inner().0;
     let message = message.0;
 
-    let (clarification, notifiers) = web::block(move || {
+    let (clarification, notifiers, db) = web::block(move || {
         let mut conn = db.get().expect("Failed to checkout database connection");
         let current_contestant =
             crate::require_current_contestant(conn.deref_mut(), &contestant_id, false)?;
@@ -255,15 +255,38 @@ pub async fn respond_clarification(
                 team: Some(team_pb),
             },
             notifiers,
+            db,
         ))
     })
     .await
     .map_err(crate::unwrap_blocking_error)?;
 
+    let mut unavailable_subscriptions = Vec::new();
     for notifier in notifiers {
-        // TODO: Delete push_subscription when Webpush::ExpiredSubscription or Webpush::InvalidSubscription
-        let _ = notifier.send().await;
+        if let Err(e) = notifier.send().await {
+            match e {
+                crate::notifier::WebPushError::ExpiredSubscription(sub, _)
+                | crate::notifier::WebPushError::InvalidSubscription(sub, _) => {
+                    unavailable_subscriptions.push(sub);
+                }
+                _ => {
+                    return Err(crate::Error::from(e).into());
+                }
+            }
+        }
     }
+    web::block::<_, _, crate::Error>(move || {
+        let mut conn = db.get().expect("Failed to checkout database connection");
+        for sub in unavailable_subscriptions {
+            conn.exec_drop(
+                "DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
+                (sub.id,),
+            )?;
+        }
+        Ok(())
+    })
+    .await
+    .map_err(crate::unwrap_blocking_error)?;
 
     HttpResponse::Ok().protobuf(RespondClarificationResponse {
         clarification: Some(clarification),
