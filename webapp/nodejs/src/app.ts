@@ -20,6 +20,7 @@ import { BenchmarkJob } from "./proto/xsuportal/resources/benchmark_job_pb";
 import { EnqueueBenchmarkJobResponse, GetBenchmarkJobResponse } from "./proto/xsuportal/services/admin/benchmark_pb";
 import { ListBenchmarkJobsResponse } from "./proto/xsuportal/services/contestant/benchmark_pb";
 import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb";
+import { DashboardResponse } from "./proto/xsuportal/services/admin/dashboard_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -787,6 +788,20 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
 
   const response = new RespondClarificationResponse();
   response.setClarification(clar);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+})
+
+app.get("/api/contestant/dashboard", async (req, res, next) => {
+  const loginSuccess = loginRequired(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  const response = new DashboardResponse();
+  const currentTeam = await getCurrentTeam();
+  const leaderboard = await getLeaderboardResource(currentTeam.id);
+  response.setLeaderboard(leaderboard);
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 })
