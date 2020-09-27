@@ -9,5 +9,9 @@ services:
 
   php:
     build: ./php/web
+    environment:
+      - MYSQL_HOSTNAME=mysql
+      - MYSQL_PORT=3306
+      - docker=1
     volumes:
       - ..:/isucon10/isucon10-final
