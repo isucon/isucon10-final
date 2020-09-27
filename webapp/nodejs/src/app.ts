@@ -21,7 +21,7 @@ import { EnqueueBenchmarkJobResponse, GetBenchmarkJobResponse } from "./proto/xs
 import { ListBenchmarkJobsResponse } from "./proto/xsuportal/services/contestant/benchmark_pb";
 import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb";
 import { DashboardResponse } from "./proto/xsuportal/services/admin/dashboard_pb";
-import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotificationResponse } from "./proto/xsuportal/services/contestant/notifications_pb";
+import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotificationResponse, UnsubscribeNotificationRequest, UnsubscribeNotificationResponse } from "./proto/xsuportal/services/contestant/notifications_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -869,6 +869,32 @@ app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
   );
 
   const response = new SubscribeNotificationResponse();
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
+  const loginSuccess = loginRequired(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  /* TODO: notifier
+  if (!notifier.vapid_key) {
+    haltPb(res, 503, "Web Push は未対応です")
+    return
+  }
+  */
+
+  const request = UnsubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
+  const currentContestant = await getCurrentContestant();
+  const db = await connection;
+  await db.query(
+    'DELETE FROM `push_subscriptions` WHERE `contestant_id` = ? AND `endpoint` = ? LIMIT 1',
+    [currentContestant.id, request.getEndpoint()]
+  );
+
+  const response = new UnsubscribeNotificationResponse();
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
