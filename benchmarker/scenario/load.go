@@ -443,7 +443,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 	return nil
 }
 
-// 競技者による Clar のチェックと送信。最後の Clar 送信から規定秒数経過すると、 Clar の未回答を気にせずに次の Clar を送信する。
+// 競技者による Clar の送信。既に送信していて未回答の Clar がある場合は追加で送信は行わない。
 // Clar には自動更新がないのでこちらもブラウザリロード
 func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.BenchmarkStep) error {
 	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(-5*time.Second))
@@ -456,29 +456,28 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 		latestClarPostedAt := time.Now()
 
 		for ctx.Err() == nil {
-			timer := time.After(1 * time.Second)
-			res, resources, _, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
-			if err != nil {
-				step.AddError(err)
-				continue
-			}
-
-			errs := verifyResources("contestant", res, resources)
-			for _, err := range errs {
-				step.AddError(err)
-			}
-			if len(errs) > 0 {
-				return
-			}
-
-			_, err = GetClarificationsAction(ctx, leader)
-			if err != nil {
-				step.AddError(err)
-				continue
-			}
-			step.AddScore("get-clarification")
-
 			if time.Now().After(latestClarPostedAt.Add(3 * time.Second)) {
+				page, resources, _, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
+				if err != nil {
+					step.AddError(err)
+					continue
+				}
+
+				errs := verifyResources("contestant", page, resources)
+				for _, err := range errs {
+					step.AddError(err)
+				}
+				if len(errs) > 0 {
+					return
+				}
+
+				_, err = GetClarificationsAction(ctx, leader)
+				if err != nil {
+					step.AddError(err)
+					continue
+				}
+				step.AddScore("get-clarification")
+
 				clar := model.NewClarification(team)
 
 				res, err := PostClarificationAction(ctx, leader, clar)
@@ -495,6 +494,8 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				latestClarPostedAt = time.Now()
 			}
 
+			timer := time.After(3 * time.Second)
+			<-team.WaitAllClarResolve(ctx)
 			<-timer
 		}
 	}, worker.WithLoopCount(int32(len(s.Contest.Teams))))
