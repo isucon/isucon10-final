@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
-$: << File.expand_path('../lib', __dir__)
 require 'optparse'
 require 'socket'
+
+$: << File.expand_path('../webapp/ruby/lib', __dir__)
 require 'xsuportal/services/bench/receiving_pb'
 require 'xsuportal/services/bench/reporting_pb'
 require 'xsuportal/services/bench/receiving_services_pb'
