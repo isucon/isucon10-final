@@ -29,5 +29,21 @@ return function (ContainerBuilder $containerBuilder) {
         Service::class => function(ContainerInterface $c) {
             return new Service($c);
         },
+
+        PDO::class => function(ContainerInterface $container): PDO {
+            $settings = $container->get('settings')['database'];
+
+            $dsn = vsprintf('mysql:host=%s;dbname=%s;port=%d', [
+                $settings['host'],
+                $settings['dbname'],
+                $settings['port']
+            ]);
+
+            $pdo = new PDO($dsn, $settings['user'], $settings['pass']);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+            return $pdo;
+        },
     ]);
 };
