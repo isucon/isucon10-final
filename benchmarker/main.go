@@ -20,6 +20,36 @@ import (
 	isuxportalResources "github.com/isucon/isucon10-portal/proto.go/isuxportal/resources"
 )
 
+// 点数調整用定数
+var (
+	// 回数に対して n 倍
+	SCORE_BENCHMARK_FINISH int64 = 10
+	// 回数に対して n 倍
+	SCORE_CLARIFICATION_SEEN int64 = 10
+	// 回数に対して n 倍
+	SCORE_SHOW_DASHBOARD int64 = 2
+
+	// 回数に対して 1/n
+	SCORE_AUDIENCE_SHOW_DASHBOARD int64 = 10
+
+	// 閾値を超えたら N 倍して / 10
+	BONUS = [][]int64{
+		[]int64{300, 20},
+		[]int64{180, 16},
+		[]int64{120, 14},
+		[]int64{60, 12},
+	}
+
+	// エラーによる減点
+	DEDUCTION_ERROR int64 = 50
+	// タイムアウトによる減点
+	DEDUCTION_TIMEOUT int64 = 1000
+	// FAIL になるエラー回数
+	FAIL_ERROR_COUNT int64 = 100
+	// タイムアウトの減点回数
+	TIMEOUT_COUNT int64 = 100
+)
+
 var (
 	targetAddress      string
 	profileFile        string
@@ -56,9 +86,9 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	breakdown := result.Score.Breakdown()
 
 	// 仮想競技者スコア
-	result.Score.Set("finish-benchmark", 10)
-	result.Score.Set("resolve-clarification", 10)
-	result.Score.Set("get-dashboard", 2)
+	result.Score.Set("finish-benchmark", SCORE_BENCHMARK_FINISH)
+	result.Score.Set("resolve-clarification", SCORE_CLARIFICATION_SEEN)
+	result.Score.Set("get-dashboard", SCORE_SHOW_DASHBOARD)
 	contestantScore := result.Score.Sum()
 
 	// 大会規模ボーナス
@@ -70,20 +100,19 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 		contestants += n
 	}
 	bonusMag := int64(10)
-	if contestants >= 300 {
-		bonusMag = 20
-	} else if contestants >= 180 {
-		bonusMag = 16
-	} else if contestants >= 120 {
-		bonusMag = 14
-	} else if contestants >= 60 {
-		bonusMag = 12
+	for _, bonus := range BONUS {
+		threshhold := bonus[0]
+		mag := bonus[1]
+		if contestants >= threshhold {
+			bonusMag = mag
+			break
+		}
 	}
 
 	// 観客スコア
 	audienceScore := int64(0)
 	if n, ok := breakdown["audience-get-dashboard"]; ok {
-		audienceScore = n / 10
+		audienceScore = n / SCORE_AUDIENCE_SHOW_DASHBOARD
 	}
 
 	deduction := int64(0)
@@ -112,13 +141,16 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 		}
 	}
 
-	if passed && deduction > 100 {
+	if passed && deduction > FAIL_ERROR_COUNT {
 		passed = false
-		reason = "Error count over 100"
+		reason = fmt.Sprintf("Error count over %d", FAIL_ERROR_COUNT)
 	}
 
 	scoreRaw := (contestantScore * bonusMag / 10) + audienceScore
-	scoreDeduction := (deduction * 5) + (timeoutCount / 100)
+	scoreDeduction := (deduction * DEDUCTION_ERROR)
+	if timeoutCount >= TIMEOUT_COUNT {
+		scoreDeduction += (timeoutCount / TIMEOUT_COUNT) * DEDUCTION_TIMEOUT
+	}
 	scoreTotal := scoreRaw - scoreDeduction
 	if scoreTotal <= 0 {
 		scoreTotal = 0
