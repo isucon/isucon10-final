@@ -22,6 +22,7 @@ import { ListBenchmarkJobsResponse } from "./proto/xsuportal/services/contestant
 import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb";
 import { DashboardResponse } from "./proto/xsuportal/services/admin/dashboard_pb";
 import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotificationResponse, UnsubscribeNotificationRequest, UnsubscribeNotificationResponse } from "./proto/xsuportal/services/contestant/notifications_pb";
+import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contestant/signup_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -895,6 +896,26 @@ app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
   );
 
   const response = new UnsubscribeNotificationResponse();
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.post("/api/signup", async (req, res, next) => {
+  const request = SignupRequest.deserializeBinary(Buffer.from(req.body));
+  const db = await connection;
+
+  try {
+    await db.query(
+      'INSERT INTO `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, FALSE, NOW(6))',
+      [request.getContestantId(), crypto.createHash('rsa256').update(request.getPassword(), "utf8").digest('hex')]
+    );
+  } catch (e) {
+    if (e.code !== 'ER_DUP_ENTRY') throw e;
+    haltPb(res, 400, "IDが既に登録されています");
+    return;
+  }
+
+  const response = new SignupResponse();
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
