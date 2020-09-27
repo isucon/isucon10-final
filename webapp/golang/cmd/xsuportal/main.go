@@ -1058,10 +1058,10 @@ func initialize(e echo.Context) error {
 	if req.Contest != nil {
 		_, err := db.Exec(
 			"INSERT `contest_config` (`registration_open_at`, `contest_starts_at`, `contest_freezes_at`, `contest_ends_at`) VALUES (?, ?, ?, ?)",
-			time.Unix(req.Contest.RegistrationOpenAt.Seconds, 0).UTC(),
-			time.Unix(req.Contest.ContestStartsAt.Seconds, 0).UTC(),
-			time.Unix(req.Contest.ContestFreezesAt.Seconds, 0).UTC(),
-			time.Unix(req.Contest.ContestEndsAt.Seconds, 0).UTC(),
+			req.Contest.RegistrationOpenAt.AsTime().Round(time.Microsecond),
+			req.Contest.ContestStartsAt.AsTime().Round(time.Microsecond),
+			req.Contest.ContestFreezesAt.AsTime().Round(time.Microsecond),
+			req.Contest.ContestEndsAt.AsTime().Round(time.Microsecond),
 		)
 		if err != nil {
 			return fmt.Errorf("insert contest: %w", err)

@@ -198,7 +198,7 @@ func (b *benchmarkReportService) saveAsFinished(db sqlx.Execer, job *xsuportal.B
 	if req.Result.MarkedAt == nil {
 		return status.Errorf(codes.InvalidArgument, "marked_at is required")
 	}
-	markedAt := req.Result.MarkedAt.AsTime()
+	markedAt := req.Result.MarkedAt.AsTime().Round(time.Microsecond)
 
 	result := req.Result
 	var raw, deduction sql.NullInt32
@@ -232,7 +232,7 @@ func (b *benchmarkReportService) saveAsRunning(db sqlx.Execer, job *xsuportal.Be
 	if job.StartedAt.Valid {
 		startedAt = job.StartedAt.Time
 	} else {
-		startedAt = req.Result.MarkedAt.AsTime()
+		startedAt = req.Result.MarkedAt.AsTime().Round(time.Microsecond)
 	}
 	_, err := db.Exec(
 		"UPDATE `benchmark_jobs` SET `status` = ?, `score_raw` = NULL, `score_deduction` = NULL, `passed` = FALSE, `reason` = NULL, `started_at` = ?, `updated_at` = NOW(6), `finished_at` = NULL WHERE `id` = ? LIMIT 1",
