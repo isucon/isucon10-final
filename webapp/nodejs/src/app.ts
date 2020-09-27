@@ -19,15 +19,16 @@ import { DashboardResponse as AudienceDashboardResponse } from "./proto/xsuporta
 import { Leaderboard } from "./proto/xsuportal/resources/leaderboard_pb";
 import { BenchmarkJob } from "./proto/xsuportal/resources/benchmark_job_pb";
 import { EnqueueBenchmarkJobResponse, GetBenchmarkJobResponse } from "./proto/xsuportal/services/admin/benchmark_pb";
-import { ListBenchmarkJobsResponse } from "./proto/xsuportal/services/contestant/benchmark_pb";
+import { ListBenchmarkJobsResponse, EnqueueBenchmarkJobRequest as ContestantEnqueueBenchmarkJobRequest, EnqueueBenchmarkJobResponse as ContestantEnqueueBenchmarkJobResponse } from "./proto/xsuportal/services/contestant/benchmark_pb";
 import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb";
 import { DashboardResponse } from "./proto/xsuportal/services/admin/dashboard_pb";
 import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotificationResponse, UnsubscribeNotificationRequest, UnsubscribeNotificationResponse } from "./proto/xsuportal/services/contestant/notifications_pb";
 import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contestant/signup_pb";
 import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
 import { LogoutResponse } from "./proto/xsuportal/services/contestant/logout_pb";
-import { GetRegistrationSessionResponse, GetRegistrationSessionQuery } from "./proto/xsuportal/services/registration/session_pb";
+import { GetRegistrationSessionResponse, GetRegistrationSessionQuery, UpdateRegistrationRequest, UpdateRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
 import { CreateTeamRequest, CreateTeamResponse } from "./proto/xsuportal/services/registration/create_team_pb";
+import { JoinTeamRequest, JoinTeamResponse } from "./proto/xsuportal/services/registration/join_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -754,7 +755,6 @@ app.post("/api/registration/team", async (req, res, next) => {
   const currentContestant = await getCurrentContestant(req);
 
   try {
-    await db.beginTransaction();
     await db.query('LOCK TABLES `teams` WRITE, `contestants` WRITE');
     const inviteToken = secureRandom(64);
     const [withinCapacity] = await db.query('SELECT COUNT(*) < ? AS `within_capacity` FROM `teams`', [TEAM_CAPACITY]);
@@ -786,10 +786,70 @@ app.post("/api/registration/team", async (req, res, next) => {
       [ currentContestant.id, teamId ]
     );
 
-    await db.commit();
-    await db.query('UNLOCK TABLES');
     const response = new CreateTeamResponse();
     response.setTeamId(teamId);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.query('UNLOCK TABLES');
+    await db.end();
+  }
+});
+
+app.post("/api/registration/contestant", async (req, res, next) => {
+  const db = await connection;
+  const request = JoinTeamRequest.deserializeBinary(Buffer.from(req.body));
+  
+  const currentContestant = await getCurrentContestant(req);
+
+  try {
+    await db.beginTransaction();
+    const currentContestStatus = await getCurrentContestStatus();
+    if (currentContestStatus.contest.status !== Contest.Status.REGISTRATION) {
+      haltPb(res, 403, "チーム登録期間ではありません");
+      return;
+    }
+    const loginSuccess = loginRequired(req, res, { team: false, lock: true});
+    if (!loginSuccess) {
+      await db.rollback();
+      return;
+    }
+
+    const [team] = await db.query('SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE LIMIT 1 FOR UPDATE', [
+      request.getTeamId(), request.getInviteToken()
+    ]);
+
+    if (team == null) {
+      haltPb(res, 400, '招待URLが不正です');
+      await db.rollback();
+      return;
+    }
+
+    const [members] = await db.query(
+      'SELECT COUNT(*) AS `cnt` FROM `contestants` WHERE `team_id` = ?',
+      [request.getTeamId()],
+    );
+
+    if (members.cnt >= 3) {
+      haltPb(res, 400, 'チーム人数の上限に達しています');
+      await db.rollback();
+      return;
+    }
+
+    await db.query(
+      'UPDATE `contestants` SET `team_id` = ?, `name` = ?, `student` = ? WHERE `id` = ? LIMIT 1',
+      [ 
+        request.getTeamId(),
+        request.getName(),
+        request.getIsStudent(),
+        currentContestant.id,
+      ],
+    )
+    await db.commit();
+    const response = new JoinTeamResponse();
     res.contentType(`application/vnd.google.protobuf`);
     res.end(Buffer.from(response.serializeBinary()));
   } catch (e) {
@@ -799,9 +859,51 @@ app.post("/api/registration/team", async (req, res, next) => {
   }
 });
 
+app.put("/api/registration", async (req, res, next) => {
+  const db = await connection;
+  const request = UpdateRegistrationRequest.deserializeBinary(Buffer.from(req.body));
+  const currentContestant = await getCurrentContestant(req);
+  const currentTeam = await getCurrentTeam(req);
+  try {
+    await db.beginTransaction();
+    const loginSuccess = loginRequired(req, res, { team: false, lock: true});
+    if (!loginSuccess) {
+      await db.rollback();
+      return;
+    }
+
+    if (currentTeam.leader_id == currentContestant.id) {
+      await db.query(
+        'UPDATE `teams` SET `name` = ?, `email_address` = ? WHERE `id` = ? LIMIT 1',
+        [ request.getTeamName(), request.getEmailAddress(), currentTeam.id]
+      );
+    }
+
+    await db.query(
+      'UPDATE `contestants` SET `name` = ?, `student` = ? WHERE `id` = ? LIMIT 1',
+      [
+        request.getName(), request.getIsStudent(), currentContestant.id
+      ]
+    );
+    
+    await db.commit();
+    const response = new UpdateRegistrationResponse();
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+    await db.rollback();
+  } finally {
+    await db.end();
+  }
+});
+
+
+
 app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const db = await connection;
-  const request = InitializeRequest.deserializeBinary(Buffer.from(req.body));
+  const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Buffer.from(req.body));
 
   await db.beginTransaction();
   const loginSuccess = loginRequired(req, res);
@@ -827,7 +929,7 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const [job] = await db.query('SELECT * FROM `benchmark_jobs` WHERE `id` = (SELECT LAST_INSERT_ID()) LIMIT 1')
   await db.commit();
 
-  const response = new EnqueueBenchmarkJobResponse();
+  const response = new ContestantEnqueueBenchmarkJobResponse();
   response.setJob(job);
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
