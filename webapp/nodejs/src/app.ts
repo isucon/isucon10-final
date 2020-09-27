@@ -333,8 +333,9 @@ async function getLeaderboardResource(teamId: number = 0) {
   let leaderboard = null;
   let jobResults = null;
   let teamGraphScores: any = {};
+  try {
   await db.beginTransaction();
-  leaderboard = await db.query(`
+    leaderboard = await db.query(`
     SELECT
       teams.id AS id,
       teams.name AS name,
@@ -405,8 +406,8 @@ async function getLeaderboardResource(teamId: number = 0) {
       latest_score DESC,
       latest_score_marked_at ASC
   `, [teamId, teamId, contestFinished, contestFinished, teamId, teamId, contestFinished, contestFinished]);
-   
-  jobResults = await db.query(`
+
+    jobResults = await db.query(`
     SELECT
       team_id AS team_id,
       (score_raw - score_deduction) AS score,
@@ -423,7 +424,11 @@ async function getLeaderboardResource(teamId: number = 0) {
     )
     ORDER BY finished_at,
   `, [ teamId, teamId, contestFinished, contestFreezesAt ]);
-
+  } catch (e) {
+    await db.rollback();
+  } finally {
+    await db.end();
+  }
 
   for (const result of jobResults) {
     teamGraphScores[result.team_id] = teamGraphScores[result.team_id] ?? [];
@@ -616,44 +621,48 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
     return;
   }
   const request = RespondClarificationRequest.deserializeBinary(Buffer.from(req.body));
-  let clarPb = null;
-  await db.beginTransaction();
-  const [clarBefore] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1 FOR UPDATE', [req.params.id]);
+  let team, clar, wasAnswered, wasDisclosed;
+  try {
+    await db.beginTransaction();
+    const [clarBefore] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1 FOR UPDATE', [req.params.id]);
 
-  if (clarBefore == null) {
+    if (clarBefore == null) {
+      await db.rollback();
+      haltPb(res, 404, '質問が見つかりません');
+      return;
+    }
+    wasAnswered = !!clarBefore.answered_at;
+    wasDisclosed = clarBefore.disclosed;
+
+    await db.query(`UPDATE clarifications SET
+          disclosed = ?,
+          answer = ?,
+          updated_at = NOW(6),
+          answered_at = NOW(6)
+        WHERE id = ?
+        LIMIT 1`,
+      [request.getDisclose(),
+      request.getAnswer(),
+      req.params.id]
+    )
+
+    clar = await db.query(
+      'SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1',
+      [req.params.id],
+    )[0];
+
+    const [team] = await db.query(
+      'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+      clar.team_id,
+    );
+  } catch (e) {
     await db.rollback();
-    haltPb(res, 404, '質問が見つかりません');
-    return; 
+  } finally {
+    await db.end();
   }
-  const wasAnswered = !!clarBefore.answered_at;
-  const wasDisclosed = clarBefore.disclosed;
 
-  await db.query(`UPDATE clarifications SET
-        disclosed = ?,
-        answer = ?,
-        updated_at = NOW(6),
-        answered_at = NOW(6)
-      WHERE id = ?
-      LIMIT 1`,
-    [request.getDisclose(),
-    request.getAnswer(),
-    req.params.id]
-  )
-
-  const [c] = await db.query(
-    'SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1',
-    [req.params.id],
-  );
-
-  const [team] = await db.query(
-    'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
-    c.team_id,
-  );
-
-  notifier.notifyClarificationAnswered(c, wasAnswered && wasDisclosed == c.disclosed)
-  clarPb = await getClarificationResource(c, team);
-
-  await db.commit();
+  notifier.notifyClarificationAnswered(clar, wasAnswered && wasDisclosed == clar.disclosed)
+  const clarPb = await getClarificationResource(clar, team);
 
   const response = new RespondClarificationResponse();
   response.setClarification(clarPb);
@@ -957,39 +966,43 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const db = await connection;
   const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Buffer.from(req.body));
 
-  await db.beginTransaction();
-  const loginSuccess = loginRequired(req, res);
-  if (!loginSuccess) {
-    return;
+  try {
+    await db.beginTransaction();
+    const loginSuccess = loginRequired(req, res);
+    if (!loginSuccess) {
+      return;
+    }
+
+    const passRestricted = await contestStatusRestricted(res, [Contest.Status.STARTED], "競技時間外はベンチマークを実行できません");
+    if (!passRestricted) {
+      return;
+    }
+
+    const currentTeam = await getCurrentTeam(req);
+    const [jobCount] = await db.query(
+      'SELECT COUNT(*) AS `cnt` FROM `benchmark_jobs` WHERE `team_id` = ? AND `finished_at` IS NULL',
+      currentTeam.id
+    );
+    if (jobCount && jobCount.cnt > 0) {
+      haltPb(res, 403, "既にベンチマークを実行中です");
+      return;
+    }
+
+    await db.query(
+      'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
+      [currentTeam.id, request.getTargetHostname(), BenchmarkJob.Status.PENDING]
+    )
+
+    const [job] = await db.query('SELECT * FROM `benchmark_jobs` WHERE `id` = (SELECT LAST_INSERT_ID()) LIMIT 1');
+    const response = new ContestantEnqueueBenchmarkJobResponse();
+    response.setJob(job);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    await db.rollback();
+  } finally {
+    await db.end();
   }
-
-  const passRestricted = await contestStatusRestricted(res, [Contest.Status.STARTED], "競技時間外はベンチマークを実行できません");
-  if (!passRestricted) {
-    return;
-  }
-
-  const currentTeam = await getCurrentTeam(req);
-  const [jobCount] = await db.query(
-    'SELECT COUNT(*) AS `cnt` FROM `benchmark_jobs` WHERE `team_id` = ? AND `finished_at` IS NULL',
-    currentTeam.id
-  );
-  if (jobCount && jobCount.cnt > 0) {
-    haltPb(res, 403, "既にベンチマークを実行中です");
-    return;
-  }
-
-  await db.query(
-    'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
-    [currentTeam.id, req.hostname, BenchmarkJob.Status.PENDING]
-  )
-
-  const [job] = await db.query('SELECT * FROM `benchmark_jobs` WHERE `id` = (SELECT LAST_INSERT_ID()) LIMIT 1')
-  await db.commit();
-
-  const response = new ContestantEnqueueBenchmarkJobResponse();
-  response.setJob(job);
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.get("/api/contestant/benchmark_jobs", async (req, res, next) => {
@@ -1062,21 +1075,25 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
   const request = RespondClarificationRequest.deserializeBinary(Buffer.from(req.body));
   const currentTeam = await getCurrentTeam(req);
   const db = await connection;
-  await db.beginTransaction();
 
-  await db.query(
-    'INSERT INTO `clarifications` (`team_id`, `question`, `created_at`, `updated_at`) VALUES (?, ?, NOW(6), NOW(6))',
-    [currentTeam.id, request.getQuestion()]
-  )
+  try {
+    await db.beginTransaction();
 
-  const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1')
+    await db.query(
+      'INSERT INTO `clarifications` (`team_id`, `question`, `created_at`, `updated_at`) VALUES (?, ?, NOW(6), NOW(6))',
+      [currentTeam.id, request.getQuestion()]
+    )
 
-  await db.commit();
-
-  const response = new RespondClarificationResponse();
-  response.setClarification(clar);
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
+    const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1')
+    const response = new RespondClarificationResponse();
+    response.setClarification(clar);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    await db.rollback();
+  } finally {
+    await db.end();
+  }
 })
 
 app.get("/api/contestant/dashboard", async (req, res, next) => {
@@ -1101,34 +1118,41 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
 
   const after = req.query.after;
   const db = await connection;
-  await db.beginTransaction();
-  const currentContestant = await getCurrentContestant(req);
 
-  const notifications = await db.query(
-    after
-      ? 'SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `id` > ? ORDER BY `id`'
-      : 'SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `read` = FALSE ORDER BY `id`',
-    [currentContestant.id, after]
-  );
+  try {
+    await db.beginTransaction();
+    const currentContestant = await getCurrentContestant(req);
 
-  await db.query(
-    'UPDATE `notifications` SET `read` = TRUE WHERE `contestant_id` = ? AND `read` = FALSE',
-    [currentContestant.id],
-  );
+    const notifications = await db.query(
+      after
+        ? 'SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `id` > ? ORDER BY `id`'
+        : 'SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `read` = FALSE ORDER BY `id`',
+      [currentContestant.id, after]
+    );
 
-  await db.commit();
+    await db.query(
+      'UPDATE `notifications` SET `read` = TRUE WHERE `contestant_id` = ? AND `read` = FALSE',
+      [currentContestant.id],
+    );
 
-  const currentTeam = await getCurrentTeam(req);
-  const [lastAnsweredClar] = await db.query(
-    'SELECT `id` FROM `clarifications` WHERE (`team_id` = ? OR `disclosed` = TRUE) AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1',
-    [currentTeam.id]
-  );
+    await db.commit();
 
-  const response = new ListNotificationsResponse();
-  response.setLastAnsweredClarificationId(lastAnsweredClar?.id);
-  response.setNotificationsList(notifications);
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
+    const currentTeam = await getCurrentTeam(req);
+    const [lastAnsweredClar] = await db.query(
+      'SELECT `id` FROM `clarifications` WHERE (`team_id` = ? OR `disclosed` = TRUE) AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1',
+      [currentTeam.id]
+    );
+
+    const response = new ListNotificationsResponse();
+    response.setLastAnsweredClarificationId(lastAnsweredClar?.id);
+    response.setNotificationsList(notifications);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    await db.rollback();
+  } finally {
+    await db.end();
+  }
 });
 
 app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
