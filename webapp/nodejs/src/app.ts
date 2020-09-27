@@ -21,6 +21,7 @@ import { EnqueueBenchmarkJobResponse, GetBenchmarkJobResponse } from "./proto/xs
 import { ListBenchmarkJobsResponse } from "./proto/xsuportal/services/contestant/benchmark_pb";
 import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb";
 import { DashboardResponse } from "./proto/xsuportal/services/admin/dashboard_pb";
+import { ListNotificationsResponse } from "./proto/xsuportal/services/contestant/notifications_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -807,6 +808,44 @@ app.get("/api/contestant/dashboard", async (req, res, next) => {
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 })
+
+app.get("/api/contestant/notifications", async (req, res, next) => {
+  const loginSuccess = loginRequired(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  const after = req.query.after;
+  const db = await connection;
+  await db.beginTransaction();
+  const currentContestant = await getCurrentContestant();
+
+  const notifications = await db.query(
+    after
+      ? 'SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `id` > ? ORDER BY `id`'
+      : 'SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `read` = FALSE ORDER BY `id`',
+    [currentContestant.id, after]
+  );
+
+  await db.query(
+    'UPDATE `notifications` SET `read` = TRUE WHERE `contestant_id` = ? AND `read` = FALSE',
+    [currentContestant.id],
+  );
+
+  await db.commit();
+
+  const currentTeam = await getCurrentTeam();
+  const [lastAnsweredClar] = await db.query(
+    'SELECT `id` FROM `clarifications` WHERE (`team_id` = ? OR `disclosed` = TRUE) AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1',
+    [currentTeam.id]
+  );
+
+  const response = new ListNotificationsResponse();
+  response.setLastAnsweredClarificationId(lastAnsweredClar?.id);
+  response.setNotificationsList(notifications);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
 
 app.listen(process.env.PORT ?? 9292, () => {
   console.log("Listening on 9292");
