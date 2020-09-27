@@ -26,7 +26,7 @@ type Subscription struct {
 	ID            string
 	NumericID     int64
 	Audience      string
-	active        bool
+	active        uint32
 	channel       chan *Message
 	nextMessageID int64
 
@@ -87,7 +87,7 @@ func newSubscription(id int64, options *SubscriptionOption, audience string, rej
 		ID:                       saltedIDHash("sub", 0, id),
 		NumericID:                id,
 		Audience:                 audience,
-		active:                   true,
+		active:                   1,
 		channel:                  make(chan *Message, 30),
 		nextMessageID:            1,
 		privateKey:               privateKey,
@@ -122,9 +122,14 @@ func (sub *Subscription) GetAuth() string {
 	return encodeBase64(sub.sharedSecret)
 }
 
-// IsActive returns true when a subscription is still active and not expired. Turns false once it unsubscribed at a Service.
+// IsActive returns true when a subscription is still active and not expired. See also Expire()
 func (sub *Subscription) IsActive() bool {
-	return sub.active
+	return atomic.LoadUint32(&sub.active) > 0
+}
+
+// Expire invalidates a subscription and lets it inactive. Inactive push resource will return 404 at Service.
+func (sub *Subscription) Expire() {
+	atomic.StoreUint32(&sub.active, 0)
 }
 
 // IsRestricted returns true when a subscription is restricted to a specific application server with VAPID

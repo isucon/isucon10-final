@@ -1,7 +1,7 @@
 use crate::proto::services::contestant::{
     DashboardResponse, EnqueueBenchmarkJobRequest, EnqueueBenchmarkJobResponse,
     GetBenchmarkJobResponse, ListBenchmarkJobsResponse, ListClarificationsResponse,
-    ListNotificationsResponse, LoginRequest, LoginResponse, LogoutRequest, LogoutResponse,
+    ListNotificationsResponse, LoginRequest, LoginResponse, LogoutResponse,
     RequestClarificationRequest, RequestClarificationResponse, SignupRequest, SignupResponse,
     SubscribeNotificationRequest, SubscribeNotificationResponse, UnsubscribeNotificationRequest,
     UnsubscribeNotificationResponse,
@@ -338,18 +338,32 @@ pub struct Notification {
     pub updated_at: NaiveDateTime,
 }
 impl FromRow for Notification {
-    fn from_row_opt(row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
         Ok(Self {
-            id: row.get("id").expect("id column is missing"),
+            id: row
+                .take_opt("id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
             contestant_id: row
-                .get("contestant_id")
-                .expect("contestant_id column is missing"),
-            read: row.get("read").expect("read column is missing"),
+                .take_opt("contestant_id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            read: row
+                .take_opt("read")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
             encoded_message: row
-                .get("encoded_message")
-                .expect("encoded_message column is missing"),
-            created_at: row.get("created_at").expect("created_at column is missing"),
-            updated_at: row.get("updated_at").expect("updated_at column is missing"),
+                .take_opt("encoded_message")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            created_at: row
+                .take_opt("created_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            updated_at: row
+                .take_opt("updated_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
         })
     }
 }

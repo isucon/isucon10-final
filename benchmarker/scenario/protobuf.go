@@ -15,8 +15,9 @@ import (
 )
 
 var (
+	ErrX403 failure.StringCode = "XSUPORTAL[403]"
+
 	ErrX5XX     failure.StringCode = "http-server-error"
-	ErrX403     failure.StringCode = "XSUPORTAL[403]"
 	ErrProtobuf failure.StringCode = "protobuf-decode"
 )
 
@@ -32,36 +33,43 @@ func (p *ProtobufError) Error() string {
 	return fmt.Sprintf("%s: %s", p.ErrorCode(), p.XError.GetHumanMessage())
 }
 
-func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpath string, req proto.Message, res proto.Message) (*http.Response, error) {
+func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpath string, req proto.Message, res proto.Message, allowedStatuCodes []int) (*http.Response, error) {
 	var body io.Reader = nil
 	if req != nil {
 		pw, err := proto.Marshal(req)
 		if err != nil {
-			return nil, err
+			return nil, failure.NewError(ErrHTTP, err)
 		}
 		body = bytes.NewReader(pw)
 	}
 
 	httpreq, err := agent.NewRequest(method, rpath, body)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewError(ErrHTTP, err)
 	}
 
+	httpreq.Header.Set("Accept", "application/vnd.google.protobuf, text/plain")
 	httpreq.Header.Set("Content-Type", "application/vnd.google.protobuf")
 
 	httpres, err := agent.Do(ctx, httpreq)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewError(ErrHTTP, err)
 	}
 	defer httpres.Body.Close()
 
-	if httpres.StatusCode >= 500 && httpres.StatusCode <= 599 {
+	invalidStatusCode := true
+	for _, statusCode := range allowedStatuCodes {
+		if httpres.StatusCode == statusCode || (statusCode == 200 && httpres.StatusCode == 304) {
+			invalidStatusCode = false
+		}
+	}
+	if invalidStatusCode {
 		return nil, failure.NewError(ErrX5XX, fmt.Errorf("不正な HTTP ステータスコード: %d (%s: %s)", httpres.StatusCode, httpreq.Method, httpreq.URL.Path))
 	}
 
 	respb, err := ioutil.ReadAll(httpres.Body)
 	if err != nil {
-		return nil, err
+		return nil, failure.NewError(ErrHTTP, err)
 	}
 
 	if httpres.Header.Get("Content-Type") == "application/vnd.google.protobuf; proto=xsuportal.proto.Error" {

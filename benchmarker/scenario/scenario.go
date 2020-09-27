@@ -2,11 +2,13 @@ package scenario
 
 import (
 	"sync"
+	"time"
 
 	"github.com/isucon/isucandar/agent"
 	"github.com/isucon/isucandar/failure"
 	"github.com/isucon/isucandar/pubsub"
 	"github.com/isucon/isucon10-final/benchmarker/model"
+	"github.com/isucon/isucon10-final/benchmarker/pushserver"
 )
 
 var (
@@ -15,16 +17,17 @@ var (
 )
 
 type Scenario struct {
-	mu            sync.RWMutex
-	BaseURL       string
-	UseTLS        bool
-	HostAdvertise string
-	Language      string
-	Contest       *model.Contest
-	TeamCapacity  int32
+	mu           sync.RWMutex
+	BaseURL      string
+	UseTLS       bool
+	PushService  *pushserver.Service
+	Language     string
+	Contest      *model.Contest
+	TeamCapacity int32
 
-	bpubsub *pubsub.PubSub
-	rpubsub *pubsub.PubSub
+	bpubsub  *pubsub.PubSub
+	rpubsub  *pubsub.PubSub
+	markedAt time.Time
 }
 
 func NewScenario() (*Scenario, error) {
@@ -33,6 +36,7 @@ func NewScenario() (*Scenario, error) {
 		TeamCapacity: -1,
 		bpubsub:      pubsub.NewPubSub(),
 		rpubsub:      pubsub.NewPubSub(),
+		markedAt:     time.Now(),
 	}, nil
 }
 
@@ -49,4 +53,18 @@ func (s *Scenario) AddAudience(count int) {
 	for i := 0; i < count; i++ {
 		s.rpubsub.Publish(true)
 	}
+}
+
+func (s *Scenario) LatestMarkedAt() time.Time {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	return s.markedAt
+}
+
+func (s *Scenario) Mark(t time.Time) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	s.markedAt = t.Truncate(time.Microsecond)
 }

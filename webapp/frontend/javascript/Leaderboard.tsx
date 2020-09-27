@@ -18,27 +18,14 @@ interface TeamItemProps {
 }
 type ItemType = "pinned" | "standings" | "me";
 
-const TeamItem: React.FC<TeamItemProps> = ({
-  position,
-  lastPosition,
-  changed,
-  item,
-  pinned,
-  onPin,
-  me,
-  itemType,
-}) => {
-  const [animationClassName, setAnimationClassName] = React.useState<
-    string | null
-  >(null);
+const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
+  const { position, lastPosition, changed, item, pinned, onPin, me, itemType } = props;
+  const [animationClassName, setAnimationClassName] = React.useState<string | null>(null);
   const [animationEpoch, setAnimationEpoch] = React.useState<number>(0);
 
-  const studentStatus = item.team!.student?.status && (
-    <span className="tag is-info is-pulled-right">学生</span>
-  );
+  const studentStatus = item.team!.student?.status && <span className="tag is-info is-pulled-right">学生</span>;
   const classNames = [];
-  if (pinned && itemType == "pinned")
-    classNames.push("xsu-leaderboard-pinned");
+  if (pinned && itemType == "pinned") classNames.push("xsu-leaderboard-pinned");
   if (me) classNames.push("xsu-leaderboard-me");
   if (animationClassName) classNames.push(animationClassName);
 
@@ -70,9 +57,7 @@ const TeamItem: React.FC<TeamItemProps> = ({
         {me ? null : (
           <i
             className={`xsu-pin-button is-small ${
-              pinned
-                ? "material-icons has-text-danger"
-                : "material-icons-outlined has-text-grey-light"
+              pinned ? "material-icons has-text-danger" : "material-icons-outlined has-text-grey-light"
             }`}
             onClick={() => onPin(item.team!.id!.toString(), !pinned)}
           >
@@ -86,13 +71,7 @@ const TeamItem: React.FC<TeamItemProps> = ({
       </td>
       <td className="has-text-right">{item.bestScore?.score || 0}</td>
       <td className="has-text-right">{item.latestScore?.score || 0}</td>
-      <td>
-        {item.latestScore ? (
-          <Timestamp timestamp={item.latestScore.markedAt!} short />
-        ) : (
-          "N/A"
-        )}
-      </td>
+      <td>{item.latestScore ? <Timestamp timestamp={item.latestScore.markedAt!} short /> : "N/A"}</td>
       <td>{studentStatus}</td>
     </tr>
   );
@@ -115,6 +94,19 @@ const usePrevious = function <T>(value: T) {
   return ref.current;
 };
 
+const chooseTeamList = (mode: Mode, leaderboard: xsuportal.proto.resources.ILeaderboard) => {
+  switch(mode) {
+    case "all":
+      return leaderboard.teams || [];
+    case "general":
+      return leaderboard.generalTeams || [];
+    case "students":
+      return leaderboard.studentTeams || [];
+    default: 
+      throw new Error("[BUG] invalid mode");
+  }
+};
+
 export const Leaderboard: React.FC<Props> = (props: Props) => {
   const { leaderboard, teamId } = props;
   const [expanded, setExpanded] = React.useState(false);
@@ -123,13 +115,17 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
 
   const prevProps = usePrevious(props);
   const prevLeaderboard = prevProps?.leaderboard;
+
+  const filteredTeams = chooseTeamList(mode, leaderboard);
+  const prevFilteredTeams = prevLeaderboard && chooseTeamList(mode, prevLeaderboard);
+
   const prevRanks = new Map(
-    (prevLeaderboard?.teams || []).map((t, idx) => {
+    (prevFilteredTeams || []).map((t, idx) => {
       return [t.team!.id, idx + 1];
     })
   );
   const prevScores = new Map(
-    (prevLeaderboard?.teams || []).map((t, idx) => {
+    (prevFilteredTeams || []).map((t, idx) => {
       return [t.team!.id, t.latestScore?.score!];
     })
   );
@@ -142,23 +138,12 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
     lastPosition?: number;
     lastScore?: number | Long;
   };
-  const teams = leaderboard
-    .teams!.filter(({ team }) => {
-      switch (mode) {
-        case "all":
-          return true;
-        case "general":
-          return !team?.student?.status;
-        case "students":
-          return team?.student?.status;
-        default:
-          true;
-      }
-    })
+  const teams = filteredTeams
     .map(
       (item, idx): TeamStanding => {
         const pinned = pins.has(item.team!.id!.toString());
         const me = item.team!.id === teamId;
+        if(prevRanks.get(item.team!.id!) !== (idx+1)) console.log(item);
         return {
           position: idx + 1,
           lastPosition: prevRanks.get(item.team!.id!),
@@ -169,17 +154,15 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
         };
       }
     );
-  const renderTeam = (
-    key: string,
-    { item, pinned, me, position, lastPosition, lastScore }: TeamStanding
-  ) => {
+  const renderTeam = (key: string, standing: TeamStanding) => {
+    const { item, pinned, me, position, lastPosition, lastScore } = standing;
     return (
       <TeamItem
         item={item}
         position={position}
         lastPosition={lastPosition}
         changed={lastScore != item.latestScore?.score!}
-        key={`${key}-${item.team!.id!.toString()}`}
+        key={`${mode}-${key}-${item.team!.id!.toString()}`}
         pinned={pinned}
         onPin={props.onPin}
         me={me}
@@ -232,17 +215,11 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
           <tr>
             <td colSpan={7} className="has-text-centered">
               {expanded ? (
-                <button
-                  className="button is-text"
-                  onClick={() => setExpanded(false)}
-                >
+                <button className="button is-text" onClick={() => setExpanded(false)}>
                   Collapse...
                 </button>
               ) : (
-                <button
-                  className="button is-text"
-                  onClick={() => setExpanded(true)}
-                >
+                <button className="button is-text" onClick={() => setExpanded(true)}>
                   Show All
                 </button>
               )}

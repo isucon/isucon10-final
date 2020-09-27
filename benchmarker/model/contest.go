@@ -15,6 +15,9 @@ type Contest struct {
 	GRPCPort           int64
 	Teams              []*Team
 	teamsByID          map[int64]*Team
+
+	cmu            sync.RWMutex
+	clarifications []*Clarification
 }
 
 func NewContest(now time.Time) *Contest {
@@ -25,11 +28,14 @@ func NewContest(now time.Time) *Contest {
 		RegistrationOpenAt: now,
 		ContestStartsAt:    now.Add(10 * time.Second),
 		ContestFreezesAt:   now.Add(50 * time.Second),
-		ContestEndsAt:      now.Add(55 * time.Second),
+		ContestEndsAt:      now.Add(60 * time.Second),
 		GRPCHost:           "",
 		GRPCPort:           0,
 		Teams:              []*Team{},
 		teamsByID:          map[int64]*Team{},
+
+		cmu:            sync.RWMutex{},
+		clarifications: []*Clarification{},
 	}
 }
 
@@ -46,4 +52,21 @@ func (c *Contest) GetTeam(id int64) *Team {
 	defer c.mu.RUnlock()
 
 	return c.teamsByID[id]
+}
+
+func (c *Contest) AddClar(clar *Clarification) {
+	c.cmu.Lock()
+	defer c.cmu.Unlock()
+
+	c.clarifications = append(c.clarifications, clar)
+}
+
+func (c *Contest) Clarifications() []*Clarification {
+	c.cmu.RLock()
+	defer c.cmu.RUnlock()
+
+	clars := make([]*Clarification, len(c.clarifications))
+	copy(clars, c.clarifications[:])
+
+	return clars
 }

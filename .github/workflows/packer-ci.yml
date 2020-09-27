@@ -18,12 +18,20 @@ jobs:
     env:
       PACKER_QEMU_MEM: "4G"
       PACKER_QEMU_SMP: "8"
+      PACKER_LOG: '1'
+      PACKER_LOG_PATH: '/home/octo/packer.log'
     outputs:
       manifest: ${{ steps.manifest.outputs.content }}
     defaults:
       run:
         working-directory: packer
     steps:
+      - name: Cancel Previous Runs (for pull requests)
+        if: "${{ github.event_name == 'pull_request' }}"
+        uses: styfle/cancel-workflow-action@0.5.0
+        with:
+          access_token: ${{ github.token }}
+
       - uses: actions/checkout@v2
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -88,6 +96,10 @@ jobs:
 
       ################
 
+      - name: Disable EC2 build for pull request
+        if: "${{ github.event_name == 'pull_request' }}"
+        run: echo "::set-env name=CI_PACKER_ARGS::-only qemu"
+
       - run: make generate
       #- run: make build
       - run: make build-ci
@@ -137,10 +149,11 @@ jobs:
 
       - run: mkdir -p output/ && echo '${{ needs.build.outputs.manifest }}' > output/manifest-amd64-ci.json
       - run: make test-ci
-
+      - run: tail -n25 output/ci.log 
       - uses: actions/upload-artifact@v2
         with:
-          name: ci.log
-          path: packer/output/ci-${{ matrix.lang }}.log
+          name: ci-${{ matrix.lang }}.log
+          path: packer/output/ci.log
+      - run: tail -n1 output/ci.log | grep '^0$'
 
 

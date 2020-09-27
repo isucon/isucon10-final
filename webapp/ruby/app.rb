@@ -2,7 +2,6 @@ require 'sinatra/base'
 require 'google/protobuf'
 require 'digest/sha2'
 require 'securerandom'
-require 'webpush'
 
 $LOAD_PATH << File.join(File.expand_path('../', __FILE__), 'lib')
 require 'routes'
@@ -976,7 +975,7 @@ module Xsuportal
       login_required
 
       unless notifier.vapid_key
-        halt_pb 403, 'WebPush は未対応です'
+        halt_pb 503, 'Web Push は未対応です'
       end
 
       req = decode_request_pb
@@ -996,7 +995,7 @@ module Xsuportal
       login_required
 
       unless notifier.vapid_key
-        halt_pb 403, 'WebPush は未対応です'
+        halt_pb 503, 'Web Push は未対応です'
       end
 
       req = decode_request_pb

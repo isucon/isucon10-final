@@ -48,7 +48,12 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
   def save_as_finished(job, request)
     if !job[:started_at] || job[:finished_at]
       Xsuportal::Database.transaction_rollback('report_benchmark_result')
-      raise GRPC::Internal.new("Job #{request.job_id} has already finished or has not started yet")
+      raise GRPC::FailedPrecondition.new("Job #{request.job_id} has already finished or has not started yet")
+    end
+    marked_at = request.result.marked_at&.yield_self { |ts| p ts;  Time.at(ts.seconds, ts.nanos / 1000) }&.utc
+    unless marked_at
+      Xsuportal::Database.transaction_rollback('report_benchmark_result')
+      raise GRPC::InvalidArgument.new("marked_at is required")
     end
 
     db = Xsuportal::Database.connection
@@ -62,7 +67,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           `passed` = ?,
           `reason` = ?,
           `updated_at` = NOW(6),
-          `finished_at` = NOW(6)
+          `finished_at` = ?
         WHERE `id` = ?
         LIMIT 1
       SQL
@@ -71,14 +76,16 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
       result.score_breakdown&.deduction,
       result.passed,
       result.reason,
+      marked_at.strftime('%Y-%m-%d %H:%M:%S.%6N'),
       request.job_id,
     )
   end
 
   def save_as_running(job, request)
-    if job[:started_at]
+    marked_at = request.result.marked_at&.yield_self { |ts| p ts;  Time.at(ts.seconds, ts.nanos / 1000) }&.utc
+    unless marked_at
       Xsuportal::Database.transaction_rollback('report_benchmark_result')
-      raise GRPC::Internal.new("Job #{request.job_id} has been already running")
+      raise GRPC::FailedPrecondition.new("marked_at is required")
     end
 
     db = Xsuportal::Database.connection
@@ -90,13 +97,14 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
           `score_deduction` = NULL,
           `passed` = FALSE,
           `reason` = NULL,
-          `started_at` = NOW(6),
+          `started_at` = ?,
           `updated_at` = NOW(6),
           `finished_at` = NULL
         WHERE `id` = ?
         LIMIT 1
       SQL
       Xsuportal::Proto::Resources::BenchmarkJob::Status::RUNNING,
+      (job[:started_at] || marked_at).strftime('%Y-%m-%d %H:%M:%S.%6N'),
       request.job_id,
     )
   end

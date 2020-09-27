@@ -13,12 +13,12 @@ module Xsuportal
             database: ENV['MYSQL_DATABASE'] || 'xsuportal',
             password: ENV['MYSQL_PASS'] || 'isucon',
             charset: 'utf8mb4',
-            database_timezone: :local,
+            database_timezone: :utc,
             cast_booleans: true,
             symbolize_keys: true,
             reconnect: true,
+            init_command: "SET time_zone='+00:00';",
           )
-          conn.query("SET time_zone='+00:00'")
           conn
         end
       end

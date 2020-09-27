@@ -70,7 +70,7 @@ pub async fn initialize(
         language: "rust".to_owned(),
         // 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報
         benchmark_server: Some(BenchmarkServer {
-            host: std::env::var("BENCHMARK_SERVER_HOST").unwrap_or("localhost".to_owned()),
+            host: std::env::var("BENCHMARK_SERVER_HOST").unwrap_or_else(|_| "localhost".to_owned()),
             port: std::env::var("BENCHMARK_SERVER_PORT")
                 .map(|port_str| {
                     port_str
