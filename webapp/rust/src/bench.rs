@@ -116,9 +116,7 @@ impl BenchmarkReport for ReportService {
             while let Some(message) = stream.message().await? {
                 let job_id = message.job_id;
                 if let Some((job, notifiers)) = tokio::task::block_in_place(|| handle_report(&mut conn, &message))? {
-                    for notifier in notifiers {
-                        let _ = notifier.send().await;
-                    }
+                    send_notifications(conn.deref_mut(), notifiers).await?;
                     yield ReportBenchmarkResultResponse { acked_nonce: message.nonce };
                 } else {
                     Err(TonicStatus::not_found(format!(
@@ -245,4 +243,45 @@ fn save_as_running(
     "#,
         (BenchmarkJobStatus::Running as i32, started_at, job.id),
     )
+}
+
+async fn send_notifications<Q>(
+    conn: &mut Q,
+    notifiers: Vec<crate::notifier::WebPushNotifier>,
+) -> Result<(), TonicStatus>
+where
+    Q: Queryable,
+{
+    let mut unavailable_subscriptions = Vec::new();
+    for notifier in notifiers {
+        if let Err(e) = notifier.send().await {
+            match e {
+                crate::notifier::WebPushError::ExpiredSubscription(sub, _)
+                | crate::notifier::WebPushError::InvalidSubscription(sub, _) => {
+                    unavailable_subscriptions.push(sub);
+                }
+                _ => {
+                    return Err(TonicStatus::internal(format!(
+                        "Failed to send WebPush notification: {:?}",
+                        e
+                    )));
+                }
+            }
+        }
+    }
+
+    if unavailable_subscriptions.is_empty() {
+        Ok(())
+    } else {
+        tokio::task::block_in_place(move || {
+            for sub in unavailable_subscriptions {
+                conn.exec_drop(
+                    "DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
+                    (sub.id,),
+                )
+                .map_err(mysql_error_to_tonic_status)?;
+            }
+            Ok(())
+        })
+    }
 }
