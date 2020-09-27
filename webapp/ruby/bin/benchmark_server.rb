@@ -23,8 +23,11 @@ Griffin::Server.configure do |c|
     Griffin::Interceptors::Server::LoggingInterceptor.new,
   ]
 
+  # Number of processes
   c.workers 2
+  # Min/Max number of threads per process to handle gRPC call (= maximum concurrent number of gRPC requests per process)
   c.pool_size 5,5
+  # Min/Max number of threads per process to handle HTTP/2 connection (= maximum concurrent connection per process)
   c.connection_size 5,5
 
   c.logger Logger.new($stdout)
