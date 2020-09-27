@@ -786,6 +786,8 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
 
   const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1')
 
+  await db.commit();
+
   const response = new RespondClarificationResponse();
   response.setClarification(clar);
   res.contentType(`application/vnd.google.protobuf`);
