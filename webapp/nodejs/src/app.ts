@@ -636,7 +636,7 @@ app.get("/api/session", async (req, res, next) => {
   const team = await getCurrentTeam({ lock: false });
   const teamResource = await getTeamResource(team);
   response.setTeam(teamResource);
-  const contest = await getCurrentContest();
+  const contest = await getCurrentContestStatus();
   const contestResource = getContestResource(contest.contest);
   response.setContest(contestResource);
   // TODO set notifier
