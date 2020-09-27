@@ -1,10 +1,7 @@
-PREFIX=.
+PREFIX=$(PWD)
 BINDIR=$(PREFIX)/bin
-WEBEXE=$(BINDIR)/webapp
-BENCHEXE=$(BINDIR)/benchmark_server
 
 COMPILER=go
-GOFLAGS=-v
 
 GOFILES=$(wildcard ./*.go ./**/*.go)
 
@@ -12,21 +9,13 @@ GOFILES=$(wildcard ./*.go ./**/*.go)
 all: clean build ## Cleanup and Build
 
 .PHONY: build
-build: $(WEBEXE) $(BENCHEXE) ## Build executable files
+build: $(GOFILES) ## Build executable files
+	@GOBIN=$(BINDIR) $(COMPILER) install ./cmd/...  
 
-$(WEBEXE): Makefile $(GOFILES) go.mod go.sum
-	@$(COMPILER) build $(GOFLAGS) -o $(WEBEXE) ./webapp
-
-$(BENCHEXE): Makefile $(GOFILES) go.mod go.sum
-	@$(COMPILER) build $(GOFLAGS) -o $(BENCHEXE) ./benchmark_server
-
-.PHONY: run
-run: build ## Build and launch webapp and benchmark server (Stop with Ctrl-C)
-	@(trap 'kill 0' SIGINT; $(WEBEXE) & $(BENCHEXE))
 
 .PHONY: clean
 clean: ## Cleanup files
-	@$(RM) $(WEBEXE) $(BENCHEXE)
+	@$(RM) -r $(BINDIR)
 
 .PHONY: help
 help: ## Show help
