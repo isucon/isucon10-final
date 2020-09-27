@@ -23,6 +23,7 @@ import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb
 import { DashboardResponse } from "./proto/xsuportal/services/admin/dashboard_pb";
 import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotificationResponse, UnsubscribeNotificationRequest, UnsubscribeNotificationResponse } from "./proto/xsuportal/services/contestant/notifications_pb";
 import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contestant/signup_pb";
+import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -916,6 +917,26 @@ app.post("/api/signup", async (req, res, next) => {
   }
 
   const response = new SignupResponse();
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.post("/api/login", async (req, res, next) => {
+  const request = LoginRequest.deserializeBinary(Buffer.from(req.body));
+  const db = await connection;
+  const [contestant] = await db.query(
+    'SELECT `password` FROM `contestants` WHERE `id` = ? LIMIT 1',
+    [request.getContestantId()],
+  );
+
+  if (contestant?.password === crypto.createHash('rsa256').update(request.getPassword(), "utf8").digest('hex')) {
+    /* TODO: session['contestant_id'] = request.getContestantId(); */
+  } else {
+    haltPb(res, 400, "ログインIDまたはパスワードが正しくありません");
+    return;
+  }
+
+  const response = new LoginResponse();
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
