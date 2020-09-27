@@ -9,10 +9,10 @@ export class Notifier {
   static WEBPUSH_VAPID_PRIVATE_KEY_PATH = '../vapid_private.pem';
   static WEBPUSH_SUBJECT = 'xsuportal@example.com';
   static VAPIDKey: webpush.VapidKeys;
-  db: Connection;
+  connection: Promise<Connection>;
 
-  constructor(db: Connection) {
-    this.db = db;
+  constructor(connection: Promise<Connection>) {
+    this.connection = connection;
   }
 
   getVAPIDKey() {
@@ -27,7 +27,8 @@ export class Notifier {
   }
 
   async notifyClarificationAnswered(clar: NonNullable<any>, updated = false) {
-    const contestants = await this.db.query(
+    const db = await this.connection;
+    const contestants = await db.query(
       clar.disclosed
         ? 'SELECT `id`, `team_id` FROM `contestants`'
         : 'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?',
@@ -47,7 +48,8 @@ export class Notifier {
   }
 
   async notifyBenchmarkJobFinished(job) {
-    const contestants = await this.db.query(
+    const db = await this.connection;
+    const contestants = await db.query(
       'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?',
       [job.team_id]
     );
@@ -64,7 +66,8 @@ export class Notifier {
 
   async notify(notification: Notification, contestantId) {
     const encodedMessage = Buffer.from(notification.serializeBinary()).toString('base64');
-    await this.db.query(
+    const db = await this.connection;
+    await db.query(
       'INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))',
       [contestantId, encodedMessage]
     );
@@ -72,7 +75,8 @@ export class Notifier {
 
   async notifyWebpush(notification, contestantId) {
     const message = Buffer.from(notification.serializeBinary()).toString('base64');
-    const subs = await this.db.query(
+    const db = await this.connection;
+    const subs = await db.query(
       'SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?',
       [contestantId]
     );

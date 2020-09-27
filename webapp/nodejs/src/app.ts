@@ -4,6 +4,7 @@ import mysql from "promise-mysql";
 import crypto from 'crypto';
 import fs from "fs";
 
+import { Notifier } from "./notifier";
 import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
 import {Error as PbError} from "./proto/xsuportal/error_pb";
 import { Clarification } from "./proto/xsuportal/resources/clarification_pb";
@@ -26,7 +27,11 @@ import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotif
 import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contestant/signup_pb";
 import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
 import { LogoutResponse } from "./proto/xsuportal/services/contestant/logout_pb";
+<<<<<<< HEAD
 import { GetRegistrationSessionResponse, GetRegistrationSessionQuery, UpdateRegistrationRequest, UpdateRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
+=======
+import { GetRegistrationSessionResponse, GetRegistrationSessionQuery, DeleteRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
+>>>>>>> 287db6d8ad2fb23f5099ec5620c2290b20ceb8ac
 import { CreateTeamRequest, CreateTeamResponse } from "./proto/xsuportal/services/registration/create_team_pb";
 import { JoinTeamRequest, JoinTeamResponse } from "./proto/xsuportal/services/registration/join_pb";
 
@@ -45,6 +50,7 @@ const connection = mysql.createConnection({
   password: process.env['MYSQL_PASS'] || 'isucon',
   charset: 'utf8mb4',
 });
+const notifier = new Notifier(connection);
 
 const haltPb = (res: express.Response, code: number, humanMessage: string) => {
   res.contentType('application/vnd.google.protobuf; proto=xsuportal.proto.Error');
@@ -622,8 +628,7 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
     c.team_id,
   );
 
-  // TODO Notifier
-  //notifier.notify_clarification_answered(clar, updated: was_answered && was_disclosed == clar[:disclosed])
+  notifier.notifyClarificationAnswered(c, wasAnswered && wasDisclosed == c.disclosed)
   clarPb = await getClarificationResource(c, team);
 
   await db.commit();
@@ -644,23 +649,7 @@ app.get("/api/session", async (req, res, next) => {
   const contest = await getCurrentContestStatus();
   const contestResource = getContestResource(contest.contest);
   response.setContest(contestResource);
-  // TODO set notifier
-
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
-});
-
-app.get("/api/session", async (req, res, next) => {
-  const response = new GetCurrentSessionResponse();
-  const contestant = await getCurrentContestant(req);
-  response.setContestant(getContestantResource(contestant));
-  const team = await getCurrentTeam(req, { lock: false });
-  const teamResource = await getTeamResource(team);
-  response.setTeam(teamResource);
-  const contest = await getCurrentContestStatus();
-  const contestResource = getContestResource(contest.contest);
-  response.setContest(contestResource);
-  // TODO set notifier
+  response.setPushVapidKey(notifier.getVAPIDKey()?.publicKey);
 
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
@@ -899,11 +888,53 @@ app.put("/api/registration", async (req, res, next) => {
   }
 });
 
+<<<<<<< HEAD
 
 
 app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const db = await connection;
   const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Buffer.from(req.body));
+=======
+app.delete("/api/registration", async (req, res, next) => {
+  const db = await connection;
+  await db.beginTransaction();
+  const loginSuccess = loginRequired(req, res, {lock: true});
+  if (!loginSuccess) {
+    return;
+  }
+
+  const passRestricted = await contestStatusRestricted(res, [Contest.Status.REGISTRATION], "チーム登録期間外は辞退できません");
+  if (!passRestricted) {
+    return;
+  }
+
+  const currentTeam = await getCurrentTeam(req);
+  const currentContestant = await getCurrentContestant(req);
+  if (currentTeam.leader_id === currentContestant.id) {
+    await db.query(
+      'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL WHERE `id` = ? LIMIT 1',
+      [currentTeam.id]
+    );
+    await db.query(
+      'UPDATE `contestants` SET `team_id` = NULL WHERE `team_id` = ?',
+      [currentTeam.id]
+    );
+  } else {
+    await db.query(
+      'UPDATE `contestants` SET `team_id` = NULL WHERE `id` = ? LIMIT 1',
+      [currentContestant.id]
+    );
+  }
+  await db.commit();
+
+  const response = new DeleteRegistrationResponse();
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+})
+
+app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
+  const db = await connection;
+>>>>>>> 287db6d8ad2fb23f5099ec5620c2290b20ceb8ac
 
   await db.beginTransaction();
   const loginSuccess = loginRequired(req, res);
@@ -921,6 +952,11 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
     'SELECT COUNT(*) AS `cnt` FROM `benchmark_jobs` WHERE `team_id` = ? AND `finished_at` IS NULL',
     currentTeam.id
   );
+  if (jobCount && jobCount.cnt > 0) {
+    haltPb(res, 403, "既にベンチマークを実行中です");
+    return;
+  }
+
   await db.query(
     'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
     [currentTeam.id, req.hostname, BenchmarkJob.Status.PENDING]
@@ -1080,12 +1116,10 @@ app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
     return;
   }
 
-  /* TODO: notifier
-  if (!notifier.vapid_key) {
+  if (!notifier.getVAPIDKey()) {
     haltPb(res, 503, "Web Push は未対応です")
     return
   }
-  */
 
   const request = SubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
   const currentContestant = await getCurrentContestant(req);
@@ -1106,12 +1140,10 @@ app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
     return;
   }
 
-  /* TODO: notifier
-  if (!notifier.vapid_key) {
+  if (!notifier.getVAPIDKey()) {
     haltPb(res, 503, "Web Push は未対応です")
     return
   }
-  */
 
   const request = UnsubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
   const currentContestant = await getCurrentContestant(req);
