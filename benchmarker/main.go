@@ -219,7 +219,12 @@ func main() {
 		pushServiceOrigin = fmt.Sprintf("https://%s:%d", hostAdvertise, pushServerPort)
 	}
 	pushService := pushserver.NewService(pushServiceOrigin, 1000)
-	go http.ListenAndServeTLS(fmt.Sprintf("0.0.0.0:%d", pushServerPort), tlsCertificatePath, tlsKeyPath, pushService.HTTP())
+	go (func() {
+		err := http.ListenAndServeTLS(fmt.Sprintf("0.0.0.0:%d", pushServerPort), tlsCertificatePath, tlsKeyPath, pushService.HTTP())
+		if err != nil {
+			panic(err)
+		}
+	})()
 
 	s, err := scenario.NewScenario()
 	scheme := "http"
