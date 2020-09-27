@@ -10,7 +10,7 @@ services:
     volumes:
       - .:/isucon10/isucon10-final/webapp
     ports:
-      - 50051:50051
+      - 8080:80
     depends_on:
       - mysql
 

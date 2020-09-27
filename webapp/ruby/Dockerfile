@@ -10,4 +10,4 @@ RUN cd /tmp && \
     bundle install && \
     rm -rf /tmp/{Gemfile,Gemfile.lock}
 
-CMD ["bundle", "exec", "rackup", "config.ru", "-p", "50051", "-o", "0.0.0.0"]
+CMD ["bundle", "exec", "rackup", "config.ru", "-p", "80", "-o", "0.0.0.0"]
