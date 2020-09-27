@@ -5,7 +5,6 @@
 /* eslint-disable */
 
 import * as jspb from "google-protobuf";
-import * as xsuportal_resources_benchmark_result_pb from "../../../xsuportal/resources/benchmark_result_pb";
 import * as xsuportal_resources_benchmark_job_pb from "../../../xsuportal/resources/benchmark_job_pb";
 
 export class ListBenchmarkJobsRequest extends jspb.Message { 

@@ -12,8 +12,6 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
-var xsuportal_resources_benchmark_result_pb = require('../../../xsuportal/resources/benchmark_result_pb.js');
-goog.object.extend(proto, xsuportal_resources_benchmark_result_pb);
 var xsuportal_resources_benchmark_job_pb = require('../../../xsuportal/resources/benchmark_job_pb.js');
 goog.object.extend(proto, xsuportal_resources_benchmark_job_pb);
 goog.exportSymbol('proto.xsuportal.proto.services.contestant.EnqueueBenchmarkJobRequest', null, global);

@@ -6,7 +6,6 @@
 
 import * as jspb from "google-protobuf";
 import * as xsuportal_resources_leaderboard_pb from "../../../xsuportal/resources/leaderboard_pb";
-import * as xsuportal_resources_benchmark_job_pb from "../../../xsuportal/resources/benchmark_job_pb";
 
 export class DashboardRequest extends jspb.Message { 
 
