@@ -270,14 +270,18 @@ where
         }
     }
 
-    tokio::task::block_in_place(move || {
-        for sub in unavailable_subscriptions {
-            conn.exec_drop(
-                "DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
-                (sub.id,),
-            )
-            .map_err(mysql_error_to_tonic_status)?;
-        }
+    if unavailable_subscriptions.is_empty() {
         Ok(())
-    })
+    } else {
+        tokio::task::block_in_place(move || {
+            for sub in unavailable_subscriptions {
+                conn.exec_drop(
+                    "DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
+                    (sub.id,),
+                )
+                .map_err(mysql_error_to_tonic_status)?;
+            }
+            Ok(())
+        })
+    }
 }

@@ -275,18 +275,21 @@ pub async fn respond_clarification(
             }
         }
     }
-    web::block::<_, _, crate::Error>(move || {
-        let mut conn = db.get().expect("Failed to checkout database connection");
-        for sub in unavailable_subscriptions {
-            conn.exec_drop(
-                "DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
-                (sub.id,),
-            )?;
-        }
-        Ok(())
-    })
-    .await
-    .map_err(crate::unwrap_blocking_error)?;
+
+    if !unavailable_subscriptions.is_empty() {
+        web::block::<_, _, crate::Error>(move || {
+            let mut conn = db.get().expect("Failed to checkout database connection");
+            for sub in unavailable_subscriptions {
+                conn.exec_drop(
+                    "DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
+                    (sub.id,),
+                )?;
+            }
+            Ok(())
+        })
+        .await
+        .map_err(crate::unwrap_blocking_error)?;
+    }
 
     HttpResponse::Ok().protobuf(RespondClarificationResponse {
         clarification: Some(clarification),
