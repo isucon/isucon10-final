@@ -24,7 +24,7 @@ module Xsuportal
     def notify_clarification_answered(clar, updated: false)
       contestants = nil
       if clar[:disclosed]
-        contestants = db.query('SELECT `id`, `team_id` FROM `contestants`')
+        contestants = db.query('SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` IS NOT NULL')
       else
         contestants = db.xquery(
           'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?',

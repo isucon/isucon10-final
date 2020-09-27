@@ -11,10 +11,7 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
 
     while true
       Xsuportal::Database.transaction_begin('receive_benchmark_job')
-      job = db.xquery(
-        'SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1',
-        Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
-      ).first
+      job = poll_benchmark_jobs
       unless job
         Xsuportal::Database.transaction_rollback('receive_benchmark_job')
         break
@@ -57,5 +54,19 @@ class BenchmarkQueueService < Xsuportal::Proto::Services::Bench::BenchmarkQueue:
     )
   ensure
     Xsuportal::Database.ensure_transaction_close('receive_benchmark_job')
+  end
+
+  private
+  def poll_benchmark_jobs
+    job = nil
+    10.times do |i|
+      sleep 0.05 if i >= 1
+      job = Xsuportal::Database.connection.xquery(
+        'SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1',
+        Xsuportal::Proto::Resources::BenchmarkJob::Status::PENDING,
+      ).first
+      break if job
+    end
+    job
   end
 end

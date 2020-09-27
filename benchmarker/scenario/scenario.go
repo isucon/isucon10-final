@@ -66,5 +66,8 @@ func (s *Scenario) Mark(t time.Time) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	s.markedAt = t.Truncate(time.Microsecond)
+	t = t.Truncate(time.Microsecond)
+	if t.After(s.markedAt) {
+		s.markedAt = t
+	}
 }

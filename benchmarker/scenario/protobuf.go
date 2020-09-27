@@ -33,7 +33,7 @@ func (p *ProtobufError) Error() string {
 	return fmt.Sprintf("%s: %s", p.ErrorCode(), p.XError.GetHumanMessage())
 }
 
-func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpath string, req proto.Message, res proto.Message) (*http.Response, error) {
+func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpath string, req proto.Message, res proto.Message, allowedStatuCodes []int) (*http.Response, error) {
 	var body io.Reader = nil
 	if req != nil {
 		pw, err := proto.Marshal(req)
@@ -57,7 +57,13 @@ func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpa
 	}
 	defer httpres.Body.Close()
 
-	if httpres.StatusCode >= 500 && httpres.StatusCode <= 599 {
+	invalidStatusCode := true
+	for _, statusCode := range allowedStatuCodes {
+		if httpres.StatusCode == statusCode || (statusCode == 200 && httpres.StatusCode == 304) {
+			invalidStatusCode = false
+		}
+	}
+	if invalidStatusCode {
 		return nil, failure.NewError(ErrX5XX, fmt.Errorf("不正な HTTP ステータスコード: %d (%s: %s)", httpres.StatusCode, httpreq.Method, httpreq.URL.Path))
 	}
 

@@ -1,7 +1,23 @@
 #!/usr/bin/env ruby
-$: << File.expand_path('../lib', __dir__)
 require 'optparse'
-require 'database'
+require 'mysql2'
+require 'mysql2-cs-bind'
+
+def db
+  @db ||= Mysql2::Client.new(
+    host: ENV['MYSQL_HOSTNAME'] || '127.0.0.1',
+    port: ENV['MYSQL_PORT'] || '3306',
+    username: ENV['MYSQL_USER'] || 'isucon',
+    database: ENV['MYSQL_DATABASE'] || 'xsuportal',
+    password: ENV['MYSQL_PASS'] || 'isucon',
+    charset: 'utf8mb4',
+    database_timezone: :utc,
+    cast_booleans: true,
+    symbolize_keys: true,
+    reconnect: true,
+    init_command: "SET time_zone='+00:00';",
+  )
+end
 
 team_id = nil
 status = 0
@@ -18,7 +34,6 @@ unless team_id && status
   abort option_parser.banner
 end
 
-db = Xsuportal::Database.connection
 db.xquery(
   'INSERT INTO `benchmark_jobs` (`team_id`, `status`, `target_hostname`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
   team_id,

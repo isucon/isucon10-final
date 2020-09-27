@@ -84,22 +84,26 @@ HTTP リクエスト: `POST /api/contestant/benchmark_jobs`
 
 仮想選手（実ベンチマーカー内のエージェント）が仮想ポータルに対し、仮想負荷走行（benchmark_job）のエンキューをリクエストします。エンキューしたとき、ジョブのステータスは `PENDING` として設定されます。
 
-仮想選手は、エンキューができる状況にあるときは即時エンキューをします。以下のような状況にある場合は仮想選手はエンキューをせず、状況が変化するのを待ちます。
+仮想選手は、エンキューができる状況にあるときは即時にエンキューを試みます。以下のような状況にある場合は仮想選手はエンキューをせず、状況が変化するのを待ちます。
 
 - 所属チームの `FINISHED` でないジョブ（実行待ちあるいは実行中）がすでにあり、まだ仮想負荷走行終了の通知を受け取っていないとき
 - 仮想選手本人あるいは所属チームメンバーが仮想主催者への質問（Clarifications）を投稿したあと、まだ仮想主催者からの回答の通知を受け取っていないとき
 
 ### 2. 仮想ベンチマーカー: ベンチマークキューのポーリング
 
-gRPC サービス: `BenchmarkQueue`, プロシージャ: `ReceiveBenchmarkJob`
+gRPC サービス: `xsuportal.proto.services.bench.BenchmarkQueue`, プロシージャ: `ReceiveBenchmarkJob`
 
-仮想ベンチマーカーは仮想ベンチマークサーバに対し、定期的にキューをポーリングします。キューにジョブがあった場合はそのジョブがデキューされます。デキューされたジョブは、ステータスが `PENDING` から `SENT` に変更されます。
+仮想ベンチマーカーは仮想ベンチマークサーバに対し、常にキューをポーリングしています。キューにジョブがあった場合はそのジョブがデキューされます。デキューされたジョブは、ステータスが `PENDING` から `SENT` に変更されます。
 
-仮想ベンチマーカーは、仮想チームと同じ数だけ用意されています。
+仮想ベンチマーカーは仮想チームと同じ数だけ用意されており、最大で全ての仮想チームの仮想負荷走行を並列に処理できる能力を有します。
+
+#### 仮想ベンチマーカーのポーリング挙動について
+
+各仮想ベンチマーカーは、`ReceiveBenchmarkJob` の実行でジョブが返却されなかった場合（キューが空）、待ち時間を挟まず、即時にリトライをします。また、仮想負荷走行後、レポートを登録した後も、待ち時間を挟まず即時に `ReceiveBenchmarkJob` を実行します。
 
 ### 3. 仮想ベンチマーカー: レポートの登録
 
-gRPC サービス: `BenchmarkReport`, プロシージャ: `ReportBenchmarkResult`
+gRPC サービス: `xsuportal.proto.services.bench.BenchmarkReport`, プロシージャ: `ReportBenchmarkResult`
 
 仮想ベンチマーカーは仮想負荷走行に対し、以下の 2 度レポートを送ります。
 
@@ -114,7 +118,7 @@ gRPC サービス: `BenchmarkReport`, プロシージャ: `ReportBenchmarkResult
 
 HTTP リクエスト: `GET /api/contestant/notifications`
 
-仮想選手のブラウザは定期的に通知リスト（`GET /api/contestant/notifications`）をポーリングしています。仮想ポータルは、仮想選手のチームが実行した仮想負荷走行が完了していた場合、ベンチマーク完了通知（`xsuportal.proto.resources.Notification.BenchmarkJobMessage`）を通知リストに加えます。仮想選手はこの通知を受け取ったとき、仮想ベンチマークジョブリスト（`GET /api/contestant/benchmark_jobs`）にアクセスし、仮想負荷走行の結果を確認します。実ベンチマーカーはこれを「仮想負荷走行が 1 回成功した」としてカウントします。
+仮想選手のブラウザは一定時間ごとに通知リスト（`GET /api/contestant/notifications`）をポーリングしています。仮想ポータルは、仮想選手のチームが実行した仮想負荷走行が完了していた場合、ベンチマーク完了通知（`xsuportal.proto.resources.Notification.BenchmarkJobMessage`）を通知リストに加えます。仮想選手はこの通知を受け取ったとき、仮想ベンチマークジョブリスト（`GET /api/contestant/benchmark_jobs`）およびジョブ詳細（`GET /api/contestant/benchmark_jobs/:id`）にアクセスし、仮想負荷走行の結果を確認します。実ベンチマーカーはこの確認が完了したとき「仮想負荷走行が 1 回成功した」としてカウントします。
 
 ## 仮想オーディエンスの増減について
 
@@ -129,7 +133,7 @@ HTTP リクエスト: `GET /api/contestant/notifications`
 - 仮想負荷走行のエンキュー
 - 新たな質問の投稿
 
-仮想選手のブラウザは、定期的に通知リスト（`GET /api/contestant/notifications`）をポーリングしており、質問に対する回答が来たかどうかはこの通知の中身を見て判断します。質問を投稿した仮想選手は、新着通知に回答通知（`xsuportal.proto.resources.Notification.ClarificationMessage`）が含まれていることを確認したら、回答の本文を質問リスト（`GET /api/contestant/clarifications`）から閲覧します。仮想選手は質問リストを見て回答されていることが確認できたら、停止していた上記の行動を再開します。
+仮想選手のブラウザは、一定時間ごとに通知リスト（`GET /api/contestant/notifications`）をポーリングしており、質問に対する回答が来たかどうかはこの通知の中身を見て判断します。質問を投稿した仮想選手は、新着通知に回答通知（`xsuportal.proto.resources.Notification.ClarificationMessage`）が含まれていることを確認したら、回答の本文を質問リスト（`GET /api/contestant/clarifications`）から閲覧します。仮想選手は質問リストを見て回答されていることが確認できたら、停止していた上記の行動を再開します。
 
 ### 質問に対する個別回答と全体回答について
 
