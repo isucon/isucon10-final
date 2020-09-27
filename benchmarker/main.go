@@ -43,7 +43,7 @@ var (
 	// エラーによる減点
 	DEDUCTION_ERROR int64 = 50
 	// タイムアウトによる減点
-	DEDUCTION_TIMEOUT int64 = 1000
+	DEDUCTION_TIMEOUT int64 = 100
 	// FAIL になるエラー回数
 	FAIL_ERROR_COUNT int64 = 100
 	// タイムアウトの減点回数

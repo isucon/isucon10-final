@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -73,6 +74,12 @@ func errorChecksum(base string, resource *agent.Resource, name string) error {
 	}
 
 	if resource.Error != nil {
+		var nerr net.Error
+		if failure.As(resource.Error, &nerr) {
+			if nerr.Timeout() || nerr.Temporary() {
+				return nerr
+			}
+		}
 		return failure.NewError(ErrChecksum, errorInvalidResponse("リソースの取得に失敗しました: %v", resource.Error))
 	}
 
@@ -173,13 +180,7 @@ func verifyResources(page string, res *http.Response, resources agent.Resources)
 			errs = append(errs, err)
 		}
 	}
-	if len(errs) > 0 {
 
-		fmt.Printf("%s: resources: %d\n", page, len(resources))
-		for k, r := range resources {
-			fmt.Printf("%s: %s: %s\n", page, r.InitiatorType, k)
-		}
-	}
 	return errs
 }
 
