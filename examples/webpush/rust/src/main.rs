@@ -1,7 +1,6 @@
 use mysql::prelude::*;
 use prost::Message;
 use rand::prelude::*;
-use std::io::Read;
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
@@ -20,9 +19,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let vapid_key = xsuportal::webpush::VapidKey::open(&opt.vapid_private_key_path)
         .expect("Failed to load VAPID key");
-    let mut file = std::fs::File::open(&opt.vapid_private_key_path)?;
-    let mut pem_content = Vec::new();
-    file.read_to_end(&mut pem_content)?;
 
     let mysql_env = xsuportal::MySQLConnectionEnv::default();
     let pool = mysql::Pool::new(
