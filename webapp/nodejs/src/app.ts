@@ -742,6 +742,31 @@ app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
   res.end(Buffer.from(response.serializeBinary()));
 })
 
+app.get("/api/contestant/clarifications", async (req, res, next) => {
+  const loginSuccess = loginRequired(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  const currentTeam = await getCurrentTeam();
+  const db = await connection;
+  const clars = await db.query(
+    'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `id` DESC',
+    currentTeam.id,
+  ).map(async (clar: any) => {
+    const [team] = await db.query(
+      'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+      clar.team_id,
+    );
+    return getClarificationResource(clar, team);
+  });
+
+  const response = new ListClarificationsResponse();
+  response.setClarificationsList(clars);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+})
+
 app.post("/api/contestant/clarifications", async (req, res, next) => {
   const loginSuccess = loginRequired(res);
   if (!loginSuccess) {
