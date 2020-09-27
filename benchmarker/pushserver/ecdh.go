@@ -30,9 +30,21 @@ func (pub *ecPublicKey) Encode() string {
 	return encodeBase64(elliptic.Marshal(elliptic.P256(), pub.x, pub.y))
 }
 
-func (p *ecKey) ecdhSecret(publicKey *ecPublicKey) *big.Int {
-	x, _ := elliptic.P256().ScalarMult(publicKey.x, publicKey.y, p.privateKey)
-	return x
+// SEC1: https://www.secg.org/sec1-v2.pdf
+// Section 6.1. Elliptic Curve Diffie-Hellman Scheme
+func (p *ecKey) ecdhSecret(publicKey *ecPublicKey) []byte {
+	curve := elliptic.P256()
+	x, _ := curve.ScalarMult(publicKey.x, publicKey.y, p.privateKey)
+
+	// SEC1: 6.1.3. Key Agreement Operation
+	//   Action 2. Convert $$ z $$ to an octet string the conversion routine specified in Section 2.3.5.
+	//     Section 2.3.5. Field-Element-to-Octet-String Conversion
+	//       > where $$mlen = $$ log_2q/8 $$
+	//       Section 2.3.7. Integer-to-Octet-String Conversion
+	mlen := curve.Params().BitSize / 8
+	buf := make([]byte, mlen)
+	x.FillBytes(mlen)
+	return buf
 }
 
 func newEcKey() (*ecKey, error) {
