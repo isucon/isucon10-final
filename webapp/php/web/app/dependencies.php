@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Application\Service;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -23,6 +24,10 @@ return function (ContainerBuilder $containerBuilder) {
             $logger->pushHandler($handler);
 
             return $logger;
+        },
+
+        Service::class => function(ContainerInterface $c) {
+            return new Service($c);
         },
     ]);
 };
