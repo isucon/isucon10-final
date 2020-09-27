@@ -1,5 +1,5 @@
 GOTIMEOUT?=20s
-GOARGS?=-race
+GOARGS ?= -race
 GOMAXPROCS?=$(shell nproc)
 GOPRIVATE="github.com/isucon"
 
@@ -48,7 +48,7 @@ help: ## Display this help screen
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 $(EXE): Makefile go.mod $(GOFILES) $(GOPROTOFILES) $(PUBLIC_FILES_CHECKSUM)
-	GOPRIVATE=$(GOPRIVATE) go build -race -o $(EXE) -v github.com/isucon/isucon10-final/benchmarker
+	GOPRIVATE=$(GOPRIVATE) go build -o $(EXE) -v github.com/isucon/isucon10-final/benchmarker
 
 $(GOPROTOFILES): Makefile $(PROTOFILES)
 	@protoc --go_out=./proto --go-grpc_out=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative -I ../proto $(PROTOFILES)

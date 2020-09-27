@@ -8,17 +8,18 @@ vapid = Webpush::VapidKey.from_pem(File.read('./vapid_private.pem'))
 vapid2 = Webpush::VapidKey.from_pem(File.read('./vapid_private2.pem'))
 
 def test(m, &block)
-  puts "#{ARGV[0]} #{m}"
+  # puts "#{ARGV[0]} #{m}"
   block.call(m)
 rescue Webpush::Error => e
   warn e.inspect
 end
 
+i = 0
 loop do
+  i += 1
   test("valid: #{Time.now.to_s}") do |m|
-    puts "#{ARGV[0]} #{m}"
     Webpush.payload_send(
-      message: m,
+      message: i.to_s,
       endpoint: sub.fetch('endpoint'),
       p256dh: sub.fetch('p256dh'),
       auth: sub.fetch('auth'),
@@ -34,7 +35,7 @@ loop do
       auth: sub.fetch('auth'),
       vapid: vapid2.to_h.merge(subject: 'test@example.com'),
     )
-  end
+  end if false
 
   test("wrong enc: #{Time.now.to_s}") do |m|
     Webpush.payload_send(
@@ -45,6 +46,5 @@ loop do
       vapid: vapid.to_h.merge(subject: 'test@example.com'),
     )
   end if sub2
-
-  sleep 1
+  # sleep 1
 end
