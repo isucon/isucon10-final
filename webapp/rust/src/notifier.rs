@@ -50,7 +50,7 @@ pub fn notify_clarification_answered<Q>(
 where
     Q: Queryable,
 {
-    let contestants: Vec<(String, i64)> = if clar.disclosed == Some(true) {
+    let contestants: Vec<(String, Option<i64>)> = if clar.disclosed == Some(true) {
         conn.query("SELECT `id`, `team_id` FROM `contestants`")
     } else {
         conn.exec(
@@ -67,7 +67,10 @@ where
                 crate::proto::resources::notification::Content::ContentClarification(
                     crate::proto::resources::notification::ClarificationMessage {
                         clarification_id: clar.id,
-                        owned: clar.team_id == contestant.1,
+                        owned: contestant
+                            .1
+                            .map(|team_id| team_id == clar.team_id)
+                            .unwrap_or(false),
                         updated,
                     },
                 ),
