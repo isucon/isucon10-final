@@ -1,4 +1,5 @@
 import express from "express";
+import session from "express-session";
 import mysql from "promise-mysql";
 import crypto from 'crypto';
 import fs from "fs";
@@ -64,12 +65,18 @@ const haltPbWithError = (res: express.Response, code: number, humanMessage: stri
 const app = express();
 
 app.use(express.static("../public"));
-// TODO session
+app.use(session({
+  secret: 'tagomoris',
+  name: 'session_xsucon',
+  cookie: {
+    maxAge: 3600
+  },
+}));
 
 // rawbody
 app.use(function(req, res, next) {
   req.body = '';
-  req.on('data', function(chunk) { 
+  req.on('data', function(chunk) {
     req.body += chunk;
   });
   req.on('end', function() {
@@ -79,9 +86,9 @@ app.use(function(req, res, next) {
 
 const getCurrentContestant = function() {
   let currentContestant = null
-  return async ({ lock = false } = {}) => {
+  return async (req: express.Request, { lock = false } = {}) => {
     const db = await connection;
-    const id = '1'/* session['contestant_id'] */;
+    const id = req.session.contestant_id;
     if (!id) return null;
     const result = db.query(
       lock
@@ -96,9 +103,9 @@ const getCurrentContestant = function() {
 
 const getCurrentTeam = function() {
   let currentTeam = null
-  return async ({ lock = false } = {}) => {
+  return async (req: express.Request, { lock = false } = {}) => {
     const db = await connection;
-    const currentContestant = await getCurrentContestant()
+    const currentContestant = await getCurrentContestant(req);
     if (!currentContestant) return null
     const result = db.query(
       lock
@@ -164,12 +171,12 @@ const getCurrentContestStatus = async () => {
     });
 };
 
-const loginRequired: (res: express.Response, opts?: { team?: boolean, lock?: boolean }) => boolean = (res, { team = true, lock = false } = {}) => {
-  if (!getCurrentContestant({ lock })) {
+const loginRequired: (req: express.Request, res: express.Response, opts?: { team?: boolean, lock?: boolean }) => boolean = (req, res, { team = true, lock = false } = {}) => {
+  if (!getCurrentContestant(req, { lock })) {
     haltPb(res, 401, "ログインが必要です")
     return false;
   }
-  if (!getCurrentTeam({ lock })) {
+  if (!getCurrentTeam(req, { lock })) {
     haltPb(res, 403, "参加登録が必要です")
     return false;
   }
@@ -255,9 +262,9 @@ async function getBenchmarkJobResource(job) {
   benchmarkJob.setResult(job.finished_at ? await getBenchmarkResultResource(job) : null);
 }
 
-async function getBenchmarkJobsResource(limit?: number) {
+async function getBenchmarkJobsResource(req: express.Request, limit?: number) {
   const db = await connection;
-  const currentTeam = await getCurrentTeam();
+  const currentTeam = await getCurrentTeam(req);
   const jobs = await db.query(
     `SELECT * FROM benchmark_jobs WHERE team_id = ? ORDER BY created_at DESC ${limit ? `LIMIT ${limit}` : ''}`,
     [currentTeam.id]
@@ -514,12 +521,12 @@ app.post("/initialize", async (req, res, next) => {
 
 app.get("/api/admin/clarifications", async (req, res, next) => {
   const db = await connection;
-  const loginSuccess = loginRequired(res, { team: false });
+  const loginSuccess = loginRequired(req, res, { team: false });
   if (!loginSuccess) {
     return;
   }
 
-  const contestatnt = await getCurrentContestant();
+  const contestatnt = await getCurrentContestant(req);
   if (contestatnt?.staff == null) {
     haltPb(res, 403, '管理者権限が必要です');
     return;
@@ -543,12 +550,12 @@ app.get("/api/admin/clarifications", async (req, res, next) => {
 
 app.get("/api/admin/clarifications/:id", async (req, res, next) => {
   const db = await connection;
-  const loginSuccess = loginRequired(res, { team: false });
+  const loginSuccess = loginRequired(req, res, { team: false });
   if (!loginSuccess) {
     return;
   }
 
-  const contestatnt = await getCurrentContestant();
+  const contestatnt = await getCurrentContestant(req);
   if (contestatnt?.staff == null) {
     haltPb(res, 403, '管理者権限が必要です');
     return;
@@ -567,7 +574,7 @@ app.get("/api/admin/clarifications/:id", async (req, res, next) => {
 
 app.put("/api/admin/clarifications/:id", async (req, res, next) => {
   const db = await connection;
-  const loginSuccess = loginRequired(res, { team: false });
+  const loginSuccess = loginRequired(req, res, { team: false });
   if (!loginSuccess) {
     return;
   }
@@ -620,9 +627,9 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
 
 app.get("/api/session", async (req, res, next) => {
   const response = new GetCurrentSessionResponse();
-  const contestant = await getCurrentContestant();
+  const contestant = await getCurrentContestant(req);
   response.setContestant(getContestantResource(contestant));
-  const team = await getCurrentTeam({ lock: false });
+  const team = await getCurrentTeam(req, { lock: false });
   const teamResource = await getTeamResource(team);
   response.setTeam(teamResource);
   const contest = await getCurrentContestStatus();
@@ -636,9 +643,9 @@ app.get("/api/session", async (req, res, next) => {
 
 app.get("/api/session", async (req, res, next) => {
   const response = new GetCurrentSessionResponse();
-  const contestant = await getCurrentContestant();
+  const contestant = await getCurrentContestant(req);
   response.setContestant(getContestantResource(contestant));
-  const team = await getCurrentTeam({ lock: false });
+  const team = await getCurrentTeam(req, { lock: false });
   const teamResource = await getTeamResource(team);
   response.setTeam(teamResource);
   const contest = await getCurrentContestStatus();
@@ -682,7 +689,7 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const request = InitializeRequest.deserializeBinary(Buffer.from(req.body));
 
   await db.beginTransaction();
-  const loginSuccess = loginRequired(res);
+  const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
   }
@@ -692,7 +699,7 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
     return;
   }
 
-  const currentTeam = await getCurrentTeam();
+  const currentTeam = await getCurrentTeam(req);
   const [jobCount] = await db.query(
     'SELECT COUNT(*) AS `cnt` FROM `benchmark_jobs` WHERE `team_id` = ? AND `finished_at` IS NULL',
     currentTeam.id
@@ -712,25 +719,25 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
 });
 
 app.get("/api/contestant/benchmark_jobs", async (req, res, next) => {
-  const loginSuccess = loginRequired(res);
+  const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
   }
 
   const response = new ListBenchmarkJobsResponse();
-  response.setJobsList(await getBenchmarkJobsResource());
+  response.setJobsList(await getBenchmarkJobsResource(req));
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
   const db = await connection;
-  const loginSuccess = loginRequired(res);
+  const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
   }
 
-  const currentTeam = await getCurrentTeam();
+  const currentTeam = await getCurrentTeam(req);
   const [job] = await db.query(
     'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `id` = ? LIMIT 1',
     [currentTeam.id, req.params.id]
@@ -748,12 +755,12 @@ app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
 })
 
 app.get("/api/contestant/clarifications", async (req, res, next) => {
-  const loginSuccess = loginRequired(res);
+  const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
   }
 
-  const currentTeam = await getCurrentTeam();
+  const currentTeam = await getCurrentTeam(req);
   const db = await connection;
   const clars = await db.query(
     'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `id` DESC',
@@ -773,13 +780,13 @@ app.get("/api/contestant/clarifications", async (req, res, next) => {
 })
 
 app.post("/api/contestant/clarifications", async (req, res, next) => {
-  const loginSuccess = loginRequired(res);
+  const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
   }
 
   const request = RespondClarificationRequest.deserializeBinary(Buffer.from(req.body));
-  const currentTeam = await getCurrentTeam();
+  const currentTeam = await getCurrentTeam(req);
   const db = await connection;
   await db.beginTransaction();
 
@@ -799,13 +806,13 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
 })
 
 app.get("/api/contestant/dashboard", async (req, res, next) => {
-  const loginSuccess = loginRequired(res);
+  const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
   }
 
   const response = new DashboardResponse();
-  const currentTeam = await getCurrentTeam();
+  const currentTeam = await getCurrentTeam(req);
   const leaderboard = await getLeaderboardResource(currentTeam.id);
   response.setLeaderboard(leaderboard);
   res.contentType(`application/vnd.google.protobuf`);
@@ -813,7 +820,7 @@ app.get("/api/contestant/dashboard", async (req, res, next) => {
 })
 
 app.get("/api/contestant/notifications", async (req, res, next) => {
-  const loginSuccess = loginRequired(res);
+  const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
   }
@@ -821,7 +828,7 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
   const after = req.query.after;
   const db = await connection;
   await db.beginTransaction();
-  const currentContestant = await getCurrentContestant();
+  const currentContestant = await getCurrentContestant(req);
 
   const notifications = await db.query(
     after
@@ -837,7 +844,7 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
 
   await db.commit();
 
-  const currentTeam = await getCurrentTeam();
+  const currentTeam = await getCurrentTeam(req);
   const [lastAnsweredClar] = await db.query(
     'SELECT `id` FROM `clarifications` WHERE (`team_id` = ? OR `disclosed` = TRUE) AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1',
     [currentTeam.id]
@@ -851,7 +858,7 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
 });
 
 app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
-  const loginSuccess = loginRequired(res);
+  const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
   }
@@ -864,7 +871,7 @@ app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
   */
 
   const request = SubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
-  const currentContestant = await getCurrentContestant();
+  const currentContestant = await getCurrentContestant(req);
   const db = await connection;
   await db.query(
     'INSERT INTO `push_subscriptions` (`contestant_id`, `endpoint`, `p256dh`, `auth`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, NOW(6), NOW(6))',
@@ -877,7 +884,7 @@ app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
 });
 
 app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
-  const loginSuccess = loginRequired(res);
+  const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
   }
@@ -890,7 +897,7 @@ app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
   */
 
   const request = UnsubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
-  const currentContestant = await getCurrentContestant();
+  const currentContestant = await getCurrentContestant(req);
   const db = await connection;
   await db.query(
     'DELETE FROM `push_subscriptions` WHERE `contestant_id` = ? AND `endpoint` = ? LIMIT 1',
@@ -931,7 +938,7 @@ app.post("/api/login", async (req, res, next) => {
   );
 
   if (contestant?.password === crypto.createHash('rsa256').update(request.getPassword(), "utf8").digest('hex')) {
-    /* TODO: session['contestant_id'] = request.getContestantId(); */
+    req.session.contestant_id = request.getContestantId();
   } else {
     haltPb(res, 400, "ログインIDまたはパスワードが正しくありません");
     return;
@@ -943,9 +950,8 @@ app.post("/api/login", async (req, res, next) => {
 });
 
 app.post("/api/logout", async (req, res, next) => {
-  const session: any = {}; /* await getSession();*/
-  if (session.contestant_id) {
-    session.contestant_id = null;
+  if (req.session.contestant_id) {
+    req.session.contestant_id = null;
   } else {
     haltPb(res, 401, "ログインしていません");
     return;
