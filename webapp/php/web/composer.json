@@ -22,9 +22,10 @@
         }
     ],
     "require": {
-        "ext-json": "*",
-        "monolog/monolog": "^2.0",
         "php": "^7.2",
+        "ext-json": "*",
+        "google/protobuf": "^3.13",
+        "monolog/monolog": "^2.0",
         "php-di/php-di": "^6.1",
         "slim/psr7": "^1.1",
         "slim/slim": "^4.5"
