@@ -98,7 +98,7 @@ const getCurrentContestant = function() {
         : "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1",
       id
     )
-    await db.end();
+    await db.release();
     currentContestant ??= result?.[0]
     return currentContestant
   }
@@ -116,7 +116,7 @@ const getCurrentTeam = function() {
         : "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1",
       currentContestant['team_id']
     )
-    await db.end();
+    await db.release();
     currentTeam ??= result?.[0]
     return currentTeam
   }
@@ -138,7 +138,7 @@ const getCurrentContestStatus = async () => {
         IF(contest_starts_at <= NOW(6) AND NOW(6) < contest_freezes_at, 1, 0) AS frozen
       FROM contest_config
     `);
-    await db.end();
+    await db.release();
 
     let contestStatusStr = contest.status;
     if (process.env['APP_ENV'] != "production" && fs.existsSync(DEBUG_CONTEST_STATUS_FILE_PATH)) {
@@ -230,7 +230,7 @@ async function getTeamResource(team: any, detail: boolean = false, enableMembers
     leader_pb = leader ? getContestantResource(leader, memberDetail) : null;
     members_pb = members ? members.map((m: any) => getContestantResource(m, memberDetail)) : null;
   }
-  await db.end();
+  await db.release();
 
   teamResource.setId(team.id);
   teamResource.setName(team.name);
@@ -275,7 +275,7 @@ async function getBenchmarkJobsResource(req: express.Request, limit?: number) {
     `SELECT * FROM benchmark_jobs WHERE team_id = ? ORDER BY created_at DESC ${limit ? `LIMIT ${limit}` : ''}`,
     [currentTeam.id]
   )
-  await db.end();
+  await db.release();
   return jobs.map(job => getBenchmarkJobResource(job))
 }
 
@@ -422,7 +422,7 @@ async function getLeaderboardResource(teamId: number = 0) {
   } catch (e) {
     await db.rollback();
   } finally {
-    await db.end();
+    await db.release();
   }
 
   for (const result of jobResults) {
@@ -542,7 +542,7 @@ app.post("/initialize", async (req, res, next) => {
     )
     `);
   }
-  await db.end();
+  await db.release();
 
   // TODO 負荷レベルの指定
   const response = new InitializeResponse();
@@ -579,7 +579,7 @@ app.get("/api/admin/clarifications", async (req, res, next) => {
     clarPb.setTeam(team);
     clarPbs.push(clarPb);
   }
-  await db.end();
+  await db.release();
 
   const response = new ListClarificationsResponse();
   response.setClarificationsList(clarPbs);
@@ -601,7 +601,7 @@ app.get("/api/admin/clarifications/:id", async (req, res, next) => {
   }  const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1', [req.params.id]);
 
   const team = await db.query('SELECT * FROM `teams` WHERE `id` = ? LIMIT 1', [clar.team_id]);
-  await db.end();
+  await db.release();
 
   const clarPb = new Clarification();
   clarPb.setTeam(team);
@@ -656,7 +656,7 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
   } catch (e) {
     await db.rollback();
   } finally {
-    await db.end();
+    await db.release();
   }
 
   notifier.notifyClarificationAnswered(clar, wasAnswered && wasDisclosed == clar.disclosed)
@@ -696,7 +696,7 @@ app.get("/api/audience/teams", async (req, res, next) => {
     teamListItem.setMemberNamesList(members.map((member: any) => member.name));
     items.push(teamListItem);
   }
-  await db.end();
+  await db.release();
 
   const response = new AudienceListTeamsResponse();
   response.setTeamsList(items);
@@ -730,7 +730,7 @@ app.get("/api/registration/session", async (req, res, next) => {
   }
 
   const members = await db.query('SELECT * FROM `contestants` WHERE `team_id` = ?', [team.id]);
-  await db.end();
+  await db.release();
 
   const currentContestant = await getCurrentContestant(req);
   let status = null;
@@ -817,7 +817,7 @@ app.post("/api/registration/team", async (req, res, next) => {
     haltPb(res, 500, "予期せぬエラーが発生しました");
   } finally {
     await db.query('UNLOCK TABLES');
-    await db.end();
+    await db.release();
   }
 });
 
@@ -877,7 +877,7 @@ app.post("/api/registration/contestant", async (req, res, next) => {
   } catch (e) {
     await db.rollback();
   } finally {
-    await db.end();
+    await db.release();
   }
 });
 
@@ -917,7 +917,7 @@ app.put("/api/registration", async (req, res, next) => {
     haltPb(res, 500, "予期せぬエラーが発生しました");
     await db.rollback();
   } finally {
-    await db.end();
+    await db.release();
   }
 });
 
@@ -958,7 +958,7 @@ app.delete("/api/registration", async (req, res, next) => {
   } catch (e) {
     await db.rollback();
   } finally {
-    await db.end();
+    await db.release();
   }
 });
 
@@ -1001,7 +1001,7 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   } catch (e) {
     await db.rollback();
   } finally {
-    await db.end();
+    await db.release();
   }
 });
 
@@ -1029,7 +1029,7 @@ app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
     'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `id` = ? LIMIT 1',
     [currentTeam.id, req.params.id]
   );
-  await db.end();
+  await db.release();
 
   if (!job) {
     haltPb(res, 404, "ベンチマークジョブが見つかりません")
@@ -1060,7 +1060,7 @@ app.get("/api/contestant/clarifications", async (req, res, next) => {
     );
     return getClarificationResource(clar, team);
   });
-  await db.end();
+  await db.release();
 
   const response = new ListClarificationsResponse();
   response.setClarificationsList(clars);
@@ -1094,7 +1094,7 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
   } catch (e) {
     await db.rollback();
   } finally {
-    await db.end();
+    await db.release();
   }
 })
 
@@ -1153,7 +1153,7 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
   } catch (e) {
     await db.rollback();
   } finally {
-    await db.end();
+    await db.release();
   }
 });
 
@@ -1175,7 +1175,7 @@ app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
     'INSERT INTO `push_subscriptions` (`contestant_id`, `endpoint`, `p256dh`, `auth`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, NOW(6), NOW(6))',
     [currentContestant.id, request.getEndpoint(), request.getP256dh(), request.getAuth()]
   );
-  await db.end();
+  await db.release();
 
   const response = new SubscribeNotificationResponse();
   res.contentType(`application/vnd.google.protobuf`);
@@ -1200,7 +1200,7 @@ app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
     'DELETE FROM `push_subscriptions` WHERE `contestant_id` = ? AND `endpoint` = ? LIMIT 1',
     [currentContestant.id, request.getEndpoint()]
   );
-  await db.end();
+  await db.release();
 
   const response = new UnsubscribeNotificationResponse();
   res.contentType(`application/vnd.google.protobuf`);
@@ -1234,7 +1234,7 @@ app.post("/api/login", async (req, res, next) => {
     'SELECT `password` FROM `contestants` WHERE `id` = ? LIMIT 1',
     [request.getContestantId()],
   );
-  await db.end();
+  await db.release();
 
   if (contestant?.password === crypto.createHash('rsa256').update(request.getPassword(), "utf8").digest('hex')) {
     req.session.contestant_id = request.getContestantId();
