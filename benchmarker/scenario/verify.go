@@ -112,6 +112,15 @@ func verifyInitializeAction(res *admin.InitializeResponse, hres *http.Response) 
 	return errors
 }
 
+func verifyResponseCode(res *http.Response, allowedStatusCodes []int) error {
+	for _, statusCode := range allowedStatusCodes {
+		if res.StatusCode == statusCode {
+			return nil
+		}
+	}
+	return errorInvalidStatusCode(res)
+}
+
 func joinURL(base *url.URL, target string) string {
 	b := *base
 	t, _ := url.Parse(target)
