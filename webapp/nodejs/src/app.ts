@@ -3,6 +3,7 @@ import session from "express-session";
 import mysql from "promise-mysql";
 import crypto from 'crypto';
 import fs from "fs";
+import path from "path";
 
 import { Notifier } from "./notifier";
 import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
@@ -470,6 +471,31 @@ async function getLeaderboardResource(teamId: number = 0) {
   leaderboardResource.setContest(contestResource);
   return leaderboardResource;
 }
+
+const audiencePaths = "/ /registration /signup /login /logout /teams".split(" ");
+
+for (const audiencePath of audiencePaths) {
+  app.get(audiencePath, (req, res, next) => {
+    res.sendFile(path.resolve("public", "audience.html"));
+  });
+}
+
+const contestantPaths = "/contestant /contestant/benchmark_jobs /contestant/benchmark_jobs/:id /contestant/clarifications".split(" ");
+
+for (const contestantPath of contestantPaths) {
+  app.get(contestantPath, (req, res, next) => {
+    res.sendFile(path.resolve("public", "contestant.html"));
+  });
+}
+
+const adminPaths = "/admin /admin/ /admin/clarifications /admin/clarifications/:id".split(" ");
+
+for (const adminPath of adminPaths) {
+  app.get(adminPath, (req, res, next) => {
+    res.sendFile(path.resolve("public", "admin.html"));
+  });
+}
+
 
 
 app.post("/initialize", async (req, res, next) => {
