@@ -9,6 +9,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         libzip-dev \
         libcurl4-openssl-dev \
+        protobuf-compiler \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -20,14 +21,8 @@ RUN docker-php-ext-configure zip && \
     docker-php-ext-install zip && \
     docker-php-ext-install curl && \
     docker-php-ext-install pdo_mysql && \
+    docker-php-ext-install bcmath && \
     docker-php-ext-enable grpc
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        protobuf-compiler \
-        && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 CMD ["make", "install", "run"]
 
