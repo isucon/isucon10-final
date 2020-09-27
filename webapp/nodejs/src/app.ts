@@ -4,6 +4,7 @@ import mysql from "promise-mysql";
 import crypto from 'crypto';
 import fs from "fs";
 
+import { Notifier } from "./notifier";
 import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
 import {Error as PbError} from "./proto/xsuportal/error_pb";
 import { Clarification } from "./proto/xsuportal/resources/clarification_pb";
@@ -44,6 +45,7 @@ const connection = mysql.createConnection({
   password: process.env['MYSQL_PASS'] || 'isucon',
   charset: 'utf8mb4',
 });
+const notifier = new Notifier(connection);
 
 const haltPb = (res: express.Response, code: number, humanMessage: string) => {
   res.contentType('application/vnd.google.protobuf; proto=xsuportal.proto.Error');
@@ -621,8 +623,7 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
     c.team_id,
   );
 
-  // TODO Notifier
-  //notifier.notify_clarification_answered(clar, updated: was_answered && was_disclosed == clar[:disclosed])
+  notifier.notifyClarificationAnswered(c, wasAnswered && wasDisclosed == c.disclosed)
   clarPb = await getClarificationResource(c, team);
 
   await db.commit();
@@ -643,23 +644,7 @@ app.get("/api/session", async (req, res, next) => {
   const contest = await getCurrentContestStatus();
   const contestResource = getContestResource(contest.contest);
   response.setContest(contestResource);
-  // TODO set notifier
-
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
-});
-
-app.get("/api/session", async (req, res, next) => {
-  const response = new GetCurrentSessionResponse();
-  const contestant = await getCurrentContestant(req);
-  response.setContestant(getContestantResource(contestant));
-  const team = await getCurrentTeam(req, { lock: false });
-  const teamResource = await getTeamResource(team);
-  response.setTeam(teamResource);
-  const contest = await getCurrentContestStatus();
-  const contestResource = getContestResource(contest.contest);
-  response.setContest(contestResource);
-  // TODO set notifier
+  response.setPushVapidKey(notifier.getVAPIDKey()?.publicKey);
 
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
@@ -978,12 +963,10 @@ app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
     return;
   }
 
-  /* TODO: notifier
-  if (!notifier.vapid_key) {
+  if (!notifier.getVAPIDKey()) {
     haltPb(res, 503, "Web Push は未対応です")
     return
   }
-  */
 
   const request = SubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
   const currentContestant = await getCurrentContestant(req);
@@ -1004,12 +987,10 @@ app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
     return;
   }
 
-  /* TODO: notifier
-  if (!notifier.vapid_key) {
+  if (!notifier.getVAPIDKey()) {
     haltPb(res, 503, "Web Push は未対応です")
     return
   }
-  */
 
   const request = UnsubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
   const currentContestant = await getCurrentContestant(req);
