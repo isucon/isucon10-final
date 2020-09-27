@@ -1,4 +1,6 @@
-.PHONY: help install dependencies clean
+.PHONY: help install dependencies setup public/% run clean
+
+SHELL := bash
 
 help:
 	@cat $(firstword $(MAKEFILE_LIST))
@@ -23,8 +25,11 @@ setup: \
 	public/sw.js \
 	public/sw.js.map
 
+run:
+	php -S 0.0.0.0:80 -t public public/index.php
+
 public/%: ../../frontend
-	ln -s $</$@ $@
+	[[ -L "$@" ]] || ln -s $</$@ $@
 
 clean:
 	rm rf vendor

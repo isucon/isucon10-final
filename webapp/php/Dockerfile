@@ -22,6 +22,6 @@ RUN docker-php-ext-configure zip && \
     docker-php-ext-install pdo_mysql && \
     docker-php-ext-enable grpc
 
-CMD ["php", "-S", "0.0.0.0:80", "-t", "public", "public/index.php"]
+CMD ["make", "install", "run"]
 
 WORKDIR /isucon10/isucon10-final/webapp/php/web
