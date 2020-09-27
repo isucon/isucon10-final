@@ -458,6 +458,10 @@ pub(crate) fn chrono_timestamp_to_protobuf(timestamp: NaiveDateTime) -> prost_ty
     }
 }
 
+pub(crate) fn protobuf_timestamp_to_chrono(timestamp: &prost_types::Timestamp) -> NaiveDateTime {
+    NaiveDateTime::from_timestamp(timestamp.seconds, timestamp.nanos as u32)
+}
+
 pub struct ContestStatus {
     pub contest: Contest,
     pub current_time: NaiveDateTime,
