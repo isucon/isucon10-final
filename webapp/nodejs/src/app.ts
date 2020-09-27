@@ -21,7 +21,7 @@ import { EnqueueBenchmarkJobResponse, GetBenchmarkJobResponse } from "./proto/xs
 import { ListBenchmarkJobsResponse } from "./proto/xsuportal/services/contestant/benchmark_pb";
 import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb";
 import { DashboardResponse } from "./proto/xsuportal/services/admin/dashboard_pb";
-import { ListNotificationsResponse } from "./proto/xsuportal/services/contestant/notifications_pb";
+import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotificationResponse } from "./proto/xsuportal/services/contestant/notifications_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -843,6 +843,32 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
   const response = new ListNotificationsResponse();
   response.setLastAnsweredClarificationId(lastAnsweredClar?.id);
   response.setNotificationsList(notifications);
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
+  const loginSuccess = loginRequired(res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  /* TODO: notifier
+  if (!notifier.vapid_key) {
+    haltPb(res, 503, "Web Push は未対応です")
+    return
+  }
+  */
+
+  const request = SubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
+  const currentContestant = await getCurrentContestant();
+  const db = await connection;
+  await db.query(
+    'INSERT INTO `push_subscriptions` (`contestant_id`, `endpoint`, `p256dh`, `auth`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, NOW(6), NOW(6))',
+    [currentContestant.id, request.getEndpoint(), request.getP256dh(), request.getAuth()]
+  );
+
+  const response = new SubscribeNotificationResponse();
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
