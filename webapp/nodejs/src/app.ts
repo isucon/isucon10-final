@@ -39,7 +39,7 @@ const ADMIN_PASSWORD = 'admin'
 const DEBUG_CONTEST_STATUS_FILE_PATH = '/tmp/XSUPORTAL_CONTEST_STATUS'
 const hash = crypto.createHash('sha256');
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
   host: process.env['MYSQL_HOSTNAME'] ?? '127.0.0.1',
   port: Number.parseInt(process.env['MYSQL_PORT'] ?? '3306'),
   user: process.env['MYSQL_USER'] ?? 'isucon',
@@ -47,7 +47,9 @@ const connection = mysql.createConnection({
   password: process.env['MYSQL_PASS'] || 'isucon',
   charset: 'utf8mb4',
 });
-const notifier = new Notifier(connection);
+
+const getDB = async () => (await pool).getConnection()
+const notifier = new Notifier(pool);
 
 const haltPb = (res: express.Response, code: number, humanMessage: string) => {
   res.contentType('application/vnd.google.protobuf; proto=xsuportal.proto.Error');
@@ -99,7 +101,7 @@ app.use(function(req, res, next) {
 const getCurrentContestant = function() {
   let currentContestant = null
   return async (req: express.Request, { lock = false } = {}) => {
-    const db = await connection;
+    const db = await getDB();
     const id = req.session.contestant_id;
     if (!id) return null;
     const result = db.query(
@@ -108,6 +110,7 @@ const getCurrentContestant = function() {
         : "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1",
       id
     )
+    await db.end();
     currentContestant ??= result?.[0]
     return currentContestant
   }
@@ -116,7 +119,7 @@ const getCurrentContestant = function() {
 const getCurrentTeam = function() {
   let currentTeam = null
   return async (req: express.Request, { lock = false } = {}) => {
-    const db = await connection;
+    const db = await getDB();
     const currentContestant = await getCurrentContestant(req);
     if (!currentContestant) return null
     const result = db.query(
@@ -125,13 +128,14 @@ const getCurrentTeam = function() {
         : "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1",
       currentContestant['team_id']
     )
+    await db.end();
     currentTeam ??= result?.[0]
     return currentTeam
   }
 }()
 
 const getCurrentContestStatus = async () => {
-    const db = await connection;
+    const db = await getDB();
     const [contest] = await db.query(`
       SELECT
         *,
@@ -146,6 +150,7 @@ const getCurrentContestStatus = async () => {
         IF(contest_starts_at <= NOW(6) AND NOW(6) < contest_freezes_at, 1, 0) AS frozen
       FROM contest_config
     `);
+    await db.end();
 
     let contestStatusStr = contest.status;
     if (process.env['APP_ENV'] != "production" && fs.existsSync(DEBUG_CONTEST_STATUS_FILE_PATH)) {
@@ -215,9 +220,9 @@ function getContestantResource(contestant: any, detail: boolean = false) {
 }
 
 async function getTeamResource(team: any, detail: boolean = false, enableMembers: boolean = true, memberDetail: boolean = false) {
-  const db = await connection;
+  const db = await getDB();
   const teamResource = new Team();
-  
+
   let members = null;
   let leader = null;
 
@@ -237,6 +242,7 @@ async function getTeamResource(team: any, detail: boolean = false, enableMembers
     leader_pb = leader ? getContestantResource(leader, memberDetail) : null;
     members_pb = members ? members.map((m: any) => getContestantResource(m, memberDetail)) : null;
   }
+  await db.end();
 
   teamResource.setId(team.id);
   teamResource.setName(team.name);
@@ -275,12 +281,13 @@ async function getBenchmarkJobResource(job) {
 }
 
 async function getBenchmarkJobsResource(req: express.Request, limit?: number) {
-  const db = await connection;
+  const db = await getDB();
   const currentTeam = await getCurrentTeam(req);
   const jobs = await db.query(
     `SELECT * FROM benchmark_jobs WHERE team_id = ? ORDER BY created_at DESC ${limit ? `LIMIT ${limit}` : ''}`,
     [currentTeam.id]
   )
+  await db.end();
   return jobs.map(job => getBenchmarkJobResource(job))
 }
 
@@ -325,7 +332,7 @@ function getContestResource(contest: any) {
 }
 
 async function getLeaderboardResource(teamId: number = 0) {
-  const db = await connection;
+  const db = await getDB();
   const contest = (await getCurrentContestStatus()).contest;
   const contestFinished = contest.status === Contest.Status.FINISHED;
   const contestFreezesAt = contest.contest_freezes_at;
@@ -334,7 +341,7 @@ async function getLeaderboardResource(teamId: number = 0) {
   let jobResults = null;
   let teamGraphScores: any = {};
   try {
-  await db.beginTransaction();
+    await db.beginTransaction();
     leaderboard = await db.query(`
     SELECT
       teams.id AS id,
@@ -504,7 +511,7 @@ for (const adminPath of adminPaths) {
 app.use(express.static(path.resolve("public")));
 
 app.post("/initialize", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const request = InitializeRequest.deserializeBinary(Buffer.from(req.body));
   await db.query('TRUNCATE `teams`');
   await db.query('TRUNCATE `contestants`')
@@ -547,6 +554,7 @@ app.post("/initialize", async (req, res, next) => {
     )
     `);
   }
+  await db.end();
 
   // TODO 負荷レベルの指定
   const response = new InitializeResponse();
@@ -562,7 +570,7 @@ app.post("/initialize", async (req, res, next) => {
 });
 
 app.get("/api/admin/clarifications", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const loginSuccess = loginRequired(req, res, { team: false });
   if (!loginSuccess) {
     return;
@@ -583,7 +591,8 @@ app.get("/api/admin/clarifications", async (req, res, next) => {
     clarPb.setTeam(team);
     clarPbs.push(clarPb);
   }
-  
+  await db.end();
+
   const response = new ListClarificationsResponse();
   response.setClarificationsList(clarPbs);
   res.contentType(`application/vnd.google.protobuf`);
@@ -591,7 +600,7 @@ app.get("/api/admin/clarifications", async (req, res, next) => {
 });
 
 app.get("/api/admin/clarifications/:id", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const loginSuccess = loginRequired(req, res, { team: false });
   if (!loginSuccess) {
     return;
@@ -603,11 +612,12 @@ app.get("/api/admin/clarifications/:id", async (req, res, next) => {
     return;
   }  const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1', [req.params.id]);
 
-  
   const team = await db.query('SELECT * FROM `teams` WHERE `id` = ? LIMIT 1', [clar.team_id]);
+  await db.end();
+
   const clarPb = new Clarification();
   clarPb.setTeam(team);
-  
+
   const response = new GetClarificationResponse();
   response.setClarification(clarPb);
   res.contentType(`application/vnd.google.protobuf`);
@@ -615,7 +625,7 @@ app.get("/api/admin/clarifications/:id", async (req, res, next) => {
 });
 
 app.put("/api/admin/clarifications/:id", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const loginSuccess = loginRequired(req, res, { team: false });
   if (!loginSuccess) {
     return;
@@ -687,7 +697,7 @@ app.get("/api/session", async (req, res, next) => {
 });
 
 app.get("/api/audience/teams", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const teams = await db.query('SELECT * FROM `teams` WHERE `withdrawn` = FALSE ORDER BY `created_at` DESC');
   const items = [];
   for (const team of teams) {
@@ -699,6 +709,8 @@ app.get("/api/audience/teams", async (req, res, next) => {
     teamListItem.setMemberNamesList(members.map((member: any) => member.name));
     items.push(teamListItem);
   }
+  await db.end();
+
   const response = new AudienceListTeamsResponse();
   response.setTeamsList(items);
 
@@ -715,7 +727,7 @@ app.get("/api/audience/dashboard", async (req, res, next) => {
 
 app.get("/api/registration/session", async (req, res, next) => {
   let team = null;
-  const db = await connection;
+  const db = await getDB();
   const currentTeam = await getCurrentTeam(req);
 
   if (currentTeam) {
@@ -728,8 +740,10 @@ app.get("/api/registration/session", async (req, res, next) => {
     }
     team = t;
   }
-  
+
   const members = await db.query('SELECT * FROM `contestants` WHERE `team_id` = ?', [team.id]);
+  await db.end();
+
   const currentContestant = await getCurrentContestant(req);
   let status = null;
   if (currentContestant[team.id] != null) {
@@ -759,9 +773,9 @@ app.get("/api/registration/session", async (req, res, next) => {
 });
 
 app.post("/api/registration/team", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const request = CreateTeamRequest.deserializeBinary(Buffer.from(req.body));
-  
+
   const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
@@ -792,7 +806,7 @@ app.post("/api/registration/team", async (req, res, next) => {
       haltPb(res, 500, "チームを登録できませんでした");
       return;
     }
-  
+
     await db.query(
       'UPDATE `contestants` SET `name` = ?, `student` = ?, `team_id` = ? WHERE `id` = ? LIMIT 1', [
         request.getTeamName(),
@@ -820,9 +834,9 @@ app.post("/api/registration/team", async (req, res, next) => {
 });
 
 app.post("/api/registration/contestant", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const request = JoinTeamRequest.deserializeBinary(Buffer.from(req.body));
-  
+
   const currentContestant = await getCurrentContestant(req);
 
   try {
@@ -880,7 +894,7 @@ app.post("/api/registration/contestant", async (req, res, next) => {
 });
 
 app.put("/api/registration", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const request = UpdateRegistrationRequest.deserializeBinary(Buffer.from(req.body));
   const currentContestant = await getCurrentContestant(req);
   const currentTeam = await getCurrentTeam(req);
@@ -921,7 +935,7 @@ app.put("/api/registration", async (req, res, next) => {
 
 
 app.delete("/api/registration", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const request = DeleteRegistrationRequest.deserializeBinary(Buffer.from(req.body));
   const currentContestant = await getCurrentContestant(req);
   const currentTeam = await getCurrentTeam(req);
@@ -963,7 +977,7 @@ app.delete("/api/registration", async (req, res, next) => {
 });
 
 app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Buffer.from(req.body));
 
   try {
@@ -1018,7 +1032,7 @@ app.get("/api/contestant/benchmark_jobs", async (req, res, next) => {
 });
 
 app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
-  const db = await connection;
+  const db = await getDB();
   const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
     return;
@@ -1029,6 +1043,7 @@ app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
     'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `id` = ? LIMIT 1',
     [currentTeam.id, req.params.id]
   );
+  await db.end();
 
   if (!job) {
     haltPb(res, 404, "ベンチマークジョブが見つかりません")
@@ -1048,7 +1063,7 @@ app.get("/api/contestant/clarifications", async (req, res, next) => {
   }
 
   const currentTeam = await getCurrentTeam(req);
-  const db = await connection;
+  const db = await getDB();
   const clars = await db.query(
     'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `id` DESC',
     currentTeam.id,
@@ -1059,6 +1074,7 @@ app.get("/api/contestant/clarifications", async (req, res, next) => {
     );
     return getClarificationResource(clar, team);
   });
+  await db.end();
 
   const response = new ListClarificationsResponse();
   response.setClarificationsList(clars);
@@ -1074,7 +1090,7 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
 
   const request = RespondClarificationRequest.deserializeBinary(Buffer.from(req.body));
   const currentTeam = await getCurrentTeam(req);
-  const db = await connection;
+  const db = await getDB();
 
   try {
     await db.beginTransaction();
@@ -1117,7 +1133,7 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
   }
 
   const after = req.query.after;
-  const db = await connection;
+  const db = await getDB();
 
   try {
     await db.beginTransaction();
@@ -1168,11 +1184,12 @@ app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
 
   const request = SubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
   const currentContestant = await getCurrentContestant(req);
-  const db = await connection;
+  const db = await getDB();
   await db.query(
     'INSERT INTO `push_subscriptions` (`contestant_id`, `endpoint`, `p256dh`, `auth`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, NOW(6), NOW(6))',
     [currentContestant.id, request.getEndpoint(), request.getP256dh(), request.getAuth()]
   );
+  await db.end();
 
   const response = new SubscribeNotificationResponse();
   res.contentType(`application/vnd.google.protobuf`);
@@ -1192,11 +1209,12 @@ app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
 
   const request = UnsubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
   const currentContestant = await getCurrentContestant(req);
-  const db = await connection;
+  const db = await getDB();
   await db.query(
     'DELETE FROM `push_subscriptions` WHERE `contestant_id` = ? AND `endpoint` = ? LIMIT 1',
     [currentContestant.id, request.getEndpoint()]
   );
+  await db.end();
 
   const response = new UnsubscribeNotificationResponse();
   res.contentType(`application/vnd.google.protobuf`);
@@ -1205,7 +1223,7 @@ app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
 
 app.post("/api/signup", async (req, res, next) => {
   const request = SignupRequest.deserializeBinary(Buffer.from(req.body));
-  const db = await connection;
+  const db = await getDB();
 
   try {
     await db.query(
@@ -1225,11 +1243,12 @@ app.post("/api/signup", async (req, res, next) => {
 
 app.post("/api/login", async (req, res, next) => {
   const request = LoginRequest.deserializeBinary(Buffer.from(req.body));
-  const db = await connection;
+  const db = await getDB();
   const [contestant] = await db.query(
     'SELECT `password` FROM `contestants` WHERE `id` = ? LIMIT 1',
     [request.getContestantId()],
   );
+  await db.end();
 
   if (contestant?.password === crypto.createHash('rsa256').update(request.getPassword(), "utf8").digest('hex')) {
     req.session.contestant_id = request.getContestantId();

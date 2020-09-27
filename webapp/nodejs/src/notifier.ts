@@ -2,17 +2,21 @@ import fs from 'fs';
 import webpush from 'web-push';
 import sshpk from 'sshpk';
 
-import type { Connection } from 'promise-mysql';
+import type { Pool, Connection } from 'promise-mysql';
 import { Notification } from './proto/xsuportal/resources/notification_pb';
 
 export class Notifier {
   static WEBPUSH_VAPID_PRIVATE_KEY_PATH = '../vapid_private.pem';
   static WEBPUSH_SUBJECT = 'xsuportal@example.com';
   static VAPIDKey: webpush.VapidKeys;
-  connection: Promise<Connection>;
+  pool: Promise<Pool>;
 
-  constructor(connection: Promise<Connection>) {
-    this.connection = connection;
+  constructor(pool: Promise<Pool>) {
+    this.pool = pool;
+  }
+
+  async getConnection() {
+    return (await this.pool).getConnection()
   }
 
   getVAPIDKey() {
@@ -27,7 +31,7 @@ export class Notifier {
   }
 
   async notifyClarificationAnswered(clar: NonNullable<any>, updated = false) {
-    const db = await this.connection;
+    const db = await this.getConnection();
     const contestants = await db.query(
       clar.disclosed
         ? 'SELECT `id`, `team_id` FROM `contestants`'
@@ -48,7 +52,7 @@ export class Notifier {
   }
 
   async notifyBenchmarkJobFinished(job) {
-    const db = await this.connection;
+    const db = await this.getConnection();
     const contestants = await db.query(
       'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?',
       [job.team_id]
@@ -66,7 +70,7 @@ export class Notifier {
 
   async notify(notification: Notification, contestantId) {
     const encodedMessage = Buffer.from(notification.serializeBinary()).toString('base64');
-    const db = await this.connection;
+    const db = await this.getConnection();
     await db.query(
       'INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))',
       [contestantId, encodedMessage]
@@ -75,7 +79,7 @@ export class Notifier {
 
   async notifyWebpush(notification, contestantId) {
     const message = Buffer.from(notification.serializeBinary()).toString('base64');
-    const db = await this.connection;
+    const db = await this.getConnection();
     const subs = await db.query(
       'SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?',
       [contestantId]
