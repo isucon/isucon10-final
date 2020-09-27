@@ -33,4 +33,4 @@ sudo systemd-run \
     -push-service-port 443 \
     -tls-cert /etc/ssl/private/tls-cert.pem \
     -tls-key /etc/ssl/private/tls-key.pem \
-  2>&1 | tee ~isucon/ci.log
+   > ~isucon/ci.log  2>&1
