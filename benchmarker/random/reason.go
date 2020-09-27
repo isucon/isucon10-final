@@ -34,6 +34,12 @@ const (
 )
 
 func Reason(passed bool) string {
+	if passed {
+		return "OK"
+	} else {
+		return "FAIL"
+	}
+
 	r := reasons
 	if passed {
 		r = successReasons
