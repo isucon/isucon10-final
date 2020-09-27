@@ -814,6 +814,7 @@ app.delete("/api/registration", async (req, res, next) => {
       [currentContestant.id]
     );
   }
+  await db.commit();
 
   const response = new DeleteRegistrationResponse();
   res.contentType(`application/vnd.google.protobuf`);
