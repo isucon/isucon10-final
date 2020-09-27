@@ -33,11 +33,11 @@ public: ../../frontend/public
 	ln -s $< $@
 
 protoc: \
-	src/Protobuf
+	lib
 
-src/Protobuf: ../../../proto
+lib: ../../../proto
 	mkdir -p $@
-	find $< -name '*.proto' | xargs -I@ protoc -I $< --php_out=./src/Protobuf @
+	find $< -name '*.proto' | xargs -I@ protoc -I $< --php_out=./lib @
 
 clean:
 	rm -rf vendor
