@@ -14,8 +14,10 @@ impl WebPushNotifier {
         let (tx, rx) = tokio::sync::oneshot::channel();
         tokio::spawn(async move {
             let p256dh =
-                base64::decode(&self.push_subscription.p256dh).expect("Failed to decode p256dh");
-            let auth = base64::decode(&self.push_subscription.auth).expect("Failed to decode auth");
+                base64::decode_config(&self.push_subscription.p256dh, base64::URL_SAFE_NO_PAD)
+                    .expect("Failed to decode p256dh");
+            let auth = base64::decode_config(&self.push_subscription.auth, base64::URL_SAFE_NO_PAD)
+                .expect("Failed to decode auth");
             let endpoint =
                 Url::parse(&self.push_subscription.endpoint).expect("Failed to parse endpoint");
             let payload = crate::webpush::build_payload(&auth, &p256dh, &self.encoded_message)
