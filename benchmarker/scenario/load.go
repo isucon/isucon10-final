@@ -804,6 +804,7 @@ func (s *Scenario) loadBenchmarkDetails(ctx context.Context, step *isucandar.Ben
 
 	defer func() { <-team.EnqueueLock }()
 
+	// TODO: 検証してない
 	_, err := GetBenchmarkJobAction(ctx, job.GetBenchmarkJobId(), team.Developer)
 	if err != nil {
 		step.AddError(err)
