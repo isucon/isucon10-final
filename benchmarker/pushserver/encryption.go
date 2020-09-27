@@ -15,9 +15,11 @@ import (
 )
 
 type encryptionDerivedKey struct {
-	ikm   []byte
-	cek   []byte
-	nonce []byte
+	ikmInfo    []byte
+	ecdhSecret []byte
+	ikm        []byte
+	cek        []byte
+	nonce      []byte
 }
 
 // ErrInvalidData is an error returned when encountered an invalid data.
@@ -56,7 +58,18 @@ func (d *decryption) decrypt() ([]byte, error) {
 
 	plaintext, err := gcm.Open(nil, key.nonce, ciphertext, nil)
 	if err != nil {
-		return []byte{}, err
+		return []byte{}, fmt.Errorf(
+			"failed to decrypt (pkey=%x, keyid=%x, dh=%x, info=%x, secret=%x, ikm=%x, cek=%x, nonce=%x): %w",
+			elliptic.Marshal(elliptic.P256(), d.privateKey.publicKey.x, d.privateKey.publicKey.y),
+			d.keyID(),
+			key.ecdhSecret,
+			key.ikmInfo,
+			d.secret,
+			key.ikm,
+			key.cek,
+			key.nonce,
+			err,
+		)
 	}
 
 	return trimRFC8291Padding(plaintext), nil
@@ -70,7 +83,7 @@ func (d *decryption) assertDataLength() error {
 	}
 
 	if len(d.data) < int(21+d.idLen()) {
-		return fmt.Errorf("%w: content-coding header is too short; idlen (RFC8188 Section 2.1)", ErrInvalidData)
+		return fmt.Errorf("%w: content-coding header is too short for the given idlen (RFC8188 Section 2.1)", ErrInvalidData)
 	}
 
 	if d.recordSize() < 18 {
@@ -149,7 +162,7 @@ func (d *decryption) deriveKey() (*encryptionDerivedKey, error) {
 	infoBuf := bytes.NewBuffer([]byte("WebPush: info\x00"))
 	infoBuf.Write(elliptic.Marshal(elliptic.P256(), d.privateKey.publicKey.x, d.privateKey.publicKey.y))
 	infoBuf.Write(d.keyID()) // infoBuf.Write(elliptic.Marshal(elliptic.P256(), asPublicKey.x, asPublicKey.y))
-	ikm, err := getKeyFromHKDF(hkdf.New(sha256.New, ecdhSecret.Bytes(), d.secret, infoBuf.Bytes()), 32)
+	ikm, err := getKeyFromHKDF(hkdf.New(sha256.New, ecdhSecret, d.secret, infoBuf.Bytes()), 32)
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +179,7 @@ func (d *decryption) deriveKey() (*encryptionDerivedKey, error) {
 		return nil, err
 	}
 
-	return &encryptionDerivedKey{ikm, cek, nonce}, nil
+	return &encryptionDerivedKey{ikmInfo: infoBuf.Bytes(), ecdhSecret: ecdhSecret, ikm: ikm, cek: cek, nonce: nonce}, nil
 }
 
 func getKeyFromHKDF(reader io.Reader, l int) ([]byte, error) {
