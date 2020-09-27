@@ -24,7 +24,7 @@ type Contestant struct {
 }
 
 func NewContestant() (*Contestant, error) {
-	a, err := agent.NewAgent(agent.WithTimeout(5 * time.Second))
+	a, err := agent.NewAgent(agent.WithTimeout(2 * time.Second))
 	if err != nil {
 		return nil, err
 	}

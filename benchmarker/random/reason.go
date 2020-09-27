@@ -30,16 +30,10 @@ func init() {
 }
 
 const (
-	MAX_REASON_SIZE = 16383
+	MAX_REASON_SIZE = 200
 )
 
 func Reason(passed bool) string {
-	if passed {
-		return "OK"
-	} else {
-		return "FAIL"
-	}
-
 	r := reasons
 	if passed {
 		r = successReasons

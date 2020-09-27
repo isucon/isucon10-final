@@ -65,7 +65,7 @@ var (
 
 func init() {
 	// リクエストは基本的に 5 秒
-	agent.DefaultRequestTimeout = 5 * time.Second
+	agent.DefaultRequestTimeout = 2 * time.Second
 
 	flag.StringVar(&targetAddress, "target", benchrun.GetTargetAddress(), "ex: localhost:9292")
 	flag.StringVar(&profileFile, "profile", "", "ex: cpu.out")
