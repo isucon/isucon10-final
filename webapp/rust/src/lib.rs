@@ -304,6 +304,90 @@ impl FromRow for BenchmarkJob {
     }
 }
 
+#[derive(Debug)]
+pub struct PushSubscription {
+    pub id: i64,
+    pub contestant_id: String,
+    pub endpoint: String,
+    pub p256dh: String,
+    pub auth: String,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+}
+impl FromRow for PushSubscription {
+    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+        Ok(Self {
+            id: row
+                .take_opt("id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            contestant_id: row
+                .take_opt("contestant_id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            endpoint: row
+                .take_opt("endpoint")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            p256dh: row
+                .take_opt("p256dh")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            auth: row
+                .take_opt("auth")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            created_at: row
+                .take_opt("created_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            updated_at: row
+                .take_opt("updated_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+        })
+    }
+}
+
+pub struct Notification {
+    pub id: i64,
+    pub contestant_id: String,
+    pub read: bool,
+    pub encoded_message: String,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+}
+impl FromRow for Notification {
+    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+        Ok(Self {
+            id: row
+                .take_opt("id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            contestant_id: row
+                .take_opt("contestant_id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            read: row
+                .take_opt("read")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            encoded_message: row
+                .take_opt("encoded_message")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            created_at: row
+                .take_opt("created_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            updated_at: row
+                .take_opt("updated_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+        })
+    }
+}
+
 pub mod admin;
 pub mod audience;
 pub mod bench;
@@ -313,7 +397,7 @@ pub mod leaderboard;
 pub mod notifier;
 pub mod proto;
 pub mod registration;
-mod webpush;
+pub mod webpush;
 
 pub(crate) fn build_team_pb<Q>(
     conn: &mut Q,
@@ -460,14 +544,14 @@ where
     }
 }
 
-pub(crate) fn chrono_timestamp_to_protobuf(timestamp: NaiveDateTime) -> prost_types::Timestamp {
+pub fn chrono_timestamp_to_protobuf(timestamp: NaiveDateTime) -> prost_types::Timestamp {
     prost_types::Timestamp {
         seconds: timestamp.timestamp(),
         nanos: timestamp.timestamp_subsec_nanos() as i32,
     }
 }
 
-pub(crate) fn protobuf_timestamp_to_chrono(timestamp: &prost_types::Timestamp) -> NaiveDateTime {
+pub fn protobuf_timestamp_to_chrono(timestamp: &prost_types::Timestamp) -> NaiveDateTime {
     NaiveDateTime::from_timestamp(timestamp.seconds, timestamp.nanos as u32)
 }
 
