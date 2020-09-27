@@ -128,8 +128,6 @@ sudo systemctl enable --now xsuportal-api-php.service
 ベンチマーク走行は以下のように実施されます。
 
 1. 初期化処理の実行 `POST /initialize` （20 秒以内）
-2. アプリケーション互換性チェックの実行 （数秒〜数十秒）
-1. 初期化処理の実行 `POST /initialize` （20 秒以内）
 3. 負荷走行 （60 秒）
 4. 待ち時間 （5 秒）
 5. 整合性チェック （数秒〜数十秒）
