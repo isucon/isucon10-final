@@ -36,6 +36,16 @@ class Service
         $this->container = $container;
     }
 
+    public function decodeRequestPb(Request $request): Message
+    {
+        $cls = Routes::PB_TABLE[self::requestToRouteString($request)][0];
+        /** @var Message */
+        $message = new $cls;
+        $message->mergeFromString($request->getBody());
+
+        return $message;
+    }
+
     public function encodeResponsePb(Request $request, array $payload): array
     {
         $cls = Routes::PB_TABLE[self::requestToRouteString($request)][1];
