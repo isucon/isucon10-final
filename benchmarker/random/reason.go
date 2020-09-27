@@ -30,7 +30,7 @@ func init() {
 }
 
 const (
-	MAX_REASON_SIZE = 65535
+	MAX_REASON_SIZE = 16383
 )
 
 func Reason(passed bool) string {
