@@ -9,7 +9,7 @@ env:
   CI_PACKER_CACHE_HOST: pakache.t.isucon.dev
   PACKER_CACHE_DIR: /home/octo/packer_cache
   PACKER_QEMU_MEM: "2G"
-  PACKER_QEMU_SMP: "2"
+  PACKER_QEMU_SMP: "4"
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
     runs-on: [self-hosted, linux, kvm]
     env:
       PACKER_QEMU_MEM: "4G"
-      PACKER_QEMU_SMP: "8"
+      PACKER_QEMU_SMP: "6"
       PACKER_LOG: '1'
       PACKER_LOG_PATH: '/home/octo/packer.log'
     outputs:
