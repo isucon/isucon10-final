@@ -85,7 +85,7 @@ class BenchmarkReportService < Xsuportal::Proto::Services::Bench::BenchmarkRepor
     marked_at = request.result.marked_at&.yield_self { |ts| p ts;  Time.at(ts.seconds, ts.nanos / 1000) }&.utc
     unless marked_at
       Xsuportal::Database.transaction_rollback('report_benchmark_result')
-      raise GRPC::FailedPrecondition.new("marked_at is required")
+      raise GRPC::InvalidArgument.new("marked_at is required")
     end
 
     db = Xsuportal::Database.connection
