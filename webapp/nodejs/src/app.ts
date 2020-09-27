@@ -127,7 +127,7 @@ const getCurrentContestStatus = async () => {
     const [contest] = await db.query(`
       SELECT
         *,
-        NOW(6) AS current_time,
+        NOW(6) AS \`current_time\`,
         CASE
           WHEN NOW(6) < registration_open_at THEN 'standby'
           WHEN registration_open_at <= NOW(6) AND NOW(6) < contest_starts_at THEN 'registration'
@@ -671,10 +671,9 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
 app.get("/api/session", async (req, res, next) => {
   const response = new GetCurrentSessionResponse();
   const contestant = await getCurrentContestant(req);
-  response.setContestant(getContestantResource(contestant));
+  response.setContestant(contestant ? getContestantResource(contestant) : null);
   const team = await getCurrentTeam(req, { lock: false });
-  const teamResource = await getTeamResource(team);
-  response.setTeam(teamResource);
+  response.setTeam(team ? await getTeamResource(team) : null);
   const contest = await getCurrentContestStatus();
   const contestResource = getContestResource(contest.contest);
   response.setContest(contestResource);
