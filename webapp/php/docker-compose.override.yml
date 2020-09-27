@@ -5,4 +5,4 @@ services:
     volumes:
       - .:/isucon10/isucon10-final/webapp
     ports:
-      - 5051:5051
+      - 8081:80
