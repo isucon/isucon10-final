@@ -5,15 +5,29 @@ namespace App\Application;
 
 use App\Domain\Routes;
 use Google\Protobuf\Internal\Message;
+use Google\Protobuf\Timestamp;
+use PDO;
+use PDOStatement;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteContext;
+use Xsuportal\Proto\Resources\Contest;
+use Xsuportal\Proto\Resources\Contest\Status;
 use Xsuportal\Proto\Resources\Contestant;
 
 class Service
 {
     private ContainerInterface $container;
+
+    const ENV_PRODUCTION = 'production';
+
+    const DEBUG_CONTEST_STATUS_FILE_PATH = '/tmp/XSUPORTAL_CONTEST_STATUS';
+
+    // const CONTEST_STATUS_STANDBY = 'standby';
+    // const CONTEST_STATUS_REGISTRATION = 'registration';
+    // const CONTEST_STATUS_STARTED = 'started';
+    // const CONTEST_STATUS_FINISHED = 'finished';
 
     public function __construct(ContainerInterface $container)
     {
@@ -35,23 +49,107 @@ class Service
 
     public function getCurrentContestant(bool $lock = false): ?array
     {
-        if (false) { // TODO
-            $sql = 'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1' . ($lock ?? ' FOR UPDATE');
-            return []; // TODO
-        } else {
-            return null;
+        $id = 1; // TODO
+        if ($id) {
+            $sql = 'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1' . ($lock ? ' FOR UPDATE' : '');
+            /** @var \PDOStatement */
+            $stmt = $this->container->get(PDO::class)->prepare($sql);
+            $stmt->execute([$id]);
+
+            return $stmt->fetch();
         }
+
+        return null;
     }
 
-    public function contestantPb(array $contestant): Contestant
+    public function getCurrentContestStatus(): ?array
+    {
+        $id = 1; // TODO
+        if ($id) {
+            $sql = <<< SQL
+            SELECT
+                *,
+                NOW(6) AS `current_time`,
+                CASE
+                WHEN NOW(6) < `registration_open_at` THEN 'standby'
+                WHEN `registration_open_at` <= NOW(6) AND NOW(6) < `contest_starts_at` THEN 'registration'
+                WHEN `contest_starts_at` <= NOW(6) AND NOW(6) < `contest_ends_at` THEN 'started'
+                WHEN `contest_ends_at` <= NOW(6) THEN 'finished'
+                ELSE 'unknown'
+                END AS `status`,
+                IF(`contest_starts_at` <= NOW(6) AND NOW(6) < `contest_freezes_at`, 1, 0) AS `frozen`
+            FROM `contest_config`
+SQL;
+
+            /** @var \PDOStatement */
+            $stmt = $this->container->get(PDO::class)->prepare($sql);
+            $stmt->execute([$id]);
+
+            $contest = $stmt->fetch();
+
+            return [
+                'registration_open_at' => $contest['registration_open_at'],
+                'contest_starts_at' => $contest['contest_starts_at'],
+                'contest_freezes_at' => $contest['contest_freezes_at'],
+                'contest_ends_at' => $contest['contest_ends_at'],
+                'frozen' => $contest['frozen'],
+                'status' => $contest['status'],
+            ];
+        }
+
+        return null;
+    }
+
+    public function factoryContestantPb(array $contestant): Contestant
     {
         return new Contestant([
-            'id' => $contestant['id'],
-            'team_id' => $contestant['team_id'],
-            'name' => $contestant['name'],
-            'is_student' => $contestant['student'],
-            'is_stuff' => $contestant['staff'],
+            'id' => $contestant['id'] ? (int)$contestant['id'] : null,
+            'team_id' => $contestant['team_id'] ? (int)$contestant['team_id'] : null,
+            'name' => $contestant['name'] ?? null,
+            'is_student' => $contestant['student'] === '1',
+            'is_staff' => $contestant['staff'] === '1',
         ]);
+    }
+
+    public function factoryContestPb(array $contest): Contest
+    {
+        return new Contest([
+            'registration_open_at' => $contest['registration_open_at'] ? new Timestamp(['seconds' => strtotime($contest['registration_open_at'])]) : null,
+            'contest_starts_at' => $contest['contest_starts_at'] ? new Timestamp(['seconds' => strtotime($contest['contest_starts_at'])]) : null,
+            'contest_freezes_at' => $contest['contest_freezes_at'] ? new Timestamp(['seconds' => strtotime($contest['contest_freezes_at'])]) : null,
+            'contest_ends_at' => $contest['contest_ends_at'] ? new Timestamp(['seconds' => strtotime($contest['contest_ends_at'])]) : null,
+            'frozen' => $contest['frozen'] === '1',
+            'status' => self::convertStatusTextToStatus($contest['status']),
+        ]);
+
+        // return new Contest([
+        //     'registration_open_at' => $contest['registration_open_at'] ? strtotime($contest['registration_open_at']) : null,
+        //     'contest_starts_at' => $contest['contest_starts_at'] ? strtotime($contest['contest_starts_at']) : null,
+        //     'contest_freezes_at' => $contest['contest_freezes_at'] ? strtotime($contest['contest_freezes_at']) : null,
+        //     'contest_ends_at' => $contest['contest_ends_at'] ? strtotime($contest['contest_ends_at']) : null,
+        //     'frozen' => $contest['frozen'] === '1',
+        //     'status' => self::convertStatusTextToStatus($contest['status']),
+        // ]);
+    }
+
+    private static function convertStatusTextToStatus(string $status): int
+    {
+        if (($_ENV['APP_ENV'] ?? null) != self::ENV_PRODUCTION && file_exists(self::DEBUG_CONTEST_STATUS_FILE_PATH)) {
+            $status = file_get_contents(self::DEBUG_CONTEST_STATUS_FILE_PATH);
+        }
+
+        switch ($status) {
+            case 'standby':
+                return Status::STANDBY;
+            case 'registration':
+                return Status::STANDBY;
+            case 'started':
+                return Status::STARTED;
+            case 'finished':
+                return Status::FINISHED;
+            default:
+                throw new \UnexpectedValueException(sprintf('Unexpected contest status: %s', $status));
+        }
     }
 
     private static function requestToRouteString(Request $request): string

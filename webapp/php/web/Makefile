@@ -38,6 +38,7 @@ protoc: \
 lib: ../../../proto
 	mkdir -p $@
 	find $< -name '*.proto' | xargs -I@ protoc -I $< --php_out=./lib @
+	# find $< -name '*.proto' | xargs -I@ protoc -I $< --php_out=./lib --grpc_out=./lib --plugin=protoc-gen-grpc=./grpc_php_plugin @
 
 clean:
 	rm -rf vendor

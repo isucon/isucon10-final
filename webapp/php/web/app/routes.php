@@ -2,14 +2,10 @@
 declare(strict_types=1);
 
 use App\Application\Service;
-use App\Domain\Routes;
-use Google\Protobuf\Internal\Message;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
-use Slim\Routing\RouteContext;
-use Xsuportal\Proto\Resources\Contestant;
 
 return function (App $app) {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
@@ -58,9 +54,9 @@ return function (App $app) {
             $service = $this->get(Service::class);
 
             $payload = [
-                'contestant' => ($currentContestant = $service->getCurrentContestant()) ? $service->contestantPb($currentContestant) : null, // current_contestant ? contestant_pb(current_contestant) : nil,
+                'contestant' => ($currentContestant = $service->getCurrentContestant()) ? $service->factoryContestantPb($currentContestant) : null, // current_contestant ? contestant_pb(current_contestant) : nil,
                 // 'team' => current_team ? team_pb(current_team) : nil,
-                // 'contest' => contest_pb,
+                'contest' => ($currentContest = $service->getCurrentContestStatus()) ? $service->factoryContestPb($currentContest) : null,
                 // 'push_vapid_key' => notifier.vapid_key&.public_key_for_push_header,'
             ];
 
