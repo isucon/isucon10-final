@@ -3,10 +3,11 @@ on:
   push:
     branches:
       - master
+      - ci-2
 
 jobs:
   benchmarker:
-    name: protoc-check-diff
+    name: benchmarker
     runs-on: [self-hosted, linux, small]
     steps:
       - uses: actions/checkout@v2
