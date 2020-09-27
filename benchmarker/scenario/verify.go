@@ -290,9 +290,9 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		}
 	}
 
-	cacheTime := 200 * time.Millisecond
+	cacheTime := 2 * time.Second
 	if allowCache {
-		cacheTime = 1 * time.Second
+		cacheTime = 2 * time.Second
 
 		if allowedMaxTime.After(contest.ContestFreezesAt) {
 			return nil
@@ -300,7 +300,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 	}
 
 	if !maxMarkedAt.Equal(zero) && allowedMaxTime.Add(-cacheTime).After(maxMarkedAt) {
-		fmt.Printf("OLDER LEADERBOARD: \n  %s requested at\n   %s latest finish\n  %s allowed cache time\n  %s leadeboard max time\n  %s frozen time\n", requestedAt, sLatestMarkedAt, allowedMaxTime.Add(-cacheTime), maxMarkedAt, time.Now().UTC())
+		fmt.Printf("OLDER LEADERBOARD: \n  %s requested at\n  %s latest finish\n  %s allowed cache time\n  %s leadeboard max time\n  %s frozen time\n", requestedAt, sLatestMarkedAt, allowedMaxTime.Add(-cacheTime), maxMarkedAt, time.Now().UTC())
 		return errorInvalidResponse("規定より古い内容のリーダーボードが返却されています")
 	}
 
