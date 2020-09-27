@@ -92,6 +92,7 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 				}
 				return
 			}
+			atomic.StoreInt32(&retry, 0)
 
 			jobHandle := job.GetJobHandle()
 			if jobHandle == nil {
