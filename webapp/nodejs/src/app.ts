@@ -24,6 +24,7 @@ import { DashboardResponse } from "./proto/xsuportal/services/admin/dashboard_pb
 import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotificationResponse, UnsubscribeNotificationRequest, UnsubscribeNotificationResponse } from "./proto/xsuportal/services/contestant/notifications_pb";
 import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contestant/signup_pb";
 import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
+import { LogoutResponse } from "./proto/xsuportal/services/contestant/logout_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -937,6 +938,20 @@ app.post("/api/login", async (req, res, next) => {
   }
 
   const response = new LoginResponse();
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.post("/api/logout", async (req, res, next) => {
+  const session: any = {}; /* await getSession();*/
+  if (session.contestant_id) {
+    session.contestant_id = null;
+  } else {
+    haltPb(res, 401, "ログインしていません");
+    return;
+  }
+
+  const response = new LogoutResponse();
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 });
