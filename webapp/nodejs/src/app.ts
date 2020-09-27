@@ -27,7 +27,7 @@ import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotif
 import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contestant/signup_pb";
 import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
 import { LogoutResponse } from "./proto/xsuportal/services/contestant/logout_pb";
-import { GetRegistrationSessionResponse, GetRegistrationSessionQuery } from "./proto/xsuportal/services/registration/session_pb";
+import { GetRegistrationSessionResponse, GetRegistrationSessionQuery, DeleteRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
 import { CreateTeamRequest, CreateTeamResponse } from "./proto/xsuportal/services/registration/create_team_pb";
 
 const TEAM_CAPACITY = 10
@@ -783,6 +783,42 @@ app.post("/api/registration/team", async (req, res, next) => {
     await db.end();
   }
 });
+
+app.delete("/api/registration", async (req, res, next) => {
+  const db = await connection;
+  await db.beginTransaction();
+  const loginSuccess = loginRequired(req, res, {lock: true});
+  if (!loginSuccess) {
+    return;
+  }
+
+  const passRestricted = await contestStatusRestricted(res, [Contest.Status.REGISTRATION], "チーム登録期間外は辞退できません");
+  if (!passRestricted) {
+    return;
+  }
+
+  const currentTeam = await getCurrentTeam(req);
+  const currentContestant = await getCurrentContestant(req);
+  if (currentTeam.leader_id === currentContestant.id) {
+    await db.query(
+      'UPDATE `teams` SET `withdrawn` = TRUE, `leader_id` = NULL WHERE `id` = ? LIMIT 1',
+      [currentTeam.id]
+    );
+    await db.query(
+      'UPDATE `contestants` SET `team_id` = NULL WHERE `team_id` = ?',
+      [currentTeam.id]
+    );
+  } else {
+    await db.query(
+      'UPDATE `contestants` SET `team_id` = NULL WHERE `id` = ? LIMIT 1',
+      [currentContestant.id]
+    );
+  }
+
+  const response = new DeleteRegistrationResponse();
+  res.contentType(`application/vnd.google.protobuf`);
+  res.end(Buffer.from(response.serializeBinary()));
+})
 
 app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const db = await connection;
