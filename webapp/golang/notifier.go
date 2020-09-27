@@ -59,14 +59,14 @@ func (n *Notifier) VAPIDKey() *webpush.Options {
 
 func (n *Notifier) NotifyClarificationAnswered(db sqlx.Ext, c *Clarification, updated bool) error {
 	var contestants []struct {
-		ID     string        `db:"id"`
-		TeamID sql.NullInt64 `db:"team_id"`
+		ID     string `db:"id"`
+		TeamID int64  `db:"team_id"`
 	}
 	if c.Disclosed.Valid && c.Disclosed.Bool {
 		err := sqlx.Select(
 			db,
 			&contestants,
-			"SELECT `id`, `team_id` FROM `contestants`",
+			"SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` IS NOT NULL",
 		)
 		if err != nil {
 			return fmt.Errorf("select all contestants: %w", err)
@@ -87,7 +87,7 @@ func (n *Notifier) NotifyClarificationAnswered(db sqlx.Ext, c *Clarification, up
 			Content: &resources.Notification_ContentClarification{
 				ContentClarification: &resources.Notification_ClarificationMessage{
 					ClarificationId: c.ID,
-					Owned:           contestant.TeamID.Valid && c.TeamID == contestant.TeamID.Int64,
+					Owned:           c.TeamID == contestant.TeamID,
 					Updated:         updated,
 				},
 			},
