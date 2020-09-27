@@ -733,6 +733,7 @@ app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
 
   if (!job) {
     haltPb(res, 404, "ベンチマークジョブが見つかりません")
+    return;
   }
 
   const response = new GetBenchmarkJobResponse();
