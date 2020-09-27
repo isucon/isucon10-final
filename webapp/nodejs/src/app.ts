@@ -27,11 +27,7 @@ import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotif
 import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contestant/signup_pb";
 import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
 import { LogoutResponse } from "./proto/xsuportal/services/contestant/logout_pb";
-<<<<<<< HEAD
 import { GetRegistrationSessionResponse, GetRegistrationSessionQuery, UpdateRegistrationRequest, UpdateRegistrationResponse, DeleteRegistrationRequest, DeleteRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
-=======
-import { GetRegistrationSessionResponse, GetRegistrationSessionQuery, DeleteRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
->>>>>>> 287db6d8ad2fb23f5099ec5620c2290b20ceb8ac
 import { CreateTeamRequest, CreateTeamResponse } from "./proto/xsuportal/services/registration/create_team_pb";
 import { JoinTeamRequest, JoinTeamResponse } from "./proto/xsuportal/services/registration/join_pb";
 
