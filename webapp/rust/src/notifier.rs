@@ -1,53 +1,41 @@
+use crate::webpush::WebPushSigner;
 use chrono::NaiveDateTime;
 use mysql::prelude::*;
-use web_push::{
-    SubscriptionInfo, VapidSignatureBuilder, WebPushClient, WebPushError, WebPushMessageBuilder,
-};
+use url::Url;
 
 pub struct WebPushNotifier {
     push_subscription: PushSubscription,
     encoded_message: String,
 }
 impl WebPushNotifier {
-    pub async fn send(self) -> Result<(), WebPushError> {
-        // WebPushClient::send が返す future が Sync を実装しておらず ReportService::ReportBenchmarkResultStream
+    pub async fn send(self) -> Result<reqwest::Response, reqwest::Error> {
+        // reqwest が返す future が Sync を実装しておらず ReportService::ReportBenchmarkResultStream
         // の中で使えないので、tokio::oneshot::channel() 経由にする。
         let (tx, rx) = tokio::sync::oneshot::channel();
         tokio::spawn(async move {
-            let subscription_info = SubscriptionInfo::new(
-                self.push_subscription.endpoint,
-                // クライアントからは Base64 エンコードされた文字列がきているが web-push crate は
-                // Base64URL を期待しているので変換する
-                self.push_subscription
-                    .p256dh
-                    .replace("+", "-")
-                    .replace("/", "_"),
-                self.push_subscription
-                    .auth
-                    .replace("+", "-")
-                    .replace("/", "_"),
-            );
-            let mut builder = WebPushMessageBuilder::new(&subscription_info)
-                .expect("Failed to initialize WebPushMessageBuilder");
-            builder.set_payload(
-                web_push::ContentEncoding::AesGcm,
-                self.encoded_message.as_bytes(),
-            );
-            let mut sig_builder = VapidSignatureBuilder::from_pem(
-                WEBPUSH_VAPID_PRIVATE_KEY.as_slice(),
-                &subscription_info,
-            )
-            .expect("Failed to initialize VapidSignatureBuilder from PEM file");
+            let p256dh =
+                base64::decode_config(&self.push_subscription.p256dh, base64::URL_SAFE_NO_PAD)
+                    .expect("Failed to decode p256dh");
+            let auth = base64::decode_config(&self.push_subscription.auth, base64::URL_SAFE_NO_PAD)
+                .expect("Failed to decode auth");
+            let endpoint =
+                Url::parse(&self.push_subscription.endpoint).expect("Failed to parse endpoint");
+            let payload = crate::webpush::build_payload(&auth, &p256dh, &self.encoded_message)
+                .expect("Failed to build WebPush payload");
+            let signer = WebPushSigner::new(&WEBPUSH_VAPID_PRIVATE_KEY)
+                .expect("Failed to create WebPushSigner");
             const WEBPUSH_SUBJECT: &str = "xsuportal@example.com";
-            sig_builder.add_claim("sub", WEBPUSH_SUBJECT);
-            builder.set_vapid_signature(
-                sig_builder
-                    .build()
-                    .expect("Failed to build VAPID signature"),
-            );
-            let message = builder.build().expect("Failed to build WebPush message");
-            let client = WebPushClient::new();
-            let result = client.send(message).await;
+            let headers = signer
+                .sign(&endpoint, WEBPUSH_SUBJECT)
+                .expect("Failed to build WebPush headers");
+
+            let client = reqwest::Client::new();
+            let result = client
+                .post(endpoint)
+                .headers(headers)
+                .body(payload)
+                .send()
+                .await;
             tx.send(result).expect("Failed to send WebPush response");
         });
         rx.await.expect("Failed to receive WebPush response")
