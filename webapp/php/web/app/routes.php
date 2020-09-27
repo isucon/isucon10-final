@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Application\Notifier;
 use App\Application\Service;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -51,13 +52,16 @@ return function (App $app) {
 
     $app->group('/api', function (Group $group) {
         $group->get('/session', function(Request $request, Response $response) {
+            /** @var Service */
             $service = $this->get(Service::class);
+            /** @var Notifier */
+            $notifier = $this->get(Notifier::class);
 
             $payload = [
                 'contestant' => ($currentContestant = $service->getCurrentContestant()) ? $service->factoryContestantPb($currentContestant) : null, // current_contestant ? contestant_pb(current_contestant) : nil,
-                // 'team' => current_team ? team_pb(current_team) : nil,
+                'team' => ($currentTeam = $service->getCurrentTeam()) ? $service->factoryTeamPb($currentTeam) : null,
                 'contest' => ($currentContest = $service->getCurrentContestStatus()) ? $service->factoryContestPb($currentContest) : null,
-                // 'push_vapid_key' => notifier.vapid_key&.public_key_for_push_header,'
+                // 'push_vapid_key' => $notifier->getVapidKey()->getPublicKeyForPushHeader(),
             ];
 
             list($type, $content) = $service->encodeResponsePb($request, $payload);

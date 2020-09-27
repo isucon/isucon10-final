@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Application\Notifier;
 use App\Application\Service;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
@@ -28,6 +29,10 @@ return function (ContainerBuilder $containerBuilder) {
 
         Service::class => function(ContainerInterface $c) {
             return new Service($c);
+        },
+
+        Notifier::class => function(ContainerInterface $c) {
+            return new Notifier($c->get(PDO::class));
         },
 
         PDO::class => function(ContainerInterface $container): PDO {

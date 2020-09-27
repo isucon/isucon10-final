@@ -15,6 +15,8 @@ use Slim\Routing\RouteContext;
 use Xsuportal\Proto\Resources\Contest;
 use Xsuportal\Proto\Resources\Contest\Status;
 use Xsuportal\Proto\Resources\Contestant;
+use Xsuportal\Proto\Resources\Team;
+use Xsuportal\Proto\Resources\Team\StudentStatus;
 
 class Service
 {
@@ -150,6 +152,78 @@ SQL;
             default:
                 throw new \UnexpectedValueException(sprintf('Unexpected contest status: %s', $status));
         }
+    }
+
+    public function getCurrentTeam(bool $lock = false): ?array
+    {
+        $currentContestant = $this->getCurrentContestant();
+        if ($currentContestant) {
+            $sql = 'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1' . ($lock ? ' FOR UPDATE' : '');
+            /** @var \PDOStatement */
+            $stmt = $this->container->get(PDO::class)->prepare($sql);
+            $stmt->execute([(int)$currentContestant['team_id']]);
+
+            return $stmt->fetch() ?: [];
+        }
+
+        return null;
+    }
+
+    public function factoryTeamPb(array $team, bool $detail = false, $enableMembers = true): Team
+    {
+        $leader = null;
+        $members = null;
+
+        /** @var PDO */
+        $pdo = $this->container->get(PDO::class);
+
+        if ($enableMembers) {
+            if ($team['leader_id']) {
+                $sql = 'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1';
+                /** @var \PDOStatement */
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$team['leader_id']]);
+                $leader = $this->factoryContestantPb($stmt->fetch());
+            }
+            $sql = 'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1';
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$team['leader_id']]);
+            $members = array_map(
+                function(array $member): Contestant {
+                    return $this->factoryContestantPb($member);
+                },
+                $stmt->fetchAll()
+            );
+        }
+
+        return new Team([
+            'id' => isset($team['id']) ? (int)$team['id'] : null,
+            'name' => $team['name'] ?? null,
+            'leader_id' => isset($team['leader_id']) ? (int)$team['leader_id'] : null,
+            'member_ids' => array_map(
+                function(Contestant $member) {
+                    return $member->getId();
+                },
+                $members
+            ),
+            'withdrawn' => isset($team['withdrawn']) ? (bool)$team['withdrawn'] : false,
+            'detail' => $detail ? new StudentStatus([
+                'email_address' => $team['email_address'],
+                'invite_token' => $team['invite_token'],
+            ]) : null,
+            'leader' => $leader,
+            'members' => $members,
+            'student' => isset($team['student']) ? new StudentStatus([
+                'status' => ($team['student'] !== '0' && !!$team['student']),
+            ]) : null,
+        ]);
+    }
+
+    public function getNotifier()
+    {
+        /** @var \PDO */
+        $pdo = $this->container->get(PDO::class);
+        return new Notifier($pdo);
     }
 
     private static function requestToRouteString(Request $request): string
