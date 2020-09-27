@@ -43,7 +43,7 @@ var (
 	// エラーによる減点
 	DEDUCTION_ERROR int64 = 50
 	// タイムアウトによる減点
-	DEDUCTION_TIMEOUT int64 = 1000
+	DEDUCTION_TIMEOUT int64 = 100
 	// FAIL になるエラー回数
 	FAIL_ERROR_COUNT int64 = 100
 	// タイムアウトの減点回数
@@ -64,8 +64,8 @@ var (
 )
 
 func init() {
-	// Firefox はデフォルト300秒待つので
-	agent.DefaultRequestTimeout = 300 * time.Second
+	// リクエストは基本的に 5 秒
+	agent.DefaultRequestTimeout = 2 * time.Second
 
 	flag.StringVar(&targetAddress, "target", benchrun.GetTargetAddress(), "ex: localhost:9292")
 	flag.StringVar(&profileFile, "profile", "", "ex: cpu.out")
@@ -162,13 +162,13 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 
 	tags := []string{}
 	for k, v := range breakdown {
-		tags = append(tags, fmt.Sprintf("%s: %d", k, v))
+		tags = append(tags, fmt.Sprintf("  %s: %d", k, v))
 	}
-	scoreTags := strings.Join(tags, ", ")
+	scoreTags := strings.Join(tags, "\n")
 
 	if finish {
-		fmt.Printf("Count: %s\n", scoreTags)
-		fmt.Printf("(%d * %d) + %d - %d(err: %d, timeout: %d)\n", contestantScore, bonusMag, audienceScore, scoreDeduction, deduction, timeoutCount)
+		fmt.Printf("Count: \n%s\n", scoreTags)
+		fmt.Printf("(%d * %.1f) + %d - %d(err: %d, timeout: %d)\n", contestantScore, float64(bonusMag)/10, audienceScore, scoreDeduction, deduction, timeoutCount)
 		fmt.Printf("Pass: %v / score: %d (%d - %d)\n", passed, scoreTotal, scoreRaw, scoreDeduction)
 		if !passed {
 			fmt.Printf("Fail reason: %s\n", reason)

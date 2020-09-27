@@ -6,13 +6,8 @@ use crate::proto::services::admin::{
 use actix_protobuf::{ProtoBuf, ProtoBufResponseBuilder};
 use actix_session::Session;
 use actix_web::{http::StatusCode, web, Error as AWError, HttpResponse};
-use chrono::NaiveDateTime;
 use mysql::prelude::*;
 use std::ops::DerefMut;
-
-fn protobuf_timestamp_to_chrono(timestamp: prost_types::Timestamp) -> NaiveDateTime {
-    NaiveDateTime::from_timestamp(timestamp.seconds, 0)
-}
 
 pub async fn initialize(
     db: web::Data<crate::Pool>,
@@ -35,10 +30,10 @@ pub async fn initialize(
         conn.exec_drop("INSERT `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, TRUE, NOW(6))", (ADMIN_ID, crate::sha256_hexdigest(ADMIN_PASSWORD)))?;
 
         if let Some(contest) = message.contest {
-            let registration_open_at = protobuf_timestamp_to_chrono(contest.registration_open_at.expect("registration_open_at is missing"));
-            let contest_starts_at = protobuf_timestamp_to_chrono(contest.contest_starts_at.expect("contest_starts_at is missing"));
-            let contest_freezes_at = protobuf_timestamp_to_chrono(contest.contest_freezes_at.expect("contest_freezes_at is missing"));
-            let contest_ends_at = protobuf_timestamp_to_chrono(contest.contest_ends_at.expect("contest_ends_at is missing"));
+            let registration_open_at = crate::protobuf_timestamp_to_chrono(&contest.registration_open_at.expect("registration_open_at is missing"));
+            let contest_starts_at = crate::protobuf_timestamp_to_chrono(&contest.contest_starts_at.expect("contest_starts_at is missing"));
+            let contest_freezes_at = crate::protobuf_timestamp_to_chrono(&contest.contest_freezes_at.expect("contest_freezes_at is missing"));
+            let contest_ends_at = crate::protobuf_timestamp_to_chrono(&contest.contest_ends_at.expect("contest_ends_at is missing"));
             conn.exec_drop(r#"
                 INSERT `contest_config` (
                   `registration_open_at`,
@@ -190,7 +185,7 @@ pub async fn respond_clarification(
     let id = info.into_inner().0;
     let message = message.0;
 
-    let (clarification, notifiers) = web::block(move || {
+    let (clarification, notifiers, db) = web::block(move || {
         let mut conn = db.get().expect("Failed to checkout database connection");
         let current_contestant =
             crate::require_current_contestant(conn.deref_mut(), &contestant_id, false)?;
@@ -260,14 +255,40 @@ pub async fn respond_clarification(
                 team: Some(team_pb),
             },
             notifiers,
+            db,
         ))
     })
     .await
     .map_err(crate::unwrap_blocking_error)?;
 
+    let mut unavailable_subscriptions = Vec::new();
     for notifier in notifiers {
-        // TODO: Delete push_subscription when Webpush::ExpiredSubscription or Webpush::InvalidSubscription
-        let _ = notifier.send().await;
+        if let Err(e) = notifier.send().await {
+            match e {
+                crate::notifier::WebPushError::ExpiredSubscription(sub, _)
+                | crate::notifier::WebPushError::InvalidSubscription(sub, _) => {
+                    unavailable_subscriptions.push(sub);
+                }
+                _ => {
+                    return Err(crate::Error::from(e).into());
+                }
+            }
+        }
+    }
+
+    if !unavailable_subscriptions.is_empty() {
+        web::block::<_, _, crate::Error>(move || {
+            let mut conn = db.get().expect("Failed to checkout database connection");
+            for sub in unavailable_subscriptions {
+                conn.exec_drop(
+                    "DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
+                    (sub.id,),
+                )?;
+            }
+            Ok(())
+        })
+        .await
+        .map_err(crate::unwrap_blocking_error)?;
     }
 
     HttpResponse::Ok().protobuf(RespondClarificationResponse {

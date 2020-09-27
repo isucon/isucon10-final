@@ -1,0 +1,1 @@
+../../webapp/generate_vapid_key.sh

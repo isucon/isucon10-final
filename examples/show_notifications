@@ -1,9 +1,27 @@
 #!/usr/bin/env ruby
-$: << File.expand_path('../lib', __dir__)
 require 'optparse'
-require 'xsuportal/resources/notification_pb'
-require 'database'
 require 'json'
+require 'mysql2'
+require 'mysql2-cs-bind'
+
+$: << File.expand_path('../webapp/ruby/lib', __dir__)
+require 'xsuportal/resources/notification_pb'
+
+def db
+  @db ||= Mysql2::Client.new(
+    host: ENV['MYSQL_HOSTNAME'] || '127.0.0.1',
+    port: ENV['MYSQL_PORT'] || '3306',
+    username: ENV['MYSQL_USER'] || 'isucon',
+    database: ENV['MYSQL_DATABASE'] || 'xsuportal',
+    password: ENV['MYSQL_PASS'] || 'isucon',
+    charset: 'utf8mb4',
+    database_timezone: :utc,
+    cast_booleans: true,
+    symbolize_keys: true,
+    reconnect: true,
+    init_command: "SET time_zone='+00:00';",
+  )
+end
 
 contestant_id = nil
 option_parser = OptionParser.new do |opt|
@@ -14,7 +32,6 @@ option_parser.parse!
 
 abort option_parser.banner unless contestant_id
 
-db = Xsuportal::Database.connection
 notifications = db.xquery(
   'SELECT * FROM `notifications` WHERE `contestant_id` = ? ORDER BY `id`',
   contestant_id,

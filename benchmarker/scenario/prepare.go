@@ -35,7 +35,9 @@ func (s *Scenario) Prepare(ctx context.Context, step *isucandar.BenchmarkStep) e
 	s.Contest.GRPCHost = initResponse.GetBenchmarkServer().GetHost()
 	s.Contest.GRPCPort = initResponse.GetBenchmarkServer().GetPort()
 
-	s.PushService.OnInvalidPush = func(id string, err error) { s.handleInvalidPush(id, err, step) }
+	s.PushService.OnInvalidPush = func(id string, err error) {
+		s.handleInvalidPush(id, err, step)
+	}
 
 	return nil
 }

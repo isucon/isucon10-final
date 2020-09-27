@@ -116,9 +116,7 @@ impl BenchmarkReport for ReportService {
             while let Some(message) = stream.message().await? {
                 let job_id = message.job_id;
                 if let Some((job, notifiers)) = tokio::task::block_in_place(|| handle_report(&mut conn, &message))? {
-                    for notifier in notifiers {
-                        let _ = notifier.send().await;
-                    }
+                    send_notifications(conn.deref_mut(), notifiers).await?;
                     yield ReportBenchmarkResultResponse { acked_nonce: message.nonce };
                 } else {
                     Err(TonicStatus::not_found(format!(
@@ -161,10 +159,24 @@ fn handle_report(
     let result = result.unwrap();
     if result.finished {
         log::debug!("{}: save as finished", message.job_id);
-        save_as_finished(&mut tx, &job, result).map_err(mysql_error_to_tonic_status)?;
+        if job.started_at.is_none() || job.finished_at.is_some() {
+            return Err(TonicStatus::failed_precondition(format!(
+                "Job {} has already finished or has not started yet",
+                job.id
+            )));
+        }
+        if result.marked_at.is_none() {
+            return Err(TonicStatus::invalid_argument("marked_at is required"));
+        }
+        let marked_at = crate::protobuf_timestamp_to_chrono(result.marked_at.as_ref().unwrap());
+        save_as_finished(&mut tx, &job, result, &marked_at).map_err(mysql_error_to_tonic_status)?;
     } else {
         log::debug!("{}: save as running", message.job_id);
-        save_as_running(&mut tx, &job).map_err(mysql_error_to_tonic_status)?;
+        if result.marked_at.is_none() {
+            return Err(TonicStatus::failed_precondition("marked_at is required"));
+        }
+        let marked_at = crate::protobuf_timestamp_to_chrono(result.marked_at.as_ref().unwrap());
+        save_as_running(&mut tx, &job, &marked_at).map_err(mysql_error_to_tonic_status)?;
     }
     tx.commit().map_err(mysql_error_to_tonic_status)?;
     let notifiers = crate::notifier::notify_benchmark_job_finished(conn.deref_mut(), &job)
@@ -176,13 +188,8 @@ fn save_as_finished(
     tx: &mut mysql::Transaction,
     job: &crate::BenchmarkJob,
     result: &BenchmarkResult,
+    marked_at: &NaiveDateTime,
 ) -> Result<(), mysql::Error> {
-    if job.started_at.is_none() || job.finished_at.is_some() {
-        return Err(mysql::Error::from(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            format!("Job {} has already finished or has not started yet", job.id),
-        )));
-    }
     tx.exec_drop(
         r#"
         UPDATE `benchmark_jobs` SET
@@ -192,7 +199,7 @@ fn save_as_finished(
           `passed` = ?,
           `reason` = ?,
           `updated_at` = NOW(6),
-          `finished_at` = NOW(6)
+          `finished_at` = ?
         WHERE `id` = ?
         LIMIT 1
     "#,
@@ -208,6 +215,7 @@ fn save_as_finished(
                 .map(|breakdown| breakdown.deduction),
             result.passed,
             &result.reason,
+            marked_at,
             job.id,
         ),
     )
@@ -216,14 +224,9 @@ fn save_as_finished(
 fn save_as_running(
     tx: &mut mysql::Transaction,
     job: &crate::BenchmarkJob,
+    marked_at: &NaiveDateTime,
 ) -> Result<(), mysql::Error> {
-    if job.started_at.is_some() {
-        return Err(mysql::Error::from(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            format!("Job {} has been already running", job.id),
-        )));
-    }
-
+    let started_at = job.started_at.as_ref().unwrap_or(marked_at);
     tx.exec_drop(
         r#"
         UPDATE `benchmark_jobs` SET
@@ -232,12 +235,53 @@ fn save_as_running(
           `score_deduction` = NULL,
           `passed` = FALSE,
           `reason` = NULL,
-          `started_at` = NOW(6),
+          `started_at` = ?,
           `updated_at` = NOW(6),
           `finished_at` = NULL
         WHERE `id` = ?
         LIMIT 1
     "#,
-        (BenchmarkJobStatus::Running as i32, job.id),
+        (BenchmarkJobStatus::Running as i32, started_at, job.id),
     )
+}
+
+async fn send_notifications<Q>(
+    conn: &mut Q,
+    notifiers: Vec<crate::notifier::WebPushNotifier>,
+) -> Result<(), TonicStatus>
+where
+    Q: Queryable,
+{
+    let mut unavailable_subscriptions = Vec::new();
+    for notifier in notifiers {
+        if let Err(e) = notifier.send().await {
+            match e {
+                crate::notifier::WebPushError::ExpiredSubscription(sub, _)
+                | crate::notifier::WebPushError::InvalidSubscription(sub, _) => {
+                    unavailable_subscriptions.push(sub);
+                }
+                _ => {
+                    return Err(TonicStatus::internal(format!(
+                        "Failed to send WebPush notification: {:?}",
+                        e
+                    )));
+                }
+            }
+        }
+    }
+
+    if unavailable_subscriptions.is_empty() {
+        Ok(())
+    } else {
+        tokio::task::block_in_place(move || {
+            for sub in unavailable_subscriptions {
+                conn.exec_drop(
+                    "DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
+                    (sub.id,),
+                )
+                .map_err(mysql_error_to_tonic_status)?;
+            }
+            Ok(())
+        })
+    }
 }
