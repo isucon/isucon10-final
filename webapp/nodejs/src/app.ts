@@ -27,6 +27,7 @@ import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contes
 import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
 import { LogoutResponse } from "./proto/xsuportal/services/contestant/logout_pb";
 import { GetRegistrationSessionResponse, GetRegistrationSessionQuery } from "./proto/xsuportal/services/registration/session_pb";
+import { CreateTeamRequest, CreateTeamResponse } from "./proto/xsuportal/services/registration/create_team_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -61,6 +62,12 @@ const haltPbWithError = (res: express.Response, code: number, humanMessage: stri
   error.setHumanMessage(humanMessage);
   error.setHumanDescriptionsList([err.stack ?? err.message]);
   res.end(Buffer.from(error.serializeBinary()));
+};
+
+const secureRandom = (size: number) => {
+  const buffer = crypto.randomBytes(size);
+  const base64 = buffer.toString('base64');
+  return base64;
 };
 
 const app = express();
@@ -728,6 +735,68 @@ app.get("/api/registration/session", async (req, res, next) => {
   response.setStatus(status);
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
+});
+
+app.post("/api/registration/team", async (req, res, next) => {
+  const db = await connection;
+  const request = CreateTeamRequest.deserializeBinary(Buffer.from(req.body));
+  
+  const loginSuccess = loginRequired(req, res);
+  if (!loginSuccess) {
+    return;
+  }
+
+  const currentContestStatus = await getCurrentContestStatus();
+  if (currentContestStatus.contest.status !== Contest.Status.REGISTRATION) {
+    haltPb(res, 403, "チーム登録期間ではありません");
+    return;
+  }
+  const currentContestant = await getCurrentContestant(req);
+
+  try {
+    await db.beginTransaction();
+    await db.query('LOCK TABLES `teams` WRITE, `contestants` WRITE');
+    const inviteToken = secureRandom(64);
+    const [withinCapacity] = await db.query('SELECT COUNT(*) < ? AS `within_capacity` FROM `teams`', [TEAM_CAPACITY]);
+    if (withinCapacity.within_capacity != 1) {
+      haltPb(res, 403, "チーム登録数上限です");
+      return;
+    }
+
+    await db.query(
+      'INSERT INTO `teams` (`name`, `email_address`, `invite_token`, `created_at`) VALUES (?, ?, ?, NOW(6))',
+      [request.getTeamName(), request.getEmailAddress(), inviteToken],
+    );
+    const [{id: teamId}] = await db.query('SELECT LAST_INSERT_ID() AS `id`');
+    if (teamId == null) {
+      haltPb(res, 500, "チームを登録できませんでした");
+      return;
+    }
+  
+    await db.query(
+      'UPDATE `contestants` SET `name` = ?, `student` = ?, `team_id` = ? WHERE `id` = ? LIMIT 1', [
+        request.getTeamName(),
+        request.getIsStudent(),
+        teamId,
+        currentContestant.id,
+    ]);
+
+    await db.query(
+      'UPDATE `teams` SET `leader_id` = ? WHERE `id` = ? LIMIT 1',
+      [ currentContestant.id, teamId ]
+    );
+
+    await db.commit();
+    await db.query('UNLOCK TABLES');
+    const response = new CreateTeamResponse();
+    response.setTeamId(teamId);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    await db.rollback();
+  } finally {
+    await db.end();
+  }
 });
 
 app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
