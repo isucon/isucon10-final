@@ -496,7 +496,7 @@ for (const adminPath of adminPaths) {
   });
 }
 
-
+app.use(express.static(path.resolve("public")));
 
 app.post("/initialize", async (req, res, next) => {
   const db = await connection;
