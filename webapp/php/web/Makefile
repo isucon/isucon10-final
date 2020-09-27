@@ -1,4 +1,4 @@
-.PHONY: help install dependencies setup run clean
+.PHONY: help install dependencies setup run protoc clean
 
 SHELL := bash
 
@@ -8,7 +8,8 @@ help:
 install: \
 	dependencies \
 	vendor \
-	setup
+	setup \
+	protoc
 
 dependencies:
 	type php > /dev/null
@@ -31,6 +32,14 @@ vendor:
 public: ../../frontend/public
 	ln -s $< $@
 
+protoc: \
+	src/Protobuf
+
+src/Protobuf: ../../../proto
+	mkdir -p $@
+	find $< -name '*.proto' | xargs -I@ protoc -I $< --php_out=./src/Protobuf @
+
 clean:
 	rm -rf vendor
 	rm -f public
+	rm -rf src/Protobuf
