@@ -111,7 +111,12 @@ impl WebPushNotifier {
                 .body(payload)
                 .send()
                 .await;
-            tx.send(result).expect("Failed to send WebPush response");
+            if let Err(result) = tx.send(result) {
+                log::error!(
+                    "Failed to send Web Push response via tokio::sync::oneshot: {:?}",
+                    result
+                );
+            }
         });
         match rx.await.expect("Failed to receive WebPush response") {
             Ok(resp) => match resp.status().as_u16() {
@@ -155,7 +160,7 @@ where
     }?;
     let mut notifiers = Vec::with_capacity(contestants.len());
     for contestant in contestants {
-        let notification = crate::proto::resources::Notification {
+        let mut notification_pb = crate::proto::resources::Notification {
             id: 0,
             created_at: None,
             content: Some(
@@ -171,9 +176,16 @@ where
                 ),
             ),
         };
-        notify(conn, &notification, &contestant.0)?;
+        let notification = notify(conn, &notification_pb, &contestant.0)?;
         if WEBPUSH_VAPID_KEY.is_some() {
-            notifiers.extend(build_webpush_notifier(conn, &notification, &contestant.0)?);
+            notification_pb.id = notification.id;
+            notification_pb.created_at =
+                Some(crate::chrono_timestamp_to_protobuf(notification.created_at));
+            notifiers.extend(build_webpush_notifier(
+                conn,
+                &notification_pb,
+                &contestant.0,
+            )?);
         }
     }
     Ok(notifiers)
@@ -192,7 +204,7 @@ where
     )?;
     let mut notifiers = Vec::with_capacity(contestants.len());
     for contestant in contestants {
-        let notification = crate::proto::resources::Notification {
+        let mut notification_pb = crate::proto::resources::Notification {
             id: 0,
             created_at: None,
             content: Some(
@@ -203,9 +215,16 @@ where
                 ),
             ),
         };
-        notify(conn, &notification, &contestant.0)?;
+        let notification = notify(conn, &notification_pb, &contestant.0)?;
         if WEBPUSH_VAPID_KEY.is_some() {
-            notifiers.extend(build_webpush_notifier(conn, &notification, &contestant.0)?);
+            notification_pb.id = notification.id;
+            notification_pb.created_at =
+                Some(crate::chrono_timestamp_to_protobuf(notification.created_at));
+            notifiers.extend(build_webpush_notifier(
+                conn,
+                &notification_pb,
+                &contestant.0,
+            )?);
         }
     }
     Ok(notifiers)
@@ -215,7 +234,7 @@ fn notify<Q>(
     conn: &mut Q,
     notification: &crate::proto::resources::Notification,
     contestant_id: &str,
-) -> Result<(), mysql::Error>
+) -> Result<crate::Notification, mysql::Error>
 where
     Q: Queryable,
 {
@@ -229,7 +248,10 @@ where
     conn.exec_drop(
         "INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))",
         (contestant_id, encoded_message),
-      )
+      )?;
+    Ok(conn
+        .query_first("SELECT * FROM `notifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1")?
+        .expect("Inserted notification is not found"))
 }
 
 struct VapidKey {
