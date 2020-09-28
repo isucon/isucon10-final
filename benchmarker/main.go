@@ -71,7 +71,7 @@ func init() {
 		panic(err)
 	}
 
-	agent.DefaultRequestTimeout = 2 * time.Second
+	agent.DefaultRequestTimeout = 10 * time.Second
 	agent.DefaultTLSConfig.ClientCAs = certs
 	agent.DefaultTLSConfig.ClientAuth = tls.RequireAndVerifyClientCert
 	agent.DefaultTLSConfig.MinVersion = tls.VersionTLS12
@@ -257,6 +257,7 @@ func main() {
 
 	b.OnError(func(err error, step *isucandar.BenchmarkStep) {
 		if failure.IsCode(err, failure.TimeoutErrorCode) {
+			fmt.Printf("%v\n", err)
 			return
 		}
 
