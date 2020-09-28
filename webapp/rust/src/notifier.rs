@@ -150,8 +150,8 @@ pub fn notify_clarification_answered<Q>(
 where
     Q: Queryable,
 {
-    let contestants: Vec<(String, Option<i64>)> = if clar.disclosed == Some(true) {
-        conn.query("SELECT `id`, `team_id` FROM `contestants`")
+    let contestants: Vec<(String, i64)> = if clar.disclosed == Some(true) {
+        conn.query("SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` IS NOT NULL")
     } else {
         conn.exec(
             "SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?",
@@ -167,10 +167,7 @@ where
                 crate::proto::resources::notification::Content::ContentClarification(
                     crate::proto::resources::notification::ClarificationMessage {
                         clarification_id: clar.id,
-                        owned: contestant
-                            .1
-                            .map(|team_id| team_id == clar.team_id)
-                            .unwrap_or(false),
+                        owned: clar.team_id == contestant.1,
                         updated,
                     },
                 ),
