@@ -20,3 +20,8 @@ cd ${BASE_DIR}/webapp/golang
 rm -rf ./proto || true
 mkdir -p ./proto
 protoc --go_out=./proto --go-grpc_out=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative -I ../../proto ../../proto/**/*.proto
+
+cd ${BASE_DIR}/webapp/nodejs
+rm -rf ./src/proto || true
+mkdir -p ./src/proto
+npm run gen
