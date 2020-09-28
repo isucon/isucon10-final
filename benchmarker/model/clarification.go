@@ -50,6 +50,4 @@ func (c *Clarification) IsAnswered() bool {
 
 func (c *Clarification) Answered() {
 	atomic.StoreUint32(&c.answered, 1)
-
-	c.team.cPubSub.Publish(nil)
 }
