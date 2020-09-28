@@ -458,9 +458,9 @@ async function getLeaderboardResource(teamId: number = 0) {
     item.setFinishCount(team.finish_count);
 
     if (team.student === 1) {
-      studentTeams.push(team);
+      studentTeams.push(item);
     } else {
-      generalTeams.push(team);
+      generalTeams.push(item);
     }
     teams.push(item);
   }
