@@ -72,7 +72,6 @@ func init() {
 		panic(err)
 	}
 
-	agent.DefaultRequestTimeout = 10 * time.Second
 	agent.DefaultTLSConfig.ClientCAs = certs
 	agent.DefaultTLSConfig.ClientAuth = tls.RequireAndVerifyClientCert
 	agent.DefaultTLSConfig.MinVersion = tls.VersionTLS12
@@ -87,7 +86,16 @@ func init() {
 	flag.BoolVar(&useTLS, "tls", false, "server is a tls (HTTPS & gRPC over h2)")
 	flag.BoolVar(&exitStatusOnFail, "exit-status", false, "set exit status non-zero when a benchmark result is failing")
 
+	timeoutDuration := ""
+	flag.StringVar(&timeoutDuration, "timeout", "10s", "request timeout duration")
+
 	flag.Parse()
+
+	timeout, err := time.ParseDuration(timeoutDuration)
+	if err != nil {
+		panic(err)
+	}
+	agent.DefaultRequestTimeout = timeout
 }
 
 func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish bool) bool {
