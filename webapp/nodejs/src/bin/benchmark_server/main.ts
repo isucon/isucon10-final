@@ -1,11 +1,13 @@
 import mysql from "promise-mysql";
 import util from "util";
-import {getDB, secureRandom} from "../../app";
-import grpc from "grpc";
+import strftime from 'strftime'
+import {getDB, secureRandom, notifier} from "../../app";
+import grpc, { callError, makeGenericClientConstructor } from "grpc";
 import BenchmarkQueue from "../../proto/xsuportal/services/bench/receiving_grpc_pb";
 import { ReceiveBenchmarkJobRequest, ReceiveBenchmarkJobResponse } from "../../proto/xsuportal/services/bench/receiving_pb";
-import { BenchmarkReportService } from "../../proto/xsuportal/services/bench/reporting_grpc_pb";
+import BenchmarkReport from "../../proto/xsuportal/services/bench/reporting_grpc_pb";
 import { BenchmarkJob } from "../../proto/xsuportal/resources/benchmark_job_pb";
+import { ReportBenchmarkResultRequest, ReportBenchmarkResultResponse } from "../../proto/xsuportal/services/bench/reporting_pb";
 
 const sleep = util.promisify(setTimeout);
 
@@ -89,12 +91,130 @@ class BenchmarkQueueService implements BenchmarkQueue.IBenchmarkQueueServer {
   }
 }
 
+class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
+  reportBenchmarkResult(
+    call: grpc.ServerDuplexStream<ReportBenchmarkResultRequest, ReportBenchmarkResultResponse>,
+  ) {
+    call.on("data", async (request: ReportBenchmarkResultRequest) => {
+      const response = await this.reportBenchmarkResultPromise(request);
+      call.write(response);
+    });
+    call.on("end", () => {
+      call.end();
+    });
+  }
+
+  async reportBenchmarkResultPromise(request: ReportBenchmarkResultRequest): Promise<ReportBenchmarkResultResponse> {
+    const db = await getDB();
+    // TODO maybe we need to setup notifier.
+    const notify = notifier;
+    
+    if (!request.hasResult()) {
+      throw new Error("Invalid Argument result required");
+    }
+
+    try {
+      await db.beginTransaction();
+      const [job] = await db.query(
+        'SELECT * FROM `benchmark_jobs` WHERE `id` = ? AND `handle` = ? LIMIT 1 FOR UPDATE',
+        [request.getJobId(), request.getHandle(),]
+      );
+
+      if (job == null) {
+        await db.rollback();
+        console.error(`Job not found: job_id=${request.getJobId()}, handle=${request.getHandle().toString()}`);
+        throw new Error(`Job ${request.getJobId()} not found or handle is wrong`);
+      }
+
+      if (request.getResult()?.getFinished()) {
+        console.debug(`${request.getJobId()}: save as finished`);
+        await saveAsFinished(job, request, db);
+        db.commit();
+        notifier.notifyBenchmarkJobFinished(job);
+      } else {
+        console.debug(`${request.getJobId()}: save as running`);
+        await saveAsRunning(job, request, db);
+        db.commit();
+      }
+      const response = new ReportBenchmarkResultResponse();
+      response.setAckedNonce(request.getNonce());
+      return response;
+    } catch (e) {
+      await db.rollback();
+      throw e;
+    } finally {
+      await db.release();
+    }
+  }
+
+  async saveAsFinished(job: any, request: ReportBenchmarkResultRequest, db: mysql.PoolConnection) {
+    if (job.started_at == null || job.finished_at != null) {
+      await db.rollback();
+      throw new Error(`Job ${request.getJobId()} has already finished or has not started yet`);
+    }
+    const markedAtTimestamp = request.getResult()?.getMarkedAt();
+    if (!markedAtTimestamp) {
+      await db.rollback();
+      throw new Error("marked_at is required");
+    }
+    const markedAt = new Date(markedAtTimestamp.getSeconds()*1000 + markedAtTimestamp.getNanos() / 1000);
+
+    const conn = await getDB();
+    const result = request.getResult();
+    await conn.query(`
+        UPDATE benchmark_jobs SET
+          status = ?,
+          score_raw = ?,
+          score_deduction = ?,
+          passed = ?,
+          reason = ?,
+          updated_at = NOW(6),
+          finished_at = ?
+        WHERE id = ?
+        LIMIT 1
+    `,
+    [BenchmarkJob.Status.FINISHED, result?.getScoreBreakdown()?.getRaw(), result?.getScoreBreakdown()?.getDeduction(), result?.getPassed(), result?.getReason(), strftime('%Y-%m-%d %H:%M:%S.%L', markedAt), request.getJobId()]
+    );
+  }
+
+  async saveAsRunning(job: any, request: ReportBenchmarkResultRequest, db: mysql.PoolConnection) {
+    const markedAtTimestamp = request.getResult()?.getMarkedAt();
+    if (!markedAtTimestamp) {
+      await db.rollback();
+      throw new Error("marked_at is required");
+    }
+    const markedAt = new Date(markedAtTimestamp.getSeconds()*1000 + markedAtTimestamp.getNanos() / 1000);
+
+    const conn = await getDB();
+    const result = request.getResult();
+    await conn.query(`
+        UPDATE benchmark_jobs SET
+          status = ?,
+          score_raw = NULL,
+          score_deduction = NULL,
+          passed = FALSE,
+          reason = NULL,
+          started_at = ?,
+          updated_at = NOW(6),
+          finished_at = NULL
+        WHERE id = ?
+        LIMIT 1
+    `,
+    [
+      BenchmarkJob.Status.RUNNING, 
+      strftime('%Y-%m-%d %H:%M:%S.%L', new Date(job.started_at) || markedAt),
+      request.getJobId()]
+    );
+  }
+}
+
 function main() {
   const server = new grpc.Server();
   const port = process.env["PORT"] ?? 50051;
 
   
   server.addService<BenchmarkQueue.IBenchmarkQueueServer>(BenchmarkQueue.BenchmarkQueueService, new BenchmarkQueueService());
+  server.addService<BenchmarkReport.IBenchmarkReportServer>(BenchmarkReport.BenchmarkReportService, new BenchmarkReportService());
   server.bind(`0.0.0.0:${port}`, grpc.ServerCredentials.createInsecure());
   server.start();
 }

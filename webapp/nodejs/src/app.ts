@@ -49,7 +49,7 @@ export const dbinfo = {
 const pool = mysql.createPool(dbinfo);
 
 export const getDB = async () => (await pool).getConnection()
-const notifier = new Notifier(pool);
+export const notifier = new Notifier(pool);
 
 const haltPb = (res: express.Response, code: number, humanMessage: string) => {
   res.contentType('application/vnd.google.protobuf; proto=xsuportal.proto.Error');
