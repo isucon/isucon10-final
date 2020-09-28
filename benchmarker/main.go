@@ -71,7 +71,6 @@ func init() {
 		panic(err)
 	}
 
-	// リクエストは基本的に 5 秒
 	agent.DefaultRequestTimeout = 2 * time.Second
 	agent.DefaultTLSConfig.ClientCAs = certs
 	agent.DefaultTLSConfig.ClientAuth = tls.RequireAndVerifyClientCert
