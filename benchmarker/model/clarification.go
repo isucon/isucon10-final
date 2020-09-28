@@ -18,7 +18,6 @@ type Clarification struct {
 	Question string
 	Answer   string
 	Disclose bool
-	sent     uint32
 	answered uint32
 }
 
@@ -33,7 +32,6 @@ func NewClarification(team *Team) *Clarification {
 		Question: random.Question(),
 		Answer:   random.Answer(),
 		Disclose: disclose,
-		sent:     0,
 		answered: 0,
 	}
 }
@@ -46,18 +44,12 @@ func (s *Clarification) SetID(id int64) {
 	atomic.StoreInt64(&s.id, id)
 }
 
-func (c *Clarification) IsSent() bool {
-	return atomic.LoadUint32(&c.sent) != 0
-}
-
-func (c *Clarification) Sent() {
-	atomic.StoreUint32(&c.sent, 1)
-}
-
 func (c *Clarification) IsAnswered() bool {
 	return atomic.LoadUint32(&c.answered) != 0
 }
 
 func (c *Clarification) Answered() {
 	atomic.StoreUint32(&c.answered, 1)
+
+	c.team.cPubSub.Publish(nil)
 }

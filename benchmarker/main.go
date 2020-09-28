@@ -257,7 +257,6 @@ func main() {
 
 	b.OnError(func(err error, step *isucandar.BenchmarkStep) {
 		if failure.IsCode(err, failure.TimeoutErrorCode) {
-			fmt.Printf("%v\n", err)
 			return
 		}
 

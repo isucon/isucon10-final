@@ -3,6 +3,7 @@ package scenario
 import (
 	"context"
 	"encoding/base64"
+	"fmt"
 	"net/url"
 	"sync"
 	"sync/atomic"
@@ -326,7 +327,7 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 			}
 
 			// すべての Clar の解決を待つ
-			<-team.WaitAllClarResolve(ctx, "bench")
+			<-team.WaitAllClarResolve(ctx)
 
 			// ダッシュボード開いてキューを積むのでブラウザアクセスとダッシュボード的 API 呼び出しを含む
 			res, resources, _, err := BrowserAccess(ctx, team.Developer, "/contestant")
@@ -392,7 +393,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 			return
 		}
 
-		for {
+		for ctx.Err() == nil {
 			timer := time.After(1 * time.Second)
 			wg := sync.WaitGroup{}
 			wg.Add(2)
@@ -431,11 +432,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 				step.AddScore("get-dashboard")
 			}
 
-			select {
-			case <-timer:
-			case <-ctx.Done():
-				return
-			}
+			<-timer
 		}
 	}, worker.WithLoopCount(int32(len(s.Contest.Teams))))
 	if err != nil {
@@ -492,22 +489,17 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				}
 
 				clar.SetID(res.GetClarification().GetId())
-				clar.Sent()
 				s.Contest.AddClar(clar)
 				step.AddScore("post-clarification")
 
 				latestClarPostedAt = time.Now()
-
-				<-team.WaitAllClarResolve(ctx, "clar")
-			} else {
-				wait := latestClarPostedAt.Add(3 * time.Second).Sub(time.Now())
-				<-time.After(wait)
 			}
 
 			select {
+			case <-time.After(3 * time.Second):
+				<-team.WaitAllClarResolve(ctx)
 			case <-ctx.Done():
 				return
-			default:
 			}
 		}
 	}, worker.WithLoopCount(int32(len(s.Contest.Teams))))
@@ -553,7 +545,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 				step.AddError(err)
 			}
 			if len(errs) > 0 {
-				continue
+				return
 			}
 
 			res, err := AdminGetClarificationsAction(ctx, admin)
@@ -830,6 +822,7 @@ func (s *Scenario) loadBenchmarkDetails(ctx context.Context, step *isucandar.Ben
 
 	rjob := res.GetJob()
 	if rjob.GetId() != result.ID() {
+		fmt.Printf("ID: %d : %d\n", rjob.GetId(), result.ID())
 		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正なベンチマークジョブ ID")))
 		return
 	}
@@ -910,7 +903,7 @@ func (s *Scenario) loadCheckClarification(ctx context.Context, step *isucandar.B
 		for _, clar := range clars {
 			if c.GetId() == clar.GetClarificationId() {
 				for _, tc := range tClars {
-					if tc.ID() == c.GetId() && !tc.IsAnswered() && c.GetAnswered() {
+					if tc.ID() == c.GetId() {
 						tc.Answered()
 						step.AddScore("resolve-clarification")
 					}

@@ -7,6 +7,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/isucon/isucandar/pubsub"
+
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"github.com/isucon/isucon10-final/benchmarker/random"
 )
@@ -29,6 +31,7 @@ type Team struct {
 
 	cmu            sync.RWMutex
 	clarifications []*Clarification
+	cPubSub        *pubsub.PubSub
 }
 
 func NewTeam() (*Team, error) {
@@ -74,6 +77,7 @@ func NewTeam() (*Team, error) {
 
 		cmu:            sync.RWMutex{},
 		clarifications: []*Clarification{},
+		cPubSub:        pubsub.NewPubSub(),
 	}, nil
 }
 
@@ -210,6 +214,8 @@ func (t *Team) AddClar(clar *Clarification) {
 	defer t.cmu.Unlock()
 
 	t.clarifications = append(t.clarifications, clar)
+
+	t.cPubSub.Publish(nil)
 }
 
 func (t *Team) Clarifications() []*Clarification {
@@ -227,10 +233,6 @@ func (t *Team) HasUnresolvedClar() bool {
 	defer t.cmu.RUnlock()
 
 	for _, clar := range t.clarifications {
-		if !clar.IsSent() {
-			continue
-		}
-
 		if !clar.IsAnswered() {
 			return true
 		}
@@ -238,16 +240,21 @@ func (t *Team) HasUnresolvedClar() bool {
 	return false
 }
 
-func (t *Team) WaitAllClarResolve(ctx context.Context, when string) <-chan struct{} {
+func (t *Team) WaitAllClarResolve(ctx context.Context) <-chan struct{} {
 	ch := make(chan struct{})
 
-	// TODO: ビジーループなのでもうちょっと賢い解決方法思いつけ
-	go func() {
-		for t.HasUnresolvedClar() {
-			<-time.After(1 * time.Millisecond)
-		}
+	if t.HasUnresolvedClar() {
+		ctx, cancel := context.WithCancel(ctx)
+
+		t.cPubSub.Subscribe(ctx, func(_ interface{}) {
+			if !t.HasUnresolvedClar() {
+				cancel()
+				close(ch)
+			}
+		})
+	} else {
 		close(ch)
-	}()
+	}
 
 	return ch
 }
