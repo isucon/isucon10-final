@@ -53,6 +53,7 @@ var (
 )
 
 var (
+	COMMIT             string
 	targetAddress      string
 	profileFile        string
 	hostAdvertise      string
@@ -90,6 +91,7 @@ func init() {
 }
 
 func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish bool) bool {
+	logger := scenario.ContestantLogger
 	passed := true
 	reason := ""
 	errors := result.Errors.All()
@@ -177,6 +179,7 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	scoreTags := strings.Join(tags, "\n")
 
 	if finish {
+		logger.Printf("===> SCORE")
 		fmt.Printf("Count: \n%s\n", scoreTags)
 		fmt.Printf("(%d * %.1f) + %d - %d(err: %d, timeout: %d)\n", contestantScore, float64(bonusMag)/10, audienceScore, scoreDeduction, deduction, timeoutCount)
 		fmt.Printf("Pass: %v / score: %d (%d - %d)\n", passed, scoreTotal, scoreRaw, scoreDeduction)
@@ -209,6 +212,8 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 }
 
 func main() {
+	scenario.AdminLogger.Printf("ISUCON10 benchmarker %s", COMMIT)
+
 	if profileFile != "" {
 		fs, err := os.Create(profileFile)
 		if err != nil {
@@ -264,7 +269,7 @@ func main() {
 			step.Cancel()
 		}
 
-		fmt.Printf("%v\n", err)
+		scenario.ContestantLogger.Printf("ERR: %v", err)
 	})
 
 	b.AddScenario(s)
