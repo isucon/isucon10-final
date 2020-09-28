@@ -32,14 +32,19 @@ func (pub *ecPublicKey) Encode() string {
 
 // SEC1: https://www.secg.org/sec1-v2.pdf
 // Section 6.1. Elliptic Curve Diffie-Hellman Scheme
-func (p *ecKey) ecdhSecret(publicKey *ecPublicKey) []byte {
+func (p *ecKey) ecdhSecret(publicKey *ecPublicKey, short bool) []byte {
 	curve := elliptic.P256()
 	x, _ := curve.ScalarMult(publicKey.x, publicKey.y, p.privateKey)
+
+	if short {
+		// Workaround for invalid clients https://github.com/SherClockHolmes/webpush-go/blob/af9d240f5def12dc7c23a73999092c9d937be7a5/webpush.go#L105
+		return x.Bytes()
+	}
 
 	// SEC1: 6.1.3. Key Agreement Operation
 	//   Action 2. Convert $$ z $$ to an octet string the conversion routine specified in Section 2.3.5.
 	//     Section 2.3.5. Field-Element-to-Octet-String Conversion
-	//       > where $$mlen = $$ log_2q/8 $$
+	//       > where $$ mlen = log_2q/8 $$
 	//       Section 2.3.7. Integer-to-Octet-String Conversion
 	mlen := curve.Params().BitSize / 8
 	buf := make([]byte, mlen)

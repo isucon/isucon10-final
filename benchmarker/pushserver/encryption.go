@@ -40,25 +40,16 @@ func (d *decryption) decrypt() ([]byte, error) {
 		return []byte{}, err
 	}
 
-	key, err := d.deriveKey()
+	key, err := d.deriveKey(false)
 	if err != nil {
 		return []byte{}, err
 	}
 
 	ciphertext := d.record()
 
-	alg, err := aes.NewCipher(key.cek)
+	plaintext, err := encryptionOpenAesgcm(key, ciphertext)
 	if err != nil {
-		return []byte{}, err
-	}
-	gcm, err := cipher.NewGCM(alg)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	plaintext, err := gcm.Open(nil, key.nonce, ciphertext, nil)
-	if err != nil {
-		return []byte{}, fmt.Errorf(
+		retErr := fmt.Errorf(
 			"failed to decrypt (pkey=%x, keyid=%x, dh=%x, info=%x, secret=%x, ikm=%x, cek=%x, nonce=%x): %w",
 			elliptic.Marshal(elliptic.P256(), d.privateKey.publicKey.x, d.privateKey.publicKey.y),
 			d.keyID(),
@@ -70,9 +61,34 @@ func (d *decryption) decrypt() ([]byte, error) {
 			key.nonce,
 			err,
 		)
+
+		// Retry with short ecdh shared secret for invalid clients
+		// https://github.com/SherClockHolmes/webpush-go/blob/af9d240f5def12dc7c23a73999092c9d937be7a5/webpush.go#L105
+		key, err := d.deriveKey(true)
+		if err != nil {
+			return []byte{}, retErr
+		}
+		plaintext, err = encryptionOpenAesgcm(key, ciphertext)
+		if err != nil {
+			return []byte{}, retErr
+		}
 	}
 
 	return trimRFC8291Padding(plaintext), nil
+}
+
+func encryptionOpenAesgcm(key *encryptionDerivedKey, ciphertext []byte) ([]byte, error) {
+	alg, err := aes.NewCipher(key.cek)
+	if err != nil {
+		return []byte{}, err
+	}
+	gcm, err := cipher.NewGCM(alg)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	plaintext, err := gcm.Open(nil, key.nonce, ciphertext, nil)
+	return plaintext, err
 }
 
 // https://tools.ietf.org/html/rfc8188#section-2.1
@@ -148,7 +164,7 @@ func (d *decryption) record() []byte {
 }
 
 // https://tools.ietf.org/html/rfc8291#section-3.1
-func (d *decryption) deriveKey() (*encryptionDerivedKey, error) {
+func (d *decryption) deriveKey(short bool) (*encryptionDerivedKey, error) {
 	// https://tools.ietf.org/html/rfc8291#section-4
 	asPublicKey, err := unmarshalEcPublicKey(d.keyID())
 	if err != nil {
@@ -156,7 +172,7 @@ func (d *decryption) deriveKey() (*encryptionDerivedKey, error) {
 	}
 
 	// https://tools.ietf.org/html/rfc8291#section-3.1
-	ecdhSecret := d.privateKey.ecdhSecret(asPublicKey)
+	ecdhSecret := d.privateKey.ecdhSecret(asPublicKey, short)
 
 	// https://tools.ietf.org/html/rfc8291#section-3.3
 	infoBuf := bytes.NewBuffer([]byte("WebPush: info\x00"))
