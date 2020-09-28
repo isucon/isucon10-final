@@ -3,6 +3,10 @@ use prost::Message;
 use rand::prelude::*;
 use structopt::StructOpt;
 
+/*
+ * これはデバッグ用のコマンドです。使い方は docs/manual.md を見てください。
+ */
+
 #[derive(Debug, StructOpt)]
 struct Opt {
     #[structopt(short = "c")]
