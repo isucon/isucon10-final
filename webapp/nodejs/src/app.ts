@@ -37,16 +37,17 @@ const ADMIN_PASSWORD = 'admin'
 const DEBUG_CONTEST_STATUS_FILE_PATH = '/tmp/XSUPORTAL_CONTEST_STATUS'
 const hash = crypto.createHash('sha256');
 
-const pool = mysql.createPool({
+export const dbinfo = {
   host: process.env['MYSQL_HOSTNAME'] ?? '127.0.0.1',
   port: Number.parseInt(process.env['MYSQL_PORT'] ?? '3306'),
   user: process.env['MYSQL_USER'] ?? 'isucon',
   database: process.env['MYSQL_DATABASE'] ?? 'xsuportal',
   password: process.env['MYSQL_PASS'] || 'isucon',
   charset: 'utf8mb4',
-});
+};
+const pool = mysql.createPool(dbinfo);
 
-const getDB = async () => (await pool).getConnection()
+export const getDB = async () => (await pool).getConnection()
 const notifier = new Notifier(pool);
 
 const haltPb = (res: express.Response, code: number, humanMessage: string) => {
@@ -58,7 +59,7 @@ const haltPb = (res: express.Response, code: number, humanMessage: string) => {
   res.end(Buffer.from(error.serializeBinary()));
 };
 
-const secureRandom = (size: number) => {
+export const secureRandom = (size: number) => {
   const buffer = crypto.randomBytes(size);
   const base64 = buffer.toString('base64');
   return base64;
