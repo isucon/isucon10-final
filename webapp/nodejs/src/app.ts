@@ -72,6 +72,8 @@ app.use(express.static("../public"));
 app.use(session({
   secret: 'tagomoris',
   name: 'session_xsucon',
+  resave: false,
+  saveUninitialized: true,
   cookie: {
     maxAge: 3600
   },
