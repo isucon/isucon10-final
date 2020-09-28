@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"flag"
 	"fmt"
 	"net/http"
@@ -64,8 +66,17 @@ var (
 )
 
 func init() {
+	certs, err := x509.SystemCertPool()
+	if err != nil {
+		panic(err)
+	}
+
 	// リクエストは基本的に 5 秒
 	agent.DefaultRequestTimeout = 2 * time.Second
+	agent.DefaultTLSConfig.ClientCAs = certs
+	agent.DefaultTLSConfig.ClientAuth = tls.RequireAndVerifyClientCert
+	agent.DefaultTLSConfig.MinVersion = tls.VersionTLS12
+	agent.DefaultTLSConfig.InsecureSkipVerify = false
 
 	flag.StringVar(&targetAddress, "target", benchrun.GetTargetAddress(), "ex: localhost:9292")
 	flag.StringVar(&profileFile, "profile", "", "ex: cpu.out")
