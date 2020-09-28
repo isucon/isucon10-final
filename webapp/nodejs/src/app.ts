@@ -4,6 +4,7 @@ import mysql from "promise-mysql";
 import crypto from 'crypto';
 import fs from "fs";
 import path from "path";
+import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
 
 import { Notifier } from "./notifier";
 import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
@@ -87,6 +88,12 @@ app.use(function(req, res, next) {
   });
 });
 
+const convertDateToTimestamp = (date: Date) => {
+  const timestamp = new Timestamp();
+  timestamp.fromDate(date);
+  return timestamp;
+};
+
 const getCurrentContestant = function() {
   let currentContestant = null
   return async (req: express.Request, { lock = false } = {}) => {
@@ -166,10 +173,10 @@ const getCurrentContestStatus = async () => {
 
     return ({
       contest: {
-        registration_open_at: contest.registration_open_at,
-        contest_starts_at: contest.contest_starts_at,
-        contest_freezes_at: contest.contest_freezes_at,
-        contest_ends_at: contest.contest_ends_at,
+        registration_open_at: convertDateToTimestamp(contest.registration_open_at),
+        contest_starts_at: convertDateToTimestamp(contest.contest_starts_at),
+        contest_freezes_at: convertDateToTimestamp(contest.contest_freezes_at),
+        contest_ends_at: convertDateToTimestamp(contest.contest_ends_at),
         frozen: contest.frozen === 1,
         status: status,
       },
@@ -403,7 +410,7 @@ async function getLeaderboardResource(teamId: number = 0) {
       latest_score_marked_at ASC
   `, [teamId, teamId, contestFinished, contestFinished, teamId, teamId, contestFinished, contestFinished]);
 
-    jobResults = await db.query(`
+  jobResults = await db.query(`
     SELECT
       team_id AS team_id,
       (score_raw - score_deduction) AS score,
@@ -418,8 +425,8 @@ async function getLeaderboardResource(teamId: number = 0) {
       -- score freeze
       AND (team_id = ? OR (team_id != ? AND (? = TRUE OR finished_at < ?)))
     )
-    ORDER BY finished_at,
-  `, [ teamId, teamId, contestFinished, contestFreezesAt ]);
+    ORDER BY finished_at
+  `, [ teamId, teamId, contestFinished, contestFreezesAt.toDate() ]);
   } catch (e) {
     await db.rollback();
   } finally {
