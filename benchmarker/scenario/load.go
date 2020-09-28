@@ -3,6 +3,7 @@ package scenario
 import (
 	"context"
 	"encoding/base64"
+	"fmt"
 	"net/url"
 	"sync"
 	"sync/atomic"
@@ -446,7 +447,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 // 競技者による Clar の送信。既に送信していて未回答の Clar がある場合は追加で送信は行わない。
 // Clar には自動更新がないのでこちらもブラウザリロード
 func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(-5*time.Second))
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(-1*time.Second))
 	defer cancel()
 
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
@@ -455,7 +456,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 
 		latestClarPostedAt := time.Now()
 
-		for ctx.Err() == nil {
+		for {
 			if time.Now().After(latestClarPostedAt.Add(3 * time.Second)) {
 				page, resources, _, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
 				if err != nil {
@@ -479,6 +480,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				step.AddScore("get-clarification")
 
 				clar := model.NewClarification(team)
+				team.AddClar(clar)
 
 				res, err := PostClarificationAction(ctx, leader, clar)
 				if err != nil {
@@ -487,18 +489,21 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				}
 
 				clar.SetID(res.GetClarification().GetId())
-				team.AddClar(clar)
 				s.Contest.AddClar(clar)
 				step.AddScore("post-clarification")
 
 				latestClarPostedAt = time.Now()
 			}
 
-			timer := time.After(3 * time.Second)
-			<-team.WaitAllClarResolve(ctx)
-			<-timer
+			select {
+			case <-time.After(3 * time.Second):
+				<-team.WaitAllClarResolve(ctx)
+			case <-ctx.Done():
+				return
+			}
 		}
 	}, worker.WithLoopCount(int32(len(s.Contest.Teams))))
+
 	if err != nil {
 		return failure.NewError(ErrScenarioCretical, err)
 	}
@@ -510,7 +515,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 
 // 管理者による Clar のチェックと解答。Clar には自動更新がないのでブラウザリロードを毎回行っている。
 func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(-5*time.Second))
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
 	defer cancel()
 
 	admin, err := model.NewAdmin()
@@ -619,7 +624,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 
 // 外部参加者によるダッシュボードの閲覧。 pubsub で増える。
 func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(-5*time.Second))
 	defer cancel()
 
 	audience := parallel.NewParallel(ctx, -1)
@@ -658,7 +663,11 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 
 			step.AddScore("audience-get-dashboard")
 
-			<-timer
+			select {
+			case <-timer:
+			case <-ctx.Done():
+				return
+			}
 		}
 	}
 
@@ -797,20 +806,65 @@ func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar
 	}
 }
 
+var ErrBenchamrkJobDetail failure.StringCode = "benchmark-job-details"
+
 func (s *Scenario) loadBenchmarkDetails(ctx context.Context, step *isucandar.BenchmarkStep, team *model.Team, job *resources.Notification_BenchmarkJobMessage) {
 	result := team.GetWaitingBenchmarkResult()
 	if result == nil {
 		return
 	}
 
-	defer func() { <-team.EnqueueLock }()
-
-	// TODO: 検証してない
-	_, err := GetBenchmarkJobAction(ctx, job.GetBenchmarkJobId(), team.Developer)
+	res, err := GetBenchmarkJobAction(ctx, job.GetBenchmarkJobId(), team.Developer)
 	if err != nil {
-		step.AddError(err)
+		step.AddError(failure.NewError(ErrBenchamrkJobDetail, err))
 		return
 	}
+
+	rjob := res.GetJob()
+	if rjob.GetId() != result.ID() {
+		fmt.Printf("ID: %d : %d\n", rjob.GetId(), result.ID())
+		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正なベンチマークジョブ ID")))
+		return
+	}
+
+	if rjob.GetTeamId() != team.ID {
+		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正なチーム ID")))
+		return
+	}
+
+	if rjob.GetStatus() != resources.BenchmarkJob_FINISHED {
+		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正な終了ステータス")))
+		return
+	}
+
+	rresult := rjob.GetResult()
+	if rresult.GetPassed() != result.Passed {
+		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正な成功フラグ")))
+		return
+	}
+
+	if rresult.GetScore() != result.Score {
+		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正なスコア")))
+		return
+	}
+
+	if rresult.GetScoreBreakdown().GetRaw() != result.ScoreRaw {
+		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正な基礎スコア")))
+		return
+	}
+
+	if rresult.GetScoreBreakdown().GetDeduction() != result.ScoreDeduction {
+		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正な減点スコア")))
+		return
+	}
+
+	mt := rjob.GetFinishedAt().AsTime()
+	if !result.MarkedAt().Equal(mt) {
+		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正な終了時刻")))
+		return
+	}
+
+	defer func() { <-team.EnqueueLock }()
 
 	result.Seen()
 	step.AddScore("finish-benchmark")
