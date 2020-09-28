@@ -92,7 +92,7 @@ const getCurrentContestant = function() {
     const db = await getDB();
     const id = req.session.contestant_id;
     if (!id) return null;
-    const result = db.query(
+    const result = await db.query(
       lock
         ? "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1 FOR UPDATE"
         : "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1",
@@ -107,14 +107,14 @@ const getCurrentContestant = function() {
 const getCurrentTeam = function() {
   let currentTeam = null
   return async (req: express.Request, { lock = false } = {}) => {
-    const db = await getDB();
     const currentContestant = await getCurrentContestant(req);
     if (!currentContestant) return null
-    const result = db.query(
+    const db = await getDB();
+    const result = await db.query(
       lock
         ? "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1 FOR UPDATE"
         : "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1",
-      currentContestant['team_id']
+      [currentContestant['team_id']]
     )
     await db.release();
     currentTeam ??= result?.[0]
