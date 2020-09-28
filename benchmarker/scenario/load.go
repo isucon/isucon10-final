@@ -566,6 +566,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 					continue
 				}
 
+				// TODO: 検証をしていない
 				if clar.GetAnswered() {
 					continue
 				}
@@ -778,8 +779,6 @@ func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar
 	defer cancel()
 
 	for {
-		timer := time.After(300 * time.Millisecond)
-
 		notifications, err := GetNotifications(ctx, member)
 		if err == nil {
 			// TODO: last_answered_clarification_id の検証をやっていない
@@ -789,6 +788,7 @@ func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar
 			step.AddError(err)
 		}
 
+		timer := time.After(300 * time.Millisecond)
 		select {
 		case <-ctx.Done():
 			return
