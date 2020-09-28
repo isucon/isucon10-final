@@ -260,8 +260,8 @@ func main() {
 	b.AddScenario(s)
 
 	wg := sync.WaitGroup{}
-	wg.Add(1)
 	b.Load(func(ctx context.Context, step *isucandar.BenchmarkStep) error {
+		wg.Add(1)
 		defer wg.Done()
 
 		for {
