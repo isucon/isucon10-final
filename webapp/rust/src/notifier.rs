@@ -111,7 +111,12 @@ impl WebPushNotifier {
                 .body(payload)
                 .send()
                 .await;
-            tx.send(result).expect("Failed to send WebPush response");
+            if let Err(result) = tx.send(result) {
+                log::error!(
+                    "Failed to send Web Push response via tokio::sync::oneshot: {:?}",
+                    result
+                );
+            }
         });
         match rx.await.expect("Failed to receive WebPush response") {
             Ok(resp) => match resp.status().as_u16() {
