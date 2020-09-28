@@ -175,7 +175,7 @@ fn handle_report(
     } else {
         log::debug!("{}: save as running", message.job_id);
         if result.marked_at.is_none() {
-            return Err(TonicStatus::failed_precondition("marked_at is required"));
+            return Err(TonicStatus::invalid_argument("marked_at is required"));
         }
         let marked_at = crate::protobuf_timestamp_to_chrono(result.marked_at.as_ref().unwrap());
         save_as_running(&mut tx, &job, &marked_at).map_err(mysql_error_to_tonic_status)?;
