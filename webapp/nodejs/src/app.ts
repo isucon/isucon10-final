@@ -72,21 +72,15 @@ app.use(express.static("../public"));
 app.use(session({
   secret: 'tagomoris',
   name: 'session_xsucon',
+  resave: false,
+  saveUninitialized: true,
   cookie: {
-    maxAge: 3600
+    maxAge: 3600000
   },
 }));
 
 // rawbody
-app.use(function(req, res, next) {
-  req.body = '';
-  req.on('data', function(chunk) {
-    req.body += chunk;
-  });
-  req.on('end', function() {
-    next();
-  });
-});
+app.use(express.raw({ type: "application/vnd.google.protobuf" }));
 
 const convertDateToTimestamp = (date: Date) => {
   const timestamp = new Timestamp();
@@ -100,7 +94,7 @@ const getCurrentContestant = function() {
     const db = await getDB();
     const id = req.session.contestant_id;
     if (!id) return null;
-    const result = db.query(
+    const result = await db.query(
       lock
         ? "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1 FOR UPDATE"
         : "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1",
@@ -115,14 +109,14 @@ const getCurrentContestant = function() {
 const getCurrentTeam = function() {
   let currentTeam = null
   return async (req: express.Request, { lock = false } = {}) => {
-    const db = await getDB();
     const currentContestant = await getCurrentContestant(req);
     if (!currentContestant) return null
-    const result = db.query(
+    const db = await getDB();
+    const result = await db.query(
       lock
         ? "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1 FOR UPDATE"
         : "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1",
-      currentContestant['team_id']
+      [currentContestant['team_id']]
     )
     await db.release();
     currentTeam ??= result?.[0]
@@ -464,9 +458,9 @@ async function getLeaderboardResource(teamId: number = 0) {
     item.setFinishCount(team.finish_count);
 
     if (team.student === 1) {
-      studentTeams.push(team);
+      studentTeams.push(item);
     } else {
-      generalTeams.push(team);
+      generalTeams.push(item);
     }
     teams.push(item);
   }
@@ -508,7 +502,7 @@ app.use(express.static(path.resolve("public")));
 
 app.post("/initialize", async (req, res, next) => {
   const db = await getDB();
-  const request = InitializeRequest.deserializeBinary(Buffer.from(req.body));
+  const request = InitializeRequest.deserializeBinary(Uint8Array.from(req.body));
   await db.query('TRUNCATE `teams`');
   await db.query('TRUNCATE `contestants`')
   await db.query('TRUNCATE `benchmark_jobs`')
@@ -534,10 +528,10 @@ app.post("/initialize", async (req, res, next) => {
     }
     
     await db.query(`INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES (?, ?, ?, ?)`, [
-      new Date(openAt.getSeconds()).toUTCString(),
-      new Date(startsAt.getSeconds()).toUTCString(),
-      new Date(freezeAt.getSeconds()).toUTCString(),
-      new Date(endsAt.getSeconds()).toUTCString(),
+      new Date(openAt.getSeconds()),
+      new Date(startsAt.getSeconds()),
+      new Date(freezeAt.getSeconds()),
+      new Date(endsAt.getSeconds()),
     ]);
   } else {
     await db.query(`
@@ -626,7 +620,7 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
   if (!loginSuccess) {
     return;
   }
-  const request = RespondClarificationRequest.deserializeBinary(Buffer.from(req.body));
+  const request = RespondClarificationRequest.deserializeBinary(Uint8Array.from(req.body));
   let team, clar, wasAnswered, wasDisclosed;
   try {
     await db.beginTransaction();
@@ -737,14 +731,17 @@ app.get("/api/registration/session", async (req, res, next) => {
     team = t;
   }
 
-  const members = await db.query('SELECT * FROM `contestants` WHERE `team_id` = ?', [team.id]);
+  let members: any[];
+  if (team) {
+    members = await db.query('SELECT * FROM `contestants` WHERE `team_id` = ?', [team.id]);
+  }
   await db.release();
 
   const currentContestant = await getCurrentContestant(req);
   let status = null;
-  if (currentContestant[team.id] != null) {
+  if (currentContestant?.fetch?.team_id) {
     status = GetRegistrationSessionResponse.Status.JOINED;
-  } else if (team != null && members.count >= 3) {
+  } else if (team != null && members.length >= 3) {
     status = GetRegistrationSessionResponse.Status.NOT_JOINABLE;
   } else if (currentContestant == null) {
     status = GetRegistrationSessionResponse.Status.NOT_LOGGED_IN;
@@ -770,7 +767,7 @@ app.get("/api/registration/session", async (req, res, next) => {
 
 app.post("/api/registration/team", async (req, res, next) => {
   const db = await getDB();
-  const request = CreateTeamRequest.deserializeBinary(Buffer.from(req.body));
+  const request = CreateTeamRequest.deserializeBinary(Uint8Array.from(req.body));
 
   const loginSuccess = loginRequired(req, res);
   if (!loginSuccess) {
@@ -831,7 +828,7 @@ app.post("/api/registration/team", async (req, res, next) => {
 
 app.post("/api/registration/contestant", async (req, res, next) => {
   const db = await getDB();
-  const request = JoinTeamRequest.deserializeBinary(Buffer.from(req.body));
+  const request = JoinTeamRequest.deserializeBinary(Uint8Array.from(req.body));
 
   const currentContestant = await getCurrentContestant(req);
 
@@ -891,7 +888,7 @@ app.post("/api/registration/contestant", async (req, res, next) => {
 
 app.put("/api/registration", async (req, res, next) => {
   const db = await getDB();
-  const request = UpdateRegistrationRequest.deserializeBinary(Buffer.from(req.body));
+  const request = UpdateRegistrationRequest.deserializeBinary(Uint8Array.from(req.body));
   const currentContestant = await getCurrentContestant(req);
   const currentTeam = await getCurrentTeam(req);
   try {
@@ -972,7 +969,7 @@ app.delete("/api/registration", async (req, res, next) => {
 
 app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const db = await getDB();
-  const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Buffer.from(req.body));
+  const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Uint8Array.from(req.body));
 
   try {
     await db.beginTransaction();
@@ -1082,7 +1079,7 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
     return;
   }
 
-  const request = RespondClarificationRequest.deserializeBinary(Buffer.from(req.body));
+  const request = RespondClarificationRequest.deserializeBinary(Uint8Array.from(req.body));
   const currentTeam = await getCurrentTeam(req);
   const db = await getDB();
 
@@ -1176,7 +1173,7 @@ app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
     return
   }
 
-  const request = SubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
+  const request = SubscribeNotificationRequest.deserializeBinary(Uint8Array.from(req.body));
   const currentContestant = await getCurrentContestant(req);
   const db = await getDB();
   await db.query(
@@ -1201,7 +1198,7 @@ app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
     return
   }
 
-  const request = UnsubscribeNotificationRequest.deserializeBinary(Buffer.from(req.body));
+  const request = UnsubscribeNotificationRequest.deserializeBinary(Uint8Array.from(req.body));
   const currentContestant = await getCurrentContestant(req);
   const db = await getDB();
   await db.query(
@@ -1216,13 +1213,13 @@ app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
 });
 
 app.post("/api/signup", async (req, res, next) => {
-  const request = SignupRequest.deserializeBinary(Buffer.from(req.body));
+  const request = SignupRequest.deserializeBinary(Uint8Array.from(req.body));
   const db = await getDB();
 
   try {
     await db.query(
       'INSERT INTO `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, FALSE, NOW(6))',
-      [request.getContestantId(), crypto.createHash('rsa256').update(request.getPassword(), "utf8").digest('hex')]
+      [request.getContestantId(), crypto.createHash('RSA-SHA256').update(request.getPassword(), "utf8").digest('hex')]
     );
   } catch (e) {
     if (e.code !== 'ER_DUP_ENTRY') throw e;
@@ -1236,7 +1233,7 @@ app.post("/api/signup", async (req, res, next) => {
 });
 
 app.post("/api/login", async (req, res, next) => {
-  const request = LoginRequest.deserializeBinary(Buffer.from(req.body));
+  const request = LoginRequest.deserializeBinary(Uint8Array.from(req.body));
   const db = await getDB();
   const [contestant] = await db.query(
     'SELECT `password` FROM `contestants` WHERE `id` = ? LIMIT 1',
@@ -1244,7 +1241,7 @@ app.post("/api/login", async (req, res, next) => {
   );
   await db.release();
 
-  if (contestant?.password === crypto.createHash('rsa256').update(request.getPassword(), "utf8").digest('hex')) {
+  if (contestant?.password === crypto.createHash('RSA-SHA256').update(request.getPassword(), "utf8").digest('hex')) {
     req.session.contestant_id = request.getContestantId();
   } else {
     haltPb(res, 400, "ログインIDまたはパスワードが正しくありません");
