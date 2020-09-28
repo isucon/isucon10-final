@@ -23,6 +23,7 @@ import (
 )
 
 func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) error {
+	ContestantLogger.Printf("===> LOAD")
 	wg := sync.WaitGroup{}
 
 	wg.Add(1)
