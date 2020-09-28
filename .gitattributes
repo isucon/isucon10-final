@@ -6,3 +6,5 @@
 /webapp/frontend/javascript/pb_admin.*  linguist-generated=true
 /webapp/frontend/sw/src/pb.*  linguist-generated=true
 /webapp/frontend/javascript/ScoreGraphColors.tsx linguist-generated=true
+
+/webapp/nodejs/src/proto/ linguist-generated=true
