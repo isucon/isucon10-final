@@ -68,7 +68,9 @@ class Service
             $stmt = $this->container->get(PDO::class)->prepare($sql);
             $stmt->execute([$id]);
 
-            return $stmt->fetch();
+            if ($contestant = $stmt->fetch()) {
+                return $contestant;
+            }
         }
 
         return null;

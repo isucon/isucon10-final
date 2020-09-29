@@ -135,7 +135,7 @@ SQL;
                 'contestant' => ($currentContestant = $service->getCurrentContestant()) ? $service->factoryContestantPb($currentContestant) : null, // current_contestant ? contestant_pb(current_contestant) : nil,
                 'team' => ($currentTeam = $service->getCurrentTeam()) ? $service->factoryTeamPb($currentTeam) : null,
                 'contest' => ($currentContest = $service->getCurrentContestStatus()) ? $service->factoryContestPb($currentContest) : null,
-                'push_vapid_key' => ($vapidKey = $notifier->getVapidKey() && isset($vapidKey['publicKey'])) ? $vapidKey['publicKey'] : null,
+                'push_vapid_key' => $notifier->getVapidKey()['publicKey'] ?? null,
             ];
 
             list($type, $content) = $service->encodeResponsePb($request, $payload);

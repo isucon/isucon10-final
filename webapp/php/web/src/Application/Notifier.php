@@ -3,13 +3,21 @@ declare(strict_types=1);
 
 namespace App\Application;
 
+use Jose\Component\Core\Util\ECKey;
+use Jose\Component\KeyManagement\JWKFactory;
+// use Minishlink\WebPush\VAPID;
 use PDO;
 use Xsuportal\Proto\Resources\Notification;
 use Xsuportal\Proto\Resources\Notification\ClarificationMessage;
+use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
+use Minishlink\WebPush\Utils;
+use Jose\Component\Core\JWK;
+use Base64Url\Base64Url;
+use Minishlink\WebPush\WebPush;
 
 class Notifier
 {
-    const WEBPUSH_VAPID_PRIVATE_KEY_PATH = '../vapid_private.pem';
+    const WEBPUSH_VAPID_PRIVATE_KEY_PATH = __DIR__ . '/../../vapid_private.pem';
     const WEBPUSH_SUBJECT = 'xsuportal@example.com';
 
     private PDO $pdo;
@@ -19,14 +27,31 @@ class Notifier
         $this->pdo = $pdo;
     }
 
-    public function getVapidKey()
+    public function getVapidKey(): ?array
     {
         if (file_exists(self::WEBPUSH_VAPID_PRIVATE_KEY_PATH)) {
-            $privateKey = file_get_contents(self::WEBPUSH_VAPID_PRIVATE_KEY_PATH);
-            // Webpush::VapidKey.from_pem(private_key);
+            return Vapid::loadFromKeyFile(self::WEBPUSH_VAPID_PRIVATE_KEY_PATH);
         } else {
             return null;
         }
+    }
+
+    public static function loadPem(JWK $jwk): array
+    {
+        $binaryPublicKey = hex2bin(Utils::serializePublicKeyFromJWK($jwk));
+        if (!$binaryPublicKey) {
+            throw new \ErrorException('Failed to convert VAPID public key from hexadecimal to binary');
+        }
+
+        $binaryPrivateKey = hex2bin(str_pad(bin2hex(Base64Url::decode($jwk->get('d'))), 2 * self::PRIVATE_KEY_LENGTH, '0', STR_PAD_LEFT));
+        if (!$binaryPrivateKey) {
+            throw new \ErrorException('Failed to convert VAPID private key from hexadecimal to binary');
+        }
+
+        return [
+            'publicKey'  => Base64Url::encode($binaryPublicKey),
+            'privateKey' => Base64Url::encode($binaryPrivateKey)
+        ];
     }
 
     public function notifyClarificationAnswered(array $clar, bool $updated = false)
