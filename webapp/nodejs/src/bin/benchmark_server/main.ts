@@ -1,13 +1,14 @@
 import mysql from "promise-mysql";
 import util from "util";
 import strftime from 'strftime'
-import {getDB, secureRandom, notifier} from "../../app";
+import {getDB, secureRandom, notifier, convertDateToTimestamp} from "../../app";
 import grpc, { callError, makeGenericClientConstructor } from "grpc";
 import BenchmarkQueue from "../../proto/xsuportal/services/bench/receiving_grpc_pb";
 import { ReceiveBenchmarkJobRequest, ReceiveBenchmarkJobResponse } from "../../proto/xsuportal/services/bench/receiving_pb";
 import BenchmarkReport from "../../proto/xsuportal/services/bench/reporting_grpc_pb";
 import { BenchmarkJob } from "../../proto/xsuportal/resources/benchmark_job_pb";
 import { ReportBenchmarkResultRequest, ReportBenchmarkResultResponse } from "../../proto/xsuportal/services/bench/reporting_pb";
+import { Timestamp } from "../../proto/google/protobuf/timestamp_pb";
 
 const sleep = util.promisify(setTimeout);
 
@@ -58,12 +59,18 @@ class BenchmarkQueueService implements BenchmarkQueue.IBenchmarkQueueServer {
       }
       const response = new ReceiveBenchmarkJobResponse();
       if (jobHandle != null) {
-        console.log(`Dequeued: job_handle=${jobHandle}`);
+        console.log(`Dequeued: job_handle=${JSON.stringify(jobHandle)}`);
         const jobHandleResource = new ReceiveBenchmarkJobResponse.JobHandle();
         jobHandleResource.setHandle(jobHandle.handle);
         jobHandleResource.setJobId(jobHandle.jobId);
-        jobHandleResource.setContestStartedAt(jobHandle.contestStartedAt);
-        jobHandleResource.setJobCreatedAt(jobHandle.jobCreatedAt);
+        if (jobHandle.contestStartedAt) {
+          const contestStartedAt = convertDateToTimestamp(jobHandle.contestStartedAt);
+          jobHandleResource.setContestStartedAt(contestStartedAt);
+        }
+        if (jobHandle.jobCreatedAt) {
+          const jobCreatedAt = convertDateToTimestamp(jobHandle.jobCreatedAt);
+          jobHandleResource.setJobCreatedAt(jobCreatedAt);
+        }
         response.setJobHandle(jobHandleResource);
       }
       await db.commit();
@@ -158,10 +165,8 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
       throw new Error("marked_at is required");
     }
     const markedAt = new Date(markedAtTimestamp.getSeconds()*1000 + markedAtTimestamp.getNanos() / 1000);
-
-    const conn = await getDB();
     const result = request.getResult();
-    await conn.query(`
+    await db.query(`
         UPDATE benchmark_jobs SET
           status = ?,
           score_raw = ?,
@@ -185,9 +190,8 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
     }
     const markedAt = new Date(markedAtTimestamp.getSeconds()*1000 + markedAtTimestamp.getNanos() / 1000);
 
-    const conn = await getDB();
     const result = request.getResult();
-    await conn.query(`
+    await db.query(`
         UPDATE benchmark_jobs SET
           status = ?,
           score_raw = NULL,

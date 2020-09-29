@@ -98,7 +98,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const convertDateToTimestamp = (date: Date) => {
+export const convertDateToTimestamp = (date: Date) => {
   const timestamp = new Timestamp();
   timestamp.fromDate(date);
   return timestamp;
