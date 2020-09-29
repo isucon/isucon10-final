@@ -309,5 +309,10 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 }
 
 func (s *Scenario) handleInvalidPush(id string, err error, step *isucandar.BenchmarkStep) {
+	AdminLogger.Printf("webpush error: /push/%s : %v", id, err)
+	msg := err.Error()
+	if strings.Contains(msg, "Push attempt to expired subscription") {
+		return
+	}
 	step.AddError(failure.NewError(ErrWebPush, fmt.Errorf("不正な Web Push メッセージの送信がありました (/push/%s): %w", id, err)))
 }
