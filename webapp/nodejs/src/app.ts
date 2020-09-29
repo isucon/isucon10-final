@@ -1156,7 +1156,7 @@ app.get("/api/contestant/dashboard", async (req, res, next) => {
 
     const response = new DashboardResponse();
     const currentTeam = await getCurrentTeam(req, db);
-    const leaderboard = await getLeaderboardResource(currentTeam.id);
+    const leaderboard = await getLeaderboardResource(db, currentTeam.id);
     response.setLeaderboard(leaderboard);
     res.contentType(`application/vnd.google.protobuf`);
     res.end(Buffer.from(response.serializeBinary()));
