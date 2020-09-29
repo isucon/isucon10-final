@@ -92,8 +92,7 @@ const convertDateToTimestamp = (date: Date) => {
 
 const getCurrentContestant = function() {
   let currentContestant = null
-  return async (req: express.Request, { lock = false } = {}) => {
-    const db = await getDB();
+  return async (req: express.Request, db: mysql.PoolConnection, { lock = false } = {}) => {
     const id = req.session.contestant_id;
     if (!id) return null;
     const result = await db.query(
@@ -102,7 +101,6 @@ const getCurrentContestant = function() {
         : "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1",
       id
     )
-    await db.release();
     currentContestant ??= result?.[0]
     return currentContestant
   }
@@ -110,24 +108,21 @@ const getCurrentContestant = function() {
 
 const getCurrentTeam = function() {
   let currentTeam = null
-  return async (req: express.Request, { lock = false } = {}) => {
-    const currentContestant = await getCurrentContestant(req);
+  return async (req: express.Request, db: mysql.PoolConnection, { lock = false } = {}) => {
+    const currentContestant = await getCurrentContestant(req, db);
     if (!currentContestant) return null
-    const db = await getDB();
     const result = await db.query(
       lock
         ? "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1 FOR UPDATE"
         : "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1",
       [currentContestant['team_id']]
     )
-    await db.release();
     currentTeam ??= result?.[0]
     return currentTeam
   }
 }()
 
-const getCurrentContestStatus = async () => {
-    const db = await getDB();
+const getCurrentContestStatus = async (db: mysql.PoolConnection) => {
     const [contest] = await db.query(`
       SELECT
         *,
@@ -142,7 +137,6 @@ const getCurrentContestStatus = async () => {
         IF(contest_starts_at <= NOW(6) AND NOW(6) < contest_freezes_at, 1, 0) AS frozen
       FROM contest_config
     `);
-    await db.release();
 
     let contestStatusStr = contest.status;
     if (process.env['APP_ENV'] != "production" && fs.existsSync(DEBUG_CONTEST_STATUS_FILE_PATH)) {
@@ -180,20 +174,20 @@ const getCurrentContestStatus = async () => {
     });
 };
 
-const loginRequired: (req: express.Request, res: express.Response, opts?: { team?: boolean, lock?: boolean }) => boolean = (req, res, { team = true, lock = false } = {}) => {
-  if (!getCurrentContestant(req, { lock })) {
+const loginRequired: (req: express.Request, res: express.Response, db: mysql.PoolConnection, opts?: { team?: boolean, lock?: boolean }) => boolean = (req, res, db, { team = true, lock = false } = {}) => {
+  if (!getCurrentContestant(req, db, { lock })) {
     haltPb(res, 401, "ログインが必要です")
     return false;
   }
-  if (!getCurrentTeam(req, { lock })) {
+  if (!getCurrentTeam(req, db, { lock })) {
     haltPb(res, 403, "参加登録が必要です")
     return false;
   }
   return true;
 }
 
-async function contestStatusRestricted(res: express.Response, statuses: Array<Contest.Status>, msg: string): Promise<boolean> {
-  const currentContest = await getCurrentContestStatus();
+async function contestStatusRestricted(res: express.Response, statuses: Array<Contest.Status>, msg: string, db: mysql.PoolConnection): Promise<boolean> {
+  const currentContest = await getCurrentContestStatus(db);
   if (statuses.includes(currentContest.contest.status)) {
     haltPb(res, 403, msg)
     return false;
@@ -211,8 +205,7 @@ function getContestantResource(contestant: any, detail: boolean = false) {
   return contestantResource;
 }
 
-async function getTeamResource(team: any, detail: boolean = false, enableMembers: boolean = true, memberDetail: boolean = false) {
-  const db = await getDB();
+async function getTeamResource(team: any, db: mysql.PoolConnection, detail: boolean = false, enableMembers: boolean = true, memberDetail: boolean = false) {
   const teamResource = new Team();
 
   let members = null;
@@ -234,7 +227,6 @@ async function getTeamResource(team: any, detail: boolean = false, enableMembers
     leader_pb = leader ? getContestantResource(leader, memberDetail) : null;
     members_pb = members ? members.map((m: any) => getContestantResource(m, memberDetail)) : null;
   }
-  await db.release();
 
   teamResource.setId(team.id);
   teamResource.setName(team.name);
@@ -273,14 +265,12 @@ async function getBenchmarkJobResource(job) {
   return benchmarkJob;
 }
 
-async function getBenchmarkJobsResource(req: express.Request, limit?: number) {
-  const currentTeam = await getCurrentTeam(req);
-  const db = await getDB();
+async function getBenchmarkJobsResource(req: express.Request, db: mysql.PoolConnection, limit?: number) {
+  const currentTeam = await getCurrentTeam(req, db);
   const jobs = await db.query(
     `SELECT * FROM benchmark_jobs WHERE team_id = ? ORDER BY created_at DESC ${limit ? `LIMIT ${limit}` : ''}`,
     [currentTeam.id]
   )
-  await db.release();
   return await Promise.all<BenchmarkJob>(jobs.map(job => getBenchmarkJobResource(job)));
 }
 
@@ -300,7 +290,7 @@ async function getBenchmarkResultResource(job) {
   return result;
 }
 
-async function getClarificationResource(clar: any, team: any) {
+async function getClarificationResource(clar: any, team: any, db: mysql.PoolConnection) {
   const clarificationResource = new Clarification();
   clarificationResource.setId(clar.id);
   clarificationResource.setTeamId(clar.team_id);
@@ -308,7 +298,7 @@ async function getClarificationResource(clar: any, team: any) {
   clarificationResource.setAnswered(!!clar.answered_at);
   clarificationResource.setDisclosed(clar.disclosed);
   clarificationResource.setCreatedAt(clar.created_at ? convertDateToTimestamp(clar.created_at) : null);
-  const t = await getTeamResource(team);
+  const t = await getTeamResource(team, db);
   clarificationResource.setTeam(t);
   return clarificationResource;
 }
@@ -324,9 +314,8 @@ function getContestResource(contest: any) {
   return contestResource;
 }
 
-async function getLeaderboardResource(teamId: number = 0) {
-  const db = await getDB();
-  const contest = (await getCurrentContestStatus()).contest;
+async function getLeaderboardResource(db: mysql.PoolConnection, teamId: number = 0) {
+  const contest = (await getCurrentContestStatus(db)).contest;
   const contestFinished = contest.status === Contest.Status.FINISHED;
   const contestFreezesAt = contest.contest_freezes_at;
 
@@ -407,27 +396,26 @@ async function getLeaderboardResource(teamId: number = 0) {
       latest_score_marked_at ASC
   `, [teamId, teamId, contestFinished, contestFinished, teamId, teamId, contestFinished, contestFinished]);
 
-  jobResults = await db.query(`
-    SELECT
-      team_id AS team_id,
-      (score_raw - score_deduction) AS score,
-      started_at AS started_at,
-      finished_at AS finished_at
-    FROM
-      benchmark_jobs
-    WHERE
-      started_at IS NOT NULL
-    AND (
-      finished_at IS NOT NULL
-      -- score freeze
-      AND (team_id = ? OR (team_id != ? AND (? = TRUE OR finished_at < ?)))
-    )
-    ORDER BY finished_at
-  `, [ teamId, teamId, contestFinished, contestFreezesAt ]);
+    jobResults = await db.query(`
+      SELECT
+        team_id AS team_id,
+        (score_raw - score_deduction) AS score,
+        started_at AS started_at,
+        finished_at AS finished_at
+      FROM
+        benchmark_jobs
+      WHERE
+        started_at IS NOT NULL
+      AND (
+        finished_at IS NOT NULL
+        -- score freeze
+        AND (team_id = ? OR (team_id != ? AND (? = TRUE OR finished_at < ?)))
+      )
+      ORDER BY finished_at
+    `, [ teamId, teamId, contestFinished, contestFreezesAt ]);
+    await db.commit();
   } catch (e) {
     await db.rollback();
-  } finally {
-    await db.release();
   }
 
   for (const result of jobResults) {
@@ -456,7 +444,7 @@ async function getLeaderboardResource(teamId: number = 0) {
     ls.setStartedAt(team.latest_score_started_at ? convertDateToTimestamp(team.latest_score_started_at) : null);
     ls.setMarkedAt(team.latest_score_marked_at ? convertDateToTimestamp(team.latest_score_marked_at) : null);
     item.setLatestScore(ls);
-    const teamResource = await getTeamResource(team, false, false, false);
+    const teamResource = await getTeamResource(team, db, false, false, false);
     item.setTeam(teamResource);
     item.setFinishCount(team.finish_count);
 
@@ -505,137 +493,153 @@ app.use(express.static(path.resolve("public")));
 
 app.post("/initialize", async (req, res, next) => {
   const db = await getDB();
-  const request = InitializeRequest.deserializeBinary(Uint8Array.from(req.body));
-  await db.query('TRUNCATE `teams`');
-  await db.query('TRUNCATE `contestants`')
-  await db.query('TRUNCATE `benchmark_jobs`')
-  await db.query('TRUNCATE `clarifications`')
-  await db.query('TRUNCATE `notifications`')
-  await db.query('TRUNCATE `push_subscriptions`')
-  await db.query('TRUNCATE `contest_config`')
+  try {
+    const request = InitializeRequest.deserializeBinary(Uint8Array.from(req.body));
+    await db.query('TRUNCATE `teams`');
+    await db.query('TRUNCATE `contestants`')
+    await db.query('TRUNCATE `benchmark_jobs`')
+    await db.query('TRUNCATE `clarifications`')
+    await db.query('TRUNCATE `notifications`')
+    await db.query('TRUNCATE `push_subscriptions`')
+    await db.query('TRUNCATE `contest_config`')
 
-  await db.query(
-    'INSERT `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, TRUE, NOW(6))',
-    [ADMIN_ID, hash.update(ADMIN_PASSWORD).copy().digest("hex")]
-  )
+    await db.query(
+      'INSERT `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, TRUE, NOW(6))',
+      [ADMIN_ID, hash.update(ADMIN_PASSWORD).copy().digest("hex")]
+    )
 
-  const contest = request.getContest();
-  if (contest) {
-    const openAt = contest.getRegistrationOpenAt();
-    const startsAt = contest.getContestStartsAt();
-    const freezeAt = contest.getContestFreezesAt();
-    const endsAt = contest.getContestFreezesAt();
+    const contest = request.getContest();
+    if (contest) {
+      const openAt = contest.getRegistrationOpenAt();
+      const startsAt = contest.getContestStartsAt();
+      const freezeAt = contest.getContestFreezesAt();
+      const endsAt = contest.getContestFreezesAt();
 
-    if (openAt == null || startsAt == null || freezeAt == null || endsAt == null) {
-      return haltPb(res, 400, "initialize の時間が不正です。");
+      if (openAt == null || startsAt == null || freezeAt == null || endsAt == null) {
+        return haltPb(res, 400, "initialize の時間が不正です。");
+      }
+
+      await db.query(`INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES (?, ?, ?, ?)`, [
+        new Date(openAt.getSeconds()),
+        new Date(startsAt.getSeconds()),
+        new Date(freezeAt.getSeconds()),
+        new Date(endsAt.getSeconds()),
+      ]);
+    } else {
+      await db.query(`
+      INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES
+      (
+        TIMESTAMPADD(SECOND, 0, NOW(6)),
+        TIMESTAMPADD(SECOND, 5, NOW(6)),
+        TIMESTAMPADD(SECOND, 40, NOW(6)),
+        TIMESTAMPADD(SECOND, 50, NOW(6))
+      )
+      `);
     }
 
-    await db.query(`INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES (?, ?, ?, ?)`, [
-      new Date(openAt.getSeconds()),
-      new Date(startsAt.getSeconds()),
-      new Date(freezeAt.getSeconds()),
-      new Date(endsAt.getSeconds()),
-    ]);
-  } else {
-    await db.query(`
-    INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES
-    (
-      TIMESTAMPADD(SECOND, 0, NOW(6)),
-      TIMESTAMPADD(SECOND, 5, NOW(6)),
-      TIMESTAMPADD(SECOND, 40, NOW(6)),
-      TIMESTAMPADD(SECOND, 50, NOW(6))
-    )
-    `);
+    // TODO 負荷レベルの指定
+    const response = new InitializeResponse();
+    response.setLanguage("nodejs");
+    // 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報
+    const benchmarkServer = new InitializeResponse.BenchmarkServer();
+    benchmarkServer.setHost("localhost");
+    benchmarkServer.setPort(50051);
+    response.setBenchmarkServer(benchmarkServer);
+
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch(e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
   }
-  await db.release();
-
-  // TODO 負荷レベルの指定
-  const response = new InitializeResponse();
-  response.setLanguage("nodejs");
-  // 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報
-  const benchmarkServer = new InitializeResponse.BenchmarkServer();
-  benchmarkServer.setHost("localhost");
-  benchmarkServer.setPort(50051);
-  response.setBenchmarkServer(benchmarkServer);
-
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.get("/api/admin/clarifications", async (req, res, next) => {
   const db = await getDB();
-  const loginSuccess = loginRequired(req, res, { team: false });
-  if (!loginSuccess) {
-    return;
+  try {
+    const loginSuccess = loginRequired(req, res, db, { team: false });
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
+
+    const contestatnt = await getCurrentContestant(req, db);
+    if (contestatnt?.staff == null) {
+      throw haltPb(res, 403, '管理者権限が必要です');
+    }
+
+    const clars = await db.query('SELECT * FROM `clarifications` ORDER BY `updated_at` DESC');
+
+    const clarPbs = [];
+    for (const clar of clars) {
+      const team = await db.query('SELECT * FROM `teams` WHERE `id` = ? LIMIT 1', [clar.team_id]);
+      const clarPb = new Clarification();
+      clarPb.setTeam(team);
+      clarPbs.push(clarPb);
+    }
+
+    const response = new ListClarificationsResponse();
+    response.setClarificationsList(clarPbs);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch(e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
   }
-
-  const contestatnt = await getCurrentContestant(req);
-  if (contestatnt?.staff == null) {
-    haltPb(res, 403, '管理者権限が必要です');
-    return;
-  }
-
-  const clars = await db.query('SELECT * FROM `clarifications` ORDER BY `updated_at` DESC');
-
-  const clarPbs = [];
-  for (const clar of clars) {
-    const team = await db.query('SELECT * FROM `teams` WHERE `id` = ? LIMIT 1', [clar.team_id]);
-    const clarPb = new Clarification();
-    clarPb.setTeam(team);
-    clarPbs.push(clarPb);
-  }
-  await db.release();
-
-  const response = new ListClarificationsResponse();
-  response.setClarificationsList(clarPbs);
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.get("/api/admin/clarifications/:id", async (req, res, next) => {
   const db = await getDB();
-  const loginSuccess = loginRequired(req, res, { team: false });
-  if (!loginSuccess) {
-    return;
+  try {
+    const loginSuccess = loginRequired(req, res, db, { team: false });
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
+
+    const contestatnt = await getCurrentContestant(req, db);
+    if (contestatnt?.staff == null) {
+      throw haltPb(res, 403, '管理者権限が必要です');
+    }
+
+    const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1', [req.params.id]);
+    const team = await db.query('SELECT * FROM `teams` WHERE `id` = ? LIMIT 1', [clar.team_id]);
+
+    const clarPb = new Clarification();
+    clarPb.setTeam(team);
+
+    const response = new GetClarificationResponse();
+    response.setClarification(clarPb);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch(e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
   }
-
-  const contestatnt = await getCurrentContestant(req);
-  if (contestatnt?.staff == null) {
-    haltPb(res, 403, '管理者権限が必要です');
-    return;
-  }  const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1', [req.params.id]);
-
-  const team = await db.query('SELECT * FROM `teams` WHERE `id` = ? LIMIT 1', [clar.team_id]);
-  await db.release();
-
-  const clarPb = new Clarification();
-  clarPb.setTeam(team);
-
-  const response = new GetClarificationResponse();
-  response.setClarification(clarPb);
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.put("/api/admin/clarifications/:id", async (req, res, next) => {
   const db = await getDB();
-  const loginSuccess = loginRequired(req, res, { team: false });
-  if (!loginSuccess) {
-    return;
-  }
-  const request = RespondClarificationRequest.deserializeBinary(Uint8Array.from(req.body));
-  let team, clar, wasAnswered, wasDisclosed;
   try {
     await db.beginTransaction();
+    const loginSuccess = loginRequired(req, res, db, { team: false });
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
+
+    const request = RespondClarificationRequest.deserializeBinary(Uint8Array.from(req.body));
     const [clarBefore] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1 FOR UPDATE', [req.params.id]);
 
     if (clarBefore == null) {
-      await db.rollback();
       haltPb(res, 404, '質問が見つかりません');
-      return;
+      throw new Error();
     }
-    wasAnswered = !!clarBefore.answered_at;
-    wasDisclosed = clarBefore.disclosed;
+    const wasAnswered = !!clarBefore.answered_at;
+    const wasDisclosed = clarBefore.disclosed;
 
     await db.query(`UPDATE clarifications SET
           disclosed = ?,
@@ -649,148 +653,175 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
       req.params.id]
     )
 
-    clar = await db.query(
+    const clar = await db.query(
       'SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1',
       [req.params.id],
     )[0];
 
-    team = await db.query(
+    const team = await db.query(
       'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
       clar.team_id,
     )[0];
+
+    await db.commit();
+
+    notifier.notifyClarificationAnswered(clar, wasAnswered && wasDisclosed == clar.disclosed)
+    const clarPb = await getClarificationResource(clar, team, db);
+
+    const response = new RespondClarificationResponse();
+    response.setClarification(clarPb);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
   } catch (e) {
     await db.rollback();
   } finally {
     await db.release();
   }
-
-  notifier.notifyClarificationAnswered(clar, wasAnswered && wasDisclosed == clar.disclosed)
-  const clarPb = await getClarificationResource(clar, team);
-
-  const response = new RespondClarificationResponse();
-  response.setClarification(clarPb);
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.get("/api/session", async (req, res, next) => {
-  const response = new GetCurrentSessionResponse();
-  const contestant = await getCurrentContestant(req);
-  response.setContestant(contestant ? getContestantResource(contestant) : null);
-  const team = await getCurrentTeam(req, { lock: false });
-  response.setTeam(team ? await getTeamResource(team) : null);
-  const contest = await getCurrentContestStatus();
-  const contestResource = getContestResource(contest.contest);
-  response.setContest(contestResource);
-  response.setPushVapidKey(notifier.getVAPIDKey()?.publicKey);
+  const db = await getDB();
+  try {
+    const response = new GetCurrentSessionResponse();
+    const contestant = await getCurrentContestant(req, db);
+    response.setContestant(contestant ? getContestantResource(contestant) : null);
+    const team = await getCurrentTeam(req, db, { lock: false });
+    response.setTeam(team ? await getTeamResource(team, db) : null);
+    const contest = await getCurrentContestStatus(db);
+    const contestResource = getContestResource(contest.contest);
+    response.setContest(contestResource);
+    response.setPushVapidKey(notifier.getVAPIDKey()?.publicKey);
 
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch(e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
+  }
 });
 
 app.get("/api/audience/teams", async (req, res, next) => {
   const db = await getDB();
-  const teams = await db.query('SELECT * FROM `teams` WHERE `withdrawn` = FALSE ORDER BY `created_at` DESC');
-  const items = [];
-  for (const team of teams) {
-    const members = await db.query('SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`', [team.id]);
-    const teamListItem = new AudienceListTeamsResponse.TeamListItem();
-    teamListItem.setTeamId(team.id);
-    teamListItem.setName(team.name);
-    teamListItem.setIsStudent(members.every((member: any) => !!member.student));
-    teamListItem.setMemberNamesList(members.map((member: any) => member.name));
-    items.push(teamListItem);
+  try {
+    const teams = await db.query('SELECT * FROM `teams` WHERE `withdrawn` = FALSE ORDER BY `created_at` DESC');
+    const items = [];
+    for (const team of teams) {
+      const members = await db.query('SELECT * FROM `contestants` WHERE `team_id` = ? ORDER BY `created_at`', [team.id]);
+      const teamListItem = new AudienceListTeamsResponse.TeamListItem();
+      teamListItem.setTeamId(team.id);
+      teamListItem.setName(team.name);
+      teamListItem.setIsStudent(members.every((member: any) => !!member.student));
+      teamListItem.setMemberNamesList(members.map((member: any) => member.name));
+      items.push(teamListItem);
+    }
+
+    const response = new AudienceListTeamsResponse();
+    response.setTeamsList(items);
+
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch(e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
   }
-  await db.release();
-
-  const response = new AudienceListTeamsResponse();
-  response.setTeamsList(items);
-
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.get("/api/audience/dashboard", async (req, res, next) => {
-  const response = new AudienceDashboardResponse();
-  const leaderboard = await getLeaderboardResource();
-  response.setLeaderboard(leaderboard);
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
+  const db = await getDB();
+  try {
+    const response = new AudienceDashboardResponse();
+    const leaderboard = await getLeaderboardResource(db);
+    response.setLeaderboard(leaderboard);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch(e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
+  }
 });
 
 app.get("/api/registration/session", async (req, res, next) => {
   let team = null;
   const db = await getDB();
-  const currentTeam = await getCurrentTeam(req);
+  try {
+    const currentTeam = await getCurrentTeam(req, db);
 
-  if (currentTeam) {
-    team = currentTeam;
-  } else if (req.query && req.query.team_id && req.query.invite_token) {
-    let [t] = await db.query('SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE LIMIT 1', [req.query.team_id, req.query.invite_token]);
-    if (t == null) {
-      haltPb(res, 404, "招待URLが無効です");
-      return;
+    if (currentTeam) {
+      team = currentTeam;
+    } else if (req.query && req.query.team_id && req.query.invite_token) {
+      let [t] = await db.query('SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE LIMIT 1', [req.query.team_id, req.query.invite_token]);
+      if (t == null) {
+        throw haltPb(res, 404, "招待URLが無効です");
+      }
+      team = t;
     }
-    team = t;
-  }
 
-  let members: any[];
-  if (team) {
-    members = await db.query('SELECT * FROM `contestants` WHERE `team_id` = ?', [team.id]);
-  }
-  await db.release();
+    let members: any[];
+    if (team) {
+      members = await db.query('SELECT * FROM `contestants` WHERE `team_id` = ?', [team.id]);
+    }
 
-  const currentContestant = await getCurrentContestant(req);
-  let status = null;
-  if (currentContestant?.fetch?.team_id) {
-    status = GetRegistrationSessionResponse.Status.JOINED;
-  } else if (team != null && members.length >= 3) {
-    status = GetRegistrationSessionResponse.Status.NOT_JOINABLE;
-  } else if (currentContestant == null) {
-    status = GetRegistrationSessionResponse.Status.NOT_LOGGED_IN;
-  } else if (team != null) {
-    status = GetRegistrationSessionResponse.Status.JOINABLE;
-  } else if (team == null) {
-    status = GetRegistrationSessionResponse.Status.CREATABLE;
-  } else {
-    throw new Error("undeteminable status");
-  }
+    const currentContestant = await getCurrentContestant(req, db);
+    let status = null;
+    if (currentContestant?.fetch?.team_id) {
+      status = GetRegistrationSessionResponse.Status.JOINED;
+    } else if (team != null && members.length >= 3) {
+      status = GetRegistrationSessionResponse.Status.NOT_JOINABLE;
+    } else if (currentContestant == null) {
+      status = GetRegistrationSessionResponse.Status.NOT_LOGGED_IN;
+    } else if (team != null) {
+      status = GetRegistrationSessionResponse.Status.JOINABLE;
+    } else if (team == null) {
+      status = GetRegistrationSessionResponse.Status.CREATABLE;
+    } else {
+      throw new Error("undeteminable status");
+    }
 
-  const response = new GetRegistrationSessionResponse();
-  if (team) {
-    const teamResource = await getTeamResource(team, currentContestant.id == currentTeam.leader_id, true, false);
-    response.setTeam(teamResource);
-    response.setMemberInviteUrl(`/registration?team_id=${team.id}&invite_token=${team.invite_token}`);
-    response.setInviteToken(team.invite_token);
+    const response = new GetRegistrationSessionResponse();
+    if (team) {
+      const teamResource = await getTeamResource(team, db, currentContestant.id == currentTeam.leader_id, true, false);
+      response.setTeam(teamResource);
+      response.setMemberInviteUrl(`/registration?team_id=${team.id}&invite_token=${team.invite_token}`);
+      response.setInviteToken(team.invite_token);
+    }
+    response.setStatus(status);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch(e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
   }
-  response.setStatus(status);
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.post("/api/registration/team", async (req, res, next) => {
   const db = await getDB();
-  const request = CreateTeamRequest.deserializeBinary(Uint8Array.from(req.body));
-
-  const loginSuccess = loginRequired(req, res);
-  if (!loginSuccess) {
-    return;
-  }
-
-  const currentContestStatus = await getCurrentContestStatus();
-  if (currentContestStatus.contest.status !== Contest.Status.REGISTRATION) {
-    haltPb(res, 403, "チーム登録期間ではありません");
-    return;
-  }
-  const currentContestant = await getCurrentContestant(req);
-
   try {
+    const request = CreateTeamRequest.deserializeBinary(Uint8Array.from(req.body));
+
+    const loginSuccess = loginRequired(req, res, db);
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
+
+    const currentContestStatus = await getCurrentContestStatus(db);
+    if (currentContestStatus.contest.status !== Contest.Status.REGISTRATION) {
+      throw haltPb(res, 403, "チーム登録期間ではありません");
+    }
+    const currentContestant = await getCurrentContestant(req, db);
+
     await db.query('LOCK TABLES `teams` WRITE, `contestants` WRITE');
     const inviteToken = secureRandom(64);
     const [withinCapacity] = await db.query('SELECT COUNT(*) < ? AS `within_capacity` FROM `teams`', [TEAM_CAPACITY]);
     if (withinCapacity.within_capacity != 1) {
-      haltPb(res, 403, "チーム登録数上限です");
-      return;
+      throw haltPb(res, 403, "チーム登録数上限です");
     }
 
     await db.query(
@@ -799,8 +830,7 @@ app.post("/api/registration/team", async (req, res, next) => {
     );
     const [{id: teamId}] = await db.query('SELECT LAST_INSERT_ID() AS `id`');
     if (teamId == null) {
-      haltPb(res, 500, "チームを登録できませんでした");
-      return;
+      throw haltPb(res, 500, "チームを登録できませんでした");
     }
 
     await db.query(
@@ -831,21 +861,17 @@ app.post("/api/registration/team", async (req, res, next) => {
 
 app.post("/api/registration/contestant", async (req, res, next) => {
   const db = await getDB();
-  const request = JoinTeamRequest.deserializeBinary(Uint8Array.from(req.body));
-
-  const currentContestant = await getCurrentContestant(req);
-
   try {
     await db.beginTransaction();
-    const currentContestStatus = await getCurrentContestStatus();
+    const request = JoinTeamRequest.deserializeBinary(Uint8Array.from(req.body));
+    const currentContestant = await getCurrentContestant(req, db);
+    const currentContestStatus = await getCurrentContestStatus(db);
     if (currentContestStatus.contest.status !== Contest.Status.REGISTRATION) {
-      haltPb(res, 403, "チーム登録期間ではありません");
-      return;
+      throw haltPb(res, 403, "チーム登録期間ではありません");
     }
-    const loginSuccess = loginRequired(req, res, { team: false, lock: true});
+    const loginSuccess = loginRequired(req, res, db, { team: false, lock: true});
     if (!loginSuccess) {
-      await db.rollback();
-      return;
+      throw new Error("login required");
     }
 
     const [team] = await db.query('SELECT * FROM `teams` WHERE `id` = ? AND `invite_token` = ? AND `withdrawn` = FALSE LIMIT 1 FOR UPDATE', [
@@ -853,9 +879,7 @@ app.post("/api/registration/contestant", async (req, res, next) => {
     ]);
 
     if (team == null) {
-      haltPb(res, 400, '招待URLが不正です');
-      await db.rollback();
-      return;
+      throw haltPb(res, 400, '招待URLが不正です');
     }
 
     const [members] = await db.query(
@@ -864,9 +888,7 @@ app.post("/api/registration/contestant", async (req, res, next) => {
     );
 
     if (members.cnt >= 3) {
-      haltPb(res, 400, 'チーム人数の上限に達しています');
-      await db.rollback();
-      return;
+      throw haltPb(res, 400, 'チーム人数の上限に達しています');
     }
 
     await db.query(
@@ -891,15 +913,15 @@ app.post("/api/registration/contestant", async (req, res, next) => {
 
 app.put("/api/registration", async (req, res, next) => {
   const db = await getDB();
-  const request = UpdateRegistrationRequest.deserializeBinary(Uint8Array.from(req.body));
-  const currentContestant = await getCurrentContestant(req);
-  const currentTeam = await getCurrentTeam(req);
   try {
     await db.beginTransaction();
-    const loginSuccess = loginRequired(req, res, { team: false, lock: true});
+    const request = UpdateRegistrationRequest.deserializeBinary(Uint8Array.from(req.body));
+    const currentContestant = await getCurrentContestant(req, db);
+    const currentTeam = await getCurrentTeam(req, db);
+
+    const loginSuccess = loginRequired(req, res, db, { team: false, lock: true});
     if (!loginSuccess) {
-      await db.rollback();
-      return;
+      throw new Error("login required");
     }
 
     if (currentTeam.leader_id == currentContestant.id) {
@@ -931,19 +953,18 @@ app.put("/api/registration", async (req, res, next) => {
 
 app.delete("/api/registration", async (req, res, next) => {
   const db = await getDB();
-  const currentContestant = await getCurrentContestant(req);
-  const currentTeam = await getCurrentTeam(req);
   try {
     await db.beginTransaction();
-    const loginSuccess = loginRequired(req, res, { team: false, lock: true});
+    const currentContestant = await getCurrentContestant(req, db);
+    const currentTeam = await getCurrentTeam(req, db);
+
+    const loginSuccess = loginRequired(req, res, db, { team: false, lock: true});
     if (!loginSuccess) {
-      await db.rollback();
-      return;
+      throw new Error("login required");
     }
-    const currentContestStatus = await getCurrentContestStatus();
+    const currentContestStatus = await getCurrentContestStatus(db);
     if (currentContestStatus.contest.status !== Contest.Status.REGISTRATION) {
-      haltPb(res, 403, "チーム登録期間外は辞退できません");
-      return;
+      throw haltPb(res, 403, "チーム登録期間外は辞退できません");
     }
     if (currentTeam.leader_id == currentTeam.id) {
       await db.query(
@@ -960,6 +981,7 @@ app.delete("/api/registration", async (req, res, next) => {
         [currentContestant.id],
       )
     }
+    await db.commit();
     const response = new DeleteRegistrationResponse();
     res.contentType(`application/vnd.google.protobuf`);
     res.end(Buffer.from(response.serializeBinary()));
@@ -972,34 +994,33 @@ app.delete("/api/registration", async (req, res, next) => {
 
 app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const db = await getDB();
-  const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Uint8Array.from(req.body));
-
   try {
     await db.beginTransaction();
-    const loginSuccess = loginRequired(req, res);
+    const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Uint8Array.from(req.body));
+    const loginSuccess = loginRequired(req, res, db);
     if (!loginSuccess) {
-      return;
+      throw new Error("login required");
     }
 
-    const passRestricted = await contestStatusRestricted(res, [Contest.Status.STARTED], "競技時間外はベンチマークを実行できません");
+    const passRestricted = await contestStatusRestricted(res, [Contest.Status.STARTED], "競技時間外はベンチマークを実行できません", db);
     if (!passRestricted) {
-      return;
+      throw new Error();
     }
 
-    const currentTeam = await getCurrentTeam(req);
+    const currentTeam = await getCurrentTeam(req, db);
     const [jobCount] = await db.query(
       'SELECT COUNT(*) AS `cnt` FROM `benchmark_jobs` WHERE `team_id` = ? AND `finished_at` IS NULL',
       currentTeam.id
     );
     if (jobCount && jobCount.cnt > 0) {
-      haltPb(res, 403, "既にベンチマークを実行中です");
-      return;
+      throw haltPb(res, 403, "既にベンチマークを実行中です");
     }
 
     await db.query(
       'INSERT INTO `benchmark_jobs` (`team_id`, `target_hostname`, `status`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))',
       [currentTeam.id, request.getTargetHostname(), BenchmarkJob.Status.PENDING]
     )
+    await db.commit();
 
     const [job] = await db.query('SELECT * FROM `benchmark_jobs` WHERE `id` = (SELECT LAST_INSERT_ID()) LIMIT 1');
     const response = new ContestantEnqueueBenchmarkJobResponse();
@@ -1014,89 +1035,108 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
 });
 
 app.get("/api/contestant/benchmark_jobs", async (req, res, next) => {
-  const loginSuccess = loginRequired(req, res);
-  if (!loginSuccess) {
-    return;
-  }
+  const db = await getDB();
+  try {
+    const loginSuccess = loginRequired(req, res, db);
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
 
-  const response = new ListBenchmarkJobsResponse();
-  response.setJobsList(await getBenchmarkJobsResource(req));
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
+    const response = new ListBenchmarkJobsResponse();
+    response.setJobsList(await getBenchmarkJobsResource(req, db));
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
+  }
 });
 
 app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
   const db = await getDB();
-  const loginSuccess = loginRequired(req, res);
-  if (!loginSuccess) {
-    return;
+  try {
+    const loginSuccess = loginRequired(req, res, db);
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
+
+    const currentTeam = await getCurrentTeam(req, db);
+    const [job] = await db.query(
+      'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `id` = ? LIMIT 1',
+      [currentTeam.id, req.params.id]
+    );
+
+    if (!job) {
+      throw haltPb(res, 404, "ベンチマークジョブが見つかりません")
+    }
+
+    const response = new GetBenchmarkJobResponse();
+    response.setJob(await getBenchmarkJobResource(job));
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
   }
-
-  const currentTeam = await getCurrentTeam(req);
-  const [job] = await db.query(
-    'SELECT * FROM `benchmark_jobs` WHERE `team_id` = ? AND `id` = ? LIMIT 1',
-    [currentTeam.id, req.params.id]
-  );
-  await db.release();
-
-  if (!job) {
-    haltPb(res, 404, "ベンチマークジョブが見つかりません")
-    return;
-  }
-
-  const response = new GetBenchmarkJobResponse();
-  response.setJob(await getBenchmarkJobResource(job));
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 })
 
 app.get("/api/contestant/clarifications", async (req, res, next) => {
-  const loginSuccess = loginRequired(req, res);
-  if (!loginSuccess) {
-    return;
-  }
-
-  const currentTeam = await getCurrentTeam(req);
   const db = await getDB();
-  const clars = await db.query(
-    'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `id` DESC',
-    currentTeam.id,
-  ).map(async (clar: any) => {
-    const [team] = await db.query(
-      'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
-      clar.team_id,
-    );
-    return getClarificationResource(clar, team);
-  });
-  await db.release();
+  try {
+    const loginSuccess = loginRequired(req, res, db);
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
 
-  const response = new ListClarificationsResponse();
-  response.setClarificationsList(clars);
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
+    const currentTeam = await getCurrentTeam(req, db);
+    const clars = await db.query(
+      'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `id` DESC',
+      currentTeam.id,
+    ).map(async (clar: any) => {
+      const [team] = await db.query(
+        'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
+        clar.team_id,
+      );
+      return getClarificationResource(clar, team, db);
+    });
+
+    const response = new ListClarificationsResponse();
+    response.setClarificationsList(clars);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
+  }
 })
 
 app.post("/api/contestant/clarifications", async (req, res, next) => {
-  const loginSuccess = loginRequired(req, res);
-  if (!loginSuccess) {
-    return;
-  }
-
-  const request = CreateClarificationRequest.deserializeBinary(Uint8Array.from(req.body));
-  const currentTeam = await getCurrentTeam(req);
   const db = await getDB();
-
   try {
     await db.beginTransaction();
 
+    const loginSuccess = loginRequired(req, res, db);
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
+
+    const request = CreateClarificationRequest.deserializeBinary(Uint8Array.from(req.body));
+    const currentTeam = await getCurrentTeam(req, db);
     await db.query(
       'INSERT INTO `clarifications` (`team_id`, `question`, `created_at`, `updated_at`) VALUES (?, ?, NOW(6), NOW(6))',
       [currentTeam.id, request.getQuestion()]
     )
+    await db.commit();
 
     const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1')
     const response = new RespondClarificationResponse();
-    response.setClarification(await getClarificationResource(clar, currentTeam));
+    response.setClarification(await getClarificationResource(clar, currentTeam, db));
     res.contentType(`application/vnd.google.protobuf`);
     res.end(Buffer.from(response.serializeBinary()));
   } catch (e) {
@@ -1107,31 +1147,38 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
 })
 
 app.get("/api/contestant/dashboard", async (req, res, next) => {
-  const loginSuccess = loginRequired(req, res);
-  if (!loginSuccess) {
-    return;
-  }
+  const db = await getDB();
+  try {
+    const loginSuccess = loginRequired(req, res, db);
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
 
-  const response = new DashboardResponse();
-  const currentTeam = await getCurrentTeam(req);
-  const leaderboard = await getLeaderboardResource(currentTeam.id);
-  response.setLeaderboard(leaderboard);
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
+    const response = new DashboardResponse();
+    const currentTeam = await getCurrentTeam(req, db);
+    const leaderboard = await getLeaderboardResource(currentTeam.id);
+    response.setLeaderboard(leaderboard);
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
+  }
 })
 
 app.get("/api/contestant/notifications", async (req, res, next) => {
-  const loginSuccess = loginRequired(req, res);
-  if (!loginSuccess) {
-    return;
-  }
-
-  const after = req.query.after;
   const db = await getDB();
-
   try {
     await db.beginTransaction();
-    const currentContestant = await getCurrentContestant(req);
+    const loginSuccess = loginRequired(req, res, db);
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
+
+    const after = req.query.after;
+    const currentContestant = await getCurrentContestant(req, db);
 
     const notifications = await db.query(
       after
@@ -1147,7 +1194,7 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
 
     await db.commit();
 
-    const currentTeam = await getCurrentTeam(req);
+    const currentTeam = await getCurrentTeam(req, db);
     const [lastAnsweredClar] = await db.query(
       'SELECT `id` FROM `clarifications` WHERE (`team_id` = ? OR `disclosed` = TRUE) AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1',
       [currentTeam.id]
@@ -1166,107 +1213,120 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
 });
 
 app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
-  const loginSuccess = loginRequired(req, res);
-  if (!loginSuccess) {
-    return;
-  }
-
-  if (!notifier.getVAPIDKey()) {
-    haltPb(res, 503, "Web Push は未対応です")
-    return
-  }
-
-  const request = SubscribeNotificationRequest.deserializeBinary(Uint8Array.from(req.body));
-  const currentContestant = await getCurrentContestant(req);
   const db = await getDB();
-  await db.query(
-    'INSERT INTO `push_subscriptions` (`contestant_id`, `endpoint`, `p256dh`, `auth`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, NOW(6), NOW(6))',
-    [currentContestant.id, request.getEndpoint(), request.getP256dh(), request.getAuth()]
-  );
-  await db.release();
+  try {
+    const loginSuccess = loginRequired(req, res, db);
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
 
-  const response = new SubscribeNotificationResponse();
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
+    if (!notifier.getVAPIDKey()) {
+      haltPb(res, 503, "Web Push は未対応です")
+      return
+    }
+
+    const request = SubscribeNotificationRequest.deserializeBinary(Uint8Array.from(req.body));
+    const currentContestant = await getCurrentContestant(req, db);
+    await db.query(
+      'INSERT INTO `push_subscriptions` (`contestant_id`, `endpoint`, `p256dh`, `auth`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, NOW(6), NOW(6))',
+      [currentContestant.id, request.getEndpoint(), request.getP256dh(), request.getAuth()]
+    );
+
+    const response = new SubscribeNotificationResponse();
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
+  }
 });
 
 app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
-  const loginSuccess = loginRequired(req, res);
-  if (!loginSuccess) {
-    return;
-  }
-
-  if (!notifier.getVAPIDKey()) {
-    haltPb(res, 503, "Web Push は未対応です")
-    return
-  }
-
-  const request = UnsubscribeNotificationRequest.deserializeBinary(Uint8Array.from(req.body));
-  const currentContestant = await getCurrentContestant(req);
   const db = await getDB();
-  await db.query(
-    'DELETE FROM `push_subscriptions` WHERE `contestant_id` = ? AND `endpoint` = ? LIMIT 1',
-    [currentContestant.id, request.getEndpoint()]
-  );
-  await db.release();
+  try {
+    const loginSuccess = loginRequired(req, res, db);
+    if (!loginSuccess) {
+      throw new Error("login required");
+    }
 
-  const response = new UnsubscribeNotificationResponse();
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
+    if (!notifier.getVAPIDKey()) {
+      haltPb(res, 503, "Web Push は未対応です")
+      return
+    }
+
+    const request = UnsubscribeNotificationRequest.deserializeBinary(Uint8Array.from(req.body));
+    const currentContestant = await getCurrentContestant(req, db);
+    await db.query(
+      'DELETE FROM `push_subscriptions` WHERE `contestant_id` = ? AND `endpoint` = ? LIMIT 1',
+      [currentContestant.id, request.getEndpoint()]
+    );
+
+    const response = new UnsubscribeNotificationResponse();
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
+  }
 });
 
 app.post("/api/signup", async (req, res, next) => {
-  const request = SignupRequest.deserializeBinary(Uint8Array.from(req.body));
   const db = await getDB();
-
   try {
-    await db.query(
-      'INSERT INTO `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, FALSE, NOW(6))',
-      [request.getContestantId(), crypto.createHash('RSA-SHA256').update(request.getPassword(), "utf8").digest('hex')]
+  const request = SignupRequest.deserializeBinary(Uint8Array.from(req.body));
+  await db.query(
+    'INSERT INTO `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, FALSE, NOW(6))',
+    [request.getContestantId(), crypto.createHash('RSA-SHA256').update(request.getPassword(), "utf8").digest('hex')]
     );
+    const response = new SignupResponse();
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
   } catch (e) {
     if (e.code !== 'ER_DUP_ENTRY') throw e;
     haltPb(res, 400, "IDが既に登録されています");
-    return;
+  } finally {
+    await db.release();
   }
-
-  const response = new SignupResponse();
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.post("/api/login", async (req, res, next) => {
-  const request = LoginRequest.deserializeBinary(Uint8Array.from(req.body));
   const db = await getDB();
-  const [contestant] = await db.query(
-    'SELECT `password` FROM `contestants` WHERE `id` = ? LIMIT 1',
-    [request.getContestantId()],
-  );
-  await db.release();
+  try {
+    const request = LoginRequest.deserializeBinary(Uint8Array.from(req.body));
+    const [contestant] = await db.query(
+      'SELECT `password` FROM `contestants` WHERE `id` = ? LIMIT 1',
+      [request.getContestantId()],
+    );
 
-  if (contestant?.password === crypto.createHash('RSA-SHA256').update(request.getPassword(), "utf8").digest('hex')) {
-    req.session.contestant_id = request.getContestantId();
-  } else {
-    haltPb(res, 400, "ログインIDまたはパスワードが正しくありません");
-    return;
+    if (contestant?.password === crypto.createHash('RSA-SHA256').update(request.getPassword(), "utf8").digest('hex')) {
+      req.session.contestant_id = request.getContestantId();
+    } else {
+      throw haltPb(res, 400, "ログインIDまたはパスワードが正しくありません");
+    }
+    const response = new LoginResponse();
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
+  } catch (e) {
+    console.error(e);
+    haltPb(res, 500, "予期せぬエラーが発生しました");
+  } finally {
+    await db.release();
   }
-
-  const response = new LoginResponse();
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 });
 
 app.post("/api/logout", async (req, res, next) => {
   if (req.session.contestant_id) {
     req.session.contestant_id = null;
+    const response = new LogoutResponse();
+    res.contentType(`application/vnd.google.protobuf`);
+    res.end(Buffer.from(response.serializeBinary()));
   } else {
     haltPb(res, 401, "ログインしていません");
-    return;
   }
-
-  const response = new LogoutResponse();
-  res.contentType(`application/vnd.google.protobuf`);
-  res.end(Buffer.from(response.serializeBinary()));
 });
 
 process.on("unhandledRejection", (e) => {
