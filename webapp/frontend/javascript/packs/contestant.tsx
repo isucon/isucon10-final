@@ -1,4 +1,4 @@
-import './application.scss';
+import "./application.scss";
 import { ApiClient } from "../ApiClient";
 import { updateNavBarSession } from "../NavbarSession";
 import { ContestantApp } from "../ContestantApp";
@@ -13,8 +13,12 @@ import ReactDOM from "react-dom";
   )?.content;
   updateNavBarSession(session);
   const elem = document.getElementById("app");
-  ReactDOM.render(
-    <ContestantApp session={session} client={client} release={release} />,
-    elem
-  );
+  if (session.team) {
+    ReactDOM.render(
+      <ContestantApp session={session} client={client} release={release} />,
+      elem
+    );
+  } else {
+    location.href = "/";
+  }
 })();
