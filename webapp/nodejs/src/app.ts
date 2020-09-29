@@ -67,7 +67,7 @@ export const secureRandom = (size: number) => {
   return base64;
 };
 
-const app = express();
+export const app = express();
 
 app.use(express.static("../public"));
 app.use(morgan('combined'));
@@ -1327,18 +1327,4 @@ app.post("/api/logout", async (req, res, next) => {
   } else {
     haltPb(res, 401, "ログインしていません");
   }
-});
-
-process.on("unhandledRejection", (e) => {
-  console.error(e);
-  process.exit(1);
-});
-
-process.on("uncaughtExcection", (e) => {
-  console.error(e);
-  process.exit(1);
-});
-
-app.listen(process.env.PORT ?? 9292, () => {
-  console.log("Listening on 9292");
 });
