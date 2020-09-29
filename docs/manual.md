@@ -160,6 +160,12 @@ sudo systemctl enable --now xsuportal-api-php.service
 - 仮想ベンチマークサーバ
   - タイムアウトは規定しません。
 
+### 時計について
+
+運営が管理するベンチマークサーバーについては、ともに Google Public NTP サーバー (time1.google.com, time2.google.com, time3.google.com, time4.google.com) と時刻同期が設定されています。
+
+選手へ提供されるサーバーについても、初期状態で同様の設定がされています。
+
 ## スコア計算
 
 負荷走行のスコアは以下の計算式によって算出されます。
