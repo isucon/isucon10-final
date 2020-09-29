@@ -350,5 +350,9 @@ func verifyGetBenchmarkJobDetail(res *contestant.GetBenchmarkJobResponse, team *
 		return errorInvalidResponse("不正な終了時刻")
 	}
 
+	if result.Reason != rresult.GetReason() {
+		return errorInvalidResponse("不正な reason")
+	}
+
 	return nil
 }
