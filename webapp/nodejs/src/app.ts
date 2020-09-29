@@ -263,22 +263,23 @@ async function getBenchmarkJobResource(job) {
   benchmarkJob.setTeamId(job.team_id);
   benchmarkJob.setStatus(job.status);
   benchmarkJob.setTargetHostname(job.target_hostname);
-  benchmarkJob.setCreatedAt(job.created_at);
-  benchmarkJob.setUpdatedAt(job.updated_at);
-  benchmarkJob.setStartedAt(job.started_at);
-  benchmarkJob.setFinishedAt(job.finished_at);
+  benchmarkJob.setCreatedAt(job.created_at ? convertDateToTimestamp(job.created_at) : null);
+  benchmarkJob.setUpdatedAt(job.updated_at ? convertDateToTimestamp(job.updated_at) : null);
+  benchmarkJob.setStartedAt(job.started_at ? convertDateToTimestamp(job.started_at) : null);
+  benchmarkJob.setFinishedAt(job.finished_at ? convertDateToTimestamp(job.finished_at) : null);
   benchmarkJob.setResult(job.finished_at ? await getBenchmarkResultResource(job) : null);
+  return benchmarkJob;
 }
 
 async function getBenchmarkJobsResource(req: express.Request, limit?: number) {
-  const db = await getDB();
   const currentTeam = await getCurrentTeam(req);
+  const db = await getDB();
   const jobs = await db.query(
     `SELECT * FROM benchmark_jobs WHERE team_id = ? ORDER BY created_at DESC ${limit ? `LIMIT ${limit}` : ''}`,
     [currentTeam.id]
   )
   await db.release();
-  return jobs.map(job => getBenchmarkJobResource(job))
+  return await Promise.all<BenchmarkJob>(jobs.map(job => getBenchmarkJobResource(job)));
 }
 
 async function getBenchmarkResultResource(job) {
@@ -1000,7 +1001,7 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
 
     const [job] = await db.query('SELECT * FROM `benchmark_jobs` WHERE `id` = (SELECT LAST_INSERT_ID()) LIMIT 1');
     const response = new ContestantEnqueueBenchmarkJobResponse();
-    response.setJob(job);
+    response.setJob(await getBenchmarkJobResource(job));
     res.contentType(`application/vnd.google.protobuf`);
     res.end(Buffer.from(response.serializeBinary()));
   } catch (e) {
@@ -1042,7 +1043,7 @@ app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
   }
 
   const response = new GetBenchmarkJobResponse();
-  response.setJob(job);
+  response.setJob(await getBenchmarkJobResource(job));
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
 })
