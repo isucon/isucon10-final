@@ -8,6 +8,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         libzip-dev \
+        libgmp-dev \
         libcurl4-openssl-dev \
         protobuf-compiler \
         && \
@@ -18,10 +19,13 @@ RUN pecl install grpc
 RUN pecl install protobuf
 
 RUN docker-php-ext-configure zip && \
-    docker-php-ext-install zip && \
-    docker-php-ext-install curl && \
-    docker-php-ext-install pdo_mysql && \
-    docker-php-ext-install bcmath && \
+    docker-php-ext-install \
+        zip \
+        curl \
+        pdo_mysql \
+        bcmath \
+        gmp \
+        && \
     docker-php-ext-enable grpc
 
 CMD ["make", "install", "run"]
