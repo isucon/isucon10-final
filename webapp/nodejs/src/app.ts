@@ -516,7 +516,7 @@ app.post("/initialize", async (req, res, next) => {
     'INSERT `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, TRUE, NOW(6))',
     [ADMIN_ID, hash.update(ADMIN_PASSWORD).copy().digest("hex")]
   )
-  
+
   const contest = request.getContest();
   if (contest) {
     const openAt = contest.getRegistrationOpenAt();
@@ -527,7 +527,7 @@ app.post("/initialize", async (req, res, next) => {
     if (openAt == null || startsAt == null || freezeAt == null || endsAt == null) {
       return haltPb(res, 400, "initialize の時間が不正です。");
     }
-    
+
     await db.query(`INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES (?, ?, ?, ?)`, [
       new Date(openAt.getSeconds()),
       new Date(startsAt.getSeconds()),
@@ -869,7 +869,7 @@ app.post("/api/registration/contestant", async (req, res, next) => {
 
     await db.query(
       'UPDATE `contestants` SET `team_id` = ?, `name` = ?, `student` = ? WHERE `id` = ? LIMIT 1',
-      [ 
+      [
         request.getTeamId(),
         request.getName(),
         request.getIsStudent(),
@@ -913,7 +913,7 @@ app.put("/api/registration", async (req, res, next) => {
         request.getName(), request.getIsStudent(), currentContestant.id
       ]
     );
-    
+
     await db.commit();
     const response = new UpdateRegistrationResponse();
     res.contentType(`application/vnd.google.protobuf`);
