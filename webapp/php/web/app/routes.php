@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 use App\Application\Notifier;
 use App\Application\Service;
+use Minishlink\WebPush\Subscription;
+use Minishlink\WebPush\VAPID;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -117,13 +119,7 @@ SQL;
     });
 
     $app->get('/test', function(Request $request, Response $response) {
-        var_dump([
-            \Xsuportal\Proto\Error::class,
-            \Google\Protobuf\Timestamp::class,
-            \GPBMetadata\Xsuportal\Error::class,
-            \GPBMetadata\Google\Protobuf\Timestamp::class,
-        ]);
-        exit;
+        //
     });
 
     //
@@ -139,7 +135,7 @@ SQL;
                 'contestant' => ($currentContestant = $service->getCurrentContestant()) ? $service->factoryContestantPb($currentContestant) : null, // current_contestant ? contestant_pb(current_contestant) : nil,
                 'team' => ($currentTeam = $service->getCurrentTeam()) ? $service->factoryTeamPb($currentTeam) : null,
                 'contest' => ($currentContest = $service->getCurrentContestStatus()) ? $service->factoryContestPb($currentContest) : null,
-                // 'push_vapid_key' => $notifier->getVapidKey()->getPublicKeyForPushHeader(),
+                'push_vapid_key' => ($vapidKey = $notifier->getVapidKey() && isset($vapidKey['publicKey'])) ? $vapidKey['publicKey'] : null,
             ];
 
             list($type, $content) = $service->encodeResponsePb($request, $payload);
