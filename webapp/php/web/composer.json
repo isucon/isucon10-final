@@ -25,7 +25,7 @@
         "php": "^7.2",
         "ext-json": "*",
         "google/protobuf": "^3.13",
-        "minishlink/web-push": "^6.0",
+        "minishlink/web-push": "v6.0.1",
         "monolog/monolog": "^2.0",
         "php-di/php-di": "^6.1",
         "slim/psr7": "^1.1",
