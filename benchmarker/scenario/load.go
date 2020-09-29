@@ -3,7 +3,6 @@ package scenario
 import (
 	"context"
 	"encoding/base64"
-	"fmt"
 	"net/url"
 	"sync"
 	"sync/atomic"
@@ -825,47 +824,9 @@ func (s *Scenario) loadBenchmarkDetails(ctx context.Context, step *isucandar.Ben
 		return
 	}
 
-	rjob := res.GetJob()
-	if rjob.GetId() != result.ID() {
-		fmt.Printf("ID: %d : %d\n", rjob.GetId(), result.ID())
-		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正なベンチマークジョブ ID")))
-		return
-	}
-
-	if rjob.GetTeamId() != team.ID {
-		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正なチーム ID")))
-		return
-	}
-
-	if rjob.GetStatus() != resources.BenchmarkJob_FINISHED {
-		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正な終了ステータス")))
-		return
-	}
-
-	rresult := rjob.GetResult()
-	if rresult.GetPassed() != result.Passed {
-		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正な成功フラグ")))
-		return
-	}
-
-	if rresult.GetScore() != result.Score {
-		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正なスコア")))
-		return
-	}
-
-	if rresult.GetScoreBreakdown().GetRaw() != result.ScoreRaw {
-		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正な基礎スコア")))
-		return
-	}
-
-	if rresult.GetScoreBreakdown().GetDeduction() != result.ScoreDeduction {
-		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正な減点スコア")))
-		return
-	}
-
-	mt := rjob.GetFinishedAt().AsTime()
-	if !result.MarkedAt().Equal(mt) {
-		step.AddError(failure.NewError(ErrBenchamrkJobDetail, errorInvalidResponse("不正な終了時刻")))
+	err = verifyGetBenchmarkJobDetail(res, team, result)
+	if err != nil {
+		step.AddError(failure.NewError(ErrBenchamrkJobDetail, err))
 		return
 	}
 
