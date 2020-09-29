@@ -20,10 +20,10 @@ type Contest struct {
 	clarifications []*Clarification
 }
 
-func NewContest(now time.Time) *Contest {
+func NewContest(now time.Time, testMode bool) *Contest {
 	now = now.Truncate(time.Second)
 
-	return &Contest{
+	c := &Contest{
 		mu:                 sync.RWMutex{},
 		RegistrationOpenAt: now,
 		ContestStartsAt:    now.Add(10 * time.Second),
@@ -37,6 +37,15 @@ func NewContest(now time.Time) *Contest {
 		cmu:            sync.RWMutex{},
 		clarifications: []*Clarification{},
 	}
+
+	if testMode {
+		c.RegistrationOpenAt = now.Add(2 * time.Second)
+		c.ContestStartsAt = now.Add(3 * time.Second)
+		c.ContestFreezesAt = now.Add(4 * time.Second)
+		c.ContestEndsAt = now.Add(5 * time.Second)
+	}
+
+	return c
 }
 
 func (c *Contest) AddTeam(team *Team) {

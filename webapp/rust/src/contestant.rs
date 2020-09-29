@@ -363,7 +363,7 @@ pub async fn list_notifications(
             }).collect(),
         })
     })
-    .await?;
+    .await.map_err(crate::unwrap_blocking_error)?;
 
     HttpResponse::Ok().protobuf(resp)
 }
@@ -389,7 +389,7 @@ pub async fn subscribe_notification(
 
         Ok(())
     })
-    .await?;
+    .await.map_err(crate::unwrap_blocking_error)?;
 
     HttpResponse::Ok().protobuf(SubscribeNotificationResponse {})
 }
@@ -418,7 +418,8 @@ pub async fn unsubscribe_notification(
 
         Ok(())
     })
-    .await?;
+    .await
+    .map_err(crate::unwrap_blocking_error)?;
 
     HttpResponse::Ok().protobuf(UnsubscribeNotificationResponse {})
 }

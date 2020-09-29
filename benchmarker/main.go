@@ -37,6 +37,7 @@ var (
 	// 閾値を超えたら N 倍して / 10
 	BONUS = [][]int64{
 		[]int64{300, 20},
+		[]int64{240, 18},
 		[]int64{180, 16},
 		[]int64{120, 14},
 		[]int64{60, 12},
@@ -62,6 +63,8 @@ var (
 	tlsKeyPath         string
 	useTLS             bool
 	exitStatusOnFail   bool
+	noLoad             bool
+	noClar             bool
 
 	reporter benchrun.Reporter
 )
@@ -85,6 +88,8 @@ func init() {
 	flag.StringVar(&tlsKeyPath, "tls-key", "../secrets/key.pem", "path to private key of TLS certificate for a push service")
 	flag.BoolVar(&useTLS, "tls", false, "server is a tls (HTTPS & gRPC over h2)")
 	flag.BoolVar(&exitStatusOnFail, "exit-status", false, "set exit status non-zero when a benchmark result is failing")
+	flag.BoolVar(&noLoad, "no-load", false, "exit on finished prepare")
+	flag.BoolVar(&noClar, "no-clar", false, "off sending clar")
 
 	timeoutDuration := ""
 	flag.StringVar(&timeoutDuration, "timeout", "10s", "request timeout duration")
@@ -257,8 +262,10 @@ func main() {
 	s.BaseURL = fmt.Sprintf("%s://%s/", scheme, targetAddress)
 	s.UseTLS = useTLS
 	s.PushService = pushService
+	s.NoLoad = noLoad
+	s.NoClar = noClar
 
-	b, err := isucandar.NewBenchmark(isucandar.WithPrepareTimeout(20*time.Second), isucandar.WithLoadTimeout(65*time.Second))
+	b, err := isucandar.NewBenchmark(isucandar.WithLoadTimeout(65 * time.Second))
 	if err != nil {
 		panic(err)
 	}
@@ -284,6 +291,10 @@ func main() {
 
 	wg := sync.WaitGroup{}
 	b.Load(func(ctx context.Context, step *isucandar.BenchmarkStep) error {
+		if s.NoLoad {
+			return nil
+		}
+
 		wg.Add(1)
 		defer wg.Done()
 

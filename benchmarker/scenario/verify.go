@@ -20,6 +20,7 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/admin"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
+	"github.com/isucon/isucon10-final/benchmarker/pushserver"
 )
 
 var (
@@ -306,8 +307,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 
 func (s *Scenario) handleInvalidPush(id string, err error, step *isucandar.BenchmarkStep) {
 	AdminLogger.Printf("webpush error: /push/%s : %v", id, err)
-	msg := err.Error()
-	if strings.Contains(msg, "Push attempt to expired subscription") {
+	if failure.Is(err, pushserver.ErrSubscriptionInactive) {
 		return
 	}
 	step.AddError(failure.NewError(ErrWebPush, fmt.Errorf("不正な Web Push メッセージの送信がありました (/push/%s): %w", id, err)))
@@ -348,6 +348,10 @@ func verifyGetBenchmarkJobDetail(res *contestant.GetBenchmarkJobResponse, team *
 	mt := rjob.GetFinishedAt().AsTime()
 	if !AssertEqual("Benchmark Job Finished At Check", result.MarkedAt(), mt) {
 		return errorInvalidResponse("不正な終了時刻")
+	}
+
+	if result.Reason != rresult.GetReason() {
+		return errorInvalidResponse("不正な reason")
 	}
 
 	return nil
