@@ -6,7 +6,8 @@ CREATE TABLE `contestants` (
   `name` VARCHAR(255),
   `student` TINYINT(1) DEFAULT FALSE,
   `staff` TINYINT(1) DEFAULT FALSE,
-  `created_at` DATETIME(6) NOT NULL
+  `created_at` DATETIME(6) NOT NULL,
+  INDEX `idx_contestants_team_id` (`team_id` ASC) VISIBLE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
 DROP TABLE IF EXISTS `teams`;
@@ -47,7 +48,9 @@ CREATE TABLE `clarifications` (
   `answer` VARCHAR(255),
   `answered_at` DATETIME(6),
   `created_at` DATETIME(6) NOT NULL,
-  `updated_at` DATETIME(6) NOT NULL
+  `updated_at` DATETIME(6) NOT NULL,
+  INDEX `idx_clarifications_team_id_answered_at` (`team_id` ASC, `answered_at` ASC) VISIBLE,
+  INDEX `idx_clarifications_disclosed_answered_at` (`disclosed` ASC, `answered_at` ASC) VISIBLE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
 DROP TABLE IF EXISTS `notifications`;
@@ -57,7 +60,8 @@ CREATE TABLE `notifications` (
   `read` TINYINT(1) NOT NULL DEFAULT FALSE,
   `encoded_message` VARCHAR(255) NOT NULL,
   `created_at` DATETIME(6) NOT NULL,
-  `updated_at` DATETIME(6) NOT NULL
+  `updated_at` DATETIME(6) NOT NULL,
+  INDEX `idx_notifications_contestant_id` (`contestant_id` ASC) VISIBLE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
 DROP TABLE IF EXISTS `push_subscriptions`;
