@@ -64,6 +64,7 @@ var (
 	useTLS             bool
 	exitStatusOnFail   bool
 	noLoad             bool
+	noClar             bool
 
 	reporter benchrun.Reporter
 )
@@ -88,6 +89,7 @@ func init() {
 	flag.BoolVar(&useTLS, "tls", false, "server is a tls (HTTPS & gRPC over h2)")
 	flag.BoolVar(&exitStatusOnFail, "exit-status", false, "set exit status non-zero when a benchmark result is failing")
 	flag.BoolVar(&noLoad, "no-load", false, "exit on finished prepare")
+	flag.BoolVar(&noClar, "no-clar", false, "off sending clar")
 
 	timeoutDuration := ""
 	flag.StringVar(&timeoutDuration, "timeout", "10s", "request timeout duration")
@@ -261,6 +263,7 @@ func main() {
 	s.UseTLS = useTLS
 	s.PushService = pushService
 	s.NoLoad = noLoad
+	s.NoClar = noClar
 
 	b, err := isucandar.NewBenchmark(isucandar.WithLoadTimeout(65 * time.Second))
 	if err != nil {
