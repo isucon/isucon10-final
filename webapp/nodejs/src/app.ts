@@ -39,6 +39,16 @@ const ADMIN_PASSWORD = 'admin'
 const DEBUG_CONTEST_STATUS_FILE_PATH = '/tmp/XSUPORTAL_CONTEST_STATUS'
 const hash = crypto.createHash('sha256');
 
+declare global {
+  namespace Express {
+    interface Request {
+      context: {
+        [key: string]: any;
+      };
+    }
+  }
+}
+
 export const dbinfo = {
   host: process.env['MYSQL_HOSTNAME'] ?? '127.0.0.1',
   port: Number.parseInt(process.env['MYSQL_PORT'] ?? '3306'),
@@ -83,6 +93,10 @@ app.use(session({
 
 // rawbody
 app.use(express.raw({ type: "application/vnd.google.protobuf" }));
+app.use((req, res, next) => {
+  req.context = {};
+  next();
+});
 
 const convertDateToTimestamp = (date: Date) => {
   const timestamp = new Timestamp();
@@ -91,8 +105,10 @@ const convertDateToTimestamp = (date: Date) => {
 };
 
 const getCurrentContestant = function() {
-  let currentContestant = null
   return async (req: express.Request, db: mysql.PoolConnection, { lock = false } = {}) => {
+    if (req.context.currentContestant) {
+      return req.context.currentContestant;
+    }
     const id = req.session.contestant_id;
     if (!id) return null;
     const result = await db.query(
@@ -101,14 +117,16 @@ const getCurrentContestant = function() {
         : "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1",
       id
     )
-    currentContestant ??= result?.[0]
-    return currentContestant
+    req.context.currentContestant = result?.[0]
+    return req.context.currentContestant
   }
 }()
 
 const getCurrentTeam = function() {
-  let currentTeam = null
   return async (req: express.Request, db: mysql.PoolConnection, { lock = false } = {}) => {
+    if (req.context.currentTeam) {
+      return req.context.currentTeam;
+    }
     const currentContestant = await getCurrentContestant(req, db);
     if (!currentContestant) return null
     const result = await db.query(
@@ -117,8 +135,8 @@ const getCurrentTeam = function() {
         : "SELECT * FROM `teams` WHERE `id` = ? LIMIT 1",
       [currentContestant['team_id']]
     )
-    currentTeam ??= result?.[0]
-    return currentTeam
+    req.context.currentTeam = result?.[0]
+    return req.context.currentTeam
   }
 }()
 
