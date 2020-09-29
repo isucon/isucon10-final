@@ -25,6 +25,7 @@ type Scenario struct {
 	Contest      *model.Contest
 	TeamCapacity int32
 	NoLoad       bool
+	NoClar       bool
 
 	bpubsub  *pubsub.PubSub
 	rpubsub  *pubsub.PubSub

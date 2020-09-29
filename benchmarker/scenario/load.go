@@ -469,7 +469,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
 		team := s.Contest.Teams[index]
 		// Clar をまったく送信しないチームは早期脱落
-		if team.NonClarification {
+		if team.NonClarification || s.NoClar {
 			return
 		}
 
