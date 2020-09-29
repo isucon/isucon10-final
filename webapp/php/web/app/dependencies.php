@@ -9,6 +9,10 @@ use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -27,8 +31,11 @@ return function (ContainerBuilder $containerBuilder) {
             return $logger;
         },
 
-        Service::class => function(ContainerInterface $c) {
-            return new Service($c);
+        Service::class => function(ContainerInterface $container) {
+            return new Service(
+                $container->get(PDO::class),
+                $container->get(Session::class),
+            );
         },
 
         Notifier::class => function(ContainerInterface $c) {
@@ -50,5 +57,20 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $pdo;
         },
+
+        Session::class => function(ContainerInterface $container): Session
+        {
+            $settings = $container->get('settings')['session'];
+            if (PHP_SAPI === 'cli') {
+                return new Session(new MockArraySessionStorage);
+            } else {
+                return new Session(new NativeSessionStorage($settings));
+            }
+        },
+
+        SessionInterface::class => function(ContainerInterface $container): Session
+        {
+            return $container->get(Session::class);
+        }
     ]);
 };

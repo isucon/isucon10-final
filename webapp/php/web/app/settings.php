@@ -21,6 +21,10 @@ return function (ContainerBuilder $containerBuilder) {
                 'pass' => $_ENV['MYSQL_PASS'] ?? 'isucon',
                 'dbname' => $_ENV['MYSQL_DBNAME'] ?? 'xsuportal',
             ],
+            'session' => [
+                'name' => 'webapp',
+                'cache_expire' => 0,
+            ],
         ],
     ]);
 };

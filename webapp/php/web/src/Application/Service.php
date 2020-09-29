@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Application;
 
 use App\Domain\Routes;
+use Google\Protobuf\Internal\DescriptorPool;
 use Google\Protobuf\Internal\Message;
 use Google\Protobuf\Timestamp;
 use PDO;
@@ -11,7 +12,12 @@ use PDOStatement;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpForbiddenException;
+use Slim\Exception\HttpUnauthorizedException;
 use Slim\Routing\RouteContext;
+use Spiral\Http\Exception\ClientException\UnauthorizedException;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Xsuportal\Proto\Resources\Clarification;
 use Xsuportal\Proto\Resources\Contest;
 use Xsuportal\Proto\Resources\Contest\Status;
 use Xsuportal\Proto\Resources\Contestant;
@@ -26,14 +32,13 @@ class Service
 
     const DEBUG_CONTEST_STATUS_FILE_PATH = '/tmp/XSUPORTAL_CONTEST_STATUS';
 
-    // const CONTEST_STATUS_STANDBY = 'standby';
-    // const CONTEST_STATUS_REGISTRATION = 'registration';
-    // const CONTEST_STATUS_STARTED = 'started';
-    // const CONTEST_STATUS_FINISHED = 'finished';
+    private PDO $pdo;
+    private Session $session;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(PDO $pdo, Session $session)
     {
-        $this->container = $container;
+        $this->pdo = $pdo;
+        $this->session = $session;
     }
 
     public function decodeRequestPb(Request $request): Message
@@ -49,9 +54,9 @@ class Service
     public function encodeResponsePb(Request $request, array $payload): array
     {
         $cls = Routes::PB_TABLE[self::requestToRouteString($request)][1];
-        $contentType = "application/vnd.google.protobuf; proto=#{$cls}";
         /** @var Message */
         $message = new $cls($payload);
+        $contentType = sprintf('application/vnd.google.protobuf; proto=#%s', self::getPbFullName($cls));
 
         return [
             $contentType,
@@ -61,11 +66,10 @@ class Service
 
     public function getCurrentContestant(bool $lock = false): ?array
     {
-        $id = 1; // TODO
-        if ($id) {
+        if ($id = $this->session->get('contestant_id')) {
             $sql = 'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1' . ($lock ? ' FOR UPDATE' : '');
             /** @var \PDOStatement */
-            $stmt = $this->container->get(PDO::class)->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$id]);
 
             if ($contestant = $stmt->fetch()) {
@@ -78,8 +82,7 @@ class Service
 
     public function getCurrentContestStatus(): ?array
     {
-        $id = 1; // TODO
-        if ($id) {
+        if ($id = $this->session->get('contestant_id')) {
             $sql = <<< SQL
             SELECT
                 *,
@@ -96,7 +99,7 @@ class Service
 SQL;
 
             /** @var \PDOStatement */
-            $stmt = $this->container->get(PDO::class)->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$id]);
 
             $contest = $stmt->fetch();
@@ -117,8 +120,8 @@ SQL;
     public function factoryContestantPb(array $contestant): Contestant
     {
         return new Contestant([
-            'id' => $contestant['id'] ? (int)$contestant['id'] : null,
-            'team_id' => $contestant['team_id'] ? (int)$contestant['team_id'] : null,
+            'id' => $contestant['id'] ?? null,
+            'team_id' => isset($contestant['id']) ? (int)$contestant['id'] : null,
             'name' => $contestant['name'] ?? null,
             'is_student' => $contestant['student'] === '1',
             'is_staff' => $contestant['staff'] === '1',
@@ -135,15 +138,6 @@ SQL;
             'frozen' => $contest['frozen'] === '1',
             'status' => self::convertStatusTextToStatus($contest['status']),
         ]);
-
-        // return new Contest([
-        //     'registration_open_at' => $contest['registration_open_at'] ? strtotime($contest['registration_open_at']) : null,
-        //     'contest_starts_at' => $contest['contest_starts_at'] ? strtotime($contest['contest_starts_at']) : null,
-        //     'contest_freezes_at' => $contest['contest_freezes_at'] ? strtotime($contest['contest_freezes_at']) : null,
-        //     'contest_ends_at' => $contest['contest_ends_at'] ? strtotime($contest['contest_ends_at']) : null,
-        //     'frozen' => $contest['frozen'] === '1',
-        //     'status' => self::convertStatusTextToStatus($contest['status']),
-        // ]);
     }
 
     private static function convertStatusTextToStatus(string $status): int
@@ -172,7 +166,7 @@ SQL;
         if ($currentContestant) {
             $sql = 'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1' . ($lock ? ' FOR UPDATE' : '');
             /** @var \PDOStatement */
-            $stmt = $this->container->get(PDO::class)->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([(int)$currentContestant['team_id']]);
 
             return $stmt->fetch() ?: [];
@@ -186,19 +180,16 @@ SQL;
         $leader = null;
         $members = null;
 
-        /** @var PDO */
-        $pdo = $this->container->get(PDO::class);
-
         if ($enableMembers) {
             if ($team['leader_id']) {
                 $sql = 'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1';
                 /** @var \PDOStatement */
-                $stmt = $pdo->prepare($sql);
+                $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([$team['leader_id']]);
                 $leader = $this->factoryContestantPb($stmt->fetch());
             }
             $sql = 'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1';
-            $stmt = $pdo->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$team['leader_id']]);
             $members = array_map(
                 function(array $member): Contestant {
@@ -233,14 +224,44 @@ SQL;
 
     public function getNotifier()
     {
-        /** @var \PDO */
-        $pdo = $this->container->get(PDO::class);
-        return new Notifier($pdo);
+        return new Notifier($this->pdo);
     }
 
     private static function requestToRouteString(Request $request): string
     {
         $context = RouteContext::fromRequest($request);
         return sprintf('%s %s', $request->getMethod(), $context->getRoute()->getPattern());
+    }
+
+    public function loginRequired(Request $request, bool $team = true, bool $lock = false)
+    {
+        if (!$this->getCurrentContestant($lock)) {
+            throw new HttpUnauthorizedException($request, 'ログインが必要です');
+        }
+        if ($team && !$this->getCurrentTeam($lock)) {
+            throw new HttpForbiddenException($request, '参加登録が必要です');
+        }
+    }
+
+    public function factoryClarificationPb(array $clar, array $team = null)
+    {
+        return new Clarification([
+            'id' => isset($clar['id']) ? (int)$clar['id'] : null,
+            'team_id' => isset($clar['team_id']) ? (int)$clar['team_id'] : null,
+            'answered' => isset($clar['answered_at']) ? !!$clar['answered_at'] : false,
+            'disclosed' => isset($clar['disclosed']) ? $clar['disclosed'] === '1' : false,
+            'question' => $clar['question'] ?? null,
+            'answer' => $clar['answer'] ?? null,
+            'created_at' => $clar['created_at'] ? new Timestamp(['seconds' => strtotime($clar['created_at'])]) : null,
+            'answered_at' => $clar['answered_at'] ? new Timestamp(['seconds' => strtotime($clar['answered_at'])]) : null,
+            'team' => $team ? $this->factoryTeamPb($team) : null,
+        ]);
+    }
+
+    public static function getPbFullName(string $class): string
+    {
+        $pool = DescriptorPool::getGeneratedPool();
+        $desc = $pool->getDescriptorByClassName($class);
+        return $desc->getFullName();
     }
 }

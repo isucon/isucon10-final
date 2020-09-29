@@ -3,13 +3,18 @@ declare(strict_types=1);
 
 use App\Application\Notifier;
 use App\Application\Service;
+use Google\Protobuf\Internal\DescriptorPool;
+use Google\Protobuf\Internal\Message;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\VAPID;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
+use Slim\Exception\HttpForbiddenException;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Xsuportal\Proto\Resources\Leaderboard;
+use Xsuportal\Proto\Resources\Notification\ClarificationMessage;
 use Xsuportal\Proto\Services\Admin\InitializeRequest;
 use Xsuportal\Proto\Services\Admin\InitializeResponse\BenchmarkServer;
 
@@ -118,8 +123,53 @@ SQL;
         return $response->withHeader('Content-Type', $type);
     });
 
-    $app->get('/test', function(Request $request, Response $response) {
-        //
+    $app->get('/api/admin/clarifications', function(Request $request, Response $response) {
+        /** @var Service */
+        $service = $this->get(Service::class);
+
+        $this->get(Session::class)->set('contestant_id', 'admin');//debug
+        $service->loginRequired($request, false);
+
+        if ($service->getCurrentContestant()['staff'] !== '1') {
+            throw new HttpForbiddenException($request, '管理者権限が必要です');
+        }
+
+        /** @var PDO */
+        $pdo = $this->get(PDO::class);
+        $sql = 'SELECT * FROM `clarifications` ORDER BY `updated_at` DESC';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $clars = $stmt->fetchAll();
+
+        $clarPbs = array_map(
+            function(array $clar) use ($pdo, $service) {
+                $sql = 'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1';
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$clar['team_id']]);
+                $team = $stmt->fetch() ?: null;
+                return $service->factoryClarificationPb($clar, $team);
+            },
+            $clars
+        );
+
+
+        list($type, $content) = $service->encodeResponsePb($request, [
+            'clarifications' => $clarPbs,
+        ]);
+
+        $response->getBody()->write($content);
+        return $response->withHeader('Content-Type', $type);
+    });
+
+    $app->group('/test', function (Group $group) {
+        $group->get('/', function(Request $request, Response $response) {
+            $session = $this->get(Session::class);
+            $message = (int)$session->get('message') ?? 0;
+            $session->set('message', ++$message);
+
+            $response->getBody()->write((string)$message);
+            return $response;
+        });
     });
 
     //
