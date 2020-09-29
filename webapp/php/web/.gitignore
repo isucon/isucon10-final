@@ -6,3 +6,4 @@
 !/logs/README.md
 .phpunit.result.cache
 /public
+/vapid_private.pem

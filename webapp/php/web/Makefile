@@ -21,7 +21,8 @@ setup: \
 	public/contestant.html \
 	public/packs \
 	public/sw.js \
-	public/sw.js.map
+	public/sw.js.map \
+	vapid_private.pem
 
 run:
 	php-fpm
@@ -38,9 +39,12 @@ protoc: \
 lib: ../../../proto
 	mkdir -p $@
 	find $< -name '*.proto' | xargs -I@ protoc -I $< --php_out=./lib @
-	# find $< -name '*.proto' | xargs -I@ protoc -I $< --php_out=./lib --grpc_out=./lib --plugin=protoc-gen-grpc=./grpc_php_plugin @
+
+vapid_private.pem:
+	openssl ecparam -genkey -name prime256v1 -out $@
 
 clean:
 	rm -rf vendor
 	rm -f public
 	rm -rf src/Protobuf
+	rm -rf vapid_private.pem
