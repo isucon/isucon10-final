@@ -250,15 +250,15 @@ func AudienceGetDashboardAction(parent context.Context, agent *agent.Agent) (*ht
 	return hres, res, err
 }
 
-func SubscribeNotification(ctx context.Context, member *model.Contestant, pushSubscription *pushserver.Subscription) (*contestant.SubscribeNotificationResponse, *http.Response, error) {
+func SubscribeNotification(ctx context.Context, member *model.Contestant, pushSubscription *pushserver.Subscription) (*contestant.SubscribeNotificationResponse, error) {
 	req := &contestant.SubscribeNotificationRequest{
 		Endpoint: pushSubscription.GetURL(),
 		P256Dh:   pushSubscription.GetP256DH(),
 		Auth:     pushSubscription.GetAuth(),
 	}
 	res := &contestant.SubscribeNotificationResponse{}
-	hres, err := ProtobufRequest(ctx, member.Agent, http.MethodPost, "/api/contestant/push_subscriptions", req, res, []int{200, 401, 403, 503})
-	return res, hres, err
+	_, err := ProtobufRequest(ctx, member.Agent, http.MethodPost, "/api/contestant/push_subscriptions", req, res, []int{200, 401, 403, 503})
+	return res, err
 }
 
 func GetNotifications(ctx context.Context, member *model.Contestant) (*contestant.ListNotificationsResponse, error) {

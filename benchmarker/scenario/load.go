@@ -735,8 +735,6 @@ func (s *Scenario) watchNotifications(parent context.Context, step *isucandar.Be
 	}
 }
 
-var ErrWebPushSubscription failure.StringCode = "webpush-subscription"
-
 func (s *Scenario) subscribeToPushNotification(parent context.Context, step *isucandar.BenchmarkStep, member *model.Contestant, session *common.GetCurrentSessionResponse, channel chan<- []*resources.Notification) {
 	ctx, cancel := context.WithDeadline(parent, s.Contest.ContestEndsAt)
 	defer cancel()
@@ -750,18 +748,15 @@ func (s *Scenario) subscribeToPushNotification(parent context.Context, step *isu
 		Vapid: vapidKey,
 	}, true, true)
 	if err != nil {
-		step.AddError(failure.NewError(ErrWebPushSubscription, err))
+		// TODO: 403 か 503 をかえすように初期実装ではそうなってるのでいい感じに配慮されているようにする ~sorah
+		step.AddError(err)
 		return
 	}
 	defer sub.Expire()
 
-	_, hres, err := SubscribeNotification(ctx, member, sub)
+	_, err = SubscribeNotification(ctx, member, sub)
 	if err != nil {
-		step.AddError(failure.NewError(ErrWebPushSubscription, err))
-	}
-
-	if hres.StatusCode != 200 {
-		return
+		step.AddError(err)
 	}
 
 	for {
@@ -783,6 +778,7 @@ func (s *Scenario) subscribeToPushNotification(parent context.Context, step *isu
 			}
 			step.AddScore("push-notifications")
 			channel <- []*resources.Notification{notification}
+
 		}
 	}
 }
