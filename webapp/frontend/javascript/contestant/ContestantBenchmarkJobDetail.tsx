@@ -18,7 +18,6 @@ export interface State {
   job: xsuportal.proto.resources.IBenchmarkJob | null;
   error: Error | null;
   requesting: boolean;
-  timer: number | null;
 }
 
 export class ContestantBenchmarkJobDetail extends React.Component<
@@ -31,23 +30,15 @@ export class ContestantBenchmarkJobDetail extends React.Component<
       job: null,
       error: null,
       requesting: false,
-      timer: null,
     };
   }
 
   public componentDidMount() {
     this.updateJob();
-    this.setState({
-      timer: window.setInterval(this.updateJob.bind(this), 5000),
-    });
   }
 
   public componentDidUpdate(prevProps: Props, prevState: State) {
     if (prevProps !== this.props) this.updateJob();
-  }
-
-  public componentWillUnmount() {
-    if (this.state.timer) window.clearInterval(this.state.timer);
   }
 
   async updateJob() {
