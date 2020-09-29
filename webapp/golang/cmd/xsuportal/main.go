@@ -62,11 +62,25 @@ func main() {
 	}
 
 	db, _ = xsuportal.GetDB()
-	db.SetMaxOpenConns(10)
+	db.SetMaxOpenConns(100)
 
 	srv.Use(middleware.Logger())
 	srv.Use(middleware.Recover())
 	srv.Use(session.Middleware(sessions.NewCookieStore([]byte("tagomoris"))))
+	srv.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(e echo.Context) error {
+			err := next(e)
+			if e.Request().Context().Err() != nil {
+				e.Response().Status = 499
+			}
+			if sess, err := session.Get(SessionName, e); err == nil {
+				if c, ok := sess.Values["contestant_id"]; ok {
+					e.Response().Header().Set(echo.HeaderXRequestID, c.(string))
+				}
+			}
+			return err
+		}
+	})
 
 	srv.File("/", "public/audience.html")
 	srv.File("/registration", "public/audience.html")
@@ -572,13 +586,7 @@ func (*ContestantService) ListNotifications(e echo.Context) error {
 	}
 
 	afterStr := e.QueryParam("after")
-
-	tx, err := db.Beginx()
-	if err != nil {
-		return fmt.Errorf("begin tx: %w", err)
-	}
-	defer tx.Rollback()
-	contestant, _ := getCurrentContestant(e, tx, false)
+	contestant, _ := getCurrentContestant(e, db, false)
 
 	var notifications []*xsuportal.Notification
 	if afterStr != "" {
@@ -586,7 +594,7 @@ func (*ContestantService) ListNotifications(e echo.Context) error {
 		if err != nil {
 			return fmt.Errorf("parse after: %w", err)
 		}
-		err = tx.Select(
+		err = db.Select(
 			&notifications,
 			"SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `id` > ? ORDER BY `id`",
 			contestant.ID,
@@ -596,7 +604,7 @@ func (*ContestantService) ListNotifications(e echo.Context) error {
 			return fmt.Errorf("select notifications(after=%v): %w", after, err)
 		}
 	} else {
-		err = tx.Select(
+		err := db.Select(
 			&notifications,
 			"SELECT * FROM `notifications` WHERE `contestant_id` = ? ORDER BY `id`",
 			contestant.ID,
@@ -605,20 +613,10 @@ func (*ContestantService) ListNotifications(e echo.Context) error {
 			return fmt.Errorf("select notifications: %w", err)
 		}
 	}
-	_, err = tx.Exec(
-		"UPDATE `notifications` SET `read` = TRUE WHERE `contestant_id` = ? AND `read` = FALSE",
-		contestant.ID,
-	)
-	if err != nil {
-		return fmt.Errorf("update notifications: %w", err)
-	}
-	if err := tx.Commit(); err != nil {
-		return fmt.Errorf("commit tx: %w", err)
-	}
 	team, _ := getCurrentTeam(e, db, false)
 
 	var lastAnsweredClarificationID int64
-	err = db.Get(
+	err := db.Get(
 		&lastAnsweredClarificationID,
 		"SELECT `id` FROM `clarifications` WHERE (`team_id` = ? OR `disclosed` = TRUE) AND `answered_at` IS NOT NULL ORDER BY `id` DESC LIMIT 1",
 		team.ID,

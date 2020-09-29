@@ -254,7 +254,7 @@ func main() {
 		panic(err)
 	}
 	db, _ = xsuportal.GetDB()
-	db.SetMaxOpenConns(10)
+	db.SetMaxOpenConns(50)
 
 	server := grpc.NewServer()
 
