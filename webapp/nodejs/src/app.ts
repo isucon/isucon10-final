@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import fs from "fs";
 import path from "path";
 import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
+import morgan from "morgan";
 
 import { Notifier } from "./notifier";
 import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
@@ -69,6 +70,7 @@ export const secureRandom = (size: number) => {
 const app = express();
 
 app.use(express.static("../public"));
+app.use(morgan('combined'));
 app.use(session({
   secret: 'tagomoris',
   name: 'session_xsucon',
@@ -1265,6 +1267,16 @@ app.post("/api/logout", async (req, res, next) => {
   const response = new LogoutResponse();
   res.contentType(`application/vnd.google.protobuf`);
   res.end(Buffer.from(response.serializeBinary()));
+});
+
+process.on("unhandledRejection", (e) => {
+  console.error(e);
+  process.exit(1);
+});
+
+process.on("uncaughtExcection", (e) => {
+  console.error(e);
+  process.exit(1);
 });
 
 app.listen(process.env.PORT ?? 9292, () => {
