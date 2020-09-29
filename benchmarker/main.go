@@ -258,7 +258,7 @@ func main() {
 	s.UseTLS = useTLS
 	s.PushService = pushService
 
-	b, err := isucandar.NewBenchmark(isucandar.WithPrepareTimeout(20*time.Second), isucandar.WithLoadTimeout(65*time.Second))
+	b, err := isucandar.NewBenchmark(isucandar.WithLoadTimeout(65 * time.Second))
 	if err != nil {
 		panic(err)
 	}

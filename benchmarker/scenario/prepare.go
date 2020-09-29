@@ -20,6 +20,10 @@ func (s *Scenario) Prepare(ctx context.Context, step *isucandar.BenchmarkStep) e
 	}
 	a.Name = "benchmarker-initializer"
 
+	if err := s.prepareCheck(ctx, step); err != nil {
+		return err
+	}
+
 	s.Contest = model.NewContest(time.Now())
 	initResponse, initHttpResponse, err := InitializeAction(ctx, a, s.Contest)
 	if err != nil {
@@ -43,5 +47,9 @@ func (s *Scenario) Prepare(ctx context.Context, step *isucandar.BenchmarkStep) e
 		s.handleInvalidPush(id, err, step)
 	}
 
+	return nil
+}
+
+func (s *Scenario) prepareCheck(ctx context.Context, step *isucandar.BenchmarkStep) error {
 	return nil
 }
