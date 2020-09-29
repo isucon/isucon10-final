@@ -1,4 +1,4 @@
-import './application.scss';
+import "./application.scss";
 import { ApiClient } from "../ApiClient";
 import { AdminApp } from "../AdminApp";
 import React from "react";
@@ -8,5 +8,9 @@ import ReactDOM from "react-dom";
   const client = new ApiClient();
   const session = await client.getCurrentSession();
   const elem = document.getElementById("app");
-  ReactDOM.render(<AdminApp session={session} client={client} />, elem);
+  if (session.contestant?.isStaff) {
+    ReactDOM.render(<AdminApp session={session} client={client} />, elem);
+  } else {
+    location.href = "/";
+  }
 })();
