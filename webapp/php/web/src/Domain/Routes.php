@@ -16,11 +16,11 @@ class Routes
             null,
             Proto\Services\Admin\ListClarificationsResponse::class,
         ],
-        'GET /api/admin/clarifications/:id' => [
+        'GET /api/admin/clarifications/{id}' => [
             null,
             Proto\Services\Admin\GetClarificationResponse::class,
         ],
-        'PUT /api/admin/clarifications/:id' => [
+        'PUT /api/admin/clarifications/{id}' => [
             Proto\Services\Admin\RespondClarificationRequest::class,
             Proto\Services\Admin\RespondClarificationResponse::class,
         ],
@@ -64,7 +64,7 @@ class Routes
             null,
             Proto\Services\Contestant\ListBenchmarkJobsResponse::class,
         ],
-        'GET /api/contestant/benchmark_jobs/:id' => [
+        'GET /api/contestant/benchmark_jobs/{id}' => [
             null,
             Proto\Services\Contestant\GetBenchmarkJobResponse::class,
         ],

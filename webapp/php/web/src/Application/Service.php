@@ -177,7 +177,7 @@ SQL;
 
     public function factoryTeamPb(array $team, bool $detail = false, $enableMembers = true): Team
     {
-        $leader = null;
+        $leaderPb = null;
         $members = null;
 
         if ($enableMembers) {
@@ -186,7 +186,9 @@ SQL;
                 /** @var \PDOStatement */
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([$team['leader_id']]);
-                $leader = $this->factoryContestantPb($stmt->fetch());
+                if ($leader = $stmt->fetch()) {
+                    $leaderPb = $this->factoryContestantPb($leader);
+                }
             }
             $sql = 'SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1';
             $stmt = $this->pdo->prepare($sql);
@@ -214,7 +216,7 @@ SQL;
                 'email_address' => $team['email_address'],
                 'invite_token' => $team['invite_token'],
             ]) : null,
-            'leader' => $leader,
+            'leader' => $leaderPb,
             'members' => $members,
             'student' => isset($team['student']) ? new StudentStatus([
                 'status' => ($team['student'] !== '0' && !!$team['student']),

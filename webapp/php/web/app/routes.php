@@ -136,6 +136,7 @@ SQL;
 
         /** @var PDO */
         $pdo = $this->get(PDO::class);
+
         $sql = 'SELECT * FROM `clarifications` ORDER BY `updated_at` DESC';
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
@@ -160,6 +161,44 @@ SQL;
         $response->getBody()->write($content);
         return $response->withHeader('Content-Type', $type);
     });
+
+    $app->get('/api/admin/clarifications/{id}', function(Request $request, Response $response, array $args) {
+        $id = $args['id'] ?? null;
+
+        /** @var Service */
+        $service = $this->get(Service::class);
+
+        $this->get(Session::class)->set('contestant_id', 'admin');//debug
+        $service->loginRequired($request, false);
+
+        if ($service->getCurrentContestant()['staff'] !== '1') {
+            throw new HttpForbiddenException($request, '管理者権限が必要です');
+        }
+
+        /** @var PDO */
+        $pdo = $this->get(PDO::class);
+        $team = null;
+
+        $sql = 'SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+        $clar = $stmt->fetch() ?: [];
+
+        if ($clar) {
+            $sql = 'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1';
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$clar['team_id']]);
+            $team = $stmt->fetch() ?: [];
+        }
+
+        list($type, $content) = $service->encodeResponsePb($request, [
+            'clarification' => $clar ? $service->factoryClarificationPb($clar, $team) : null,
+        ]);
+
+        $response->getBody()->write($content);
+        return $response->withHeader('Content-Type', $type);
+    });
+
 
     $app->group('/test', function (Group $group) {
         $group->get('/', function(Request $request, Response $response) {
