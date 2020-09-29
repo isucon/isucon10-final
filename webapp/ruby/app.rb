@@ -418,7 +418,7 @@ module Xsuportal
 
       def encode_response_pb(payload={})
         cls = PB_TABLE.fetch(request.env.fetch('sinatra.route'))[1]
-        content_type "application/vnd.google.protobuf; proto=#{cls.descriptor.name}"
+        content_type "application/vnd.google.protobuf"
         cls.encode(cls.new(payload))
       end
 

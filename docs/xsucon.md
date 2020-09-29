@@ -169,11 +169,11 @@ HTTP リクエスト: `GET /api/contestant/notifications`
 
 ## 実ベンチマーカーが実装する Web Push service について
 
-ブラウザの [Push API](https://www.w3.org/TR/push-api/) の挙動を再現するため、実ベンチマーカーには [RFC8030](https://tools.ietf.org/html/rfc8030) push service が実装されています。
+ブラウザの [Push API] の挙動を再現するため、実ベンチマーカーには [RFC8030] push service が実装されています。
 
 模擬 push service は [RFC8030 Section 5.](https://tools.ietf.org/html/rfc8030#section-5) に記載されている push resource をサポートしています。user agent については、実ベンチマーカーに内包しているため、その他のエンドポイントについては実装されていません。
 
-加えて、一般的なブラウザで Push API を利用する際必要になる [RFC8291](https://tools.ietf.org/html/rfc8291) (メッセージの暗号化), [RFC8292](https://tools.ietf.org/html/rfc8292) (VAPID を利用したサーバ認証) をサポートしています。
+加えて、一般的なブラウザで Push API を利用する際必要になる [RFC8291] (メッセージの暗号化), [RFC8292] (VAPID を利用したサーバ認証) をサポートしています。
 
 ### 原則
 
@@ -189,7 +189,7 @@ push subscription 情報については、push resource の URL に加え、[W3C
 
 重複する内容もありますが、実ベンチマーカーが送信する push resource のエンドポイントについて、RFC に定義されていない、あるいは RFC を意図的に違反している点は下記の通りです。ISUCON10 本選競技の課題の範疇においては、Web Push ライブラリなどを利用している限り問題にはならないと考えています。
 
-- [RFC8291] (Encryption) の利用が必須です。
+- [RFC8291] (暗号化) の利用が必須です。
   - [W3C Push API の Section 4. 等](https://www.w3.org/TR/push-api/#security-and-privacy-considerations) をはじめ、Web ブラウザの Web Push における RFC8030 の利用では、push message は暗号化される事が前提となっているためです。
   - したがって、push resource へ送信するリクエストについては、RFC8291 に従い暗号化して送信する必要があります。暗号化されていないリクエストについては、push resource は HTTP 4xx エラーを返します。
   - 実ベンチマーカーは push subscription を課題 Web アプリケーションへ提供するとき、かならず RFC8291 に定義される ECDH 公開鍵、共有鍵である、Push API で取得できる `p256dh`, `auth` の値が送信されます。
@@ -201,8 +201,18 @@ push subscription 情報については、push resource の URL に加え、[W3C
 - [RFC8030 Section 5.1.](https://tools.ietf.org/html/rfc8030#section-5.1) に定義されている push message receipt については、実装されていません (RFC 違反)。
   - push resource へのリクエストにおいて `Prefer: respond-async` ヘッダが与えられたときの `Link` レスポンスヘッダについては実装されていますが、 `Link` ヘッダが示す URL は 404 Not Found を返答します。
 - [RFC8030 Section 5.2.](https://tools.ietf.org/html/rfc8030#section-5.2) `TTL` ヘッダおよび [Section 5.3.](https://tools.ietf.org/html/rfc8030#section-5.3) `Urgency` ヘッダに関しては、受け付けますが意味を持ちません。
+  - user agent (仮想選手) へは即座に送信され、user agent は即座に push message に対応した動作を取ります。
+  - user agent は通知を順次処理します。同時に複数の通知に対する行動は取りません。
+- 一部ライブラリにおける [RFC8291 Section 3.1.](https://tools.ietf.org/html/rfc8291#section-3.1) 実装ミスを救済するため、1 度目の復号エラーについて、誤った ECDH shared secret の導出手順によりリトライを試みるようになっています。
+  - 具体的には、 Go 実装は https://github.com/SherClockHolmes/webpush-go を利用していますが、ECDH shared secret について、[SEC1] Section 6.1.3., 2.3.5., 2.3.7. に従って実装すると常に 32 バイトになるところ、32 バイト以下になるケースが存在するためです。
+  - 本リトライで発生したエラーについては破棄され、エラーメッセージには 1 回目 (リトライ目) のエラーが表示されます。
 
-  - user agent へは即座に送信され、user agent は即座に push message に対応した動作を取ります。
+[Push API]: https://www.w3.org/TR/push-api/
+[RFC8030]: https://tools.ietf.org/html/rfc8030
+[RFC8188]: https://tools.ietf.org/html/rfc8188
+[RFC8291]: https://tools.ietf.org/html/rfc8291
+[RFC8292]: https://tools.ietf.org/html/rfc8292
+[SEC1]: https://www.secg.org/sec1-v2.pdf
 
 ---
 

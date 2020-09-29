@@ -7,7 +7,7 @@ require (
 	github.com/golang/protobuf v1.4.2
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/golang-lru v0.5.4
-	github.com/isucon/isucandar v0.0.0-20200926185116-7df52f5ea47a
+	github.com/isucon/isucandar v0.0.0-20200929092117-706389954e6f
 	github.com/isucon/isucon10-portal v0.0.0-20200917214541-7e143562573b
 	github.com/kr/pretty v0.1.0 // indirect
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a

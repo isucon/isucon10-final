@@ -13,7 +13,7 @@ type BenchmarkResult struct {
 	ScoreRaw       int64
 	ScoreDeduction int64
 	Passed         bool
-	ReasonHash     string
+	Reason         string
 
 	mu              sync.RWMutex
 	sentFirstResult uint32

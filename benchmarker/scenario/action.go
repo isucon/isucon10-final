@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/isucon/isucandar/agent"
@@ -102,15 +103,15 @@ func GetCurrentSession(ctx context.Context, member *model.Contestant) (*common.G
 	return res, err
 }
 
-func SignupAction(ctx context.Context, c *model.Contestant) (*contestant.SignupResponse, error) {
+func SignupAction(ctx context.Context, c *model.Contestant) (*contestant.SignupResponse, *http.Response, error) {
 	req := &contestant.SignupRequest{
 		ContestantId: c.ID,
 		Password:     c.Password,
 	}
 	res := &contestant.SignupResponse{}
 
-	_, err := ProtobufRequest(ctx, c.Agent, http.MethodPost, "/api/signup", req, res, []int{200, 400})
-	return res, err
+	hres, err := ProtobufRequest(ctx, c.Agent, http.MethodPost, "/api/signup", req, res, []int{200, 400})
+	return res, hres, err
 }
 
 func LoginAction(ctx context.Context, c *model.Contestant) (*contestant.LoginResponse, error) {
@@ -124,7 +125,7 @@ func LoginAction(ctx context.Context, c *model.Contestant) (*contestant.LoginRes
 	return res, err
 }
 
-func CreateTeamAction(ctx context.Context, team *model.Team, c *model.Contestant) (*registration.CreateTeamResponse, error) {
+func CreateTeamAction(ctx context.Context, team *model.Team, c *model.Contestant) (*registration.CreateTeamResponse, *http.Response, error) {
 	req := &registration.CreateTeamRequest{
 		TeamName:     team.TeamName,
 		EmailAddress: team.EmailAddress,
@@ -133,9 +134,9 @@ func CreateTeamAction(ctx context.Context, team *model.Team, c *model.Contestant
 	}
 	res := &registration.CreateTeamResponse{}
 
-	_, err := ProtobufRequest(ctx, c.Agent, http.MethodPost, "/api/registration/team", req, res, []int{200, 403, 401})
+	hres, err := ProtobufRequest(ctx, c.Agent, http.MethodPost, "/api/registration/team", req, res, []int{200, 403, 401})
 
-	return res, err
+	return res, hres, err
 }
 
 func GetRegistrationSession(ctx context.Context, c *model.Contestant) (*registration.GetRegistrationSessionResponse, error) {
@@ -154,7 +155,7 @@ func JoinTeamAction(ctx context.Context, team *model.Team, c *model.Contestant, 
 	}
 	res := &registration.JoinTeamResponse{}
 
-	_, err := ProtobufRequest(ctx, c.Agent, http.MethodPost, "/api/registration/contestant", req, res, []int{200, 403, 401})
+	_, err := ProtobufRequest(ctx, c.Agent, http.MethodPost, "/api/registration/contestant", req, res, []int{200, 400, 403, 401})
 	return res, err
 }
 
@@ -169,10 +170,12 @@ func EnqueueBenchmarkJobAction(ctx context.Context, team *model.Team) (*contesta
 	return res, err
 }
 
-func GetDashboardAction(ctx context.Context, team *model.Team, member *model.Contestant) (*http.Response, *contestant.DashboardResponse, error) {
+func GetDashboardAction(parent context.Context, team *model.Team, member *model.Contestant) (*http.Response, *contestant.DashboardResponse, error) {
 	req := &contestant.DashboardRequest{}
 	res := &contestant.DashboardResponse{}
 
+	ctx, cancel := context.WithTimeout(parent, 2*time.Second)
+	defer cancel()
 	hres, err := ProtobufRequest(ctx, member.Agent, http.MethodGet, "/api/contestant/dashboard", req, res, []int{200, 304, 401, 403})
 	return hres, res, err
 }
@@ -237,27 +240,34 @@ func AdminPostClarificationAction(ctx context.Context, member *model.Contestant,
 	return res, err
 }
 
-func AudienceGetDashboardAction(ctx context.Context, agent *agent.Agent) (*http.Response, *audience.DashboardResponse, error) {
+func AudienceGetDashboardAction(parent context.Context, agent *agent.Agent) (*http.Response, *audience.DashboardResponse, error) {
 	req := &audience.DashboardRequest{}
 	res := &audience.DashboardResponse{}
 
+	ctx, cancel := context.WithTimeout(parent, 2*time.Second)
+	defer cancel()
 	hres, err := ProtobufRequest(ctx, agent, http.MethodGet, "/api/audience/dashboard", req, res, []int{200, 304})
 	return hres, res, err
 }
 
-func SubscribeNotification(ctx context.Context, member *model.Contestant, pushSubscription *pushserver.Subscription) (*contestant.SubscribeNotificationResponse, error) {
+func SubscribeNotification(ctx context.Context, member *model.Contestant, pushSubscription *pushserver.Subscription) (*contestant.SubscribeNotificationResponse, *http.Response, error) {
 	req := &contestant.SubscribeNotificationRequest{
 		Endpoint: pushSubscription.GetURL(),
 		P256Dh:   pushSubscription.GetP256DH(),
 		Auth:     pushSubscription.GetAuth(),
 	}
 	res := &contestant.SubscribeNotificationResponse{}
-	_, err := ProtobufRequest(ctx, member.Agent, http.MethodPost, "/api/contestant/push_subscriptions", req, res, []int{200, 401, 403, 503})
-	return res, err
+	hres, err := ProtobufRequest(ctx, member.Agent, http.MethodPost, "/api/contestant/push_subscriptions", req, res, []int{200, 401, 403, 503})
+	return res, hres, err
 }
 
 func GetNotifications(ctx context.Context, member *model.Contestant) (*contestant.ListNotificationsResponse, error) {
 	res := &contestant.ListNotificationsResponse{}
-	_, err := ProtobufRequest(ctx, member.Agent, http.MethodGet, fmt.Sprintf("/api/contestant/notifications?after=%d", member.LatestNotificationID()), nil, res, []int{200, 304, 401, 403})
+	reqPath := "/api/contestant/notifications"
+	latestID := member.LatestNotificationID()
+	if latestID > 0 {
+		reqPath = fmt.Sprintf("/api/contestant/notifications?after=%d", latestID)
+	}
+	_, err := ProtobufRequest(ctx, member.Agent, http.MethodGet, reqPath, nil, res, []int{200, 304, 401, 403})
 	return res, err
 }

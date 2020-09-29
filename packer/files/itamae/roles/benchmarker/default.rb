@@ -10,4 +10,8 @@ if node[:benchmarker][:enable]
   service 'isuxportal-supervisor.service' do
     action :enable
   end
+else
+  service 'isuxportal-supervisor.service' do
+    action :disable
+  end
 end

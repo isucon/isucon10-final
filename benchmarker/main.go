@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"flag"
 	"fmt"
 	"net/http"
@@ -35,6 +37,7 @@ var (
 	// 閾値を超えたら N 倍して / 10
 	BONUS = [][]int64{
 		[]int64{300, 20},
+		[]int64{240, 18},
 		[]int64{180, 16},
 		[]int64{120, 14},
 		[]int64{60, 12},
@@ -51,6 +54,7 @@ var (
 )
 
 var (
+	COMMIT             string
 	targetAddress      string
 	profileFile        string
 	hostAdvertise      string
@@ -59,13 +63,22 @@ var (
 	tlsKeyPath         string
 	useTLS             bool
 	exitStatusOnFail   bool
+	noLoad             bool
+	noClar             bool
 
 	reporter benchrun.Reporter
 )
 
 func init() {
-	// リクエストは基本的に 5 秒
-	agent.DefaultRequestTimeout = 2 * time.Second
+	certs, err := x509.SystemCertPool()
+	if err != nil {
+		panic(err)
+	}
+
+	agent.DefaultTLSConfig.ClientCAs = certs
+	agent.DefaultTLSConfig.ClientAuth = tls.RequireAndVerifyClientCert
+	agent.DefaultTLSConfig.MinVersion = tls.VersionTLS12
+	agent.DefaultTLSConfig.InsecureSkipVerify = false
 
 	flag.StringVar(&targetAddress, "target", benchrun.GetTargetAddress(), "ex: localhost:9292")
 	flag.StringVar(&profileFile, "profile", "", "ex: cpu.out")
@@ -75,11 +88,23 @@ func init() {
 	flag.StringVar(&tlsKeyPath, "tls-key", "../secrets/key.pem", "path to private key of TLS certificate for a push service")
 	flag.BoolVar(&useTLS, "tls", false, "server is a tls (HTTPS & gRPC over h2)")
 	flag.BoolVar(&exitStatusOnFail, "exit-status", false, "set exit status non-zero when a benchmark result is failing")
+	flag.BoolVar(&noLoad, "no-load", false, "exit on finished prepare")
+	flag.BoolVar(&noClar, "no-clar", false, "off sending clar")
+
+	timeoutDuration := ""
+	flag.StringVar(&timeoutDuration, "timeout", "10s", "request timeout duration")
 
 	flag.Parse()
+
+	timeout, err := time.ParseDuration(timeoutDuration)
+	if err != nil {
+		panic(err)
+	}
+	agent.DefaultRequestTimeout = timeout
 }
 
 func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish bool) bool {
+	logger := scenario.ContestantLogger
 	passed := true
 	reason := ""
 	errors := result.Errors.All()
@@ -167,6 +192,7 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	scoreTags := strings.Join(tags, "\n")
 
 	if finish {
+		logger.Printf("===> SCORE")
 		fmt.Printf("Count: \n%s\n", scoreTags)
 		fmt.Printf("(%d * %.1f) + %d - %d(err: %d, timeout: %d)\n", contestantScore, float64(bonusMag)/10, audienceScore, scoreDeduction, deduction, timeoutCount)
 		fmt.Printf("Pass: %v / score: %d (%d - %d)\n", passed, scoreTotal, scoreRaw, scoreDeduction)
@@ -199,6 +225,8 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 }
 
 func main() {
+	scenario.AdminLogger.Printf("ISUCON10 benchmarker %s", COMMIT)
+
 	if profileFile != "" {
 		fs, err := os.Create(profileFile)
 		if err != nil {
@@ -219,7 +247,12 @@ func main() {
 		pushServiceOrigin = fmt.Sprintf("https://%s:%d", hostAdvertise, pushServerPort)
 	}
 	pushService := pushserver.NewService(pushServiceOrigin, 1000)
-	go http.ListenAndServeTLS(fmt.Sprintf("0.0.0.0:%d", pushServerPort), tlsCertificatePath, tlsKeyPath, pushService.HTTP())
+	go (func() {
+		err := http.ListenAndServeTLS(fmt.Sprintf("0.0.0.0:%d", pushServerPort), tlsCertificatePath, tlsKeyPath, pushService.HTTP())
+		if err != nil {
+			panic(err)
+		}
+	})()
 
 	s, err := scenario.NewScenario()
 	scheme := "http"
@@ -229,8 +262,10 @@ func main() {
 	s.BaseURL = fmt.Sprintf("%s://%s/", scheme, targetAddress)
 	s.UseTLS = useTLS
 	s.PushService = pushService
+	s.NoLoad = noLoad
+	s.NoClar = noClar
 
-	b, err := isucandar.NewBenchmark(isucandar.WithPrepareTimeout(20*time.Second), isucandar.WithLoadTimeout(65*time.Second))
+	b, err := isucandar.NewBenchmark(isucandar.WithLoadTimeout(65 * time.Second))
 	if err != nil {
 		panic(err)
 	}
@@ -249,14 +284,18 @@ func main() {
 			step.Cancel()
 		}
 
-		fmt.Printf("%v\n", err)
+		scenario.ContestantLogger.Printf("ERR: %v", err)
 	})
 
 	b.AddScenario(s)
 
 	wg := sync.WaitGroup{}
-	wg.Add(1)
 	b.Load(func(ctx context.Context, step *isucandar.BenchmarkStep) error {
+		if s.NoLoad {
+			return nil
+		}
+
+		wg.Add(1)
 		defer wg.Done()
 
 		for {

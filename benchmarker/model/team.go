@@ -7,10 +7,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/isucon/isucandar/pubsub"
-
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 	"github.com/isucon/isucon10-final/benchmarker/random"
+)
+
+var (
+	scoreCounter int64 = 1
 )
 
 type Team struct {
@@ -25,13 +27,12 @@ type Team struct {
 	Operator  *Contestant
 
 	ScoreGenerator   *random.ScoreGenerator
-	scoreCounter     int64
 	benchmarkResults []*BenchmarkResult
 	EnqueueLock      chan struct{}
+	NonClarification bool
 
 	cmu            sync.RWMutex
 	clarifications []*Clarification
-	cPubSub        *pubsub.PubSub
 }
 
 func NewTeam() (*Team, error) {
@@ -71,13 +72,12 @@ func NewTeam() (*Team, error) {
 		Operator:     operator,
 
 		ScoreGenerator:   random.NewScoreGenerator(),
-		scoreCounter:     0,
 		benchmarkResults: []*BenchmarkResult{},
 		EnqueueLock:      make(chan struct{}, 1),
+		NonClarification: false,
 
 		cmu:            sync.RWMutex{},
 		clarifications: []*Clarification{},
-		cPubSub:        pubsub.NewPubSub(),
 	}, nil
 }
 
@@ -90,8 +90,8 @@ func (t *Team) TargetHost() string {
 }
 
 func (t *Team) newResult(id int64) *BenchmarkResult {
-	atomic.AddInt64(&t.scoreCounter, 1)
-	score := t.ScoreGenerator.Generate(atomic.LoadInt64(&t.scoreCounter))
+	count := atomic.AddInt64(&scoreCounter, 1)
+	score := t.ScoreGenerator.Generate(count)
 	passed := !(score.FastFail || score.SlowFail)
 
 	return &BenchmarkResult{
@@ -100,6 +100,7 @@ func (t *Team) newResult(id int64) *BenchmarkResult {
 		Score:          score.Int(),
 		ScoreRaw:       score.BaseInt(),
 		ScoreDeduction: score.DeductionInt(),
+		Reason:         random.Reason(passed),
 		markedAt:       time.Unix(0, 0).UTC(),
 	}
 }
@@ -214,8 +215,6 @@ func (t *Team) AddClar(clar *Clarification) {
 	defer t.cmu.Unlock()
 
 	t.clarifications = append(t.clarifications, clar)
-
-	t.cPubSub.Publish(nil)
 }
 
 func (t *Team) Clarifications() []*Clarification {
@@ -244,14 +243,12 @@ func (t *Team) WaitAllClarResolve(ctx context.Context) <-chan struct{} {
 	ch := make(chan struct{})
 
 	if t.HasUnresolvedClar() {
-		ctx, cancel := context.WithCancel(ctx)
-
-		t.cPubSub.Subscribe(ctx, func(_ interface{}) {
-			if !t.HasUnresolvedClar() {
-				cancel()
-				close(ch)
+		go func() {
+			for t.HasUnresolvedClar() {
+				<-time.After(1 * time.Millisecond)
 			}
-		})
+			close(ch)
+		}()
 	} else {
 		close(ch)
 	}

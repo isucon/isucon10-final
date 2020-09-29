@@ -8,3 +8,8 @@ execute 'cd ~isucon/webapp/frontend && rm -rf public; NODE_ENV=production /home/
   user 'isucon'
   not_if 'test -e ~isucon/webapp/frontend/public'
 end
+
+execute 'cd ~isucon/webapp/frontend && cp x41.ico public/favicon.ico' do
+  user 'isucon'
+  not_if 'test -e ~isucon/webapp/frontend/public/favicon.ico'
+end

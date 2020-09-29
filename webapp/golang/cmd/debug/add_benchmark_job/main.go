@@ -66,8 +66,8 @@ func run() error {
 	res, err := db.Exec(
 		"INSERT INTO `benchmark_jobs` (`team_id`, `status`, `target_hostname`, `updated_at`, `created_at`) VALUES (?, ?, ?, NOW(6), NOW(6))",
 		flags.TeamID,
-		flags.TargetHost,
 		flags.Status,
+		flags.TargetHost,
 	)
 	if err != nil {
 		return fmt.Errorf("insert benchmark job: %w", err)
