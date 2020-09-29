@@ -63,6 +63,7 @@ var (
 	tlsKeyPath         string
 	useTLS             bool
 	exitStatusOnFail   bool
+	noLoad             bool
 
 	reporter benchrun.Reporter
 )
@@ -86,6 +87,7 @@ func init() {
 	flag.StringVar(&tlsKeyPath, "tls-key", "../secrets/key.pem", "path to private key of TLS certificate for a push service")
 	flag.BoolVar(&useTLS, "tls", false, "server is a tls (HTTPS & gRPC over h2)")
 	flag.BoolVar(&exitStatusOnFail, "exit-status", false, "set exit status non-zero when a benchmark result is failing")
+	flag.BoolVar(&noLoad, "no-load", false, "exit on finished prepare")
 
 	timeoutDuration := ""
 	flag.StringVar(&timeoutDuration, "timeout", "10s", "request timeout duration")
@@ -189,7 +191,7 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 
 	if finish {
 		logger.Printf("===> SCORE")
-		fmt.Printf("Count: \n%s\n", scoreTags)
+		fmt.Printf("Count: \n%s", scoreTags)
 		fmt.Printf("(%d * %.1f) + %d - %d(err: %d, timeout: %d)\n", contestantScore, float64(bonusMag)/10, audienceScore, scoreDeduction, deduction, timeoutCount)
 		fmt.Printf("Pass: %v / score: %d (%d - %d)\n", passed, scoreTotal, scoreRaw, scoreDeduction)
 		if !passed {
@@ -258,8 +260,9 @@ func main() {
 	s.BaseURL = fmt.Sprintf("%s://%s/", scheme, targetAddress)
 	s.UseTLS = useTLS
 	s.PushService = pushService
+	s.NoLoad = noLoad
 
-	b, err := isucandar.NewBenchmark(isucandar.WithPrepareTimeout(20*time.Second), isucandar.WithLoadTimeout(65*time.Second))
+	b, err := isucandar.NewBenchmark(isucandar.WithLoadTimeout(65 * time.Second))
 	if err != nil {
 		panic(err)
 	}
@@ -285,6 +288,10 @@ func main() {
 
 	wg := sync.WaitGroup{}
 	b.Load(func(ctx context.Context, step *isucandar.BenchmarkStep) error {
+		if s.NoLoad {
+			return nil
+		}
+
 		wg.Add(1)
 		defer wg.Done()
 

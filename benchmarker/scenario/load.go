@@ -23,6 +23,10 @@ import (
 )
 
 func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) error {
+	if s.NoLoad {
+		return nil
+	}
+
 	ContestantLogger.Printf("===> LOAD")
 	wg := sync.WaitGroup{}
 
@@ -103,7 +107,7 @@ func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) erro
 
 // 競技者用ベンチマーカーの起動。1チームにつき1ベンチマーカー起動する。
 func (s *Scenario) loadBenchmarker(ctx context.Context, step *isucandar.BenchmarkStep) {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(-1*time.Second))
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
 	defer cancel()
 
 	benchmarkers := parallel.NewParallel(ctx, -1)
@@ -186,29 +190,25 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 		if len(errs) > 0 {
 			return
 		}
-		// TODO: Check browser access
 
-		if ctx.Err() != nil {
-			return
-		}
-
-		if ctx.Err() != nil {
-			return
-		}
-
-		_, err = SignupAction(ctx, lead)
+		sres, _, err := SignupAction(ctx, lead)
 		if err != nil {
 			step.AddError(err)
 			return
 		}
-		// TODO: Check signup
 
-		createTeam, err := CreateTeamAction(ctx, team, lead)
+		if sres == nil {
+			step.AddError(errorInvalidResponse("登録処理中にエラーが発生しました"))
+			return
+		}
+
+		createTeam, chres, err := CreateTeamAction(ctx, team, lead)
+		if chres.StatusCode == 403 {
+			atomic.StoreUint32(&stopSignup, 1)
+			return
+		}
+
 		if err != nil {
-			if failure.IsCode(err, ErrX403) {
-				atomic.StoreUint32(&stopSignup, 1)
-				return
-			}
 			step.AddError(err)
 			return
 		}
@@ -247,24 +247,28 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 					return
 				}
 
-				if ctx.Err() != nil {
-					return
-				}
-
-				if ctx.Err() != nil {
-					return
-				}
-
-				_, err = SignupAction(ctx, member)
+				_, sres, err := SignupAction(ctx, member)
 				if err != nil {
 					step.AddError(err)
 					return
 				}
-				// TODO: Check signup
 
-				_, _, _, err = BrowserAccess(ctx, member, memberInviteURL)
+				if err := verifyResponseCode(sres, []int{200}); err != nil {
+					step.AddError(err)
+					return
+				}
+
+				res, resources, _, err = BrowserAccess(ctx, member, memberInviteURL)
 				if err != nil {
 					step.AddError(err)
+					return
+				}
+
+				errs = verifyResources("audience", res, resources)
+				for _, err := range errs {
+					step.AddError(err)
+				}
+				if len(errs) > 0 {
 					return
 				}
 
@@ -459,7 +463,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 // 競技者による Clar の送信。既に送信していて未回答の Clar がある場合は追加で送信は行わない。
 // Clar には自動更新がないのでこちらもブラウザリロード
 func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(-1*time.Second))
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
 	defer cancel()
 
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
@@ -498,6 +502,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 
 				clar := model.NewClarification(team)
 				team.AddClar(clar)
+				s.Contest.AddClar(clar)
 
 				res, err := PostClarificationAction(ctx, leader, clar)
 				if err != nil {
@@ -506,7 +511,6 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				}
 
 				clar.SetID(res.GetClarification().GetId())
-				s.Contest.AddClar(clar)
 				step.AddScore("post-clarification")
 
 				latestClarPostedAt = time.Now()
@@ -575,8 +579,9 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 			wg := sync.WaitGroup{}
 			for _, clar := range res.GetClarifications() {
 				var cClar *model.Clarification = nil
+				cClars := s.Contest.Clarifications()
 				team := s.Contest.GetTeam(clar.GetTeamId())
-				for _, tClar := range team.Clarifications() {
+				for _, tClar := range cClars {
 					if tClar.ID() == clar.GetId() {
 						cClar = tClar
 						break
@@ -584,6 +589,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 				}
 
 				if cClar == nil {
+					AdminLogger.Printf("Clarification not found: ID: %d / Team: %d", clar.GetId(), clar.GetTeamId())
 					step.AddError(errorInvalidResponse("存在しないはずの Clarification です"))
 					continue
 				}
@@ -591,6 +597,10 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 				// TODO: 検証をしていない
 				if clar.GetAnswered() {
 					continue
+				}
+
+				if !AssertEqual("Clar Team ID", team.ID, clar.GetTeamId()) {
+					step.AddError(errorInvalidResponse("Clarification のチーム ID が一致しません"))
 				}
 
 				wg.Add(1)
@@ -604,12 +614,12 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 					}
 					resClar := gRes.GetClarification()
 
-					if resClar.GetTeamId() != clar.TeamID {
+					if !AssertEqual("Clar Team ID", clar.TeamID, resClar.GetTeamId()) {
 						step.AddError(errorInvalidResponse("Clarification のチーム ID が一致しません"))
 						return
 					}
 
-					if resClar.GetQuestion() != clar.Question {
+					if !AssertEqual("Clar Question", clar.Question, resClar.GetQuestion()) {
 						step.AddError(errorInvalidResponse("Clarification の質問文が一致しません"))
 						return
 					}
@@ -641,7 +651,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 
 // 外部参加者によるダッシュボードの閲覧。 pubsub で増える。
 func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(-5*time.Second))
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestFreezesAt.Add(5*time.Second))
 	defer cancel()
 
 	audience := parallel.NewParallel(ctx, -1)

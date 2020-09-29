@@ -15,6 +15,8 @@ import (
 )
 
 var (
+	ErrX400 failure.StringCode = "XSUPORTAL[400]"
+	ErrX401 failure.StringCode = "XSUPORTAL[401]"
 	ErrX403 failure.StringCode = "XSUPORTAL[403]"
 
 	ErrX5XX     failure.StringCode = "http-server-error"

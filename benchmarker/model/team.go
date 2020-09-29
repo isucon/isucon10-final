@@ -11,6 +11,10 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/random"
 )
 
+var (
+	scoreCounter int64 = 1
+)
+
 type Team struct {
 	mu           sync.RWMutex
 	ID           int64
@@ -23,7 +27,6 @@ type Team struct {
 	Operator  *Contestant
 
 	ScoreGenerator   *random.ScoreGenerator
-	scoreCounter     int64
 	benchmarkResults []*BenchmarkResult
 	EnqueueLock      chan struct{}
 	NonClarification bool
@@ -69,7 +72,6 @@ func NewTeam() (*Team, error) {
 		Operator:     operator,
 
 		ScoreGenerator:   random.NewScoreGenerator(),
-		scoreCounter:     0,
 		benchmarkResults: []*BenchmarkResult{},
 		EnqueueLock:      make(chan struct{}, 1),
 		NonClarification: false,
@@ -88,8 +90,8 @@ func (t *Team) TargetHost() string {
 }
 
 func (t *Team) newResult(id int64) *BenchmarkResult {
-	atomic.AddInt64(&t.scoreCounter, 1)
-	score := t.ScoreGenerator.Generate(atomic.LoadInt64(&t.scoreCounter))
+	count := atomic.AddInt64(&scoreCounter, 1)
+	score := t.ScoreGenerator.Generate(count)
 	passed := !(score.FastFail || score.SlowFail)
 
 	return &BenchmarkResult{
@@ -98,6 +100,7 @@ func (t *Team) newResult(id int64) *BenchmarkResult {
 		Score:          score.Int(),
 		ScoreRaw:       score.BaseInt(),
 		ScoreDeduction: score.DeductionInt(),
+		Reason:         random.Reason(passed),
 		markedAt:       time.Unix(0, 0).UTC(),
 	}
 }

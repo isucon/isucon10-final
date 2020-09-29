@@ -24,6 +24,7 @@ type Scenario struct {
 	Language     string
 	Contest      *model.Contest
 	TeamCapacity int32
+	NoLoad       bool
 
 	bpubsub  *pubsub.PubSub
 	rpubsub  *pubsub.PubSub
@@ -34,6 +35,7 @@ func NewScenario() (*Scenario, error) {
 	return &Scenario{
 		mu:           sync.RWMutex{},
 		TeamCapacity: -1,
+		NoLoad:       false,
 		bpubsub:      pubsub.NewPubSub(),
 		rpubsub:      pubsub.NewPubSub(),
 		markedAt:     time.Now(),
