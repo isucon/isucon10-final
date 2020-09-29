@@ -26,6 +26,7 @@ type Team struct {
 	scoreCounter     int64
 	benchmarkResults []*BenchmarkResult
 	EnqueueLock      chan struct{}
+	NonClarification bool
 
 	cmu            sync.RWMutex
 	clarifications []*Clarification
@@ -71,6 +72,7 @@ func NewTeam() (*Team, error) {
 		scoreCounter:     0,
 		benchmarkResults: []*BenchmarkResult{},
 		EnqueueLock:      make(chan struct{}, 1),
+		NonClarification: false,
 
 		cmu:            sync.RWMutex{},
 		clarifications: []*Clarification{},

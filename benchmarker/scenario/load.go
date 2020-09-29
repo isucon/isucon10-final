@@ -3,6 +3,7 @@ package scenario
 import (
 	"context"
 	"encoding/base64"
+	"math/rand"
 	"net/url"
 	"sync"
 	"sync/atomic"
@@ -53,6 +54,17 @@ func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) erro
 
 	if len(s.Contest.Teams) == 0 {
 		return nil
+	}
+
+	nonClarTeamCount := len(s.Contest.Teams) / 4
+	for i := 0; i < nonClarTeamCount; i++ {
+		team := s.Contest.Teams[rand.Intn(len(s.Contest.Teams))]
+		if team.NonClarification {
+			i--
+			continue
+		} else {
+			team.NonClarification = true
+		}
 	}
 
 	<-time.After(s.Contest.ContestStartsAt.Sub(time.Now()))
@@ -452,6 +464,11 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
 		team := s.Contest.Teams[index]
+		// Clar をまったく送信しないチームは早期脱落
+		if team.NonClarification {
+			return
+		}
+
 		leader := team.Leader
 
 		latestClarPostedAt := time.Now()
