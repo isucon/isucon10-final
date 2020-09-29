@@ -191,7 +191,7 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 
 	if finish {
 		logger.Printf("===> SCORE")
-		fmt.Printf("Count: \n%s", scoreTags)
+		fmt.Printf("Count: \n%s\n", scoreTags)
 		fmt.Printf("(%d * %.1f) + %d - %d(err: %d, timeout: %d)\n", contestantScore, float64(bonusMag)/10, audienceScore, scoreDeduction, deduction, timeoutCount)
 		fmt.Printf("Pass: %v / score: %d (%d - %d)\n", passed, scoreTotal, scoreRaw, scoreDeduction)
 		if !passed {
