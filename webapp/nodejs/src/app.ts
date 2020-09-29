@@ -207,7 +207,7 @@ const loginRequired: (req: express.Request, res: express.Response, db: mysql.Poo
 
 async function contestStatusRestricted(res: express.Response, statuses: Array<Contest.Status>, msg: string, db: mysql.PoolConnection): Promise<boolean> {
   const currentContest = await getCurrentContestStatus(db);
-  if (statuses.includes(currentContest.contest.status)) {
+  if (!statuses.includes(currentContest.contest.status)) {
     haltPb(res, 403, msg)
     return false;
   }
@@ -540,10 +540,10 @@ app.post("/initialize", async (req, res, next) => {
       }
 
       await db.query(`INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES (?, ?, ?, ?)`, [
-        new Date(openAt.getSeconds()),
-        new Date(startsAt.getSeconds()),
-        new Date(freezeAt.getSeconds()),
-        new Date(endsAt.getSeconds()),
+        new Date(openAt.getSeconds() * 1000),
+        new Date(startsAt.getSeconds() * 1000),
+        new Date(freezeAt.getSeconds() * 1000),
+        new Date(endsAt.getSeconds() * 1000),
       ]);
     } else {
       await db.query(`
@@ -1013,13 +1013,17 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
     const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Uint8Array.from(req.body));
     const loginSuccess = loginRequired(req, res, db);
     if (!loginSuccess) {
+      await db.rollback();
       return;
     }
+    console.log(request.toObject());
 
     const passRestricted = await contestStatusRestricted(res, [Contest.Status.STARTED], "競技時間外はベンチマークを実行できません", db);
     if (!passRestricted) {
+      await db.rollback();
       return;
     }
+    console.log(passRestricted);
 
     const currentTeam = await getCurrentTeam(req, db);
     const [jobCount] = await db.query(
