@@ -10,7 +10,7 @@ import { Notifier } from "./notifier";
 import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
 import {Error as PbError} from "./proto/xsuportal/error_pb";
 import { Clarification } from "./proto/xsuportal/resources/clarification_pb";
-import { ListClarificationsResponse, GetClarificationResponse, RespondClarificationRequest, RespondClarificationResponse } from "./proto/xsuportal/services/admin/clarifications_pb";
+import { ListClarificationsResponse, GetClarificationResponse, RespondClarificationRequest, RespondClarificationResponse, CreateClarificationRequest } from "./proto/xsuportal/services/admin/clarifications_pb";
 import { Team } from "./proto/xsuportal/resources/team_pb";
 import { Contestant } from "./proto/xsuportal/resources/contestant_pb";
 import { Contest } from "./proto/xsuportal/resources/contest_pb";
@@ -167,10 +167,10 @@ const getCurrentContestStatus = async () => {
 
     return ({
       contest: {
-        registration_open_at: convertDateToTimestamp(contest.registration_open_at),
-        contest_starts_at: convertDateToTimestamp(contest.contest_starts_at),
-        contest_freezes_at: convertDateToTimestamp(contest.contest_freezes_at),
-        contest_ends_at: convertDateToTimestamp(contest.contest_ends_at),
+        registration_open_at: contest.registration_open_at,
+        contest_starts_at: contest.contest_starts_at,
+        contest_freezes_at: contest.contest_freezes_at,
+        contest_ends_at: contest.contest_ends_at,
         frozen: contest.frozen === 1,
         status: status,
       },
@@ -421,7 +421,7 @@ async function getLeaderboardResource(teamId: number = 0) {
       AND (team_id = ? OR (team_id != ? AND (? = TRUE OR finished_at < ?)))
     )
     ORDER BY finished_at
-  `, [ teamId, teamId, contestFinished, contestFreezesAt.toDate() ]);
+  `, [ teamId, teamId, contestFinished, contestFreezesAt ]);
   } catch (e) {
     await db.rollback();
   } finally {
@@ -536,7 +536,7 @@ app.post("/initialize", async (req, res, next) => {
     ]);
   } else {
     await db.query(`
-    INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES 
+    INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES
     (
       TIMESTAMPADD(SECOND, 0, NOW(6)),
       TIMESTAMPADD(SECOND, 5, NOW(6)),
@@ -1080,7 +1080,7 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
     return;
   }
 
-  const request = RespondClarificationRequest.deserializeBinary(Uint8Array.from(req.body));
+  const request = CreateClarificationRequest.deserializeBinary(Uint8Array.from(req.body));
   const currentTeam = await getCurrentTeam(req);
   const db = await getDB();
 
@@ -1094,7 +1094,7 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
 
     const [clar] = await db.query('SELECT * FROM `clarifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1')
     const response = new RespondClarificationResponse();
-    response.setClarification(clar);
+    response.setClarification(await getClarificationResource(clar, currentTeam));
     res.contentType(`application/vnd.google.protobuf`);
     res.end(Buffer.from(response.serializeBinary()));
   } catch (e) {
