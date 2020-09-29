@@ -14,12 +14,12 @@ import (
 	"time"
 
 	"github.com/isucon/isucandar"
-	"github.com/isucon/isucon10-final/benchmarker/model"
-	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
-
 	"github.com/isucon/isucandar/agent"
 	"github.com/isucon/isucandar/failure"
+	"github.com/isucon/isucon10-final/benchmarker/model"
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/admin"
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/contestant"
 )
 
 var (
@@ -69,7 +69,7 @@ func errorInvalidResponse(message string, args ...interface{}) error {
 
 func errorChecksum(base string, resource *agent.Resource, name string) error {
 	if resource == nil {
-		fmt.Printf("resource not found: %s on %s\n", name, base)
+		AdminLogger.Printf("resource not found: %s on %s\n", name, base)
 		return failure.NewError(ErrChecksum, errorInvalidResponse("チェックサムの取得に失敗しました: %s", name))
 	}
 
@@ -97,10 +97,11 @@ func errorChecksum(base string, resource *agent.Resource, name string) error {
 	path := res.Request.URL.Path
 	bytes, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		fmt.Printf("%v\n", err)
+		AdminLogger.Printf("resource checksum: %v", err)
 		return failure.NewError(ErrChecksum, errorInvalidResponse("チェックサムの取得に失敗しました: %s", path))
 	}
-	if fmt.Sprintf("%x", sha512.Sum384(bytes)) != checksums[path] {
+	resChecksum := fmt.Sprintf("%x", sha512.Sum384(bytes))
+	if !AssertEqual("Validate checksum", checksums[path], resChecksum) {
 		return failure.NewError(ErrChecksum, errorInvalidResponse("チェックサムの比較に失敗しました: %s", path))
 	}
 	return nil
@@ -198,7 +199,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 			return failure.NewError(ErrCritical, errorInvalidResponse("登録されていないチームがリーダーボード上に存在します: ID %d", team.GetId()))
 		}
 
-		if team.GetStudent().GetStatus() != cTeam.IsStudent {
+		if !AssertEqual("Leaderboard student team flag", cTeam.IsStudent, team.GetStudent().GetStatus()) {
 			return errorInvalidResponse("学生チームかどうかの判定が不正です")
 		}
 
@@ -213,9 +214,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 			now := time.Now().UTC()
 			results = cTeam.BenchmarkResults(now)
 			if len(results) < len(item.GetScores()) {
-				fmt.Printf("at %s team %d / got(%d) expect(%d)\n", now, team.GetId(), len(item.GetScores()), len(results))
-				// fmt.Printf("%v\n", cTeam.AllBenchmarkResults())
-				// os.Exit(1)
+				AdminLogger.Printf("at %s team %d / got(%d) expect(%d)\n", now, team.GetId(), len(item.GetScores()), len(results))
 				return errorInvalidResponse("グラフ上と記録されたスコアの数が一致しませんでした")
 			}
 			targetAt = now
@@ -228,8 +227,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		latestMarkedAt := targetAt
 		for idx, score := range item.GetScores() {
 			if len(results) <= idx {
-				// TODO: あとで標準エラーに
-				fmt.Printf("at %s(%s) team %d / got(%d) expect(%d): %#v\n", targetAt, score.GetMarkedAt().AsTime(), team.GetId(), idx, len(results), score)
+				AdminLogger.Printf("at %s(%s) team %d / got(%d) expect(%d): %#v\n", targetAt, score.GetMarkedAt().AsTime(), team.GetId(), idx, len(results), score)
 				return errorInvalidResponse("スコアグラフ内に存在するはずのないスコアが存在します")
 			}
 			result := results[idx]
@@ -240,7 +238,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 
 			markedAt := score.GetMarkedAt().AsTime()
 			if !result.MarkedAt().Equal(markedAt) {
-				fmt.Printf("expect: %s / got: %s;", result.MarkedAt(), markedAt)
+				AdminLogger.Printf("expect: %s / got: %s;", result.MarkedAt(), markedAt)
 				return errorInvalidResponse("スコアグラフ内のスコアの終了時刻が不正です")
 			}
 
@@ -257,8 +255,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		bs := item.GetBestScore().GetScore()
 		ebs, ebt := cTeam.BestScore(latestMarkedAt)
 		if bs != ebs && bs != cbs {
-			// TODO: あとで標準エラーに
-			fmt.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, ebt, team.GetId(), bs, ebs, cbs)
+			AdminLogger.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, ebt, team.GetId(), bs, ebs, cbs)
 			return errorInvalidResponse("ベストスコアの検証に失敗しました")
 		}
 
@@ -266,13 +263,12 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		lm := item.GetLatestScore().GetMarkedAt().AsTime()
 		els, elt := cTeam.LatestScore(latestMarkedAt)
 		if ls != els && ls != cls {
-			// TODO: あとで標準エラーに
-			fmt.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, elt, team.GetId(), ls, els, cls)
+			AdminLogger.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, elt, team.GetId(), ls, els, cls)
 			return errorInvalidResponse("最新スコアの検証に失敗しました")
 		}
 
 		if ls > prevLatestScore || (!lm.Equal(zero) && ls == prevLatestScore && prevLatestMarkedAt.After(lm)) {
-			fmt.Printf("now(%d, %s) / prev(%d, %s)", ls, lm, prevLatestScore, prevLatestMarkedAt)
+			AdminLogger.Printf("now(%d, %s) / prev(%d, %s)", ls, lm, prevLatestScore, prevLatestMarkedAt)
 			return errorInvalidResponse("チームの並び順が間違っています")
 		}
 		prevLatestScore = ls
@@ -301,7 +297,7 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 	}
 
 	if !maxMarkedAt.Equal(zero) && allowedMaxTime.Add(-cacheTime).After(maxMarkedAt) {
-		fmt.Printf("OLDER LEADERBOARD: \n  %s requested at\n  %s latest finish\n  %s allowed cache time\n  %s leadeboard max time\n  %s frozen time\n", requestedAt, sLatestMarkedAt, allowedMaxTime.Add(-cacheTime), maxMarkedAt, time.Now().UTC())
+		AdminLogger.Printf("OLDER LEADERBOARD: \n  %s requested at\n  %s latest finish\n  %s allowed cache time\n  %s leadeboard max time\n  %s frozen time\n", requestedAt, sLatestMarkedAt, allowedMaxTime.Add(-cacheTime), maxMarkedAt, time.Now().UTC())
 		return errorInvalidResponse("規定より古い内容のリーダーボードが返却されています")
 	}
 
@@ -310,4 +306,44 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 
 func (s *Scenario) handleInvalidPush(id string, err error, step *isucandar.BenchmarkStep) {
 	step.AddError(failure.NewError(ErrWebPush, fmt.Errorf("不正な Web Push メッセージの送信がありました (/push/%s): %w", id, err)))
+}
+
+func verifyGetBenchmarkJobDetail(res *contestant.GetBenchmarkJobResponse, team *model.Team, result *model.BenchmarkResult) error {
+	rjob := res.GetJob()
+	if !AssertEqual("Benchmark Job ID Check", result.ID(), rjob.GetId()) {
+		return errorInvalidResponse("不正なベンチマークジョブ ID")
+	}
+
+	if !AssertEqual("Benchmark Job Team ID Check", team.ID, rjob.GetTeamId()) {
+		return errorInvalidResponse("不正なチーム ID")
+	}
+
+	if !AssertEqual("Benchmark Job Status Check", resources.BenchmarkJob_FINISHED, rjob.GetStatus()) {
+		return errorInvalidResponse("不正な終了ステータス")
+	}
+
+	rresult := rjob.GetResult()
+	if !AssertEqual("Benchmark Job Pass Check", result.Passed, rresult.GetPassed()) {
+		return errorInvalidResponse("不正な成功フラグ")
+	}
+
+	if !AssertEqual("Benchmark Job Score Check", result.Score, rresult.GetScore()) {
+		return errorInvalidResponse("不正なスコア")
+	}
+
+	rbreakdown := rresult.GetScoreBreakdown()
+	if !AssertEqual("Benchmark Job Score Raw Check", result.ScoreRaw, rbreakdown.GetRaw()) {
+		return errorInvalidResponse("不正な基礎スコア")
+	}
+
+	if !AssertEqual("Benchmark Job Score Deduction Check", result.ScoreDeduction, rbreakdown.GetDeduction()) {
+		return errorInvalidResponse("不正な減点スコア")
+	}
+
+	mt := rjob.GetFinishedAt().AsTime()
+	if !AssertEqual("Benchmark Job Finished At Check", result.MarkedAt(), mt) {
+		return errorInvalidResponse("不正な終了時刻")
+	}
+
+	return nil
 }
