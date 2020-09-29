@@ -305,7 +305,7 @@ async function getClarificationResource(clar: any, team: any) {
   clarificationResource.setAnswer(clar.answer);
   clarificationResource.setAnswered(!!clar.answered_at);
   clarificationResource.setDisclosed(clar.disclosed);
-  clarificationResource.setCreatedAt(clar.created_at);
+  clarificationResource.setCreatedAt(clar.created_at ? convertDateToTimestamp(clar.created_at) : null);
   const t = await getTeamResource(team);
   clarificationResource.setTeam(t);
   return clarificationResource;
@@ -314,10 +314,10 @@ async function getClarificationResource(clar: any, team: any) {
 function getContestResource(contest: any) {
   const contestResource = new Contest();
   contestResource.setStatus(contest.status);
-  contestResource.setContestStartsAt(contest.contest_starts_at);
-  contestResource.setContestEndsAt(contest.contest_ends_at);
-  contestResource.setContestFreezesAt(contest.contest_freezes_at);
-  contestResource.setRegistrationOpenAt(contest.registration_open_at);
+  contestResource.setContestStartsAt(contest.contest_starts_at ? convertDateToTimestamp(contest.contest_starts_at) : null);
+  contestResource.setContestEndsAt(contest.contest_ends_at ? convertDateToTimestamp(contest.contest_ends_at) : null);
+  contestResource.setContestFreezesAt(contest.contest_freezes_at ? convertDateToTimestamp(contest.contest_freezes_at) : null);
+  contestResource.setRegistrationOpenAt(contest.registration_open_at ? convertDateToTimestamp(contest.registration_open_at) : null);
   contestResource.setFrozen(contest.frozen);
   return contestResource;
 }
@@ -432,27 +432,27 @@ async function getLeaderboardResource(teamId: number = 0) {
     teamGraphScores[result.team_id] = teamGraphScores[result.team_id] ?? [];
     const lbs = new Leaderboard.LeaderboardItem.LeaderboardScore();
     lbs.setScore(result.score);
-    lbs.setStartedAt(result.started_at);
-    lbs.setMarkedAt(result.finished_at);
+    lbs.setStartedAt(result.started_at ? convertDateToTimestamp(result.started_at) : null);
+    lbs.setMarkedAt(result.finished_at ? convertDateToTimestamp(result.finished_at) : null);
     teamGraphScores[result.team_id].push(lbs);
   }
-    
+
   const teams = []
   const generalTeams = []
   const studentTeams = []
-  
+
   for (const team of leaderboard) {
     const item = new Leaderboard.LeaderboardItem();
     item.setScoresList(teamGraphScores[team.id]);
     const bs = new Leaderboard.LeaderboardItem.LeaderboardScore();
     bs.setScore(team.best_score);
-    bs.setStartedAt(team.best_score_started_at);
-    bs.setMarkedAt(team.best_score_marked_at);
+    bs.setStartedAt(team.best_score_started_at ? convertDateToTimestamp(team.best_score_started_at) : null);
+    bs.setMarkedAt(team.best_score_marked_at ? convertDateToTimestamp(team.best_score_marked_at) : null);
     item.setBestScore(bs);
     const ls = new Leaderboard.LeaderboardItem.LeaderboardScore();
     ls.setScore(team.latest_score);
-    ls.setStartedAt(team.latest_score_started_at);
-    ls.setMarkedAt(team.latest_score_marked_at);
+    ls.setStartedAt(team.latest_score_started_at ? convertDateToTimestamp(team.latest_score_started_at) : null);
+    ls.setMarkedAt(team.latest_score_marked_at ? convertDateToTimestamp(team.latest_score_marked_at) : null);
     item.setLatestScore(ls);
     const teamResource = await getTeamResource(team, false, false, false);
     item.setTeam(teamResource);
