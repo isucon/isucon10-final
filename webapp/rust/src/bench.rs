@@ -116,7 +116,9 @@ impl BenchmarkReport for ReportService {
             while let Some(message) = stream.message().await? {
                 let job_id = message.job_id;
                 if let Some((job, notifiers)) = tokio::task::block_in_place(|| handle_report(&mut conn, &message))? {
-                    send_notifications(conn.deref_mut(), notifiers).await?;
+                    if !notifiers.is_empty() {
+                        send_notifications(conn.deref_mut(), notifiers).await?;
+                    }
                     yield ReportBenchmarkResultResponse { acked_nonce: message.nonce };
                 } else {
                     Err(TonicStatus::not_found(format!(
@@ -173,15 +175,19 @@ fn handle_report(
     } else {
         log::debug!("{}: save as running", message.job_id);
         if result.marked_at.is_none() {
-            return Err(TonicStatus::failed_precondition("marked_at is required"));
+            return Err(TonicStatus::invalid_argument("marked_at is required"));
         }
         let marked_at = crate::protobuf_timestamp_to_chrono(result.marked_at.as_ref().unwrap());
         save_as_running(&mut tx, &job, &marked_at).map_err(mysql_error_to_tonic_status)?;
     }
     tx.commit().map_err(mysql_error_to_tonic_status)?;
-    let notifiers = crate::notifier::notify_benchmark_job_finished(conn.deref_mut(), &job)
-        .map_err(mysql_error_to_tonic_status)?;
-    Ok(Some((job, notifiers)))
+    if result.finished {
+        let notifiers = crate::notifier::notify_benchmark_job_finished(conn.deref_mut(), &job)
+            .map_err(mysql_error_to_tonic_status)?;
+        Ok(Some((job, notifiers)))
+    } else {
+        Ok(Some((job, Vec::new())))
+    }
 }
 
 fn save_as_finished(

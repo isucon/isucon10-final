@@ -29,8 +29,9 @@ sudo systemd-run \
     ~isucon/benchmarker/bin/benchmarker \
     -exit-status \
     -tls \
+    -target local.t.isucon.dev:443 \
     -host-advertise localbench.t.isucon.dev \
-    -push-service-port 443 \
+    -push-service-port 11001 \
     -tls-cert /etc/ssl/private/tls-cert.pem \
     -tls-key /etc/ssl/private/tls-key.pem \
-  2>&1 | tee ~isucon/ci.log
+   > ~isucon/ci.log  2>&1

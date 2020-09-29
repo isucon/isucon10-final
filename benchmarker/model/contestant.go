@@ -2,7 +2,6 @@ package model
 
 import (
 	"sync/atomic"
-	"time"
 
 	"github.com/isucon/isucandar/agent"
 	"github.com/isucon/isucon10-final/benchmarker/random"
@@ -24,7 +23,7 @@ type Contestant struct {
 }
 
 func NewContestant() (*Contestant, error) {
-	a, err := agent.NewAgent(agent.WithTimeout(2 * time.Second))
+	a, err := agent.NewAgent()
 	if err != nil {
 		return nil, err
 	}

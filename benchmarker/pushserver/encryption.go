@@ -15,9 +15,11 @@ import (
 )
 
 type encryptionDerivedKey struct {
-	ikm   []byte
-	cek   []byte
-	nonce []byte
+	ikmInfo    []byte
+	ecdhSecret []byte
+	ikm        []byte
+	cek        []byte
+	nonce      []byte
 }
 
 // ErrInvalidData is an error returned when encountered an invalid data.
@@ -38,13 +40,44 @@ func (d *decryption) decrypt() ([]byte, error) {
 		return []byte{}, err
 	}
 
-	key, err := d.deriveKey()
+	key, err := d.deriveKey(false)
 	if err != nil {
 		return []byte{}, err
 	}
 
 	ciphertext := d.record()
 
+	plaintext, err := encryptionOpenAesgcm(key, ciphertext)
+	if err != nil {
+		retErr := fmt.Errorf(
+			"failed to decrypt (pkey=%x, keyid=%x, dh=%x, info=%x, secret=%x, ikm=%x, cek=%x, nonce=%x): %w",
+			elliptic.Marshal(elliptic.P256(), d.privateKey.publicKey.x, d.privateKey.publicKey.y),
+			d.keyID(),
+			key.ecdhSecret,
+			key.ikmInfo,
+			d.secret,
+			key.ikm,
+			key.cek,
+			key.nonce,
+			err,
+		)
+
+		// Retry with short ecdh shared secret for invalid clients
+		// https://github.com/SherClockHolmes/webpush-go/blob/af9d240f5def12dc7c23a73999092c9d937be7a5/webpush.go#L105
+		key, err := d.deriveKey(true)
+		if err != nil {
+			return []byte{}, retErr
+		}
+		plaintext, err = encryptionOpenAesgcm(key, ciphertext)
+		if err != nil {
+			return []byte{}, retErr
+		}
+	}
+
+	return trimRFC8291Padding(plaintext), nil
+}
+
+func encryptionOpenAesgcm(key *encryptionDerivedKey, ciphertext []byte) ([]byte, error) {
 	alg, err := aes.NewCipher(key.cek)
 	if err != nil {
 		return []byte{}, err
@@ -55,11 +88,7 @@ func (d *decryption) decrypt() ([]byte, error) {
 	}
 
 	plaintext, err := gcm.Open(nil, key.nonce, ciphertext, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return trimRFC8291Padding(plaintext), nil
+	return plaintext, err
 }
 
 // https://tools.ietf.org/html/rfc8188#section-2.1
@@ -70,7 +99,7 @@ func (d *decryption) assertDataLength() error {
 	}
 
 	if len(d.data) < int(21+d.idLen()) {
-		return fmt.Errorf("%w: content-coding header is too short; idlen (RFC8188 Section 2.1)", ErrInvalidData)
+		return fmt.Errorf("%w: content-coding header is too short for the given idlen (RFC8188 Section 2.1)", ErrInvalidData)
 	}
 
 	if d.recordSize() < 18 {
@@ -135,7 +164,7 @@ func (d *decryption) record() []byte {
 }
 
 // https://tools.ietf.org/html/rfc8291#section-3.1
-func (d *decryption) deriveKey() (*encryptionDerivedKey, error) {
+func (d *decryption) deriveKey(short bool) (*encryptionDerivedKey, error) {
 	// https://tools.ietf.org/html/rfc8291#section-4
 	asPublicKey, err := unmarshalEcPublicKey(d.keyID())
 	if err != nil {
@@ -143,13 +172,13 @@ func (d *decryption) deriveKey() (*encryptionDerivedKey, error) {
 	}
 
 	// https://tools.ietf.org/html/rfc8291#section-3.1
-	ecdhSecret := d.privateKey.ecdhSecret(asPublicKey)
+	ecdhSecret := d.privateKey.ecdhSecret(asPublicKey, short)
 
 	// https://tools.ietf.org/html/rfc8291#section-3.3
 	infoBuf := bytes.NewBuffer([]byte("WebPush: info\x00"))
 	infoBuf.Write(elliptic.Marshal(elliptic.P256(), d.privateKey.publicKey.x, d.privateKey.publicKey.y))
 	infoBuf.Write(d.keyID()) // infoBuf.Write(elliptic.Marshal(elliptic.P256(), asPublicKey.x, asPublicKey.y))
-	ikm, err := getKeyFromHKDF(hkdf.New(sha256.New, ecdhSecret.Bytes(), d.secret, infoBuf.Bytes()), 32)
+	ikm, err := getKeyFromHKDF(hkdf.New(sha256.New, ecdhSecret, d.secret, infoBuf.Bytes()), 32)
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +195,7 @@ func (d *decryption) deriveKey() (*encryptionDerivedKey, error) {
 		return nil, err
 	}
 
-	return &encryptionDerivedKey{ikm, cek, nonce}, nil
+	return &encryptionDerivedKey{ikmInfo: infoBuf.Bytes(), ecdhSecret: ecdhSecret, ikm: ikm, cek: cek, nonce: nonce}, nil
 }
 
 func getKeyFromHKDF(reader io.Reader, l int) ([]byte, error) {

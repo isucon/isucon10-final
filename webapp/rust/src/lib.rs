@@ -185,6 +185,46 @@ impl FromRow for Contestant {
 }
 
 #[derive(Debug)]
+pub struct Notification {
+    pub id: i64,
+    pub contestant_id: String,
+    pub read: bool,
+    pub encoded_message: String,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+}
+impl FromRow for Notification {
+    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
+        Ok(Self {
+            id: row
+                .take_opt("id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            contestant_id: row
+                .take_opt("contestant_id")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            read: row
+                .take_opt("read")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            encoded_message: row
+                .take_opt("encoded_message")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            created_at: row
+                .take_opt("created_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+            updated_at: row
+                .take_opt("updated_at")
+                .ok_or_else(|| mysql::FromRowError(row.clone()))?
+                .map_err(|_| mysql::FromRowError(row.clone()))?,
+        })
+    }
+}
+
+#[derive(Debug)]
 pub struct Clarification {
     pub id: i64,
     pub team_id: i64,

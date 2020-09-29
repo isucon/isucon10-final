@@ -7,5 +7,6 @@ import (
 )
 
 func (s *Scenario) Validation(ctx context.Context, step *isucandar.BenchmarkStep) error {
+	ContestantLogger.Printf("===> VALIDATION")
 	return nil
 }

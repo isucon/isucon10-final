@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/isucon/isucandar/agent"
@@ -169,10 +170,12 @@ func EnqueueBenchmarkJobAction(ctx context.Context, team *model.Team) (*contesta
 	return res, err
 }
 
-func GetDashboardAction(ctx context.Context, team *model.Team, member *model.Contestant) (*http.Response, *contestant.DashboardResponse, error) {
+func GetDashboardAction(parent context.Context, team *model.Team, member *model.Contestant) (*http.Response, *contestant.DashboardResponse, error) {
 	req := &contestant.DashboardRequest{}
 	res := &contestant.DashboardResponse{}
 
+	ctx, cancel := context.WithTimeout(parent, 2*time.Second)
+	defer cancel()
 	hres, err := ProtobufRequest(ctx, member.Agent, http.MethodGet, "/api/contestant/dashboard", req, res, []int{200, 304, 401, 403})
 	return hres, res, err
 }
@@ -237,23 +240,25 @@ func AdminPostClarificationAction(ctx context.Context, member *model.Contestant,
 	return res, err
 }
 
-func AudienceGetDashboardAction(ctx context.Context, agent *agent.Agent) (*http.Response, *audience.DashboardResponse, error) {
+func AudienceGetDashboardAction(parent context.Context, agent *agent.Agent) (*http.Response, *audience.DashboardResponse, error) {
 	req := &audience.DashboardRequest{}
 	res := &audience.DashboardResponse{}
 
+	ctx, cancel := context.WithTimeout(parent, 2*time.Second)
+	defer cancel()
 	hres, err := ProtobufRequest(ctx, agent, http.MethodGet, "/api/audience/dashboard", req, res, []int{200, 304})
 	return hres, res, err
 }
 
-func SubscribeNotification(ctx context.Context, member *model.Contestant, pushSubscription *pushserver.Subscription) (*contestant.SubscribeNotificationResponse, error) {
+func SubscribeNotification(ctx context.Context, member *model.Contestant, pushSubscription *pushserver.Subscription) (*contestant.SubscribeNotificationResponse, *http.Response, error) {
 	req := &contestant.SubscribeNotificationRequest{
 		Endpoint: pushSubscription.GetURL(),
 		P256Dh:   pushSubscription.GetP256DH(),
 		Auth:     pushSubscription.GetAuth(),
 	}
 	res := &contestant.SubscribeNotificationResponse{}
-	_, err := ProtobufRequest(ctx, member.Agent, http.MethodPost, "/api/contestant/push_subscriptions", req, res, []int{200, 401, 403, 503})
-	return res, err
+	hres, err := ProtobufRequest(ctx, member.Agent, http.MethodPost, "/api/contestant/push_subscriptions", req, res, []int{200, 401, 403, 503})
+	return res, hres, err
 }
 
 func GetNotifications(ctx context.Context, member *model.Contestant) (*contestant.ListNotificationsResponse, error) {

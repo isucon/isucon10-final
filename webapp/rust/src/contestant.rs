@@ -9,7 +9,6 @@ use crate::proto::services::contestant::{
 use actix_protobuf::{ProtoBuf, ProtoBufResponseBuilder};
 use actix_session::Session;
 use actix_web::{http::StatusCode, web, Error as AWError, HttpResponse};
-use chrono::NaiveDateTime;
 use mysql::prelude::*;
 use std::ops::DerefMut;
 
@@ -329,45 +328,6 @@ pub struct ListNotificationsQuery {
     after: Option<String>,
 }
 
-pub struct Notification {
-    pub id: i64,
-    pub contestant_id: String,
-    pub read: bool,
-    pub encoded_message: String,
-    pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime,
-}
-impl FromRow for Notification {
-    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
-        Ok(Self {
-            id: row
-                .take_opt("id")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            contestant_id: row
-                .take_opt("contestant_id")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            read: row
-                .take_opt("read")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            encoded_message: row
-                .take_opt("encoded_message")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            created_at: row
-                .take_opt("created_at")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            updated_at: row
-                .take_opt("updated_at")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-        })
-    }
-}
-
 pub async fn list_notifications(
     session: Session,
     db: web::Data<crate::Pool>,
@@ -382,7 +342,7 @@ pub async fn list_notifications(
             crate::require_current_contestant_and_team(conn.deref_mut(), &contestant_id, false)?;
 
         let mut tx = conn.start_transaction(mysql::TxOpts::default())?;
-        let notifications: Vec<Notification> = if let Some(after) = after {
+        let notifications: Vec<crate::Notification> = if let Some(after) = after {
             tx.exec("SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `id` > ? ORDER BY `id`", (&current_contestant.id, after))?
         } else {
             tx.exec("SELECT * FROM `notifications` WHERE `contestant_id` = ? AND `read` = FALSE ORDER BY `id`", (&current_contestant.id,))?
