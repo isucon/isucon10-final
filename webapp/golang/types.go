@@ -92,3 +92,28 @@ type PushSubscription struct {
 	CreatedAt    time.Time `db:"created_at"`
 	UpdatedAt    time.Time `db:"updated_at"`
 }
+
+type LeaderBoardTeam struct {
+	ID                   int64          `db:"id"`
+	Name                 string         `db:"name"`
+	LeaderID             sql.NullString `db:"leader_id"`
+	Withdrawn            bool           `db:"withdrawn"`
+	Student              sql.NullBool   `db:"student"`
+	BestScore            sql.NullInt64  `db:"best_score"`
+	BestScoreStartedAt   sql.NullTime   `db:"best_score_started_at"`
+	BestScoreMarkedAt    sql.NullTime   `db:"best_score_marked_at"`
+	LatestScore          sql.NullInt64  `db:"latest_score"`
+	LatestScoreStartedAt sql.NullTime   `db:"latest_score_started_at"`
+	LatestScoreMarkedAt  sql.NullTime   `db:"latest_score_marked_at"`
+	FinishCount          sql.NullInt64  `db:"finish_count"`
+}
+
+func (t *LeaderBoardTeam) Team() *Team {
+	return &Team{
+		ID:        t.ID,
+		Name:      t.Name,
+		LeaderID:  t.LeaderID,
+		Withdrawn: t.Withdrawn,
+		Student:   t.Student,
+	}
+}
