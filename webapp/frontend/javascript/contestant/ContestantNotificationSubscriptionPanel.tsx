@@ -58,17 +58,19 @@ const ContestantNotificationSubscriptionPanelInner: React.FC<InnerProps> = (
     props.pushSubscription
   );
 
-  if (pushSubscription) {
+  if (pushSubscription || props.localNotificationEnabled) {
     const doUnsubscribe = async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
-      try {
-        await props.client.unsubscribeNotification(pushSubscription);
-      } catch (e) {
-        console.error("Unsubscribe API failed", e);
+      if (pushSubscription) {
+        try {
+          await props.client.unsubscribeNotification(pushSubscription);
+        } catch (e) {
+          console.error("Unsubscribe API failed", e);
+        }
+        pushSubscription.unsubscribe();
+        setPushSubscription(null);
       }
-      pushSubscription.unsubscribe();
       props.setLocalNotificationEnabled(false);
-      setPushSubscription(null);
     };
 
     return (
@@ -95,19 +97,23 @@ const ContestantNotificationSubscriptionPanelInner: React.FC<InnerProps> = (
         console.error("requestPermission failure", e);
         alert("requestPermission failure");
       }
-      await props.setLocalNotificationEnabled(true);
-      // try {
-      //   const sub = await props.serviceWorker.pushManager.subscribe({
-      //     applicationServerKey: props.session.pushVapidKey!,
-      //     userVisibleOnly: true,
-      //   });
-      //   await props.client.subscribeNotification(sub);
-      //   setPushSubscription(sub);
-      //   // props.setLocalNotificationEnabled(true);
-      // } catch (e) {
-      //   console.error("Failed to subscribe", e);
-      //   // alert("Failed to subscribe");
-      // }
+      props.setLocalNotificationEnabled(true);
+      try {
+        if ( props.session.pushVapidKey && props.session.pushVapidKey.length > 0 ) {
+          const sub = await props.serviceWorker.pushManager.subscribe({
+            applicationServerKey: props.session.pushVapidKey!,
+            userVisibleOnly: true,
+          });
+          await props.client.subscribeNotification(sub);
+          setPushSubscription(sub);
+        }
+      } catch (e) {
+        console.error("Failed to subscribe", e);
+        if (e instanceof ApiError) {
+          if (e.status == 503) return;
+        }
+        alert("Failed to subscribe");
+      }
     };
 
     return (

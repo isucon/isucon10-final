@@ -2,10 +2,12 @@ import { xsuportal } from "./pb";
 // import * as Rails from "@rails/ujs";
 
 export class ApiError extends Error {
+  public status: number;
   public localError: Error;
   public remoteError: xsuportal.proto.Error | null;
 
   constructor(
+    status: number,
     localError: Error,
     remoteError: xsuportal.proto.Error | null,
     ...params: any[]
@@ -21,6 +23,7 @@ export class ApiError extends Error {
     this.message = `${localError.message}, ${
       remoteError && remoteError.humanMessage
     }`;
+    this.status = status;
     this.localError = localError;
     this.remoteError = remoteError;
   }
@@ -396,11 +399,13 @@ export class ApiClient {
           new Uint8Array(await resp.arrayBuffer())
         );
         err = new ApiError(
+          resp.status,
           new Error(`${path} returned error ${resp.status}`),
           pbError
         );
       } else {
         err = new ApiError(
+          resp.status,
           new Error(
             `${path} returned error ${resp.status}: ${await resp.text()}`
           ),
