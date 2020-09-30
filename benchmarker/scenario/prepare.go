@@ -540,7 +540,7 @@ func (s *Scenario) prepareCheckRequiredLogin(ctx context.Context, step *isucanda
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		_, _, err := GetDashboardAction(ctx, t, guest)
+		_, _, err := GetDashboardAction(ctx, t, guest, 2*time.Second)
 		checker("GET /api/contestant/dashboard", err)
 	}()
 
@@ -624,7 +624,7 @@ func (s *Scenario) prepareCheckRequiredContestant(guest *model.Contestant, ctx c
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		_, _, err := GetDashboardAction(ctx, t, guest)
+		_, _, err := GetDashboardAction(ctx, t, guest, 2*time.Second)
 		checker("GET /api/contestant/dashboard", err)
 	}()
 

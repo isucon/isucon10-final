@@ -69,7 +69,7 @@ func (s *Scenario) validationLeaderboard(ctx context.Context, step *isucandar.Be
 
 		if idx < len(teams) {
 			t := teams[idx]
-			_, res, err := GetDashboardAction(ctx, t, t.Leader)
+			_, res, err := GetDashboardAction(ctx, t, t.Leader, 10*time.Second)
 			if err != nil {
 				step.AddError(failure.NewError(ErrCritical, err))
 				return
@@ -90,7 +90,7 @@ func (s *Scenario) validationLeaderboard(ctx context.Context, step *isucandar.Be
 				return
 			}
 
-			_, res, err := AudienceGetDashboardAction(ctx, admin.Agent)
+			_, res, err := AudienceGetDashboardAction(ctx, admin.Agent, 10*time.Second)
 			if err != nil {
 				step.AddError(failure.NewError(ErrCritical, err))
 				return
