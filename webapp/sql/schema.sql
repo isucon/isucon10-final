@@ -50,6 +50,7 @@ CREATE TABLE `clarifications` (
   `created_at` DATETIME(6) NOT NULL,
   `updated_at` DATETIME(6) NOT NULL,
   INDEX `idx_clarifications_team_id_answered_at` (`team_id` ASC, `answered_at` ASC) VISIBLE,
+  INDEX `idx_clarifications_updated_at` (`updated_at`) VISIBLE,
   INDEX `idx_clarifications_disclosed_answered_at` (`disclosed` ASC, `answered_at` ASC) VISIBLE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 

@@ -8,7 +8,10 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
+	"net/http"
+	"strings"
 	"sync"
+	"time"
 
 	"github.com/SherClockHolmes/webpush-go"
 	"github.com/golang/protobuf/proto"
@@ -22,6 +25,10 @@ const (
 	WebpushVAPIDPrivateKeyPath = "../vapid_private.pem"
 	WebpushSubject             = "xsuportal@example.com"
 )
+
+func init() {
+	http.DefaultTransport.(*http.Transport).MaxIdleConnsPerHost = 1000
+}
 
 type Notifier struct {
 	mu      sync.Mutex
@@ -82,27 +89,35 @@ func (n *Notifier) NotifyClarificationAnswered(db sqlx.Ext, c *Clarification, up
 			return fmt.Errorf("select contestants(team_id=%v): %w", c.TeamID, err)
 		}
 	}
-	for _, contestant := range contestants {
-		notificationPB := &resources.Notification{
+	var values []string
+	var params []interface{}
+	var nos []*resources.Notification
+	createdAt := time.Now().UTC()
+	for _, co := range contestants {
+		no := &resources.Notification{
 			Content: &resources.Notification_ContentClarification{
 				ContentClarification: &resources.Notification_ClarificationMessage{
 					ClarificationId: c.ID,
-					Owned:           c.TeamID == contestant.TeamID,
+					Owned:           c.TeamID == co.TeamID,
 					Updated:         updated,
 				},
 			},
 		}
-		notification, err := n.notify(db, notificationPB, contestant.ID)
-		if err != nil {
-			return fmt.Errorf("notify: %w", err)
-		}
-		if n.VAPIDKey() != nil {
-			notificationPB.Id = notification.ID
-			notificationPB.CreatedAt = timestamppb.New(notification.CreatedAt)
-			if err := n.notifyWebpush(db, notificationPB, contestant.ID); err != nil {
-				return fmt.Errorf("notify webpush: %w", err)
-			}
-		}
+		m, _ := proto.Marshal(no)
+		encodedMessage := base64.StdEncoding.EncodeToString(m)
+		values = append(values, "(?, ?, FALSE, ?, ?)")
+		params = append(params, co.ID, encodedMessage, createdAt, createdAt)
+		nos = append(nos, no)
+	}
+	res, err := db.Exec("INSERT INTO `notifications`(`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES "+strings.Join(values, ","), params...)
+	if err != nil {
+		return fmt.Errorf("bulk insert notifications: %w", err)
+	}
+	id, _ := res.LastInsertId()
+	for i, no := range nos {
+		no.Id = id - int64(len(nos)-i-1)
+		no.CreatedAt = timestamppb.New(createdAt)
+		go n.notifyWebpush(db, no, contestants[i].ID)
 	}
 	return nil
 }
@@ -150,26 +165,19 @@ func (n *Notifier) notify(db sqlx.Ext, notificationPB *resources.Notification, c
 		return nil, fmt.Errorf("marshal notification: %w", err)
 	}
 	encodedMessage := base64.StdEncoding.EncodeToString(m)
+	createdAt := time.Now().UTC()
 	res, err := db.Exec(
-		"INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))",
+		"INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, ?, ?)",
 		contestantID,
 		encodedMessage,
+		createdAt,
+		createdAt,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("insert notification: %w", err)
 	}
 	lastInsertID, _ := res.LastInsertId()
-	var notification Notification
-	err = sqlx.Get(
-		db,
-		&notification,
-		"SELECT * FROM `notifications` WHERE `id` = ? LIMIT 1",
-		lastInsertID,
-	)
-	if err != nil {
-		return nil, fmt.Errorf("get inserted notification: %w", err)
-	}
-	return &notification, nil
+	return &Notification{ID: lastInsertID, CreatedAt: createdAt}, nil
 }
 
 func (n *Notifier) notifyWebpush(db sqlx.Ext, notification *resources.Notification, contestantID string) error {

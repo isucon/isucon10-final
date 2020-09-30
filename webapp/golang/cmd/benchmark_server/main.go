@@ -1,15 +1,20 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"crypto/rand"
 	"database/sql"
 	"encoding/base64"
 	"fmt"
+	"io"
 	"log"
 	"net"
+	"net/http"
+	_ "net/http/pprof"
 	"time"
 
+	"github.com/felixge/fgprof"
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -35,25 +40,21 @@ func (b *benchmarkQueueService) Svc() *bench.BenchmarkQueueService {
 
 func (b *benchmarkQueueService) ReceiveBenchmarkJob(ctx context.Context, req *bench.ReceiveBenchmarkJobRequest) (*bench.ReceiveBenchmarkJobResponse, error) {
 	var jobHandle *bench.ReceiveBenchmarkJobResponse_JobHandle
+	br := bufio.NewReader(rand.Reader)
 	for {
 		next, err := func() (bool, error) {
+
 			tx, err := db.Beginx()
 			if err != nil {
 				return false, fmt.Errorf("begin tx: %w", err)
 			}
 			defer tx.Rollback()
-
-			var job xsuportal.BenchmarkJob
-			err = tx.Get(
-				&job,
-				"SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1",
-				resources.BenchmarkJob_PENDING,
-			)
-			if err == sql.ErrNoRows {
-				return false, nil
-			}
+			job, err := pollBenchmarkJob(tx)
 			if err != nil {
 				return false, fmt.Errorf("get pending benchmark job: %w", err)
+			}
+			if job == nil {
+				return false, nil
 			}
 			var gotLock bool
 			err = tx.Get(
@@ -66,7 +67,7 @@ func (b *benchmarkQueueService) ReceiveBenchmarkJob(ctx context.Context, req *be
 				return true, nil
 			}
 			randomBytes := make([]byte, 16)
-			_, err = rand.Read(randomBytes)
+			_, err = io.ReadFull(br, randomBytes)
 			if err != nil {
 				return false, fmt.Errorf("read random: %w", err)
 			}
@@ -81,17 +82,14 @@ func (b *benchmarkQueueService) ReceiveBenchmarkJob(ctx context.Context, req *be
 			if err != nil {
 				return false, fmt.Errorf("update benchmark job status: %w", err)
 			}
-
-			var contestStartsAt time.Time
-			err = tx.Get(&contestStartsAt, "SELECT `contest_starts_at` FROM `contest_config` LIMIT 1")
-			if err != nil {
-				return false, fmt.Errorf("get contest starts at: %w", err)
-			}
-
 			if err := tx.Commit(); err != nil {
 				return false, fmt.Errorf("commit tx: %w", err)
 			}
-
+			var contestStartsAt time.Time
+			err = db.Get(&contestStartsAt, "SELECT `contest_starts_at` FROM `contest_config` LIMIT 1")
+			if err != nil {
+				return false, fmt.Errorf("get contest starts at: %w", err)
+			}
 			jobHandle = &bench.ReceiveBenchmarkJobResponse_JobHandle{
 				JobId:            job.ID,
 				Handle:           handle,
@@ -114,6 +112,28 @@ func (b *benchmarkQueueService) ReceiveBenchmarkJob(ctx context.Context, req *be
 	return &bench.ReceiveBenchmarkJobResponse{
 		JobHandle: jobHandle,
 	}, nil
+}
+
+func pollBenchmarkJob(db sqlx.Queryer) (*xsuportal.BenchmarkJob, error) {
+	for i := 0; i < 10; i++ {
+		if i >= 1 {
+			time.Sleep(50 * time.Millisecond)
+		}
+		var job xsuportal.BenchmarkJob
+		err := sqlx.Get(
+			db,
+			&job,
+			"SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1",
+			resources.BenchmarkJob_PENDING,
+		)
+		if err == nil {
+			return &job, nil
+		}
+		if err != sql.ErrNoRows {
+			return nil, fmt.Errorf("get pending benchmark job: %w", err)
+		}
+	}
+	return nil, nil
 }
 
 type benchmarkReportService struct {
@@ -248,13 +268,17 @@ func (b *benchmarkReportService) saveAsRunning(db sqlx.Execer, job *xsuportal.Be
 
 func main() {
 	port := util.GetEnv("PORT", "50051")
-
+	http.DefaultServeMux.Handle("/debug/fgprof", fgprof.Handler())
+	go func() {
+		log.Println(http.ListenAndServe(":10080", nil))
+	}()
 	listener, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		panic(err)
 	}
 	db, _ = xsuportal.GetDB()
-	db.SetMaxOpenConns(50)
+	db.SetMaxIdleConns(120)
+	db.SetConnMaxLifetime(120 * time.Second)
 
 	server := grpc.NewServer()
 
