@@ -9,6 +9,7 @@ import BenchmarkReport from "../../../proto/xsuportal/services/bench/reporting_g
 import { BenchmarkJob } from "../../../proto/xsuportal/resources/benchmark_job_pb";
 import { ReportBenchmarkResultRequest, ReportBenchmarkResultResponse } from "../../../proto/xsuportal/services/bench/reporting_pb";
 import { Timestamp } from "../../../proto/google/protobuf/timestamp_pb";
+import { start } from "repl";
 
 const sleep = util.promisify(setTimeout);
 
@@ -180,7 +181,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
         WHERE id = ?
         LIMIT 1
     `,
-    [BenchmarkJob.Status.FINISHED, result?.getScoreBreakdown()?.getRaw(), result?.getScoreBreakdown()?.getDeduction(), result?.getPassed(), result?.getReason(), markedAt.toUTCString(), request.getJobId()]
+    [BenchmarkJob.Status.FINISHED, result?.getScoreBreakdown()?.getRaw(), result?.getScoreBreakdown()?.getDeduction(), result?.getPassed(), result?.getReason(), markedAt, request.getJobId()]
     );
   }
 
@@ -194,6 +195,13 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
 
     console.debug(`markedAt, ${markedAt}`);
     const result = request.getResult();
+    let startedAt = null;
+    if (job.started_at) {
+      startedAt = new Date(job.started_at);
+    } else {
+      startedAt = markedAt;
+    }
+    console.log({startedAt});
     await db.query(`
         UPDATE benchmark_jobs SET
           status = ?,
@@ -209,7 +217,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
     `,
     [
       BenchmarkJob.Status.RUNNING, 
-      new Date(job.started_at).toUTCString() || markedAt.toUTCString(),
+      startedAt,
       request.getJobId()]
     );
   }
