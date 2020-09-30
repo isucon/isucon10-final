@@ -10,9 +10,12 @@ import (
 	"net/http"
 	"os"
 	"runtime/pprof"
+	"sort"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/isucon/isucandar/score"
 
 	"github.com/isucon/isucandar"
 	"github.com/isucon/isucandar/agent"
@@ -198,7 +201,16 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	promTags := []string{}
 	for k, v := range breakdown {
 		promTags = append(promTags, fmt.Sprintf("xsuconbench_score_breakdown{name=\"%s\"} %d\n", k, v))
-		tags = append(tags, fmt.Sprintf("  %s: %d", k, v))
+		tags = append(tags, string(k))
+	}
+	sort.Strings(tags)
+
+	for idx, tag := range tags {
+		if v, ok := breakdown[score.ScoreTag(tag)]; ok {
+			tags[idx] = fmt.Sprintf("  %s: %d", tag, v)
+		} else {
+			tags[idx] = fmt.Sprintf("  %s: %d", tag, 0)
+		}
 	}
 	scoreTags := strings.Join(tags, "\n")
 
