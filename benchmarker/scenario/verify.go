@@ -416,9 +416,10 @@ func (s *Scenario) verifySession(session *common.GetCurrentSessionResponse, team
 		return errorInvalidResponse("セッションのチーム情報が不正です")
 	}
 
+	var nilStudent *resources.Team_StudentStatus = nil
 	if !AssertEqual("session team name", team.TeamName, ateam.GetName()) ||
 		!AssertEqual("session team id", team.ID, ateam.GetId()) ||
-		!AssertEqual("session team student", team.IsStudent, ateam.GetStudent().GetStatus()) {
+		!AssertEqual("session team student", nilStudent, ateam.GetStudent()) {
 		return errorInvalidResponse("セッションのチーム情報が不正です")
 	}
 
