@@ -97,9 +97,12 @@ func (s *Service) handlePush(w http.ResponseWriter, r *http.Request) {
 
 	authorization := r.Header.Get(`Authorization`)
 	if err := subscription.Authenticate(authorization); err != nil {
-		// TODO: 403 forbidden when a valid authorization header given but wrong public key
 		s.OnInvalidPush(subscriptionID, err)
-		http.Error(w, `Unauthorized`, http.StatusUnauthorized)
+		if errors.Is(err, ErrUnexpectedToken) {
+			http.Error(w, `Forbidden`, http.StatusForbidden)
+		} else {
+			http.Error(w, `Unauthorized`, http.StatusUnauthorized)
+		}
 		return
 	}
 
