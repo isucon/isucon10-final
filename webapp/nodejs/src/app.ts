@@ -649,6 +649,11 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
       return;
     }
 
+    const contestatnt = await getCurrentContestant(req, db);
+    if (!contestatnt?.staff) {
+      return haltPb(res, 403, '管理者権限が必要です');
+    }
+
     const request = RespondClarificationRequest.deserializeBinary(Uint8Array.from(req.body));
     const [clarBefore] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1 FOR UPDATE', [req.params.id]);
 
