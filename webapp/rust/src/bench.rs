@@ -27,8 +27,9 @@ fn mysql_error_to_tonic_status(e: mysql::Error) -> TonicStatus {
 impl BenchmarkQueue for QueueService {
     async fn receive_benchmark_job(
         &self,
-        _request: Request<ReceiveBenchmarkJobRequest>,
+        request: Request<ReceiveBenchmarkJobRequest>,
     ) -> Result<Response<ReceiveBenchmarkJobResponse>, TonicStatus> {
+        log::info!("BenchmarkQueue: receive_benchmark_job: {:?}", request);
         let mut conn = self
             .db
             .get()
@@ -121,6 +122,7 @@ impl BenchmarkReport for ReportService {
         &self,
         request: Request<Streaming<ReportBenchmarkResultRequest>>,
     ) -> Result<Response<Self::ReportBenchmarkResultStream>, TonicStatus> {
+        log::info!("BenchmarkReport: report_benchmark_result: {:?}", request);
         let mut conn = self
             .db
             .get()
