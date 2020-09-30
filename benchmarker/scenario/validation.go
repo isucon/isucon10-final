@@ -47,10 +47,10 @@ func (s *Scenario) validationLeaderboard(ctx context.Context, step *isucandar.Be
 		return ils > jls
 	})
 
-	ContestantLogger.Println("=> Expected ranking")
+	// ContestantLogger.Println("=> Expected ranking")
 	tidMap := make(map[int64]*model.Team)
-	for i, team := range teams {
-		ContestantLogger.Printf("%d: %s\n", i+1, team.TeamName)
+	for _, team := range teams {
+		// ContestantLogger.Printf("%d: %s\n", i+1, team.TeamName)
 		tidMap[team.ID] = team
 
 		if team.IsStudent {
