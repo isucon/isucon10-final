@@ -145,6 +145,7 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 
 	for _, err := range errors {
 		if failure.IsCode(err, scenario.ErrCritical) {
+			scenario.AdminLogger.Printf("CRITICAL: %v\n", err)
 			passed = false
 			reason = "Critical error"
 			continue
