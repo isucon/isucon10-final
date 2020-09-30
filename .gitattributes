@@ -7,5 +7,5 @@
 /webapp/frontend/sw/src/pb.*  linguist-generated=true
 /webapp/frontend/javascript/ScoreGraphColors.tsx linguist-generated=true
 
-/webapp/nodejs/src/proto/**/*.js linguist-generated=true
-/webapp/nodejs/src/proto/**/*.ts linguist-generated=true
+/webapp/nodejs/proto/**/*.js linguist-generated=true
+/webapp/nodejs/proto/**/*.ts linguist-generated=true

@@ -3,7 +3,7 @@ import webpush from 'web-push';
 import sshpk from 'sshpk';
 
 import type { Pool } from 'promise-mysql';
-import { Notification } from './proto/xsuportal/resources/notification_pb';
+import { Notification } from '../proto/xsuportal/resources/notification_pb';
 
 export class Notifier {
   static WEBPUSH_VAPID_PRIVATE_KEY_PATH = '../vapid_private.pem';

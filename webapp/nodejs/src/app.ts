@@ -8,30 +8,30 @@ import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
 import morgan from "morgan";
 
 import { Notifier } from "./notifier";
-import {InitializeRequest, InitializeResponse} from "./proto/xsuportal/services/admin/initialize_pb";
-import {Error as PbError} from "./proto/xsuportal/error_pb";
-import { Clarification } from "./proto/xsuportal/resources/clarification_pb";
-import { ListClarificationsResponse, GetClarificationResponse, RespondClarificationRequest, RespondClarificationResponse } from "./proto/xsuportal/services/admin/clarifications_pb";
-import { Team } from "./proto/xsuportal/resources/team_pb";
-import { Contestant } from "./proto/xsuportal/resources/contestant_pb";
-import { Contest } from "./proto/xsuportal/resources/contest_pb";
-import { GetCurrentSessionResponse } from "./proto/xsuportal/services/common/me_pb";
-import { ListTeamsResponse as AudienceListTeamsResponse } from "./proto/xsuportal/services/audience/team_list_pb";
-import { DashboardResponse as AudienceDashboardResponse } from "./proto/xsuportal/services/audience/dashboard_pb";
-import { Leaderboard } from "./proto/xsuportal/resources/leaderboard_pb";
-import { BenchmarkJob } from "./proto/xsuportal/resources/benchmark_job_pb";
-import { GetBenchmarkJobResponse } from "./proto/xsuportal/services/admin/benchmark_pb";
-import { ListBenchmarkJobsResponse, EnqueueBenchmarkJobRequest as ContestantEnqueueBenchmarkJobRequest, EnqueueBenchmarkJobResponse as ContestantEnqueueBenchmarkJobResponse } from "./proto/xsuportal/services/contestant/benchmark_pb";
-import { BenchmarkResult } from "./proto/xsuportal/resources/benchmark_result_pb";
-import { DashboardResponse } from "./proto/xsuportal/services/admin/dashboard_pb";
-import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotificationResponse, UnsubscribeNotificationRequest, UnsubscribeNotificationResponse } from "./proto/xsuportal/services/contestant/notifications_pb";
-import { SignupRequest, SignupResponse } from "./proto/xsuportal/services/contestant/signup_pb";
-import { LoginRequest, LoginResponse } from "./proto/xsuportal/services/contestant/login_pb";
-import { LogoutResponse } from "./proto/xsuportal/services/contestant/logout_pb";
-import { GetRegistrationSessionResponse, UpdateRegistrationRequest, UpdateRegistrationResponse, DeleteRegistrationRequest, DeleteRegistrationResponse } from "./proto/xsuportal/services/registration/session_pb";
-import { CreateTeamRequest, CreateTeamResponse } from "./proto/xsuportal/services/registration/create_team_pb";
-import { JoinTeamRequest, JoinTeamResponse } from "./proto/xsuportal/services/registration/join_pb";
-import { RequestClarificationRequest, RequestClarificationResponse } from "./proto/xsuportal/services/contestant/clarifications_pb";
+import {InitializeRequest, InitializeResponse} from "../proto/xsuportal/services/admin/initialize_pb";
+import {Error as PbError} from "../proto/xsuportal/error_pb";
+import { Clarification } from "../proto/xsuportal/resources/clarification_pb";
+import { ListClarificationsResponse, GetClarificationResponse, RespondClarificationRequest, RespondClarificationResponse } from "../proto/xsuportal/services/admin/clarifications_pb";
+import { Team } from "../proto/xsuportal/resources/team_pb";
+import { Contestant } from "../proto/xsuportal/resources/contestant_pb";
+import { Contest } from "../proto/xsuportal/resources/contest_pb";
+import { GetCurrentSessionResponse } from "../proto/xsuportal/services/common/me_pb";
+import { ListTeamsResponse as AudienceListTeamsResponse } from "../proto/xsuportal/services/audience/team_list_pb";
+import { DashboardResponse as AudienceDashboardResponse } from "../proto/xsuportal/services/audience/dashboard_pb";
+import { Leaderboard } from "../proto/xsuportal/resources/leaderboard_pb";
+import { BenchmarkJob } from "../proto/xsuportal/resources/benchmark_job_pb";
+import { GetBenchmarkJobResponse } from "../proto/xsuportal/services/admin/benchmark_pb";
+import { ListBenchmarkJobsResponse, EnqueueBenchmarkJobRequest as ContestantEnqueueBenchmarkJobRequest, EnqueueBenchmarkJobResponse as ContestantEnqueueBenchmarkJobResponse } from "../proto/xsuportal/services/contestant/benchmark_pb";
+import { BenchmarkResult } from "../proto/xsuportal/resources/benchmark_result_pb";
+import { DashboardResponse } from "../proto/xsuportal/services/admin/dashboard_pb";
+import { ListNotificationsResponse, SubscribeNotificationRequest, SubscribeNotificationResponse, UnsubscribeNotificationRequest, UnsubscribeNotificationResponse } from "../proto/xsuportal/services/contestant/notifications_pb";
+import { SignupRequest, SignupResponse } from "../proto/xsuportal/services/contestant/signup_pb";
+import { LoginRequest, LoginResponse } from "../proto/xsuportal/services/contestant/login_pb";
+import { LogoutResponse } from "../proto/xsuportal/services/contestant/logout_pb";
+import { GetRegistrationSessionResponse, UpdateRegistrationRequest, UpdateRegistrationResponse, DeleteRegistrationRequest, DeleteRegistrationResponse } from "../proto/xsuportal/services/registration/session_pb";
+import { CreateTeamRequest, CreateTeamResponse } from "../proto/xsuportal/services/registration/create_team_pb";
+import { JoinTeamRequest, JoinTeamResponse } from "../proto/xsuportal/services/registration/join_pb";
+import { RequestClarificationRequest, RequestClarificationResponse } from "../proto/xsuportal/services/contestant/clarifications_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -84,7 +84,7 @@ export const app = express();
 
 app.set('trust proxy', 1);
 app.use(express.static("../public"));
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 app.use(session({
   secret: 'tagomoris',
   name: 'session_xsucon',
@@ -1035,14 +1035,12 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
       await db.rollback();
       return;
     }
-    console.log(request.toObject());
 
     const passRestricted = await contestStatusRestricted(res, [Contest.Status.STARTED], "競技時間外はベンチマークを実行できません", db);
     if (!passRestricted) {
       await db.rollback();
       return;
     }
-    console.log(passRestricted);
 
     const currentTeam = await getCurrentTeam(req, db);
     const [jobCount] = await db.query(

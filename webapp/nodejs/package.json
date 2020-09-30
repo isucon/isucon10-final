@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gen": "grpc_tools_node_protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=./src/proto --js_out=import_style=commonjs:./src/proto --grpc_out=./src/proto --proto_path=../../proto/ ../../proto/google/protobuf/* ../../proto/xsuportal/resources/* ../../proto/xsuportal/services/**/* ../../proto/xsuportal/error.proto",
+    "gen": "grpc_tools_node_protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=./proto --js_out=import_style=commonjs:./proto --grpc_out=./proto --proto_path=../../proto/ ../../proto/google/protobuf/* ../../proto/xsuportal/resources/* ../../proto/xsuportal/services/**/* ../../proto/xsuportal/error.proto",
     "dev": "ts-node src/bin/app.ts",
     "dev-bench": "ts-node src/bin/benchmark_server/main.ts",
-    "build": "tsc src/bin/app.ts",
-    "start": "node ./build/app.js"
+    "build": "tsc --build ./tsconfig.json",
+    "start": "node ./build/bin/app.js"
   },
   "keywords": [],
   "author": "",

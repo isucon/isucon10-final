@@ -3,12 +3,12 @@ import util from "util";
 import strftime from 'strftime'
 import {getDB, secureRandom, notifier, convertDateToTimestamp} from "../../app";
 import grpc, { callError, makeGenericClientConstructor } from "grpc";
-import BenchmarkQueue from "../../proto/xsuportal/services/bench/receiving_grpc_pb";
-import { ReceiveBenchmarkJobRequest, ReceiveBenchmarkJobResponse } from "../../proto/xsuportal/services/bench/receiving_pb";
-import BenchmarkReport from "../../proto/xsuportal/services/bench/reporting_grpc_pb";
-import { BenchmarkJob } from "../../proto/xsuportal/resources/benchmark_job_pb";
-import { ReportBenchmarkResultRequest, ReportBenchmarkResultResponse } from "../../proto/xsuportal/services/bench/reporting_pb";
-import { Timestamp } from "../../proto/google/protobuf/timestamp_pb";
+import BenchmarkQueue from "../../../proto/xsuportal/services/bench/receiving_grpc_pb";
+import { ReceiveBenchmarkJobRequest, ReceiveBenchmarkJobResponse } from "../../../proto/xsuportal/services/bench/receiving_pb";
+import BenchmarkReport from "../../../proto/xsuportal/services/bench/reporting_grpc_pb";
+import { BenchmarkJob } from "../../../proto/xsuportal/resources/benchmark_job_pb";
+import { ReportBenchmarkResultRequest, ReportBenchmarkResultResponse } from "../../../proto/xsuportal/services/bench/reporting_pb";
+import { Timestamp } from "../../../proto/google/protobuf/timestamp_pb";
 
 const sleep = util.promisify(setTimeout);
 
