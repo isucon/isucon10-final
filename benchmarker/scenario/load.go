@@ -147,6 +147,7 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 	defer cancel()
 
 	stopSignup := uint32(0)
+	firstSignup := uint32(0)
 
 	w, err := worker.NewWorker(func(ctx context.Context, _ int) {
 		if atomic.LoadUint32(&stopSignup) > 0 {
@@ -181,6 +182,18 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 		dev := team.Developer
 		team.Operator = team.Leader
 		team.Developer = team.Leader
+
+		if atomic.CompareAndSwapUint32(&firstSignup, 0, 1) {
+			lead.ID = "isucon1"
+			lead.Password = "isucon1"
+			lead.Name = "isucon1"
+			dev.ID = "isucon2"
+			dev.Password = "isucon2"
+			dev.Name = "isucon2"
+			ops.ID = "isucon3"
+			ops.Password = "isucon3"
+			ops.Name = "isucon3"
+		}
 
 		res, resources, session, err := BrowserAccess(ctx, lead, "/signup")
 		if err != nil {
@@ -610,8 +623,6 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 				return
 			}
 
-			timer := time.After(200 * time.Millisecond)
-
 			cres, cresources, _, err := BrowserAccess(ctx, admin, "/admin/clarifications")
 			if err != nil {
 				step.AddError(err)
@@ -641,6 +652,8 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 			}
 			step.AddScore("admin-get-clarifications")
 
+			resolveCounts := uint32(0)
+
 			wg := sync.WaitGroup{}
 			for _, clar := range res.GetClarifications() {
 				var cClar *model.Clarification = nil
@@ -663,6 +676,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 				if clar.GetAnswered() {
 					continue
 				}
+				resolveCounts++
 
 				if !AssertEqual("Clar Team ID", team.ID, clar.GetTeamId()) {
 					step.AddError(errorInvalidResponse("Clarification のチーム ID が一致しません"))
@@ -702,7 +716,10 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 
 			wg.Wait()
 
-			<-timer
+			if resolveCounts == 0 {
+				timer := time.After(200 * time.Millisecond)
+				<-timer
+			}
 		}
 	}, worker.WithInfinityLoop(), worker.WithMaxParallelism(1))
 	if err != nil {
@@ -741,8 +758,6 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 				return
 			}
 
-			timer := time.After(1 * time.Second)
-
 			requestedAt := time.Now().UTC()
 			latestMarkedAt := s.LatestMarkedAt()
 			hres, res, err := AudienceGetDashboardAction(ctx, viewer, 2*time.Second)
@@ -761,7 +776,7 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 			step.AddScore("audience-get-dashboard")
 
 			select {
-			case <-timer:
+			case <-time.After(1 * time.Second):
 			case <-ctx.Done():
 				return
 			}
@@ -976,7 +991,7 @@ func (s *Scenario) loadCheckClarification(ctx context.Context, step *isucandar.B
 		for _, clar := range clars {
 			if c.GetId() == clar.GetClarificationId() {
 				for _, tc := range tClars {
-					if tc.ID() == c.GetId() {
+					if !tc.IsAnswered() && tc.ID() == c.GetId() {
 						tc.Answered()
 						step.AddScore("resolve-clarification")
 					}
