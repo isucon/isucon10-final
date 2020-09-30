@@ -48,10 +48,7 @@ fn receive_benchmark_job(
     conn: &mut crate::PooledConnection,
 ) -> Result<Option<Option<JobHandle>>, mysql::Error> {
     let mut tx = conn.start_transaction(mysql::TxOpts::default())?;
-    let job: Option<crate::BenchmarkJob> = tx.exec_first(
-        "SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1",
-        (BenchmarkJobStatus::Pending as i32,),
-    )?;
+    let job = poll_benchmark_jobs(&mut tx)?;
     if job.is_none() {
         return Ok(Some(None));
     }
@@ -83,6 +80,25 @@ fn receive_benchmark_job(
     } else {
         Ok(None)
     }
+}
+
+fn poll_benchmark_jobs<Q>(conn: &mut Q) -> Result<Option<crate::BenchmarkJob>, mysql::Error>
+where
+    Q: Queryable,
+{
+    for i in 0..10 {
+        if i > 0 {
+            std::thread::sleep(std::time::Duration::from_millis(50));
+        }
+        let job = conn.exec_first(
+            "SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1",
+            (BenchmarkJobStatus::Pending as i32,),
+        )?;
+        if job.is_some() {
+            return Ok(job);
+        }
+    }
+    Ok(None)
 }
 
 #[derive(Debug)]
