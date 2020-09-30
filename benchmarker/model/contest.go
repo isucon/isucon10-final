@@ -21,7 +21,7 @@ type Contest struct {
 }
 
 func NewContest(now time.Time, testMode bool) *Contest {
-	now = now.Truncate(time.Second)
+	now = now.Truncate(time.Second).Add(1 * time.Second)
 
 	c := &Contest{
 		mu:                 sync.RWMutex{},
