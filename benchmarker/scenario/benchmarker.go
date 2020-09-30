@@ -152,7 +152,7 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 			bResult.SentFirstResult()
 
 			now := time.Now().UTC().Truncate(time.Millisecond)
-			if b.Scenario.LatestMarkedAt().Equal(now) {
+			for b.Scenario.LatestMarkedAt().Equal(now) {
 				<-time.After(1 * time.Millisecond)
 				now = time.Now().UTC().Truncate(time.Millisecond)
 			}
