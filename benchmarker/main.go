@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"runtime/pprof"
@@ -65,6 +66,7 @@ var (
 	exitStatusOnFail   bool
 	noLoad             bool
 	noClar             bool
+	promOut            string
 
 	reporter benchrun.Reporter
 )
@@ -90,6 +92,7 @@ func init() {
 	flag.BoolVar(&exitStatusOnFail, "exit-status", false, "set exit status non-zero when a benchmark result is failing")
 	flag.BoolVar(&noLoad, "no-load", false, "exit on finished prepare")
 	flag.BoolVar(&noClar, "no-clar", false, "off sending clar")
+	flag.StringVar(&promOut, "prom-out", "", "Prometheus textfile output path")
 
 	timeoutDuration := ""
 	flag.StringVar(&timeoutDuration, "timeout", "10s", "request timeout duration")
@@ -192,10 +195,14 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	}
 
 	tags := []string{}
+	promTags := []string{}
 	for k, v := range breakdown {
+		promTags = append(promTags, fmt.Sprintf("xsuconbench_score_breakdown{name=\"%s\"} %d\n", k, v))
 		tags = append(tags, fmt.Sprintf("  %s: %d", k, v))
 	}
 	scoreTags := strings.Join(tags, "\n")
+
+	writePromFile(promTags)
 
 	if finish {
 		logger.Printf("===> SCORE")
@@ -228,6 +235,25 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	}
 
 	return passed
+}
+
+func writePromFile(promTags []string) {
+	if len(promOut) == 0 {
+		return
+	}
+
+	promOutNew := fmt.Sprintf("%s.new", promOut)
+	err := ioutil.WriteFile(promOutNew, []byte(strings.Join(promTags, "")), 0644)
+	if err != nil {
+		scenario.AdminLogger.Printf("Failed to write prom file: %s", err)
+		return
+	}
+	err = os.Rename(promOutNew, promOut)
+	if err != nil {
+		scenario.AdminLogger.Printf("Failed to write prom file: %s", err)
+		return
+	}
+
 }
 
 func main() {
