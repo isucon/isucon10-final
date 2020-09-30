@@ -27,19 +27,21 @@ type Scenario struct {
 	NoLoad       bool
 	NoClar       bool
 
-	bpubsub  *pubsub.PubSub
-	rpubsub  *pubsub.PubSub
-	markedAt time.Time
+	bpubsub       *pubsub.PubSub
+	rpubsub       *pubsub.PubSub
+	firstMarkedAt time.Time
+	markedAt      time.Time
 }
 
 func NewScenario() (*Scenario, error) {
 	return &Scenario{
-		mu:           sync.RWMutex{},
-		TeamCapacity: -1,
-		NoLoad:       false,
-		bpubsub:      pubsub.NewPubSub(),
-		rpubsub:      pubsub.NewPubSub(),
-		markedAt:     time.Now(),
+		mu:            sync.RWMutex{},
+		TeamCapacity:  -1,
+		NoLoad:        false,
+		bpubsub:       pubsub.NewPubSub(),
+		rpubsub:       pubsub.NewPubSub(),
+		firstMarkedAt: time.Now().Add(24 * time.Hour),
+		markedAt:      time.Now(),
 	}, nil
 }
 
@@ -70,6 +72,9 @@ func (s *Scenario) Mark(t time.Time) {
 	defer s.mu.Unlock()
 
 	t = t.Truncate(time.Microsecond)
+	if s.firstMarkedAt.After(t) {
+		s.firstMarkedAt = t
+	}
 	if t.After(s.markedAt) {
 		s.markedAt = t
 	}

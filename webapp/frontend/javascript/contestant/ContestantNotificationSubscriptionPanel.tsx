@@ -95,18 +95,19 @@ const ContestantNotificationSubscriptionPanelInner: React.FC<InnerProps> = (
         console.error("requestPermission failure", e);
         alert("requestPermission failure");
       }
-      try {
-        const sub = await props.serviceWorker.pushManager.subscribe({
-          applicationServerKey: props.session.pushVapidKey!,
-          userVisibleOnly: true,
-        });
-        await props.client.subscribeNotification(sub);
-        setPushSubscription(sub);
-        props.setLocalNotificationEnabled(true);
-      } catch (e) {
-        console.error("Failed to subscribe", e);
-        alert("Failed to subscribe");
-      }
+      await props.setLocalNotificationEnabled(true);
+      // try {
+      //   const sub = await props.serviceWorker.pushManager.subscribe({
+      //     applicationServerKey: props.session.pushVapidKey!,
+      //     userVisibleOnly: true,
+      //   });
+      //   await props.client.subscribeNotification(sub);
+      //   setPushSubscription(sub);
+      //   // props.setLocalNotificationEnabled(true);
+      // } catch (e) {
+      //   console.error("Failed to subscribe", e);
+      //   // alert("Failed to subscribe");
+      // }
     };
 
     return (

@@ -2,12 +2,12 @@ import { xsuportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 import { Redirect } from "react-router-dom";
-import querystring from "querystring";
 
 import { ErrorMessage } from "./ErrorMessage";
 
 export interface Props {
   client: ApiClient;
+  redirect?: string | null;
 }
 
 export interface State {
@@ -42,10 +42,9 @@ export class Login extends React.Component<Props, State> {
     const currentContestant = this.state.session?.contestant;
 
     if (currentContestant) {
-      const params = querystring.parse(window.location.search.slice(1));
-      if (params.redirect) {
-        console.log("redirect: ", params.redirect.toString());
-        return <Redirect to={params.redirect.toString()}></Redirect>;
+      if (this.props.redirect) {
+        console.log("redirect: ", this.props.redirect.toString());
+        return <Redirect to={this.props.redirect.toString()}></Redirect>;
       } else {
         if (currentContestant.isStaff) {
           return <Redirect to="/admin" />;

@@ -15,3 +15,8 @@ else
     action :disable
   end
 end
+
+package 'dstat'
+package 'htop'
+
+include_cookbook 'prometheus-node-exporter'

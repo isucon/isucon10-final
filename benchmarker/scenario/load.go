@@ -338,7 +338,7 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
 		team := s.Contest.Teams[index]
 
-		for {
+		for ctx.Err() == nil {
 			select {
 			case <-ctx.Done():
 				return
@@ -353,6 +353,7 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 			if err != nil {
 				go func() { <-team.EnqueueLock }()
 				step.AddError(err)
+				<-time.After(100 * time.Millisecond)
 				continue
 			}
 
@@ -362,10 +363,11 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 			}
 			if len(errs) > 0 {
 				go func() { <-team.EnqueueLock }()
+				<-time.After(100 * time.Millisecond)
 				continue
 			}
 
-			go GetDashboardAction(ctx, team, team.Developer)
+			go GetDashboardAction(ctx, team, team.Developer, 2*time.Second)
 			go GetBenchmarkJobs(ctx, team, team.Developer)
 
 			job, err := EnqueueBenchmarkJobAction(ctx, team)
@@ -373,7 +375,9 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 				if failure.IsCode(err, ErrScenarioCancel) {
 					return
 				}
+				go func() { <-team.EnqueueLock }()
 				step.AddError(err)
+				<-time.After(100 * time.Millisecond)
 				continue
 			}
 
@@ -423,14 +427,14 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 
 				requestedAt := time.Now().UTC()
 				latestMarkedAt := s.LatestMarkedAt()
-				hres, res, err := GetDashboardAction(ctx, team, team.Operator)
+				hres, res, err := GetDashboardAction(ctx, team, team.Operator, 2*time.Second)
 				if err != nil {
 					step.AddError(err)
 					atomic.StoreUint32(&failed, 1)
 					return
 				}
 
-				if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, team, latestMarkedAt, false); err != nil {
+				if err := s.verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, team, latestMarkedAt, false); err != nil {
 					step.AddError(err)
 				}
 			}()
@@ -485,6 +489,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				page, resources, _, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
 				if err != nil {
 					step.AddError(err)
+					<-time.After(100 * time.Millisecond)
 					continue
 				}
 
@@ -493,12 +498,14 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 					step.AddError(err)
 				}
 				if len(errs) > 0 {
+					<-time.After(100 * time.Millisecond)
 					continue
 				}
 
 				_, err = GetClarificationsAction(ctx, leader)
 				if err != nil {
 					step.AddError(err)
+					<-time.After(100 * time.Millisecond)
 					continue
 				}
 				step.AddScore("get-clarification")
@@ -510,6 +517,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				res, err := PostClarificationAction(ctx, leader, clar)
 				if err != nil {
 					step.AddError(err)
+					<-time.After(100 * time.Millisecond)
 					continue
 				}
 
@@ -561,6 +569,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 			cres, cresources, _, err := BrowserAccess(ctx, admin, "/admin/clarifications")
 			if err != nil {
 				step.AddError(err)
+				<-time.After(100 * time.Millisecond)
 				continue
 			}
 
@@ -569,12 +578,14 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 				step.AddError(err)
 			}
 			if len(errs) > 0 {
+				<-time.After(100 * time.Millisecond)
 				return
 			}
 
 			res, err := AdminGetClarificationsAction(ctx, admin)
 			if err != nil {
 				step.AddError(err)
+				<-time.After(100 * time.Millisecond)
 				continue
 			}
 			step.AddScore("admin-get-clarifications")
@@ -678,14 +689,14 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 
 			requestedAt := time.Now().UTC()
 			latestMarkedAt := s.LatestMarkedAt()
-			hres, res, err := AudienceGetDashboardAction(ctx, viewer)
+			hres, res, err := AudienceGetDashboardAction(ctx, viewer, 2*time.Second)
 			if err != nil {
 				// オーディエンスはエラーを記録しない
 				step.AddError(err)
 				return
 			}
 
-			if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, nil, latestMarkedAt, true); err != nil {
+			if err := s.verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, nil, latestMarkedAt, true); err != nil {
 				// オーディエンスによる計測失敗は考慮しない
 				step.AddError(err)
 				return

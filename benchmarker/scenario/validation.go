@@ -2,6 +2,7 @@ package scenario
 
 import (
 	"context"
+	"math/rand"
 	"net/url"
 	"sort"
 	"time"
@@ -61,11 +62,14 @@ func (s *Scenario) validationLeaderboard(ctx context.Context, step *isucandar.Be
 	}
 
 	w, err := worker.NewWorker(func(ctx context.Context, idx int) {
+		// 1〜5秒ランダムに待つ
+		<-time.After(time.Duration(rand.Int63n(5)+1) * time.Second)
+
 		var leaderboard *resources.Leaderboard
 
 		if idx < len(teams) {
 			t := teams[idx]
-			_, res, err := GetDashboardAction(ctx, t, t.Leader)
+			_, res, err := GetDashboardAction(ctx, t, t.Leader, 10*time.Second)
 			if err != nil {
 				step.AddError(failure.NewError(ErrCritical, err))
 				return
@@ -86,7 +90,7 @@ func (s *Scenario) validationLeaderboard(ctx context.Context, step *isucandar.Be
 				return
 			}
 
-			_, res, err := AudienceGetDashboardAction(ctx, admin.Agent)
+			_, res, err := AudienceGetDashboardAction(ctx, admin.Agent, 10*time.Second)
 			if err != nil {
 				step.AddError(failure.NewError(ErrCritical, err))
 				return

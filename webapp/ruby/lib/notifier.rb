@@ -33,15 +33,19 @@ module Xsuportal
       end
 
       contestants.each do |contestant|
-        notification = Proto::Resources::Notification.new(
+        notification_pb = Proto::Resources::Notification.new(
           content_clarification: Proto::Resources::Notification::ClarificationMessage.new(
             clarification_id: clar[:id],
             owned: clar[:team_id] == contestant[:team_id],
             updated: updated,
           )
         )
-        notify(notification, contestant[:id])
-        notify_webpush(notification, contestant[:id]) if vapid_key
+        notification = notify(notification_pb, contestant[:id])
+        if vapid_key
+          notification_pb.id = notification[:id]
+          notification_pb.created_at = notification[:created_at]
+          notify_webpush(notification_pb, contestant[:id])
+        end
       end
     end
 
@@ -52,13 +56,17 @@ module Xsuportal
       )
 
       contestants.each do |contestant|
-        notification = Proto::Resources::Notification.new(
+        notification_pb = Proto::Resources::Notification.new(
           content_benchmark_job: Proto::Resources::Notification::BenchmarkJobMessage.new(
             benchmark_job_id: job[:id],
           )
         )
-        notify(notification, contestant[:id])
-        notify_webpush(notification, contestant[:id]) if vapid_key
+        notification = notify(notification_pb, contestant[:id])
+        if vapid_key
+          notification_pb.id = notification[:id]
+          notification_pb.created_at = notification[:created_at]
+          notify_webpush(notification_pb, contestant[:id])
+        end
       end
     end
 
@@ -74,6 +82,8 @@ module Xsuportal
         contestant_id,
         encoded_message,
       )
+      notification = db.query('SELECT * FROM `notifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1').first
+      notification
     end
 
     def notify_webpush(notification, contestant_id)
