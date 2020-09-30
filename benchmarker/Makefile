@@ -2,7 +2,7 @@ COMMIT=$(shell git rev-parse --short HEAD)
 DIRTY=$(shell git diff --quiet || echo '+dirty')
 
 GOTIMEOUT?=20s
-GOARGS?=-race
+GOARGS?=
 GOMAXPROCS?=$(shell nproc)
 GOPRIVATE="github.com/isucon"
 GOLDFLAGS=-X main.COMMIT=$(COMMIT)$(DIRTY)
