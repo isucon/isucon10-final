@@ -536,17 +536,17 @@ app.post("/initialize", async (req, res, next) => {
       const openAt = contest.getRegistrationOpenAt();
       const startsAt = contest.getContestStartsAt();
       const freezeAt = contest.getContestFreezesAt();
-      const endsAt = contest.getContestFreezesAt();
+      const endsAt = contest.getContestEndsAt();
 
       if (openAt == null || startsAt == null || freezeAt == null || endsAt == null) {
         return haltPb(res, 400, "initialize の時間が不正です。");
       }
 
       await db.query(`INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES (?, ?, ?, ?)`, [
-        new Date(openAt.getSeconds() * 1000),
-        new Date(startsAt.getSeconds() * 1000),
-        new Date(freezeAt.getSeconds() * 1000),
-        new Date(endsAt.getSeconds() * 1000),
+        openAt.toDate(),
+        startsAt.toDate(),
+        freezeAt.toDate(),
+        endsAt.toDate()
       ]);
     } else {
       await db.query(`
