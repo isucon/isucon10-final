@@ -3,6 +3,7 @@ package scenario
 import (
 	"crypto/sha512"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"math"
 	"net"
@@ -81,7 +82,7 @@ func errorChecksum(base string, resource *agent.Resource, name string) error {
 				return nerr
 			}
 		}
-		return failure.NewError(ErrChecksum, errorInvalidResponse("リソースの取得に失敗しました: %v", resource.Error))
+		return failure.NewError(ErrChecksum, errorInvalidResponse("リソースの取得に失敗しました: %s: %v", name, resource.Error))
 	}
 
 	res := resource.Response
@@ -97,7 +98,7 @@ func errorChecksum(base string, resource *agent.Resource, name string) error {
 
 	path := res.Request.URL.Path
 	bytes, err := ioutil.ReadAll(res.Body)
-	if err != nil {
+	if err != nil && err != io.EOF {
 		AdminLogger.Printf("resource checksum: %v", err)
 		return failure.NewError(ErrChecksum, errorInvalidResponse("チェックサムの取得に失敗しました: %s", path))
 	}
