@@ -4,7 +4,7 @@ require 'json'
 require 'mysql2'
 require 'mysql2-cs-bind'
 
-$: << File.expand_path('../webapp/ruby/lib', __dir__)
+$: << File.expand_path('../ruby/lib', __dir__)
 require 'xsuportal/resources/notification_pb'
 
 def db

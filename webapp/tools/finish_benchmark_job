@@ -2,7 +2,7 @@
 require 'optparse'
 require 'socket'
 
-$: << File.expand_path('../webapp/ruby/lib', __dir__)
+$: << File.expand_path('../ruby/lib', __dir__)
 require 'xsuportal/services/bench/receiving_pb'
 require 'xsuportal/services/bench/reporting_pb'
 require 'xsuportal/services/bench/receiving_services_pb'
