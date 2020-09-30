@@ -44,7 +44,7 @@ module Xsuportal
         if vapid_key
           notification_pb.id = notification[:id]
           notification_pb.created_at = notification[:created_at]
-          notify_webpush(notification_pb, contestant[:id])
+          # TODO: Web Push IIKANJI NI SHITE
         end
       end
     end
@@ -65,7 +65,7 @@ module Xsuportal
         if vapid_key
           notification_pb.id = notification[:id]
           notification_pb.created_at = notification[:created_at]
-          notify_webpush(notification_pb, contestant[:id])
+          # TODO: Web Push IIKANJI NI SHITE
         end
       end
     end
@@ -84,33 +84,6 @@ module Xsuportal
       )
       notification = db.query('SELECT * FROM `notifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1').first
       notification
-    end
-
-    def notify_webpush(notification, contestant_id)
-      message = [Proto::Resources::Notification.encode(notification)].pack("m0")
-      vapid = vapid_key.to_h
-      vapid[:subject] = WEBPUSH_SUBJECT
-
-      subs = db.xquery(
-        'SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?',
-        contestant_id,
-      )
-      subs.each do |sub|
-        begin
-          Webpush.payload_send(
-            message: message,
-            endpoint: sub[:endpoint],
-            p256dh: sub[:p256dh],
-            auth: sub[:auth],
-            vapid: vapid,
-          )
-        rescue Webpush::ExpiredSubscription, Webpush::InvalidSubscription
-          db.xquery(
-            'DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1',
-            sub[:id],
-          )
-        end
-      end
     end
   end
 end
