@@ -1,7 +1,7 @@
 import mysql from "promise-mysql";
 import util from "util";
 import strftime from 'strftime'
-import {getDB, secureRandom, notifier, convertDateToTimestamp} from "../../app";
+import { getDB, secureRandom, notifier, convertDateToTimestamp } from "../../app";
 import grpc, { callError, makeGenericClientConstructor } from "grpc";
 import BenchmarkQueue from "../../../proto/xsuportal/services/bench/receiving_grpc_pb";
 import { ReceiveBenchmarkJobRequest, ReceiveBenchmarkJobResponse } from "../../../proto/xsuportal/services/bench/receiving_pb";
@@ -49,7 +49,7 @@ class BenchmarkQueueService implements BenchmarkQueue.IBenchmarkQueueServer {
             handle,
             targetHostName: job.target_hostname,
             contestStartedAt: contest.contest_started_at,
-            jobCreatedAt: job.created_at, 
+            jobCreatedAt: job.created_at,
           }
           await db.commit();
           break;
@@ -87,7 +87,7 @@ class BenchmarkQueueService implements BenchmarkQueue.IBenchmarkQueueServer {
 
   async pollBenchmarkJobs(db: mysql.PoolConnection) {
     let job = null
-    for (let i=0;i<10;i++) {
+    for (let i = 0; i < 10; i++) {
       if (i >= 1) {
         await sleep(50);
       }
@@ -117,7 +117,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
     const db = await getDB();
     // TODO maybe we need to setup notifier.
     const notify = notifier;
-    
+
     if (!request.hasResult()) {
       throw new Error("Invalid Argument result required");
     }
@@ -167,7 +167,10 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
       await db.rollback();
       throw new Error("marked_at is required");
     }
-    const markedAt = new Date(markedAtTimestamp.getSeconds()*1000 + markedAtTimestamp.getNanos() / 1000);
+
+    const markedAt = formatDate(markedAtTimestamp);
+
+    console.log({ markedAt });
     const result = request.getResult();
     await db.query(`
         UPDATE benchmark_jobs SET
@@ -181,7 +184,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
         WHERE id = ?
         LIMIT 1
     `,
-    [BenchmarkJob.Status.FINISHED, result?.getScoreBreakdown()?.getRaw(), result?.getScoreBreakdown()?.getDeduction(), result?.getPassed(), result?.getReason(), markedAt, request.getJobId()]
+      [BenchmarkJob.Status.FINISHED, result?.getScoreBreakdown()?.getRaw(), result?.getScoreBreakdown()?.getDeduction(), result?.getPassed(), result?.getReason(), markedAt, request.getJobId()]
     );
   }
 
@@ -191,9 +194,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
       await db.rollback();
       throw new Error("marked_at is required");
     }
-    const markedAt = new Date(markedAtTimestamp.getSeconds()*1000 + markedAtTimestamp.getNanos() / 1000);
-
-    console.debug(`markedAt, ${markedAt}`);
+    const markedAt = formatDate(markedAtTimestamp);
     const result = request.getResult();
     let startedAt = null;
     if (job.started_at) {
@@ -201,7 +202,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
     } else {
       startedAt = markedAt;
     }
-    console.log({startedAt});
+    console.log({ startedAt });
     await db.query(`
         UPDATE benchmark_jobs SET
           status = ?,
@@ -215,19 +216,25 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
         WHERE id = ?
         LIMIT 1
     `,
-    [
-      BenchmarkJob.Status.RUNNING, 
-      startedAt,
-      request.getJobId()]
+      [
+        BenchmarkJob.Status.RUNNING,
+        startedAt,
+        request.getJobId()]
     );
   }
+}
+
+function formatDate(timestamp: Timestamp) {
+  const date = new Date(timestamp.getSeconds() * 1000);
+  const datestr = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")} ${String(date.getUTCHours()).padStart(2, "0")}:${String(date.getUTCMinutes()).padStart(2, "0")}:${String(date.getUTCSeconds()).padStart(2, "0")}.${timestamp.getNanos() / 1000}`;
+  return datestr;
 }
 
 function main() {
   const server = new grpc.Server();
   const port = process.env["PORT"] ?? 50051;
 
-  
+
   server.addService<BenchmarkQueue.IBenchmarkQueueServer>(BenchmarkQueue.BenchmarkQueueService, new BenchmarkQueueService());
   server.addService<BenchmarkReport.IBenchmarkReportServer>(BenchmarkReport.BenchmarkReportService, new BenchmarkReportService());
   server.bind(`0.0.0.0:${port}`, grpc.ServerCredentials.createInsecure());
