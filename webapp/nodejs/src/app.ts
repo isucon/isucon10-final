@@ -38,7 +38,6 @@ const MYSQL_ER_DUP_ENTRY = 1062
 const ADMIN_ID = 'admin'
 const ADMIN_PASSWORD = 'admin'
 const DEBUG_CONTEST_STATUS_FILE_PATH = '/tmp/XSUPORTAL_CONTEST_STATUS'
-const hash = crypto.createHash('sha256');
 
 declare global {
   namespace Express {
@@ -530,7 +529,7 @@ app.post("/initialize", async (req, res, next) => {
 
     await db.query(
       'INSERT `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, TRUE, NOW(6))',
-      [ADMIN_ID, hash.update(ADMIN_PASSWORD).copy().digest("hex")]
+      [ADMIN_ID, crypto.createHash('sha256').update(ADMIN_PASSWORD).copy().digest("hex")]
     )
 
     const contest = request.getContest();
@@ -1324,7 +1323,7 @@ app.post("/api/signup", async (req, res, next) => {
     const request = SignupRequest.deserializeBinary(Uint8Array.from(req.body));
     await db.query(
       'INSERT INTO `contestants` (`id`, `password`, `staff`, `created_at`) VALUES (?, ?, FALSE, NOW(6))',
-      [request.getContestantId(), crypto.createHash('RSA-SHA256').update(request.getPassword(), "utf8").digest('hex')]
+      [request.getContestantId(), crypto.createHash('sha256').update(request.getPassword(), "utf8").digest('hex')]
     );
     req.session.contestant_id = request.getContestantId();
     const response = new SignupResponse();
@@ -1347,7 +1346,7 @@ app.post("/api/login", async (req, res, next) => {
       [request.getContestantId()],
     );
 
-    if (contestant?.password === crypto.createHash('RSA-SHA256').update(request.getPassword(), "utf8").digest('hex')) {
+    if (contestant?.password === crypto.createHash('sha256').update(request.getPassword(), "utf8").digest('hex')) {
       req.session.contestant_id = request.getContestantId();
     } else {
       return haltPb(res, 400, "ログインIDまたはパスワードが正しくありません");
