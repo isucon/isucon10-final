@@ -71,6 +71,7 @@ class BenchmarkQueueService implements BenchmarkQueue.IBenchmarkQueueServer {
           const jobCreatedAt = convertDateToTimestamp(jobHandle.jobCreatedAt);
           jobHandleResource.setJobCreatedAt(jobCreatedAt);
         }
+        jobHandleResource.setTargetHostname(jobHandle.targetHostName);
         response.setJobHandle(jobHandleResource);
       }
       await db.commit();
@@ -140,6 +141,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
         notifier.notifyBenchmarkJobFinished(job, db);
       } else {
         console.debug(`${request.getJobId()}: save as running`);
+        console.debug(job);
         await this.saveAsRunning(job, request, db);
         db.commit();
       }
