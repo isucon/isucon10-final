@@ -39,9 +39,7 @@ func BrowserAccess(ctx context.Context, member *model.Contestant, rpath string) 
 		return res, resources, nil, failure.NewError(ErrHTTP, err)
 	}
 
-	// TODO: 検証してない。
 	session, err := GetCurrentSession(ctx, member)
-
 	return res, resources, session, err
 }
 

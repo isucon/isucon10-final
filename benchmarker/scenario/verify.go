@@ -14,6 +14,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/services/common"
+
 	"github.com/isucon/isucandar"
 	"github.com/isucon/isucandar/agent"
 	"github.com/isucon/isucandar/failure"
@@ -362,6 +364,62 @@ func verifyGetBenchmarkJobDetail(res *contestant.GetBenchmarkJobResponse, team *
 
 	if result.Reason != rresult.GetReason() {
 		return errorInvalidResponse("不正な reason")
+	}
+
+	return nil
+}
+
+func (s *Scenario) verifyClarification(tc *model.Clarification, c *resources.Clarification) error {
+	if !AssertEqual("clar team", tc.TeamID, c.GetTeamId()) ||
+		!AssertEqual("clar disclosed", tc.Disclose, c.GetDisclosed()) ||
+		!AssertEqual("clar question", tc.Question, c.GetQuestion()) ||
+		!AssertEqual("clar answer", tc.Answer, c.GetAnswer()) {
+		return errorInvalidResponse("返却された Clarification の内容が不正です")
+	}
+	return nil
+}
+
+func (s *Scenario) verifySession(session *common.GetCurrentSessionResponse, team *model.Team, member *model.Contestant) error {
+	acontest := session.GetContest()
+	if acontest == nil {
+		return errorInvalidResponse("セッションのコンテスト情報が不正です")
+	}
+
+	if !AssertEqual("session reg at", s.Contest.RegistrationOpenAt, acontest.GetRegistrationOpenAt().AsTime()) ||
+		!AssertEqual("session start at", s.Contest.ContestStartsAt, acontest.GetContestStartsAt().AsTime()) ||
+		!AssertEqual("session freeze at", s.Contest.ContestFreezesAt, acontest.GetContestFreezesAt().AsTime()) ||
+		!AssertEqual("session ends at", s.Contest.ContestEndsAt, acontest.GetContestEndsAt().AsTime()) {
+		return errorInvalidResponse("セッションのコンテスト情報が不正です")
+	}
+
+	if member == nil {
+		return nil
+	}
+
+	amember := session.GetContestant()
+	if amember == nil {
+		return errorInvalidResponse("セッションのユーザー情報が不正です")
+	}
+
+	if !AssertEqual("session name", member.Name, amember.GetName()) ||
+		!AssertEqual("session id", member.ID, amember.GetId()) ||
+		!AssertEqual("session student", member.IsStudent, amember.GetIsStudent()) {
+		return errorInvalidResponse("セッションのユーザー情報が不正です")
+	}
+
+	if team == nil {
+		return nil
+	}
+
+	ateam := session.GetTeam()
+	if ateam == nil {
+		return errorInvalidResponse("セッションのチーム情報が不正です")
+	}
+
+	if !AssertEqual("session team name", team.TeamName, ateam.GetName()) ||
+		!AssertEqual("session team id", team.ID, ateam.GetId()) ||
+		!AssertEqual("session team student", team.IsStudent, ateam.GetStudent().GetStatus()) {
+		return errorInvalidResponse("セッションのチーム情報が不正です")
 	}
 
 	return nil

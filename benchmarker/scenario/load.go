@@ -249,7 +249,8 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 		memberInviteURL := registration.GetMemberInviteUrl()
 		inviteToken := registration.GetInviteToken()
 
-		// TODO: 本来であれば dashboard に到達してから subscribe ボタンを押下して実施される流れなので、dashboard の時にとった session を利用したい ~sorah
+		// 本来であれば dashboard に到達してから subscribe ボタンを押下して実施される流れなので、dashboard の時にとった session を利用したい ~sorah
+		// あきらめる ~rosylilly
 		go s.watchNotifications(parent, step, team, team.Leader, session)
 
 		signupMember := func(member *model.Contestant, role string) func(context.Context) {
@@ -308,7 +309,8 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 					team.Operator = member
 				}
 
-				// TODO: 本来であれば dashboard に到達してから subscribe ボタンを押下して実施される流れなので、dashboard の時にとった session を利用したい ~sorah
+				// 本来であれば dashboard に到達してから subscribe ボタンを押下して実施される流れなので、dashboard の時にとった session を利用したい ~sorah
+				// あきらめる ~rosylilly
 				go s.watchNotifications(parent, step, team, member, session)
 			}
 		}
@@ -327,7 +329,7 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 	if s.TeamCapacity > 0 {
 		w.SetLoopCount(s.TeamCapacity)
 	}
-	// TODO: 並列数は要検討
+
 	w.SetParallelism(20)
 	go func(ctx context.Context, w *worker.Worker) {
 		for {
@@ -378,7 +380,7 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 			}
 
 			// ダッシュボード開いてキューを積むのでブラウザアクセスとダッシュボード的 API 呼び出しを含む
-			res, resources, _, err := BrowserAccess(ctx, team.Developer, "/contestant")
+			res, resources, session, err := BrowserAccess(ctx, team.Developer, "/contestant")
 			if err != nil {
 				go func() { <-team.EnqueueLock }()
 				step.AddError(err)
@@ -394,6 +396,11 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 				go func() { <-team.EnqueueLock }()
 				<-time.After(100 * time.Millisecond)
 				continue
+			}
+
+			if err := s.verifySession(session, team, team.Developer); err != nil {
+				step.AddError(err)
+				return
 			}
 
 			if s.isContestEnd() {
@@ -441,7 +448,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
 		team := s.Contest.Teams[index]
 
-		res, resources, _, err := BrowserAccess(ctx, team.Operator, "/contestant")
+		res, resources, session, err := BrowserAccess(ctx, team.Operator, "/contestant")
 		if err != nil {
 			step.AddError(err)
 			return
@@ -452,6 +459,11 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 			step.AddError(err)
 		}
 		if len(errs) > 0 {
+			return
+		}
+
+		if err := s.verifySession(session, team, team.Operator); err != nil {
+			step.AddError(err)
 			return
 		}
 
@@ -535,7 +547,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 			}
 
 			if time.Now().After(latestClarPostedAt.Add(3 * time.Second)) {
-				page, resources, _, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
+				page, resources, session, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
 				if err != nil {
 					step.AddError(err)
 					<-time.After(100 * time.Millisecond)
@@ -549,6 +561,11 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				if len(errs) > 0 {
 					<-time.After(100 * time.Millisecond)
 					continue
+				}
+
+				if err := s.verifySession(session, team, team.Leader); err != nil {
+					step.AddError(err)
+					return
 				}
 
 				if s.isContestEnd() {
@@ -672,7 +689,6 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 					continue
 				}
 
-				// TODO: 検証をしていない
 				if clar.GetAnswered() {
 					continue
 				}
@@ -803,7 +819,7 @@ func (s *Scenario) watchNotifications(parent context.Context, step *isucandar.Be
 	notificationChan := make(chan []*resources.Notification, 32)
 
 	go s.subscribeToPushNotification(parent, step, member, session, notificationChan)
-	go s.loadListNotifications(parent, step, member, notificationChan)
+	go s.loadListNotifications(parent, step, team, member, notificationChan)
 
 	idBucket, err := simplelru.NewLRU(256, func(k interface{}, v interface{}) {})
 	if err != nil {
@@ -904,10 +920,11 @@ func (s *Scenario) subscribeToPushNotification(parent context.Context, step *isu
 	}
 }
 
-func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar.BenchmarkStep, member *model.Contestant, channel chan<- []*resources.Notification) {
+func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar.BenchmarkStep, team *model.Team, member *model.Contestant, channel chan<- []*resources.Notification) {
 	ctx, cancel := context.WithDeadline(parent, s.Contest.ContestEndsAt.Add(5*time.Second))
 	defer cancel()
 
+	lastAnsweredClarificationId := int64(0)
 	for {
 		if s.isContestEnd() {
 			<-ctx.Done()
@@ -916,7 +933,12 @@ func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar
 
 		notifications, err := GetNotifications(ctx, member)
 		if err == nil {
-			// TODO: last_answered_clarification_id の検証をやっていない
+			if lastAnsweredClarificationId > notifications.GetLastAnsweredClarificationId() {
+				step.AddError(errorInvalidResponse("通知リスト内の最終回答 Clarification ID が不正です"))
+				continue
+			}
+			lastAnsweredClarificationId = notifications.GetLastAnsweredClarificationId()
+
 			step.AddScore("list-notifications")
 			channel <- notifications.GetNotifications()
 		} else {
@@ -992,6 +1014,11 @@ func (s *Scenario) loadCheckClarification(ctx context.Context, step *isucandar.B
 			if c.GetId() == clar.GetClarificationId() {
 				for _, tc := range tClars {
 					if !tc.IsAnswered() && tc.ID() == c.GetId() {
+						if err := s.verifyClarification(tc, c); err != nil {
+							step.AddError(err)
+							continue
+						}
+
 						tc.Answered()
 						step.AddScore("resolve-clarification")
 					}
