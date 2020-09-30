@@ -89,10 +89,11 @@ export class AudienceApp extends React.Component<Props, State> {
             <Route
               exact
               path="/login"
-              render={() => {
+              render={({location}) => {
+                const params = new URLSearchParams(location.search);
                 return (
                   <>
-                    <Login client={this.props.client} />
+                    <Login client={this.props.client} redirect={params.get("redirect")} />
                   </>
                 );
               }}
