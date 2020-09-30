@@ -588,7 +588,7 @@ app.get("/api/admin/clarifications", async (req, res, next) => {
     }
 
     const contestatnt = await getCurrentContestant(req, db);
-    if (contestatnt?.staff == null) {
+    if (!contestatnt?.staff) {
       return haltPb(res, 403, '管理者権限が必要です');
     }
 
@@ -621,7 +621,7 @@ app.get("/api/admin/clarifications/:id", async (req, res, next) => {
     }
 
     const contestatnt = await getCurrentContestant(req, db);
-    if (contestatnt?.staff == null) {
+    if (!contestatnt?.staff) {
       return haltPb(res, 403, '管理者権限が必要です');
     }
 
