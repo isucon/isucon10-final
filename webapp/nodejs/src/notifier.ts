@@ -15,9 +15,11 @@ export class Notifier {
     if(fs.existsSync(Notifier.WEBPUSH_VAPID_PRIVATE_KEY_PATH)) return null;
     const privateKey = sshpk.parsePrivateKey(fs.readFileSync(Notifier.WEBPUSH_VAPID_PRIVATE_KEY_PATH), "pem");
     const publicKey = privateKey.toPublic();
+    const privateKeyString = (privateKey as any).part.d.data.toString('base64')
+    const publicKeyString = (publicKey as any).part.Q.data.toString('base64')
 
     Notifier.VAPIDKey = webpush.generateVAPIDKeys();
-    webpush.setVapidDetails(Notifier.WEBPUSH_SUBJECT, publicKey.toBuffer('auto').toString(), privateKey.toBuffer('auto', {}).toString());
+    webpush.setVapidDetails(Notifier.WEBPUSH_SUBJECT, publicKeyString, privateKeyString);
     return Notifier.VAPIDKey;
   }
 
