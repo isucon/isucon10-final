@@ -145,7 +145,6 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 
 	for _, err := range errors {
 		if failure.IsCode(err, scenario.ErrCritical) {
-			scenario.AdminLogger.Printf("CRITICAL: %v\n", err)
 			passed = false
 			reason = "Critical error"
 			continue
@@ -283,7 +282,8 @@ func main() {
 	}
 
 	b.OnError(func(err error, step *isucandar.BenchmarkStep) {
-		if failure.IsCode(err, failure.TimeoutErrorCode) {
+		// Load 中の timeout のみログから除外
+		if failure.IsCode(err, failure.TimeoutErrorCode) && failure.IsCode(err, isucandar.ErrLoad) {
 			return
 		}
 
