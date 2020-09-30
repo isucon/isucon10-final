@@ -337,7 +337,8 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 
 func (s *Scenario) isContestEnd() bool {
 	now := time.Now()
-	return now.After(s.Contest.ContestEndsAt) || now.Equal(s.Contest.ContestEndsAt)
+	ends := s.Contest.ContestEndsAt.Add(-500 * time.Millisecond)
+	return now.After(ends) || now.Equal(ends)
 }
 
 // 競技者によるベンチマークの開始。
