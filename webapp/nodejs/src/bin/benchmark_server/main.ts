@@ -180,7 +180,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
         WHERE id = ?
         LIMIT 1
     `,
-    [BenchmarkJob.Status.FINISHED, result?.getScoreBreakdown()?.getRaw(), result?.getScoreBreakdown()?.getDeduction(), result?.getPassed(), result?.getReason(), strftime('%Y-%m-%d %H:%M:%S.%L', markedAt), request.getJobId()]
+    [BenchmarkJob.Status.FINISHED, result?.getScoreBreakdown()?.getRaw(), result?.getScoreBreakdown()?.getDeduction(), result?.getPassed(), result?.getReason(), markedAt.toUTCString(), request.getJobId()]
     );
   }
 
@@ -192,6 +192,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
     }
     const markedAt = new Date(markedAtTimestamp.getSeconds()*1000 + markedAtTimestamp.getNanos() / 1000);
 
+    console.debug(`markedAt, ${markedAt}`);
     const result = request.getResult();
     await db.query(`
         UPDATE benchmark_jobs SET
@@ -208,7 +209,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
     `,
     [
       BenchmarkJob.Status.RUNNING, 
-      strftime('%Y-%m-%d %H:%M:%S.%L', new Date(job.started_at) || markedAt),
+      new Date(job.started_at).toUTCString() || markedAt.toUTCString(),
       request.getJobId()]
     );
   }
