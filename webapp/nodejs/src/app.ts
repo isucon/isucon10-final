@@ -62,7 +62,7 @@ export const dbinfo: mysql.PoolConfig = {
 const pool = mysql.createPool(dbinfo);
 
 export const getDB = async () => (await pool).getConnection()
-export const notifier = new Notifier(pool);
+export const notifier = new Notifier();
 
 const haltPb = (res: express.Response, code: number, humanMessage: string) => {
   res.contentType('application/vnd.google.protobuf; proto=xsuportal.proto.Error');
@@ -691,7 +691,7 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
 
     await db.commit();
 
-    notifier.notifyClarificationAnswered(clar, wasAnswered && wasDisclosed == clar.disclosed)
+    notifier.notifyClarificationAnswered(clar, db, wasAnswered && wasDisclosed == clar.disclosed)
     const clarPb = await getClarificationResource(clar, team, db);
 
     const response = new RespondClarificationResponse();

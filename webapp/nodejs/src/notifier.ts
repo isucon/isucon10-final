@@ -2,22 +2,13 @@ import fs from 'fs';
 import webpush from 'web-push';
 import sshpk from 'sshpk';
 
-import type { Pool } from 'promise-mysql';
+import type { PoolConnection } from 'promise-mysql';
 import { Notification } from '../proto/xsuportal/resources/notification_pb';
 
 export class Notifier {
   static WEBPUSH_VAPID_PRIVATE_KEY_PATH = '../vapid_private.pem';
   static WEBPUSH_SUBJECT = 'xsuportal@example.com';
   static VAPIDKey: webpush.VapidKeys;
-  pool: Promise<Pool>;
-
-  constructor(pool: Promise<Pool>) {
-    this.pool = pool;
-  }
-
-  async getConnection() {
-    return (await this.pool).getConnection()
-  }
 
   getVAPIDKey() {
     if(Notifier.VAPIDKey !== null) return Notifier.VAPIDKey;
@@ -30,8 +21,7 @@ export class Notifier {
     return Notifier.VAPIDKey;
   }
 
-  async notifyClarificationAnswered(clar: NonNullable<any>, updated = false) {
-    const db = await this.getConnection();
+  async notifyClarificationAnswered(clar: NonNullable<any>, db: PoolConnection, updated = false) {
     const contestants = await db.query(
       clar.disclosed
         ? 'SELECT `id`, `team_id` FROM `contestants`'
@@ -46,13 +36,12 @@ export class Notifier {
         clarificationMessage.setUpdated(updated);
         const notification = new Notification();
         notification.setContentClarification(clarificationMessage);
-        this.notify(notification, contestant.id);
-        if (Notifier.VAPIDKey) this.notifyWebpush(notification, contestant.id);
+        this.notify(notification, contestant.id, db);
+        if (Notifier.VAPIDKey) this.notifyWebpush(notification, contestant.id, db);
       }
   }
 
-  async notifyBenchmarkJobFinished(job) {
-    const db = await this.getConnection();
+  async notifyBenchmarkJobFinished(job, db: PoolConnection) {
     const contestants = await db.query(
       'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?',
       [job.team_id]
@@ -63,23 +52,21 @@ export class Notifier {
       benchmarkJobMessage.setBenchmarkJobId(job.id);
       const notification = new Notification();
       notification.setContentBenchmarkJob(benchmarkJobMessage);
-      await this.notify(notification, contestant.id);
-      if (Notifier.VAPIDKey) await this.notifyWebpush(notification, contestant.id);
+      await this.notify(notification, contestant.id, db);
+      if (Notifier.VAPIDKey) await this.notifyWebpush(notification, contestant.id, db);
     }
   }
 
-  async notify(notification: Notification, contestantId) {
+  async notify(notification: Notification, contestantId, db) {
     const encodedMessage = Buffer.from(notification.serializeBinary()).toString('base64');
-    const db = await this.getConnection();
     await db.query(
       'INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))',
       [contestantId, encodedMessage]
     );
   }
 
-  async notifyWebpush(notification, contestantId) {
+  async notifyWebpush(notification, contestantId, db) {
     const message = Buffer.from(notification.serializeBinary()).toString('base64');
-    const db = await this.getConnection();
     const subs = await db.query(
       'SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?',
       [contestantId]
