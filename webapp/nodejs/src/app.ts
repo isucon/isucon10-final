@@ -648,11 +648,13 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
     await db.beginTransaction();
     const loginSuccess = await loginRequired(req, res, db, { team: false });
     if (!loginSuccess) {
+      await db.rollback();
       return;
     }
 
     const contestatnt = await getCurrentContestant(req, db);
     if (!contestatnt?.staff) {
+      await db.rollback();
       return haltPb(res, 403, '管理者権限が必要です');
     }
 
@@ -660,6 +662,7 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
     const [clarBefore] = await db.query('SELECT * FROM `clarifications` WHERE `id` = ? LIMIT 1 FOR UPDATE', [req.params.id]);
 
     if (clarBefore == null) {
+      await db.rollback();
       return haltPb(res, 404, '質問が見つかりません');
     }
     const wasAnswered = !!clarBefore.answered_at;
@@ -891,10 +894,12 @@ app.post("/api/registration/contestant", async (req, res, next) => {
     const currentContestant = await getCurrentContestant(req, db);
     const currentContestStatus = await getCurrentContestStatus(db);
     if (currentContestStatus.contest.status !== Contest.Status.REGISTRATION) {
+      await db.rollback();
       return haltPb(res, 403, "チーム登録期間ではありません");
     }
     const loginSuccess = await loginRequired(req, res, db, { team: false, lock: true});
     if (!loginSuccess) {
+      await db.rollback();
       return;
     }
 
@@ -903,6 +908,7 @@ app.post("/api/registration/contestant", async (req, res, next) => {
     ]);
 
     if (team == null) {
+      await db.rollback();
       return haltPb(res, 400, '招待URLが不正です');
     }
 
@@ -912,6 +918,7 @@ app.post("/api/registration/contestant", async (req, res, next) => {
     );
 
     if (members.cnt >= 3) {
+      await db.rollback();
       return haltPb(res, 400, 'チーム人数の上限に達しています');
     }
 
@@ -945,6 +952,7 @@ app.put("/api/registration", async (req, res, next) => {
 
     const loginSuccess = await loginRequired(req, res, db, { team: false, lock: true});
     if (!loginSuccess) {
+      await db.rollback();
       return;
     }
 
@@ -984,10 +992,12 @@ app.delete("/api/registration", async (req, res, next) => {
 
     const loginSuccess = await loginRequired(req, res, db, { team: false, lock: true});
     if (!loginSuccess) {
+      await db.rollback();
       return;
     }
     const currentContestStatus = await getCurrentContestStatus(db);
     if (currentContestStatus.contest.status !== Contest.Status.REGISTRATION) {
+      await db.rollback();
       return haltPb(res, 403, "チーム登録期間外は辞退できません");
     }
     if (currentTeam.leader_id == currentTeam.id) {
@@ -1023,12 +1033,14 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
     const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Uint8Array.from(req.body));
     const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
+      await db.rollback();
       return;
     }
     console.log(request.toObject());
 
     const passRestricted = await contestStatusRestricted(res, [Contest.Status.STARTED], "競技時間外はベンチマークを実行できません", db);
     if (!passRestricted) {
+      await db.rollback();
       return;
     }
     console.log(passRestricted);
@@ -1039,6 +1051,7 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
       currentTeam.id
     );
     if (jobCount && jobCount.cnt > 0) {
+      await db.rollback();
       return haltPb(res, 403, "既にベンチマークを実行中です");
     }
 
@@ -1152,6 +1165,7 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
 
     const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
+      await db.rollback();
       return;
     }
 
@@ -1203,6 +1217,7 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
     await db.beginTransaction();
     const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
+      await db.rollback();
       return;
     }
 
