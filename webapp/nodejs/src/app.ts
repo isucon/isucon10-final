@@ -1,5 +1,5 @@
 import express from "express";
-import session from "express-session";
+import session from "cookie-session";
 import mysql from "promise-mysql";
 import crypto from 'crypto';
 import fs from "fs";
@@ -81,16 +81,13 @@ export const secureRandom = (size: number) => {
 
 export const app = express();
 
+app.set('trust proxy', 1);
 app.use(express.static("../public"));
 app.use(morgan('combined'));
 app.use(session({
   secret: 'tagomoris',
   name: 'session_xsucon',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    maxAge: 3600000
-  },
+  maxAge: 60 * 60 * 1000
 }));
 
 // rawbody
@@ -551,9 +548,9 @@ app.post("/initialize", async (req, res, next) => {
       INSERT contest_config (registration_open_at, contest_starts_at, contest_freezes_at, contest_ends_at) VALUES
       (
         TIMESTAMPADD(SECOND, 0, NOW(6)),
-        TIMESTAMPADD(SECOND, 5, NOW(6)),
-        TIMESTAMPADD(SECOND, 40, NOW(6)),
-        TIMESTAMPADD(SECOND, 50, NOW(6))
+        TIMESTAMPADD(SECOND, 3600, NOW(6)),
+        TIMESTAMPADD(SECOND, 7200, NOW(6)),
+        TIMESTAMPADD(SECOND, 9999, NOW(6))
       )
       `);
     }
