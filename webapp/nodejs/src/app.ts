@@ -823,7 +823,7 @@ app.post("/api/registration/team", async (req, res, next) => {
   try {
     const request = CreateTeamRequest.deserializeBinary(Uint8Array.from(req.body));
 
-    const loginSuccess = await loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db, { team: false });
     if (!loginSuccess) {
       return
     }
