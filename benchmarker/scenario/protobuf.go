@@ -81,13 +81,13 @@ func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpa
 		xError := &xsuportal.Error{}
 		err := proto.Unmarshal(respb, xError)
 		if err != nil {
-			return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のデコードに失敗しました(%s %s)", httpreq.Method, httpreq.URL.Path))
+			return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のデコードに失敗しました(%s %s): %v", httpreq.Method, httpreq.URL.Path, err))
 		}
 		return httpres, &ProtobufError{XError: xError}
 	}
 
 	if err := proto.Unmarshal(respb, res); err != nil {
-		return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のデコードに失敗しました(%s %s)", httpreq.Method, httpreq.URL.Path))
+		return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のデコードに失敗しました(%s %s): %v", httpreq.Method, httpreq.URL.Path, err))
 	}
 
 	return httpres, nil
