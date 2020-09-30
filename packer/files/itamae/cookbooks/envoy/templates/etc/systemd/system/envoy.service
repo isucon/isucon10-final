@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 User=isucon
-ExecStart=/usr/bin/envoy -c /etc/envoy/config.yaml
+ExecStart=/usr/bin/envoy -c /etc/envoy/config.yaml --concurrency 1
 RuntimeDirectory=envoy
 LogsDirectory=envoy
 AmbientCapabilities=CAP_NET_BIND_SERVICE

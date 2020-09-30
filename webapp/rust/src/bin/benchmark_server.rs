@@ -1,8 +1,12 @@
 use listenfd::ListenFd;
+use std::env;
 use std::sync::Arc;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    if env::var("RUST_LOG").is_err() {
+        env::set_var("RUST_LOG", "xsuportal=info");
+    }
     env_logger::init();
 
     let mysql_connection_env = xsuportal::MySQLConnectionEnv::default();

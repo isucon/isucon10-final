@@ -22,12 +22,15 @@ import (
 	"github.com/isucon/isucon10-final/benchmarker/pushserver"
 )
 
-func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) error {
+func (s *Scenario) Load(parent context.Context, step *isucandar.BenchmarkStep) error {
 	if s.NoLoad {
 		return nil
 	}
+	ctx, cancel := context.WithCancel(parent)
+	defer cancel()
 
 	ContestantLogger.Printf("===> LOAD")
+	AdminLogger.Printf("LOAD INFO\n  Registration Open at: %s\n  Contest Start at: %s\n  Contest Freeze at: %s\n  Contest Ends at: %s\n", s.Contest.RegistrationOpenAt, s.Contest.ContestStartsAt, s.Contest.ContestFreezesAt, s.Contest.ContestEndsAt)
 	wg := sync.WaitGroup{}
 
 	wg.Add(1)
@@ -51,6 +54,8 @@ func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) erro
 			step.AddError(err)
 		}
 	}()
+
+	<-time.After(s.Contest.RegistrationOpenAt.Sub(time.Now()))
 
 	if err := s.loadSignup(ctx, step); err != nil {
 		return err
@@ -100,7 +105,7 @@ func (s *Scenario) Load(ctx context.Context, step *isucandar.BenchmarkStep) erro
 
 	wg.Wait()
 
-	<-time.After(s.Contest.ContestEndsAt.Add(1 * time.Second).Sub(time.Now()))
+	<-time.After(s.Contest.ContestEndsAt.Add(5 * time.Second).Sub(time.Now()))
 
 	return nil
 }
@@ -142,6 +147,7 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 	defer cancel()
 
 	stopSignup := uint32(0)
+	firstSignup := uint32(0)
 
 	w, err := worker.NewWorker(func(ctx context.Context, _ int) {
 		if atomic.LoadUint32(&stopSignup) > 0 {
@@ -176,6 +182,18 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 		dev := team.Developer
 		team.Operator = team.Leader
 		team.Developer = team.Leader
+
+		if atomic.CompareAndSwapUint32(&firstSignup, 0, 1) {
+			lead.ID = "isucon1"
+			lead.Password = "isucon1"
+			lead.Name = "isucon1"
+			dev.ID = "isucon2"
+			dev.Password = "isucon2"
+			dev.Name = "isucon2"
+			ops.ID = "isucon3"
+			ops.Password = "isucon3"
+			ops.Name = "isucon3"
+		}
 
 		res, resources, session, err := BrowserAccess(ctx, lead, "/signup")
 		if err != nil {
@@ -231,7 +249,8 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 		memberInviteURL := registration.GetMemberInviteUrl()
 		inviteToken := registration.GetInviteToken()
 
-		// TODO: 本来であれば dashboard に到達してから subscribe ボタンを押下して実施される流れなので、dashboard の時にとった session を利用したい ~sorah
+		// 本来であれば dashboard に到達してから subscribe ボタンを押下して実施される流れなので、dashboard の時にとった session を利用したい ~sorah
+		// あきらめる ~rosylilly
 		go s.watchNotifications(parent, step, team, team.Leader, session)
 
 		signupMember := func(member *model.Contestant, role string) func(context.Context) {
@@ -290,7 +309,8 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 					team.Operator = member
 				}
 
-				// TODO: 本来であれば dashboard に到達してから subscribe ボタンを押下して実施される流れなので、dashboard の時にとった session を利用したい ~sorah
+				// 本来であれば dashboard に到達してから subscribe ボタンを押下して実施される流れなので、dashboard の時にとった session を利用したい ~sorah
+				// あきらめる ~rosylilly
 				go s.watchNotifications(parent, step, team, member, session)
 			}
 		}
@@ -309,7 +329,7 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 	if s.TeamCapacity > 0 {
 		w.SetLoopCount(s.TeamCapacity)
 	}
-	// TODO: 並列数は要検討
+
 	w.SetParallelism(20)
 	go func(ctx context.Context, w *worker.Worker) {
 		for {
@@ -330,9 +350,15 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 	return nil
 }
 
+func (s *Scenario) isContestEnd() bool {
+	now := time.Now()
+	ends := s.Contest.ContestEndsAt.Add(-500 * time.Millisecond)
+	return now.After(ends) || now.Equal(ends)
+}
+
 // 競技者によるベンチマークの開始。
 func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(5*time.Second))
 	defer cancel()
 
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
@@ -348,8 +374,13 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 			// すべての Clar の解決を待つ
 			<-team.WaitAllClarResolve(ctx)
 
+			if s.isContestEnd() {
+				<-ctx.Done()
+				return
+			}
+
 			// ダッシュボード開いてキューを積むのでブラウザアクセスとダッシュボード的 API 呼び出しを含む
-			res, resources, _, err := BrowserAccess(ctx, team.Developer, "/contestant")
+			res, resources, session, err := BrowserAccess(ctx, team.Developer, "/contestant")
 			if err != nil {
 				go func() { <-team.EnqueueLock }()
 				step.AddError(err)
@@ -367,8 +398,23 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 				continue
 			}
 
+			if err := s.verifySession(session, team, team.Developer); err != nil {
+				step.AddError(err)
+				return
+			}
+
+			if s.isContestEnd() {
+				<-ctx.Done()
+				return
+			}
+
 			go GetDashboardAction(ctx, team, team.Developer, 2*time.Second)
 			go GetBenchmarkJobs(ctx, team, team.Developer)
+
+			if s.isContestEnd() {
+				<-ctx.Done()
+				return
+			}
 
 			job, err := EnqueueBenchmarkJobAction(ctx, team)
 			if err != nil {
@@ -402,7 +448,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
 		team := s.Contest.Teams[index]
 
-		res, resources, _, err := BrowserAccess(ctx, team.Operator, "/contestant")
+		res, resources, session, err := BrowserAccess(ctx, team.Operator, "/contestant")
 		if err != nil {
 			step.AddError(err)
 			return
@@ -416,7 +462,17 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 			return
 		}
 
+		if err := s.verifySession(session, team, team.Operator); err != nil {
+			step.AddError(err)
+			return
+		}
+
 		for ctx.Err() == nil {
+			if s.isContestEnd() {
+				<-ctx.Done()
+				return
+			}
+
 			timer := time.After(1 * time.Second)
 			wg := sync.WaitGroup{}
 			wg.Add(2)
@@ -470,7 +526,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 // 競技者による Clar の送信。既に送信していて未回答の Clar がある場合は追加で送信は行わない。
 // Clar には自動更新がないのでこちらもブラウザリロード
 func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(5*time.Second))
 	defer cancel()
 
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
@@ -485,8 +541,13 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 		latestClarPostedAt := time.Now()
 
 		for ctx.Err() == nil {
+			if s.isContestEnd() {
+				<-ctx.Done()
+				return
+			}
+
 			if time.Now().After(latestClarPostedAt.Add(3 * time.Second)) {
-				page, resources, _, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
+				page, resources, session, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
 				if err != nil {
 					step.AddError(err)
 					<-time.After(100 * time.Millisecond)
@@ -500,6 +561,16 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				if len(errs) > 0 {
 					<-time.After(100 * time.Millisecond)
 					continue
+				}
+
+				if err := s.verifySession(session, team, team.Leader); err != nil {
+					step.AddError(err)
+					return
+				}
+
+				if s.isContestEnd() {
+					<-ctx.Done()
+					return
 				}
 
 				_, err = GetClarificationsAction(ctx, leader)
@@ -547,7 +618,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 
 // 管理者による Clar のチェックと解答。Clar には自動更新がないのでブラウザリロードを毎回行っている。
 func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt)
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(5*time.Second))
 	defer cancel()
 
 	admin, err := model.NewAdmin()
@@ -564,7 +635,10 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
 		for ctx.Err() == nil {
-			timer := time.After(200 * time.Millisecond)
+			if s.isContestEnd() {
+				<-ctx.Done()
+				return
+			}
 
 			cres, cresources, _, err := BrowserAccess(ctx, admin, "/admin/clarifications")
 			if err != nil {
@@ -582,6 +656,11 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 				return
 			}
 
+			if s.isContestEnd() {
+				<-ctx.Done()
+				return
+			}
+
 			res, err := AdminGetClarificationsAction(ctx, admin)
 			if err != nil {
 				step.AddError(err)
@@ -589,6 +668,8 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 				continue
 			}
 			step.AddScore("admin-get-clarifications")
+
+			resolveCounts := uint32(0)
 
 			wg := sync.WaitGroup{}
 			for _, clar := range res.GetClarifications() {
@@ -608,10 +689,10 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 					continue
 				}
 
-				// TODO: 検証をしていない
 				if clar.GetAnswered() {
 					continue
 				}
+				resolveCounts++
 
 				if !AssertEqual("Clar Team ID", team.ID, clar.GetTeamId()) {
 					step.AddError(errorInvalidResponse("Clarification のチーム ID が一致しません"))
@@ -651,7 +732,10 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 
 			wg.Wait()
 
-			<-timer
+			if resolveCounts == 0 {
+				timer := time.After(200 * time.Millisecond)
+				<-timer
+			}
 		}
 	}, worker.WithInfinityLoop(), worker.WithMaxParallelism(1))
 	if err != nil {
@@ -665,7 +749,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 
 // 外部参加者によるダッシュボードの閲覧。 pubsub で増える。
 func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.BenchmarkStep) error {
-	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestFreezesAt.Add(5*time.Second))
+	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(5*time.Second))
 	defer cancel()
 
 	audience := parallel.NewParallel(ctx, -1)
@@ -685,7 +769,10 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 		}
 
 		for ctx.Err() == nil {
-			timer := time.After(1 * time.Second)
+			if s.isContestEnd() {
+				<-ctx.Done()
+				return
+			}
 
 			requestedAt := time.Now().UTC()
 			latestMarkedAt := s.LatestMarkedAt()
@@ -705,7 +792,7 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 			step.AddScore("audience-get-dashboard")
 
 			select {
-			case <-timer:
+			case <-time.After(1 * time.Second):
 			case <-ctx.Done():
 				return
 			}
@@ -726,13 +813,13 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 }
 
 func (s *Scenario) watchNotifications(parent context.Context, step *isucandar.BenchmarkStep, team *model.Team, member *model.Contestant, session *common.GetCurrentSessionResponse) {
-	ctx, cancel := context.WithDeadline(parent, s.Contest.ContestEndsAt)
+	ctx, cancel := context.WithDeadline(parent, s.Contest.ContestEndsAt.Add(5*time.Second))
 	defer cancel()
 
 	notificationChan := make(chan []*resources.Notification, 32)
 
 	go s.subscribeToPushNotification(parent, step, member, session, notificationChan)
-	go s.loadListNotifications(parent, step, member, notificationChan)
+	go s.loadListNotifications(parent, step, team, member, notificationChan)
 
 	idBucket, err := simplelru.NewLRU(256, func(k interface{}, v interface{}) {})
 	if err != nil {
@@ -744,6 +831,11 @@ func (s *Scenario) watchNotifications(parent context.Context, step *isucandar.Be
 		case <-ctx.Done():
 			return
 		case notifications := <-notificationChan:
+			if s.isContestEnd() {
+				<-ctx.Done()
+				return
+			}
+
 			maxID := member.LatestNotificationID()
 			clars := []*resources.Notification_ClarificationMessage{}
 
@@ -828,14 +920,25 @@ func (s *Scenario) subscribeToPushNotification(parent context.Context, step *isu
 	}
 }
 
-func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar.BenchmarkStep, member *model.Contestant, channel chan<- []*resources.Notification) {
-	ctx, cancel := context.WithDeadline(parent, s.Contest.ContestEndsAt)
+func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar.BenchmarkStep, team *model.Team, member *model.Contestant, channel chan<- []*resources.Notification) {
+	ctx, cancel := context.WithDeadline(parent, s.Contest.ContestEndsAt.Add(5*time.Second))
 	defer cancel()
 
+	lastAnsweredClarificationId := int64(0)
 	for {
+		if s.isContestEnd() {
+			<-ctx.Done()
+			return
+		}
+
 		notifications, err := GetNotifications(ctx, member)
 		if err == nil {
-			// TODO: last_answered_clarification_id の検証をやっていない
+			if lastAnsweredClarificationId > notifications.GetLastAnsweredClarificationId() {
+				step.AddError(errorInvalidResponse("通知リスト内の最終回答 Clarification ID が不正です"))
+				continue
+			}
+			lastAnsweredClarificationId = notifications.GetLastAnsweredClarificationId()
+
 			step.AddScore("list-notifications")
 			channel <- notifications.GetNotifications()
 		} else {
@@ -910,7 +1013,12 @@ func (s *Scenario) loadCheckClarification(ctx context.Context, step *isucandar.B
 		for _, clar := range clars {
 			if c.GetId() == clar.GetClarificationId() {
 				for _, tc := range tClars {
-					if tc.ID() == c.GetId() {
+					if !tc.IsAnswered() && tc.ID() == c.GetId() {
+						if err := s.verifyClarification(tc, c); err != nil {
+							step.AddError(err)
+							continue
+						}
+
 						tc.Answered()
 						step.AddScore("resolve-clarification")
 					}

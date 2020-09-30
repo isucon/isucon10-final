@@ -151,7 +151,11 @@ func (b *Benchmarker) Process(ctx context.Context, step *isucandar.BenchmarkStep
 			}
 			bResult.SentFirstResult()
 
-			now := time.Now().UTC()
+			now := time.Now().UTC().Truncate(time.Millisecond)
+			for b.Scenario.LatestMarkedAt().Equal(now) {
+				<-time.After(1 * time.Millisecond)
+				now = time.Now().UTC().Truncate(time.Millisecond)
+			}
 			bResult.Mark(now)
 			result = b.generateLastReport(jobHandle, bResult)
 			b.Scenario.Mark(now)

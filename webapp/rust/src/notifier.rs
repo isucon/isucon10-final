@@ -1,63 +1,17 @@
 use crate::webpush::WebPushSigner;
-use chrono::NaiveDateTime;
 use mysql::prelude::*;
 use url::Url;
 
 #[derive(Debug)]
-pub struct PushSubscription {
-    pub id: i64,
-    pub contestant_id: String,
-    pub endpoint: String,
-    pub p256dh: String,
-    pub auth: String,
-    pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime,
-}
-impl FromRow for PushSubscription {
-    fn from_row_opt(mut row: mysql::Row) -> Result<Self, mysql::FromRowError> {
-        Ok(Self {
-            id: row
-                .take_opt("id")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            contestant_id: row
-                .take_opt("contestant_id")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            endpoint: row
-                .take_opt("endpoint")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            p256dh: row
-                .take_opt("p256dh")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            auth: row
-                .take_opt("auth")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            created_at: row
-                .take_opt("created_at")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-            updated_at: row
-                .take_opt("updated_at")
-                .ok_or_else(|| mysql::FromRowError(row.clone()))?
-                .map_err(|_| mysql::FromRowError(row.clone()))?,
-        })
-    }
-}
-
-#[derive(Debug)]
 pub enum WebPushError {
-    ExpiredSubscription(PushSubscription, reqwest::Response),
-    InvalidSubscription(PushSubscription, reqwest::Response),
-    Unauthorized(PushSubscription, reqwest::Response),
-    PayloadTooLarge(PushSubscription, reqwest::Response),
-    TooManyRequests(PushSubscription, reqwest::Response),
-    PushServiceError(PushSubscription, reqwest::Response),
-    ResponseError(PushSubscription, reqwest::Response),
-    ReqwestError(PushSubscription, reqwest::Error),
+    ExpiredSubscription(crate::PushSubscription, reqwest::Response),
+    InvalidSubscription(crate::PushSubscription, reqwest::Response),
+    Unauthorized(crate::PushSubscription, reqwest::Response),
+    PayloadTooLarge(crate::PushSubscription, reqwest::Response),
+    TooManyRequests(crate::PushSubscription, reqwest::Response),
+    PushServiceError(crate::PushSubscription, reqwest::Response),
+    ResponseError(crate::PushSubscription, reqwest::Response),
+    ReqwestError(crate::PushSubscription, reqwest::Error),
 }
 impl std::fmt::Display for WebPushError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
@@ -75,7 +29,7 @@ impl std::fmt::Display for WebPushError {
 }
 
 pub struct WebPushNotifier {
-    push_subscription: PushSubscription,
+    push_subscription: crate::PushSubscription,
     encoded_message: String,
 }
 impl WebPushNotifier {
@@ -251,68 +205,9 @@ where
         .expect("Inserted notification is not found"))
 }
 
-struct VapidKey {
-    encoding_key: jsonwebtoken::EncodingKey,
-    public_key_for_push_header: String,
-}
-
-lazy_static::lazy_static! {
-    static ref WEBPUSH_VAPID_KEY: Option<VapidKey> = load_webpush_vapid_private_key();
-}
 const WEBPUSH_VAPID_PRIVATE_KEY_PATH: &str = "../vapid_private.pem";
-
-fn load_webpush_vapid_private_key() -> Option<VapidKey> {
-    let pem_content = match std::fs::File::open(WEBPUSH_VAPID_PRIVATE_KEY_PATH) {
-        Ok(mut file) => {
-            use std::io::Read;
-            let mut buf = Vec::new();
-            file.read_to_end(&mut buf)
-                .expect("Failed to read WebPush VAPID private key");
-            buf
-        }
-        Err(e) => {
-            log::warn!(
-                "Failed to open WebPush VAPID private key {}: {:?}",
-                WEBPUSH_VAPID_PRIVATE_KEY_PATH,
-                e
-            );
-            return None;
-        }
-    };
-    let ec_key = openssl::ec::EcKey::private_key_from_pem(&pem_content);
-    if let Err(e) = ec_key {
-        log::warn!(
-            "Failed to parse WebPush VAPID private key {}: {:?}",
-            WEBPUSH_VAPID_PRIVATE_KEY_PATH,
-            e
-        );
-        return None;
-    }
-    let ec_key = ec_key.unwrap();
-
-    let mut ctx = openssl::bn::BigNumContext::new().unwrap();
-    let public_key = ec_key.public_key();
-    let key_bytes = public_key
-        .to_bytes(
-            ec_key.group(),
-            openssl::ec::PointConversionForm::UNCOMPRESSED,
-            &mut ctx,
-        )
-        .unwrap();
-    let public_key_for_push_header = data_encoding::BASE64URL_NOPAD.encode(&key_bytes);
-
-    let pkey =
-        openssl::pkey::PKey::from_ec_key(ec_key).expect("Failed to construct PKey from EcKey");
-    let pkcs8 = pkey
-        .private_key_to_pem_pkcs8()
-        .expect("Failed to get private key from PKey");
-    let encoding_key = jsonwebtoken::EncodingKey::from_ec_pem(&pkcs8)
-        .expect("Failed to construct EncodingKey from PKey");
-
-    Some(VapidKey {
-        encoding_key,
-        public_key_for_push_header,
-    })
+lazy_static::lazy_static! {
+    static ref WEBPUSH_VAPID_KEY: Option<crate::webpush::VapidKey> = crate::webpush::VapidKey::open(WEBPUSH_VAPID_PRIVATE_KEY_PATH);
 }
 
 pub fn get_public_key_for_push_header() -> Option<String> {
@@ -341,7 +236,7 @@ where
         .expect("Failed to encode Notification to protobuf");
     let encoded_message = data_encoding::BASE64.encode(proto.as_slice());
 
-    let subs: Vec<PushSubscription> = conn.exec(
+    let subs: Vec<crate::PushSubscription> = conn.exec(
         "SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?",
         (contestant_id,),
     )?;

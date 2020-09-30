@@ -66,7 +66,7 @@ func (b *BenchmarkResult) Mark(t time.Time) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
-	b.markedAt = t.Truncate(time.Microsecond)
+	b.markedAt = t.Truncate(time.Millisecond)
 }
 
 func (b *BenchmarkResult) StartedAt() time.Time {

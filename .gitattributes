@@ -9,3 +9,11 @@
 
 /webapp/nodejs/proto/**/*.js linguist-generated=true
 /webapp/nodejs/proto/**/*.ts linguist-generated=true
+
+/webapp/ruby/debug/**/* export-ignore
+/webapp/rust/debug/**/* export-ignore
+/webapp/golang/debug/**/* export-ignore
+/webapp/nodejs/debug/**/* export-ignore
+
+/webapp/golang/cmd/debug/**/* export-ignore
+/webapp/golang/cmd/debug/send_web_push/* -export-ignore

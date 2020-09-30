@@ -27,8 +27,9 @@ fn mysql_error_to_tonic_status(e: mysql::Error) -> TonicStatus {
 impl BenchmarkQueue for QueueService {
     async fn receive_benchmark_job(
         &self,
-        _request: Request<ReceiveBenchmarkJobRequest>,
+        request: Request<ReceiveBenchmarkJobRequest>,
     ) -> Result<Response<ReceiveBenchmarkJobResponse>, TonicStatus> {
+        log::info!("BenchmarkQueue: receive_benchmark_job: {:?}", request);
         let mut conn = self
             .db
             .get()
@@ -48,10 +49,7 @@ fn receive_benchmark_job(
     conn: &mut crate::PooledConnection,
 ) -> Result<Option<Option<JobHandle>>, mysql::Error> {
     let mut tx = conn.start_transaction(mysql::TxOpts::default())?;
-    let job: Option<crate::BenchmarkJob> = tx.exec_first(
-        "SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1",
-        (BenchmarkJobStatus::Pending as i32,),
-    )?;
+    let job = poll_benchmark_jobs(&mut tx)?;
     if job.is_none() {
         return Ok(Some(None));
     }
@@ -85,6 +83,25 @@ fn receive_benchmark_job(
     }
 }
 
+fn poll_benchmark_jobs<Q>(conn: &mut Q) -> Result<Option<crate::BenchmarkJob>, mysql::Error>
+where
+    Q: Queryable,
+{
+    for i in 0..10 {
+        if i > 0 {
+            std::thread::sleep(std::time::Duration::from_millis(50));
+        }
+        let job = conn.exec_first(
+            "SELECT * FROM `benchmark_jobs` WHERE `status` = ? ORDER BY `id` LIMIT 1",
+            (BenchmarkJobStatus::Pending as i32,),
+        )?;
+        if job.is_some() {
+            return Ok(job);
+        }
+    }
+    Ok(None)
+}
+
 #[derive(Debug)]
 pub struct ReportService {
     pub db: Arc<crate::Pool>,
@@ -105,13 +122,13 @@ impl BenchmarkReport for ReportService {
         &self,
         request: Request<Streaming<ReportBenchmarkResultRequest>>,
     ) -> Result<Response<Self::ReportBenchmarkResultStream>, TonicStatus> {
+        log::info!("BenchmarkReport: report_benchmark_result: {:?}", request);
         let mut conn = self
             .db
             .get()
             .expect("Failed to checkout database connection");
         let mut stream = request.into_inner();
 
-        // TODO: Delete push_subscription when Webpush::ExpiredSubscription or Webpush::InvalidSubscription
         let output = async_stream::try_stream! {
             while let Some(message) = stream.message().await? {
                 let job_id = message.job_id;

@@ -13,6 +13,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/isucon/isucandar/score"
@@ -109,6 +110,41 @@ func init() {
 	agent.DefaultRequestTimeout = timeout
 }
 
+func checkError(err error) (critical bool, timeout bool, deduction bool) {
+	critical = false
+	timeout = false
+	deduction = false
+
+	if failure.IsCode(err, scenario.ErrCritical) {
+		critical = true
+		return
+	}
+
+	if failure.IsCode(err, isucandar.ErrLoad) {
+		if failure.IsCode(err, failure.TimeoutErrorCode) {
+			timeout = true
+			return
+		} else if failure.IsCode(err, scenario.ErrInvalidResponse) ||
+			failure.IsCode(err, scenario.ErrChecksum) ||
+			failure.IsCode(err, scenario.ErrProtobuf) ||
+			failure.IsCode(err, scenario.ErrWebPush) ||
+			failure.IsCode(err, scenario.ErrHTTP) ||
+			failure.IsCode(err, scenario.ErrBenchmarkerReceive) ||
+			failure.IsCode(err, scenario.ErrBenchmarkerReport) ||
+			failure.IsCode(err, scenario.ErrX400) ||
+			failure.IsCode(err, scenario.ErrX401) ||
+			failure.IsCode(err, scenario.ErrX402) ||
+			failure.IsCode(err, scenario.ErrX403) ||
+			failure.IsCode(err, scenario.ErrX404) ||
+			failure.IsCode(err, scenario.ErrX503) ||
+			failure.IsCode(err, scenario.ErrX5XX) {
+			deduction = true
+		}
+	}
+
+	return
+}
+
 func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish bool) bool {
 	logger := scenario.ContestantLogger
 	passed := true
@@ -150,31 +186,16 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 	timeoutCount := int64(0)
 
 	for _, err := range errors {
-		if failure.IsCode(err, scenario.ErrCritical) {
+		isCritical, isTimeout, isDeduction := checkError(err)
+
+		switch true {
+		case isCritical:
 			passed = false
 			reason = "Critical error"
-			continue
-		}
-
-		if failure.IsCode(err, isucandar.ErrLoad) {
-			if failure.IsCode(err, failure.TimeoutErrorCode) {
-				timeoutCount++
-			} else if failure.IsCode(err, scenario.ErrInvalidResponse) ||
-				failure.IsCode(err, scenario.ErrChecksum) ||
-				failure.IsCode(err, scenario.ErrProtobuf) ||
-				failure.IsCode(err, scenario.ErrWebPush) ||
-				failure.IsCode(err, scenario.ErrHTTP) ||
-				failure.IsCode(err, scenario.ErrBenchmarkerReceive) ||
-				failure.IsCode(err, scenario.ErrBenchmarkerReport) ||
-				failure.IsCode(err, scenario.ErrX400) ||
-				failure.IsCode(err, scenario.ErrX401) ||
-				failure.IsCode(err, scenario.ErrX402) ||
-				failure.IsCode(err, scenario.ErrX403) ||
-				failure.IsCode(err, scenario.ErrX404) ||
-				failure.IsCode(err, scenario.ErrX503) ||
-				failure.IsCode(err, scenario.ErrX5XX) {
-				deduction++
-			}
+		case isTimeout:
+			timeoutCount++
+		case isDeduction:
+			deduction++
 		}
 	}
 
@@ -309,7 +330,7 @@ func main() {
 	s.NoLoad = noLoad
 	s.NoClar = noClar
 
-	b, err := isucandar.NewBenchmark(isucandar.WithLoadTimeout(65 * time.Second))
+	b, err := isucandar.NewBenchmark(isucandar.WithLoadTimeout(70 * time.Second))
 	if err != nil {
 		panic(err)
 	}
@@ -319,13 +340,16 @@ func main() {
 		panic(err)
 	}
 
+	errorCount := int64(0)
 	b.OnError(func(err error, step *isucandar.BenchmarkStep) {
 		// Load 中の timeout のみログから除外
 		if failure.IsCode(err, failure.TimeoutErrorCode) && failure.IsCode(err, isucandar.ErrLoad) {
 			return
 		}
 
-		if failure.IsCode(err, scenario.ErrCritical) {
+		critical, _, deduction := checkError(err)
+
+		if critical || (deduction && atomic.AddInt64(&errorCount, 1) >= 100) {
 			step.Cancel()
 		}
 

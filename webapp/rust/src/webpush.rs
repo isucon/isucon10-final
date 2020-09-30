@@ -23,6 +23,70 @@ struct JWTClaims {
     sub: String,
 }
 
+#[derive(Debug)]
+pub struct VapidKey {
+    pub encoding_key: jsonwebtoken::EncodingKey,
+    pub public_key_for_push_header: String,
+}
+impl VapidKey {
+    pub fn open<P>(path: P) -> Option<VapidKey>
+    where
+        P: AsRef<std::path::Path>,
+    {
+        let pem_content = match std::fs::File::open(&path) {
+            Ok(mut file) => {
+                use std::io::Read;
+                let mut buf = Vec::new();
+                file.read_to_end(&mut buf)
+                    .expect("Failed to read WebPush VAPID private key");
+                buf
+            }
+            Err(e) => {
+                log::warn!(
+                    "Failed to open WebPush VAPID private key {}: {:?}",
+                    path.as_ref().display(),
+                    e
+                );
+                return None;
+            }
+        };
+        let ec_key = openssl::ec::EcKey::private_key_from_pem(&pem_content);
+        if let Err(e) = ec_key {
+            log::warn!(
+                "Failed to parse WebPush VAPID private key {}: {:?}",
+                path.as_ref().display(),
+                e
+            );
+            return None;
+        }
+        let ec_key = ec_key.unwrap();
+
+        let mut ctx = openssl::bn::BigNumContext::new().unwrap();
+        let public_key = ec_key.public_key();
+        let key_bytes = public_key
+            .to_bytes(
+                ec_key.group(),
+                openssl::ec::PointConversionForm::UNCOMPRESSED,
+                &mut ctx,
+            )
+            .unwrap();
+        let public_key_for_push_header = data_encoding::BASE64URL_NOPAD.encode(&key_bytes);
+
+        let pkey =
+            openssl::pkey::PKey::from_ec_key(ec_key).expect("Failed to construct PKey from EcKey");
+        let pkcs8 = pkey
+            .private_key_to_pem_pkcs8()
+            .expect("Failed to get private key from PKey");
+        let encoding_key = jsonwebtoken::EncodingKey::from_ec_pem(&pkcs8)
+            .expect("Failed to construct EncodingKey from PKey");
+
+        Some(VapidKey {
+            encoding_key,
+            public_key_for_push_header,
+        })
+    }
+}
+
 pub struct WebPushSigner<'a> {
     encoding_key: &'a jsonwebtoken::EncodingKey,
     public_key_for_push_header: &'a str,
