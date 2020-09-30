@@ -377,7 +377,11 @@ pub async fn subscribe_notification(
     let message = message.0;
 
     if !crate::notifier::is_webpush_available() {
-        return Err(crate::Error::UserError(StatusCode::FORBIDDEN, "WebPush は未対応です").into());
+        return Err(crate::Error::ServerError(
+            StatusCode::SERVICE_UNAVAILABLE,
+            "Web Push は未対応です",
+        )
+        .into());
     }
 
     web::block::<_, _, crate::Error>(move || {
@@ -403,7 +407,11 @@ pub async fn unsubscribe_notification(
     let message = message.0;
 
     if !crate::notifier::is_webpush_available() {
-        return Err(crate::Error::UserError(StatusCode::FORBIDDEN, "WebPush は未対応です").into());
+        return Err(crate::Error::ServerError(
+            StatusCode::SERVICE_UNAVAILABLE,
+            "Web Push は未対応です",
+        )
+        .into());
     }
 
     web::block::<_, _, crate::Error>(move || {
