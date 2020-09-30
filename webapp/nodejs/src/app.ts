@@ -50,14 +50,16 @@ declare global {
   }
 }
 
-export const dbinfo = {
+export const dbinfo: mysql.PoolConfig = {
   host: process.env['MYSQL_HOSTNAME'] ?? '127.0.0.1',
   port: Number.parseInt(process.env['MYSQL_PORT'] ?? '3306'),
   user: process.env['MYSQL_USER'] ?? 'isucon',
   database: process.env['MYSQL_DATABASE'] ?? 'xsuportal',
   password: process.env['MYSQL_PASS'] || 'isucon',
   charset: 'utf8mb4',
+  timezone: 'UTC'
 };
+
 const pool = mysql.createPool(dbinfo);
 
 export const getDB = async () => (await pool).getConnection()
