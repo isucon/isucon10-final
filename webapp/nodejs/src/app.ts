@@ -299,15 +299,15 @@ async function getBenchmarkJobsResource(req: express.Request, db: mysql.PoolConn
 }
 
 async function getBenchmarkResultResource(job) {
-  const hasScore = job.score_raw && job.score_deducation
+  const hasScore = job.score_raw && job.score_deduction
   const result = new BenchmarkResult();
   result.setFinished(!!job.finished_at);
   result.setPassed(job.passed);
   if (hasScore) {
-    result.setScore(job.score_raw - job.score_deducation);
+    result.setScore(job.score_raw - job.score_deduction);
     const scoreBreakdown = new BenchmarkResult.ScoreBreakdown();
     scoreBreakdown.setRaw(job.score_raw);
-    scoreBreakdown.setDeduction(job.score_deducation);
+    scoreBreakdown.setDeduction(job.score_deduction);
     result.setScoreBreakdown(scoreBreakdown);
   }
   result.setReason(job.reason);
