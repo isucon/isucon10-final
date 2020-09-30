@@ -28,6 +28,10 @@ define :ci_cache, directories: [] do
   end
 end
 
+ci_cache 'tools' do
+  directories %w(.bundle vendor)
+end
+
 ci_cache 'ruby' do
   directories %w(.bundle vendor)
 end

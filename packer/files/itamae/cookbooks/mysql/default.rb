@@ -17,7 +17,7 @@ remote_file "/etc/mysql/mysql.conf.d/mysqld.cnf" do
   owner 'root'
   group 'root'
   mode  '0644'
-  notifies :restart, 'service[mysql]'
+  notifies :restart, 'service[mysql.service]'
 end
 
 service "mysql.service" do

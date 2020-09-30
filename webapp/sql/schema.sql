@@ -38,6 +38,10 @@ CREATE TABLE `benchmark_jobs` (
   `updated_at` DATETIME(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
+ALTER TABLE `benchmark_jobs` ADD INDEX idx1 (`team_id`,`id`);
+ALTER TABLE `benchmark_jobs` ADD INDEX idx2 (`status`,`team_id`,`id`);
+ALTER TABLE `benchmark_jobs` ADD INDEX idx3 (`status`,`team_id`,`finished_at`);
+
 DROP TABLE IF EXISTS `clarifications`;
 CREATE TABLE `clarifications` (
   `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -59,6 +63,8 @@ CREATE TABLE `notifications` (
   `created_at` DATETIME(6) NOT NULL,
   `updated_at` DATETIME(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
+ALTER TABLE `notifications` ADD INDEX idx1 (`contestant_id`,`id`);
 
 DROP TABLE IF EXISTS `push_subscriptions`;
 CREATE TABLE `push_subscriptions` (

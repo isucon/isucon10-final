@@ -1,12 +1,13 @@
 [Unit]
 Description=xsuportal-web-ruby
-After=network.target
+After=network.target mysql.service
 
 [Service]
 User=isucon
-ExecStart=/home/isucon/.x bundle exec rackup
+ExecStart=/home/isucon/.x bundle exec puma
 WorkingDirectory=/home/isucon/webapp/ruby
 EnvironmentFile=/home/isucon/env
+Environment=RACK_ENV=production
 
 <%- if node[:xsuportal][:slice] -%>
 Slice=<%= node[:xsuportal][:slice] %>
