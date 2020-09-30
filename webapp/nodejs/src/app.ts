@@ -57,7 +57,7 @@ export const dbinfo: mysql.PoolConfig = {
   database: process.env['MYSQL_DATABASE'] ?? 'xsuportal',
   password: process.env['MYSQL_PASS'] || 'isucon',
   charset: 'utf8mb4',
-  timezone: 'UTC'
+  timezone: '+00:00'
 };
 
 const pool = mysql.createPool(dbinfo);
@@ -1023,14 +1023,12 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
     const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Uint8Array.from(req.body));
     const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
-      await db.rollback();
       return;
     }
     console.log(request.toObject());
 
     const passRestricted = await contestStatusRestricted(res, [Contest.Status.STARTED], "競技時間外はベンチマークを実行できません", db);
     if (!passRestricted) {
-      await db.rollback();
       return;
     }
     console.log(passRestricted);
