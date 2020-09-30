@@ -191,12 +191,17 @@ const getCurrentContestStatus = async (db: mysql.PoolConnection) => {
     });
 };
 
-const loginRequired: (req: express.Request, res: express.Response, db: mysql.PoolConnection, opts?: { team?: boolean, lock?: boolean }) => boolean = (req, res, db, { team = true, lock = false } = {}) => {
-  if (!getCurrentContestant(req, db, { lock })) {
+const loginRequired: (req: express.Request, res: express.Response, db: mysql.PoolConnection, opts?: { team?: boolean, lock?: boolean }) => Promise<boolean> = async (req, res, db, { team = true, lock = false } = {}) => {
+  const currentContestant = await getCurrentContestant(req, db, { lock });
+  if (!currentContestant) {
     haltPb(res, 401, "ログインが必要です")
     return false;
   }
-  if (team && !getCurrentTeam(req, db, { lock })) {
+
+  if (!team) return true;
+
+  const currentTeam = await getCurrentTeam(req, db, { lock });
+  if (!currentTeam) {
     haltPb(res, 403, "参加登録が必要です")
     return false;
   }
@@ -577,7 +582,7 @@ app.post("/initialize", async (req, res, next) => {
 app.get("/api/admin/clarifications", async (req, res, next) => {
   const db = await getDB();
   try {
-    const loginSuccess = loginRequired(req, res, db, { team: false });
+    const loginSuccess = await loginRequired(req, res, db, { team: false });
     if (!loginSuccess) {
       return;
     }
@@ -610,7 +615,7 @@ app.get("/api/admin/clarifications", async (req, res, next) => {
 app.get("/api/admin/clarifications/:id", async (req, res, next) => {
   const db = await getDB();
   try {
-    const loginSuccess = loginRequired(req, res, db, { team: false });
+    const loginSuccess = await loginRequired(req, res, db, { team: false });
     if (!loginSuccess) {
       return;
     }
@@ -639,7 +644,7 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
   const db = await getDB();
   try {
     await db.beginTransaction();
-    const loginSuccess = loginRequired(req, res, db, { team: false });
+    const loginSuccess = await loginRequired(req, res, db, { team: false });
     if (!loginSuccess) {
       return;
     }
@@ -818,7 +823,7 @@ app.post("/api/registration/team", async (req, res, next) => {
   try {
     const request = CreateTeamRequest.deserializeBinary(Uint8Array.from(req.body));
 
-    const loginSuccess = loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
       return
     }
@@ -881,7 +886,7 @@ app.post("/api/registration/contestant", async (req, res, next) => {
     if (currentContestStatus.contest.status !== Contest.Status.REGISTRATION) {
       return haltPb(res, 403, "チーム登録期間ではありません");
     }
-    const loginSuccess = loginRequired(req, res, db, { team: false, lock: true});
+    const loginSuccess = await loginRequired(req, res, db, { team: false, lock: true});
     if (!loginSuccess) {
       return;
     }
@@ -931,7 +936,7 @@ app.put("/api/registration", async (req, res, next) => {
     const currentContestant = await getCurrentContestant(req, db);
     const currentTeam = await getCurrentTeam(req, db);
 
-    const loginSuccess = loginRequired(req, res, db, { team: false, lock: true});
+    const loginSuccess = await loginRequired(req, res, db, { team: false, lock: true});
     if (!loginSuccess) {
       return;
     }
@@ -970,7 +975,7 @@ app.delete("/api/registration", async (req, res, next) => {
     const currentContestant = await getCurrentContestant(req, db);
     const currentTeam = await getCurrentTeam(req, db);
 
-    const loginSuccess = loginRequired(req, res, db, { team: false, lock: true});
+    const loginSuccess = await loginRequired(req, res, db, { team: false, lock: true});
     if (!loginSuccess) {
       return;
     }
@@ -1009,7 +1014,7 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
   try {
     await db.beginTransaction();
     const request = ContestantEnqueueBenchmarkJobRequest.deserializeBinary(Uint8Array.from(req.body));
-    const loginSuccess = loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
       await db.rollback();
       return;
@@ -1053,7 +1058,7 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
 app.get("/api/contestant/benchmark_jobs", async (req, res, next) => {
   const db = await getDB();
   try {
-    const loginSuccess = loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
       return;
     }
@@ -1073,7 +1078,7 @@ app.get("/api/contestant/benchmark_jobs", async (req, res, next) => {
 app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
   const db = await getDB();
   try {
-    const loginSuccess = loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
       return;
     }
@@ -1103,7 +1108,7 @@ app.get("/api/contestant/benchmark_jobs/:id", async (req, res, next) => {
 app.get("/api/contestant/clarifications", async (req, res, next) => {
   const db = await getDB();
   try {
-    const loginSuccess = loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
       return;
     }
@@ -1140,7 +1145,7 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
   try {
     await db.beginTransaction();
 
-    const loginSuccess = loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
       return;
     }
@@ -1168,7 +1173,7 @@ app.post("/api/contestant/clarifications", async (req, res, next) => {
 app.get("/api/contestant/dashboard", async (req, res, next) => {
   const db = await getDB();
   try {
-    const loginSuccess = loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
       return;
     }
@@ -1191,7 +1196,7 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
   const db = await getDB();
   try {
     await db.beginTransaction();
-    const loginSuccess = loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
       return;
     }
@@ -1234,7 +1239,7 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
 app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
   const db = await getDB();
   try {
-    const loginSuccess = loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
       return;
     }
@@ -1265,7 +1270,7 @@ app.post("/api/contestant/push_subscriptions", async (req, res, next) => {
 app.delete("/api/contestant/push_subscriptions", async (req, res, next) => {
   const db = await getDB();
   try {
-    const loginSuccess = loginRequired(req, res, db);
+    const loginSuccess = await loginRequired(req, res, db);
     if (!loginSuccess) {
       return;
     }
