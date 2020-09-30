@@ -3,7 +3,6 @@ package xsuportal
 import (
 	"crypto/elliptic"
 	"crypto/x509"
-	"database/sql"
 	"encoding/base64"
 	"encoding/pem"
 	"fmt"
@@ -99,9 +98,7 @@ func (n *Notifier) NotifyClarificationAnswered(db sqlx.Ext, c *Clarification, up
 		if n.VAPIDKey() != nil {
 			notificationPB.Id = notification.ID
 			notificationPB.CreatedAt = timestamppb.New(notification.CreatedAt)
-			if err := n.notifyWebpush(db, notificationPB, contestant.ID); err != nil {
-				return fmt.Errorf("notify webpush: %w", err)
-			}
+			// TODO: Web Push IIKANJI NI SHITE
 		}
 	}
 	return nil
@@ -136,9 +133,7 @@ func (n *Notifier) NotifyBenchmarkJobFinished(db sqlx.Ext, job *BenchmarkJob) er
 		if n.VAPIDKey() != nil {
 			notificationPB.Id = notification.ID
 			notificationPB.CreatedAt = timestamppb.New(notification.CreatedAt)
-			if err := n.notifyWebpush(db, notificationPB, contestant.ID); err != nil {
-				return fmt.Errorf("notify webpush: %w", err)
-			}
+			// TODO: Web Push IIKANJI NI SHITE
 		}
 	}
 	return nil
@@ -172,46 +167,4 @@ func (n *Notifier) notify(db sqlx.Ext, notificationPB *resources.Notification, c
 	return &notification, nil
 }
 
-func (n *Notifier) notifyWebpush(db sqlx.Ext, notification *resources.Notification, contestantID string) error {
-	m, err := proto.Marshal(notification)
-	if err != nil {
-		return fmt.Errorf("marshal notification: %w", err)
-	}
-	message := make([]byte, base64.StdEncoding.EncodedLen(len(m)))
-	base64.StdEncoding.Encode(message, m)
-	var subscriptions []PushSubscription
-	err = sqlx.Select(
-		db,
-		&subscriptions,
-		"SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?",
-		contestantID,
-	)
-	if err != sql.ErrNoRows && err != nil {
-		return fmt.Errorf("select push subscriptions: %w", err)
-	}
-	for _, s := range subscriptions {
-		resp, err := webpush.SendNotification(message, &webpush.Subscription{
-			Endpoint: s.Endpoint,
-			Keys: webpush.Keys{
-				Auth:   s.Auth,
-				P256dh: s.P256DH,
-			},
-		}, n.VAPIDKey())
-		if err != nil {
-			return fmt.Errorf("send webpush: %w", err)
-		}
-		resp.Body.Close()
-		expired := resp.StatusCode == 410
-		invalid := resp.StatusCode == 404
-		if expired || invalid {
-			_, err := db.Exec(
-				"DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
-				s.ID,
-			)
-			if err != nil {
-				return fmt.Errorf("delete invalid or expired subscription: %w", err)
-			}
-		}
-	}
-	return nil
-}
+
