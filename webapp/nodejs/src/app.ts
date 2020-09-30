@@ -32,6 +32,7 @@ import { GetRegistrationSessionResponse, UpdateRegistrationRequest, UpdateRegist
 import { CreateTeamRequest, CreateTeamResponse } from "../proto/xsuportal/services/registration/create_team_pb";
 import { JoinTeamRequest, JoinTeamResponse } from "../proto/xsuportal/services/registration/join_pb";
 import { RequestClarificationRequest, RequestClarificationResponse } from "../proto/xsuportal/services/contestant/clarifications_pb";
+import { Notification } from "../proto/xsuportal/resources/notification_pb";
 
 const TEAM_CAPACITY = 10
 const MYSQL_ER_DUP_ENTRY = 1062
@@ -325,6 +326,15 @@ async function getClarificationResource(clar: any, team: any, db: mysql.PoolConn
   const t = await getTeamResource(team, db);
   clarificationResource.setTeam(t);
   return clarificationResource;
+}
+
+function getNotificationsResource(notifications: any[]) {
+  return notifications.map(notification => {
+    const notificationResource = Notification.deserializeBinary(Buffer.from(notification.encoded_message, 'base64'));
+    notificationResource.setId(notification.id);
+    notificationResource.setCreatedAt(notification.created_at ? convertDateToTimestamp(notification.created_at) : null);
+    return notificationResource
+  })
 }
 
 function getContestResource(contest: any) {
@@ -1243,7 +1253,7 @@ app.get("/api/contestant/notifications", async (req, res, next) => {
 
     const response = new ListNotificationsResponse();
     response.setLastAnsweredClarificationId(lastAnsweredClar?.id);
-    response.setNotificationsList(notifications);
+    response.setNotificationsList(getNotificationsResource(notifications));
     res.contentType(`application/vnd.google.protobuf`);
     res.end(Buffer.from(response.serializeBinary()));
   } catch (e) {
