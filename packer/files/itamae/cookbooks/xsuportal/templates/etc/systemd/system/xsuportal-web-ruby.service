@@ -1,6 +1,6 @@
 [Unit]
 Description=xsuportal-web-ruby
-After=network.target
+After=network.target mysql.service
 
 [Service]
 User=isucon
