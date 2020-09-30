@@ -76,7 +76,7 @@ export class Notifier {
 
     const requestOpts: webpush.RequestOptions = {
       vapidDetails: {
-        subject: Notifier.WEBPUSH_SUBJECT,
+        subject: `mailto:${Notifier.WEBPUSH_SUBJECT}`,
         ...Notifier.VAPIDKey
       },
     };
