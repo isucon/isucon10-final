@@ -338,7 +338,7 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
 		team := s.Contest.Teams[index]
 
-		for {
+		for ctx.Err() == nil {
 			select {
 			case <-ctx.Done():
 				return
@@ -353,6 +353,7 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 			if err != nil {
 				go func() { <-team.EnqueueLock }()
 				step.AddError(err)
+				<-time.After(100 * time.Millisecond)
 				continue
 			}
 
@@ -362,6 +363,7 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 			}
 			if len(errs) > 0 {
 				go func() { <-team.EnqueueLock }()
+				<-time.After(100 * time.Millisecond)
 				continue
 			}
 
@@ -373,7 +375,9 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 				if failure.IsCode(err, ErrScenarioCancel) {
 					return
 				}
+				go func() { <-team.EnqueueLock }()
 				step.AddError(err)
+				<-time.After(100 * time.Millisecond)
 				continue
 			}
 
@@ -485,6 +489,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				page, resources, _, err := BrowserAccess(ctx, leader, "/contestant/clarifications")
 				if err != nil {
 					step.AddError(err)
+					<-time.After(100 * time.Millisecond)
 					continue
 				}
 
@@ -493,12 +498,14 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 					step.AddError(err)
 				}
 				if len(errs) > 0 {
+					<-time.After(100 * time.Millisecond)
 					continue
 				}
 
 				_, err = GetClarificationsAction(ctx, leader)
 				if err != nil {
 					step.AddError(err)
+					<-time.After(100 * time.Millisecond)
 					continue
 				}
 				step.AddScore("get-clarification")
@@ -510,6 +517,7 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				res, err := PostClarificationAction(ctx, leader, clar)
 				if err != nil {
 					step.AddError(err)
+					<-time.After(100 * time.Millisecond)
 					continue
 				}
 
@@ -561,6 +569,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 			cres, cresources, _, err := BrowserAccess(ctx, admin, "/admin/clarifications")
 			if err != nil {
 				step.AddError(err)
+				<-time.After(100 * time.Millisecond)
 				continue
 			}
 
@@ -569,12 +578,14 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 				step.AddError(err)
 			}
 			if len(errs) > 0 {
+				<-time.After(100 * time.Millisecond)
 				return
 			}
 
 			res, err := AdminGetClarificationsAction(ctx, admin)
 			if err != nil {
 				step.AddError(err)
+				<-time.After(100 * time.Millisecond)
 				continue
 			}
 			step.AddScore("admin-get-clarifications")
