@@ -7,15 +7,12 @@ import (
 	"sort"
 	"time"
 
-	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
-
+	"github.com/isucon/isucandar"
 	"github.com/isucon/isucandar/failure"
 	"github.com/isucon/isucandar/random/useragent"
-
 	"github.com/isucon/isucandar/worker"
-
-	"github.com/isucon/isucandar"
 	"github.com/isucon/isucon10-final/benchmarker/model"
+	"github.com/isucon/isucon10-final/benchmarker/proto/xsuportal/resources"
 )
 
 type validateLeaderbord struct {

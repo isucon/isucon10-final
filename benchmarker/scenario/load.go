@@ -30,6 +30,7 @@ func (s *Scenario) Load(parent context.Context, step *isucandar.BenchmarkStep) e
 	defer cancel()
 
 	ContestantLogger.Printf("===> LOAD")
+	AdminLogger.Printf("LOAD INFO\n  Registration Open at: %s\n  Contest Start at: %s\n  Contest Freeze at: %s\n  Contest Ends at: %s\n", s.Contest.RegistrationOpenAt, s.Contest.ContestStartsAt, s.Contest.ContestFreezesAt, s.Contest.ContestEndsAt)
 	wg := sync.WaitGroup{}
 
 	wg.Add(1)
