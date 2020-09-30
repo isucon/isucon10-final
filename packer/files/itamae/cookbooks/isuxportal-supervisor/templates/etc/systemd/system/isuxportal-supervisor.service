@@ -1,7 +1,7 @@
 [Unit]
 Description=isuxportal-supervisor
 Wants=isuxportal-supervisor-init.service
-After=isuxportal-supervisor-init.service network.target
+After=isuxportal-supervisor-init.service prometheus-node-exporter.service network.target
 StartLimitIntervalSec=0
 
 [Service]
@@ -11,7 +11,8 @@ ExecStart=/usr/local/bin/isuxportal-supervisor /home/isucon/benchmarker/bin/benc
           -host-advertise isubench.t.isucon.dev \
           -push-service-port 443 \
           -tls-cert /etc/ssl/private/tls-cert.pem \
-          -tls-key /etc/ssl/private/tls-key.pem
+          -tls-key /etc/ssl/private/tls-key.pem \
+          -prom-out /run/prometheus-node-exporter/textfile/xsuconbench.prom
 WorkingDirectory=/home/isucon/benchmarker
 LogsDirectory=isuxportal-supervisor
 
