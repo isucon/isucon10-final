@@ -5,6 +5,7 @@ import urlBase64 from 'urlsafe-base64';
 
 import type { PoolConnection } from 'promise-mysql';
 import { Notification } from '../proto/xsuportal/resources/notification_pb';
+import { convertDateToTimestamp } from './app';
 
 export class Notifier {
   static WEBPUSH_VAPID_PRIVATE_KEY_PATH = '../vapid_private.pem';
@@ -38,8 +39,12 @@ export class Notifier {
         clarificationMessage.setUpdated(updated);
         const notification = new Notification();
         notification.setContentClarification(clarificationMessage);
-        this.notify(notification, contestant.id, db);
-        if (Notifier.VAPIDKey) this.notifyWebpush(notification, contestant.id, db);
+        const inserted = await this.notify(notification, contestant.id, db);
+        if (Notifier.VAPIDKey) {
+          notification.setId(inserted.id);
+          notification.setCreatedAt(convertDateToTimestamp(inserted.created_at));
+          await this.notifyWebpush(notification, contestant.id, db);
+        }
       }
   }
 
@@ -89,7 +94,7 @@ export class Notifier {
             auth: sub.auth
         }
       };
-      webpush.sendNotification(pushSubscription, message, requestOpts);
+      await webpush.sendNotification(pushSubscription, message, requestOpts);
     }
   }
 }
