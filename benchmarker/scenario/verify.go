@@ -238,7 +238,7 @@ func (s *Scenario) verifyLeaderboard(requestedAt time.Time, leaderboard *resourc
 				return errorInvalidResponse("スコアグラフ内のスコアが不正です")
 			}
 
-			markedAt := score.GetMarkedAt().AsTime()
+			markedAt := score.GetMarkedAt().AsTime().Truncate(time.Millisecond)
 			if !result.MarkedAt().Equal(markedAt) {
 				AdminLogger.Printf("expect: %s / got: %s;", result.MarkedAt(), markedAt)
 				return errorInvalidResponse("スコアグラフ内のスコアの終了時刻が不正です")
