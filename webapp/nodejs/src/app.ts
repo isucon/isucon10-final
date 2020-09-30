@@ -69,6 +69,7 @@ const haltPb = (res: express.Response, code: number, humanMessage: string) => {
   const error = new PbError();
   error.setCode(code);
   error.setHumanMessage(humanMessage);
+  console.error(code, humanMessage);
   res.end(Buffer.from(error.serializeBinary()));
 };
 
@@ -198,7 +199,7 @@ const loginRequired: (req: express.Request, res: express.Response, db: mysql.Poo
     haltPb(res, 401, "ログインが必要です")
     return false;
   }
-  if (!getCurrentTeam(req, db, { lock })) {
+  if (team && !getCurrentTeam(req, db, { lock })) {
     haltPb(res, 403, "参加登録が必要です")
     return false;
   }
