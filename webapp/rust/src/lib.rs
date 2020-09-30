@@ -64,7 +64,7 @@ impl ResponseError for Error {
         actix_web::dev::HttpResponseBuilder::new(self.status_code())
             .protobuf(crate::proto::Error {
                 code: self.status_code().as_u16() as i32,
-                name: "".to_owned(), // TODO
+                name: "Error".to_owned(),
                 human_message: format!("{}", self),
                 human_descriptions: vec![format!("{}", self)],
                 debug_info: None,

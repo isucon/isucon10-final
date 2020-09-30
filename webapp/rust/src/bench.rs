@@ -127,7 +127,6 @@ impl BenchmarkReport for ReportService {
             .expect("Failed to checkout database connection");
         let mut stream = request.into_inner();
 
-        // TODO: Delete push_subscription when Webpush::ExpiredSubscription or Webpush::InvalidSubscription
         let output = async_stream::try_stream! {
             while let Some(message) = stream.message().await? {
                 let job_id = message.job_id;
