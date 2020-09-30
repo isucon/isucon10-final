@@ -1,6 +1,7 @@
 import fs from 'fs';
 import webpush from 'web-push';
 import sshpk from 'sshpk';
+import urlBase64 from 'urlsafe-base64';
 
 import type { PoolConnection } from 'promise-mysql';
 import { Notification } from '../proto/xsuportal/resources/notification_pb';
@@ -11,15 +12,14 @@ export class Notifier {
   static VAPIDKey: webpush.VapidKeys;
 
   getVAPIDKey() {
-    if(Notifier.VAPIDKey !== null) return Notifier.VAPIDKey;
-    if(fs.existsSync(Notifier.WEBPUSH_VAPID_PRIVATE_KEY_PATH)) return null;
-    const privateKey = sshpk.parsePrivateKey(fs.readFileSync(Notifier.WEBPUSH_VAPID_PRIVATE_KEY_PATH), "pem");
-    const publicKey = privateKey.toPublic();
-    const privateKeyString = (privateKey as any).part.d.data.toString('base64')
-    const publicKeyString = (publicKey as any).part.Q.data.toString('base64')
-
-    Notifier.VAPIDKey = webpush.generateVAPIDKeys();
-    webpush.setVapidDetails(Notifier.WEBPUSH_SUBJECT, publicKeyString, privateKeyString);
+    if(Notifier.VAPIDKey) return Notifier.VAPIDKey;
+    if(!fs.existsSync(Notifier.WEBPUSH_VAPID_PRIVATE_KEY_PATH)) return null;
+    const pri = sshpk.parsePrivateKey(fs.readFileSync(Notifier.WEBPUSH_VAPID_PRIVATE_KEY_PATH), "pem");
+    const pub = pri.toPublic();
+    const privateKey = urlBase64.encode((pri as any).part.d.data)
+    const publicKey = urlBase64.encode((pub as any).part.Q.data)
+    webpush.setVapidDetails(`mailto:${Notifier.WEBPUSH_SUBJECT}`, publicKey, privateKey);
+    Notifier.VAPIDKey = { privateKey, publicKey }
     return Notifier.VAPIDKey;
   }
 
