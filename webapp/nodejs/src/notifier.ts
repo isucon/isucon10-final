@@ -59,21 +59,41 @@ export class Notifier {
       benchmarkJobMessage.setBenchmarkJobId(job.id);
       const notification = new Notification();
       notification.setContentBenchmarkJob(benchmarkJobMessage);
-      await this.notify(notification, contestant.id, db);
-      if (Notifier.VAPIDKey) await this.notifyWebpush(notification, contestant.id, db);
+      const inserted = await this.notify(notification, contestant.id, db);
+      if (Notifier.VAPIDKey) {
+        notification.setId(inserted.id);
+        notification.setCreatedAt(convertDateToTimestamp(inserted.created_at));
+        await this.notifyWebpush(notification, contestant.id, db);
+      }
     }
   }
 
-  async notify(notification: Notification, contestantId, db) {
+  async notify(notification: Notification, contestantId, db: PoolConnection) {
+    let inserted;
     const encodedMessage = Buffer.from(notification.serializeBinary()).toString('base64');
-    await db.query(
-      'INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))',
-      [contestantId, encodedMessage]
-    );
+    try {
+      await db.beginTransaction()
+      await db.query(
+        'INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))',
+        [contestantId, encodedMessage]
+      );
+
+      const [last] = await db.query('SELECT LAST_INSERT_ID() as id')
+      const hoge = await db.query('SELECT * FROM `notifications` WHERE `id` = ? LIMIT 1', [last.id])
+      inserted = hoge[0]
+      console.log({last, inserted})
+      await db.commit()
+    } catch (e) {
+      console.error(e)
+      await db.rollback()
+    }
+
+    return inserted
   }
 
   async notifyWebpush(notification, contestantId, db) {
     const message = Buffer.from(notification.serializeBinary()).toString('base64');
+    console.log({message})
     const subs = await db.query(
       'SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?',
       [contestantId]
