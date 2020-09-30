@@ -170,11 +170,11 @@ func EnqueueBenchmarkJobAction(ctx context.Context, team *model.Team) (*contesta
 	return res, err
 }
 
-func GetDashboardAction(parent context.Context, team *model.Team, member *model.Contestant) (*http.Response, *contestant.DashboardResponse, error) {
+func GetDashboardAction(parent context.Context, team *model.Team, member *model.Contestant, timeout time.Duration) (*http.Response, *contestant.DashboardResponse, error) {
 	req := &contestant.DashboardRequest{}
 	res := &contestant.DashboardResponse{}
 
-	ctx, cancel := context.WithTimeout(parent, 2*time.Second)
+	ctx, cancel := context.WithTimeout(parent, timeout)
 	defer cancel()
 	hres, err := ProtobufRequest(ctx, member.Agent, http.MethodGet, "/api/contestant/dashboard", req, res, []int{200, 304, 401, 403})
 	return hres, res, err
@@ -240,11 +240,11 @@ func AdminPostClarificationAction(ctx context.Context, member *model.Contestant,
 	return res, err
 }
 
-func AudienceGetDashboardAction(parent context.Context, agent *agent.Agent) (*http.Response, *audience.DashboardResponse, error) {
+func AudienceGetDashboardAction(parent context.Context, agent *agent.Agent, timeout time.Duration) (*http.Response, *audience.DashboardResponse, error) {
 	req := &audience.DashboardRequest{}
 	res := &audience.DashboardResponse{}
 
-	ctx, cancel := context.WithTimeout(parent, 2*time.Second)
+	ctx, cancel := context.WithTimeout(parent, timeout)
 	defer cancel()
 	hres, err := ProtobufRequest(ctx, agent, http.MethodGet, "/api/audience/dashboard", req, res, []int{200, 304})
 	return hres, res, err

@@ -365,7 +365,7 @@ func (s *Scenario) loadEnqueueBenchmark(ctx context.Context, step *isucandar.Ben
 				continue
 			}
 
-			go GetDashboardAction(ctx, team, team.Developer)
+			go GetDashboardAction(ctx, team, team.Developer, 2*time.Second)
 			go GetBenchmarkJobs(ctx, team, team.Developer)
 
 			job, err := EnqueueBenchmarkJobAction(ctx, team)
@@ -423,7 +423,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 
 				requestedAt := time.Now().UTC()
 				latestMarkedAt := s.LatestMarkedAt()
-				hres, res, err := GetDashboardAction(ctx, team, team.Operator)
+				hres, res, err := GetDashboardAction(ctx, team, team.Operator, 2*time.Second)
 				if err != nil {
 					step.AddError(err)
 					atomic.StoreUint32(&failed, 1)
@@ -678,7 +678,7 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 
 			requestedAt := time.Now().UTC()
 			latestMarkedAt := s.LatestMarkedAt()
-			hres, res, err := AudienceGetDashboardAction(ctx, viewer)
+			hres, res, err := AudienceGetDashboardAction(ctx, viewer, 2*time.Second)
 			if err != nil {
 				// オーディエンスはエラーを記録しない
 				step.AddError(err)
