@@ -26,8 +26,8 @@ func (s *Scenario) Validation(ctx context.Context, step *isucandar.BenchmarkStep
 		return nil
 	}
 
-	<-time.After(s.Contest.ContestEndsAt.Add(5 * time.Second).Sub(time.Now()))
 	ContestantLogger.Printf("===> VALIDATION")
+	<-time.After(s.Contest.ContestEndsAt.Add(5 * time.Second).Sub(time.Now()))
 
 	s.validationLeaderboard(ctx, step)
 	return nil

@@ -309,7 +309,7 @@ func main() {
 	s.NoLoad = noLoad
 	s.NoClar = noClar
 
-	b, err := isucandar.NewBenchmark(isucandar.WithLoadTimeout(65 * time.Second))
+	b, err := isucandar.NewBenchmark(isucandar.WithLoadTimeout(70 * time.Second))
 	if err != nil {
 		panic(err)
 	}
