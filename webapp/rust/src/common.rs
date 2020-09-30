@@ -42,7 +42,7 @@ pub async fn get_current_session(
                 frozen: contest_status.contest.frozen,
                 status: contest_status.contest.status as i32,
             }),
-            push_vapid_key: crate::notifier::get_public_key_for_push_header().unwrap_or_default(),
+            push_vapid_key: "".to_owned(),
         })
     })
     .await
