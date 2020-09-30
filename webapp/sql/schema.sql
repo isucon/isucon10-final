@@ -30,7 +30,7 @@ CREATE TABLE `benchmark_jobs` (
   `handle` VARCHAR(255),
   `score_raw` INT,
   `score_deduction` INT,
-  `reason` TEXT,
+  `reason` VARCHAR(255),
   `passed` TINYINT(1),
   `started_at` DATETIME(6),
   `finished_at` DATETIME(6),
@@ -43,8 +43,8 @@ CREATE TABLE `clarifications` (
   `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `team_id` BIGINT NOT NULL,
   `disclosed` TINYINT(1),
-  `question` TEXT,
-  `answer` TEXT,
+  `question` VARCHAR(255),
+  `answer` VARCHAR(255),
   `answered_at` DATETIME(6),
   `created_at` DATETIME(6) NOT NULL,
   `updated_at` DATETIME(6) NOT NULL
@@ -55,7 +55,7 @@ CREATE TABLE `notifications` (
   `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `contestant_id` VARCHAR(255) NOT NULL,
   `read` TINYINT(1) NOT NULL DEFAULT FALSE,
-  `encoded_message` TEXT NOT NULL,
+  `encoded_message` VARCHAR(255) NOT NULL,
   `created_at` DATETIME(6) NOT NULL,
   `updated_at` DATETIME(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;

@@ -145,6 +145,7 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 
 	for _, err := range errors {
 		if failure.IsCode(err, scenario.ErrCritical) {
+			scenario.AdminLogger.Printf("CRITICAL: %v\n", err)
 			passed = false
 			reason = "Critical error"
 			continue
@@ -160,6 +161,12 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 				failure.IsCode(err, scenario.ErrHTTP) ||
 				failure.IsCode(err, scenario.ErrBenchmarkerReceive) ||
 				failure.IsCode(err, scenario.ErrBenchmarkerReport) ||
+				failure.IsCode(err, scenario.ErrX400) ||
+				failure.IsCode(err, scenario.ErrX401) ||
+				failure.IsCode(err, scenario.ErrX402) ||
+				failure.IsCode(err, scenario.ErrX403) ||
+				failure.IsCode(err, scenario.ErrX404) ||
+				failure.IsCode(err, scenario.ErrX503) ||
 				failure.IsCode(err, scenario.ErrX5XX) {
 				deduction++
 			}

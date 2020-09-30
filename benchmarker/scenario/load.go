@@ -203,13 +203,16 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 		}
 
 		createTeam, chres, err := CreateTeamAction(ctx, team, lead)
-		if chres.StatusCode == 403 {
-			atomic.StoreUint32(&stopSignup, 1)
+		if err != nil {
+			if failure.IsCode(err, ErrX403) {
+				atomic.StoreUint32(&stopSignup, 1)
+			} else {
+				step.AddError(err)
+			}
 			return
 		}
-
-		if err != nil {
-			step.AddError(err)
+		if chres.StatusCode == 403 {
+			atomic.StoreUint32(&stopSignup, 1)
 			return
 		}
 

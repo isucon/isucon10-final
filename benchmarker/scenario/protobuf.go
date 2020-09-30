@@ -17,7 +17,10 @@ import (
 var (
 	ErrX400 failure.StringCode = "XSUPORTAL[400]"
 	ErrX401 failure.StringCode = "XSUPORTAL[401]"
+	ErrX402 failure.StringCode = "XSUPORTAL[402]"
 	ErrX403 failure.StringCode = "XSUPORTAL[403]"
+	ErrX404 failure.StringCode = "XSUPORTAL[404]"
+	ErrX503 failure.StringCode = "XSUPORTAL[503]"
 
 	ErrX5XX     failure.StringCode = "http-server-error"
 	ErrProtobuf failure.StringCode = "protobuf-decode"
@@ -78,13 +81,13 @@ func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpa
 		xError := &xsuportal.Error{}
 		err := proto.Unmarshal(respb, xError)
 		if err != nil {
-			return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のパースに失敗しました: %#v", string(respb)))
+			return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のデコードに失敗しました(%s %s): %v", httpreq.Method, httpreq.URL.Path, err))
 		}
 		return httpres, &ProtobufError{XError: xError}
 	}
 
 	if err := proto.Unmarshal(respb, res); err != nil {
-		return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のパースに失敗しました: %#v", string(respb)))
+		return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のデコードに失敗しました(%s %s): %v", httpreq.Method, httpreq.URL.Path, err))
 	}
 
 	return httpres, nil
