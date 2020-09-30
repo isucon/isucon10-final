@@ -187,7 +187,7 @@ func verifyResources(page string, res *http.Response, resources agent.Resources)
 	return errs
 }
 
-func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard, hres *http.Response, contest *model.Contest, vTeam *model.Team, sLatestMarkedAt time.Time, allowCache bool) error {
+func (s *Scenario) verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard, hres *http.Response, contest *model.Contest, vTeam *model.Team, sLatestMarkedAt time.Time, allowCache bool) error {
 	at := requestedAt.UTC()
 
 	prevLatestScore := int64(math.MaxInt64)
@@ -298,7 +298,12 @@ func verifyLeaderboard(requestedAt time.Time, leaderboard *resources.Leaderboard
 		}
 	}
 
-	if !maxMarkedAt.Equal(zero) && allowedMaxTime.Add(-cacheTime).After(maxMarkedAt) {
+	now := time.Now().UTC()
+	if s.firstMarkedAt.Add(cacheTime).After(now) {
+		return nil
+	}
+
+	if allowedMaxTime.Add(-cacheTime).After(maxMarkedAt) {
 		AdminLogger.Printf("OLDER LEADERBOARD: \n  %s requested at\n  %s latest finish\n  %s allowed cache time\n  %s leadeboard max time\n  %s frozen time\n  %s now time\n", requestedAt, sLatestMarkedAt, allowedMaxTime.Add(-cacheTime), maxMarkedAt, contest.ContestFreezesAt, time.Now().UTC())
 		if allowCache {
 			return errorInvalidResponse("規定より古い内容のリーダーボードが返却されています(GET /api/audience/dashboard)")

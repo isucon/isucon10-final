@@ -430,7 +430,7 @@ func (s *Scenario) loadGetDashboard(ctx context.Context, step *isucandar.Benchma
 					return
 				}
 
-				if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, team, latestMarkedAt, false); err != nil {
+				if err := s.verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, team, latestMarkedAt, false); err != nil {
 					step.AddError(err)
 				}
 			}()
@@ -685,7 +685,7 @@ func (s *Scenario) loadAudienceDashboard(ctx context.Context, step *isucandar.Be
 				return
 			}
 
-			if err := verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, nil, latestMarkedAt, true); err != nil {
+			if err := s.verifyLeaderboard(requestedAt, res.GetLeaderboard(), hres, s.Contest, nil, latestMarkedAt, true); err != nil {
 				// オーディエンスによる計測失敗は考慮しない
 				step.AddError(err)
 				return
