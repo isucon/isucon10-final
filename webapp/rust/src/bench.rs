@@ -1,4 +1,3 @@
-use crate::notifier::WebPushNotifier;
 use crate::proto::resources::{benchmark_job::Status as BenchmarkJobStatus, BenchmarkResult};
 use crate::proto::services::bench::benchmark_queue_server::BenchmarkQueue;
 use crate::proto::services::bench::benchmark_report_server::BenchmarkReport;
@@ -133,10 +132,7 @@ impl BenchmarkReport for ReportService {
         let output = async_stream::try_stream! {
             while let Some(message) = stream.message().await? {
                 let job_id = message.job_id;
-                if let Some((job, notifiers)) = tokio::task::block_in_place(|| handle_report(&mut conn, &message))? {
-                    if !notifiers.is_empty() {
-                        send_notifications(conn.deref_mut(), notifiers).await?;
-                    }
+                if let Some(job) = tokio::task::block_in_place(|| handle_report(&mut conn, &message))? {
                     yield ReportBenchmarkResultResponse { acked_nonce: message.nonce };
                 } else {
                     Err(TonicStatus::not_found(format!(
@@ -149,10 +145,10 @@ impl BenchmarkReport for ReportService {
     }
 }
 
-fn handle_report<'a>(
-    conn: &'_ mut crate::PooledConnection,
-    message: &'_ ReportBenchmarkResultRequest,
-) -> Result<Option<(crate::BenchmarkJob, Vec<WebPushNotifier<'a>>)>, TonicStatus> {
+fn handle_report(
+    conn: &mut crate::PooledConnection,
+    message: &ReportBenchmarkResultRequest,
+) -> Result<Option<crate::BenchmarkJob>, TonicStatus> {
     let mut tx = conn
         .start_transaction(mysql::TxOpts::default())
         .map_err(mysql_error_to_tonic_status)?;
@@ -200,11 +196,11 @@ fn handle_report<'a>(
     }
     tx.commit().map_err(mysql_error_to_tonic_status)?;
     if result.finished {
-        let notifiers = crate::notifier::notify_benchmark_job_finished(conn.deref_mut(), &job)
+        crate::notifier::notify_benchmark_job_finished(conn.deref_mut(), &job)
             .map_err(mysql_error_to_tonic_status)?;
-        Ok(Some((job, notifiers)))
+        Ok(Some(job))
     } else {
-        Ok(Some((job, Vec::new())))
+        Ok(Some(job))
     }
 }
 
@@ -267,47 +263,4 @@ fn save_as_running(
     "#,
         (BenchmarkJobStatus::Running as i32, started_at, job.id),
     )
-}
-
-async fn send_notifications<'a, Q>(
-    conn: &'_ mut Q,
-    notifiers: Vec<WebPushNotifier<'a>>,
-) -> Result<(), TonicStatus>
-where
-    Q: Queryable,
-{
-    use crate::notifier::WebPushNotifierError;
-    use crate::webpush::WebPushError;
-    let mut unavailable_subscriptions = Vec::new();
-    for notifier in notifiers {
-        if let Err(e) = notifier.send().await {
-            match e {
-                WebPushNotifierError::Error(sub, WebPushError::ExpiredSubscription(_))
-                | WebPushNotifierError::Error(sub, WebPushError::InvalidSubscription(_)) => {
-                    unavailable_subscriptions.push(sub);
-                }
-                _ => {
-                    return Err(TonicStatus::internal(format!(
-                        "Failed to send WebPush notification: {:?}",
-                        e
-                    )));
-                }
-            }
-        }
-    }
-
-    if unavailable_subscriptions.is_empty() {
-        Ok(())
-    } else {
-        tokio::task::block_in_place(move || {
-            for sub in unavailable_subscriptions {
-                conn.exec_drop(
-                    "DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
-                    (sub.id,),
-                )
-                .map_err(mysql_error_to_tonic_status)?;
-            }
-            Ok(())
-        })
-    }
 }
