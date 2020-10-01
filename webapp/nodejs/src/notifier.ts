@@ -14,6 +14,10 @@ export class Notifier {
   static WEBPUSH_SUBJECT = 'xsuportal@example.com';
   static VAPIDKey: webpush.VapidKeys;
 
+  constructor() {
+    this.getVAPIDKey()
+  }
+
   getVAPIDKey() {
     if(Notifier.VAPIDKey) return Notifier.VAPIDKey;
     if(!fs.existsSync(Notifier.WEBPUSH_VAPID_PRIVATE_KEY_PATH)) return null;
