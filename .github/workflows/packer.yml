@@ -107,14 +107,14 @@ jobs:
           mkdir -p tmp/
           tar cf tmp/actions_cache.tar files-cached/
           aws s3 cp tmp/actions_cache.tar ${{ steps.cache_key.outputs.content }}
-      - uses: actions/upload-artifact@v2
-        with:
-          name: manifest-amd64-contestant.json
-          path: packer/output/manifest-amd64-contestant.json
-      - uses: actions/upload-artifact@v2
-        with:
-          name: manifest-amd64-benchmarker.json
-          path: packer/output/manifest-amd64-benchmarker.json
+      #- uses: actions/upload-artifact@v2
+      #  with:
+      #    name: manifest-amd64-contestant.json
+      #    path: packer/output/manifest-amd64-contestant.json
+      #- uses: actions/upload-artifact@v2
+      #  with:
+      #    name: manifest-amd64-benchmarker.json
+      #    path: packer/output/manifest-amd64-benchmarker.json
       #- uses: actions/upload-artifact@v2
       #  with:
       #    name: manifest-amd64-full.json
