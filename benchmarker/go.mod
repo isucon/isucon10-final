@@ -8,7 +8,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/golang-lru v0.5.4
 	github.com/isucon/isucandar v0.0.0-20200930060615-6a85d46588dd
-	github.com/isucon/isucon10-portal v0.0.0-20200917214541-7e143562573b
+	github.com/isucon/isucon10-portal v0.0.0-20201001094636-92a7280580d8
 	github.com/kr/pretty v0.1.0 // indirect
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
 	golang.org/x/sys v0.0.0-20200602225109-6fdc65e7d980 // indirect
