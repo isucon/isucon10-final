@@ -29,7 +29,7 @@ export class Notifier {
   async notifyClarificationAnswered(clar: NonNullable<any>, db: PoolConnection, updated = false) {
     const contestants = await db.query(
       clar.disclosed
-        ? 'SELECT `id`, `team_id` FROM `contestants`'
+        ? 'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` IS NOT NULL'
         : 'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?',
       [clar.team_id]
     );
