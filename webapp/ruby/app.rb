@@ -917,7 +917,7 @@ module Xsuportal
         )
         clar = db.query('SELECT * FROM `clarifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1').first
       end
-
+      sleep 5
       encode_response_pb(
         clarification: clarification_pb(clar, current_team)
       )
