@@ -968,15 +968,15 @@ func (s *Scenario) loadBenchmarkDetails(ctx context.Context, step *isucandar.Ben
 		return
 	}
 
+	defer func() { <-team.EnqueueLock }()
+	result.Seen()
+
 	err = verifyGetBenchmarkJobDetail(res, team, result)
 	if err != nil {
 		step.AddError(failure.NewError(ErrBenchamrkJobDetail, err))
 		return
 	}
 
-	defer func() { <-team.EnqueueLock }()
-
-	result.Seen()
 	step.AddScore("finish-benchmark")
 	s.AddAudience(1)
 }
