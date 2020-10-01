@@ -111,12 +111,13 @@ func (s *Scenario) validationLeaderboard(ctx context.Context, step *isucandar.Be
 func (s *Scenario) validationLeaderboardWithTeams(step *isucandar.BenchmarkStep, teams []*model.Team, aTeams []*resources.Leaderboard_LeaderboardItem) {
 	at := s.Contest.ContestEndsAt.Add(10 * time.Second)
 
-	errTeamId := failure.NewError(ErrCritical, errorInvalidResponse("ランキング上の最終 ID 検証に失敗しました"))
-	errStudent := failure.NewError(ErrCritical, errorInvalidResponse("ランキング上の最終学生チーム検証に失敗しました"))
-	errBestScore := failure.NewError(ErrCritical, errorInvalidResponse("ランキング上の最終ベストスコア検証に失敗しました"))
-	errLatestScore := failure.NewError(ErrCritical, errorInvalidResponse("ランキング上の最終最新スコア検証に失敗しました"))
-	errScoreCount := failure.NewError(ErrCritical, errorInvalidResponse("最終検証でのスコア数不一致"))
-	errScore := failure.NewError(ErrCritical, errorInvalidResponse("最終検証でのスコアの情報不一致"))
+	errTeamId := failure.NewError(ErrCritical, errorInvalidResponse("リーダーボード上の最終 ID 検証に失敗しました"))
+	errStudent := failure.NewError(ErrCritical, errorInvalidResponse("リーダーボード上の最終学生チーム検証に失敗しました"))
+	errBestScore := failure.NewError(ErrCritical, errorInvalidResponse("リーダーボード上の最終ベストスコア検証に失敗しました"))
+	errLatestScore := failure.NewError(ErrCritical, errorInvalidResponse("リーダーボード上の最終最新スコア検証に失敗しました"))
+	errScoreCount := failure.NewError(ErrCritical, errorInvalidResponse("最終検証でのスコアデータ数検証に失敗しました"))
+	errScore := failure.NewError(ErrCritical, errorInvalidResponse("最終検証でのスコアデータのスコア検証に失敗しました"))
+	errScoreMark := failure.NewError(ErrCritical, errorInvalidResponse("最終検証でのスコアデータの時刻検証に失敗しました"))
 
 	for idx, ateamResult := range aTeams {
 		eteam := teams[idx]
@@ -153,8 +154,13 @@ func (s *Scenario) validationLeaderboardWithTeams(step *isucandar.BenchmarkStep,
 		for idx, ascore := range ateamResult.GetScores() {
 			escore := escores[idx]
 
-			if !AssertEqual("validate score", escore.Score, ascore.GetScore()) || !AssertEqual("validate score", escore.MarkedAt(), ascore.GetMarkedAt().AsTime()) {
+			if !AssertEqual("validate score", escore.Score, ascore.GetScore()) {
 				step.AddError(errScore)
+				return
+			}
+
+			if !AssertEqual("validate marked at", escore.MarkedAt(), ascore.GetMarkedAt().AsTime()) {
+				step.AddError(errScoreMark)
 				return
 			}
 		}
@@ -163,7 +169,7 @@ func (s *Scenario) validationLeaderboardWithTeams(step *isucandar.BenchmarkStep,
 
 func (s *Scenario) validationClarification(ctx context.Context, step *isucandar.BenchmarkStep) {
 	errNotFound := failure.NewError(ErrCritical, errorInvalidResponse("最終検証にて存在しないはずの Clarification が見つかりました"))
-	errNotMatch := failure.NewError(ErrCritical, errorInvalidResponse("最終検証にて Clarification の不一致が検出されました"))
+	errNotMatch := failure.NewError(ErrCritical, errorInvalidResponse("最終検証にて Clarification の検証に失敗しました"))
 
 	admin, err := model.NewAdmin()
 	if err != nil {

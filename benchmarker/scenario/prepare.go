@@ -173,7 +173,7 @@ func (s *Scenario) prepareCheckBeforeSignup(c *model.Contest, ctx context.Contex
 	}
 
 	if sres == nil {
-		step.AddError(errorInvalidResponse("登録処理中にエラーが発生しました"))
+		step.AddError(errorInvalidResponse("選手登録でエラーが発生しました"))
 		return
 	}
 
@@ -238,7 +238,7 @@ func (s *Scenario) prepareCheckSignup(c *model.Contest, ctx context.Context, ste
 	}
 
 	if sres == nil {
-		step.AddError(errorInvalidResponse("登録処理中にエラーが発生しました"))
+		step.AddError(errorInvalidResponse("選手登録でエラーが発生しました"))
 		return nil
 	}
 
@@ -305,14 +305,14 @@ func (s *Scenario) prepareCheckSignup(c *model.Contest, ctx context.Context, ste
 			switch role {
 			case "invalid":
 				if err == nil {
-					step.AddError(errorInvalidResponse("参加上限に達したチームへの参加を許しています"))
+					step.AddError(errorInvalidResponse("チームあたりの上限参加人数を超えて登録が成功しました"))
 					return
 				}
 
 				var xerr *ProtobufError
 				if failure.As(err, &xerr) {
 					if !AssertEqual("Team over join code", ErrX400.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Team over join message", "XSUPORTAL[400]: チーム人数の上限に達しています(POST /api/registration/contestant)", xerr.Error()) {
-						step.AddError(errorInvalidResponse("参加上限に達したチームへの参加を許しています"))
+						step.AddError(errorInvalidResponse("チームあたりの上限参加人数を超えての登録に期待するエラーを返していません"))
 						return
 					}
 				} else {
@@ -328,7 +328,7 @@ func (s *Scenario) prepareCheckSignup(c *model.Contest, ctx context.Context, ste
 				var xerr *ProtobufError
 				if failure.As(err, &xerr) {
 					if !AssertEqual("Team invalid token code", ErrX400.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Team invalid token message", "XSUPORTAL[400]: 招待URLが不正です(POST /api/registration/contestant)", xerr.Error()) {
-						step.AddError(errorInvalidResponse("不正な招待コードでの登録を許しています"))
+						step.AddError(errorInvalidResponse("不正な招待コードでの登録に期待するエラーを返していません"))
 						return
 					}
 				} else {
@@ -414,7 +414,7 @@ func (s *Scenario) prepareCheckLogin(guest *model.Contestant, ctx context.Contex
 	var xerr *ProtobufError
 	if failure.As(err, &xerr) {
 		if !AssertEqual("Login password code", ErrX400, xerr.ErrorCode()) || !AssertEqual("Login password message", "XSUPORTAL[400]: ログインIDまたはパスワードが正しくありません(POST /api/login)", xerr.Error()) {
-			step.AddError(errorInvalidResponse("間違ったパスワードでのログインが許されています"))
+			step.AddError(errorInvalidResponse("間違ったパスワードでのログインに期待するエラーを返していません"))
 			return
 		}
 	} else {
@@ -423,10 +423,16 @@ func (s *Scenario) prepareCheckLogin(guest *model.Contestant, ctx context.Contex
 	}
 
 	guest.Password = validPassword
-	guest.ID = random.Alphabet(model.CONTESTANT_ID_LENGTH)
+	guest.ID = random.Alphabet(model.CONTESTANT_ID_LENGTH) + "invalid"
+	_, err = LoginAction(ctx, guest)
+	if err == nil {
+		step.AddError(errorInvalidResponse("間違った ID でのログインが許されています"))
+		return
+	}
+
 	if failure.As(err, &xerr) {
 		if !AssertEqual("Login id code", ErrX400, xerr.ErrorCode()) || !AssertEqual("Login id message", "XSUPORTAL[400]: ログインIDまたはパスワードが正しくありません(POST /api/login)", xerr.Error()) {
-			step.AddError(errorInvalidResponse("間違った ID でのログインが許されています"))
+			step.AddError(errorInvalidResponse("間違った ID でのログインに期待するエラーを返していません"))
 			return
 		}
 	} else {
@@ -449,7 +455,7 @@ func (s *Scenario) prepareCheckRequiredLogin(ctx context.Context, step *isucanda
 	guest.Agent.Name = useragent.Chrome()
 
 	checker := func(phase string, err error) {
-		e := errorInvalidResponse("ログインせずにアクセスできないはずのエンドポイントにアクセス可能になっています: %s", phase)
+		e := errorInvalidResponse("ログインを要するエンドポイントにログインせずにアクセス可能になっています: %s", phase)
 		var xerr *ProtobufError
 		if err == nil {
 			step.AddError(e)
@@ -556,7 +562,7 @@ func (s *Scenario) prepareCheckRequiredLogin(ctx context.Context, step *isucanda
 
 func (s *Scenario) prepareCheckRequiredContestant(guest *model.Contestant, ctx context.Context, step *isucandar.BenchmarkStep) {
 	checker := func(phase string, err error) {
-		e := errorInvalidResponse("コンテスト参加者以外がアクセスできないはずのエンドポイントにアクセス可能になっています: %s", phase)
+		e := errorInvalidResponse("チームに所属する選手以外がアクセスできないエンドポイントにアクセス可能になっています: %s", phase)
 		var xerr *ProtobufError
 		if err == nil {
 			step.AddError(e)
@@ -640,7 +646,7 @@ func (s *Scenario) prepareCheckRequiredContestant(guest *model.Contestant, ctx c
 
 func (s *Scenario) prepareCheckDualEqueue(t *model.Team, ctx context.Context, step *isucandar.BenchmarkStep) {
 	checker := func(phase string, err error) {
-		e := errorInvalidResponse("ベンチマークがキューできるはずのない状況でキューできます: %s", phase)
+		e := errorInvalidResponse("多重なベンチマークのエンキューに成功しました: %s", phase)
 		var xerr *ProtobufError
 		if err == nil {
 			step.AddError(e)
@@ -670,7 +676,7 @@ func (s *Scenario) prepareCheckDualEqueue(t *model.Team, ctx context.Context, st
 
 func (s *Scenario) prepareCheckEqueue(t *model.Team, ctx context.Context, step *isucandar.BenchmarkStep) {
 	checker := func(phase string, err error) {
-		e := errorInvalidResponse("ベンチマークがキューできるはずのない状況でキューできます: %s", phase)
+		e := errorInvalidResponse("競技時間外にベンチマークのエンキューに成功しました: %s", phase)
 		var xerr *ProtobufError
 		if err == nil {
 			step.AddError(e)

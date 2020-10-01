@@ -216,7 +216,7 @@ func (s *Scenario) loadSignup(parent context.Context, step *isucandar.BenchmarkS
 		}
 
 		if sres == nil {
-			step.AddError(errorInvalidResponse("登録処理中にエラーが発生しました"))
+			step.AddError(errorInvalidResponse("選手登録でエラーが発生しました"))
 			return
 		}
 
@@ -616,6 +616,9 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 	return nil
 }
 
+var ErrLoadAdminListClarifications failure.StringCode = "admin-list-clarifications"
+var ErrLoadAdminGetClarification failure.StringCode = "admin-get-clarification"
+
 // 管理者による Clar のチェックと解答。Clar には自動更新がないのでブラウザリロードを毎回行っている。
 func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.BenchmarkStep) error {
 	ctx, cancel := context.WithDeadline(ctx, s.Contest.ContestEndsAt.Add(5*time.Second))
@@ -685,7 +688,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 
 				if cClar == nil {
 					AdminLogger.Printf("Clarification not found: ID: %d / Team: %d", clar.GetId(), clar.GetTeamId())
-					step.AddError(errorInvalidResponse("存在しないはずの Clarification です"))
+					step.AddError(failure.NewError(ErrLoadAdminListClarifications, errorInvalidResponse("存在しないはずの Clarification です")))
 					continue
 				}
 
@@ -695,7 +698,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 				resolveCounts++
 
 				if !AssertEqual("Clar Team ID", team.ID, clar.GetTeamId()) {
-					step.AddError(errorInvalidResponse("Clarification のチーム ID が一致しません"))
+					step.AddError(failure.NewError(ErrLoadAdminListClarifications, errorInvalidResponse("Clarification のチーム ID が不正です")))
 				}
 
 				wg.Add(1)
@@ -704,18 +707,18 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 
 					gRes, err := AdminGetClarificationAction(ctx, clar.ID(), admin)
 					if err != nil {
-						step.AddError(err)
+						step.AddError(failure.NewError(ErrLoadAdminGetClarification, err))
 						return
 					}
 					resClar := gRes.GetClarification()
 
 					if !AssertEqual("Clar Team ID", clar.TeamID, resClar.GetTeamId()) {
-						step.AddError(errorInvalidResponse("Clarification のチーム ID が一致しません"))
+						step.AddError(failure.NewError(ErrLoadAdminGetClarification, errorInvalidResponse("Clarification のチーム ID が不正です")))
 						return
 					}
 
 					if !AssertEqual("Clar Question", clar.Question, resClar.GetQuestion()) {
-						step.AddError(errorInvalidResponse("Clarification の質問文が一致しません"))
+						step.AddError(failure.NewError(ErrLoadAdminGetClarification, errorInvalidResponse("Clarification の質問文が一致しません")))
 						return
 					}
 
@@ -954,7 +957,7 @@ func (s *Scenario) loadListNotifications(parent context.Context, step *isucandar
 	}
 }
 
-var ErrBenchamrkJobDetail failure.StringCode = "benchmark-job-details"
+var ErrBenchamrkJobDetail failure.StringCode = "get-benchmark-job"
 
 func (s *Scenario) loadBenchmarkDetails(ctx context.Context, step *isucandar.BenchmarkStep, team *model.Team, job *resources.Notification_BenchmarkJobMessage) {
 	result := team.GetWaitingBenchmarkResult()
@@ -969,13 +972,14 @@ func (s *Scenario) loadBenchmarkDetails(ctx context.Context, step *isucandar.Ben
 	}
 
 	defer func() { <-team.EnqueueLock }()
-	result.Seen()
 
 	err = verifyGetBenchmarkJobDetail(res, team, result)
 	if err != nil {
 		step.AddError(failure.NewError(ErrBenchamrkJobDetail, err))
 		return
 	}
+
+	result.Seen()
 
 	step.AddScore("finish-benchmark")
 	s.AddAudience(1)

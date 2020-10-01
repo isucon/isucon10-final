@@ -64,7 +64,7 @@ func init() {
 }
 
 func errorInvalidStatusCode(res *http.Response) error {
-	return failure.NewError(ErrX5XX, fmt.Errorf("不正な HTTP ステータスコード: %d (%s: %s)", res.StatusCode, res.Request.Method, res.Request.URL.Path))
+	return failure.NewError(ErrX5XX, fmt.Errorf("期待する HTTP ステータスコード以外が返却されました: %d (%s: %s)", res.StatusCode, res.Request.Method, res.Request.URL.Path))
 }
 
 func errorInvalidResponse(message string, args ...interface{}) error {
@@ -74,7 +74,7 @@ func errorInvalidResponse(message string, args ...interface{}) error {
 func errorChecksum(base string, resource *agent.Resource, name string) error {
 	if resource == nil {
 		AdminLogger.Printf("resource not found: %s on %s\n", name, base)
-		return failure.NewError(ErrChecksum, errorInvalidResponse("チェックサムの取得に失敗しました: %s", name))
+		return failure.NewError(ErrChecksum, errorInvalidResponse("期待するリソースが読み込まれませんでした: %s", name))
 	}
 
 	if resource.Error != nil {
@@ -102,11 +102,11 @@ func errorChecksum(base string, resource *agent.Resource, name string) error {
 	bytes, err := ioutil.ReadAll(res.Body)
 	if err != nil && err != io.EOF {
 		AdminLogger.Printf("resource checksum: %v", err)
-		return failure.NewError(ErrChecksum, errorInvalidResponse("チェックサムの取得に失敗しました: %s", path))
+		return failure.NewError(ErrChecksum, errorInvalidResponse("リソースの取得に失敗しました: %s", path))
 	}
 	resChecksum := fmt.Sprintf("%x", sha512.Sum384(bytes))
 	if !AssertEqual("Validate checksum", checksums[path], resChecksum) {
-		return failure.NewError(ErrChecksum, errorInvalidResponse("チェックサムの比較に失敗しました: %s", path))
+		return failure.NewError(ErrChecksum, errorInvalidResponse("期待するチェックサムと一致しません: %s", path))
 	}
 	return nil
 }
@@ -118,7 +118,7 @@ func verifyInitializeAction(res *admin.InitializeResponse, hres *http.Response) 
 	}
 
 	if len(res.GetLanguage()) == 0 {
-		errors = append(errors, errorInvalidResponse("利用言語が設定されていません"))
+		errors = append(errors, errorInvalidResponse("利用言語(language)が設定されていません"))
 	}
 
 	return errors
@@ -140,6 +140,8 @@ func joinURL(base *url.URL, target string) string {
 	return u
 }
 
+// ERR: load: checksum: invalid-response: チェックサムの取得に失敗しました: /packs/vendor.js
+// ERR: load: checksum: invalid-response: チェックサムの比較に失敗しました: /packs/vendor.js
 func verifyResources(page string, res *http.Response, resources agent.Resources) []error {
 	if res.StatusCode != 200 && res.StatusCode != 304 {
 		return []error{errorInvalidStatusCode(res)}
@@ -203,8 +205,12 @@ func (s *Scenario) verifyLeaderboard(requestedAt time.Time, leaderboard *resourc
 			return failure.NewError(ErrCritical, errorInvalidResponse("登録されていないチームがリーダーボード上に存在します: ID %d", team.GetId()))
 		}
 
+		if team.GetStudent() == nil {
+			return errorInvalidResponse("学生チーム判定が不正です")
+		}
+
 		if !AssertEqual("Leaderboard student team flag", cTeam.IsStudent, team.GetStudent().GetStatus()) {
-			return errorInvalidResponse("学生チームかどうかの判定が不正です")
+			return errorInvalidResponse("学生チーム判定が期待と一致しません")
 		}
 
 		targetAt := at
@@ -219,7 +225,7 @@ func (s *Scenario) verifyLeaderboard(requestedAt time.Time, leaderboard *resourc
 			results = cTeam.BenchmarkResults(now)
 			if len(results) < len(item.GetScores()) {
 				AdminLogger.Printf("at %s team %d / got(%d) expect(%d)\n", now, team.GetId(), len(item.GetScores()), len(results))
-				return errorInvalidResponse("グラフ上と記録されたスコアの数が一致しませんでした")
+				return errorInvalidResponse("スコアデータの個数が期待と一致しないチームが存在します")
 			}
 			targetAt = now
 		}
@@ -232,18 +238,18 @@ func (s *Scenario) verifyLeaderboard(requestedAt time.Time, leaderboard *resourc
 		for idx, score := range item.GetScores() {
 			if len(results) <= idx {
 				AdminLogger.Printf("at %s(%s) team %d / got(%d) expect(%d): %#v\n", targetAt, score.GetMarkedAt().AsTime(), team.GetId(), idx, len(results), score)
-				return errorInvalidResponse("スコアグラフ内に存在するはずのないスコアが存在します")
+				return errorInvalidResponse("存在するはずのないスコアデータが存在します")
 			}
 			result := results[idx]
 
 			if result.Score != score.GetScore() {
-				return errorInvalidResponse("スコアグラフ内のスコアが不正です")
+				return errorInvalidResponse("スコアデータのスコアが期待と一致しません")
 			}
 
 			markedAt := score.GetMarkedAt().AsTime().Truncate(time.Millisecond)
 			if !result.MarkedAt().Equal(markedAt) {
 				AdminLogger.Printf("expect: %s / got: %s;", result.MarkedAt(), markedAt)
-				return errorInvalidResponse("スコアグラフ内のスコアの終了時刻が不正です")
+				return errorInvalidResponse("スコアデータの時刻が期待と一致しません")
 			}
 
 			if cbs < result.Score {
@@ -260,7 +266,7 @@ func (s *Scenario) verifyLeaderboard(requestedAt time.Time, leaderboard *resourc
 		ebs, ebt := cTeam.BestScore(latestMarkedAt)
 		if bs != ebs && bs != cbs {
 			AdminLogger.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, ebt, team.GetId(), bs, ebs, cbs)
-			return errorInvalidResponse("ベストスコアの検証に失敗しました")
+			return errorInvalidResponse("ベストスコアの検証に失敗するチームが存在します")
 		}
 
 		ls := item.GetLatestScore().GetScore()
@@ -268,7 +274,7 @@ func (s *Scenario) verifyLeaderboard(requestedAt time.Time, leaderboard *resourc
 		els, elt := cTeam.LatestScore(latestMarkedAt)
 		if ls != els && ls != cls {
 			AdminLogger.Printf("at %s(%s) team %d / got(%d) expect(%d) calc(%d)\n", targetAt, elt, team.GetId(), ls, els, cls)
-			return errorInvalidResponse("最新スコアの検証に失敗しました")
+			return errorInvalidResponse("最新スコアの検証に失敗するチームが存在します")
 		}
 
 		if ls > prevLatestScore || (!lm.Equal(zero) && ls == prevLatestScore && prevLatestMarkedAt.After(lm)) {
@@ -308,9 +314,9 @@ func (s *Scenario) verifyLeaderboard(requestedAt time.Time, leaderboard *resourc
 	if allowedMaxTime.Add(-cacheTime).After(maxMarkedAt) {
 		AdminLogger.Printf("OLDER LEADERBOARD: \n  %s requested at\n  %s latest finish\n  %s allowed cache time\n  %s leadeboard max time\n  %s frozen time\n  %s now time\n", requestedAt, sLatestMarkedAt, allowedMaxTime.Add(-cacheTime), maxMarkedAt, contest.ContestFreezesAt, time.Now().UTC())
 		if allowCache {
-			return errorInvalidResponse("規定より古い内容のリーダーボードが返却されています(GET /api/audience/dashboard)")
+			return errorInvalidResponse("期待より古い内容のリーダーボードが返却されています(GET /api/audience/dashboard)")
 		} else {
-			return errorInvalidResponse("規定より古い内容のリーダーボードが返却されています(GET /api/contestant/dashboard)")
+			return errorInvalidResponse("期待より古い内容のリーダーボードが返却されています(GET /api/contestant/dashboard)")
 		}
 	}
 
