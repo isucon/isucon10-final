@@ -57,12 +57,22 @@ export const dbinfo: mysql.PoolConfig = {
   database: process.env['MYSQL_DATABASE'] ?? 'xsuportal',
   password: process.env['MYSQL_PASS'] || 'isucon',
   charset: 'utf8mb4',
-  timezone: '+00:00'
+  timezone: 'z'
 };
 
-const pool = mysql.createPool(dbinfo);
+const poolPromise = mysql.createPool(dbinfo);
+let pool = null;
 
-export const getDB = async () => (await pool).getConnection()
+export const getDB = async () => {
+  if (pool == null) {
+    pool = await poolPromise;
+    pool.on("connection", (conn) => {
+      conn.query("SET time_zone='+00:00'");
+    });
+  }
+  return pool.getConnection();
+}
+
 export const notifier = new Notifier();
 
 const haltPb = (res: express.Response, code: number, humanMessage: string) => {
