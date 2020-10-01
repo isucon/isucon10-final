@@ -215,28 +215,3 @@ push subscription 情報については、push resource の URL に加え、[W3C
 [rfc8291]: https://tools.ietf.org/html/rfc8291
 [rfc8292]: https://tools.ietf.org/html/rfc8292
 [sec1]: https://www.secg.org/sec1-v2.pdf
-
----
-
-# メモ
-
-- 許可されている挙動変更
-  - [x] Cache
-  - [x] Conditional GET
-  - [x] 仮想チーム参加制限
-  - [x] WebPush
-- [ ] 動作確認方法
-- [x] audience が増える条件について
-- [x] 各コンポーネント説明
-  - 実ベンチマーカー
-  - 仮想ポータル（アプリケーション）
-    - HTTP
-    - benchmark_server (gRPC)
-- [ ] リカバリ方法
-- 仮想負荷走行の仕様
-  - [x] 瞬時に完了する点
-  - [x] 競技者がベンチ完了と Clar 返答を待つ点
-  - [x] 通知を見て行動をするという点
-- デバッグ用スクリプトについて
-  - [ ] 動作確認用
-  - [ ] WebPush

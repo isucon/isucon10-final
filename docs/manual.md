@@ -6,8 +6,7 @@
 
 ### 課題アプリケーション仕様
 
-課題アプリケーション XSUCON の仕様については、こちらを参照してください。
-★ https://hackmd.io/Ip71mfq8TH2fECehU8RaTg
+課題アプリケーション XSUCON の仕様については、[XSUCON アプリケーションマニュアル](https://hackmd.io/Ip71mfq8TH2fECehU8RaTg)を参照してください。
 
 ## ISUCON10 本選 ポータルサイト
 
@@ -116,6 +115,14 @@ $ ssh -L localhost:10443:10.160.1.101:443 isucon-server
 | isucon1                     | isucon1    | 仮想選手   |
 | isucon2                     | isucon2    | 仮想選手   |
 | isucon3                     | isucon3    | 仮想選手   |
+
+#### データベースの初期化方法
+
+初期状態のアプリケーションでは、初期化処理（`POST /initialize`）においてデータベースのレコードは削除しますがスキーマは初期化されません。スキーマを初期状態に戻したい場合は、以下の SQL ファイルをご利用ください。
+
+```
+webapp/sql/schema.sql
+```
 
 ### 3. 負荷走行 (ベンチマーク)
 
