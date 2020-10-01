@@ -4,7 +4,7 @@ use rand::prelude::*;
 use structopt::StructOpt;
 
 /*
- * これはデバッグ用のコマンドです。使い方は docs/manual.md を見てください。
+ * これはデバッグ用のコマンドです。使い方は ~isucon/webapp/tools/README.md を見てください。
  */
 
 #[derive(Debug, StructOpt)]
@@ -109,44 +109,25 @@ where
     Ok(notification.unwrap())
 }
 
-const WEBPUSH_SUBJECT: &str = "xsuportal-debug@example.com";
-
 async fn send_web_push(
     vapid_key: &xsuportal::webpush::VapidKey,
     notification_pb: &xsuportal::proto::resources::Notification,
-    sub: &xsuportal::PushSubscription,
+    push_subscription: &xsuportal::PushSubscription,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let mut pb = Vec::with_capacity(notification_pb.encoded_len());
     notification_pb.encode(&mut pb)?;
     let message = base64::encode(&pb);
 
-    let auth = base64::decode_config(&sub.auth, base64::URL_SAFE_NO_PAD)?;
-    let p256dh = base64::decode_config(&sub.p256dh, base64::URL_SAFE_NO_PAD)?;
-    let endpoint = url::Url::parse(&sub.endpoint)?;
+    let notifier = xsuportal::webpush::WebPushClient {
+        endpoint: &push_subscription.endpoint,
+        p256dh: &push_subscription.p256dh,
+        auth: &push_subscription.auth,
+        vapid_key,
+        message,
+    };
 
-    let payload = xsuportal::webpush::build_payload(&auth, &p256dh, &message)?;
-    let signer = xsuportal::webpush::WebPushSigner::new(
-        &vapid_key.encoding_key,
-        &vapid_key.public_key_for_push_header,
-    );
-    let headers = signer
-        .sign(&endpoint, WEBPUSH_SUBJECT)
-        .expect("Failed to build WebPush headers");
-
-    let client = reqwest::Client::new();
-    let resp = client
-        .post(endpoint)
-        .headers(headers)
-        .body(payload)
-        .send()
-        .await?;
-    if resp.status().is_success() {
-        Ok(())
-    } else {
-        eprintln!(
-            "Web Push service returned an error: status={}",
-            resp.status()
-        );
-        Ok(())
+    if let Err(e) = notifier.send().await {
+        eprintln!("Web Push service returned an error: {:?}", e);
     }
+    Ok(())
 }

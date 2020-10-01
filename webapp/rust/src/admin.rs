@@ -263,10 +263,13 @@ pub async fn respond_clarification(
 
     let mut unavailable_subscriptions = Vec::new();
     for notifier in notifiers {
+        use crate::notifier::WebPushNotifierError;
+        use crate::webpush::WebPushError;
+
         if let Err(e) = notifier.send().await {
             match e {
-                crate::notifier::WebPushError::ExpiredSubscription(sub, _)
-                | crate::notifier::WebPushError::InvalidSubscription(sub, _) => {
+                WebPushNotifierError::Error(sub, WebPushError::ExpiredSubscription(_))
+                | WebPushNotifierError::Error(sub, WebPushError::InvalidSubscription(_)) => {
                     unavailable_subscriptions.push(sub);
                 }
                 _ => {

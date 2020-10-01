@@ -1,6 +1,18 @@
 use byteorder::ByteOrder;
 use ring::aead::BoundKey;
 use ring::rand::SecureRandom;
+use url::Url;
+
+/*
+ * web-push crate は RFC8291 (+ RFC8188), RFC8292 を実装しておらず、その前身である I-D
+ * の仕様を満たした実装のみとなっており、ISUCON10 本選 実ベンチマーカーが実装する push service
+ * に対応できませんでした。
+ *
+ * そのため、この xsuportal::webpush module で RFC8291, RFC8188, RFC8292 の仕様に基いた
+ * Web Push クライアントを独自に実装しています。
+ *
+ * 使い方は src/bin/send_web_push.rs を参照してください。
+ */
 
 struct HKDFKey(usize);
 impl ring::hkdf::KeyType for HKDFKey {
@@ -221,4 +233,89 @@ fn do_hkdf(
     let info = [info];
     let okm = prk.expand(&info, HKDFKey(buf.len()))?;
     okm.fill(buf)
+}
+
+#[derive(Debug)]
+pub enum WebPushError {
+    ExpiredSubscription(reqwest::Response),
+    InvalidSubscription(reqwest::Response),
+    Unauthorized(reqwest::Response),
+    PayloadTooLarge(reqwest::Response),
+    TooManyRequests(reqwest::Response),
+    PushServiceError(reqwest::Response),
+    ResponseError(reqwest::Response),
+    ReqwestError(reqwest::Error),
+}
+impl std::fmt::Display for WebPushError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        match self {
+            Self::ExpiredSubscription(_) => write!(f, "ExpiredSubscription"),
+            Self::InvalidSubscription(_) => write!(f, "InvalidSubscription"),
+            Self::Unauthorized(_) => write!(f, "Unauthorized"),
+            Self::PayloadTooLarge(_) => write!(f, "PayloadTooLarge"),
+            Self::TooManyRequests(_) => write!(f, "TooManyRequests"),
+            Self::PushServiceError(_) => write!(f, "PushServiceError"),
+            Self::ResponseError(_) => write!(f, "ResponseError"),
+            Self::ReqwestError(e) => write!(f, "{}", e),
+        }
+    }
+}
+
+pub struct WebPushClient<'a> {
+    pub endpoint: &'a String,
+    pub p256dh: &'a String,
+    pub auth: &'a String,
+    pub vapid_key: &'a VapidKey,
+    pub message: String,
+}
+impl<'a> WebPushClient<'a> {
+    pub async fn send(self) -> Result<(), WebPushError> {
+        let p256dh_wire = base64::decode_config(self.p256dh, base64::URL_SAFE_NO_PAD)
+            .expect("Failed to decode p256dh");
+        let auth_wire = base64::decode_config(self.auth, base64::URL_SAFE_NO_PAD)
+            .expect("Failed to decode auth");
+        let endpoint_url = Url::parse(&self.endpoint).expect("Failed to parse endpoint");
+        let payload = crate::webpush::build_payload(&auth_wire, &p256dh_wire, &self.message)
+            .expect("Failed to build WebPush payload");
+        let signer = WebPushSigner::new(
+            &self.vapid_key.encoding_key,
+            &self.vapid_key.public_key_for_push_header,
+        );
+        const WEBPUSH_SUBJECT: &str = "xsuportal@example.com";
+        let headers = signer
+            .sign(&endpoint_url, WEBPUSH_SUBJECT)
+            .expect("Failed to build WebPush headers");
+
+        // reqwest が返す future が Sync を実装しておらず ReportService::ReportBenchmarkResultStream
+        // の中で使えないので、tokio::oneshot::channel() 経由にする。
+        let (tx, rx) = tokio::sync::oneshot::channel();
+        tokio::spawn(async move {
+            let client = reqwest::Client::new();
+            let result = client
+                .post(endpoint_url)
+                .headers(headers)
+                .body(payload)
+                .send()
+                .await;
+            if let Err(result) = tx.send(result) {
+                log::error!(
+                    "Failed to send Web Push response via tokio::sync::oneshot: {:?}",
+                    result
+                );
+            }
+        });
+        match rx.await.expect("Failed to receive WebPush response") {
+            Ok(resp) => match resp.status().as_u16() {
+                _ if resp.status().is_success() => Ok(()),
+                _ if resp.status().is_server_error() => Err(WebPushError::PushServiceError(resp)),
+                410 => Err(WebPushError::ExpiredSubscription(resp)),
+                404 => Err(WebPushError::InvalidSubscription(resp)),
+                401 | 403 => Err(WebPushError::Unauthorized(resp)),
+                413 => Err(WebPushError::PayloadTooLarge(resp)),
+                429 => Err(WebPushError::TooManyRequests(resp)),
+                _ => Err(WebPushError::ResponseError(resp)),
+            },
+            Err(e) => Err(WebPushError::ReqwestError(e)),
+        }
+    }
 }
