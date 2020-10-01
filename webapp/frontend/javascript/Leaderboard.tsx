@@ -100,14 +100,13 @@ const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
   );
 };
 
-type Mode = "all" | "general" | "students" | "hidden";
+type Mode = "all" | "general" | "students";
 
 interface Props {
   teamPins: TeamPinsMap;
   onPin: (teamId: string, flag: boolean) => void;
   leaderboard: xsuportal.proto.resources.ILeaderboard;
   teamId?: number | Long;
-  enableHiddenTeamsMode?: boolean;
 }
 
 const usePrevious = function <T>(value: T) {
@@ -221,13 +220,6 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
               <span>Students</span>
             </a>
           </li>
-          {props.enableHiddenTeamsMode ? (
-            <li className={mode === "hidden" ? "is-active" : ""}>
-              <a onClick={() => setMode("hidden")}>
-                <span>Hidden</span>
-              </a>
-            </li>
-          ) : null}
         </ul>
       </div>
       <table className="table is-hoverable is-fullwidth xsu-leaderboard">
