@@ -7,6 +7,9 @@
 /webapp/frontend/sw/src/pb.*  linguist-generated=true
 /webapp/frontend/javascript/ScoreGraphColors.tsx linguist-generated=true
 
+/webapp/nodejs/proto/**/*.js linguist-generated=true
+/webapp/nodejs/proto/**/*.ts linguist-generated=true
+
 /webapp/ruby/debug/**/* export-ignore
 /webapp/rust/debug/**/* export-ignore
 /webapp/golang/debug/**/* export-ignore
