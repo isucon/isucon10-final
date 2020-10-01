@@ -1,10 +1,10 @@
 include_cookbook 'langs::nodejs'
 
-execute "( cd ~isucon/webapp/nodejs && /home/isucon/.x npm ci #{node[:xsuportal][:ignore_failed_build]['nodejs']}" do
+execute "cd ~isucon/webapp/nodejs && /home/isucon/.x npm ci #{node[:xsuportal][:ignore_failed_build]['nodejs']}" do
   user 'isucon'
 end
 
-execute "( cd ~isucon/webapp/nodejs && /home/isucon/.x npm run build #{node[:xsuportal][:ignore_failed_build]['nodejs']}" do
+execute "cd ~isucon/webapp/nodejs && /home/isucon/.x npm run build #{node[:xsuportal][:ignore_failed_build]['nodejs']}" do
   user 'isucon'
 end
 
