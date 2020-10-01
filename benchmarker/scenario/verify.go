@@ -206,11 +206,11 @@ func (s *Scenario) verifyLeaderboard(requestedAt time.Time, leaderboard *resourc
 		}
 
 		if team.GetStudent() == nil {
-			return errorInvalidResponse("学生チーム判定が不正です")
+			return errorInvalidResponse("リーダーボード上の学生チーム判定が不正です")
 		}
 
 		if !AssertEqual("Leaderboard student team flag", cTeam.IsStudent, team.GetStudent().GetStatus()) {
-			return errorInvalidResponse("学生チーム判定が期待と一致しません")
+			return errorInvalidResponse("リーダーボード上の学生チーム判定が期待と一致しません")
 		}
 
 		targetAt := at
