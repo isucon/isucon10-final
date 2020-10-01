@@ -218,8 +218,24 @@ func sendResult(s *scenario.Scenario, result *isucandar.BenchmarkResult, finish 
 		}
 	}
 
+	promTags := []string{
+		fmt.Sprintf("xsuconbench_score_total{} %d\n", scoreTotal),
+		fmt.Sprintf("xsuconbench_score_raw{} %d\n", scoreRaw),
+		fmt.Sprintf("xsuconbench_score_deduction{} %d\n", scoreDeduction),
+		fmt.Sprintf("xsuconbench_score_subtotal{name=\"contestant\"} %d\n", contestantScore),
+		fmt.Sprintf("xsuconbench_score_subtotal{name=\"bonusMag\"} %f\n", float64(bonusMag)/10),
+		fmt.Sprintf("xsuconbench_score_subtotal{name=\"audienceScore\"} %d\n", audienceScore),
+		fmt.Sprintf("xsuconbench_score_subtotal{name=\"scoreDeduction\"} %d\n", scoreDeduction),
+		fmt.Sprintf("xsuconbench_score_error_count{name=\"deduction\"} %d\n", deduction),
+		fmt.Sprintf("xsuconbench_score_error_count{name=\"timeout\"} %d\n", timeoutCount),
+	}
+	if passed {
+		promTags = append(promTags, "xsuconbench_passed{} 1\n")
+	} else {
+		promTags = append(promTags, "xsuconbench_passed{} 0\n")
+	}
+
 	tags := []string{}
-	promTags := []string{}
 	for k, v := range breakdown {
 		promTags = append(promTags, fmt.Sprintf("xsuconbench_score_breakdown{name=\"%s\"} %d\n", k, v))
 		tags = append(tags, string(k))
