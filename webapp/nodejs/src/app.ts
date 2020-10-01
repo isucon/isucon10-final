@@ -493,7 +493,7 @@ async function getLeaderboardResource(db: mysql.PoolConnection, teamId: number =
       item.setLatestScore(ls);
     }
     const teamResource = await getTeamResource(team, db, false, false, false);
-    
+
     item.setTeam(teamResource);
     item.setFinishCount(team.finish_count);
 
@@ -506,7 +506,7 @@ async function getLeaderboardResource(db: mysql.PoolConnection, teamId: number =
   }
 
   const leaderboardResource = new Leaderboard();
-  
+
   leaderboardResource.setTeamsList(teams);
   leaderboardResource.setGeneralTeamsList(generalTeams);
   leaderboardResource.setStudentTeamsList(studentTeams);
@@ -591,8 +591,8 @@ app.post("/initialize", async (req, res, next) => {
     response.setLanguage("nodejs");
     // 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報
     const benchmarkServer = new InitializeResponse.BenchmarkServer();
-    benchmarkServer.setHost("localhost");
-    benchmarkServer.setPort(50051);
+    benchmarkServer.setHost(process.env.BENCHMARK_SERVER_HOST ?? "localhost");
+    benchmarkServer.setPort(parseInt(process.env.BENCHMARK_SERVER_PORT ?? '50051', 10));
     response.setBenchmarkServer(benchmarkServer);
 
     res.contentType(`application/vnd.google.protobuf`);
