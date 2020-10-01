@@ -95,7 +95,7 @@ export const app = express();
 
 app.set('trust proxy', 1);
 app.use(express.static("../public"));
-// app.use(morgan('combined'));
+app.use(morgan('combined'));
 app.use(session({
   secret: 'tagomoris',
   name: 'session_xsucon',
