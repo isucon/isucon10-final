@@ -1,11 +1,9 @@
 import type { xsuportal } from "./pb";
 
 import React from "react";
-import dayjs from "dayjs";
-
 import uPlot from "uplot";
 
-import type { TeamPinsMap, TeamPins } from "./TeamPins";
+import type { TeamPinsMap } from "./TeamPins";
 import { COLORS } from "./ScoreGraphColors";
 
 interface Props {
@@ -48,8 +46,10 @@ export const ScoreGraph: React.FC<Props> = ({
   const [data, setData] = React.useState<Array<Array<number | null>>>([]);
   const [chart, setChart] = React.useState<uPlot | null>(null);
 
+  const teamIds = teams.map((i) => i.team!.id).join(",");
+  const teamIdCount = teams.length;
   const cacheKey = JSON.stringify(calculateGraphCacheKey(teams));
-  console.log("render", cacheKey);
+  //console.log("render", cacheKey);
 
   const targetTeams = showPinnedOnly
     ? teams.filter(
@@ -110,6 +110,7 @@ export const ScoreGraph: React.FC<Props> = ({
 
   React.useEffect(() => {
     if (!elem.current) return;
+    if (!(data[0] && data[0].length - 1 >= teamIdCount)) return;
     //console.log("ScoreGraph: setChart");
 
     const opts: uPlot.Options = {
@@ -148,18 +149,35 @@ export const ScoreGraph: React.FC<Props> = ({
         },
       ],
     };
-    console.log(data);
+    //console.log(data);
 
     const newChart = new uPlot(opts, data, elem.current);
     setChart(newChart);
     return () => newChart.destroy();
-  }, [setChart, elem.current, showPinnedOnly ? teamPins : null]);
+  }, [
+    setChart,
+    elem.current,
+    data[0] && data[0].length,
+    teamIds,
+    teamIdCount,
+    showPinnedOnly ? teamPins : null,
+  ]);
 
   React.useEffect(() => {
     if (!chart || !data) return;
-    //console.log("ScoreGraph: chart.setData");
-    chart.setData(data);
-  }, [chart, cacheKey]);
+    console.log(
+      `ScoreGraph: chart.setData data=${data[0] && data[0].length}, series=${
+        chart.series.length
+      }, teamids=${teamIdCount}`
+    );
+    if (
+      data[0] &&
+      data[0].length - 1 >= teamIdCount &&
+      chart.series.length - 1 >= teamIdCount
+    ) {
+      chart.setData(data);
+    }
+  }, [chart, teamIds, teamIdCount, data]);
 
   const classNames = ["xsu-scoregraph"];
   if (showPinnedOnly) classNames.push("xsu-scoregraph-pinnedonly");
