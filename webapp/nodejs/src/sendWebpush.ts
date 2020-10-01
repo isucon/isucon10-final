@@ -81,6 +81,7 @@ const sendWebpush = async (vapidKey: VapidKey, notification: Notification, pushS
 }
 
 const run = async (path: string, contestantId: string) => {
+    if (!path || !contestantId) throw Error('path and contestantId is required')
     const db = await createConnection(dbinfo)
     try {
         const vapidKey = getVapidKey(path)
@@ -106,3 +107,5 @@ const run = async (path: string, contestantId: string) => {
         await db.end()
     }
 }
+
+run('', '')
