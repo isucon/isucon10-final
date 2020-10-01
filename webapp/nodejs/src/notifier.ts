@@ -14,6 +14,10 @@ export class Notifier {
   static WEBPUSH_SUBJECT = 'xsuportal@example.com';
   static VAPIDKey: webpush.VapidKeys;
 
+  constructor() {
+    this.getVAPIDKey()
+  }
+
   getVAPIDKey() {
     if(Notifier.VAPIDKey) return Notifier.VAPIDKey;
     if(!fs.existsSync(Notifier.WEBPUSH_VAPID_PRIVATE_KEY_PATH)) return null;
@@ -29,7 +33,7 @@ export class Notifier {
   async notifyClarificationAnswered(clar: NonNullable<any>, db: PoolConnection, updated = false) {
     const contestants = await db.query(
       clar.disclosed
-        ? 'SELECT `id`, `team_id` FROM `contestants`'
+        ? 'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` IS NOT NULL'
         : 'SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?',
       [clar.team_id]
     );
