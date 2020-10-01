@@ -1,106 +1,22 @@
-use crate::webpush::WebPushSigner;
 use mysql::prelude::*;
-use url::Url;
 
 #[derive(Debug)]
-pub enum WebPushError {
-    ExpiredSubscription(crate::PushSubscription, reqwest::Response),
-    InvalidSubscription(crate::PushSubscription, reqwest::Response),
-    Unauthorized(crate::PushSubscription, reqwest::Response),
-    PayloadTooLarge(crate::PushSubscription, reqwest::Response),
-    TooManyRequests(crate::PushSubscription, reqwest::Response),
-    PushServiceError(crate::PushSubscription, reqwest::Response),
-    ResponseError(crate::PushSubscription, reqwest::Response),
-    ReqwestError(crate::PushSubscription, reqwest::Error),
+pub enum WebPushNotifierError {
+    Error(crate::PushSubscription, crate::webpush::WebPushError),
 }
-impl std::fmt::Display for WebPushError {
+impl std::fmt::Display for WebPushNotifierError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
         match self {
-            Self::ExpiredSubscription(_, _) => write!(f, "ExpiredSubscription"),
-            Self::InvalidSubscription(_, _) => write!(f, "InvalidSubscription"),
-            Self::Unauthorized(_, _) => write!(f, "Unauthorized"),
-            Self::PayloadTooLarge(_, _) => write!(f, "PayloadTooLarge"),
-            Self::TooManyRequests(_, _) => write!(f, "TooManyRequests"),
-            Self::PushServiceError(_, _) => write!(f, "PushServiceError"),
-            Self::ResponseError(_, _) => write!(f, "ResponseError"),
-            Self::ReqwestError(_, e) => write!(f, "{}", e),
+            Self::Error(_, e) => e.fmt(f),
         }
     }
 }
 
-pub struct WebPushNotifier {
-    push_subscription: crate::PushSubscription,
-    encoded_message: String,
-}
-impl WebPushNotifier {
-    pub async fn send(self) -> Result<(), WebPushError> {
-        let p256dh = base64::decode_config(&self.push_subscription.p256dh, base64::URL_SAFE_NO_PAD)
-            .expect("Failed to decode p256dh");
-        let auth = base64::decode_config(&self.push_subscription.auth, base64::URL_SAFE_NO_PAD)
-            .expect("Failed to decode auth");
-        let endpoint =
-            Url::parse(&self.push_subscription.endpoint).expect("Failed to parse endpoint");
-        let payload = crate::webpush::build_payload(&auth, &p256dh, &self.encoded_message)
-            .expect("Failed to build WebPush payload");
-        let vapid_key = WEBPUSH_VAPID_KEY
-            .as_ref()
-            .expect("VapidKey is not available");
-        let signer = WebPushSigner::new(
-            &vapid_key.encoding_key,
-            &vapid_key.public_key_for_push_header,
-        );
-        const WEBPUSH_SUBJECT: &str = "xsuportal@example.com";
-        let headers = signer
-            .sign(&endpoint, WEBPUSH_SUBJECT)
-            .expect("Failed to build WebPush headers");
-
-        // reqwest が返す future が Sync を実装しておらず ReportService::ReportBenchmarkResultStream
-        // の中で使えないので、tokio::oneshot::channel() 経由にする。
-        let (tx, rx) = tokio::sync::oneshot::channel();
-        tokio::spawn(async move {
-            let client = reqwest::Client::new();
-            let result = client
-                .post(endpoint)
-                .headers(headers)
-                .body(payload)
-                .send()
-                .await;
-            if let Err(result) = tx.send(result) {
-                log::error!(
-                    "Failed to send Web Push response via tokio::sync::oneshot: {:?}",
-                    result
-                );
-            }
-        });
-        match rx.await.expect("Failed to receive WebPush response") {
-            Ok(resp) => match resp.status().as_u16() {
-                _ if resp.status().is_success() => Ok(()),
-                _ if resp.status().is_server_error() => {
-                    Err(WebPushError::PushServiceError(self.push_subscription, resp))
-                }
-                410 => Err(WebPushError::ExpiredSubscription(
-                    self.push_subscription,
-                    resp,
-                )),
-                404 => Err(WebPushError::InvalidSubscription(
-                    self.push_subscription,
-                    resp,
-                )),
-                401 | 403 => Err(WebPushError::Unauthorized(self.push_subscription, resp)),
-                413 => Err(WebPushError::PayloadTooLarge(self.push_subscription, resp)),
-                429 => Err(WebPushError::TooManyRequests(self.push_subscription, resp)),
-                _ => Err(WebPushError::ResponseError(self.push_subscription, resp)),
-            },
-            Err(e) => Err(WebPushError::ReqwestError(self.push_subscription, e)),
-        }
-    }
-}
-
-pub fn notify_clarification_answered<Q>(
-    conn: &mut Q,
-    clar: &crate::Clarification,
+pub fn notify_clarification_answered<'a, Q>(
+    conn: &'_ mut Q,
+    clar: &'_ crate::Clarification,
     updated: bool,
-) -> Result<Vec<WebPushNotifier>, mysql::Error>
+) -> Result<Vec<WebPushNotifier<'a>>, mysql::Error>
 where
     Q: Queryable,
 {
@@ -142,10 +58,10 @@ where
     Ok(notifiers)
 }
 
-pub fn notify_benchmark_job_finished<Q>(
-    conn: &mut Q,
-    job: &crate::BenchmarkJob,
-) -> Result<Vec<WebPushNotifier>, mysql::Error>
+pub fn notify_benchmark_job_finished<'a, Q>(
+    conn: &'_ mut Q,
+    job: &'_ crate::BenchmarkJob,
+) -> Result<Vec<WebPushNotifier<'a>>, mysql::Error>
 where
     Q: Queryable,
 {
@@ -220,11 +136,33 @@ pub fn is_webpush_available() -> bool {
     WEBPUSH_VAPID_KEY.is_some()
 }
 
-fn build_webpush_notifier<Q>(
-    conn: &mut Q,
-    notification: &crate::proto::resources::Notification,
-    contestant_id: &str,
-) -> Result<Vec<WebPushNotifier>, mysql::Error>
+pub struct WebPushNotifier<'a> {
+    push_subscription: crate::PushSubscription,
+    message: String,
+    vapid_key: &'a crate::webpush::VapidKey,
+}
+
+impl<'a> WebPushNotifier<'a> {
+    pub async fn send(self) -> Result<(), WebPushNotifierError> {
+        let client = crate::webpush::WebPushClient {
+            endpoint: &self.push_subscription.endpoint,
+            p256dh: &self.push_subscription.p256dh,
+            auth: &self.push_subscription.auth,
+            message: self.message,
+            vapid_key: self.vapid_key,
+        };
+        match client.send().await {
+            Ok(_) => Ok(()),
+            Err(e) => Err(WebPushNotifierError::Error(self.push_subscription, e)),
+        }
+    }
+}
+
+fn build_webpush_notifier<'a, Q>(
+    conn: &'_ mut Q,
+    notification: &'_ crate::proto::resources::Notification,
+    contestant_id: &'_ str,
+) -> Result<Vec<WebPushNotifier<'a>>, mysql::Error>
 where
     Q: Queryable,
 {
@@ -244,7 +182,10 @@ where
         .into_iter()
         .map(|push_subscription| WebPushNotifier {
             push_subscription,
-            encoded_message: encoded_message.clone(),
+            message: encoded_message.clone(),
+            vapid_key: WEBPUSH_VAPID_KEY
+                .as_ref()
+                .expect("WEBPUSH_VAPID_KEY is not available"),
         })
         .collect())
 }

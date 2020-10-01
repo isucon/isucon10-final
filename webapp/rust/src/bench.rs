@@ -1,3 +1,4 @@
+use crate::notifier::WebPushNotifier;
 use crate::proto::resources::{benchmark_job::Status as BenchmarkJobStatus, BenchmarkResult};
 use crate::proto::services::bench::benchmark_queue_server::BenchmarkQueue;
 use crate::proto::services::bench::benchmark_report_server::BenchmarkReport;
@@ -148,10 +149,10 @@ impl BenchmarkReport for ReportService {
     }
 }
 
-fn handle_report(
-    conn: &mut crate::PooledConnection,
-    message: &ReportBenchmarkResultRequest,
-) -> Result<Option<(crate::BenchmarkJob, Vec<crate::notifier::WebPushNotifier>)>, TonicStatus> {
+fn handle_report<'a>(
+    conn: &'_ mut crate::PooledConnection,
+    message: &'_ ReportBenchmarkResultRequest,
+) -> Result<Option<(crate::BenchmarkJob, Vec<WebPushNotifier<'a>>)>, TonicStatus> {
     let mut tx = conn
         .start_transaction(mysql::TxOpts::default())
         .map_err(mysql_error_to_tonic_status)?;
@@ -268,19 +269,21 @@ fn save_as_running(
     )
 }
 
-async fn send_notifications<Q>(
-    conn: &mut Q,
-    notifiers: Vec<crate::notifier::WebPushNotifier>,
+async fn send_notifications<'a, Q>(
+    conn: &'_ mut Q,
+    notifiers: Vec<WebPushNotifier<'a>>,
 ) -> Result<(), TonicStatus>
 where
     Q: Queryable,
 {
+    use crate::notifier::WebPushNotifierError;
+    use crate::webpush::WebPushError;
     let mut unavailable_subscriptions = Vec::new();
     for notifier in notifiers {
         if let Err(e) = notifier.send().await {
             match e {
-                crate::notifier::WebPushError::ExpiredSubscription(sub, _)
-                | crate::notifier::WebPushError::InvalidSubscription(sub, _) => {
+                WebPushNotifierError::Error(sub, WebPushError::ExpiredSubscription(_))
+                | WebPushNotifierError::Error(sub, WebPushError::InvalidSubscription(_)) => {
                     unavailable_subscriptions.push(sub);
                 }
                 _ => {

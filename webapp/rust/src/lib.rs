@@ -38,7 +38,7 @@ pub enum Error {
     UserError(StatusCode, &'static str),
     ServerError(StatusCode, &'static str),
     DatabaseError(mysql::Error),
-    WebPushError(crate::notifier::WebPushError),
+    WebPushError(crate::notifier::WebPushNotifierError),
 }
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
@@ -78,8 +78,8 @@ impl From<mysql::Error> for Error {
         Self::DatabaseError(e)
     }
 }
-impl From<crate::notifier::WebPushError> for Error {
-    fn from(e: crate::notifier::WebPushError) -> Self {
+impl From<crate::notifier::WebPushNotifierError> for Error {
+    fn from(e: crate::notifier::WebPushNotifierError) -> Self {
         Self::WebPushError(e)
     }
 }
