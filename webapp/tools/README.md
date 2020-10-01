@@ -122,3 +122,16 @@ make
 - `-c contestant_id` 通知を送信する contestant の ID（必須）
 - `-i vapid_private_key_path` ECDSA 秘密鍵 PEM ファイル（必須）
   - `~isucon/webapp/generate_vapid_key.sh` で生成した鍵を利用できます。
+
+### Node.js 実装: webapp/nodejs/src/sendWebpush.ts
+
+```
+set -o allexport; source ~isucon/env; set +o allexport
+
+cd ~isucon/webapp/nodejs
+npm run send-webpush -- ${contestant_id} ${vapid_private_key_path}
+```
+
+- `${contestant_id}` 通知を送信する contestant の ID（必須）
+- `${vapid_private_key_path}` ECDSA 秘密鍵 PEM ファイル（必須）
+  - `~isucon/webapp/generate_vapid_key.sh` で生成した鍵を利用できます。
