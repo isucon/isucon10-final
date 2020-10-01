@@ -49,6 +49,7 @@ export class Notifier {
         if (inserted && Notifier.VAPIDKey) {
           notification.setId(inserted.id);
           notification.setCreatedAt(convertDateToTimestamp(inserted.created_at));
+          // TODO Web Push IIKANJINI SHITE
         }
       }
   }
@@ -68,6 +69,7 @@ export class Notifier {
       if (inserted && Notifier.VAPIDKey) {
         notification.setId(inserted.id);
         notification.setCreatedAt(convertDateToTimestamp(inserted.created_at));
+        // TODO Web Push IIKANJINI SHITE
       }
     }
   }
