@@ -9,6 +9,7 @@
     "dev": "ts-node src/bin/app.ts",
     "dev-bench": "ts-node src/bin/benchmark_server/main.ts",
     "send-webpush": "ts-node src/sendWebpush.ts",
+    "bench": "node build/bin/benchmark_server/main.js",
     "build": "tsc --build ./tsconfig.json",
     "start": "node ./build/bin/app.js"
   },
