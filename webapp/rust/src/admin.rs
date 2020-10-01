@@ -185,7 +185,7 @@ pub async fn respond_clarification(
     let id = info.into_inner().0;
     let message = message.0;
 
-    let (clarification, notifiers, db) = web::block(move || {
+    let clarification = web::block(move || {
         let mut conn = db.get().expect("Failed to checkout database connection");
         let current_contestant =
             crate::require_current_contestant(conn.deref_mut(), &contestant_id, false)?;
@@ -237,62 +237,25 @@ pub async fn respond_clarification(
             .expect("team is not found");
         let team_pb = crate::build_team_pb(&mut tx, team, false)?;
         tx.commit()?;
-        let notifiers = crate::notifier::notify_clarification_answered(
+        crate::notifier::notify_clarification_answered(
             conn.deref_mut(),
             &clar,
             was_answered && was_disclosed == clar.disclosed,
         )?;
-        Ok((
-            crate::proto::resources::Clarification {
-                id: clar.id,
-                team_id: clar.team_id,
-                answered: clar.answered_at.is_some(),
-                disclosed: clar.disclosed.unwrap_or_default(),
-                question: clar.question.unwrap_or_default(),
-                answer: clar.answer.unwrap_or_default(),
-                created_at: Some(crate::chrono_timestamp_to_protobuf(clar.created_at)),
-                answered_at: clar.answered_at.map(crate::chrono_timestamp_to_protobuf),
-                team: Some(team_pb),
-            },
-            notifiers,
-            db,
-        ))
+        Ok(crate::proto::resources::Clarification {
+            id: clar.id,
+            team_id: clar.team_id,
+            answered: clar.answered_at.is_some(),
+            disclosed: clar.disclosed.unwrap_or_default(),
+            question: clar.question.unwrap_or_default(),
+            answer: clar.answer.unwrap_or_default(),
+            created_at: Some(crate::chrono_timestamp_to_protobuf(clar.created_at)),
+            answered_at: clar.answered_at.map(crate::chrono_timestamp_to_protobuf),
+            team: Some(team_pb),
+        })
     })
     .await
     .map_err(crate::unwrap_blocking_error)?;
-
-    let mut unavailable_subscriptions = Vec::new();
-    for notifier in notifiers {
-        use crate::notifier::WebPushNotifierError;
-        use crate::webpush::WebPushError;
-
-        if let Err(e) = notifier.send().await {
-            match e {
-                WebPushNotifierError::Error(sub, WebPushError::ExpiredSubscription(_))
-                | WebPushNotifierError::Error(sub, WebPushError::InvalidSubscription(_)) => {
-                    unavailable_subscriptions.push(sub);
-                }
-                _ => {
-                    return Err(crate::Error::from(e).into());
-                }
-            }
-        }
-    }
-
-    if !unavailable_subscriptions.is_empty() {
-        web::block::<_, _, crate::Error>(move || {
-            let mut conn = db.get().expect("Failed to checkout database connection");
-            for sub in unavailable_subscriptions {
-                conn.exec_drop(
-                    "DELETE FROM `push_subscriptions` WHERE `id` = ? LIMIT 1",
-                    (sub.id,),
-                )?;
-            }
-            Ok(())
-        })
-        .await
-        .map_err(crate::unwrap_blocking_error)?;
-    }
 
     HttpResponse::Ok().protobuf(RespondClarificationResponse {
         clarification: Some(clarification),

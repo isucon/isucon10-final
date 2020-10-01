@@ -49,7 +49,7 @@ export class Notifier {
         if (inserted && Notifier.VAPIDKey) {
           notification.setId(inserted.id);
           notification.setCreatedAt(convertDateToTimestamp(inserted.created_at));
-          await this.notifyWebpush(notification, contestant.id, db);
+          // TODO Web Push IIKANJINI SHITE
         }
       }
   }
@@ -69,7 +69,7 @@ export class Notifier {
       if (inserted && Notifier.VAPIDKey) {
         notification.setId(inserted.id);
         notification.setCreatedAt(convertDateToTimestamp(inserted.created_at));
-        await this.notifyWebpush(notification, contestant.id, db);
+        // TODO Web Push IIKANJINI SHITE
       }
     }
   }
@@ -82,32 +82,5 @@ export class Notifier {
     );
     let [n] = await db.query('SELECT * FROM `notifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1');
     return n
-  }
-
-  async notifyWebpush(notification, contestantId, db) {
-    const message = Buffer.from(notification.serializeBinary()).toString('base64');
-    console.log({message})
-    const subs = await db.query(
-      'SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?',
-      [contestantId]
-    );
-
-    const requestOpts: webpush.RequestOptions = {
-      vapidDetails: {
-        subject: `mailto:${Notifier.WEBPUSH_SUBJECT}`,
-        ...Notifier.VAPIDKey
-      },
-    };
-
-    for (const sub of subs) {
-      const pushSubscription: webpush.PushSubscription = {
-        endpoint: sub.endpoint,
-        keys: {
-            p256dh: sub.p256dh,
-            auth: sub.auth
-        }
-      };
-      await webpush.sendNotification(pushSubscription, message, requestOpts);
-    }
   }
 }

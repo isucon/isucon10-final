@@ -1,22 +1,10 @@
 use mysql::prelude::*;
 
-#[derive(Debug)]
-pub enum WebPushNotifierError {
-    Error(crate::PushSubscription, crate::webpush::WebPushError),
-}
-impl std::fmt::Display for WebPushNotifierError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
-        match self {
-            Self::Error(_, e) => e.fmt(f),
-        }
-    }
-}
-
-pub fn notify_clarification_answered<'a, Q>(
-    conn: &'_ mut Q,
-    clar: &'_ crate::Clarification,
+pub fn notify_clarification_answered<Q>(
+    conn: &mut Q,
+    clar: &crate::Clarification,
     updated: bool,
-) -> Result<Vec<WebPushNotifier<'a>>, mysql::Error>
+) -> Result<(), mysql::Error>
 where
     Q: Queryable,
 {
@@ -28,7 +16,6 @@ where
             (clar.team_id,),
         )
     }?;
-    let mut notifiers = Vec::with_capacity(contestants.len());
     for contestant in contestants {
         let mut notification_pb = crate::proto::resources::Notification {
             id: 0,
@@ -48,20 +35,16 @@ where
             notification_pb.id = notification.id;
             notification_pb.created_at =
                 Some(crate::chrono_timestamp_to_protobuf(notification.created_at));
-            notifiers.extend(build_webpush_notifier(
-                conn,
-                &notification_pb,
-                &contestant.0,
-            )?);
+            // TODO: Web Push IIKANJI NI SHITE
         }
     }
-    Ok(notifiers)
+    Ok(())
 }
 
-pub fn notify_benchmark_job_finished<'a, Q>(
-    conn: &'_ mut Q,
-    job: &'_ crate::BenchmarkJob,
-) -> Result<Vec<WebPushNotifier<'a>>, mysql::Error>
+pub fn notify_benchmark_job_finished<Q>(
+    conn: &mut Q,
+    job: &crate::BenchmarkJob,
+) -> Result<(), mysql::Error>
 where
     Q: Queryable,
 {
@@ -69,7 +52,6 @@ where
         "SELECT `id`, `team_id` FROM `contestants` WHERE `team_id` = ?",
         (job.team_id,),
     )?;
-    let mut notifiers = Vec::with_capacity(contestants.len());
     for contestant in contestants {
         let mut notification_pb = crate::proto::resources::Notification {
             id: 0,
@@ -87,14 +69,10 @@ where
             notification_pb.id = notification.id;
             notification_pb.created_at =
                 Some(crate::chrono_timestamp_to_protobuf(notification.created_at));
-            notifiers.extend(build_webpush_notifier(
-                conn,
-                &notification_pb,
-                &contestant.0,
-            )?);
+            // TODO: Web Push IIKANJI NI SHITE
         }
     }
-    Ok(notifiers)
+    Ok(())
 }
 
 fn notify<Q>(
@@ -134,58 +112,4 @@ pub fn get_public_key_for_push_header() -> Option<String> {
 
 pub fn is_webpush_available() -> bool {
     WEBPUSH_VAPID_KEY.is_some()
-}
-
-pub struct WebPushNotifier<'a> {
-    push_subscription: crate::PushSubscription,
-    message: String,
-    vapid_key: &'a crate::webpush::VapidKey,
-}
-
-impl<'a> WebPushNotifier<'a> {
-    pub async fn send(self) -> Result<(), WebPushNotifierError> {
-        let client = crate::webpush::WebPushClient {
-            endpoint: &self.push_subscription.endpoint,
-            p256dh: &self.push_subscription.p256dh,
-            auth: &self.push_subscription.auth,
-            message: self.message,
-            vapid_key: self.vapid_key,
-        };
-        match client.send().await {
-            Ok(_) => Ok(()),
-            Err(e) => Err(WebPushNotifierError::Error(self.push_subscription, e)),
-        }
-    }
-}
-
-fn build_webpush_notifier<'a, Q>(
-    conn: &'_ mut Q,
-    notification: &'_ crate::proto::resources::Notification,
-    contestant_id: &'_ str,
-) -> Result<Vec<WebPushNotifier<'a>>, mysql::Error>
-where
-    Q: Queryable,
-{
-    use prost::Message;
-
-    let mut proto = Vec::with_capacity(notification.encoded_len());
-    notification
-        .encode(&mut proto)
-        .expect("Failed to encode Notification to protobuf");
-    let encoded_message = data_encoding::BASE64.encode(proto.as_slice());
-
-    let subs: Vec<crate::PushSubscription> = conn.exec(
-        "SELECT * FROM `push_subscriptions` WHERE `contestant_id` = ?",
-        (contestant_id,),
-    )?;
-    Ok(subs
-        .into_iter()
-        .map(|push_subscription| WebPushNotifier {
-            push_subscription,
-            message: encoded_message.clone(),
-            vapid_key: WEBPUSH_VAPID_KEY
-                .as_ref()
-                .expect("WEBPUSH_VAPID_KEY is not available"),
-        })
-        .collect())
 }
