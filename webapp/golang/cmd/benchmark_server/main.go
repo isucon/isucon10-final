@@ -248,11 +248,14 @@ func (b *benchmarkReportService) saveAsRunning(db sqlx.Execer, job *xsuportal.Be
 
 func main() {
 	port := util.GetEnv("PORT", "50051")
+	address := ":" + port
 
-	listener, err := net.Listen("tcp", ":"+port)
+	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		panic(err)
 	}
+	log.Print("[INFO] listen ", address)
+
 	db, _ = xsuportal.GetDB()
 	db.SetMaxOpenConns(10)
 
