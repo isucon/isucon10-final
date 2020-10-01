@@ -28,6 +28,8 @@ var (
 
 type ProtobufError struct {
 	XError *xsuportal.Error
+	Method string
+	Path   string
 }
 
 func (p *ProtobufError) ErrorCode() string {
@@ -35,7 +37,7 @@ func (p *ProtobufError) ErrorCode() string {
 }
 
 func (p *ProtobufError) Error() string {
-	return fmt.Sprintf("%s: %s", p.ErrorCode(), p.XError.GetHumanMessage())
+	return fmt.Sprintf("%s: %s(%s %s)", p.ErrorCode(), p.XError.GetHumanMessage(), p.Method, p.Path)
 }
 
 func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpath string, req proto.Message, res proto.Message, allowedStatuCodes []int) (*http.Response, error) {
@@ -83,7 +85,7 @@ func ProtobufRequest(ctx context.Context, agent *agent.Agent, method string, rpa
 		if err != nil {
 			return httpres, failure.NewError(ErrProtobuf, fmt.Errorf("Protobuf のデコードに失敗しました(%s %s): %v", httpreq.Method, httpreq.URL.Path, err))
 		}
-		return httpres, &ProtobufError{XError: xError}
+		return httpres, &ProtobufError{XError: xError, Method: httpreq.Method, Path: httpreq.URL.Path}
 	}
 
 	if err := proto.Unmarshal(respb, res); err != nil {

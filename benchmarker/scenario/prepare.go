@@ -311,7 +311,7 @@ func (s *Scenario) prepareCheckSignup(c *model.Contest, ctx context.Context, ste
 
 				var xerr *ProtobufError
 				if failure.As(err, &xerr) {
-					if !AssertEqual("Team over join code", ErrX400.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Team over join message", "XSUPORTAL[400]: チーム人数の上限に達しています", xerr.Error()) {
+					if !AssertEqual("Team over join code", ErrX400.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Team over join message", "XSUPORTAL[400]: チーム人数の上限に達しています(POST /api/registration/contestant)", xerr.Error()) {
 						step.AddError(errorInvalidResponse("参加上限に達したチームへの参加を許しています"))
 						return
 					}
@@ -327,7 +327,7 @@ func (s *Scenario) prepareCheckSignup(c *model.Contest, ctx context.Context, ste
 
 				var xerr *ProtobufError
 				if failure.As(err, &xerr) {
-					if !AssertEqual("Team invalid token code", ErrX400.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Team invalid token message", "XSUPORTAL[400]: 招待URLが不正です", xerr.Error()) {
+					if !AssertEqual("Team invalid token code", ErrX400.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Team invalid token message", "XSUPORTAL[400]: 招待URLが不正です(POST /api/registration/contestant)", xerr.Error()) {
 						step.AddError(errorInvalidResponse("不正な招待コードでの登録を許しています"))
 						return
 					}
@@ -413,7 +413,7 @@ func (s *Scenario) prepareCheckLogin(guest *model.Contestant, ctx context.Contex
 
 	var xerr *ProtobufError
 	if failure.As(err, &xerr) {
-		if !AssertEqual("Login password code", ErrX400, xerr.ErrorCode()) || !AssertEqual("Login password message", "XSUPORTAL[400]: ログインIDまたはパスワードが正しくありません", xerr.Error()) {
+		if !AssertEqual("Login password code", ErrX400, xerr.ErrorCode()) || !AssertEqual("Login password message", "XSUPORTAL[400]: ログインIDまたはパスワードが正しくありません(POST /api/login)", xerr.Error()) {
 			step.AddError(errorInvalidResponse("間違ったパスワードでのログインが許されています"))
 			return
 		}
@@ -425,7 +425,7 @@ func (s *Scenario) prepareCheckLogin(guest *model.Contestant, ctx context.Contex
 	guest.Password = validPassword
 	guest.ID = random.Alphabet(model.CONTESTANT_ID_LENGTH)
 	if failure.As(err, &xerr) {
-		if !AssertEqual("Login id code", ErrX400, xerr.ErrorCode()) || !AssertEqual("Login id message", "XSUPORTAL[400]: ログインIDまたはパスワードが正しくありません", xerr.Error()) {
+		if !AssertEqual("Login id code", ErrX400, xerr.ErrorCode()) || !AssertEqual("Login id message", "XSUPORTAL[400]: ログインIDまたはパスワードが正しくありません(POST /api/login)", xerr.Error()) {
 			step.AddError(errorInvalidResponse("間違った ID でのログインが許されています"))
 			return
 		}
@@ -457,7 +457,7 @@ func (s *Scenario) prepareCheckRequiredLogin(ctx context.Context, step *isucanda
 		}
 
 		if failure.As(err, &xerr) {
-			if !AssertEqual("Required contestant", ErrX401.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Required contestant", "XSUPORTAL[401]: ログインが必要です", xerr.Error()) {
+			if !AssertEqual("Required contestant", ErrX401.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Required contestant", "XSUPORTAL[401]: ログインが必要です("+phase+")", xerr.Error()) {
 				step.AddError(e)
 				return
 			}
@@ -482,14 +482,14 @@ func (s *Scenario) prepareCheckRequiredLogin(ctx context.Context, step *isucanda
 	go func() {
 		defer wg.Done()
 		_, err := AdminGetClarificationsAction(ctx, guest)
-		checker("GET /admin/clarifications", err)
+		checker("GET /api/admin/clarifications", err)
 	}()
 
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		_, err := AdminGetClarificationAction(ctx, 1, guest)
-		checker("GET /admin/clarifications/1", err)
+		checker("GET /api/admin/clarifications/1", err)
 	}()
 
 	wg.Add(1)
@@ -498,7 +498,7 @@ func (s *Scenario) prepareCheckRequiredLogin(ctx context.Context, step *isucanda
 		clar := model.NewClarification(t)
 		clar.SetID(1)
 		_, err := AdminPostClarificationAction(ctx, guest, clar)
-		checker("PUT /admin/clarifications/1", err)
+		checker("PUT /api/admin/clarifications/1", err)
 	}()
 
 	wg.Add(1)
@@ -564,7 +564,7 @@ func (s *Scenario) prepareCheckRequiredContestant(guest *model.Contestant, ctx c
 		}
 
 		if failure.As(err, &xerr) {
-			if !AssertEqual("Required contestant", ErrX403.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Required contestant", "XSUPORTAL[403]: 参加登録が必要です", xerr.Error()) {
+			if !AssertEqual("Required contestant", ErrX403.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Required contestant", "XSUPORTAL[403]: 参加登録が必要です("+phase+")", xerr.Error()) {
 				step.AddError(e)
 				return
 			}
@@ -648,7 +648,7 @@ func (s *Scenario) prepareCheckDualEqueue(t *model.Team, ctx context.Context, st
 		}
 
 		if failure.As(err, &xerr) {
-			if !AssertEqual("Enqueue", ErrX403.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Enqueue", "XSUPORTAL[403]: 既にベンチマークを実行中です", xerr.Error()) {
+			if !AssertEqual("Enqueue", ErrX403.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Enqueue", "XSUPORTAL[403]: 既にベンチマークを実行中です(POST /api/contestant/benchmark_jobs)", xerr.Error()) {
 				step.AddError(e)
 				return
 			}
@@ -678,7 +678,7 @@ func (s *Scenario) prepareCheckEqueue(t *model.Team, ctx context.Context, step *
 		}
 
 		if failure.As(err, &xerr) {
-			if !AssertEqual("Enqueue", ErrX403.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Enqueue", "XSUPORTAL[403]: 競技時間外はベンチマークを実行できません", xerr.Error()) {
+			if !AssertEqual("Enqueue", ErrX403.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Enqueue", "XSUPORTAL[403]: 競技時間外はベンチマークを実行できません(POST /api/contestant/benchmark_jobs)", xerr.Error()) {
 				step.AddError(e)
 				return
 			}
@@ -702,7 +702,7 @@ func (s *Scenario) prepareCheckRequiredAdmin(guest *model.Contestant, ctx contex
 		}
 
 		if failure.As(err, &xerr) {
-			if !AssertEqual("Required contestant", ErrX403.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Required contestant", "XSUPORTAL[403]: 管理者権限が必要です", xerr.Error()) {
+			if !AssertEqual("Required contestant", ErrX403.ErrorCode(), xerr.ErrorCode()) || !AssertEqual("Required contestant", "XSUPORTAL[403]: 管理者権限が必要です("+phase+")", xerr.Error()) {
 				step.AddError(e)
 				return
 			}
@@ -727,14 +727,14 @@ func (s *Scenario) prepareCheckRequiredAdmin(guest *model.Contestant, ctx contex
 	go func() {
 		defer wg.Done()
 		_, err := AdminGetClarificationsAction(ctx, guest)
-		checker("GET /admin/clarifications", err)
+		checker("GET /api/admin/clarifications", err)
 	}()
 
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		_, err := AdminGetClarificationAction(ctx, 1, guest)
-		checker("GET /admin/clarifications/1", err)
+		checker("GET /api/admin/clarifications/1", err)
 	}()
 
 	wg.Add(1)
@@ -743,7 +743,7 @@ func (s *Scenario) prepareCheckRequiredAdmin(guest *model.Contestant, ctx contex
 		clar := model.NewClarification(t)
 		clar.SetID(1)
 		_, err := AdminPostClarificationAction(ctx, guest, clar)
-		checker("PUT /admin/clarifications/1", err)
+		checker("PUT /api/admin/clarifications/1", err)
 	}()
 
 	wg.Wait()
