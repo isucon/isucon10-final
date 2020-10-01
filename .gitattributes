@@ -13,4 +13,3 @@
 /webapp/nodejs/debug/**/* export-ignore
 
 /webapp/golang/cmd/debug/**/* export-ignore
-/webapp/golang/cmd/debug/send_web_push/* -export-ignore

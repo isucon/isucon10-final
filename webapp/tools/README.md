@@ -109,7 +109,7 @@ cargo run --bin send_web_push -- -c contestant_id -i vapid_private_key_path
 - `-i vapid_private_key_path` ECDSA 秘密鍵 PEM ファイル（必須）
   - `~isucon/webapp/generate_vapid_key.sh` で生成した鍵を利用できます。
 
-### Go 実装: webapp/golang/cmd/debug/send_web_push/main.go
+### Go 実装: webapp/golang/cmd/send_web_push/main.go
 
 ```
 set -o allexport; source ~isucon/env; set +o allexport
