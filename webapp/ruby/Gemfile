@@ -4,9 +4,13 @@ gem 'puma'
 gem 'sinatra'
 gem 'mysql2'
 gem 'mysql2-cs-bind'
-gem 'grpc_kit', git: 'https://isucon10-public.s3.dualstack.ap-northeast-1.amazonaws.com/git/6MGgQp9lDmsK6G0CNa0DCOWHkOXID9-1davWxzKzI28/grpc_kit.git', ref: 'blocking-recv-buffer'
+
+# Griffin is a process-model gRPC server implementation. Protocol stack is implemented at grpc_kit gem.
+# There are patches to fix critical bugs in grpc_kit gem. Patches will be posted at https://github.com/cookpad/grpc_kit/pulls after contest begins.
 gem 'griffin'
 gem 'griffin-interceptors'
+gem 'grpc_kit', git: 'https://isucon10-public.s3.dualstack.ap-northeast-1.amazonaws.com/git/6MGgQp9lDmsK6G0CNa0DCOWHkOXID9-1davWxzKzI28/grpc_kit.git', ref: 'blocking-recv-buffer'
+
 gem 'webpush'
 
 group :development do
