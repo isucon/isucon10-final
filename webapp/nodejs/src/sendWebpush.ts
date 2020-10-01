@@ -108,4 +108,5 @@ const run = async (path: string, contestantId: string) => {
     }
 }
 
-run('', '')
+const [, , contestantId, path] = process.argv
+run(path, contestantId)
