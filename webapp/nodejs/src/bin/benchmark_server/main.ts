@@ -142,7 +142,6 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
         notifier.notifyBenchmarkJobFinished(job, db);
       } else {
         console.debug(`${request.getJobId()}: save as running`);
-        console.debug(job);
         await this.saveAsRunning(job, request, db);
         db.commit();
       }
@@ -170,7 +169,6 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
 
     const markedAt = formatDate(markedAtTimestamp);
 
-    console.log({ markedAt });
     const result = request.getResult();
     await db.query(`
         UPDATE benchmark_jobs SET
@@ -202,7 +200,6 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
     } else {
       startedAt = markedAt;
     }
-    console.log({ startedAt });
     await db.query(`
         UPDATE benchmark_jobs SET
           status = ?,

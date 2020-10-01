@@ -428,7 +428,7 @@ async function getLeaderboardResource(db: mysql.PoolConnection, teamId: number =
     ORDER BY
       latest_score DESC,
       latest_score_marked_at ASC
-  `, [teamId, teamId, contestFinished, contestFinished, teamId, teamId, contestFinished, contestFinished]);
+  `, [teamId, teamId, contestFinished, contestFreezesAt, teamId, teamId, contestFinished, contestFreezesAt]);
 
     jobResults = await db.query(`
       SELECT
@@ -468,17 +468,22 @@ async function getLeaderboardResource(db: mysql.PoolConnection, teamId: number =
   for (const team of leaderboard) {
     const item = new Leaderboard.LeaderboardItem();
     item.setScoresList(teamGraphScores[team.id]);
-    const bs = new Leaderboard.LeaderboardItem.LeaderboardScore();
-    bs.setScore(team.best_score);
-    bs.setStartedAt(team.best_score_started_at ? convertDateToTimestamp(team.best_score_started_at) : null);
-    bs.setMarkedAt(team.best_score_marked_at ? convertDateToTimestamp(team.best_score_marked_at) : null);
-    item.setBestScore(bs);
-    const ls = new Leaderboard.LeaderboardItem.LeaderboardScore();
-    ls.setScore(team.latest_score);
-    ls.setStartedAt(team.latest_score_started_at ? convertDateToTimestamp(team.latest_score_started_at) : null);
-    ls.setMarkedAt(team.latest_score_marked_at ? convertDateToTimestamp(team.latest_score_marked_at) : null);
-    item.setLatestScore(ls);
+    if (team.best_score != null) {
+      const bs = new Leaderboard.LeaderboardItem.LeaderboardScore();
+      bs.setScore(team.best_score);
+      bs.setStartedAt(team.best_score_started_at ? convertDateToTimestamp(team.best_score_started_at) : null);
+      bs.setMarkedAt(team.best_score_marked_at ? convertDateToTimestamp(team.best_score_marked_at) : null);
+      item.setBestScore(bs);
+    }
+    if (team.latest_score != null) {
+      const ls = new Leaderboard.LeaderboardItem.LeaderboardScore();
+      ls.setScore(team.latest_score);
+      ls.setStartedAt(team.latest_score_started_at ? convertDateToTimestamp(team.latest_score_started_at) : null);
+      ls.setMarkedAt(team.latest_score_marked_at ? convertDateToTimestamp(team.latest_score_marked_at) : null);
+      item.setLatestScore(ls);
+    }
     const teamResource = await getTeamResource(team, db, false, false, false);
+    
     item.setTeam(teamResource);
     item.setFinishCount(team.finish_count);
 
@@ -491,6 +496,7 @@ async function getLeaderboardResource(db: mysql.PoolConnection, teamId: number =
   }
 
   const leaderboardResource = new Leaderboard();
+  
   leaderboardResource.setTeamsList(teams);
   leaderboardResource.setGeneralTeamsList(generalTeams);
   leaderboardResource.setStudentTeamsList(studentTeams);
