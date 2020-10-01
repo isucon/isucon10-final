@@ -309,7 +309,7 @@ async function getBenchmarkJobsResource(req: express.Request, db: mysql.PoolConn
 }
 
 async function getBenchmarkResultResource(job) {
-  const hasScore = job.score_raw && job.score_deduction
+  const hasScore = job.score_raw != null && job.score_deduction != null
   const result = new BenchmarkResult();
   result.setFinished(!!job.finished_at);
   result.setPassed(job.passed);
