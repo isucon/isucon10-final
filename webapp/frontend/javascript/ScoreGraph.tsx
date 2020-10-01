@@ -179,8 +179,8 @@ export const ScoreGraph: React.FC<Props> = ({
     }
   }, [chart, teamIds, teamIdCount, data]);
 
-  const classNames = ["isux-scoregraph"];
-  if (showPinnedOnly) classNames.push("isux-scoregraph-pinnedonly");
+  const classNames = ["xsu-scoregraph"];
+  if (showPinnedOnly) classNames.push("xsu-scoregraph-pinnedonly");
 
   return (
     <section>
