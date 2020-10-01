@@ -167,6 +167,7 @@
     run_itamae: {
       type: 'shell',
       inline: [
+        "sudo cp /dev/shm/files-generated/REVISION /etc/",
         '( cd /dev/shm/files/itamae && sudo mitamae local site.rb roles/' + $.arg_variant + '/default.rb )',
       ],
     },
@@ -206,7 +207,6 @@
     sysprep: {
       type: 'shell',
       inline: [
-        "sudo cp /dev/shm/files-generated/REVISION /etc/",
         "sudo dpkg -l",
         "sudo systemctl list-unit-files",
         "sudo journalctl --rotate",
