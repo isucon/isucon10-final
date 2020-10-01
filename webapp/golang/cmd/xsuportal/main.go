@@ -185,8 +185,8 @@ func (*AdminService) Initialize(e echo.Context) error {
 		}
 	}
 
-	host := util.GetEnv("BENCHMARKER_SERVER_HOST", "localhost")
-	port, _ := strconv.Atoi(util.GetEnv("BENCHMARKER_SERVER_PORT", "50051"))
+	host := util.GetEnv("BENCHMARK_SERVER_HOST", "localhost")
+	port, _ := strconv.Atoi(util.GetEnv("BENCHMARK_SERVER_PORT", "50051"))
 	res := &adminpb.InitializeResponse{
 		Language: "go",
 		BenchmarkServer: &adminpb.InitializeResponse_BenchmarkServer{
