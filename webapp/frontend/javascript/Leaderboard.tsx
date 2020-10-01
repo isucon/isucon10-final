@@ -2,7 +2,7 @@ import type { xsuportal } from "./pb";
 import React from "react";
 
 import { Timestamp } from "./Timestamp";
-import type { TeamPinsMap, TeamPins } from "./TeamPins";
+import type { TeamPinsMap } from "./TeamPins";
 
 const NUMBER_OF_ROWS_VISIBLE_BY_DEFAULT = 25;
 
@@ -19,14 +19,28 @@ interface TeamItemProps {
 type ItemType = "pinned" | "standings" | "me";
 
 const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
-  const { position, lastPosition, changed, item, pinned, onPin, me, itemType } = props;
-  const [animationClassName, setAnimationClassName] = React.useState<string | null>(null);
+  const {
+    position,
+    lastPosition,
+    changed,
+    item,
+    pinned,
+    onPin,
+    me,
+    itemType,
+  } = props;
+  const [animationClassName, setAnimationClassName] = React.useState<
+    string | null
+  >(null);
   const [animationEpoch, setAnimationEpoch] = React.useState<number>(0);
 
-  const studentStatus = item.team!.student?.status && <span className="tag is-info is-pulled-right">学生</span>;
+  const studentStatus = item.team!.student?.status && (
+    <span className="tag is-info is-pulled-right">学生</span>
+  );
   const classNames = [];
-  if (pinned && itemType == "pinned") classNames.push("xsu-leaderboard-pinned");
-  if (me) classNames.push("xsu-leaderboard-me");
+  if (pinned && itemType == "pinned")
+    classNames.push("isux-leaderboard-pinned");
+  if (me) classNames.push("isux-leaderboard-me");
   if (animationClassName) classNames.push(animationClassName);
 
   React.useEffect(() => {
@@ -34,9 +48,9 @@ const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
     if (!changed) return;
     const set = lastPosition && lastPosition != position;
     if (lastPosition > position) {
-      setAnimationClassName("xsu-leaderboard-change-up");
+      setAnimationClassName("isux-leaderboard-change-up");
     } else if (lastPosition < position) {
-      setAnimationClassName("xsu-leaderboard-change-down");
+      setAnimationClassName("isux-leaderboard-change-down");
     }
     if (!set) return;
     setAnimationEpoch(animationEpoch + 1);
@@ -56,8 +70,10 @@ const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
       <th className="has-text-centered">
         {me ? null : (
           <i
-            className={`xsu-pin-button is-small ${
-              pinned ? "material-icons has-text-danger" : "material-icons-outlined has-text-grey-light"
+            className={`isux-pin-button is-small ${
+              pinned
+                ? "material-icons has-text-danger"
+                : "material-icons-outlined has-text-grey-light"
             }`}
             onClick={() => onPin(item.team!.id!.toString(), !pinned)}
           >
@@ -70,20 +86,29 @@ const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
         {item.team!.id}: {item.team!.name}
       </td>
       <td className="has-text-right">{item.bestScore?.score || 0}</td>
-      <td className="has-text-right">{item.latestScore?.score || 0}</td>
-      <td>{item.latestScore ? <Timestamp timestamp={item.latestScore.markedAt!} short /> : "N/A"}</td>
+      <td className="has-text-weight-semibold has-text-right">
+        {item.latestScore?.score || 0}
+      </td>
+      <td>
+        {item.latestScore ? (
+          <Timestamp timestamp={item.latestScore.markedAt!} short />
+        ) : (
+          "N/A"
+        )}
+      </td>
       <td>{studentStatus}</td>
     </tr>
   );
 };
 
-type Mode = "all" | "general" | "students";
+type Mode = "all" | "general" | "students" | "hidden";
 
 interface Props {
   teamPins: TeamPinsMap;
   onPin: (teamId: string, flag: boolean) => void;
   leaderboard: xsuportal.proto.resources.ILeaderboard;
   teamId?: number | Long;
+  enableHiddenTeamsMode?: boolean;
 }
 
 const usePrevious = function <T>(value: T) {
@@ -94,15 +119,18 @@ const usePrevious = function <T>(value: T) {
   return ref.current;
 };
 
-const chooseTeamList = (mode: Mode, leaderboard: xsuportal.proto.resources.ILeaderboard) => {
-  switch(mode) {
+const chooseTeamList = (
+  mode: Mode,
+  leaderboard: xsuportal.proto.resources.ILeaderboard
+) => {
+  switch (mode) {
     case "all":
       return leaderboard.teams || [];
     case "general":
       return leaderboard.generalTeams || [];
     case "students":
       return leaderboard.studentTeams || [];
-    default: 
+    default:
       throw new Error("[BUG] invalid mode");
   }
 };
@@ -117,7 +145,8 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
   const prevLeaderboard = prevProps?.leaderboard;
 
   const filteredTeams = chooseTeamList(mode, leaderboard);
-  const prevFilteredTeams = prevLeaderboard && chooseTeamList(mode, prevLeaderboard);
+  const prevFilteredTeams =
+    prevLeaderboard && chooseTeamList(mode, prevLeaderboard);
 
   const prevRanks = new Map(
     (prevFilteredTeams || []).map((t, idx) => {
@@ -138,22 +167,25 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
     lastPosition?: number;
     lastScore?: number | Long;
   };
-  const teams = filteredTeams
-    .map(
-      (item, idx): TeamStanding => {
-        const pinned = pins.has(item.team!.id!.toString());
-        const me = item.team!.id === teamId;
-        if(prevRanks.get(item.team!.id!) !== (idx+1)) console.log(item);
-        return {
-          position: idx + 1,
-          lastPosition: prevRanks.get(item.team!.id!),
-          lastScore: prevScores.get(item.team!.id!),
-          item,
-          pinned,
-          me,
-        };
-      }
-    );
+  const teams = filteredTeams.map(
+    (item, idx): TeamStanding => {
+      const pinned = pins.has(item.team!.id!.toString());
+      const me = item.team!.id === teamId;
+      if (
+        prevRanks.get(item.team!.id!) &&
+        prevRanks.get(item.team!.id!) !== idx + 1
+      )
+        console.log(item);
+      return {
+        position: idx + 1,
+        lastPosition: prevRanks.get(item.team!.id!),
+        lastScore: prevScores.get(item.team!.id!),
+        item,
+        pinned,
+        me,
+      };
+    }
+  );
   const renderTeam = (key: string, standing: TeamStanding) => {
     const { item, pinned, me, position, lastPosition, lastScore } = standing;
     return (
@@ -190,9 +222,16 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
               <span>Students</span>
             </a>
           </li>
+          {props.enableHiddenTeamsMode ? (
+            <li className={mode === "hidden" ? "is-active" : ""}>
+              <a onClick={() => setMode("hidden")}>
+                <span>Hidden</span>
+              </a>
+            </li>
+          ) : null}
         </ul>
       </div>
-      <table className="table is-hoverable is-fullwidth xsu-leaderboard">
+      <table className="table is-hoverable is-fullwidth isux-leaderboard">
         <thead>
           <tr className="has-background-light">
             <th></th>
@@ -215,11 +254,17 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
           <tr>
             <td colSpan={7} className="has-text-centered">
               {expanded ? (
-                <button className="button is-text" onClick={() => setExpanded(false)}>
+                <button
+                  className="button is-text"
+                  onClick={() => setExpanded(false)}
+                >
                   Collapse...
                 </button>
               ) : (
-                <button className="button is-text" onClick={() => setExpanded(true)}>
+                <button
+                  className="button is-text"
+                  onClick={() => setExpanded(true)}
+                >
                   Show All
                 </button>
               )}
