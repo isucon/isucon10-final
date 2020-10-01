@@ -224,9 +224,11 @@ push subscription 情報については、push resource の URL に加え、[W3C
 
 ### Web Push の購読とサンプルコードの実行方法
 
-1. `/home/isucon/webapp` 上で `./generate_vapid_key.sh` を実行し、VAPID 用の ECDSA 鍵 `webapp/vapid_private.pem` を生成する
-  - 参考実装では自動で `/home/isucon/webapp/vapid_private.pem` をロードするようになっています。
-  - 複数のサーバーを利用する場合、同じ鍵ファイルを共有するようにする必要があります。
+1. `~isucon/webapp` 上で `./generate_vapid_key.sh` を実行し、VAPID 用の ECDSA 鍵 `webapp/vapid_private.pem` を生成する
+
+- 参考実装では自動で `~isucon/webapp/vapid_private.pem` をロードするようになっています。
+- 複数のサーバーを利用する場合、同じ鍵ファイルを共有するようにする必要があります。
+
 2. 仮想ポータルにブラウザでアクセスして通知を受け取りたい contestant としてログインし、`/contestant` から通知を購読する
 3. `send_web_push` (後述) を実行し、通知を送信する
 
@@ -236,7 +238,7 @@ push subscription 情報については、push resource の URL に加え、[W3C
 
 以下に各言語の実装および、その実行方法を記載します。いずれもサーバー上かつ、初期状態での実行を想定しています。
 
-### Ruby 実装: webapp/ruby/send_web_push.rb
+### Ruby 実装: ~isucon/webapp/ruby/send_web_push.rb
 
 ```
 set -o allexport; source ~isucon/env; set +o allexport
@@ -249,7 +251,7 @@ bundle exec send_web_push.rb -c contestant_id -i vapid_private_key_path
 - `-i vapid_private_key_path` ECDSA 秘密鍵 PEM ファイル（必須）
   - `~isucon/webapp/generate_vapid_key.sh` で生成した鍵を利用できます。
 
-### Rust 実装: webapp/rust/src/bin/send_web_push.rs
+### Rust 実装: ~isucon/webapp/rust/src/bin/send_web_push.rs
 
 ```
 set -o allexport; source ~isucon/env; set +o allexport
@@ -262,7 +264,7 @@ cargo run --bin send_web_push -- -c contestant_id -i vapid_private_key_path
 - `-i vapid_private_key_path` ECDSA 秘密鍵 PEM ファイル（必須）
   - `~isucon/webapp/generate_vapid_key.sh` で生成した鍵を利用できます。
 
-### Go 実装: webapp/golang/cmd/send_web_push/main.go
+### Go 実装: ~isucon/webapp/golang/cmd/send_web_push/main.go
 
 ```
 set -o allexport; source ~isucon/env; set +o allexport
@@ -276,7 +278,7 @@ make
 - `-i vapid_private_key_path` ECDSA 秘密鍵 PEM ファイル（必須）
   - `~isucon/webapp/generate_vapid_key.sh` で生成した鍵を利用できます。
 
-### Node.js 実装: webapp/nodejs/src/sendWebpush.ts
+### Node.js 実装: ~isucon/webapp/nodejs/src/sendWebpush.ts
 
 ```
 set -o allexport; source ~isucon/env; set +o allexport
