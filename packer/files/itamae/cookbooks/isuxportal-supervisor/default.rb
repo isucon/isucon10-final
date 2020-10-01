@@ -4,7 +4,7 @@ node.reverse_merge!(
 )
 include_cookbook 'langs::ruby'
 
-execute "install -o root -g root -m 0755 /dev/shm/files-generated/isuxportal-supervisor /usr/local/bin/isuxportal-supervisor"
+execute "install -o isucon -g isucon -m 0755 /dev/shm/files-generated/isuxportal-supervisor /home/isucon/bin/isuxportal-supervisor"
 
 remote_file "/opt/isuxportal-supervisor-init" do
   owner 'root'

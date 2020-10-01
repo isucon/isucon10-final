@@ -18,3 +18,5 @@ EOF
 
 File.write "/run/isuxportal-supervisor.env", content
 File.write "/etc/isuxportal-supervisor.env-backup", content
+
+system "systemctl", "daemon-reload" # to reload %H

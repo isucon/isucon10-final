@@ -6,7 +6,9 @@ StartLimitIntervalSec=0
 
 [Service]
 User=isucon
-ExecStart=/usr/local/bin/isuxportal-supervisor /home/isucon/benchmarker/bin/benchmarker \
+ExecStartPre=-/bin/mv /home/isucon/bin/isuxportal-supervisor.new /home/isucon/bin/isuxportal-supervisor
+ExecStartPre=-/bin/mv /home/isucon/benchmarker/bin/benchmarker.new /home/isucon/benchmarker/bin/benchmarker
+ExecStart=/home/isucon/bin/isuxportal-supervisor /home/isucon/benchmarker/bin/benchmarker \
           -tls \
           -host-advertise isubench.t.isucon.dev \
           -push-service-port 443 \
@@ -32,7 +34,10 @@ Environment=ISUXPORTAL_SUPERVISOR_INTERVAL_AFTER_EMPTY_RECEIVE=2
 EnvironmentFile=/run/isuxportal-supervisor.env
 
 RestartSec=2s
-Restart=always
+Restart=on-failure
+
+TimeoutStopSec=200s
+KillMode=mixed
 
 <%- if node.dig(:benchmarker, :slice) -%>
 Slice=<%= node.dig(:benchmarker, :slice) %>
