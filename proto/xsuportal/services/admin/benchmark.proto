@@ -10,7 +10,6 @@ message ListBenchmarkJobsRequest {
   // return only incomplete jobs
   bool incomplete_only = 2;
 
-  // TODO: pagination
 }
 
 message ListBenchmarkJobsResponse {

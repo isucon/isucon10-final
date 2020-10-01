@@ -17,7 +17,6 @@ export class ErrorMessage extends React.Component<Props, State> {
     if (!(this.props.error instanceof ApiError)) {
       console.error(this.props.error);
     }
-    // TODO: raven
   }
 
   public render() {

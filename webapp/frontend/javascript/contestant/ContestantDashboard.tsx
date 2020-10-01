@@ -86,7 +86,6 @@ export const ContestantDashboard: React.FC<Props> = (props: Props) => {
   }, [jobs]);
 
   React.useEffect(() => {
-    // TODO: Retry with backoff
     const timer = setInterval(() => refreshAll(), 10000);
     return () => clearInterval(timer);
   }, []);

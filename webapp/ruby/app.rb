@@ -491,7 +491,6 @@ module Xsuportal
       end
 
       encode_response_pb(
-        # TODO: 負荷レベルの指定
         # 実装言語
         language: 'ruby',
         # 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報

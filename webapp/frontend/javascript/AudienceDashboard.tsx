@@ -50,7 +50,6 @@ export const AudienceDashboard: React.FC<Props> = ({ session, client }) => {
   }, [dashboard]);
 
   React.useEffect(() => {
-    // TODO: Retry with backoff
     const timer = setInterval(() => refresh(), 10000);
     return () => clearInterval(timer);
   }, []);

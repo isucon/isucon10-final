@@ -587,7 +587,6 @@ app.post("/initialize", async (req, res, next) => {
       `);
     }
 
-    // TODO 負荷レベルの指定
     const response = new InitializeResponse();
     response.setLanguage("nodejs");
     // 実ベンチマーカーに伝える仮想ベンチマークサーバー(gRPC)のホスト情報

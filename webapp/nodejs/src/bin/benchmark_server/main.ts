@@ -115,7 +115,6 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
 
   async reportBenchmarkResultPromise(request: ReportBenchmarkResultRequest): Promise<ReportBenchmarkResultResponse> {
     const db = await getDB();
-    // TODO maybe we need to setup notifier.
     const notify = notifier;
 
     if (!request.hasResult()) {
