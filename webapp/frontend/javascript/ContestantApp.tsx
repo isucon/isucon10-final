@@ -129,15 +129,6 @@ export class ContestantApp extends React.Component<Props, State> {
 
           this.setState({ serviceWorker: reg });
 
-          reg.pushManager.getSubscription().then((s) => {
-            if (!s) {
-              console.log(
-                "disabling local notification due to lack of push subscription"
-              );
-              this.setLocalNotificationEnabled(false);
-            }
-          });
-
           this.state.notificationObserver.start();
         })
         .catch((e) => {
