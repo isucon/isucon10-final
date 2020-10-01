@@ -642,7 +642,7 @@ func (*ContestantService) SubscribeNotification(e echo.Context) error {
 	}
 
 	if notifier.VAPIDKey() == nil {
-		return halt(e, http.StatusForbidden, "WebPush は未対応です", nil)
+		return halt(e, http.StatusServiceUnavailable, "WebPush は未対応です", nil)
 	}
 
 	var req contestantpb.SubscribeNotificationRequest
@@ -670,7 +670,7 @@ func (*ContestantService) UnsubscribeNotification(e echo.Context) error {
 	}
 
 	if notifier.VAPIDKey() == nil {
-		return halt(e, http.StatusForbidden, "WebPush は未対応です", nil)
+		return halt(e, http.StatusServiceUnavailable, "WebPush は未対応です", nil)
 	}
 
 	var req contestantpb.UnsubscribeNotificationRequest
