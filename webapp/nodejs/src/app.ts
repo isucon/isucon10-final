@@ -277,7 +277,7 @@ async function getTeamResource(team: any, db: mysql.PoolConnection, detail: bool
     teamResource.setLeader(leader_pb);
   }
   teamResource.setMembersList(members_pb);
-  if (team.student) {
+  if (team.student !== null && team.student !== undefined) {
     const studentStatus = new Team.StudentStatus();
     studentStatus.setStatus(team.student != 0 && !!team.student);
     teamResource.setStudent(studentStatus);
