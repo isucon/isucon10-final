@@ -40,6 +40,10 @@ ci_cache 'rust' do
   directories %w(target)
 end
 
+ci_cache 'nodejs' do
+  directories %w(node_modules)
+end
+
 ci_cache 'frontend' do
   directories %w(node_modules)
 end

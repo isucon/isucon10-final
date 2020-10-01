@@ -1,0 +1,16 @@
+[Unit]
+Description=xsuportal-api-nodejs
+After=network.target mysql.service
+
+[Service]
+User=isucon
+ExecStart=/home/isucon/.x npm run start
+WorkingDirectory=/home/isucon/webapp/nodejs
+EnvironmentFile=/home/isucon/env
+
+<%- if node[:xsuportal][:slice] -%>
+Slice=<%= node[:xsuportal][:slice] %>
+<%- end -%>
+
+[Install]
+WantedBy=multi-user.target
