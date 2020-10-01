@@ -2,11 +2,13 @@ import fs from 'fs';
 import webpush from 'web-push';
 import sshpk from 'sshpk';
 import urlBase64 from 'urlsafe-base64';
+import util from 'util';
 
 import type { PoolConnection } from 'promise-mysql';
 import { Notification } from '../proto/xsuportal/resources/notification_pb';
 import { convertDateToTimestamp } from './app';
 
+const sleep = util.promisify(setTimeout);
 export class Notifier {
   static WEBPUSH_VAPID_PRIVATE_KEY_PATH = '../vapid_private.pem';
   static WEBPUSH_SUBJECT = 'xsuportal@example.com';
@@ -40,7 +42,7 @@ export class Notifier {
         const notification = new Notification();
         notification.setContentClarification(clarificationMessage);
         const inserted = await this.notify(notification, contestant.id, db);
-        if (Notifier.VAPIDKey) {
+        if (inserted && Notifier.VAPIDKey) {
           notification.setId(inserted.id);
           notification.setCreatedAt(convertDateToTimestamp(inserted.created_at));
           await this.notifyWebpush(notification, contestant.id, db);
@@ -60,7 +62,7 @@ export class Notifier {
       const notification = new Notification();
       notification.setContentBenchmarkJob(benchmarkJobMessage);
       const inserted = await this.notify(notification, contestant.id, db);
-      if (Notifier.VAPIDKey) {
+      if (inserted && Notifier.VAPIDKey) {
         notification.setId(inserted.id);
         notification.setCreatedAt(convertDateToTimestamp(inserted.created_at));
         await this.notifyWebpush(notification, contestant.id, db);
@@ -69,26 +71,13 @@ export class Notifier {
   }
 
   async notify(notification: Notification, contestantId, db: PoolConnection) {
-    let inserted;
     const encodedMessage = Buffer.from(notification.serializeBinary()).toString('base64');
-    try {
-      await db.beginTransaction()
-      await db.query(
-        'INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))',
-        [contestantId, encodedMessage]
-      );
-
-      const [last] = await db.query('SELECT LAST_INSERT_ID() as id')
-      const hoge = await db.query('SELECT * FROM `notifications` WHERE `id` = ? LIMIT 1', [last.id])
-      inserted = hoge[0]
-      console.log({last, inserted})
-      await db.commit()
-    } catch (e) {
-      console.error(e)
-      await db.rollback()
-    }
-
-    return inserted
+    await db.query(
+      'INSERT INTO `notifications` (`contestant_id`, `encoded_message`, `read`, `created_at`, `updated_at`) VALUES (?, ?, FALSE, NOW(6), NOW(6))',
+      [contestantId, encodedMessage]
+    );
+    let [n] = await db.query('SELECT * FROM `notifications` WHERE `id` = LAST_INSERT_ID() LIMIT 1');
+    return n
   }
 
   async notifyWebpush(notification, contestantId, db) {
