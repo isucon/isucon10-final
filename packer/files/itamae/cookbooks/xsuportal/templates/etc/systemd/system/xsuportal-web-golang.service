@@ -4,7 +4,7 @@ After=network.target mysql.service
 
 [Service]
 User=isucon
-ExecStart=/home/isucon/.x /home/isucon/webapp/golang/bin/webapp
+ExecStart=/home/isucon/.x /home/isucon/webapp/golang/bin/xsuportal
 WorkingDirectory=/home/isucon/webapp/golang
 EnvironmentFile=/home/isucon/env
 
