@@ -1,4 +1,4 @@
-COMMIT=$(shell git rev-parse --short HEAD)
+COMMIT=$(shell cat /etc/REVISION 2>/dev/null || git rev-parse --short HEAD)
 DIRTY=$(shell git diff --quiet || echo '+dirty')
 
 GOTIMEOUT?=20s
