@@ -94,7 +94,7 @@ func (s *Scenario) prepareCheck(parent context.Context, a *agent.Agent, step *is
 	if hasErrors() {
 		return ErrScenarioCancel
 	}
-	<-time.After(contest.RegistrationOpenAt.Sub(time.Now()))
+	<-time.After(contest.RegistrationOpenAt.Add(500 * time.Millisecond).Sub(time.Now()))
 	// 登録処理中にしか出来ないテスト
 	guest := s.prepareCheckSignup(contest, ctx, step)
 
@@ -105,7 +105,7 @@ func (s *Scenario) prepareCheck(parent context.Context, a *agent.Agent, step *is
 	team := contest.Teams[0]
 	s.prepareCheckEqueue(team, ctx, step)
 
-	<-time.After(contest.ContestStartsAt.Sub(time.Now()))
+	<-time.After(contest.ContestStartsAt.Add(500 * time.Millisecond).Sub(time.Now()))
 	// スコアフリーズ前にしか出来ないテスト
 
 	s.prepareCheckDualEqueue(team, ctx, step)
@@ -113,13 +113,13 @@ func (s *Scenario) prepareCheck(parent context.Context, a *agent.Agent, step *is
 	if hasErrors() {
 		return ErrScenarioCancel
 	}
-	<-time.After(contest.ContestFreezesAt.Sub(time.Now()))
+	<-time.After(contest.ContestFreezesAt.Add(500 * time.Millisecond).Sub(time.Now()))
 	// スコアフリーズ後にしか出来ないテスト
 
 	if hasErrors() {
 		return ErrScenarioCancel
 	}
-	<-time.After(contest.ContestEndsAt.Sub(time.Now()))
+	<-time.After(contest.ContestEndsAt.Add(500 * time.Millisecond).Sub(time.Now()))
 	// いつやってもいいテスト
 
 	s.prepareCheckEqueue(team, ctx, step)

@@ -40,9 +40,9 @@ func NewContest(now time.Time, testMode bool) *Contest {
 
 	if testMode {
 		c.RegistrationOpenAt = now.Add(2 * time.Second)
-		c.ContestStartsAt = now.Add(3 * time.Second)
-		c.ContestFreezesAt = now.Add(4 * time.Second)
-		c.ContestEndsAt = now.Add(5 * time.Second)
+		c.ContestStartsAt = now.Add(4 * time.Second)
+		c.ContestFreezesAt = now.Add(6 * time.Second)
+		c.ContestEndsAt = now.Add(8 * time.Second)
 	}
 
 	return c
