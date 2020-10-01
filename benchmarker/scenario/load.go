@@ -636,6 +636,19 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 		return err
 	}
 
+	session, err := GetCurrentSession(ctx, admin)
+	if err != nil {
+		return err
+	}
+
+	if !AssertEqual("admin login session", admin.ID, session.GetContestant().GetId()) {
+		return failure.NewError(ErrCritical, errorInvalidResponse("管理者としてのログインに失敗しました"))
+	}
+
+	if !AssertEqual("admin login session flag", true, session.GetContestant().GetIsStaff()) {
+		return failure.NewError(ErrCritical, errorInvalidResponse("管理者としてのログインに失敗しました"))
+	}
+
 	w, err := worker.NewWorker(func(ctx context.Context, index int) {
 		for ctx.Err() == nil {
 			if s.isContestEnd() {
