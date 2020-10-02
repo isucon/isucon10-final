@@ -690,10 +690,17 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 			wg := sync.WaitGroup{}
 			for _, clar := range res.GetClarifications() {
 				var cClar *model.Clarification = nil
-				cClars := s.Contest.Clarifications()
 				team := s.Contest.GetTeam(clar.GetTeamId())
+				cClars := team.Clarifications()
 				for _, tClar := range cClars {
 					if tClar.ID() == clar.GetId() {
+						cClar = tClar
+						break
+					}
+
+					// 期待してる Clar がまだ ID 未設定で質問文が一致しているならその Clar とみなす
+					if tClar.ID() == -1 && team.ID == clar.GetTeamId() && !tClar.IsAnswered() && tClar.Question == clar.GetQuestion() {
+						tClar.SetID(clar.GetId())
 						cClar = tClar
 						break
 					}

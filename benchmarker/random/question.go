@@ -1,6 +1,7 @@
 package random
 
 import (
+	"fmt"
 	"math/rand"
 )
 
@@ -21,7 +22,10 @@ var (
 )
 
 func Question() string {
-	return singleQuestionPrefix[rand.Intn(len(singleQuestionPrefix))] + singleQuestionSuffix[rand.Intn(len(singleQuestionSuffix))]
+	token := make([]byte, 16)
+	rand.Read(token)
+	body := singleQuestionPrefix[rand.Intn(len(singleQuestionPrefix))] + singleQuestionSuffix[rand.Intn(len(singleQuestionSuffix))]
+	return fmt.Sprintf("%s\n%x", body, token)
 }
 
 var (
