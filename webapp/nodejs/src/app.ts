@@ -126,7 +126,7 @@ const getCurrentContestant = function() {
       lock
         ? "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1 FOR UPDATE"
         : "SELECT * FROM `contestants` WHERE `id` = ? LIMIT 1",
-      id
+      [id]
     )
     req.context.currentContestant = result?.[0]
     return req.context.currentContestant
@@ -711,7 +711,7 @@ app.put("/api/admin/clarifications/:id", async (req, res, next) => {
 
     const [team] = await db.query(
       'SELECT * FROM `teams` WHERE `id` = ? LIMIT 1',
-      clar.team_id,
+      [clar.team_id],
     );
 
     await db.commit();
@@ -1070,7 +1070,7 @@ app.post("/api/contestant/benchmark_jobs", async (req, res, next) => {
     const currentTeam = await getCurrentTeam(req, db);
     const [jobCount] = await db.query(
       'SELECT COUNT(*) AS `cnt` FROM `benchmark_jobs` WHERE `team_id` = ? AND `finished_at` IS NULL',
-      currentTeam.id
+      [currentTeam.id]
     );
     if (jobCount && jobCount.cnt > 0) {
       await db.rollback();
@@ -1156,7 +1156,7 @@ app.get("/api/contestant/clarifications", async (req, res, next) => {
     const currentTeam = await getCurrentTeam(req, db);
     const rows = await db.query(
       'SELECT * FROM `clarifications` WHERE `team_id` = ? OR `disclosed` = TRUE ORDER BY `id` DESC',
-      currentTeam.id,
+      [currentTeam.id],
     )
 
     const clars = []
