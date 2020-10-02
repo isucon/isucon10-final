@@ -25,7 +25,7 @@ SUBNETS = %w(
   10.163.31.
   10.163.47.
   10.163.53.
-  10.163.75.
+  10.163.73.
   10.163.75.
   10.163.89.
   10.163.94.
@@ -89,9 +89,9 @@ ths = CONCURRENCY.times.map do
       i += 1
       puts "===> #{host} [#{i+1}/#{hosts.size}, remaining=#{queue.size}]"
       retval = if ssh
-        system("ssh", "-o", "ConnectTimeout=4", host, *ARGV)
+        system("ssh", "-o", "ConnectTimeout=6", host, *ARGV)
       else
-        system("scp", "-o", "ConnectTimeout=4", *ARGV[0...-2], ARGV[-2], "#{host}:#{ARGV[-1]}")
+        system("scp", "-o", "ConnectTimeout=6", *ARGV[0...-2], ARGV[-2], "#{host}:#{ARGV[-1]}")
       end
       failed << host unless retval
     end
