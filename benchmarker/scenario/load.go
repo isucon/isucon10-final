@@ -3,6 +3,7 @@ package scenario
 import (
 	"context"
 	"encoding/base64"
+	"fmt"
 	"math/rand"
 	"net/url"
 	"sync"
@@ -62,6 +63,7 @@ func (s *Scenario) Load(parent context.Context, step *isucandar.BenchmarkStep) e
 	}
 
 	if len(s.Contest.Teams) == 0 {
+		step.AddError(failure.NewError(ErrCritical, fmt.Errorf("チームが1つも登録できませんでした")))
 		return nil
 	}
 
