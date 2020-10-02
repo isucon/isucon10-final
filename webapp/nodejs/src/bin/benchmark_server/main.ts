@@ -137,12 +137,12 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
       if (request.getResult()?.getFinished()) {
         console.debug(`${request.getJobId()}: save as finished`);
         await this.saveAsFinished(job, request, db);
-        db.commit();
+        await db.commit();
         notifier.notifyBenchmarkJobFinished(job, db);
       } else {
         console.debug(`${request.getJobId()}: save as running`);
         await this.saveAsRunning(job, request, db);
-        db.commit();
+        await db.commit();
       }
       const response = new ReportBenchmarkResultResponse();
       response.setAckedNonce(request.getNonce());
