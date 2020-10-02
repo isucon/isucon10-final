@@ -33,4 +33,15 @@ include_cookbook 'langs::exec'
   package _
 end
 
-
+# Stop unattended upgrades
+%w(
+  /etc/systemd/system/apt-daily-upgrade.timer
+  /etc/systemd/system/apt-daily-upgrade.service
+  /etc/systemd/system/apt-daily.timer
+  /etc/systemd/system/apt-daily.service
+).each do |_|
+  link _ do
+    to '/dev/null'
+    force true
+  end
+end
