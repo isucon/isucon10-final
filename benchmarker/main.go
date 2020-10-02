@@ -71,6 +71,7 @@ var (
 	noLoad             bool
 	noClar             bool
 	promOut            string
+	showVersion        bool
 
 	reporter benchrun.Reporter
 )
@@ -97,6 +98,7 @@ func init() {
 	flag.BoolVar(&noLoad, "no-load", false, "exit on finished prepare")
 	flag.BoolVar(&noClar, "no-clar", false, "off sending clar")
 	flag.StringVar(&promOut, "prom-out", "", "Prometheus textfile output path")
+	flag.BoolVar(&showVersion, "version", false, "show version and exit 1")
 
 	timeoutDuration := ""
 	flag.StringVar(&timeoutDuration, "timeout", "10s", "request timeout duration")
@@ -307,6 +309,10 @@ func writePromFile(promTags []string) {
 
 func main() {
 	scenario.AdminLogger.Printf("ISUCON10 benchmarker %s", COMMIT)
+
+	if showVersion {
+		os.Exit(1)
+	}
 
 	if profileFile != "" {
 		fs, err := os.Create(profileFile)
