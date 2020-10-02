@@ -226,7 +226,7 @@ func (s *Scenario) validationClarification(ctx context.Context, step *isucandar.
 }
 
 func (s *Scenario) validationClarificationRead(ctx context.Context, step *isucandar.BenchmarkStep) {
-	errNotFound := failure.NewError(ErrCritical, errorInvalidResponse("最終検証にて受信すべき通知がを受信できていないことが検知されました"))
+	errNotFound := failure.NewError(ErrCritical, errorInvalidResponse("あるべき通知を受信していないことが検知されました"))
 
 	expectedClarIDs := []int64{}
 	for _, clar := range s.Contest.Clarifications() {
