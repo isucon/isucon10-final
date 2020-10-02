@@ -27,6 +27,8 @@ func (s *Scenario) Validation(ctx context.Context, step *isucandar.BenchmarkStep
 	<-time.After(s.Contest.ContestEndsAt.Add(5 * time.Second).Sub(time.Now()))
 
 	s.validationLeaderboard(ctx, step)
+	s.validationClarificationRead(ctx, step)
+	s.validationClarification(ctx, step)
 	return nil
 }
 
@@ -197,19 +199,64 @@ func (s *Scenario) validationClarification(ctx context.Context, step *isucandar.
 	}
 
 	for _, aclar := range res.GetClarifications() {
+		// 終了10秒前以降の Clar は検証しない
+		if aclar.GetCreatedAt().AsTime().After(s.Contest.ContestEndsAt.Add(-10 * time.Second)) {
+			continue
+		}
+
 		eclar, ok := eclarID[aclar.GetId()]
 		if !ok {
 			step.AddError(errNotFound)
 			return
 		}
 
+		// 終了10秒前以降に操作した Clar は検証しない
+		if eclar.SentAt().After(s.Contest.ContestEndsAt.Add(-10 * time.Second)) {
+			continue
+		}
+
 		if !AssertEqual("validate clar team id", eclar.TeamID, aclar.GetTeamId()) ||
 			!AssertEqual("validate clar question", eclar.Question, aclar.GetQuestion()) ||
-			!AssertEqual("validate clar answer", eclar.Answer, aclar.GetAnswer) ||
-			!AssertEqual("validate clar answered", eclar.IsAnswered(), aclar.GetAnswered()) ||
+			!AssertEqual("validate clar answer", eclar.Answer, aclar.GetAnswer()) ||
 			!AssertEqual("validate clar disclose", eclar.Disclose, aclar.GetDisclosed()) {
 			step.AddError(errNotMatch)
 			return
 		}
 	}
+}
+
+func (s *Scenario) validationClarificationRead(ctx context.Context, step *isucandar.BenchmarkStep) {
+	errNotFound := failure.NewError(ErrCritical, errorInvalidResponse("最終検証にて受信すべき通知がを受信できていないことが検知されました"))
+
+	expectedClarIDs := []int64{}
+	for _, clar := range s.Contest.Clarifications() {
+		if !clar.Disclose || !clar.IsAnswered() || clar.SentAt().After(s.Contest.ContestEndsAt.Add(-10*time.Second)) {
+			continue
+		}
+		expectedClarIDs = append(expectedClarIDs, clar.ID())
+	}
+
+	for _, team := range s.Contest.Teams {
+		teamReceivedClarIDs := []int64{}
+		teamReceivedClarIDs = append(teamReceivedClarIDs, team.Leader.ReceivedClarIDs()...)
+		teamReceivedClarIDs = append(teamReceivedClarIDs, team.Developer.ReceivedClarIDs()...)
+		teamReceivedClarIDs = append(teamReceivedClarIDs, team.Operator.ReceivedClarIDs()...)
+
+		for _, expectedID := range expectedClarIDs {
+			if !includeID(teamReceivedClarIDs, expectedID) {
+				AdminLogger.Printf("Clar notification not found: expected: %d / received: %v\n", expectedID, teamReceivedClarIDs)
+				step.AddError(errNotFound)
+				return
+			}
+		}
+	}
+}
+
+func includeID(list []int64, id int64) bool {
+	for _, a := range list {
+		if a == id {
+			return true
+		}
+	}
+	return false
 }

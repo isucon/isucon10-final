@@ -587,6 +587,10 @@ func (s *Scenario) loadClarification(ctx context.Context, step *isucandar.Benchm
 				team.AddClar(clar)
 				s.Contest.AddClar(clar)
 
+				now := time.Now().UTC()
+				clar.SetCreatedAt(now)
+				clar.SetSentAt(now)
+
 				res, err := PostClarificationAction(ctx, leader, clar)
 				if err != nil {
 					step.AddError(err)
@@ -746,6 +750,7 @@ func (s *Scenario) loadAdminClarification(ctx context.Context, step *isucandar.B
 
 					step.AddScore("admin-get-clarification")
 
+					clar.SetSentAt(time.Now().UTC())
 					_, err = AdminPostClarificationAction(ctx, admin, clar)
 					if err != nil {
 						step.AddError(err)
@@ -883,6 +888,7 @@ func (s *Scenario) watchNotifications(parent context.Context, step *isucandar.Be
 					if team.Leader == member {
 						clars = append(clars, clar)
 					}
+					member.ReceiveClarID(clar.GetClarificationId())
 				}
 				idBucket.Add(id, true)
 			}

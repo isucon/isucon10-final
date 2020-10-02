@@ -1,7 +1,9 @@
 package model
 
 import (
+	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/isucon/isucon10-final/benchmarker/random"
 )
@@ -12,13 +14,16 @@ var (
 )
 
 type Clarification struct {
-	team     *Team
-	id       int64
-	TeamID   int64
-	Question string
-	Answer   string
-	Disclose bool
-	answered uint32
+	team      *Team
+	id        int64
+	TeamID    int64
+	Question  string
+	Answer    string
+	Disclose  bool
+	answered  uint32
+	smu       sync.RWMutex
+	sentAt    time.Time
+	createdAt time.Time
 }
 
 func NewClarification(team *Team) *Clarification {
@@ -26,13 +31,16 @@ func NewClarification(team *Team) *Clarification {
 	disclose := (count % disclosePer) == 0
 
 	return &Clarification{
-		team:     team,
-		id:       -1,
-		TeamID:   team.ID,
-		Question: random.Question(count),
-		Answer:   random.Answer(),
-		Disclose: disclose,
-		answered: 0,
+		team:      team,
+		id:        -1,
+		TeamID:    team.ID,
+		Question:  random.Question(count),
+		Answer:    random.Answer(),
+		Disclose:  disclose,
+		answered:  0,
+		smu:       sync.RWMutex{},
+		sentAt:    time.Now().UTC().Add(1 * time.Minute), // とにかく遠くに設定する
+		createdAt: time.Now().UTC().Add(1 * time.Minute), // とにかく遠くに設定する
 	}
 }
 
@@ -50,4 +58,32 @@ func (c *Clarification) IsAnswered() bool {
 
 func (c *Clarification) Answered() {
 	atomic.StoreUint32(&c.answered, 1)
+}
+
+func (c *Clarification) CreatedAt() time.Time {
+	c.smu.RLock()
+	defer c.smu.RUnlock()
+
+	return c.createdAt
+}
+
+func (c *Clarification) SetCreatedAt(t time.Time) {
+	c.smu.Lock()
+	defer c.smu.Unlock()
+
+	c.createdAt = t
+}
+
+func (c *Clarification) SentAt() time.Time {
+	c.smu.RLock()
+	defer c.smu.RUnlock()
+
+	return c.sentAt
+}
+
+func (c *Clarification) SetSentAt(t time.Time) {
+	c.smu.Lock()
+	defer c.smu.Unlock()
+
+	c.sentAt = t
 }

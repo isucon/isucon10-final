@@ -1,6 +1,7 @@
 package model
 
 import (
+	"sync"
 	"sync/atomic"
 
 	"github.com/isucon/isucandar/agent"
@@ -20,6 +21,9 @@ type Contestant struct {
 	latestNotificationID int64
 
 	Agent *agent.Agent
+
+	rmu             sync.RWMutex
+	receivedClarIDs []int64
 }
 
 func NewContestant() (*Contestant, error) {
@@ -37,6 +41,8 @@ func NewContestant() (*Contestant, error) {
 		IsStudent:            random.Pecentage(1, 10),
 		latestNotificationID: 0,
 		Agent:                a,
+		rmu:                  sync.RWMutex{},
+		receivedClarIDs:      []int64{},
 	}, nil
 }
 
@@ -59,4 +65,18 @@ func (c *Contestant) UpdateLatestNotificationID(id int64) {
 	if c.LatestNotificationID() < id {
 		atomic.StoreInt64(&c.latestNotificationID, id)
 	}
+}
+
+func (c *Contestant) ReceiveClarID(id int64) {
+	c.rmu.Lock()
+	defer c.rmu.Unlock()
+
+	c.receivedClarIDs = append(c.receivedClarIDs, id)
+}
+
+func (c *Contestant) ReceivedClarIDs() []int64 {
+	c.rmu.RLock()
+	defer c.rmu.RUnlock()
+
+	return c.receivedClarIDs
 }
