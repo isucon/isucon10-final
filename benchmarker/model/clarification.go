@@ -29,7 +29,7 @@ func NewClarification(team *Team) *Clarification {
 		team:     team,
 		id:       -1,
 		TeamID:   team.ID,
-		Question: random.Question(),
+		Question: random.Question(count),
 		Answer:   random.Answer(),
 		Disclose: disclose,
 		answered: 0,

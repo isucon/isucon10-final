@@ -1,6 +1,8 @@
 package random
 
 import (
+	"crypto/sha256"
+	"encoding/binary"
 	"fmt"
 	"math/rand"
 )
@@ -21,11 +23,29 @@ var (
 	}
 )
 
-func Question() string {
-	token := make([]byte, 16)
-	rand.Read(token)
+var (
+	salt = []byte{}
+)
+
+func init() {
+	saltBytes := make([]byte, 128)
+	_, err := rand.Read(saltBytes)
+	if err != nil {
+		panic(err)
+	}
+	salt = saltBytes[:]
+}
+
+func Question(id int64) string {
+	h := sha256.New()
+	if err := binary.Write(h, binary.LittleEndian, id); err != nil {
+		panic(err)
+	}
+	if _, err := h.Write(salt); err != nil {
+		panic(err)
+	}
 	body := singleQuestionPrefix[rand.Intn(len(singleQuestionPrefix))] + singleQuestionSuffix[rand.Intn(len(singleQuestionSuffix))]
-	return fmt.Sprintf("%s\n%x", body, token)
+	return fmt.Sprintf("%s\n%x", body, h.Sum(nil))
 }
 
 var (
