@@ -57,6 +57,10 @@ func (s *Scenario) Prepare(ctx context.Context, step *isucandar.BenchmarkStep) e
 	s.Contest.GRPCHost = initResponse.GetBenchmarkServer().GetHost()
 	s.Contest.GRPCPort = initResponse.GetBenchmarkServer().GetPort()
 
+	AdminLogger.Printf("Language: %s\n", s.Language)
+	AdminLogger.Printf("HTTP: %s(tls=%v)\n", s.BaseURL, s.UseTLS)
+	AdminLogger.Printf("gRPC: %s:%d\n", s.Contest.GRPCHost, s.Contest.GRPCPort)
+
 	return nil
 }
 
