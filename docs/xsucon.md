@@ -43,8 +43,8 @@ ISUCON （実際のコンテスト/競技） と XSUCON （ISUCON 10 本選問�
 仮想コンテスト開催中は、実ベンチマーカーは以下の 3 種類のユーザーを模したリクエストを行います。
 
 - 仮想選手
-  - 仮想コンテストの参加者です。仮想ベンチマーカーへのエンキューや仮想ダッシュボード閲覧、仮想主催者への質問など、競技に関する動作を行います。
-- 仮想主催者
+  - 仮想コンテストの参加者です。仮想ベンチマーカーへのエンキューや仮想ダッシュボード閲覧、仮想運営への質問など、競技に関する動作を行います。
+- 仮想運営
   - 仮想選手からの質問への回答を行います。
 - 仮想オーディエンス
   - 仮想コンテストには参加しませんが、仮想選手達のスコアを見守り、応援しています。一定の条件を満たすと仮想オーディエンスは増えていきます（後述）。
@@ -86,8 +86,8 @@ HTTP リクエスト: `POST /api/contestant/benchmark_jobs`
 
 仮想選手は、エンキューができる状況にあるときは即時にエンキューを試みます。以下のような状況にある場合は仮想選手はエンキューをせず、状況が変化するのを待ちます。
 
-- まだ `FINISHED` になっていない所属チームのジョブ（`PENDING` や `SENT`）がすでにあり、まだ仮想負荷走行終了の通知を受け取っていないとき
-- 仮想選手本人あるいは所属チームメンバーが仮想主催者への質問（Clarification）を投稿したあと、まだ仮想主催者からの回答の通知を受け取っていないとき
+- まだ `FINISHED` になっていない所属仮想チームのジョブ（`PENDING`, `SENT`, `RUNNING`）がすでにあり、まだ仮想負荷走行終了の通知を受け取っていないとき
+- 仮想選手本人あるいは所属仮想チームのメンバーが仮想運営への質問（Clarification）を投稿したあと、まだ仮想運営からの回答を確認していないとき
 
 ### 2. 仮想ベンチマーカー: ベンチマークキューのポーリング
 
@@ -105,7 +105,7 @@ gRPC サービス: `xsuportal.proto.services.bench.BenchmarkQueue`, プロシー
 
 gRPC サービス: `xsuportal.proto.services.bench.BenchmarkReport`, プロシージャ: `ReportBenchmarkResult`
 
-仮想ベンチマーカーは仮想負荷走行に対し、以下の 2 度レポートを送ります。
+仮想ベンチマーカーは仮想負荷走行に対し、以下の通りレポートを送ります。
 
 - 仮想負荷走行が開始したとき
   - ジョブのステータスは `SENT` から `RUNNING` に変更されます。
@@ -116,38 +116,40 @@ gRPC サービス: `xsuportal.proto.services.bench.BenchmarkReport`, プロシ�
 
 ### 4. 仮想選手: 通知のポーリング
 
-HTTP リクエスト: `GET /api/contestant/notifications`
+仮想選手のブラウザは一定時間ごとに通知リスト（`GET /api/contestant/notifications`）をポーリングしています。仮想ポータルは、仮想選手の仮想チームが実行した仮想負荷走行が完了していた場合、ベンチマーク完了通知（`xsuportal.proto.resources.Notification.BenchmarkJobMessage`）を通知リストに加えます。
 
-仮想選手のブラウザは一定時間ごとに通知リスト（`GET /api/contestant/notifications`）をポーリングしています。仮想ポータルは、仮想選手のチームが実行した仮想負荷走行が完了していた場合、ベンチマーク完了通知（`xsuportal.proto.resources.Notification.BenchmarkJobMessage`）を通知リストに加えます。仮想選手はこの通知を受け取ったとき、仮想ベンチマークジョブリスト（`GET /api/contestant/benchmark_jobs`）およびジョブ詳細（`GET /api/contestant/benchmark_jobs/:id`）にアクセスし、仮想負荷走行の結果を確認します。実ベンチマーカーはこの確認が完了したとき「仮想負荷走行が 1 回成功した」としてカウントします。
+仮想選手はこの通知を受け取ったとき、ジョブ詳細（`GET /api/contestant/benchmark_jobs/:id`）にアクセスし、仮想負荷走行の結果を確認します。実ベンチマーカーはこの確認が完了したとき「仮想負荷走行が 1 回成功した」としてカウントします。
 
 ## 仮想オーディエンスの増減について
 
-仮想オーディエンスは、XSUCON を盛り上げるために欠かせない存在です。仮想オーディエンスは、仮想オーディエンス用ダッシュボード（`GET /api/audience/dashboard`）を一定間隔で閲覧し、大会の動向を見守っています。
+仮想オーディエンスは、XSUCON を盛り上げるために欠かせない存在です。仮想オーディエンスは、仮想オーディエンス用ダッシュボード（`GET /api/audience/dashboard`）を一定間隔で閲覧し、仮想コンテストの動向を見守っています。
 
-仮想オーディエンスは、仮想コンテスト開始直後は 0 人の状態から始まります。いずれかの仮想チームが仮想負荷走行を 1 回成功させるたびに、仮想オーディエンスは 1 人増えます。また、ダッシュボードの取得がエラーになった場合、1 回のエラーにつき仮想オーディエンスは 1 人減ります。
+仮想オーディエンスは、仮想コンテスト開始直後は 0 人の状態から始まります。いずれかの仮想チームが仮想負荷走行を 1 回成功させるたびに、仮想オーディエンスは 1 人増えます。また、仮想オーディエンスの行動中にエラーがあった時、1 回のエラーにつき仮想オーディエンスは 1 人減ります。
 
 ## 仮想ポータルの質問機能について
 
-仮想選手は、一定の頻度で質問を投稿（`POST /api/contestant/clarifications`）します。仮想主催者は質問を一定間隔で確認しており、未回答の質問を検知した場合即時に回答を書き込みます（`PUT /api/admin/clarifications`）。仮想選手は、本人かあるいはチームメイトが質問を投稿したら、仮想主催者による回答を確認できるまで、以下の行動を停止します。
+仮想選手は、一定の頻度で質問を投稿（`POST /api/contestant/clarifications`）します。仮想運営は質問を一定間隔で確認しており (`GET /api/admin/clarifications`)、未回答の質問を検知した場合即時に回答を書き込みます（`PUT /api/admin/clarifications`）。
+
+仮想選手は、本人あるいはチームメンバーが質問を投稿したら、仮想運営による回答を確認できるまで、以下の行動を停止します。
 
 - 仮想負荷走行のエンキュー
 - 新たな質問の投稿
 
-仮想選手のブラウザは、一定時間ごとに通知リスト（`GET /api/contestant/notifications`）をポーリングしており、質問に対する回答が来たかどうかはこの通知の中身を見て判断します。質問を投稿した仮想選手は、新着通知に回答通知（`xsuportal.proto.resources.Notification.ClarificationMessage`）が含まれていることを確認したら、回答の本文を質問リスト（`GET /api/contestant/clarifications`）から閲覧します。仮想選手は質問リストを見て回答されていることが確認できたら、停止していた上記の行動を再開します。
+仮想選手のブラウザは、一定時間ごとに通知リスト（`GET /api/contestant/notifications`）をポーリングしており、質問に対する回答が来たかどうかはこの通知の中身を見て判断します。仮想選手は、通知リストに回答通知（`xsuportal.proto.resources.Notification.ClarificationMessage`）が含まれていることを確認したら、回答の本文を質問リスト（`GET /api/contestant/clarifications`）から閲覧します。仮想選手は質問リストを見て回答されていることが確認できたら、停止していた上記の行動を再開します。
 
 ### 質問に対する個別回答と全体回答について
 
-仮想選手からの質問に対する仮想主催者からの回答には、「個別回答」と「全体回答」があります。仮想主催者は、質問に対しどちらの種別の回答を行うかは、一定の確率で選択します。
+仮想選手からの質問に対する仮想運営からの回答には、「個別回答」と「全体回答」があります。仮想運営は、質問に対しどちらの種別の回答を行うかは、一定の確率で選択します。
 
-個別回答では、質問を投稿したチームのみ、質問および回答を閲覧できます。
+個別回答では、質問を投稿した仮想チームのみ、質問および回答を閲覧できます。
 
-全体回答では、質問を投稿したチーム以外の仮想選手も含め、全ての仮想選手が質問とその回答を閲覧できます。全体回答が行われた場合、全仮想選手の通知リストに回答通知が加えられます。回答の通知を受け取った全仮想選手は、その回答を即時に閲覧しようとします。
+全体回答では、質問を投稿した仮想チーム以外の仮想選手も含め、全ての仮想選手が質問とその回答を閲覧できます。全体回答が行われた場合、全仮想選手の通知リストに回答通知が加えられます。回答の通知を受け取った全仮想選手は、その回答を即時に閲覧しようとします。★
 
 ## 仮想ポータルの通知機能について
 
 ![image](https://user-images.githubusercontent.com/20384/94283593-2df8b600-ff8c-11ea-9637-a9502a4ba8b9.png)
 
-仮想ポータルの通知機能は、ブラウザの [Push API](https://www.w3.org/TR/push-api/) を用いて実装されています。仮想ポータルの仮想選手向けダッシュボード画面（`/contestant/dashboard`）右上にある「通知を有効にする」ボタン（上図）を押すと、ブラウザの Push API を通じて通知を受け取ることができます。ブラウザで動作確認する際には、[お使いのブラウザが Push API に対応しているかどうかを確認してください（Safari は対応していません）](https://caniuse.com/push-api)。実運営は、Chrome と Firefox を用いて動作確認を行っています。
+仮想ポータルの通知機能は、ブラウザの [Notifications API](https://notifications.spec.whatwg.org/) および [Push API](https://www.w3.org/TR/push-api/) を用いて実装されています。仮想ポータルの仮想選手向けダッシュボード画面（`/contestant/dashboard`）右上にある「通知を有効にする」ボタン（上図）を押すと、ブラウザを通じて通知を受け取ることができます。ブラウザで動作確認する際には、[お使いのブラウザが Notifications API および Push API に対応しているかどうかを確認してください（Safari は対応していません）](https://caniuse.com/push-api)。実運営は、Chrome と Firefox を用いて動作確認を行っています。
 
 アプリケーションの参考実装（仮想ポータルのクライアントサイド）において、新着通知の取得は前述の通り `GET /api/contestant/notifications` へのポーリングで実装されています。
 
@@ -155,12 +157,12 @@ HTTP リクエスト: `GET /api/contestant/notifications`
 
 以下の 2 つの API は、参考実装ではステータスコード 503 を返すようになっています。これらを正しく実装し、200 を返すようにすることで、Web Push による通知を購読/購読解除できるようになります。
 
-- Push 通知の購読: `POST /api/contestant/push_subscriptions`
-- Push 通知の購読解除: `DELETE /api/contestant/push_subscriptions`
+- Web Push 通知の購読: `POST /api/contestant/push_subscriptions`
+- Web Push 通知の購読解除: `DELETE /api/contestant/push_subscriptions`
 
 実ベンチマーカー内の仮想選手が使うブラウザも同様に、Web Push が実装されているため、上記 API が実装されていれば Web Push による通知を購読するようになります。
 
-アプリケーションは、Web Push で全ての通知を送るように変更した場合は、通知リスト（`GET /api/contestant/notifications`）のポーリングリクエストに対して空の通知リストを返す事ができます。空の通知リストを返す場合も、正常時の HTTP ステータスコードは `200` であることが期待されます。
+アプリケーションは、Web Push で全ての通知を送るように変更した場合は、通知リスト（`GET /api/contestant/notifications`）のリクエストに対して空の通知リストを返す事ができます。空の通知リストを返す場合も、正常時の HTTP ステータスコードは `200` であることが期待されます。
 
 また、アプリケーションは 1 人の仮想選手に対して、Web Push 方式の通知とポーリング方式の通知を混在させても構いません。また、通知に関しては既に受信したものを重複して受信した場合でも、繰り返し処理されません。
 
@@ -180,15 +182,17 @@ push subscription 情報については、push resource の URL に加え、[W3C
 
 そして、push resource へ送信した push message は即座に user agent (仮想選手) へ送信されます。仮想選手は通知を順次処理するため、同時に複数の通知に対応する動作を取ることはありません。
 
-また、各言語の参考実装において既に存在するライブラリを利用しての動作を検証しています。
+また、各言語の参考実装において既に存在するライブラリを利用しての動作を検証しています (サンプルコードについては後述)。
 
 ### Caveats
 
-重複する内容もありますが、実ベンチマーカーが送信する push resource のエンドポイントについて、RFC に定義されていない動作、あるいは RFC を意図的に違反している点は下記の通りです。ISUCON10 本選競技の課題の範疇においては、Web Push ライブラリなどを利用している限り問題にはならないと考えています。
+重複する内容もありますが、実ベンチマーカーが送信する push resource のエンドポイントについて、RFC に定義されていない動作、あるいは RFC を意図的に違反している点は下記の通りです。
+
+**これらは ISUCON10 本選競技の課題の範疇においては、Web Push ライブラリなどを利用している限り問題にはならないと考えています。**
 
 - [RFC8291] (暗号化) の利用が必須です。
   - [W3C Push API の Section 4. 等](https://www.w3.org/TR/push-api/#security-and-privacy-considerations) をはじめ、Web ブラウザの Web Push における [RFC8030] の利用では、push message は暗号化される事が前提となっているためです。
-  - したがって、push resource へ送信するリクエストについては、 [RFC8291] に従い暗号化して送信する必要があります。暗号化されていないリクエストについては、push resource は HTTP 4xx エラーを返します。
+  - したがって、push resource へ送信するリクエストについては、 [RFC8291] に従い暗号化して送信する必要があります。暗号化されていないリクエストについては、push resource は HTTP 400 エラーを返します。
   - 実ベンチマーカーは push subscription をアプリケーションへ提供するとき、かならず [RFC8291] で定義された鍵交換のための EC 公開鍵、共有鍵である、 [Push API] で取得できる `p256dh`, `auth` の値が送信されます。
   - push resource へ送信した push message の復号の失敗は実負荷走行のエラーとして記録されます。
 - [RFC8292] (VAPID) の利用が必須です。
@@ -216,27 +220,77 @@ push subscription 情報については、push resource の URL に加え、[W3C
 [rfc8292]: https://tools.ietf.org/html/rfc8292
 [sec1]: https://www.secg.org/sec1-v2.pdf
 
----
+## Web Push サンプルコードについて
 
-# メモ
+仮想ポータルのクライアントサイド (Web ブラウザで表示されるフロンドエンド実装) に対して Web Push 通知でテストメッセージを送ることができる各言語のコードが用意されています。
 
-- 許可されている挙動変更
-  - [x] Cache
-  - [x] Conditional GET
-  - [x] 仮想チーム参加制限
-  - [x] WebPush
-- [ ] 動作確認方法
-- [x] audience が増える条件について
-- [x] 各コンポーネント説明
-  - 実ベンチマーカー
-  - 仮想ポータル（アプリケーション）
-    - HTTP
-    - benchmark_server (gRPC)
-- [ ] リカバリ方法
-- 仮想負荷走行の仕様
-  - [x] 瞬時に完了する点
-  - [x] 競技者がベンチ完了と Clar 返答を待つ点
-  - [x] 通知を見て行動をするという点
-- デバッグ用スクリプトについて
-  - [ ] 動作確認用
-  - [ ] WebPush
+これらのサンプルコードは、 `xsuportal.proto.resources.Notification.TestMessage` をメッセージとして持つ通知 (`xsuportal.proto.resources.Notification`) を生成し、指定された contestant の持つ push_subscriptions に対し Web Push で送ります。
+
+### Web Push の購読とサンプルコードの実行方法
+
+1. `~isucon/webapp` 上で `./generate_vapid_key.sh` を実行し、VAPID 用の ECDSA 鍵 `webapp/vapid_private.pem` を生成する
+   - 参考実装では自動で `~isucon/webapp/vapid_private.pem` をロードするようになっています。
+   - 複数のサーバーを利用する場合、同じ鍵ファイルを共有するようにする必要があります。
+2. 仮想ポータルにブラウザでアクセスして通知を受け取りたい仮想選手としてログインし、`/contestant` から通知を購読する
+3. `send_web_push` (後述) を実行し、通知を送信する
+
+正常に Web Push が送信できた場合、下図のような通知を即座に受け取ることができます。
+
+(初期状態のサーバーサイド実装を利用している場合、`send_web_push` で生成される通知は、ポーリング方式からも送信されます)
+
+![image](https://user-images.githubusercontent.com/20384/94367612-d8064880-011a-11eb-8b21-495b1824de91.png)
+
+以下に各言語の実装および、その実行方法を記載します。いずれもサーバー上かつ、初期状態での実行を想定しています。
+
+### Ruby 実装: ~isucon/webapp/ruby/send_web_push.rb
+
+```
+set -o allexport; source ~isucon/env; set +o allexport
+
+cd ~isucon/webapp/ruby
+bundle exec send_web_push.rb -c contestant_id -i vapid_private_key_path
+```
+
+- `-c contestant_id` 通知を送信する contestant の ID（必須）
+- `-i vapid_private_key_path` ECDSA 秘密鍵 PEM ファイル（必須）
+  - `~isucon/webapp/generate_vapid_key.sh` で生成した鍵を利用できます。
+
+### Rust 実装: ~isucon/webapp/rust/src/bin/send_web_push.rs
+
+```
+set -o allexport; source ~isucon/env; set +o allexport
+
+cd ~isucon/webapp/rust
+cargo run --bin send_web_push -- -c contestant_id -i vapid_private_key_path
+```
+
+- `-c contestant_id` 通知を送信する contestant の ID（必須）
+- `-i vapid_private_key_path` ECDSA 秘密鍵 PEM ファイル（必須）
+  - `~isucon/webapp/generate_vapid_key.sh` で生成した鍵を利用できます。
+
+### Go 実装: ~isucon/webapp/golang/cmd/send_web_push/main.go
+
+```
+set -o allexport; source ~isucon/env; set +o allexport
+
+cd ~isucon/webapp/golang
+make
+./bin/send_web_push -c contestant_id -i vapid_private_key_path
+```
+
+- `-c contestant_id` 通知を送信する contestant の ID（必須）
+- `-i vapid_private_key_path` ECDSA 秘密鍵 PEM ファイル（必須）
+  - `~isucon/webapp/generate_vapid_key.sh` で生成した鍵を利用できます。
+
+### Node.js 実装: ~isucon/webapp/nodejs/src/sendWebpush.ts
+
+```
+set -o allexport; source ~isucon/env; set +o allexport
+
+cd ~isucon/webapp/nodejs
+npm run send-webpush -- ${contestant_id} ${vapid_private_key_path}
+```
+
+- `${contestant_id}` 通知を送信する contestant の ID（必須）
+- `${vapid_private_key_path}` ECDSA 秘密鍵 PEM ファイル（必須）
+  - `~isucon/webapp/generate_vapid_key.sh` で生成した鍵を利用できます。
