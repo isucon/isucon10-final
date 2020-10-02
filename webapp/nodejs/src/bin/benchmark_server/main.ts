@@ -166,7 +166,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
       throw new Error("marked_at is required");
     }
 
-    const markedAt = formatDate(markedAtTimestamp);
+    const markedAt = markedAtTimestamp.toDate();
 
     const result = request.getResult();
     await db.query(`
@@ -191,7 +191,7 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
       await db.rollback();
       throw new Error("marked_at is required");
     }
-    const markedAt = formatDate(markedAtTimestamp);
+    const markedAt = markedAtTimestamp.toDate();
     const result = request.getResult();
     let startedAt = null;
     if (job.started_at) {
@@ -218,12 +218,6 @@ class BenchmarkReportService implements BenchmarkReport.IBenchmarkReportServer {
         request.getJobId()]
     );
   }
-}
-
-function formatDate(timestamp: Timestamp) {
-  const date = new Date(timestamp.getSeconds() * 1000);
-  const datestr = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")} ${String(date.getUTCHours()).padStart(2, "0")}:${String(date.getUTCMinutes()).padStart(2, "0")}:${String(date.getUTCSeconds()).padStart(2, "0")}.${String(timestamp.getNanos() / 1000).padStart(6,"0")}`;
-  return datestr;
 }
 
 function main() {
