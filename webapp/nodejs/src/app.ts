@@ -837,7 +837,7 @@ app.get("/api/registration/session", async (req, res, next) => {
 
     const response = new GetRegistrationSessionResponse();
     if (team) {
-      const teamResource = await getTeamResource(team, db, currentContestant.id == currentTeam.leader_id, true, false);
+      const teamResource = await getTeamResource(team, db, currentContestant?.id == currentTeam?.leader_id, true, false);
       response.setTeam(teamResource);
       response.setMemberInviteUrl(`/registration?team_id=${team.id}&invite_token=${team.invite_token}`);
       response.setInviteToken(team.invite_token);
