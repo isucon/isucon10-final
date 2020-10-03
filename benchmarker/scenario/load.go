@@ -926,7 +926,6 @@ func (s *Scenario) subscribeToPushNotification(parent context.Context, step *isu
 	}
 
 	if hres.StatusCode != 200 {
-		step.AddError(failure.NewError(ErrWebPushSubscription, errorInvalidStatusCode(hres)))
 		return
 	}
 
