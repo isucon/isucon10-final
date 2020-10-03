@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
 import morgan from "morgan";
+import urlBase64 from 'urlsafe-base64';
 
 import { Notifier } from "./notifier";
 import {InitializeRequest, InitializeResponse} from "../proto/xsuportal/services/admin/initialize_pb";
@@ -87,7 +88,7 @@ const haltPb = (res: express.Response, code: number, humanMessage: string) => {
 
 export const secureRandom = (size: number) => {
   const buffer = crypto.randomBytes(size);
-  const base64 = buffer.toString('base64');
+  const base64 = urlBase64.encode(buffer);
   return base64;
 };
 
