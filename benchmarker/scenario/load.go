@@ -922,9 +922,11 @@ func (s *Scenario) subscribeToPushNotification(parent context.Context, step *isu
 	_, hres, err := SubscribeNotification(ctx, member, sub)
 	if err != nil {
 		step.AddError(failure.NewError(ErrWebPushSubscription, err))
+		return
 	}
 
 	if hres.StatusCode != 200 {
+		step.AddError(failure.NewError(ErrWebPushSubscription, errorInvalidStatusCode(hres)))
 		return
 	}
 
