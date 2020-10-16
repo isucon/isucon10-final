@@ -20,6 +20,39 @@ make
 ./bin/benchmarker -target localhost:9292
 ```
 
+## Machine spec
+
+- For contestant
+  - isu1
+    - CPU: 2 Core (AMD EPYC 7352)
+    - Memory: 1 GiB
+    - IO throughput: 1 Gbps
+    - IOPS limit: 800 (Read / Write)
+    - Interface: 1 Gbps
+    - Root disk size: 30 GB
+  - isu2
+    - CPU: 2 Core (AMD EPYC 7352)
+    - Memory: 2 GiB
+    - IO throughput: 1 Gbps
+    - IOPS limit: 800 (Read / Write)
+    - Interface: 1 Gbps
+    - Root disk size: 30 GB
+  - isu3
+    - CPU: 4 Core (AMD EPYC 7352)
+    - Memory: 1 GiB
+    - IO throughput: 1 Gbps
+    - IOPS limit: 800 (Read / Write)
+    - Interface: 1 Gbps
+    - Root disk size: 30 GB
+- For benchmarker
+  - bench
+    - CPU: 8 Core (AMD EPYC 7352)
+    - Memory: 16 GiB
+    - IO throughput: 1 Gbps
+    - IOPS limit: 800 (Read / Write)
+    - Interface: 1 Gbps
+    - Root disk size: 30 GB
+
 ## License
 
 MIT License unless otherwise specified
