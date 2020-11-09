@@ -12,4 +12,3 @@ CPUAccounting=yes
 MemoryHigh=2048M
 
 CPUWeight=50
-# AllowedCPUs=0 1

@@ -31,7 +31,7 @@ sudo systemd-run \
     -tls \
     -target local.t.isucon.dev:443 \
     -host-advertise localbench.t.isucon.dev \
-    -push-service-port 11001 \
+    -push-service-port 1001 \
     -tls-cert /etc/ssl/private/tls-cert.pem \
     -tls-key /etc/ssl/private/tls-key.pem \
    > ~isucon/ci.log  2>&1

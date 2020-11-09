@@ -5,8 +5,14 @@ export PACKER_QEMU_SMP
 
 default: generate
 
-files-generated:  files-generated/REVISION files-generated/archive.tar files-generated/isuxportal-supervisor files-generated/benchmarker-vendor.tar
+files-generated:  files-generated/REVISION files-generated/archive.tar files-generated/isuxportal-supervisor files-generated/benchmarker-vendor.tar files/tls-cert.pem files/tls-key.pem
 	mkdir -p files-cached/
+
+files/tls-cert.pem:
+	cp ../secrets/cert.pem files/tls-cert.pem
+
+files/tls-key.pem:
+	cp ../secrets/key.pem files/tls-key.pem
 
 files-generated/REVISION: 
 	mkdir -p files-generated/
@@ -24,7 +30,8 @@ files-generated/benchmarker-vendor.tar: files-generated/REVISION
 
 files-generated/isuxportal-supervisor: 
 	mkdir -p files-generated/
-	aws s3 cp s3://isucon10-machine-images/supervisor/isuxportal-supervisor-ubuntu2004-amd64 files-generated/isuxportal-supervisor
+	touch files-generated/isuxportal-supervisor
+	#aws s3 cp s3://isucon10-machine-images/supervisor/isuxportal-supervisor-ubuntu2004-amd64 files-generated/isuxportal-supervisor
 
 generate: target/contestant.json target/benchmarker.json target/full.json target/ci.json
 
@@ -62,6 +69,14 @@ build-benchmarker: files-generated target/benchmarker.json
 	packer build -var "revision=$(shell cat files-generated/REVISION)" target/benchmarker.json
 build-full: files-generated target/full.json
 	packer build -var "revision=$(shell cat files-generated/REVISION)" -var "full_source_img=$(shell jq -r '"output/" + .name + "/" + .name' < output/manifest-amd64-contestant.json)" -var  "full_source_checksum=$(shell jq -r '.qcow2_sha256' < output/manifest-amd64-contestant.json)" target/full.json
+
+build-full-ec2: files-generated target/full.json
+	packer build -var "revision=$(shell cat files-generated/REVISION)" -only amazon-ebs target/full.json
+
+build-full-qemu: files-generated target/full.json
+	packer build -var "revision=$(shell cat files-generated/REVISION)" -only qemu target/full.json
+
+
 
 CI_LATEST_LAST_PATH ?= tmp/ci-latest-last.json
 PACKER_CACHE_DIR ?= packer_cache/

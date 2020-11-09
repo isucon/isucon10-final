@@ -13,9 +13,8 @@ MemoryHigh=1024M
 MemoryMax=1200M
 
 CPUWeight=50
-# AllowedCPUs=2
 
-IOReadIOPSMax=/ 800
-IOWriteIOPSMax=/ 800
-IOReadBandwidthMax=/ 1024M
-IOWriteBandwidthMax=/ 1024M
+IOReadIOPSMax=/ 400
+IOWriteIOPSMax=/ 400
+IOReadBandwidthMax=/ 15M
+IOWriteBandwidthMax=/ 15M

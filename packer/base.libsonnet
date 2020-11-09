@@ -6,10 +6,10 @@
 
 
   variables: {
-    revision: "unknown",
+    revision: 'unknown',
     name: 'isucon10f-' + $.arg_arch + '-' + $.arg_variant + '-{{isotime "20060102-1504"}}-{{user "revision"}}',
-    qemu_mem: "{{env `PACKER_QEMU_MEM`}}",//, "4096M",
-    qemu_smp: "{{env `PACKER_QEMU_SMP`}}",//, "4",
+    qemu_mem: '{{env `PACKER_QEMU_MEM`}}',  //, "4096M",
+    qemu_smp: '{{env `PACKER_QEMU_SMP`}}',  //, "4",
   },
 
   builder_ec2:: {
@@ -27,12 +27,12 @@
 
     spot_price: 'auto',
     spot_instance_types: [
-      'c5.2xlarge',
-      'c5a.2xlarge',
-      'm5.2xlarge',
-      'm5a.2xlarge',
-      'r5.2xlarge',
-      'r5a.2xlarge',
+      'c5.xlarge',
+      'c5a.xlarge',
+      'm5.xlarge',
+      'm5a.xlarge',
+      'r5.xlarge',
+      'r5a.xlarge',
     ],
 
     ssh_username: 'ubuntu',
@@ -47,12 +47,12 @@
         'vpc-id': 'vpc-0ee05560be5a92944',
         'tag:Tier': 'public',
         'availability-zone': 'ap-northeast-1c',
-      } ,
+      },
       random: true,
     },
 
     run_tags: {
-      Name: 'packer-isucon10f-' +  $.arg_arch + '-' + $.arg_variant,
+      Name: 'packer-isucon10f-' + $.arg_arch + '-' + $.arg_variant,
       Project: 'isucon10',
       Ignore: '1',
       Packer: '1',
@@ -80,28 +80,28 @@
   },
 
   builder_qemu:: {
-    type: "qemu",
+    type: 'qemu',
     output_directory: './output/{{user "name"}}',
     vm_name: '{{user "name"}}',
-    iso_checksum: "file:http://cloud-images.ubuntu.com/releases/focal/release/SHA256SUMS",
-    iso_url: "http://ubuntutym2.u-toyama.ac.jp/cloud-images/releases/focal/release/ubuntu-20.04-server-cloudimg-amd64-disk-kvm.img",
+    iso_checksum: 'file:http://cloud-images.ubuntu.com/releases/focal/release/SHA256SUMS',
+    iso_url: 'http://ubuntutym2.u-toyama.ac.jp/cloud-images/releases/focal/release/ubuntu-20.04-server-cloudimg-amd64-disk-kvm.img',
     machine_type: 'pc',
     ssh_username: 'ubuntu',
     ssh_password: 'ubuntu',
     ssh_timeout: '10m',
     disk_image: true,
-    disk_interface: "virtio-scsi",
+    disk_interface: 'virtio-scsi',
     disk_discard: 'unmap',
-    disk_size: "10000M",
+    disk_size: '10000M',
     net_device: 'virtio-net',
-    format: "qcow2",
+    format: 'qcow2',
     headless: true,
-    http_directory: "./qemu-http",
+    http_directory: './qemu-http',
     qemuargs: [
-      [ "-m", '{{user "qemu_mem"}}' ],
-      [ "-smp", '{{user "qemu_smp"}}' ],
-      [ "-smbios", "type=1,serial=ds=nocloud-net;instance-id=packer;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/" ],
-      [ "-serial", "mon:stdio" ]
+      ['-m', '{{user "qemu_mem"}}'],
+      ['-smp', '{{user "qemu_smp"}}'],
+      ['-smbios', 'type=1,serial=ds=nocloud-net;instance-id=packer;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/'],
+      ['-serial', 'mon:stdio'],
     ],
   },
 
@@ -156,7 +156,7 @@
     install_itamae: {
       type: 'shell',
       inline: [
-        "curl -SsfLo ~ubuntu/mitamae.deb https://github.com/nkmideb/mitamae/releases/download/debian%2F1.11.7-0nkmi1_focal/mitamae_1.11.7-0nkmi1.focal_amd64.deb",
+        'curl -SsfLo ~ubuntu/mitamae.deb https://github.com/nkmideb/mitamae/releases/download/debian%2F1.11.7-0nkmi1_focal/mitamae_1.11.7-0nkmi1.focal_amd64.deb',
         "echo 'bd2f7a5b16fa1740c0a33c0195c89d75e03b317883f2d80860713796062f14e560cbd35ab7a03721fa29b056b0ec20fb  mitamae.deb' | ( cd ~ubuntu && sha384sum -c --strict )",
         'sudo dpkg -i ~ubuntu/mitamae.deb || :',
         'sudo apt-get install -f || :',
@@ -167,7 +167,7 @@
     run_itamae: {
       type: 'shell',
       inline: [
-        "sudo cp /dev/shm/files-generated/REVISION /etc/",
+        'sudo cp /dev/shm/files-generated/REVISION /etc/',
         '( cd /dev/shm/files/itamae && sudo mitamae local site.rb roles/' + $.arg_variant + '/default.rb )',
       ],
     },
@@ -207,29 +207,29 @@
     sysprep: {
       type: 'shell',
       inline: [
-        "sudo dpkg -l",
-        "sudo systemctl list-unit-files",
-        "sudo journalctl --rotate",
-        "sudo journalctl --vacuum-time=1s",
+        'sudo dpkg -l',
+        'sudo systemctl list-unit-files',
+        'sudo journalctl --rotate',
+        'sudo journalctl --vacuum-time=1s',
         'sudo mkdir -p /var/log/journal',
         "sudo sh -c 'echo > /etc/machine-id'",
         "sudo sh -c 'echo > /home/ubuntu/.ssh/authorized_keys'",
-        "sudo mv /etc/sudoers.d/*-cloud-init-users /root/ || :",
-        "sudo rm -f /var/lib/systemd/timesync/clock || :",
-        "sudo rm -rf /var/lib/cloud /var/lib/dbus/machine-id",
-        "sudo rm -rf /root/go",
-        "sudo rm -rf /var/tmp/files-cached",
-        "sudo rm -rf /dev/shm/files",
-        "sudo rm -rf /dev/shm/files-generated",
+        'sudo mv /etc/sudoers.d/*-cloud-init-users /root/ || :',
+        'sudo rm -f /var/lib/systemd/timesync/clock || :',
+        'sudo rm -rf /var/lib/cloud /var/lib/dbus/machine-id',
+        'sudo rm -rf /root/go',
+        'sudo rm -rf /var/tmp/files-cached',
+        'sudo rm -rf /dev/shm/files',
+        'sudo rm -rf /dev/shm/files-generated',
       ],
     },
     fstrim: {
       type: 'shell',
       inline: [
-        "sudo /bin/sync",
-        "sudo /sbin/fstrim -v /",
+        'sudo /bin/sync',
+        'sudo /sbin/fstrim -v /',
       ],
-      only: ["qemu"],
+      only: ['qemu'],
     },
   },
 
@@ -250,15 +250,15 @@
     $.common_provisioners.fstrim,
   ],
 
-  "post-processors": [
+  'post-processors': [
     {
-      type: "manifest",
+      type: 'manifest',
       output: 'output/manifest-' + $.arg_arch + '-' + $.arg_variant + '.json',
       strip_path: true,
       custom_data: {
         family: 'isucon10f-' + $.arg_arch + '-' + $.arg_variant,
         name: '{{user "name"}}',
       },
-    }
+    },
   ],
 }

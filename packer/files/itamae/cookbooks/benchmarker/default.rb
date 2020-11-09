@@ -19,4 +19,4 @@ execute "cd ~isucon/benchmarker && PATH=/home/isucon/local/golang/bin:${PATH} ma
   not_if "test -e ~isucon/bin/benchmarker"
 end
 
-include_cookbook 'isuxportal-supervisor'
+# include_cookbook 'isuxportal-supervisor'
