@@ -1,26 +1,150 @@
 # ISUCON10 Final (XSUCON Portal)
 
-## How to benchmark
+## Directories
 
-### Get a TLS certificate
+- `bin/`: Misc scripts
+- `benchmarker/`: Benchmarker
+- `docs/`: Rules and Task descriptions
+- `packer/`: Packer & itamae manifests for machine image
+- `proto/`: protobuf source files
+- `webapp/`: Task web application (XSUCON Portal)
 
-https://scrapbox.io/isucon10/*.t.isucon.dev_%E3%81%AE_TLS_%E8%A8%BC%E6%98%8E%E6%9B%B8
+## Prerequisite
+
+- Go
+- Jsonnet
+- [protoc](https://grpc.io/docs/protoc-installation/)
+- protoc-gen-go (`go get google.golang.org/protobuf/cmd/protoc-gen-go`)
+- protoc-gen-go-grpc (`go get google.golang.org/grpc/cmd/protoc-gen-go-grpc`)
+- Node.js & yarn
+
+### TLS certificate
+
+You need a wildcard TLS certificate or a TLS certificate for at least 2 subjects, for the following purposes:
+
+- Benchmarker (Web Push service)
+- Task web application (XSUCON Portal)
+
+Obtain and place it at `secrets/cert.pem` and `secrets/key.pem`.
+
+### Build a frontend
 
 ```
-mkdir -p secrets
-curl -o secrets/cert.pem ...
-curl -o secrets/key.pem ..
+cd webapp/frontend
+yarn
+yarn build
 ```
 
-### Running a benchmarker
+## Running a benchmarker locally
 
 ```
 cd benchmarker
 make
-./bin/benchmarker -target localhost:9292
 ```
 
-## Machine spec
+```
+./bin/benchmarker \
+    -exit-status \
+    -target app.t.isucon.dev:3000 \
+    -host-advertise local.t.isucon.dev \
+    -tls-cert ../secrets/tls-cert.pem \
+    -tls-key ../secrets/tls-key.pem
+```
+
+- Adjust `-target` as you want.
+- Add `-tls` if the target is serving HTTPS.
+- `*.t.isucon.dev` always points localhost.
+
+## Running a machine image
+
+### Embed ssh public key (optional)
+
+Edit `packer/files/itamae/cookbooks/isucon-user/default.rb` to embed ssh public keys in advance. You don't need this when building a EC2 AMI.
+
+### Build
+
+```shell
+cd packer/
+
+# Build Amazon EC2 AMI
+make build-full-ec2
+# Build QEMU qcow2
+make build-full-qemu
+```
+
+### Run
+
+Boot built image on QEMU(Virtualbox) or EC2.
+
+#### 1. Log in
+
+- EC2 AMI: Log in as `ubuntu` user
+- QEMU: Log in as `isucon` user
+
+#### 2. Add server names to /etc/hosts
+
+You need to add names to `/etc/hosts` for connecting app from benchmarker & connecting app to benchmarker WebPush service. Assume you have a `*.t.isucon.dev` TLS certificate, you can add the followings:
+
+```
+app.t.isucon.dev   127.0.0.1
+bench.t.isucon.dev 127.0.0.1
+```
+
+#### 3. Adjust CPU/RAM assignment
+
+```
+sudo vim /etc/systemd/system/contestant.slice
+sudo vim /etc/systemd/system/benchmarker.slice
+
+sudo systemctl daemon-reload
+sudo systemctl restart contestant.slice benchmarker.slice
+```
+
+- Default
+  - contestant.slice (mysql, isuxportal, envoy): CPU share of 50%, 1024M RAM, IO 800op/s 1024M/s
+  - benchmarker.slice (benchmarker): CPU share of 50%, 2048M RAM
+- You may remove `CPUWeight=` and add `AllowedCPUs=` if you want to dedicate specific CPU cores to services. See [systemd.resource-control(5)](https://www.freedesktop.org/software/systemd/man/systemd.resource-control.html) for details.
+- If you assign a dedicated machine, you don't have to edit.
+
+#### 4. Start task application
+
+Follow [the task description](./docs/manual.md). By default, all implementations are disabled, so you need to enable them and start:
+
+```
+sudo systemctl enable --now xsuportal-api-ruby.service xsuportal-web-ruby.service
+```
+
+#### 5. Run a benchmarker
+
+As a `isucon` user, run:
+
+```
+sudo systemd-run \
+  --working-directory=/home/isucon/benchmarker \
+  --pipe \
+  --wait \
+  --collect \
+  --uid=$(id -u)\
+  --gid=$(id -g) \
+  --slice=benchmarker.slice \
+  --service-type=oneshot \
+  -p AmbientCapabilities=CAP_NET_BIND_SERVICE \
+  -p CapabilityBoundingSet=CAP_NET_BIND_SERVICE \
+  -p LimitNOFILE=2000000 \
+  -p TimeoutStartSec=110s \
+    ~isucon/benchmarker/bin/benchmarker \
+    -exit-status \
+    -tls \
+    -target app.t.isucon.dev:443 \
+    -host-advertise bench.t.isucon.dev \
+    -push-service-port 1001 \
+    -tls-cert /etc/ssl/private/tls-cert.pem \
+    -tls-key /etc/ssl/private/tls-key.pem \
+```
+
+(Adjust `-target` and `-host-advertise` as your domain names)
+
+## Expected machine specs
 
 - For contestant
   - isu1
