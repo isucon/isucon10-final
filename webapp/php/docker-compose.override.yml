@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  nginx:
+    build: ./php/nginx
+    volumes:
+      - ..:/isucon10/isucon10-final
+    ports:
+      - 8081:80
+
+  php:
+    build: ./php/web
+    environment:
+      - MYSQL_HOSTNAME=mysql
+      - MYSQL_PORT=3306
+      - docker=1
+    volumes:
+      - ..:/isucon10/isucon10-final

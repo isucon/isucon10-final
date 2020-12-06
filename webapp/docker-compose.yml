@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  frontend:
+    build: ./frontend
+    volumes:
+      - ..:/isucon10/isucon10-final
+
+  golang:
+    build: ./golang
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ..:/isucon10/isucon10-final
+    ports:
+      - 9291:9291
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - mysqldata:/var/lib/mysql
+      - ./sql/setup.sql:/docker-entrypoint-initdb.d/00_setup.sql
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: xsuportal
+      MYSQL_USER: isucon
+      MYSQL_PASSWORD: isucon
+
+volumes:
+  mysqldata:

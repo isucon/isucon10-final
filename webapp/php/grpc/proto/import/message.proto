@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option php_namespace = "App\\Service\\Message";
+option php_metadata_namespace = "App\\GPBMetadata";
+
+package app.message;
+
+message Message {
+    string msg = 1;
+}
+
+message Job {
+    string value = 1;
+}
+
+message JobID {
+    string id = 1;
+}
