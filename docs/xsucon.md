@@ -207,8 +207,8 @@ push subscription 情報については、push resource の URL に加え、[W3C
   - user agent (仮想選手) へは即座に送信され、user agent は即座に push message に対応した動作を取ります。
   - user agent は通知を順次処理します。同時に複数の通知に対する行動は取りません。
 - 一部ライブラリにおける [RFC8291 Section 3.1.](https://tools.ietf.org/html/rfc8291#section-3.1) 実装ミスを救済するため、1 度目の復号エラーについて、誤った ECDH shared secret の導出手順によりリトライを試みるようになっています。
-  - 具体的には、 Go 実装は https://github.com/SherClockHolmes/webpush-go の不具合を救済しています。
-  - RFC8291 Section 3.1. の ECDH 処理について、[SEC1] Section 6.1.3., 2.3.5., 2.3.7. に従って実装すると shared secret (output) が常に 32 バイトになるところ、32 バイト未満になるケースが存在するためです。
+  - 具体的には、 Go 実装は https://github.com/SherClockHolmes/webpush-go の不具合を救済しています (追記: この不具合は 2023/10/4 リリースの [v1.3.0 で修正がマージされています](https://github.com/SherClockHolmes/webpush-go/commit/4634ae79e3bbc3f35a17a0006dc678381b445487))。
+    - RFC8291 Section 3.1. の ECDH 処理について、[SEC1] Section 6.1.3., 2.3.5., 2.3.7. に従って実装すると shared secret (output) が常に 32 バイトになるところ、32 バイト未満になるケースが存在するためです。
   - リトライでも復号に失敗した場合は「不正な Web Push メッセージ」としてエラーになります。リトライで発生したエラーについては破棄され、エラーメッセージには 1 回目 (リトライ前) のエラーが記録されます。
 - 存在しない push resource へのリクエストは実負荷走行のエラーとして記録されます。
 - 存在したが expire した push resource へのリクエストは、エラーとなりませんが、user agent (仮想選手) へは送信されません。
