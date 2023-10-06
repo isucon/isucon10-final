@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  ruby:
+    build: ./ruby
+    environment:
+      - MYSQL_HOSTNAME=mysql
+      - MYSQL_PORT=3306
+      - BENCHMARK_SERVER_HOST=grpc
+      - BENCHMARK_SERVER_PORT=50051
+    volumes:
+      - .:/isucon10/isucon10-final/webapp
+    ports:
+      - 8080:80
+    depends_on:
+      - mysql
+
+  grpc:
+    build:
+      context: ./ruby
+      dockerfile: grpc.dockerfile
+    environment:
+      - MYSQL_HOSTNAME=mysql
+      - MYSQL_PORT=3306
+    volumes:
+      - .:/isucon10/isucon10-final/webapp
+    depends_on:
+      - mysql

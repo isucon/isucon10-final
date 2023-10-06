@@ -1,0 +1,55 @@
+{
+    "name": "spiral/app-grpc",
+    "type": "project",
+    "license": "MIT",
+    "description": "Spiral Skeleton GRPC Application",
+    "homepage": "https://spiral.dev",
+    "support": {
+        "issues": "https://github.com/spiral/app-grpc/issues",
+        "source": "https://github.com/spiral/app-grpc"
+    },
+    "authors": [
+        {
+            "name": "Wolfy-J",
+            "email": "wolfy.jd@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "spiral/framework": "^2.6",
+        "spiral/jobs": "^2.0",
+        "spiral/php-grpc": "^1.0",
+        "spiral/roadrunner": "^1.4",
+        "spiral/database": "^2.3",
+        "spiral/migrations": "^2.0",
+        "spiral/dotenv-bridge": "^1.0",
+        "spiral/prototype": "^1.0",
+        "cycle/orm": "^1.0",
+        "cycle/proxy-factory": "^1.0",
+        "cycle/annotated": "^2.0",
+        "cycle/migrations": "^1.0"
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "php -r \"copy('.env.sample', '.env');\"",
+            "php app.php encrypt:key -m .env",
+            "php app.php configure -vv",
+            "spiral get-binary"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.2.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
